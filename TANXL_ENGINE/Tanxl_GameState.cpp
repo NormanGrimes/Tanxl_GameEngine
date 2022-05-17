@@ -1,12 +1,12 @@
 #include "Tanxl_GameState.h"
 //StateUnit
 
-//void StateUnit::SetEvent(std::string GameEventName)
-//{
-//	GameEventBase* EventBase{};
-//	if (EventBase->GetEventBase().GetGameEvent(GameEventName))
-//		this->GameEvents = EventBase->GetEventBase().GetGameEvent(GameEventName);
-//}
+void StateUnit::SetEvent(std::string GameEventName)
+{
+	GameEventBase* EventBase{};
+	if (EventBase->GetEventBase().GetGameEvent(GameEventName))
+		this->GameEvents = EventBase->GetEventBase().GetGameEvent(GameEventName);
+}
 
 //GameStateBase
 
@@ -30,7 +30,7 @@ void GameStateBase::CompileState(std::string Infor)
 			Reader += Infor.at(i);
 		else
 		{
-			//this->GameState.at(SetCount++)->SetEvent(Reader);
+			this->GameState.at(SetCount++)->SetEvent(Reader);
 			Reader = "";
 		}
 	}
@@ -63,7 +63,7 @@ GameStateBase::~GameStateBase()
 
 GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameState_Height(0) {}
 
-GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
+GameStateBase& GameStateBase::operator=(const GameStateBase&) {}
 
 int GameStateBase::GetStateHeight()const
 {
