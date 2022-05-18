@@ -1,3 +1,6 @@
+//_VERSION_0_1_ UPDATE LOG
+// LAST_UPDATE 2022-04-27 22:32
+// »ù´¡°æ±¾
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <SOIL2\soil2.h>

@@ -63,7 +63,7 @@ GameStateBase::~GameStateBase()
 
 GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameState_Height(0) {}
 
-GameStateBase& GameStateBase::operator=(const GameStateBase&) {}
+GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
 int GameStateBase::GetStateHeight()const
 {

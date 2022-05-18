@@ -1,12 +1,10 @@
+//_VERSION_0_1_ UPDATE LOG
+// LAST_UPDATE 2022-04-27 22:32
+// 基础版本
+
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
 #include "Tanxl_InsertAction.h"
-
-//Version 0.00.00.07 UPDATE LOG
-//LAST UPDATE 2022/03/29 20:18
-// 控制台输出优化 现在显示更多内容
-// 增加移动速度修改功能 可调高调低
-// 增加清屏按键功能 按C触发
 
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
@@ -47,9 +45,9 @@ void init(GLFWwindow* window, GameStateBase* State) {
 	glGenVertexArrays(numVAOs, vao);
 	glBindVertexArray(vao[0]);
 	Height = glGetUniformLocation(renderingProgram, "SHeight");
-	glProgramUniform1f(renderingProgram, Height, HeightInt);
+	glProgramUniform1f(renderingProgram, Height, static_cast<float>(HeightInt));
 	Width = glGetUniformLocation(renderingProgram, "SWidth");
-	glProgramUniform1f(renderingProgram, Width, WidthInt);
+	glProgramUniform1f(renderingProgram, Width, static_cast<float>(WidthInt));
 
 	GLuint StatePos[100]{};
 	for (int i = 0; i < HeightInt * WidthInt; i++)
@@ -69,8 +67,8 @@ void display(GLFWwindow* window, double currentTime) {
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	float SinCurrent = sin(currentTime) * 0.5f;
-	float CosCurrent = cos(currentTime) * 0.5f;
+	float SinCurrent = static_cast<float>(sin(currentTime)) * 0.5f;
+	float CosCurrent = static_cast<float>(cos(currentTime)) * 0.5f;
 
 	PosA = glGetUniformLocation(renderingProgram, "SinCurrentTime");
 	glProgramUniform1f(renderingProgram, PosA, SinCurrent);
@@ -143,13 +141,13 @@ int mainLoop(GameStateBase* State)
 		{
 			cout << "MoveSpeed minu_PUSHED! Speed: " << movespeed << endl;
 			SpeedFlag = true;
-			movespeed += 0.01;
+			movespeed += 0.01f;
 		}
 		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS && !SpeedFlag)
 		{
 			cout << "MoveSpeed plus_PUSHED! Speed: " << movespeed << endl;
 			SpeedFlag = true;
-			movespeed -= 0.01;
+			movespeed -= 0.01f;
 		}
 		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !SpeedFlag)
 		{

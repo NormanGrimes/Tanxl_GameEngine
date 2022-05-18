@@ -36,4 +36,4 @@ GameEventBase::~GameEventBase() { delete &GameEvents; }
 
 GameEventBase::GameEventBase(const GameEventBase&){}
 
-GameEventBase& GameEventBase::operator=(const GameEventBase&){}
+GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }

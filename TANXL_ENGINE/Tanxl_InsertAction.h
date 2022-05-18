@@ -1,3 +1,7 @@
+//_VERSION_0_1_ UPDATE LOG
+// LAST_UPDATE 2022-04-27 22:32
+// »ù´¡°æ±¾
+
 #ifndef GL_GLEW_H
 #define GL_GLEW_H
 #include <GL\glew.h>
