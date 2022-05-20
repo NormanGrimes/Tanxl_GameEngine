@@ -37,7 +37,7 @@ void main(void)
 	{
 
 		if      (gl_VertexID == i * 6 + 0) 
-		{ gl_Position = vec4(  Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.0, 1.0); vs_color = vec4(1, 1, 0, 1);}
+		{ gl_Position = vec4(  Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.0, 1.0); vs_color = vec4(1, 0.8, 0, 1);}
 		else if (gl_VertexID == i * 6 + 1) 
 		{ gl_Position = vec4( -Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.0, 1.0); vs_color = vec4(1, 1, 0, 1);}
 		else if (gl_VertexID == i * 6 + 2) 

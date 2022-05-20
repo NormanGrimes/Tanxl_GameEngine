@@ -170,6 +170,7 @@
     <ClInclude Include="Tanxl_InsertAction.h" />
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="Tanxl_UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

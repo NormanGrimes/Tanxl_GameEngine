@@ -7,11 +7,25 @@
 #include <GL\glew.h>
 #endif
 
-
+#ifndef GLFW_GLFW3_H
+#define GLFW_GLFW3_H
 #include <GLFW\glfw3.h>
+#endif
+
+#ifndef STRING
+#define STRING
 #include <string>
+#endif
+
+#ifndef QUEUE
+#define QUEUE
 #include <queue>
+#endif
+
+#ifndef VECTOR
+#define VECTOR
 #include <vector>
+#endif
 
 enum EDIR
 {
@@ -120,6 +134,6 @@ private:
 
 	KeyEventBase(float* PTX, float* PTY, float* PTM) : MoveKey(PTM), DirectionX(PTX), DirectionY(PTY) {};
 	~KeyEventBase() {};
-	KeyEventBase(const KeyEventBase&) {};
+	KeyEventBase(const KeyEventBase&) : MoveKey(NULL), DirectionX(NULL), DirectionY(NULL) {};
 	KeyEventBase& operator=(const KeyEventBase&) {};
 };
