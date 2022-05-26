@@ -21,24 +21,24 @@ class UniqueIdBase
 public:
     static UniqueIdBase& GetIdGenerator()
     {
-        UniqueIdBase UNIBase;
+        static UniqueIdBase UNIBase;
         return UNIBase;
     }
     std::string Generate()
     {
         std::string Data{};
-        srand(time(0));
-        for (int i = 1; i <= 15; i++)
+        srand(static_cast<unsigned int>(time(0)));
+        for (int i = 0; i < 15; i++)
         {
-            if (i % 5 == 0)
+            if (i % 5 == 0 && i != 0)
                 Data += "-";
             Data += Uniqt[rand() % 62];
         }
         return Data;
     }
 private:
-    UniqueIdBase();
-    ~UniqueIdBase();
-    UniqueIdBase(const UniqueIdBase&);
-    UniqueIdBase& operator=(const UniqueIdBase&);
+    UniqueIdBase(){}
+    ~UniqueIdBase(){}
+    UniqueIdBase(const UniqueIdBase&){}
+    UniqueIdBase& operator=(const UniqueIdBase&) { return *this; }
 };

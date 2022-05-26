@@ -1,9 +1,9 @@
 #include "Tanxl_OpenGL_Draw.h"
+#include "Tanxl_UniqueID.h"
 //#include "Tanxl_DataBase.h"
 int main()
 {
 	GameStateBase* GSB = &GameStateBase::GetStateBase();
-	GSB->SetState(5, 5);
-	cout << GSB->GetStateHeight();
+	GSB->SetState(3, 3);
 	mainLoop(GSB);
 }

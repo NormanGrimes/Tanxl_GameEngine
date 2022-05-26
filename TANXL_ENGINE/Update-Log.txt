@@ -1,3 +1,10 @@
+TEnGinE Version-0.1 Build-4 2022-04-29 23:48 UPDATE_LOG
+///////////////////////////////////////////////////////
+修复UniqueID单例返回值类型错误的问题。修复UniqueID随机数
+不随机的问题。Tanxl_OpneGL_Draw类加入包含检查，并取消对
+名称空间std的using。移除Utils.cpp中对于Utils.h的重复包含
+，并为Utils.h加入包含检查。
+
 TEnGinE Version-0.1 Build-3 2022-04-28 22:11 UPDATE_LOG
 ///////////////////////////////////////////////////////
 增加一个UniqueID头文件，用于给任意游戏资产生成独一无二的

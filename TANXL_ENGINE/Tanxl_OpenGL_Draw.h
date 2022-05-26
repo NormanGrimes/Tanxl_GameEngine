@@ -4,17 +4,40 @@
 
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
+#ifndef TANXL_INSERTACTION_H
+#define TANXL_INSERTACTION_H
 #include "Tanxl_InsertAction.h"
+#endif
 
+#ifndef GL_GLEW_H
+#define GL_GLEW_H
 #include <GL\glew.h>
+#endif
+
+#ifndef GLFW_GLFW3_H
+#define GLFW_GLFW3_H
 #include <GLFW\glfw3.h>
+#endif
+
+#ifndef IOSTREAM
+#define IOSTREAM
 #include <iostream>
+#endif
+
+#ifndef STRING
+#define STRING
 #include <string>
-#include <iostream>
-#include <fstream>
+#endif
+
+#ifndef MATH_H
+#define MATH_H
 #include <math.h>
+#endif
+
+#ifndef UTILS_H
+#define UTILS_H
 #include "Utils.h"
-using namespace std;
+#endif
 
 #define numVAOs 1
 
@@ -52,7 +75,7 @@ void init(GLFWwindow* window, GameStateBase* State) {
 	GLuint StatePos[100]{};
 	for (int i = 0; i < HeightInt * WidthInt; i++)
 	{
-		string Tag = "State[" + to_string(i) + "]";
+		std::string Tag = "State[" + std::to_string(i) + "]";
 		StatePos[0] = glGetUniformLocation(renderingProgram, Tag.c_str());
 		glProgramUniform1i(renderingProgram, StatePos[0], StateInfor[0]);
 	}
@@ -111,48 +134,48 @@ int mainLoop(GameStateBase* State)
 		}*/
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		{
-			cout << "LEFT_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << endl;
+			std::cout << "LEFT_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
 			movex -= movespeed;
 			if (SpeedFlag)
 				SpeedFlag = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		{
-			cout << "RIGHT_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << endl;
+			std::cout << "RIGHT_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
 			movex += movespeed;
 			if (SpeedFlag)
 				SpeedFlag = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		{
-			cout << "DOWN_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << endl;
+			std::cout << "DOWN_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
 			movey -= movespeed;
 			if (SpeedFlag)
 				SpeedFlag = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		{
-			cout << "UP_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << endl;
+			std::cout << "UP_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
 			movey += movespeed;
 			if (SpeedFlag)
 				SpeedFlag = false;
 		}
 		if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !SpeedFlag)
 		{
-			cout << "MoveSpeed minu_PUSHED! Speed: " << movespeed << endl;
+			std::cout << "MoveSpeed minu_PUSHED! Speed: " << movespeed << std::endl;
 			SpeedFlag = true;
 			movespeed += 0.01f;
 		}
 		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS && !SpeedFlag)
 		{
-			cout << "MoveSpeed plus_PUSHED! Speed: " << movespeed << endl;
+			std::cout << "MoveSpeed plus_PUSHED! Speed: " << movespeed << std::endl;
 			SpeedFlag = true;
 			movespeed -= 0.01f;
 		}
 		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !SpeedFlag)
 		{
 			Clear_Function = Clear_Function == true ? false : true;
-			cout << "GLCLEAR FUNCTION CALLED! Clear: " << Clear_Function << endl;
+			std::cout << "GLCLEAR FUNCTION CALLED! Clear: " << Clear_Function << std::endl;
 			SpeedFlag = true;
 
 		}
