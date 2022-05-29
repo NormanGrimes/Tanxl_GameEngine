@@ -2,8 +2,16 @@
 // LAST_UPDATE 2022-04-27 22:32
 // »ù´¡°æ±¾
 
+#ifndef TANXL_DATABASE_H
+#define TANXL_DATABASE_H
 #include "Tanxl_DataBase.h"
+#endif
+
+#ifndef TANXL_GAMESTATE_H
+#define TANXL_GAMESTATE_H
 #include "Tanxl_GameState.h"
+#endif
+
 #ifndef TANXL_INSERTACTION_H
 #define TANXL_INSERTACTION_H
 #include "Tanxl_InsertAction.h"

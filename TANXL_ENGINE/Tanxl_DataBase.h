@@ -3,9 +3,6 @@
 // ¼ÓÈëÒì³£´¦Àí¹¦ÄÜ
 // Combine_File()ÏÖÔÚ¿ÉÈÎÒâ×éºÏ
 
-#ifndef TANXL_DATA_BASE
-#define TANXL_DATA_BASE
-
 #ifndef IOSTREAM
 #define IOSTREAM
 #include<iostream>
@@ -153,5 +150,3 @@ void Reset_Chain(TANXL_DataBase TDB, int Type, int Exac, int Nums);//ÖØÖÃÁ´±íÄ³Ò
 void Data(bool Mode = true, bool Zero = true);//²âÊÔÓÃÄ¬ÈÏÊı¾İ ÎªtrueÊ±Ã¿´ÎÌí¼ÓµÄÍ¬Ê±»¹»áÔÚÆÁÄ»ÉÏ´òÓ¡ ZeroÓÃÓÚÑ¡ÔñÌí¼ÓÄ£Ê½ ÎªTrueÊ±Ìí¼ÓµÄÎª0ºÏ·¨µÄÊı¾İ
 
 void Combine_File(std::string FileA, std::string FileB);//½«FileAºÍFileBµÄÄÚÈİÕûºÏµ½FileAÖĞ ½öÏŞUSD¸ñÊ½ÎÄ¼şÊ¹ÓÃ
-
-#endif

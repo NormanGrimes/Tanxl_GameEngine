@@ -2,9 +2,6 @@
 // LAST_UPDATE 2022-04-27 22:32
 // »ù´¡°æ±¾
 
-#ifndef GAME_STATE_BASE
-#define GAME_STATE_BASE
-
 #ifndef VECTOR
 #define VECTOR
 #include<vector>
@@ -51,5 +48,3 @@ private:
 	int GameState_Height;
 	std::vector<StateUnit*>GameState;
 };
-
-#endif

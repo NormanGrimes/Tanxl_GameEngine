@@ -2,9 +2,6 @@
 // LAST_UPDATE 2022-04-27 22:32
 // »ù´¡°æ±¾
 
-#ifndef GAME_EVENT_BASE
-#define GAME_EVENT_BASE
-
 #ifndef VECTOR
 #define VECTOR
 #include<vector>
@@ -42,5 +39,3 @@ private:
 	GameEventBase& operator=(const GameEventBase&);
 	std::vector<GameEvent*>GameEvents;
 };
-
-#endif
