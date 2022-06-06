@@ -1,6 +1,6 @@
-//_VERSION_1_5+_Final UPDATE LOG
-// LAST_UPDATE 2022-03-12 19:48:00
-// 加入枚举类型用于颜色设置 使之表现更加直观
+//_VERSION_1_5++_Final UPDATE LOG
+// LAST_UPDATE 2022-05-01 15:28
+// 调整添加物品的输入序列
 
 #ifndef TANXL_CONSOLE_LIST
 #define TANXL_CONSOLE_LIST

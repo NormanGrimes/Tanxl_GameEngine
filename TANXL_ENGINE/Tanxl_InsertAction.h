@@ -1,6 +1,9 @@
-//_VERSION_0_1_ UPDATE LOG
-// LAST_UPDATE 2022-04-27 22:32
-// 基础版本
+//_VERSION_0_2_ UPDATE LOG
+// LAST_UPDATE 2022-05-02 22:34
+// 所有内容重写 在早期版本中测试可用
+
+#include <vector>
+#include <iostream>
 
 #ifndef GL_GLEW_H
 #define GL_GLEW_H
@@ -17,123 +20,46 @@
 #include <string>
 #endif
 
-#ifndef QUEUE
-#define QUEUE
-#include <queue>
-#endif
-
-#ifndef VECTOR
-#define VECTOR
-#include <vector>
-#endif
-
-enum EDIR
+struct Key_Unit
 {
-	EDIR_MOVE_UP    = 0,
-	EDIR_MOVE_DOWN  = 1,
-	EDIR_MOVE_LEFT  = 2,
-	EDIR_MOVE_RIGHT = 3,
+	int GLFW_KEY{ NULL };
+	bool MoveToX{ false };
+	bool MoveToY{ false };
+	float MoveLen{ 0.0f };
 };
 
-struct KeyUnit
+class InsertEventBase
 {
 public:
-	KeyUnit(int GL_Defines, std::string Names, float Speed, int Direct) :
-		Name(Names), GL_Define(GL_Defines), speed(Speed), Direction(Direct) {}
-
-	int GL_Define;
-	std::string Name;
-	int Direction;
-	float speed;
-};
-
-//Default Data
-KeyUnit UP   (GLFW_KEY_UP,    "MOVUP",    0.01f, EDIR_MOVE_UP);
-KeyUnit DOWN (GLFW_KEY_DOWN,  "MOVDOWN",  0.01f, EDIR_MOVE_DOWN);
-KeyUnit LEFT (GLFW_KEY_LEFT,  "MOVLEFT",  0.01f, EDIR_MOVE_LEFT);
-KeyUnit RIGHT(GLFW_KEY_RIGHT, "MOVRIGHT", 0.01f, EDIR_MOVE_RIGHT);
-
-class KeyEventBase
-{
-public:
-
-	bool RegistInsert(KeyUnit* PTKU)
+	static InsertEventBase& GetInsertBase()
 	{
-		std::string TempName{ PTKU->Name };
-		for (int i = 0; i < KeyUnits.size(); i++)
-		{
-			if (KeyUnits.at(i)->Name == TempName)
-				return false;
-		}
-		KeyUnits.push_back(PTKU);
-		return true;
+		InsertEventBase* IEB = new InsertEventBase;
+		return *IEB;
 	}
 
-	static KeyEventBase& GetKeyEventBase(float* PTX, float* PTY, float* PTM)
+	void RegistEvent(Key_Unit KU)
 	{
-		static KeyEventBase KEB(PTX, PTY, PTM);
-		return KEB;
+		KeyEventS.push_back(KU);
 	}
 
-	void GetKeys(GLFWwindow* window)
+	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY)
 	{
-		for (int i = 0; i < KeyUnits.size(); i++)
+		for (int i = 0; i < KeyEventS.size(); i++)
 		{
-			if (glfwGetKey(window, KeyUnits.at(i)->GL_Define) == GLFW_PRESS)
+			if (glfwGetKey(window, KeyEventS.at(i).GLFW_KEY) == GLFW_PRESS)
 			{
-				InsertStack.push(KeyUnits.at(i));
-				std::cout << "PUSHED! " << std::endl;
-				return;
-			}
-		}
-	}
-
-	void ProcessKeys()
-	{
-		while (InsertStack.size() != 0)
-		{
-			std::string Temp{ InsertStack.front()->Name };
-			int count{ 0 };
-			while (InsertStack.front()->Name == Temp)
-			{
-				count++;
-				if (count >= 5)
-				{
-					count = 0;
-					switch (InsertStack.front()->Direction)
-					{
-					case EDIR_MOVE_UP:
-						*DirectionY += InsertStack.front()->speed;
-						break;
-					case EDIR_MOVE_DOWN:
-						*DirectionY -= InsertStack.front()->speed;
-						break;
-					case EDIR_MOVE_LEFT:
-						*DirectionX -= InsertStack.front()->speed;
-						break;
-					case EDIR_MOVE_RIGHT:
-						*DirectionX += InsertStack.front()->speed;
-						break;
-					}
-					std::cout << "PUSHED! CurrentLOC: x_" << *DirectionX << " y_" << *DirectionY << std::endl;
-				}
-				InsertStack.pop();
+				if (KeyEventS.at(i).MoveToX)
+					*MoveX += KeyEventS.at(i).MoveLen;
+				if (KeyEventS.at(i).MoveToY)
+					*MoveY += KeyEventS.at(i).MoveLen;
 			}
 		}
 	}
 
 private:
-
-	std::vector<KeyUnit*> KeyUnits;
-
-	std::queue<KeyUnit*> InsertStack;
-
-	float* MoveKey;
-	float* DirectionX;
-	float* DirectionY;
-
-	KeyEventBase(float* PTX, float* PTY, float* PTM) : MoveKey(PTM), DirectionX(PTX), DirectionY(PTY) {};
-	~KeyEventBase() {};
-	KeyEventBase(const KeyEventBase&) : MoveKey(NULL), DirectionX(NULL), DirectionY(NULL) {};
-	KeyEventBase& operator=(const KeyEventBase&) {};
+	std::vector<Key_Unit> KeyEventS;
+	InsertEventBase() {};
+	~InsertEventBase() {};
+	InsertEventBase(const InsertEventBase&) {};
+	InsertEventBase& operator=(const InsertEventBase&) { return *this; };
 };

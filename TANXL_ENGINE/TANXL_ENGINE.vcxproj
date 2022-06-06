@@ -166,6 +166,7 @@
     <ClInclude Include="Tanxl_Console_List.h" />
     <ClInclude Include="Tanxl_DataBase.h" />
     <ClInclude Include="Tanxl_GameEvent.h" />
+    <ClInclude Include="Tanxl_GameObject.h" />
     <ClInclude Include="Tanxl_GameState.h" />
     <ClInclude Include="Tanxl_InsertAction.h" />
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
