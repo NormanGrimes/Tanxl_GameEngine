@@ -4,6 +4,6 @@
 int main()
 {
 	GameStateBase* GSB = &GameStateBase::GetStateBase();
-	GSB->SetState(3, 3);
+	GSB->SetState(10, 10);
 	mainLoop(GSB);
 }

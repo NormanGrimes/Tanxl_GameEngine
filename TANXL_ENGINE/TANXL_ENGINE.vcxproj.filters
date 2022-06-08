@@ -36,17 +36,20 @@
     <ClInclude Include="Tanxl_GameState.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Tanxl_InsertAction.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_OpenGL_Draw.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_UniqueID.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_GameObject.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_InitBase.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_OpenGL_Draw.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_InsertAction.h">
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,18 +71,21 @@
     <ClCompile Include="Tanxl_GameState.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="StatefragShader.glsl">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="StatevertShader.glsl">
-      <Filter>资源文件</Filter>
-    </None>
+    <ClCompile Include="Tanxl_InsertAction.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt">
       <Filter>资源文件</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StatevertShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="StatefragShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

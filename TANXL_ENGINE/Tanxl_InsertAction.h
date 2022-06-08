@@ -1,9 +1,16 @@
-//_VERSION_0_2_ UPDATE LOG
-// LAST_UPDATE 2022-05-02 22:34
-// 所有内容重写 在早期版本中测试可用
+//_VERSION_0_3_ UPDATE LOG
+// LAST_UPDATE 2022-05-04 21:40
+// 整理至引擎核心内容
 
+#ifndef VECTOR
+#define VECTOR
 #include <vector>
+#endif
+
+#ifndef IOSTREAM
+#define IOSTREAM
 #include <iostream>
+#endif
 
 #ifndef GL_GLEW_H
 #define GL_GLEW_H
@@ -22,44 +29,25 @@
 
 struct Key_Unit
 {
-	int GLFW_KEY{ NULL };
-	bool MoveToX{ false };
-	bool MoveToY{ false };
-	float MoveLen{ 0.0f };
+	Key_Unit();
+	Key_Unit(int GLKEY, bool MOVX, bool MOVY, float MOVL);
+
+	int   GLFW_KEY;
+	bool  MoveToX;
+	bool  MoveToY;
+	float MoveLen;
 };
 
 class InsertEventBase
 {
 public:
-	static InsertEventBase& GetInsertBase()
-	{
-		InsertEventBase* IEB = new InsertEventBase;
-		return *IEB;
-	}
-
-	void RegistEvent(Key_Unit KU)
-	{
-		KeyEventS.push_back(KU);
-	}
-
-	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY)
-	{
-		for (int i = 0; i < KeyEventS.size(); i++)
-		{
-			if (glfwGetKey(window, KeyEventS.at(i).GLFW_KEY) == GLFW_PRESS)
-			{
-				if (KeyEventS.at(i).MoveToX)
-					*MoveX += KeyEventS.at(i).MoveLen;
-				if (KeyEventS.at(i).MoveToY)
-					*MoveY += KeyEventS.at(i).MoveLen;
-			}
-		}
-	}
-
+	static InsertEventBase& GetInsertBase();
+	void RegistEvent(Key_Unit KU);
+	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY);
 private:
 	std::vector<Key_Unit> KeyEventS;
-	InsertEventBase() {};
-	~InsertEventBase() {};
-	InsertEventBase(const InsertEventBase&) {};
-	InsertEventBase& operator=(const InsertEventBase&) { return *this; };
+	InsertEventBase();
+	~InsertEventBase();
+	InsertEventBase(const InsertEventBase&);
+	InsertEventBase& operator=(const InsertEventBase&);
 };

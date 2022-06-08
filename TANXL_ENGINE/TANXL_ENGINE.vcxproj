@@ -172,6 +172,7 @@
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Tanxl_UniqueID.h" />
+    <ClInclude Include="Tanxl_InitBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -179,11 +180,16 @@
     <ClCompile Include="Tanxl_DataBase.cpp" />
     <ClCompile Include="Tanxl_GameEvent.cpp" />
     <ClCompile Include="Tanxl_GameState.cpp" />
+    <ClCompile Include="Tanxl_InsertAction.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="StatefragShader.glsl" />
-    <None Include="StatevertShader.glsl" />
+    <None Include="StatefragShader.glsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="StatevertShader.glsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />

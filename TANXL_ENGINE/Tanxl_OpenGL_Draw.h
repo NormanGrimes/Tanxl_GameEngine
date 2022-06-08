@@ -69,7 +69,35 @@ GLuint vao[numVAOs];
 int HeightInt;
 int WidthInt;
 
+InsertEventBase* IEB = &InsertEventBase::GetInsertBase();//获取输入事件基类
+
 void init(GLFWwindow* window, GameStateBase* State) {
+	//示例提供四个按键操作事件
+	Key_Unit MOVE_UP;
+	MOVE_UP.GLFW_KEY = GLFW_KEY_UP;
+	MOVE_UP.MoveLen = 0.01f;
+	MOVE_UP.MoveToY = true;
+
+	Key_Unit MOVE_LEFT;
+	MOVE_LEFT.GLFW_KEY = GLFW_KEY_LEFT;
+	MOVE_LEFT.MoveLen = -0.01f;
+	MOVE_LEFT.MoveToX = true;
+
+	Key_Unit MOVE_RIGHT;
+	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_RIGHT;
+	MOVE_RIGHT.MoveLen = 0.01f;
+	MOVE_RIGHT.MoveToX = true;
+
+	Key_Unit MOVE_DOWN;
+	MOVE_DOWN.GLFW_KEY = GLFW_KEY_DOWN;
+	MOVE_DOWN.MoveLen = -0.01f;
+	MOVE_DOWN.MoveToY = true;
+
+	IEB->RegistEvent(MOVE_UP);
+	IEB->RegistEvent(MOVE_LEFT);
+	IEB->RegistEvent(MOVE_RIGHT);
+	IEB->RegistEvent(MOVE_DOWN);
+
 	HeightInt = State->GetStateHeight();
 	WidthInt = State->GetStateWidth();
 	renderingProgram = Utils::createShaderProgram("StatevertShader.glsl", "StatefragShader.glsl");
@@ -122,71 +150,18 @@ int mainLoop(GameStateBase* State)
 
 	init(window, State);
 
-	bool SpeedFlag = false;
-
-	int i{ 0 };
-
 	while (!glfwWindowShouldClose(window))
 	{
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		PosX = glGetUniformLocation(renderingProgram, "MoveX");
 		glProgramUniform1f(renderingProgram, PosX, movex);
 		PosY = glGetUniformLocation(renderingProgram, "MoveY");
 		glProgramUniform1f(renderingProgram, PosY, movey);
-		//KeyEventBase* KEB = &KeyEventBase::GetKeyEventBase(&movex, &movey, &movespeed);
-		//KEB->GetKeys(window);
-		/*i++;
-		if (i == 6)
-		{
-			i = 0;
-			KEB->ProcessKeys();
-		}*/
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		{
-			std::cout << "LEFT_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
-			movex -= movespeed;
-			if (SpeedFlag)
-				SpeedFlag = false;
-		}
-		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		{
-			std::cout << "RIGHT_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
-			movex += movespeed;
-			if (SpeedFlag)
-				SpeedFlag = false;
-		}
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		{
-			std::cout << "DOWN_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
-			movey -= movespeed;
-			if (SpeedFlag)
-				SpeedFlag = false;
-		}
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		{
-			std::cout << "UP_PUSHED! CurrentLOC: x_" << movex << " y_" << movey << std::endl;
-			movey += movespeed;
-			if (SpeedFlag)
-				SpeedFlag = false;
-		}
-		if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS && !SpeedFlag)
-		{
-			std::cout << "MoveSpeed minu_PUSHED! Speed: " << movespeed << std::endl;
-			SpeedFlag = true;
-			movespeed += 0.01f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS && !SpeedFlag)
-		{
-			std::cout << "MoveSpeed plus_PUSHED! Speed: " << movespeed << std::endl;
-			SpeedFlag = true;
-			movespeed -= 0.01f;
-		}
-		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !SpeedFlag)
-		{
-			Clear_Function = Clear_Function == true ? false : true;
-			std::cout << "GLCLEAR FUNCTION CALLED! Clear: " << Clear_Function << std::endl;
-			SpeedFlag = true;
 
-		}
+		IEB->GetInsert(window, &movex, &movey);
+
 		display(window, glfwGetTime());
 		glfwSwapBuffers(window);
 		glfwPollEvents();

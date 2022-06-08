@@ -1,6 +1,8 @@
-#version 430
+//_VERSION_0_1_ UPDATE LOG
+// LAST_UPDATE 2022-05-04 21:04
+// »ù´¡°æ±¾
 
-//basic state Draw
+#version 430
 
 layout (location=0) in vec3 position;
 layout (location=1) in vec4 color;
@@ -17,15 +19,6 @@ uniform float SWidth;
 
 void main(void)
 { 
-
-//	if      (gl_VertexID == 0) gl_Position = vec4(  0.25 + MoveX, -0.25 + MoveY, 0.0, 1);//MIDDLE
-//	else if (gl_VertexID == 1) gl_Position = vec4( -0.25 + MoveX, -0.25 + MoveY, 0.0, 1);
-//	else if (gl_VertexID == 2) gl_Position = vec4(  0.25 + MoveX,  0.25 + MoveY, 0.0, 1);
-//	else if (gl_VertexID == 3) gl_Position = vec4( -0.25 + MoveX, -0.25 + MoveY, 0.0, 1);
-//	else if (gl_VertexID == 4) gl_Position = vec4( -0.25 + MoveX,  0.25 + MoveY, 0.0, 1);
-//	else if (gl_VertexID == 5) gl_Position = vec4(  0.25 + MoveX,  0.25 + MoveY, 0.0, 1);
-
-
 	float Height = 2.0f / SHeight;
 	float Width  = 2.0f / SWidth;
 
@@ -58,4 +51,19 @@ void main(void)
 			HeightMove -= Height;
 		}
 	}
+
+
+//		if      (gl_VertexID == 0) 
+//		{ gl_Position = vec4(  Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 0.8, 0.0, 1.0);}
+//		else if (gl_VertexID == 1) 
+//		{ gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+//		else if (gl_VertexID == 2) 
+//		{ gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+//		else if (gl_VertexID == 3) 
+//		{ gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+//		else if (gl_VertexID == 4) 
+//		{ gl_Position = vec4( -Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+//		else if (gl_VertexID == 5) 
+//		{ gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+
 }
