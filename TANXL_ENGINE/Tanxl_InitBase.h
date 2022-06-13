@@ -1,3 +1,0 @@
-//_VERSION_0_1_ UPDATE LOG
-// LAST_UPDATE 2022-05-04 21:19
-// »ù´¡°æ±¾
