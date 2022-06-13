@@ -30,9 +30,6 @@
     <ClInclude Include="Tanxl_DataBase.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Tanxl_GameEvent.h">
-      <Filter>头文件\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_GameState.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
@@ -40,9 +37,6 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_GameObject.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_InitBase.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_OpenGL_Draw.h">
@@ -63,9 +57,6 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_DataBase.cpp">
-      <Filter>源文件\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Tanxl_GameEvent.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_GameState.cpp">
