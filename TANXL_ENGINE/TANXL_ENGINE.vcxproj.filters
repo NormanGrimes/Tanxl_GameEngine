@@ -45,6 +45,9 @@
     <ClInclude Include="Tanxl_InsertAction.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_StateControl.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,10 +75,10 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="StatevertShader.glsl">
+    <None Include="vertShader.glsl">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="StatefragShader.glsl">
+    <None Include="fragShader.glsl">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

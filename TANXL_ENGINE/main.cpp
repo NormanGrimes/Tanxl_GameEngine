@@ -3,7 +3,6 @@
 //#include "Tanxl_DataBase.h"
 int main()
 {
-	GameStateBase* GSB = &GameStateBase::GetStateBase();
-	GSB->SetState(1, 1);
+	GameStateBase* GSB = &GameStateBase::GetStateBase(10, 10);
 	mainLoop(GSB);
 }

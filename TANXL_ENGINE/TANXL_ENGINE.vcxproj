@@ -169,6 +169,7 @@
     <ClInclude Include="Tanxl_GameState.h" />
     <ClInclude Include="Tanxl_InsertAction.h" />
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
+    <ClInclude Include="Tanxl_StateControl.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Tanxl_UniqueID.h" />
   </ItemGroup>
@@ -181,10 +182,10 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="StatefragShader.glsl">
+    <None Include="fragShader.glsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="StatevertShader.glsl">
+    <None Include="vertShader.glsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
