@@ -76,6 +76,11 @@ void GameStateBase::CompileState(std::string Infor)
 	}
 }
 
+void GameStateBase::SetAdjust(float Adjust)
+{
+	this->GameState_Adjust = Adjust;
+}
+
 size_t GameStateBase::GetStateSize()
 {
 	return GameState.size();
@@ -92,7 +97,56 @@ GameStateBase& GameStateBase::GetStateBase(int Height, int Width)
 	return GameState;
 }
 
-GameStateBase::GameStateBase(int Height, int Width) :GameState_Width(Height), GameState_Height(Width), GameState(NULL) {}
+void GameStateBase::SetExacHeight(float& Current)
+{
+	static int EHCount = 0;
+	int LevelCount = 0;
+	float SingleBlock = 2.0f / GameState_Height;
+	while (SingleBlock < Current)
+	{
+		SingleBlock += 2.0f / GameState_Height;
+		LevelCount++;
+	}
+	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / GameState_Height))
+	{
+		EHCount++;
+		if (EHCount == 10)
+			Current -= GameState_Adjust;
+	}
+	else
+	{
+		EHCount++;
+		if (EHCount == 10)
+			Current += GameState_Adjust;
+	}
+}
+
+void GameStateBase::SetExacWidth(float& Current)
+{
+	static int EWCount = 0;
+	int LevelCount = 0;
+	float SingleBlock = 2.0f / GameState_Width;
+	while (SingleBlock < Current)
+	{
+		SingleBlock += 2.0f / GameState_Width;
+		LevelCount++;
+	}
+	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / GameState_Width))
+	{
+		EWCount++;
+		if (EWCount == 10)
+			Current -= GameState_Adjust;
+	}
+	else
+	{
+		EWCount++;
+		if (EWCount == 10)
+			Current += GameState_Adjust;
+	}
+}
+
+GameStateBase::GameStateBase(int Height, int Width) :
+	GameState_Width(Height), GameState_Height(Width), GameState(NULL),GameState_Adjust(0.0f) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -101,7 +155,7 @@ GameStateBase::~GameStateBase()
 	GameState.clear();
 }
 
-GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameState_Height(0) {}
+GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameState_Height(0),GameState_Adjust(0) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 

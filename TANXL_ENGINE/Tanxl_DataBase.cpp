@@ -282,7 +282,10 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 		Id_Vector* ITemp = new Id_Vector(
 			Item_Instance.Status_1, Item_Instance.Status_2,
 			Item_Instance.Code, Item_Instance.Name);
-		Append_Chain(*DTemp, *ITemp);
+		if (DTemp && ITemp)//≈–∂œ «∑Ò…Í«Îø’º‰≥…π¶
+			Append_Chain(*DTemp, *ITemp);
+		else
+			throw "ÃÌº” ß∞‹£° …Í«Îƒ⁄¥Êø’º‰ ß∞‹";
 	}
 }
 
@@ -425,7 +428,10 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 						Data_Vector* Data_Temp = new Data_Vector(IData[0], SData[0], IData[1], SData[1], IData[2], SData[2]);
 						Id_Vector* Id_Temp = new Id_Vector(Type_Stat, Exac_Stat, Type_Data, Exac_Data);
 						IData[0] = 0; IData[1] = 0; IData[2] = 0; SData[0] = ""; SData[1] = ""; SData[2] = "";
-						Append_Chain(*Data_Temp, *Id_Temp);
+						if (Data_Temp && Id_Temp)
+							Append_Chain(*Data_Temp, *Id_Temp);
+						else
+							throw "ÃÌº” ß∞‹£° …Í«Îƒ⁄¥Êø’º‰ ß∞‹";
 						continue;
 					}
 					else if (Tag == "Oth1")

@@ -1,6 +1,7 @@
 //_VERSION_0_2_ UPDATE LOG
 // LAST_UPDATE 2022-05-08 22:40
 // 将GameEvent类整合至此类
+// 新增两个可用于对2D棋盘上的物品微调位置的功能
 
 #ifndef VECTOR
 #define VECTOR
@@ -55,9 +56,12 @@ class GameStateBase
 public:
 	void SetState(int Width, int Height);
 	void CompileState(std::string Infor);
+	void SetAdjust(float Adjust);
 	size_t GetStateSize();
 	StateUnit* GetStateUnit(int Pos);
 	static GameStateBase& GetStateBase(int Height = 0, int Width = 0);
+	void SetExacHeight(float& Current);//可选功能 对2D棋盘上的物品微调位置
+	void SetExacWidth(float& Current);
 	int GetStateHeight()const;
 	int GetStateWidth()const;
 private:
@@ -67,5 +71,6 @@ private:
 	GameStateBase& operator=(const GameStateBase&);
 	int GameState_Width;
 	int GameState_Height;
+	float GameState_Adjust;
 	std::vector<StateUnit*>GameState;
 };

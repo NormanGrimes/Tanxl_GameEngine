@@ -27,12 +27,11 @@
 #include "Utils.h"
 #endif
 
-#define numVAOs 1
+const int numVAOs = 1;
 
 GLuint PosA, PosB;
 GLuint PosX, PosY;
 GLuint Height, Width;
-GLuint StatePos;
 
 GLint StateInfor[100];
 
@@ -40,8 +39,6 @@ bool Clear_Function = false;
 
 float movex;
 float movey;
-
-float movespeed = 0.01f;
 
 GLuint renderingProgram;
 GLuint vao[numVAOs];
