@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Utils.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_Console_List.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
@@ -45,12 +42,15 @@
     <ClInclude Include="Tanxl_InsertAction.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_OpenGL_Render.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_LocationBase.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_Console_List.cpp">

@@ -47,7 +47,7 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 	Col();
 	bool Is_Line_Need{ false };
 	Page = this->Selector / (SSpace & 0x00ff);
-	for (int i = Page * (SSpace & 0x00ff); i < SonList.size() && i < (Page+1)*(SSpace & 0x00ff); i++)
+	for (int i = Page * (SSpace & 0x00ff); i < SonList.size() && i < (Page + 1) * static_cast<int>(SSpace & 0x00ff); i++)
 	{
 		for (int j = Depth; j > 0; j--)
 			std::cout << "\t";

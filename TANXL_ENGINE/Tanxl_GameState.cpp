@@ -41,11 +41,19 @@ GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
 
 //StateUnit
 
+StateUnit::StateUnit(GameEvent* GE, bool MoveTarget)
+	:Is_Move_Target(MoveTarget), GameEvents(GE) {}
+
 void StateUnit::SetEvent(std::string GameEventName)
 {
 	GameEventBase* EventBase{};
 	if (EventBase->GetEventBase().GetGameEvent(GameEventName))
 		this->GameEvents = EventBase->GetEventBase().GetGameEvent(GameEventName);
+}
+
+bool StateUnit::GetMoveT()
+{
+	return this->Is_Move_Target;
 }
 
 //GameStateBase
@@ -63,9 +71,9 @@ void GameStateBase::SetState(int Width, int Height)
 
 void GameStateBase::CompileState(std::string Infor)
 {
+	std::string Reader{};
 	for (int i = 0, SetCount = 0; i < Infor.size(); i++)
 	{
-		std::string Reader{};
 		if (Infor.at(i) != ',')
 			Reader += Infor.at(i);
 		else

@@ -1,3 +1,10 @@
+TEnGinE Version-0.1 Build-11 2022-05-15 23:07 UPDATE_LOG
+///////////////////////////////////////////////////////
+Utils头文件以及源文件修改为OpenGL_Render。GameStateBase
+修复CompileState读取错误的问题。GameState类功能性更新。
+UniqueID类Uniqt移动至类的私有成员。游戏物品类增加一键执
+行所有组件功能的函数。
+
 TEnGinE Version-0.1 Build-10 2022-05-11 00:20 UPDATE_LOG
 ///////////////////////////////////////////////////////
 DataBase模块加入内存申请成功与否的判断。绘制模块移除早期

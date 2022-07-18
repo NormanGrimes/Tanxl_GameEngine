@@ -3,6 +3,7 @@
 // 组件类架构基本确定
 // 物品基类提供添加组件功能
 // 物品基类提供删除组件功能
+// 游戏物品类增加一键执行所有组件功能的函数
 
 #ifndef VECTOR//检查是否已经包含VECTOR
 #define VECTOR
@@ -35,6 +36,7 @@ class GameObjectBase
 {
 	bool AppendComponment(ComponmentBase* CM);
 	bool RemoveComponment(std::string Name);
+	void FinishComponment();
 private:
 	std::vector<ComponmentBase*> CMB;
 };
@@ -61,4 +63,10 @@ bool GameObjectBase::RemoveComponment(std::string Name)
 		}
 	}
 	return false;
+}
+
+void GameObjectBase::FinishComponment()
+{
+	for (int i = 0; i < CMB.size(); i++)
+		CMB.at(i)->Special();
 }

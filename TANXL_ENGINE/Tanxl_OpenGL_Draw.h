@@ -17,14 +17,14 @@
 #include "Tanxl_InsertAction.h"
 #endif
 
+#ifndef TANXL_OPENGL_RENDER_H
+#define TANXL_OPENGL_RENDER_H
+#include "Tanxl_OpenGL_Render.h"
+#endif
+
 #ifndef MATH_H
 #define MATH_H
 #include <math.h>
-#endif
-
-#ifndef UTILS_H
-#define UTILS_H
-#include "Utils.h"
 #endif
 
 const int numVAOs = 1;
@@ -90,7 +90,7 @@ void init(GLFWwindow* window, GameStateBase* State) {
 
 	HeightInt = State->GetStateHeight();
 	WidthInt = State->GetStateWidth();
-	renderingProgram = Utils::createShaderProgram("vertShader.glsl", "fragShader.glsl");
+	renderingProgram = createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(numVAOs, vao);
 	glBindVertexArray(vao[0]);
 	Height = glGetUniformLocation(renderingProgram, "SHeight");
