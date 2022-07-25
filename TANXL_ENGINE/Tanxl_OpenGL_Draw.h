@@ -1,6 +1,7 @@
 //_VERSION_0_2_ UPDATE LOG
 // LAST_UPDATE 2022-05-09 00:03
 // 成功解决深度测试技术难题，现在支持多层次显示
+// 修复地图数据传输错误的问题
 
 #ifndef TANXL_DATABASE_H
 #define TANXL_DATABASE_H
@@ -33,7 +34,19 @@ GLuint PosA, PosB;
 GLuint PosX, PosY;
 GLuint Height, Width;
 
-GLint StateInfor[100];
+GLint StateInfor[100]
+{
+	1,1,1,1,1,0,1,1,1,1,
+	1,1,1,1,1,0,1,1,1,1,
+	1,1,1,1,1,0,1,1,1,1,
+	1,1,1,1,1,0,1,1,1,1,
+	0,0,0,0,0,0,0,0,0,0,
+	1,1,1,1,1,0,1,1,1,1,
+	1,1,1,1,1,0,1,1,1,1,
+	1,1,1,1,1,0,1,1,1,1,
+	1,1,1,1,1,0,1,1,1,1,
+	1,1,1,1,1,0,1,1,1,1
+};
 
 bool Clear_Function = false;
 
@@ -46,7 +59,7 @@ GLuint vao[numVAOs];
 int HeightInt;
 int WidthInt;
 
-InsertEventBase* IEB = &InsertEventBase::GetInsertBase();//获取输入事件基类
+InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
 
 void init(GLFWwindow* window, GameStateBase* State) {
 	//示例提供四个按键操作事件
@@ -97,13 +110,16 @@ void init(GLFWwindow* window, GameStateBase* State) {
 	glProgramUniform1f(renderingProgram, Height, static_cast<float>(HeightInt));
 	Width = glGetUniformLocation(renderingProgram, "SWidth");
 	glProgramUniform1f(renderingProgram, Width, static_cast<float>(WidthInt));
-
+	for (int i = 0; i < HeightInt * WidthInt; i++)
+	{
+		StateInfor[i];
+	}
 	GLuint StatePos[100]{};
 	for (int i = 0; i < HeightInt * WidthInt; i++)
 	{
 		std::string Tag = "State[" + std::to_string(i) + "]";
-		StatePos[0] = glGetUniformLocation(renderingProgram, Tag.c_str());
-		glProgramUniform1i(renderingProgram, StatePos[0], StateInfor[0]);
+		StatePos[i] = glGetUniformLocation(renderingProgram, Tag.c_str());
+		glProgramUniform1i(renderingProgram, StatePos[i], StateInfor[i]);
 	}
 }
 
@@ -129,7 +145,7 @@ int mainLoop(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(600, 600, "Tanxl_Game TEST VERSION /// 0.00.00.08", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(600, 600, "Tanxl_Game TEST VERSION /// 0.00.00.09", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);

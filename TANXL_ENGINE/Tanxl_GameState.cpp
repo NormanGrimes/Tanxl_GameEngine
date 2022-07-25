@@ -1,13 +1,10 @@
 #include "Tanxl_GameState.h"
 
+//Core
+
 //GameEvent
 
 GameEvent::GameEvent(std::string Name) :EventName(Name) {}
-
-std::string GameEvent::GetEventName()
-{
-	return this->EventName;
-}
 
 //GameEventBase
 
@@ -30,30 +27,18 @@ GameEventBase& GameEventBase::GetEventBase()
 	return EventBase;
 }
 
-GameEventBase::GameEventBase() :GameEvents(NULL) {}
-
-GameEventBase::~GameEventBase() { delete& GameEvents; }
-
-GameEventBase::GameEventBase(const GameEventBase&) {}
-
-GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
-
-
 //StateUnit
 
-StateUnit::StateUnit(GameEvent* GE, bool MoveTarget)
-	:Is_Move_Target(MoveTarget), GameEvents(GE) {}
+StateUnit::StateUnit(GameEvent* GE, int State_Id, bool MoveTarget)
+	:Is_Move_Target(MoveTarget), GameEvents(GE), _State_Id(State_Id) {}
 
-void StateUnit::SetEvent(std::string GameEventName)
+void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 {
-	GameEventBase* EventBase{};
-	if (EventBase->GetEventBase().GetGameEvent(GameEventName))
+	GameEventBase* EventBase{ &GameEventBase::GetEventBase() };
+	if (EventBase->GetGameEvent(GameEventName))
 		this->GameEvents = EventBase->GetEventBase().GetGameEvent(GameEventName);
-}
-
-bool StateUnit::GetMoveT()
-{
-	return this->Is_Move_Target;
+	if (State_Id != -1)
+		this->_State_Id = State_Id;
 }
 
 //GameStateBase
@@ -69,34 +54,32 @@ void GameStateBase::SetState(int Width, int Height)
 		GameState.push_back(new StateUnit);
 }
 
-void GameStateBase::CompileState(std::string Infor)
+void GameStateBase::CompileState(std::string Infor)//Sample  A = 0, B = 1, C = 2.
 {
-	std::string Reader{};
+	std::string Text_Reader{}, Status_Reader{};
+	int Status_Int{};
 	for (int i = 0, SetCount = 0; i < Infor.size(); i++)
 	{
-		if (Infor.at(i) != ',')
-			Reader += Infor.at(i);
+		if (Infor.at(i) != ',' && Infor.at(i) != '=')
+			Text_Reader += Infor.at(i);
+		else if (Infor.at(i) == '=')//读取等号后的数字ID值
+		{
+			while (Infor.at(i) != ',')
+			{
+				if (Infor.at(i) != ' ' && (Infor.at(i) >= '0' && Infor.at(i) <= '9'))
+					Status_Reader += Infor.at(i);
+			}
+			Status_Int = std::stoi(Status_Reader);
+			Status_Reader = "";
+		}
 		else
 		{
-			this->GameState.at(SetCount++)->SetEvent(Reader);
-			Reader = "";
+			this->GameState.at(SetCount++)->SetEvent(Text_Reader, Status_Int);
+			if (Infor.at(i) == '.')
+				return;
+			Text_Reader = "";
 		}
 	}
-}
-
-void GameStateBase::SetAdjust(float Adjust)
-{
-	this->GameState_Adjust = Adjust;
-}
-
-size_t GameStateBase::GetStateSize()
-{
-	return GameState.size();
-}
-
-StateUnit* GameStateBase::GetStateUnit(int Pos)
-{
-	return this->GameState.at(Pos);
 }
 
 GameStateBase& GameStateBase::GetStateBase(int Height, int Width)
@@ -163,7 +146,60 @@ GameStateBase::~GameStateBase()
 	GameState.clear();
 }
 
-GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameState_Height(0),GameState_Adjust(0) {}
+//unimportant Stuff (GET/SET)
+
+//GameEvent
+
+std::string GameEvent::GetEventName()
+{
+	return this->EventName;
+}
+
+//GameEventBase
+
+GameEventBase::GameEventBase() :GameEvents(NULL) {}
+
+GameEventBase::~GameEventBase() { delete& GameEvents; }
+
+GameEventBase::GameEventBase(const GameEventBase&) {}
+
+GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
+
+//StateUnit
+
+bool StateUnit::GetMoveT()
+{
+	return this->Is_Move_Target;
+}
+
+int StateUnit::Get_State_Id()
+{
+	return this->_State_Id;
+}
+
+void StateUnit::Set_State_Id(int State_Id)
+{
+	this->_State_Id = State_Id;
+}
+
+//GameStateBase
+
+void GameStateBase::SetAdjust(float Adjust)
+{
+	this->GameState_Adjust = Adjust;
+}
+
+size_t GameStateBase::GetStateSize()
+{
+	return GameState.size();
+}
+
+StateUnit* GameStateBase::GetStateUnit(int Pos)
+{
+	return this->GameState.at(Pos);
+}
+
+GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameState_Height(0), GameState_Adjust(0) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 

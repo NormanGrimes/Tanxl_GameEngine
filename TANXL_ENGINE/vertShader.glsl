@@ -1,8 +1,6 @@
-//_VERSION_0_2_ UPDATE LOG
-// LAST_UPDATE 2022-05-09 00:04
-// 文件名称简化
-// 方块颜色调整
-// 深度（Z）调整
+//_VERSION_0_3_ UPDATE LOG
+// LAST_UPDATE 2022-05-16 23:45
+// 实装根据方块类型不同产生不同颜色
 
 #version 430
 
@@ -35,17 +33,53 @@ void main(void)
 	{
 
 		if      (gl_VertexID == i * 6 + 0) 
-		{ gl_Position = vec4(  Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0); vs_color = vec4(1.0, 0.8, 0, 1);}
+		{ 
+			gl_Position = vec4(  Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0);
+			if(State[i - 1] == 0)
+				vs_color = vec4(1.0, 0.8, 0.0, 1.0);
+			else
+				vs_color = vec4(0.0, 0.8, 1.0, 1.0);
+		}
 		else if (gl_VertexID == i * 6 + 1) 
-		{ gl_Position = vec4( -Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0); vs_color = vec4(1.0, 1.0, 0, 1);}
+		{ 
+			gl_Position = vec4( -Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0); 
+			if(State[i - 1] == 0)
+				vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+			else
+				vs_color = vec4(0.0, 1.0, 1.0, 1.0);
+		}
 		else if (gl_VertexID == i * 6 + 2) 
-		{ gl_Position = vec4(  Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0); vs_color = vec4(1.0, 1, 0, 1);}
+		{ 
+			gl_Position = vec4(  Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0);
+			if(State[i - 1] == 0)
+				vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+			else
+				vs_color = vec4(0.0, 1.0, 1.0, 1.0);
+		}
 		else if (gl_VertexID == i * 6 + 3) 
-		{ gl_Position = vec4( -Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0); vs_color = vec4(1.0, 1, 0, 1);}
+		{ 
+			gl_Position = vec4( -Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0); 
+			if(State[i - 1] == 0)
+				vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+			else
+				vs_color = vec4(0.0, 1.0, 1.0, 1.0);
+		}
 		else if (gl_VertexID == i * 6 + 4) 
-		{ gl_Position = vec4( -Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0); vs_color = vec4(1.0, 1, 0, 1);}
+		{
+			gl_Position = vec4( -Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0);
+			if(State[i - 1] == 0)
+				vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+			else
+				vs_color = vec4(0.0, 1.0, 1.0, 1.0);
+		}
 		else if (gl_VertexID == i * 6 + 5) 
-		{ gl_Position = vec4(  Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0); vs_color = vec4(1.0, 1, 0, 1);}
+		{
+			gl_Position = vec4(  Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0);
+			if(State[i - 1] == 0)
+				vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+			else
+				vs_color = vec4(0.0, 1.0, 1.0, 1.0);
+		}
 
 		WidthMove += Width;
 		counts++;
@@ -57,16 +91,34 @@ void main(void)
 		}
 	}
 
-	if      (gl_VertexID == 0) 
-	{ gl_Position = vec4(  Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 0.8, 0.0, 1.0);}
+	if      (gl_VertexID == 0) //MainMoveBlock
+	{
+		gl_Position = vec4(  Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); 
+		vs_color = vec4(1.0, 0.8, 0.0, 1.0);
+	}
 	else if (gl_VertexID == 1) 
-	{ gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+	{
+		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); 
+		vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+	}
 	else if (gl_VertexID == 2) 
-	{ gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+	{
+		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); 
+		vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+	}
 	else if (gl_VertexID == 3) 
-	{ gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+	{
+		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); 
+		vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+	}
 	else if (gl_VertexID == 4) 
-	{ gl_Position = vec4( -Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+	{
+		gl_Position = vec4( -Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); 
+		vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+	}
 	else if (gl_VertexID == 5) 
-	{ gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); vs_color = vec4(1.0, 1.0, 0.0, 1.0);}
+	{
+		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); 
+		vs_color = vec4(1.0, 1.0, 0.0, 1.0);
+	}
 }
