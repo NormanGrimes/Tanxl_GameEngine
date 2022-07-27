@@ -1,9 +1,6 @@
-//_VERSION_0_2_ UPDATE LOG
-// LAST_UPDATE 2022-05-08 22:51
-// 组件类架构基本确定
-// 物品基类提供添加组件功能
-// 物品基类提供删除组件功能
-// 游戏物品类增加一键执行所有组件功能的函数
+//_VERSION_0_3_ UPDATE LOG
+// LAST_UPDATE 2022-05-17 22:56
+// 提供一个初始预设生命值组件
 
 #ifndef VECTOR//检查是否已经包含VECTOR
 #define VECTOR
@@ -70,3 +67,24 @@ void GameObjectBase::FinishComponment()
 	for (int i = 0; i < CMB.size(); i++)
 		CMB.at(i)->Special();
 }
+
+//Componment Sample
+class Unit_Life : public ComponmentBase
+{
+public:
+	Unit_Life(int Life_Count) :ComponmentBase("Unit_Life"), _Life_Count(Life_Count) {}
+	void Special()
+	{
+
+	}
+	void RestoreHealth()
+	{
+		_Life_Count++;
+	}
+	void TakeDamage()
+	{
+		_Life_Count--;
+	}
+private:
+	int _Life_Count;
+};

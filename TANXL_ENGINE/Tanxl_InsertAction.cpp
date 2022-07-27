@@ -7,7 +7,7 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, float MOVL)
 
 InsertEventBase& InsertEventBase::GetInsertBase()
 {
-	InsertEventBase* IEB = new InsertEventBase;
+	static InsertEventBase* IEB = new InsertEventBase;
 	return *IEB;
 }
 
@@ -26,14 +26,33 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY)
 				*MoveX += KeyEventS.at(i).MoveLen;
 			if (KeyEventS.at(i).MoveToY)
 				*MoveY += KeyEventS.at(i).MoveLen;
+			AutoCheck(MoveX, MoveY);
 			std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
 		}
 	}
 }
 
+void InsertEventBase::Set_MaxFloat(float Max_float)
+{
+	this->_Max_float = Max_float;
+}
+
+void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
+{
+	if (*MoveX >= _Max_float)
+		*MoveX = _Max_float;
+	else if (*MoveX <= -_Max_float)
+		*MoveX = -_Max_float;
+
+	if (*MoveY >= _Max_float)
+		*MoveY = _Max_float;
+	else if (*MoveY <= -_Max_float)
+		*MoveY = -_Max_float;
+}
+
 //UnImportant µ¥ÀýÊµÏÖ
 
-InsertEventBase::InsertEventBase() :KeyEventS(NULL) {}
+InsertEventBase::InsertEventBase() :KeyEventS(NULL), _Max_float(1.0f) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -42,7 +61,7 @@ InsertEventBase::~InsertEventBase()
 	KeyEventS.clear();
 }
 
-InsertEventBase::InsertEventBase(const InsertEventBase&) {}
+InsertEventBase::InsertEventBase(const InsertEventBase&) :KeyEventS(NULL), _Max_float(1.0f) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

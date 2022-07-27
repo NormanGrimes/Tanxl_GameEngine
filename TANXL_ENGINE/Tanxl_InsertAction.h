@@ -1,6 +1,8 @@
 //_VERSION_0_3_ UPDATE LOG
 // LAST_UPDATE 2022-05-04 21:40
 // 整理至引擎核心内容
+// 提供对可操纵方块的最大移动位置限制的功能
+// 修复单例功能错误的问题
 
 #ifndef VECTOR
 #define VECTOR
@@ -44,8 +46,11 @@ public:
 	static InsertEventBase& GetInsertBase();
 	void RegistEvent(Key_Unit KU);
 	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY);
+	void Set_MaxFloat(float Max_float);
 private:
+	void AutoCheck(float* MoveX, float* MoveY);
 	std::vector<Key_Unit> KeyEventS;
+	float _Max_float;
 	InsertEventBase();
 	~InsertEventBase();
 	InsertEventBase(const InsertEventBase&);
