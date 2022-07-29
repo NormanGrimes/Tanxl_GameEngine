@@ -1,10 +1,10 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2022-04-28 22:11
 // Uniqt移动至类的私有成员
-
+#pragma once
 #include <string>
 #include <iostream>
-using namespace std;
+//using namespace std;
 
 class UniqueIdBase
 {
@@ -26,6 +26,13 @@ public:
         }
         return Data;
     }
+    int Random(int Start, int End)
+    {
+        if (End - Start <= 0)
+            return 0;
+        
+        return (rand() % (End - Start)) + Start;
+    }
 private:
     std::string Uniqt[62] = {
     {"1"}, {"2"}, {"3"}, {"4"}, {"5"}, {"6"}, {"7"}, {"8"}, {"9"}, {"0"},
@@ -36,8 +43,8 @@ private:
     {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"},
     {"Y"}, {"Z"} };
 
-    UniqueIdBase(){}
-    ~UniqueIdBase(){}
-    UniqueIdBase(const UniqueIdBase&){}
+    UniqueIdBase() {srand(static_cast<unsigned int>(time(0)));}
+    ~UniqueIdBase() {}
+    UniqueIdBase(const UniqueIdBase&) {}
     UniqueIdBase& operator=(const UniqueIdBase&) { return *this; }
 };

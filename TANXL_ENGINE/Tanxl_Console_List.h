@@ -2,9 +2,6 @@
 // LAST_UPDATE 2022-05-01 15:28
 // 调整添加物品的输入序列
 
-#ifndef TANXL_CONSOLE_LIST
-#define TANXL_CONSOLE_LIST
-
 #ifndef IOSTREAM//检查是否已经包含IOSTREAM
 #define IOSTREAM
 #include <iostream>
@@ -82,4 +79,3 @@ private:
 
 	unsigned SSpace;// { 0x171109 }选项和标题的空格数 AA-BB-CC AA左空格 BB右空格 CC页面物品限制数量
 };
-#endif

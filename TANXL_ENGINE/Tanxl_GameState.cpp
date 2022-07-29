@@ -56,7 +56,7 @@ void GameStateBase::SetState(int Width, int Height)
 
 void GameStateBase::CompileState(std::string Infor)//Sample  A = 0, B = 1, C = 2.
 {
-	std::string Text_Reader{}, Status_Reader{};
+	std::string Text_Reader{};
 	int Status_Int{};
 	for (int i = 0, SetCount = 0; i < Infor.size(); i++)
 	{
@@ -64,13 +64,13 @@ void GameStateBase::CompileState(std::string Infor)//Sample  A = 0, B = 1, C = 2
 			Text_Reader += Infor.at(i);
 		else if (Infor.at(i) == '=')//读取等号后的数字ID值
 		{
+			std::string Status_Reader{};
 			while (Infor.at(i) != ',')
 			{
 				if (Infor.at(i) != ' ' && (Infor.at(i) >= '0' && Infor.at(i) <= '9'))
 					Status_Reader += Infor.at(i);
 			}
 			Status_Int = std::stoi(Status_Reader);
-			Status_Reader = "";
 		}
 		else
 		{

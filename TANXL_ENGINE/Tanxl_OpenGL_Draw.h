@@ -25,6 +25,11 @@
 #include "Tanxl_OpenGL_Render.h"
 #endif
 
+#ifndef TANXL_UNIQUEID
+#define TANXL_UNIQUEID
+#include "Tanxl_UniqueID.h"
+#endif
+
 #ifndef MATH_H
 #define MATH_H
 #include <math.h>
@@ -36,12 +41,17 @@ const int numVAOs = 1;
 class OpenGL_Draw
 {
 public:
+	OpenGL_Draw() :HeightInt(0), Height(0), PosA(0), PosB(0), PosX(0), PosY(0), StateInfor(), WidthInt(0),
+		Width(0), movex(0), movey(0), renderingProgram(0), vao() {}
+
 	void init(GLFWwindow* window, GameStateBase* State) {
-		//示例提供四个按键操作事件
+		//示例提供四个按键操作事件 （单例模式于其他地方定义）
+		UniqueIdBase* UIB = &UniqueIdBase::GetIdGenerator();
+
 		srand(static_cast<unsigned int>(time(0)));
 
 		for (int i = 0; i < 101; i++)
-			StateInfor[i] = rand() % 2 - 1;
+			StateInfor[i] = UIB->Random(0, 2) - 1;
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
