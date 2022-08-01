@@ -4,6 +4,8 @@
 // 提供对可操纵方块的最大移动位置限制的功能
 // 修复单例功能错误的问题
 
+#pragma once
+
 #ifndef VECTOR
 #define VECTOR
 #include <vector>

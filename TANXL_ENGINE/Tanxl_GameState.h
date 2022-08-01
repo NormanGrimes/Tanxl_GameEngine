@@ -5,6 +5,8 @@
 // 源文件代码结构调整
 // 编译地图功能现在可以编译地图ID数值
 
+#pragma once
+
 #ifndef VECTOR
 #define VECTOR
 #include<vector>

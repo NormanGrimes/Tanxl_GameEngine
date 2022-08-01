@@ -2,6 +2,8 @@
 // LAST_UPDATE 2022-05-01 15:28
 // 调整添加物品的输入序列
 
+#pragma once
+
 #ifndef IOSTREAM//检查是否已经包含IOSTREAM
 #define IOSTREAM
 #include <iostream>

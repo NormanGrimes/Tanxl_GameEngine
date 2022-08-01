@@ -1,8 +1,8 @@
-//_VERSION_1_5_ UPDATE LOG
-// LAST_UPDATE 2022-04-04 23:42:47
-// 加入异常处理功能
-// Combine_File()现在可任意组合
-// 加入new申请是否成功的判断
+//_VERSION_1_6_ UPDATE LOG
+// LAST_UPDATE 2022-05-28 01:20
+// 调整结构体内容/类成员 以降低连续存储压力
+
+#pragma once
 
 #ifndef IOSTREAM
 #define IOSTREAM
@@ -84,10 +84,10 @@ struct Data_Vector//短数据表(Vector)
 struct Id_Vector//短类型表(Vector)
 {
 	explicit Id_Vector(int Type, int Exac, std::string Code = "NULL", std::string Name = "NULL") :
-		Type(Type), Exac(Exac), StrA(Code), StrB(Name), exac(NULL) {}
+		Type(Type), Exac(Exac), StrA(Code), StrB(Name), exac(new std::vector<Data_Vector*>) {}
 	int Type, Exac;
 	std::string StrA, StrB;
-	std::vector<Data_Vector*> exac;//用于支持折半查找
+	std::vector<Data_Vector*>* exac;//用于支持折半查找
 };
 
 class TANXL_DataBase
@@ -103,7 +103,7 @@ private:
 		unsigned Status_5{}; std::string Oth3;
 	}Item_Instance;
 
-	std::vector<Id_Vector*> IC_Vector;
+	std::vector<Id_Vector*>* IC_Vector;
 	int Current_Location;
 	bool Is_Instance_Data;//用来判断Item_Instance中是否有数据
 	bool Is_Chain_Empty;//用来判断链表是否为空

@@ -1,4 +1,7 @@
-#include "TANXL_CONSOLE_LIST.h"
+#pragma once
+
+#include "Tanxl_Console_List.h"
+
 //void Col是原Console_List的核心功能，使用了Linux控制台的指令
 void Col(unsigned ColN, bool Under_Line)//设置自定义行的背景颜色
 {

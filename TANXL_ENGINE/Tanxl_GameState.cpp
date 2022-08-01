@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Tanxl_GameState.h"
 
 //Core

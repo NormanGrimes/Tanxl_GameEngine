@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Tanxl_DataBase.h"
 
 TANXL_DataBase TDB_Instance(true);
@@ -186,7 +188,7 @@ inline void TANXL_DataBase::Set_Oth3(std::string set, unsigned status){ Item_Ins
 
 TANXL_DataBase::TANXL_DataBase(bool Zero_Legal) :
 	Is_Instance_Data(false), Is_Chain_Empty(true), Is_Zero_Legal(Zero_Legal),
-	IC_Vector(NULL),Current_Location(0) {}
+	IC_Vector(new std::vector<Id_Vector*>),Current_Location(0) {}
 
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
 {
@@ -303,14 +305,14 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 		return;
 	}
 	std::fstream out(Out_File_Name + ".sd", std::ios::out | std::ios::trunc);
-	Id_Vector* PIC{ this->IC_Vector.at(0) };
+	Id_Vector* PIC{ this->IC_Vector->at(0)};
 	out << "<Tanxl_DataBase Information>" << std::endl;
-	std::vector<Id_Vector*>::iterator IOIE{ IC_Vector.end() };
-	std::vector<Id_Vector*>::iterator IOIB{ IC_Vector.begin() };
+	std::vector<Id_Vector*>::iterator IOIE{ IC_Vector->end()};
+	std::vector<Id_Vector*>::iterator IOIB{ IC_Vector->begin() };
 	do
 	{
-		std::vector<Data_Vector*>::iterator IODE{ (*IOIB)->exac.end() };
-		std::vector<Data_Vector*>::iterator IODB{ (*IOIB)->exac.begin() };
+		std::vector<Data_Vector*>::iterator IODE{ (*IOIB)->exac->end() };
+		std::vector<Data_Vector*>::iterator IODB{ (*IOIB)->exac->begin() };
 		std::cout << "\t<Type_Status : " << (*IOIB)->StrA << " / " << (*IOIB)->Type << ">" << std::endl;
 		std::cout << "\t\t<Exac_Status : " << (*IOIB)->StrB << " / " << (*IOIB)->Exac << ">" << std::endl;
 		out << "\t<Type_Status : " << (*IOIB)->StrA << " / " << (*IOIB)->Type << ">" << std::endl;
@@ -347,20 +349,21 @@ void TANXL_DataBase::Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id)
 {
 	if (Is_Chain_Empty)
 	{
-		IC_Vector.push_back(&New_Id);
-		IC_Vector.at(0)->exac.push_back(&New_Data);
+		IC_Vector->push_back(&New_Id);
+		IC_Vector->at(0)->exac->push_back(&New_Data);
 		Is_Chain_Empty = false;
 		return;
 	}
-	int Left{ 0 }, Right{ static_cast<int>(IC_Vector.size()) - 1 <= 0 ? 0 : static_cast<int>(IC_Vector.size()) - 1 }, Value{ New_Id.Type * 16 + New_Id.Exac };
+	int Left{ 0 }, Value{ New_Id.Type * 16 + New_Id.Exac },
+		Right{ static_cast<int>(IC_Vector->size()) - 1 <= 0 ? 0 : static_cast<int>(IC_Vector->size()) - 1 };
 	while (true)
 	{
 		int Mid{ (Left + Right) / 2 };
-		Id_Vector* PIC = IC_Vector.at(Mid);
+		Id_Vector* PIC = IC_Vector->at(Mid);
 		int PIC_Value{ PIC->Type * 16 + PIC->Exac };
 		if (PIC_Value == Value)//Type B匹配时
 		{
-			PIC->exac.push_back(&New_Data);
+			PIC->exac->push_back(&New_Data);
 			Is_Chain_Empty = false;
 			return;
 		}
@@ -368,8 +371,8 @@ void TANXL_DataBase::Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id)
 		{
 			if (PIC_Value < Value)
 				Left += 1;
-			this->IC_Vector.insert(IC_Vector.begin() + Left, &New_Id);
-			IC_Vector.at(Left)->exac.push_back(&New_Data);
+			this->IC_Vector->insert(IC_Vector->begin() + Left, &New_Id);
+			IC_Vector->at(Left)->exac->push_back(&New_Data);
 			Is_Chain_Empty = false;
 			return;
 		}
@@ -457,8 +460,8 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 
 void TANXL_DataBase::Clear_Chain()
 {
-	for (int i = 0; i < IC_Vector.size(); i++)
-		Remove_Chain(IC_Vector.at(i)->Type, IC_Vector.at(i)->Exac);
+	for (int i = 0; i < IC_Vector->size(); i++)
+		Remove_Chain(IC_Vector->at(i)->Type, IC_Vector->at(i)->Exac);
 	Is_Chain_Empty = true;
 }
 
@@ -494,16 +497,16 @@ void TANXL_DataBase::Print_Data()//输出当前链表中的所有内容 V3 Updated
 		Id_Vector* PIC{};
 		Data_Vector* PDC{};
 		int PIC_Count{ 0 };
-		std::vector<Id_Vector*>::iterator IOI = IC_Vector.end() - 1;
+		std::vector<Id_Vector*>::iterator IOI = IC_Vector->end() - 1;
 		do
 		{
 			int PDC_Count{ 0 };
-			PIC = this->IC_Vector.at(PIC_Count++);
-			std::vector<Data_Vector*>::iterator IOD = PIC->exac.end() - 1;
+			PIC = this->IC_Vector->at(PIC_Count++);
+			std::vector<Data_Vector*>::iterator IOD = PIC->exac->end() - 1;
 			std::cout << "Id_Vector :" << PIC->Type << " - " << PIC->StrA << " - " << PIC->Exac << " - " << PIC->StrB << std::endl;
 			do
 			{
-				PDC = PIC->exac.at(PDC_Count++);
+				PDC = PIC->exac->at(PDC_Count++);
 				std::cout << "\tData_Vector :" << PDC->Id_1 << "-" << PDC->Id_2 << "-" << PDC->Id_3 << std::endl;
 			} while (PDC != *IOD);
 		} while (PIC != *IOI);
@@ -543,23 +546,24 @@ void TANXL_DataBase::Remove_Chain(int Type, int Exac)
 {
 	if (Id_Vector * PIC{ Id_Chain_Locate(Type, Exac) })
 	{
-		for (int i{ 0 }; i < PIC->exac.size(); i++)
-			delete PIC->exac.at(i);//释放 Data_Vector
-		PIC->exac.clear();
+		for (int i{ 0 }; i < PIC->exac->size(); i++)
+			delete PIC->exac->at(i);//释放 Data_Vector
+		PIC->exac->clear();
 		delete PIC;//释放 Id_Vector
-		IC_Vector.erase(IC_Vector.begin() + Current_Location);
+		IC_Vector->erase(IC_Vector->begin() + Current_Location);
 	}
 }
 
 Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 {
-	int Left{ 0 }, Right{ static_cast<int>(IC_Vector.size()) - 1 >= 0 ? static_cast<int>(IC_Vector.size()) - 1 : 0 }, Value{ Type * 16 + Exac };
+	int Left{ 0 },Value{ Type * 16 + Exac },
+		Right{ static_cast<int>(IC_Vector->size()) - 1 >= 0 ? static_cast<int>(IC_Vector->size()) - 1 : 0 };;
 	if (Left == Right)
 	{
-		if (Value == IC_Vector.at(0)->Type * 16 + IC_Vector.at(0)->Exac)
+		if (Value == IC_Vector->at(0)->Type * 16 + IC_Vector->at(0)->Exac)
 		{
 			Current_Location = 0;
-			return IC_Vector.at(0);
+			return IC_Vector->at(0);
 		}
 		throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
 		return NULL;
@@ -569,11 +573,11 @@ Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 		while (Left != Right)
 		{
 			int Mid{ (Left + Right) / 2 };
-			int Mid_Value{ IC_Vector.at(Mid)->Type * 16 + IC_Vector.at(Mid)->Exac };
+			int Mid_Value{ IC_Vector->at(Mid)->Type * 16 + IC_Vector->at(Mid)->Exac };
 			if (Mid_Value == Value)
 			{
 				Current_Location = Mid;
-				return IC_Vector.at(Mid);
+				return IC_Vector->at(Mid);
 			}
 			else if (Mid_Value > Value)
 				Right = Mid;
@@ -593,24 +597,24 @@ Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 Data_Vector* TANXL_DataBase::Data_Chain_Locate(int Type, int Exac, int Depth)
 {
 	Id_Vector* PIC{ Id_Chain_Locate(Type, Exac) };
-	if (PIC->exac.size() < Depth)
+	if (PIC->exac->size() < Depth)
 	{
 		throw "Data_Chain_Locate Failed ! : 超出当前容器最大深度";
 		return NULL;
 	}
-	else if (Depth < 0 && Depth + static_cast<int>(PIC->exac.size()) >= 0)
-		return PIC->exac.at(Depth + PIC->exac.size());
-	while (Depth + static_cast<int>(PIC->exac.size() < 0))
-		Depth += static_cast<int>(PIC->exac.size());
-	return PIC->exac.at(Depth);
+	else if (Depth < 0 && Depth + static_cast<int>(PIC->exac->size()) >= 0)
+		return PIC->exac->at(Depth + PIC->exac->size());
+	while (Depth + static_cast<int>(PIC->exac->size() < 0))
+		Depth += static_cast<int>(PIC->exac->size());
+	return PIC->exac->at(Depth);
 }
 
 void TANXL_DataBase::Replace_Chain(int OldType, int OldExac, int OldDepth, int Type, int Exac)
 {
 	Id_Vector* PIC{ Id_Chain_Locate(OldType, OldExac) };
-	Append_Chain(*PIC->exac.at(OldDepth), *new Id_Vector(Type, Exac));
-	if (PIC->exac.size() > OldDepth && OldDepth >= 0)
-		PIC->exac.erase(PIC->exac.begin() + OldDepth);
-	else if (PIC->exac.size() + OldDepth >= 0 && PIC->exac.size() + OldDepth < PIC->exac.size())
-		PIC->exac.erase(PIC->exac.begin() + PIC->exac.size() + OldDepth);
+	Append_Chain(*PIC->exac->at(OldDepth), *new Id_Vector(Type, Exac));
+	if (PIC->exac->size() > OldDepth && OldDepth >= 0)
+		PIC->exac->erase(PIC->exac->begin() + OldDepth);
+	else if (PIC->exac->size() + OldDepth >= 0 && PIC->exac->size() + OldDepth < PIC->exac->size())
+		PIC->exac->erase(PIC->exac->begin() + PIC->exac->size() + OldDepth);
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Tanxl_InsertAction.h"
 
 Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f) {}
