@@ -24,9 +24,13 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY)
 	{
 		if (glfwGetKey(window, KeyEventS.at(i).GLFW_KEY) == GLFW_PRESS)
 		{
-			if (KeyEventS.at(i).MoveToX)
+			if (KeyEventS.at(i).MoveToX/* &&
+				((*MoveX >= 0 && i + 1 < static_cast<int>(_PTB->size()) && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) + 1))
+					|| (*MoveX < 0 && i - 1 >= 0 && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) - 1)))*/)
 				*MoveX += KeyEventS.at(i).MoveLen;
-			if (KeyEventS.at(i).MoveToY)
+			if (KeyEventS.at(i).MoveToY/* &&
+				(*MoveY >= 0 && i + _Max_Line < static_cast<int>(_PTB->size()) && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) + _Max_Line))
+				|| (*MoveY < 0 && i - _Max_Line >= 0 && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) - _Max_Line))*/)
 				*MoveY += KeyEventS.at(i).MoveLen;
 			AutoCheck(MoveX, MoveY);
 			std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
@@ -37,6 +41,16 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY)
 void InsertEventBase::Set_MaxFloat(float Max_float)
 {
 	this->_Max_float = Max_float;
+}
+
+void InsertEventBase::Set_MaxLine(int Max_Line)
+{
+	this->_Max_Line = Max_Line;
+}
+
+void InsertEventBase::Get_MoveData(std::vector<bool>* PVB)
+{
+	this->_PTB = PVB;
 }
 
 void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
@@ -54,7 +68,7 @@ void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 
 //UnImportant µ¥ÀýÊµÏÖ
 
-InsertEventBase::InsertEventBase() :KeyEventS(NULL), _Max_float(1.0f) {}
+InsertEventBase::InsertEventBase() :KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -63,7 +77,7 @@ InsertEventBase::~InsertEventBase()
 	KeyEventS.clear();
 }
 
-InsertEventBase::InsertEventBase(const InsertEventBase&) :KeyEventS(NULL), _Max_float(1.0f) {}
+InsertEventBase::InsertEventBase(const InsertEventBase&) :KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

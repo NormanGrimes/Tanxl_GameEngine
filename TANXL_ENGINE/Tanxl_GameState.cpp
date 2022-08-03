@@ -45,7 +45,7 @@ void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 
 //GameStateBase
 
-void GameStateBase::SetState(int Width, int Height)
+void GameStateBase::Set_State(int Width, int Height)
 {
 	this->GameState_Width = Width;
 	this->GameState_Height = Height;
@@ -56,7 +56,31 @@ void GameStateBase::SetState(int Width, int Height)
 		GameState.push_back(new StateUnit);
 }
 
-void GameStateBase::CompileState(std::string Infor)//Sample  A = 0, B = 1, C = 2.
+void GameStateBase::CompileStateUnits(std::string Infor)
+{
+	std::string Text_Reader{};
+	int Status_Id{}, State_Move{};
+	for (int i = 0, SetCount = 0; i < Infor.size(); i++)
+	{
+		if (Infor.at(i) != ',' && Infor.at(i) != '-')
+			Text_Reader += Infor.at(i);
+		else if (Infor.at(i) != '-')
+		{
+			Status_Id = std::stoi(Text_Reader);
+			Text_Reader = "";
+		}
+		else
+		{
+			State_Move = std::stoi(Text_Reader);
+			Text_Reader = "";
+			this->GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
+			Status_Id = 0;
+			State_Move = 0;
+		}
+	}
+}
+
+void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, C = 2.
 {
 	std::string Text_Reader{};
 	int Status_Int{};
@@ -84,13 +108,13 @@ void GameStateBase::CompileState(std::string Infor)//Sample  A = 0, B = 1, C = 2
 	}
 }
 
-GameStateBase& GameStateBase::GetStateBase(int Height, int Width)
+GameStateBase& GameStateBase::Get_StateBase(int Height, int Width)
 {
 	static GameStateBase GameState(Height, Width);
 	return GameState;
 }
 
-void GameStateBase::SetExacHeight(float& Current)
+void GameStateBase::Set_ExacHeight(float& Current)
 {
 	static int EHCount = 0;
 	int LevelCount = 0;
@@ -114,7 +138,7 @@ void GameStateBase::SetExacHeight(float& Current)
 	}
 }
 
-void GameStateBase::SetExacWidth(float& Current)
+void GameStateBase::Set_ExacWidth(float& Current)
 {
 	static int EWCount = 0;
 	int LevelCount = 0;
@@ -136,6 +160,19 @@ void GameStateBase::SetExacWidth(float& Current)
 		if (EWCount == 10)
 			Current += GameState_Adjust;
 	}
+}
+
+std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
+{
+	std::vector<bool> MAB;
+	for (int i = 0; i < GameState.size(); i++)
+	{
+		if (GameState.at(i)->GetMoveAble())
+			MAB.push_back(true);
+		else
+			MAB.push_back(false);
+	}
+	return &MAB;
 }
 
 GameStateBase::GameStateBase(int Height, int Width) :
@@ -169,7 +206,7 @@ GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
 
 //StateUnit
 
-bool StateUnit::GetMoveT()
+bool StateUnit::GetMoveAble()
 {
 	return this->Is_Move_Target;
 }
@@ -186,17 +223,17 @@ void StateUnit::Set_State_Id(int State_Id)
 
 //GameStateBase
 
-void GameStateBase::SetAdjust(float Adjust)
+void GameStateBase::Set_Adjust(float Adjust)
 {
 	this->GameState_Adjust = Adjust;
 }
 
-size_t GameStateBase::GetStateSize()
+size_t GameStateBase::Get_StateSize()
 {
 	return GameState.size();
 }
 
-StateUnit* GameStateBase::GetStateUnit(int Pos)
+StateUnit* GameStateBase::Get_StateUnit(int Pos)
 {
 	return this->GameState.at(Pos);
 }
@@ -205,12 +242,17 @@ GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameStat
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
-int GameStateBase::GetStateHeight()const
+int GameStateBase::Get_StateHeight()const
 {
 	return this->GameState_Height;
 }
 
-int GameStateBase::GetStateWidth()const
+int GameStateBase::Get_StateWidth()const
 {
 	return this->GameState_Width;
+}
+
+std::vector<StateUnit*>* GameStateBase::Get_GameState()
+{
+	return &this->GameState;
 }

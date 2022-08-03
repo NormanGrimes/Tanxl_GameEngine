@@ -21,8 +21,8 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0f);
 
-	HeightInt = State->GetStateHeight();
-	WidthInt = State->GetStateWidth();
+	HeightInt = State->Get_StateHeight();
+	WidthInt = State->Get_StateWidth();
 	renderingProgram = OR::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, vao);
 	glBindVertexArray(vao[0]);

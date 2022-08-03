@@ -133,7 +133,7 @@ public:
 	//↓修改OTH1 OTH2 OTH3的时候直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
 	void Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data);
 	void Remove_Chain(int Type, int Exac);//删除某一节点与其下所有内容
-	//↓输出当前内存中的链表的所有内容 仅支持输出Id_Vector和Data_Vector中的内容
+	//↓输出当前内存中的链表的所有内容 仅支持输出Id_Vector和Data_Vector中的内容 当前内存为空时会抛出错误
 	void Print_Data();
 	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase.usd");//向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能

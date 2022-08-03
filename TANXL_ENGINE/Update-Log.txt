@@ -1,3 +1,9 @@
+TEnGinE Version-0.1 Build-16 2022-05-30 01:18 UPDATE_LOG
+///////////////////////////////////////////////////////
+调整GameState函数名称，并加入获取地图数据函数与编辑地图
+函数。LocationBase模块的功能整合至核心模块InsertAction。
+预先增加碰撞模块。InsertAction模块提供编译地图内容功能。
+
 TEnGinE Version-0.1 Build-15 2022-05-28 02:11 UPDATE_LOG
 ///////////////////////////////////////////////////////
 Tanxl_DataBase类进行结构优化改进内存使用效率。为核心功能

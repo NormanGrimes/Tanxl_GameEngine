@@ -1,8 +1,7 @@
-//_VERSION_0_3_ UPDATE LOG
-// LAST_UPDATE 2022-05-04 21:40
-// 整理至引擎核心内容
-// 提供对可操纵方块的最大移动位置限制的功能
-// 修复单例功能错误的问题
+//_VERSION_0_4_ UPDATE LOG
+// LAST_UPDATE 2022-05-30 01:18
+// 整合原LocationBase模块的基本功能
+// 提供编译地图场景的功能
 
 #pragma once
 
@@ -49,10 +48,14 @@ public:
 	void RegistEvent(Key_Unit KU);
 	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY);
 	void Set_MaxFloat(float Max_float);
+	void Set_MaxLine(int Max_Line);
+	void Get_MoveData(std::vector<bool>* PVB);
 private:
 	void AutoCheck(float* MoveX, float* MoveY);
 	std::vector<Key_Unit> KeyEventS;
+	std::vector<bool>* _PTB;
 	float _Max_float;
+	int _Max_Line;
 	InsertEventBase();
 	~InsertEventBase();
 	InsertEventBase(const InsertEventBase&);
