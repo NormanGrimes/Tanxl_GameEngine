@@ -25,23 +25,23 @@ void Col(unsigned ColN, bool Under_Line)//设置自定义行的背景颜色
 }
 //构造函数
 CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
-	:Selector(0), Is_Selected(false), SonList(NULL), SSpace(Space), Func(FunC), Is_Funcwork(true), Name(NamE),Page(0)
+	:_Selector(0), _Is_Selected(false), _SonList(NULL), _SSpace(Space), Func(FunC), _Is_Funcwork(true), _Name(NamE), _Page(0)
 {
 	if (Func == NULL)
-		Is_Funcwork = false;
+		_Is_Funcwork = false;
 }
 
 //添加函数
 void CONSOLE::Append_Item(std::string New_Item, unsigned Space, void (*FunC)(), int Depth, int* Ids)
 {
 	if (Depth == 0)
-		SonList.push_back(CONSOLE(New_Item, Space, FunC));
+		_SonList.push_back(CONSOLE(New_Item, Space, FunC));
 	else
 	{
 		CONSOLE* CP{ this };
 		for (int i = 0; i < Depth; i++)
-			CP = &CP->SonList.at(Ids[i]);
-		CP->SonList.push_back(CONSOLE(New_Item, Space, FunC));
+			CP = &CP->_SonList.at(Ids[i]);
+		CP->_SonList.push_back(CONSOLE(New_Item, Space, FunC));
 	}
 }
 
@@ -49,27 +49,27 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 {
 	Col();
 	bool Is_Line_Need{ false };
-	Page = this->Selector / (SSpace & 0x00ff);
-	for (int i = Page * (SSpace & 0x00ff); i < SonList.size() && i < (Page + 1) * static_cast<int>(SSpace & 0x00ff); i++)
+	_Page = this->_Selector / (_SSpace & 0x00ff);
+	for (int i = _Page * (_SSpace & 0x00ff); i < _SonList.size() && i < (_Page + 1) * static_cast<int>(_SSpace & 0x00ff); i++)
 	{
 		for (int j = Depth; j > 0; j--)
 			std::cout << "\t";
-		if (i == Selector)
+		if (i == _Selector)
 			Col(Real_Sel);
 		else
 			Col(Def_Col);
-		std::cout << std::setw((SSpace & 0xff0000) >> 16) << SonList.at(i).Name << std::setw((SSpace & 0x00ff00) >> 8) << " " << std::endl;
+		std::cout << std::setw((_SSpace & 0xff0000) >> 16) << _SonList.at(i)._Name << std::setw((_SSpace & 0x00ff00) >> 8) << " " << std::endl;
 		Col();
-		if (SonList.at(i).SonList.size() == 0 && this->Is_Selected == true && this->Selector == i)//在包含子项目为0时自动退出
+		if (_SonList.at(i)._SonList.size() == 0 && this->_Is_Selected == true && this->_Selector == i)//在包含子项目为0时自动退出
 		{
-			if (SonList.at(i).Is_Funcwork)
-				SonList.at(i).Func();
-			this->Is_Selected = false;
+			if (_SonList.at(i)._Is_Funcwork)
+				_SonList.at(i).Func();
+			this->_Is_Selected = false;
 		}
-		if (SonList.at(i).SonList.size() != 0 && this->Is_Selected == true && this->Selector == i)
+		if (_SonList.at(i)._SonList.size() != 0 && this->_Is_Selected == true && this->_Selector == i)
 		{
 			std::cout << std::endl;
-			this->SonList.at(i).Display(Depth + 1, (Def_Col & 0x0f) * 16 + (Def_Col & 0xf0) / 16, Real_Sel);
+			this->_SonList.at(i).Display(Depth + 1, (Def_Col & 0x0f) * 16 + (Def_Col & 0xf0) / 16, Real_Sel);
 			Is_Line_Need = 1;
 		}
 		if (!Is_Line_Need)
@@ -84,27 +84,27 @@ void CONSOLE::MainLoop(unsigned Def_Col, unsigned Real_Sel)
 {
 	bool Insert{ true };
 	bool Cover{ false };
-	int* Action_Num{ &Locate()->Selector };
-	bool* Action_Bol{ &Locate()->Is_Selected };
-	size_t List_Size{ Locate()->SonList.size() };
+	int* Action_Num{ &Locate()->_Selector };
+	bool* Action_Bol{ &Locate()->_Is_Selected };
+	size_t List_Size{ Locate()->_SonList.size() };
 	while (1)
 	{
 		system("cls");
 		this->Display();
 		if (!Cover)
 		{
-			Action_Num = &Locate()->Selector;
-			Action_Bol = &Locate()->Is_Selected;
-			List_Size = Locate()->SonList.size();
+			Action_Num = &Locate()->_Selector;
+			Action_Bol = &Locate()->_Is_Selected;
+			List_Size = Locate()->_SonList.size();
 		}
 		else
 			Cover = false;
 		if (!Insert)
 		{
-			Action_Num = &Locate(-1)->Selector;
-			Action_Bol = &Locate(-1)->Is_Selected;
-			List_Size = Locate(-1)->SonList.size();
-			Locate(-1)->Is_Selected = false;
+			Action_Num = &Locate(-1)->_Selector;
+			Action_Bol = &Locate(-1)->_Is_Selected;
+			List_Size = Locate(-1)->_SonList.size();
+			Locate(-1)->_Is_Selected = false;
 			Insert = true;
 			Cover = true;
 			continue;
@@ -134,9 +134,9 @@ bool CONSOLE::Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size)
 	else if (key == 's' || key == 'S' || key == 80)//如果输入了大小写的S或者下箭头，则执行MoveDown
 		*Action_Num = *Action_Num == static_cast<int>(List_Size) - 1 ? 0 : ++ * Action_Num;
 	else if (key == 'a' || key == 'A' || key == 75)//如果输入了大小写的A或者左箭头，则执行向上翻页
-		*Action_Num = *Action_Num - static_cast<int>(SSpace & 0x0000ff) < 0 ? 0 : *Action_Num - (SSpace & 0x0000ff);
+		*Action_Num = *Action_Num - static_cast<int>(_SSpace & 0x0000ff) < 0 ? 0 : *Action_Num - (_SSpace & 0x0000ff);
 	else if (key == 'd' || key == 'D' || key == 77)//如果输入了大小写的D或者右箭头，则执行向下翻页
-		*Action_Num = *Action_Num + static_cast<int>(SSpace & 0x0000ff) > static_cast<int>(List_Size) - 1 ? static_cast<int>(List_Size) - 1 : *Action_Num + (SSpace & 0x0000ff);
+		*Action_Num = *Action_Num + static_cast<int>(_SSpace & 0x0000ff) > static_cast<int>(List_Size) - 1 ? static_cast<int>(List_Size) - 1 : *Action_Num + (_SSpace & 0x0000ff);
 	else if (key == '\r')//回车确认
 		*Action_Bol = true;
 	return true;
@@ -146,22 +146,22 @@ CONSOLE* CONSOLE::Locate(int Target)
 {
 	if (Target == 0)
 	{
-		for (int i = 0; i < SonList.size(); i++)
+		for (int i = 0; i < _SonList.size(); i++)
 		{
-			if (i == Selector && Is_Selected == true)
-				return SonList.at(i).Locate();
+			if (i == _Selector && _Is_Selected == true)
+				return _SonList.at(i).Locate();
 		}
 		return this;
 	}
 	else
 	{
-		for (int i = 0; i < SonList.size(); i++)
+		for (int i = 0; i < _SonList.size(); i++)
 		{
-			if (i == Selector && Is_Selected == true && SonList.at(i).SonList.size() != 0)
-				if (SonList.at(i).Is_Selected == false)
+			if (i == _Selector && _Is_Selected == true && _SonList.at(i)._SonList.size() != 0)
+				if (_SonList.at(i)._Is_Selected == false)
 					return this;
 				else
-					return SonList.at(i).Locate(-1);
+					return _SonList.at(i).Locate(-1);
 		}
 		return this;
 	}

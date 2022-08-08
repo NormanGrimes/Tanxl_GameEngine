@@ -18,6 +18,9 @@ uniform float MoveY;
 uniform float SHeight;
 uniform float SWidth;
 
+uniform float CameraMoveX;
+uniform float CameraMoveY;
+
 void main(void)
 { 
 	float Height = 2.0f / SHeight;

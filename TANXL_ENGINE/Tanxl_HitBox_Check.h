@@ -2,4 +2,9 @@
 // LAST_UPDATE 2022-05-30 01:11
 // ≥ı º∞Ê±æ
 
+class HitBoxCheck
+{
+
+};
+
 #pragma once

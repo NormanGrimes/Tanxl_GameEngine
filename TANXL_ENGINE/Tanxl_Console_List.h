@@ -1,6 +1,6 @@
-//_VERSION_1_5++_Final UPDATE LOG
-// LAST_UPDATE 2022-05-01 15:28
-// 调整添加物品的输入序列
+//_VERSION_1_6_ UPDATE LOG
+// LAST_UPDATE 2022-06-07 23:57
+// 微调成员变量名称
 
 #pragma once
 
@@ -68,16 +68,16 @@ private:
 
 	CONSOLE* Locate(int Target = 0);
 
-	std::string Name;
+	std::string _Name;
 
-	int Selector;
-	int Page;
-	bool Is_Selected;
-	bool Is_Funcwork;
+	int _Selector;
+	int _Page;
+	bool _Is_Selected;
+	bool _Is_Funcwork;
 
-	std::vector<CONSOLE>SonList;
+	std::vector<CONSOLE> _SonList;
 
 	void (*Func)();
 
-	unsigned SSpace;// { 0x171109 }选项和标题的空格数 AA-BB-CC AA左空格 BB右空格 CC页面物品限制数量
+	unsigned _SSpace;// { 0x171109 }选项和标题的空格数 AA-BB-CC AA左空格 BB右空格 CC页面物品限制数量
 };

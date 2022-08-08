@@ -6,20 +6,20 @@
 
 //GameEvent
 
-GameEvent::GameEvent(std::string Name) :EventName(Name) {}
+GameEvent::GameEvent(std::string Name) :_EventName(Name) {}
 
 //GameEventBase
 
 void GameEventBase::RegistEvent(GameEvent* Event)
 {
-	GameEvents.push_back(Event);
+	_GameEvents.push_back(Event);
 }
 
 GameEvent* GameEventBase::GetGameEvent(std::string EventName)
 {
-	for (int i = 0; i < GameEvents.size(); i++)
-		if (GameEvents.at(i)->GetEventName() == EventName)
-			return GameEvents.at(i);
+	for (int i = 0; i < _GameEvents.size(); i++)
+		if (_GameEvents.at(i)->GetEventName() == EventName)
+			return _GameEvents.at(i);
 	return NULL;
 }
 
@@ -32,13 +32,13 @@ GameEventBase& GameEventBase::GetEventBase()
 //StateUnit
 
 StateUnit::StateUnit(GameEvent* GE, int State_Id, bool MoveTarget)
-	:Is_Move_Target(MoveTarget), GameEvents(GE), _State_Id(State_Id) {}
+	:_Is_Move_Target(MoveTarget), _GameEvents(GE), _State_Id(State_Id) {}
 
 void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 {
 	GameEventBase* EventBase{ &GameEventBase::GetEventBase() };
 	if (EventBase->GetGameEvent(GameEventName))
-		this->GameEvents = EventBase->GetEventBase().GetGameEvent(GameEventName);
+		this->_GameEvents = EventBase->GetEventBase().GetGameEvent(GameEventName);
 	if (State_Id != -1)
 		this->_State_Id = State_Id;
 }
@@ -47,8 +47,8 @@ void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 
 void GameStateBase::Set_State(int Width, int Height)
 {
-	this->GameState_Width = Width;
-	this->GameState_Height = Height;
+	this->_GameState_Width = Width;
+	this->_GameState_Height = Height;
 	for (int i = 0; i < GameState.size(); i++)
 		delete GameState.at(i);
 	GameState.clear();
@@ -118,23 +118,23 @@ void GameStateBase::Set_ExacHeight(float& Current)
 {
 	static int EHCount = 0;
 	int LevelCount = 0;
-	float SingleBlock = 2.0f / GameState_Height;
+	float SingleBlock = 2.0f / _GameState_Height;
 	while (SingleBlock < Current)
 	{
-		SingleBlock += 2.0f / GameState_Height;
+		SingleBlock += 2.0f / _GameState_Height;
 		LevelCount++;
 	}
-	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / GameState_Height))
+	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / _GameState_Height))
 	{
 		EHCount++;
 		if (EHCount == 10)
-			Current -= GameState_Adjust;
+			Current -= _GameState_Adjust;
 	}
 	else
 	{
 		EHCount++;
 		if (EHCount == 10)
-			Current += GameState_Adjust;
+			Current += _GameState_Adjust;
 	}
 }
 
@@ -142,29 +142,29 @@ void GameStateBase::Set_ExacWidth(float& Current)
 {
 	static int EWCount = 0;
 	int LevelCount = 0;
-	float SingleBlock = 2.0f / GameState_Width;
+	float SingleBlock = 2.0f / _GameState_Width;
 	while (SingleBlock < Current)
 	{
-		SingleBlock += 2.0f / GameState_Width;
+		SingleBlock += 2.0f / _GameState_Width;
 		LevelCount++;
 	}
-	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / GameState_Width))
+	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / _GameState_Width))
 	{
 		EWCount++;
 		if (EWCount == 10)
-			Current -= GameState_Adjust;
+			Current -= _GameState_Adjust;
 	}
 	else
 	{
 		EWCount++;
 		if (EWCount == 10)
-			Current += GameState_Adjust;
+			Current += _GameState_Adjust;
 	}
 }
 
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 {
-	std::vector<bool> MAB;
+	static std::vector<bool> MAB;
 	for (int i = 0; i < GameState.size(); i++)
 	{
 		if (GameState.at(i)->GetMoveAble())
@@ -176,7 +176,7 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 }
 
 GameStateBase::GameStateBase(int Height, int Width) :
-	GameState_Width(Height), GameState_Height(Width), GameState(NULL),GameState_Adjust(0.0f) {}
+	_GameState_Width(Height), _GameState_Height(Width), GameState(NULL), _GameState_Adjust(0.0f) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -191,14 +191,14 @@ GameStateBase::~GameStateBase()
 
 std::string GameEvent::GetEventName()
 {
-	return this->EventName;
+	return this->_EventName;
 }
 
 //GameEventBase
 
-GameEventBase::GameEventBase() :GameEvents(NULL) {}
+GameEventBase::GameEventBase() :_GameEvents(NULL) {}
 
-GameEventBase::~GameEventBase() { delete& GameEvents; }
+GameEventBase::~GameEventBase() { delete& _GameEvents; }
 
 GameEventBase::GameEventBase(const GameEventBase&) {}
 
@@ -208,7 +208,7 @@ GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
 
 bool StateUnit::GetMoveAble()
 {
-	return this->Is_Move_Target;
+	return this->_Is_Move_Target;
 }
 
 int StateUnit::Get_State_Id()
@@ -223,9 +223,15 @@ void StateUnit::Set_State_Id(int State_Id)
 
 //GameStateBase
 
+void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
+{
+	this->_SLoc._LocX = CurrentX;
+	this->_SLoc._LocY = CurrentY;
+}
+
 void GameStateBase::Set_Adjust(float Adjust)
 {
-	this->GameState_Adjust = Adjust;
+	this->_GameState_Adjust = Adjust;
 }
 
 size_t GameStateBase::Get_StateSize()
@@ -238,18 +244,18 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 	return this->GameState.at(Pos);
 }
 
-GameStateBase::GameStateBase(const GameStateBase&) :GameState_Width(0), GameState_Height(0), GameState_Adjust(0) {}
+GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
 int GameStateBase::Get_StateHeight()const
 {
-	return this->GameState_Height;
+	return this->_GameState_Height;
 }
 
 int GameStateBase::Get_StateWidth()const
 {
-	return this->GameState_Width;
+	return this->_GameState_Width;
 }
 
 std::vector<StateUnit*>* GameStateBase::Get_GameState()

@@ -2,6 +2,9 @@
 // LAST_UPDATE 2022-05-28 01:49
 // 同意义变量复用 移除两个成员变量
 // 整理至引擎核心层
+// 暂时禁用片段着色器的功能
+// 修复存在一个空循环的问题
+// 优化去掉大量中间变量
 
 #pragma once
 
@@ -45,8 +48,7 @@ public:
 	void mainLoop(GameStateBase* State);
 private:
 
-	GLuint PosA, PosB;
-	GLuint PosX, PosY;
+	GLuint Position;
 
 	GLint StateInfor[101];
 

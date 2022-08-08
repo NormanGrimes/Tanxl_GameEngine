@@ -5,8 +5,8 @@ out vec4 color;
 
 //basic state Color
 
-uniform float SinCurrentTime;
-uniform float CosCurrentTime;
+//uniform float SinCurrentTime;
+//uniform float CosCurrentTime;
 
 void main(void)
 {

@@ -1,11 +1,7 @@
 //_VERSION_0_3_ UPDATE LOG
-// LAST_UPDATE 2022-05-16 23:50
-// StateUnit类增加对每一格的ID设定
-// 微调StateUnit构造函数
-// 源文件代码结构调整
-// 编译地图功能现在可以编译地图ID数值
-// 提供一个可返回地图数据的函数
-// 调整各接口的名称
+// LAST_UPDATE 2022-06-07 23:51
+// 微调成员变量名称
+// 加入用于获取当前移动坐标的函数
 
 #pragma once
 
@@ -19,6 +15,12 @@
 #include<string>
 #endif
 
+struct SLocation
+{
+	float _LocX;
+	float _LocY;
+};
+
 class GameEvent
 {
 public:
@@ -26,7 +28,7 @@ public:
 	std::string GetEventName();
 	virtual void EventAction() = 0;
 private:
-	std::string EventName;
+	std::string _EventName;
 };
 
 //GameEventBase
@@ -42,7 +44,7 @@ private:
 	~GameEventBase();
 	GameEventBase(const GameEventBase&);
 	GameEventBase& operator=(const GameEventBase&);
-	std::vector<GameEvent*>GameEvents;
+	std::vector<GameEvent*> _GameEvents;
 };
 
 //StateUnit CLASS
@@ -56,8 +58,8 @@ public:
 	int Get_State_Id();
 	void Set_State_Id(int State_Id);
 private:
-	GameEvent* GameEvents;
-	bool Is_Move_Target;
+	GameEvent* _GameEvents;
+	bool _Is_Move_Target;
 	int _State_Id;
 };
 
@@ -78,6 +80,7 @@ public:
 	std::vector<bool>* Get_GameState_MoveAble();
 	void Set_ExacHeight(float& Current);//可选功能 对2D棋盘上的物品微调位置
 	void Set_ExacWidth(float& Current);
+	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	int Get_StateHeight()const;
 	int Get_StateWidth()const;
 private:
@@ -86,8 +89,9 @@ private:
 	~GameStateBase();
 	GameStateBase(const GameStateBase&);
 	GameStateBase& operator=(const GameStateBase&);
-	int GameState_Width;
-	int GameState_Height;
-	float GameState_Adjust;
+	int _GameState_Width;
+	int _GameState_Height;
+	float _GameState_Adjust;
+	SLocation _SLoc;//用于记录当前地图中心点
 	std::vector<StateUnit*>GameState;
 };
