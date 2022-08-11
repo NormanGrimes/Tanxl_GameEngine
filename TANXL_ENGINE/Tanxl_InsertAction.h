@@ -52,7 +52,7 @@ public:
 	void Get_MoveData(std::vector<bool>* PVB);
 private:
 	void AutoCheck(float* MoveX, float* MoveY);
-	std::vector<Key_Unit> KeyEventS;
+	std::vector<Key_Unit> _KeyEventS;
 	std::vector<bool>* _PTB;
 	float _Max_float;
 	int _Max_Line;

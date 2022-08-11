@@ -50,7 +50,7 @@ private:
 
 	GLuint Position;
 
-	GLint StateInfor[101];
+	GLint StateInfor[201];
 
 	bool Clear_Function = false;
 

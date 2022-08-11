@@ -176,7 +176,7 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 }
 
 GameStateBase::GameStateBase(int Height, int Width) :
-	_GameState_Width(Height), _GameState_Height(Width), GameState(NULL), _GameState_Adjust(0.0f) {}
+	_GameState_Width(Height), _GameState_Height(Width), GameState(NULL), _GameState_Adjust(0.0f), _SLoc(SLocation(0.0f, 0.0f)) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -244,7 +244,7 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 	return this->GameState.at(Pos);
 }
 
-GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0) {}
+GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0), _SLoc(SLocation(0.0f, 0.0f)) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
@@ -262,3 +262,7 @@ std::vector<StateUnit*>* GameStateBase::Get_GameState()
 {
 	return &this->GameState;
 }
+
+//SLocation
+
+SLocation::SLocation(float LocX, float LocY) :_LocX(LocX), _LocY(LocY) {}

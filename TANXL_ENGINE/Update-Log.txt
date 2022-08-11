@@ -1,3 +1,9 @@
+TEnGinE Version-0.1 Build-18 2022-06-15 23:56 UPDATE_LOG
+////////////////////////////////////////////////////////
+Console_List模块微调成员变量名称。SLocation结构体提供构造
+函数。调整数值以支持一次性绘制更多的方块。InsertAction模
+块微调成员变量名称。
+
 TEnGinE Version-0.1 Build-17 2022-06-07 23:57 UPDATE_LOG
 ////////////////////////////////////////////////////////
 GameState模块微调成员变量名称。Console_List模块微调成员

@@ -52,6 +52,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime)
 	//glProgramUniform1f(renderingProgram, PosA, SinCurrent);
 	//PosB = glGetUniformLocation(renderingProgram, "CosCurrentTime");
 	//glProgramUniform1f(renderingProgram, PosB, CosCurrent);
+	// 
+	//std::cout << HeightInt * WidthInt;
 
 	glUseProgram(renderingProgram);
 	glDrawArrays(GL_TRIANGLES, 0, HeightInt * WidthInt * 6 + 6);

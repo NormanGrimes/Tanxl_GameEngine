@@ -25,9 +25,9 @@ void Col(unsigned ColN, bool Under_Line)//设置自定义行的背景颜色
 }
 //构造函数
 CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
-	:_Selector(0), _Is_Selected(false), _SonList(NULL), _SSpace(Space), Func(FunC), _Is_Funcwork(true), _Name(NamE), _Page(0)
+	:_Selector(0), _Is_Selected(false), _SonList(NULL), _SSpace(Space), _Func(FunC), _Is_Funcwork(true), _Name(NamE), _Page(0)
 {
-	if (Func == NULL)
+	if (_Func == NULL)
 		_Is_Funcwork = false;
 }
 
@@ -63,7 +63,7 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 		if (_SonList.at(i)._SonList.size() == 0 && this->_Is_Selected == true && this->_Selector == i)//在包含子项目为0时自动退出
 		{
 			if (_SonList.at(i)._Is_Funcwork)
-				_SonList.at(i).Func();
+				_SonList.at(i)._Func();
 			this->_Is_Selected = false;
 		}
 		if (_SonList.at(i)._SonList.size() != 0 && this->_Is_Selected == true && this->_Selector == i)

@@ -10,7 +10,7 @@ layout (location=1) in vec4 color;
 
 out vec4 vs_color;
 
-uniform int State[100];
+uniform int State[200];
 
 uniform float MoveX;
 uniform float MoveY;

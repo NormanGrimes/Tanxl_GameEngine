@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-06-07 23:51
 // 微调成员变量名称
 // 加入用于获取当前移动坐标的函数
+// SLocation提供构造函数
 
 #pragma once
 
@@ -17,6 +18,7 @@
 
 struct SLocation
 {
+	SLocation(float LocX, float LocY);
 	float _LocX;
 	float _LocY;
 };

@@ -18,7 +18,7 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{ &GameStateBase::Get_StateBase(10, 10) };
+	GameStateBase* GSB{ &GameStateBase::Get_StateBase(12, 12) };
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 

@@ -77,7 +77,7 @@ private:
 
 	std::vector<CONSOLE> _SonList;
 
-	void (*Func)();
+	void (*_Func)();
 
 	unsigned _SSpace;// { 0x171109 }选项和标题的空格数 AA-BB-CC AA左空格 BB右空格 CC页面物品限制数量
 };
