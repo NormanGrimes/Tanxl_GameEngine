@@ -13,6 +13,11 @@ InsertEventBase& InsertEventBase::GetInsertBase()
 	return *IEB;
 }
 
+float InsertEventBase::Get_AutoFloat(int Blocks)
+{
+	return (1.0f - 1.0f / Blocks);
+}
+
 void InsertEventBase::RegistEvent(Key_Unit KU)
 {
 	_KeyEventS.push_back(KU);

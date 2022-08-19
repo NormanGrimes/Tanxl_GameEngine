@@ -25,8 +25,8 @@ GameEvent* GameEventBase::GetGameEvent(std::string EventName)
 
 GameEventBase& GameEventBase::GetEventBase()
 {
-	static GameEventBase EventBase;
-	return EventBase;
+	static GameEventBase* EventBase = new GameEventBase;
+	return *EventBase;
 }
 
 //StateUnit
@@ -60,24 +60,25 @@ void GameStateBase::CompileStateUnits(std::string Infor)
 {
 	std::string Text_Reader{};
 	int Status_Id{}, State_Move{};
-	for (int i = 0, SetCount = 0; i < Infor.size(); i++)
+	for (int i = 0; i < Infor.size(); i++)
 	{
 		if (Infor.at(i) != ',' && Infor.at(i) != '-')
 			Text_Reader += Infor.at(i);
-		else if (Infor.at(i) != '-')
+		else if (Infor.at(i) == ',' || Infor.at(i) == '.')
 		{
 			Status_Id = std::stoi(Text_Reader);
 			Text_Reader = "";
 		}
-		else
+		else if (Infor.at(i) == '-')
 		{
-			State_Move = std::stoi(Text_Reader);
+			State_Move = 0;//std::stoi(Text_Reader);
 			Text_Reader = "";
 			this->GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
 			Status_Id = 0;
 			State_Move = 0;
 		}
 	}
+	_Compile_Success = true;
 }
 
 void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, C = 2.
@@ -176,7 +177,8 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 }
 
 GameStateBase::GameStateBase(int Height, int Width) :
-	_GameState_Width(Height), _GameState_Height(Width), GameState(NULL), _GameState_Adjust(0.0f), _SLoc(SLocation(0.0f, 0.0f)) {}
+	_GameState_Width(Height), _GameState_Height(Width), GameState(NULL), _GameState_Adjust(0.0f),
+	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -244,9 +246,15 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 	return this->GameState.at(Pos);
 }
 
-GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0), _SLoc(SLocation(0.0f, 0.0f)) {}
+GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
+_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
+
+bool GameStateBase::Get_Compile_Status()
+{
+	return this->_Compile_Success;
+}
 
 int GameStateBase::Get_StateHeight()const
 {

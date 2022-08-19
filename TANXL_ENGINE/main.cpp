@@ -18,7 +18,9 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{ &GameStateBase::Get_StateBase(12, 12) };
+	GameStateBase* GSB{ &GameStateBase::Get_StateBase(5, 5) };
+
+	GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0a-1,a-0,a-1,a-0,a-1,");
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -56,8 +58,8 @@ int main()
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
 	IEB->RegistEvent(MOVE_DOWN);
 
-	IEB->Set_MaxFloat(0.9f);//公式 1 - ( 1 / 游戏地图边长（方块数）)
+	IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 
-	OpenGL_Draw OD;
-	OD.mainLoop(GSB);
+	OpenGL_Draw OGD(600, 600);
+	OGD.mainLoop(GSB);
 }

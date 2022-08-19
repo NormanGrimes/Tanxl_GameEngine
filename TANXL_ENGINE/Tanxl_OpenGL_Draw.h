@@ -41,7 +41,7 @@
 class OpenGL_Draw
 {
 public:
-	OpenGL_Draw();
+	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
 	void init(GLFWwindow* window, GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime);
 	//绘制主循环 在此之后的一切操作都会被忽略
@@ -62,5 +62,7 @@ private:
 
 	int HeightInt;
 	int WidthInt;
-
+	
+	int _ScreenWidth;
+	int _ScreenHeight;
 };

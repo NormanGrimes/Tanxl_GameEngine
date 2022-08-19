@@ -73,7 +73,7 @@ class Unit_Life : public ComponmentBase
 {
 public:
 	Unit_Life(int Life_Count) :ComponmentBase("Unit_Life"), _Life_Count(Life_Count) {}
-	void Special()
+	virtual void Special()
 	{
 
 	}
@@ -84,6 +84,10 @@ public:
 	void TakeDamage()
 	{
 		_Life_Count--;
+	}
+	int Check_Health()
+	{
+		return _Life_Count;
 	}
 private:
 	int _Life_Count;

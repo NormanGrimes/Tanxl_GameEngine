@@ -3,6 +3,7 @@
 // 微调成员变量名称
 // 加入用于获取当前移动坐标的函数
 // SLocation提供构造函数
+// 实装地图单元编译功能
 
 #pragma once
 
@@ -70,19 +71,21 @@ private:
 class GameStateBase
 {
 public:
-	void Set_State(int Width, int Height);
-	void CompileStateUnits(std::string Infor);
-	//CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
-	void CompileStateEvent(std::string Infor);
-	void Set_Adjust(float Adjust);
+	
 	size_t Get_StateSize();
 	StateUnit* Get_StateUnit(int Pos);
 	static GameStateBase& Get_StateBase(int Height = 0, int Width = 0);
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
+	void Set_State(int Width, int Height);
+	void CompileStateUnits(std::string Infor);
+	//CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
+	void CompileStateEvent(std::string Infor);
+	void Set_Adjust(float Adjust);
 	void Set_ExacHeight(float& Current);//可选功能 对2D棋盘上的物品微调位置
 	void Set_ExacWidth(float& Current);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
+	bool Get_Compile_Status();
 	int Get_StateHeight()const;
 	int Get_StateWidth()const;
 private:
@@ -94,6 +97,7 @@ private:
 	int _GameState_Width;
 	int _GameState_Height;
 	float _GameState_Adjust;
+	bool _Compile_Success;
 	SLocation _SLoc;//用于记录当前地图中心点
 	std::vector<StateUnit*>GameState;
 };

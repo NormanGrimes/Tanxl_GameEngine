@@ -45,8 +45,11 @@ class InsertEventBase
 {
 public:
 	static InsertEventBase& GetInsertBase();
+	//自动根据已知信息返回方块能移动的最大范围 公式 1 - ( 1 / 游戏地图边长（方块数）)
+	float Get_AutoFloat(int Blocks);
 	void RegistEvent(Key_Unit KU);
 	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY);
+	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	void Set_MaxFloat(float Max_float);
 	void Set_MaxLine(int Max_Line);
 	void Get_MoveData(std::vector<bool>* PVB);
