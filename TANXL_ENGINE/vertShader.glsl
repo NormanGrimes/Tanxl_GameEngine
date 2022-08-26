@@ -12,6 +12,8 @@ out vec4 vs_color;
 
 uniform int State[200];
 
+uniform float Margin;
+
 uniform float MoveX;
 uniform float MoveY;
 
@@ -21,8 +23,12 @@ uniform float SWidth;
 uniform float CameraMoveX;
 uniform float CameraMoveY;
 
+float StateMoveX = 0.0f;
+float StateMoveY = 0.0f;
+
 void main(void)
-{ 
+{
+	
 	float Height = 2.0f / SHeight;
 	float Width  = 2.0f / SWidth;
 
@@ -35,7 +41,7 @@ void main(void)
 
 		if      (gl_VertexID == i * 6 + 0) 
 		{ 
-			gl_Position = vec4(  Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0);
+			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0, 0.8, 0.1, 1.0);
 			else
@@ -43,7 +49,7 @@ void main(void)
 		}
 		else if (gl_VertexID == i * 6 + 1) 
 		{ 
-			gl_Position = vec4( -Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0); 
+			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2, 1.0); 
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
 			else
@@ -51,7 +57,7 @@ void main(void)
 		}
 		else if (gl_VertexID == i * 6 + 2) 
 		{ 
-			gl_Position = vec4(  Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0);
+			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
 			else
@@ -59,7 +65,7 @@ void main(void)
 		}
 		else if (gl_VertexID == i * 6 + 3) 
 		{ 
-			gl_Position = vec4( -Width / 2 + WidthMove, -Height / 2 + HeightMove, 0.2, 1.0); 
+			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2, 1.0); 
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
 			else
@@ -67,7 +73,7 @@ void main(void)
 		}
 		else if (gl_VertexID == i * 6 + 4) 
 		{
-			gl_Position = vec4( -Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0);
+			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
 			else
@@ -75,7 +81,7 @@ void main(void)
 		}
 		else if (gl_VertexID == i * 6 + 5) 
 		{
-			gl_Position = vec4(  Width / 2 + WidthMove,  Height / 2 + HeightMove, 0.2, 1.0);
+			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
 			else
@@ -94,32 +100,32 @@ void main(void)
 
 	if      (gl_VertexID == 0) //MainMoveBlock
 	{
-		gl_Position = vec4(  Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); 
+		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
 		vs_color = vec4(0.9, 0.8, 1.0, 1.0);
 	}
 	else if (gl_VertexID == 1) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); 
+		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
 		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
 	}
 	else if (gl_VertexID == 2) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); 
+		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
 		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
 	}
 	else if (gl_VertexID == 3) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1, 1.0); 
+		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
 		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
 	}
 	else if (gl_VertexID == 4) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); 
+		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
 		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
 	}
 	else if (gl_VertexID == 5) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1, 1.0); 
+		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
 		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
 	}
 }

@@ -49,11 +49,11 @@ void GameStateBase::Set_State(int Width, int Height)
 {
 	this->_GameState_Width = Width;
 	this->_GameState_Height = Height;
-	for (int i = 0; i < GameState.size(); i++)
-		delete GameState.at(i);
-	GameState.clear();
+	for (int i = 0; i < _GameState.size(); i++)
+		delete _GameState.at(i);
+	_GameState.clear();
 	for (int i = 0; i < Width * Height; i++)
-		GameState.push_back(new StateUnit);
+		_GameState.push_back(new StateUnit);
 }
 
 void GameStateBase::CompileStateUnits(std::string Infor)
@@ -73,7 +73,7 @@ void GameStateBase::CompileStateUnits(std::string Infor)
 		{
 			State_Move = 0;//std::stoi(Text_Reader);
 			Text_Reader = "";
-			this->GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
+			this->_GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
 			Status_Id = 0;
 			State_Move = 0;
 		}
@@ -101,7 +101,7 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 		}
 		else
 		{
-			this->GameState.at(SetCount++)->SetEvent(Text_Reader, Status_Int);
+			this->_GameState.at(SetCount++)->SetEvent(Text_Reader, Status_Int);
 			if (Infor.at(i) == '.')
 				return;
 			Text_Reader = "";
@@ -166,9 +166,9 @@ void GameStateBase::Set_ExacWidth(float& Current)
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 {
 	static std::vector<bool> MAB;
-	for (int i = 0; i < GameState.size(); i++)
+	for (int i = 0; i < _GameState.size(); i++)
 	{
-		if (GameState.at(i)->GetMoveAble())
+		if (_GameState.at(i)->GetMoveAble())
 			MAB.push_back(true);
 		else
 			MAB.push_back(false);
@@ -177,14 +177,14 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 }
 
 GameStateBase::GameStateBase(int Height, int Width) :
-	_GameState_Width(Height), _GameState_Height(Width), GameState(NULL), _GameState_Adjust(0.0f),
+	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
 	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false) {}
 
 GameStateBase::~GameStateBase()
 {
-	for (int i = 0; i < GameState.size(); i++)
-		delete GameState.at(i);
-	GameState.clear();
+	for (int i = 0; i < _GameState.size(); i++)
+		delete _GameState.at(i);
+	_GameState.clear();
 }
 
 //unimportant Stuff (GET/SET)
@@ -238,12 +238,12 @@ void GameStateBase::Set_Adjust(float Adjust)
 
 size_t GameStateBase::Get_StateSize()
 {
-	return GameState.size();
+	return _GameState.size();
 }
 
 StateUnit* GameStateBase::Get_StateUnit(int Pos)
 {
-	return this->GameState.at(Pos);
+	return this->_GameState.at(Pos);
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
@@ -268,7 +268,7 @@ int GameStateBase::Get_StateWidth()const
 
 std::vector<StateUnit*>* GameStateBase::Get_GameState()
 {
-	return &this->GameState;
+	return &this->_GameState;
 }
 
 //SLocation

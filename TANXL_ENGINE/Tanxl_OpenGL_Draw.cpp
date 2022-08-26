@@ -3,7 +3,7 @@
 #include "Tanxl_OpenGL_Draw.h"
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :HeightInt(0), Position(0), StateInfor(), WidthInt(0),
-movex(0), movey(0), renderingProgram(0), vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight) {}
+_MoveX(0.0f), _MoveY(0.0f), renderingProgram(0), vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight) {}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
@@ -27,6 +27,10 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glProgramUniform1f(renderingProgram, Position, static_cast<float>(HeightInt));
 	Position = glGetUniformLocation(renderingProgram, "SWidth");
 	glProgramUniform1f(renderingProgram, Position, static_cast<float>(WidthInt));
+
+	Position = glGetUniformLocation(renderingProgram, "Margin");
+	glProgramUniform1f(renderingProgram, Position, 1.0f);
+
 	if (State->Get_Compile_Status())
 	{
 		for (int i = 0; i < State->Get_GameState()->size(); i++)
@@ -49,6 +53,12 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 		StatePos = glGetUniformLocation(renderingProgram, Tag.c_str());
 		glProgramUniform1i(renderingProgram, StatePos, StateInfor[i]);
 	}
+}
+
+void OpenGL_Draw::UpdateMargin(float& Margin)
+{
+	Position = glGetUniformLocation(renderingProgram, "Margin");
+	glProgramUniform1f(renderingProgram, Position, Margin);
 }
 
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime)
@@ -92,13 +102,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		Position = glGetUniformLocation(renderingProgram, "MoveX");//更新操作物品坐标
-		glProgramUniform1f(renderingProgram, Position, movex);
+		glProgramUniform1f(renderingProgram, Position, _MoveX);
 		Position = glGetUniformLocation(renderingProgram, "MoveY");
-		glProgramUniform1f(renderingProgram, Position, movey);
+		glProgramUniform1f(renderingProgram, Position, _MoveY);
 
-		IEB->GetInsert(window, &movex, &movey);//获取输入
+		IEB->GetInsert(window, &_MoveX, &_MoveY);//获取输入
 		
-		GSB->Set_CurrentLoc(movex, movey);//更新地图中心点/当前移动物品坐标
+		GSB->Set_CurrentLoc(_MoveX, _MoveY);//更新地图中心点/当前移动物品坐标
 
 		display(window, glfwGetTime());
 		glfwSwapBuffers(window);

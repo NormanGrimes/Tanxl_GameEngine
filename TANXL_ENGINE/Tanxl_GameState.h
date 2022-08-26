@@ -99,5 +99,5 @@ private:
 	float _GameState_Adjust;
 	bool _Compile_Success;
 	SLocation _SLoc;//用于记录当前地图中心点
-	std::vector<StateUnit*>GameState;
+	std::vector<StateUnit*> _GameState;
 };

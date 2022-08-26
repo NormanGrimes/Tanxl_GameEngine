@@ -46,6 +46,7 @@ public:
 	void display(GLFWwindow* window, double currentTime);
 	//绘制主循环 在此之后的一切操作都会被忽略
 	void mainLoop(GameStateBase* State);
+	void UpdateMargin(float& Margin);
 private:
 
 	GLuint Position;
@@ -54,8 +55,8 @@ private:
 
 	bool Clear_Function = false;
 
-	float movex;
-	float movey;
+	float _MoveX;
+	float _MoveY;
 
 	GLuint renderingProgram;
 	GLuint vao[1];
