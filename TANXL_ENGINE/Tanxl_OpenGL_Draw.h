@@ -49,20 +49,20 @@ public:
 	void UpdateMargin(float& Margin);
 private:
 
-	GLuint Position;
+	GLuint _Position;
 
-	GLint StateInfor[201];
+	GLint _StateInfor[201];
 
-	bool Clear_Function = false;
+	bool _Clear_Function = false;
 
 	float _MoveX;
 	float _MoveY;
 
-	GLuint renderingProgram;
-	GLuint vao[1];
+	GLuint _renderingProgram;
+	GLuint _vao[1];
 
-	int HeightInt;
-	int WidthInt;
+	int _HeightInt;
+	int _WidthInt;
 	
 	int _ScreenWidth;
 	int _ScreenHeight;

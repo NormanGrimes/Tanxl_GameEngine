@@ -20,11 +20,11 @@ uniform float MoveY;
 uniform float SHeight;
 uniform float SWidth;
 
-uniform float CameraMoveX;
-uniform float CameraMoveY;
+//uniform float CameraMoveX;
+//uniform float CameraMoveY;
 
-float StateMoveX = 0.0f;
-float StateMoveY = 0.0f;
+uniform float StateMoveX;
+uniform float StateMoveY;
 
 void main(void)
 {

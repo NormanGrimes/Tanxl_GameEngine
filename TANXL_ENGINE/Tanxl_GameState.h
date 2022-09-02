@@ -79,7 +79,7 @@ public:
 	std::vector<bool>* Get_GameState_MoveAble();
 	void Set_State(int Width, int Height);
 	void CompileStateUnits(std::string Infor);
-	//CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
+	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
 	void Set_ExacHeight(float& Current);//可选功能 对2D棋盘上的物品微调位置
