@@ -2,6 +2,8 @@
 // LAST_UPDATE 2022-05-30 01:18
 // 整合原LocationBase模块的基本功能
 // 提供编译地图场景的功能
+// 提供获取每次更改的功能
+// 输入功能提供对地图坐标的控制
 
 #pragma once
 
@@ -48,17 +50,21 @@ public:
 	//自动根据已知信息返回方块能移动的最大范围 公式 1 - ( 1 / 游戏地图边长（方块数）)
 	float Get_AutoFloat(int Blocks);
 	void RegistEvent(Key_Unit KU);
-	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY);
+	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX = NULL, float* StateY = NULL);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	void Set_MaxFloat(float Max_float);
 	void Set_MaxLine(int Max_Line);
 	void Get_MoveData(std::vector<bool>* PVB);
+	float Get_Margin_X();
+	float Get_Margin_Y();
 private:
 	void AutoCheck(float* MoveX, float* MoveY);
 	std::vector<Key_Unit> _KeyEventS;
 	std::vector<bool>* _PTB;
 	float _Max_float;
 	int _Max_Line;
+	float _Margin_X;
+	float _Margin_Y;
 	InsertEventBase();
 	~InsertEventBase();
 	InsertEventBase(const InsertEventBase&);

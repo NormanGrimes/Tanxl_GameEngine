@@ -23,7 +23,7 @@ void InsertEventBase::RegistEvent(Key_Unit KU)
 	_KeyEventS.push_back(KU);
 }
 
-void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY)
+void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX, float* StateY)
 {
 	for (int i = 0; i < _KeyEventS.size(); i++)
 	{
@@ -32,11 +32,24 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY)
 			if (_KeyEventS.at(i).MoveToX/* &&
 				((*MoveX >= 0 && i + 1 < static_cast<int>(_PTB->size()) && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) + 1))
 					|| (*MoveX < 0 && i - 1 >= 0 && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) - 1)))*/)
+			{
 				*MoveX += _KeyEventS.at(i).MoveLen;
+				_Margin_X = _KeyEventS.at(i).MoveLen;
+				_Margin_Y = 0;
+			}
 			if (_KeyEventS.at(i).MoveToY/* &&
 				(*MoveY >= 0 && i + _Max_Line < static_cast<int>(_PTB->size()) && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) + _Max_Line))
 				|| (*MoveY < 0 && i - _Max_Line >= 0 && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) - _Max_Line))*/)
+			{
 				*MoveY += _KeyEventS.at(i).MoveLen;
+				_Margin_Y = _KeyEventS.at(i).MoveLen;
+				_Margin_X = 0;
+			}
+			if (StateX != NULL && StateY != NULL)
+			{
+				*StateX += -_Margin_X;
+				*StateY += -_Margin_Y;
+			}
 			AutoCheck(MoveX, MoveY);
 			std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
 		}
@@ -58,6 +71,16 @@ void InsertEventBase::Get_MoveData(std::vector<bool>* PVB)
 	this->_PTB = PVB;
 }
 
+float InsertEventBase::Get_Margin_X()
+{
+	return this->_Margin_X;
+}
+
+float InsertEventBase::Get_Margin_Y()
+{
+	return this->_Margin_Y;
+}
+
 void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 {
 	if (*MoveX >= _Max_float)
@@ -73,7 +96,8 @@ void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 
 //UnImportant µ¥ÀýÊµÏÖ
 
-InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0) {}
+InsertEventBase::InsertEventBase() :_KeyEventS(NULL),
+_Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -82,7 +106,8 @@ InsertEventBase::~InsertEventBase()
 	_KeyEventS.clear();
 }
 
-InsertEventBase::InsertEventBase(const InsertEventBase&) :_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0) {}
+InsertEventBase::InsertEventBase(const InsertEventBase&) :
+	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

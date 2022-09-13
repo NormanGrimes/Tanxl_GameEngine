@@ -85,7 +85,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.09", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.10", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
@@ -109,40 +109,9 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		static float X = 0.0f;
 		static float Y = 0.0f;
 
-		static float MX = 0.0f;
-		static float MY = 0.0f;
-
-		IEB->GetInsert(window, &_MoveX, &_MoveY);//获取输入
+		IEB->GetInsert(window, &_MoveX, &_MoveY, &X, &Y);//获取输入
 
 		GSB->Set_CurrentLoc(_MoveX, _MoveY);//更新地图中心点/当前移动物品坐标
-
-		X = _MoveX + MX;
-		Y = _MoveY +  MY;
-
-		std::cout << X << "_1_" << Y << "_" << _MoveX << "_" << _MoveY << "   ";
-
-		if (X < 0.0f)
-		{
-			X += 0.01f;
-			MX -= 0.01f;
-		}
-		else if (X > 0.0f)
-		{
-			X -= 0.01f;
-			MX += 0.01f;
-		}
-
-		if (Y < 0.0f)
-		{
-			Y += 0.01f;
-			MY -= 0.01f;
-		}
-		else if (Y > 0.0f)
-		{
-			Y -= 0.01f;
-			MY += 0.01f;
-		}
-		std::cout << X << "_2_" << Y << "_" << _MoveX << "_" << _MoveY << "   ";
 
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveX");
 		glProgramUniform1f(_renderingProgram, _Position, X);

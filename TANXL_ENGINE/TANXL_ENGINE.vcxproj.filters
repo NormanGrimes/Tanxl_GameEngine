@@ -45,9 +45,6 @@
     <ClInclude Include="Tanxl_OpenGL_Draw.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Tanxl_HitBox_Check.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
