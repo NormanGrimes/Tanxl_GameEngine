@@ -1,6 +1,8 @@
 //_VERSION_0_3_ UPDATE LOG
 // LAST_UPDATE 2022-07-24 16:28
 // 因大幅改进整理为0.00.00.10版本
+// 删除两个不必要的私有变量
+// 从初始化函数中整理出地图载入函数
 
 #pragma once
 
@@ -43,6 +45,8 @@ public:
 	//绘制主循环 在此之后的一切操作都会被忽略
 	void mainLoop(GameStateBase* State);
 	void UpdateMargin(float& Margin);
+	//用于第一次或重新加载整个地图场景
+	void ReLoadState(GameStateBase* State);
 private:
 
 	GLuint _Position;
@@ -51,13 +55,12 @@ private:
 
 	bool _Clear_Function = false;
 
-	float _MoveX;
-	float _MoveY;
-
 	GLuint _renderingProgram;
 	GLuint _vao[1];
 
+	//记录地图场景的方块行数
 	int _HeightInt;
+	//记录地图场景的方块列数
 	int _WidthInt;
 	
 	int _ScreenWidth;

@@ -29,17 +29,13 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 	{
 		if (glfwGetKey(window, _KeyEventS.at(i).GLFW_KEY) == GLFW_PRESS)
 		{
-			if (_KeyEventS.at(i).MoveToX/* &&
-				((*MoveX >= 0 && i + 1 < static_cast<int>(_PTB->size()) && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) + 1))
-					|| (*MoveX < 0 && i - 1 >= 0 && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) - 1)))*/)
+			if (_KeyEventS.at(i).MoveToX)
 			{
 				*MoveX += _KeyEventS.at(i).MoveLen;
 				_Margin_X = _KeyEventS.at(i).MoveLen;
 				_Margin_Y = 0;
 			}
-			if (_KeyEventS.at(i).MoveToY/* &&
-				(*MoveY >= 0 && i + _Max_Line < static_cast<int>(_PTB->size()) && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) + _Max_Line))
-				|| (*MoveY < 0 && i - _Max_Line >= 0 && _PTB->at(static_cast<std::vector<bool, std::allocator<bool>>::size_type>(i) - _Max_Line))*/)
+			if (_KeyEventS.at(i).MoveToY)
 			{
 				*MoveY += _KeyEventS.at(i).MoveLen;
 				_Margin_Y = _KeyEventS.at(i).MoveLen;
@@ -47,8 +43,8 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 			}
 			if (StateX != NULL && StateY != NULL)
 			{
-				*StateX += -_Margin_X;
-				*StateY += -_Margin_Y;
+				*StateX -= _Margin_X;
+				*StateY -= _Margin_Y;
 			}
 			AutoCheck(MoveX, MoveY);
 			std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;

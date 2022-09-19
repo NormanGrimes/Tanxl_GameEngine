@@ -1,9 +1,7 @@
-//_VERSION_0_3_ UPDATE LOG
-// LAST_UPDATE 2022-06-07 23:51
-// 微调成员变量名称
-// 加入用于获取当前移动坐标的函数
-// SLocation提供构造函数
-// 实装地图单元编译功能
+//_VERSION_0_4_ UPDATE LOG
+// LAST_UPDATE 2022-07-26 21:35
+// 提供一个指针指向当前地图中心的地图单元
+// Set_CurrentLoc函数预加入重新加载地图功能
 
 #pragma once
 
@@ -85,6 +83,7 @@ public:
 	void Set_ExacHeight(float& Current);//可选功能 对2D棋盘上的物品微调位置
 	void Set_ExacWidth(float& Current);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
+	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
 	int Get_StateHeight()const;
 	int Get_StateWidth()const;
@@ -100,4 +99,6 @@ private:
 	bool _Compile_Success;
 	SLocation _SLoc;//用于记录当前地图中心点
 	std::vector<StateUnit*> _GameState;
+	//用于记录当前地图中心的地图单元
+	StateUnit* _CurrentMid;
 };

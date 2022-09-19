@@ -3,7 +3,7 @@
 #include "Tanxl_OpenGL_Draw.h"
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(), _WidthInt(0),
-_MoveX(0.0f), _MoveY(0.0f), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight) {}
+_renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight) {}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
@@ -30,6 +30,13 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 
 	_Position = glGetUniformLocation(_renderingProgram, "Margin");
 	glProgramUniform1f(_renderingProgram, _Position, 1.0f);
+
+	ReLoadState(State);
+}
+
+void OpenGL_Draw::ReLoadState(GameStateBase* State)
+{
+	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
 	if (State->Get_Compile_Status())
 	{
@@ -95,6 +102,9 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 	init(window, State);
 
+	float MoveX = 0.0f;
+	float MoveY = 0.0f;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		glClearDepth(1.0f);
@@ -102,16 +112,16 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		_Position = glGetUniformLocation(_renderingProgram, "MoveX");//更新操作物品坐标
-		glProgramUniform1f(_renderingProgram, _Position, _MoveX);
+		glProgramUniform1f(_renderingProgram, _Position, MoveX);
 		_Position = glGetUniformLocation(_renderingProgram, "MoveY");
-		glProgramUniform1f(_renderingProgram, _Position, _MoveY);
+		glProgramUniform1f(_renderingProgram, _Position, MoveY);
 
 		static float X = 0.0f;
 		static float Y = 0.0f;
 
-		IEB->GetInsert(window, &_MoveX, &_MoveY, &X, &Y);//获取输入
+		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y);//获取输入
 
-		GSB->Set_CurrentLoc(_MoveX, _MoveY);//更新地图中心点/当前移动物品坐标
+		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveX");
 		glProgramUniform1f(_renderingProgram, _Position, X);

@@ -176,9 +176,14 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 	return &MAB;
 }
 
+void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
+{
+
+}
+
 GameStateBase::GameStateBase(int Height, int Width) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
-	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false) {}
+	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -229,6 +234,13 @@ void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
 	this->_SLoc._LocX = CurrentX;
 	this->_SLoc._LocY = CurrentY;
+	float Compare_Width = 2.0f / _GameState_Width;
+	float Compare_Height = 2.0f / _GameState_Height;
+	if (_SLoc._LocX < Compare_Width || _SLoc._LocX > Compare_Width ||
+		_SLoc._LocY < Compare_Height || _SLoc._LocY > Compare_Height)
+	{
+		//TODO reload Map
+	}
 }
 
 void GameStateBase::Set_Adjust(float Adjust)
@@ -247,7 +259,7 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false) {}
+_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
