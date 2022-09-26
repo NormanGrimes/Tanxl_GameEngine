@@ -1,9 +1,8 @@
-//_VERSION_0_4_ UPDATE LOG
-// LAST_UPDATE 2022-05-30 01:18
-// 整合原LocationBase模块的基本功能
-// 提供编译地图场景的功能
-// 提供获取每次更改的功能
-// 输入功能提供对地图坐标的控制
+//_VERSION_0_5_ UPDATE LOG
+// LAST_UPDATE 2022-07-28 23:01
+// 修改自动检测判断条件减少操作次数
+// 加入一个布尔值标记地图移动范围控制
+// 自动检测在有修改动作时返回二进制位
 
 #pragma once
 
@@ -48,9 +47,12 @@ struct Key_Unit
 class InsertEventBase
 {
 public:
+	//获取输入模块的单例类
 	static InsertEventBase& GetInsertBase();
 	//自动根据已知信息返回方块能移动的最大范围 公式 1 - ( 1 / 游戏地图边长（方块数）)
 	float Get_AutoFloat(int Blocks);
+	float Get_Margin_X();
+	float Get_Margin_Y();
 	//注册一个按键功能，使之能够在窗口中反应，如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit KU);
 	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX = NULL, float* StateY = NULL);
@@ -58,14 +60,15 @@ public:
 	void Set_MaxFloat(float Max_float);
 	void Set_MaxLine(int Max_Line);
 	void Get_MoveData(std::vector<bool>* PVB);
-	float Get_Margin_X();
-	float Get_Margin_Y();
+	//设置移动操作是否会导致方块移动到地图外，State_Range的值默认为真
+	void Set_StateRange(bool Enable);
 private:
-	void AutoCheck(float* MoveX, float* MoveY);
+	unsigned AutoCheck(float* MoveX, float* MoveY);
 	std::vector<Key_Unit> _KeyEventS;
 	std::vector<bool>* _PTB;
 	float _Max_float;
 	int _Max_Line;
+	bool _Is_State_Range;
 
 	//_Margin_X 代表当前主控制物品的X坐标
 	float _Margin_X;

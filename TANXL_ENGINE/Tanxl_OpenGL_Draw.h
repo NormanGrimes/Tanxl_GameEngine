@@ -40,6 +40,7 @@ class OpenGL_Draw
 {
 public:
 	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
+	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
 	void init(GLFWwindow* window, GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime);
 	//绘制主循环 在此之后的一切操作都会被忽略
@@ -62,7 +63,8 @@ private:
 	int _HeightInt;
 	//记录地图场景的方块列数
 	int _WidthInt;
-	
+	//窗口的宽度
 	int _ScreenWidth;
+	//窗口的高度
 	int _ScreenHeight;
 };

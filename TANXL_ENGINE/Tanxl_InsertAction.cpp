@@ -41,12 +41,14 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 				_Margin_Y = _KeyEventS.at(i).MoveLen;
 				_Margin_X = 0;
 			}
-			if (StateX != NULL && StateY != NULL)
+			if (AutoCheck(MoveX, MoveY) == 3)
 			{
-				*StateX -= _Margin_X;
-				*StateY -= _Margin_Y;
+				if (StateX != NULL && StateY != NULL)
+				{
+					*StateX -= _Margin_X;
+					*StateY -= _Margin_Y;
+				}
 			}
-			AutoCheck(MoveX, MoveY);
 			std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
 		}
 	}
@@ -67,6 +69,11 @@ void InsertEventBase::Get_MoveData(std::vector<bool>* PVB)
 	this->_PTB = PVB;
 }
 
+void InsertEventBase::Set_StateRange(bool Enable)
+{
+	this->_Is_State_Range = Enable;
+}
+
 float InsertEventBase::Get_Margin_X()
 {
 	return this->_Margin_X;
@@ -77,23 +84,30 @@ float InsertEventBase::Get_Margin_Y()
 	return this->_Margin_Y;
 }
 
-void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
+unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 {
-	if (*MoveX >= _Max_float)
+	unsigned Return_Value = 0;
+	if (*MoveX > _Max_float)
 		*MoveX = _Max_float;
-	else if (*MoveX <= -_Max_float)
+	else if (*MoveX < -_Max_float)
 		*MoveX = -_Max_float;
+	else
+		Return_Value |= 1;
 
-	if (*MoveY >= _Max_float)
+	if (*MoveY > _Max_float)
 		*MoveY = _Max_float;
-	else if (*MoveY <= -_Max_float)
+	else if (*MoveY < -_Max_float)
 		*MoveY = -_Max_float;
+	else
+		Return_Value |= 2;
+
+	return Return_Value;
 }
 
 //UnImportant µ¥ÀýÊµÏÖ
 
 InsertEventBase::InsertEventBase() :_KeyEventS(NULL),
-_Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f) {}
+_Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -103,7 +117,7 @@ InsertEventBase::~InsertEventBase()
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f) {}
+	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

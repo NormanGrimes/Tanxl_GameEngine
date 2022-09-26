@@ -1,7 +1,7 @@
-//_VERSION_0_3_ UPDATE LOG
-// LAST_UPDATE 2022-05-16 23:45
-// 实装根据方块类型不同产生不同颜色
-// 颜色微调
+//_VERSION_0_4_ UPDATE LOG
+// LAST_UPDATE 2022-07-28 23:06
+// 加入地图移动浮点数用于移动整体画面
+// 浮点数格式标准化
 
 #version 430
 
@@ -19,9 +19,6 @@ uniform float MoveY;
 
 uniform float SHeight;
 uniform float SWidth;
-
-//uniform float CameraMoveX;
-//uniform float CameraMoveY;
 
 uniform float StateMoveX;
 uniform float StateMoveY;
@@ -41,51 +38,51 @@ void main(void)
 
 		if      (gl_VertexID == i * 6 + 0) 
 		{ 
-			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
+			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
-				vs_color = vec4(1.0, 0.8, 0.1, 1.0);
+				vs_color = vec4(1.0f, 0.8f, 0.1f, 1.0f);
 			else
-				vs_color = vec4(0.1, 0.8, 1.0, 1.0);
+				vs_color = vec4(0.1f, 0.8f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 1) 
 		{ 
-			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2, 1.0); 
+			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f); 
 			if(State[i - 1] == 0)
-				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
+				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else
-				vs_color = vec4(0.1, 1.0, 1.0, 1.0);
+				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 2) 
 		{ 
-			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
+			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
-				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
+				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else
-				vs_color = vec4(0.1, 1.0, 1.0, 1.0);
+				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 3) 
 		{ 
-			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2, 1.0); 
+			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f); 
 			if(State[i - 1] == 0)
-				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
+				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else
-				vs_color = vec4(0.1, 1.0, 1.0, 1.0);
+				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 4) 
 		{
-			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
+			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
-				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
+				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else
-				vs_color = vec4(0.1, 1.0, 1.0, 1.0);
+				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 5) 
 		{
-			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2, 1.0);
+			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
-				vs_color = vec4(1.0, 1.0, 0.1, 1.0);
+				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else
-				vs_color = vec4(0.1, 1.0, 1.0, 1.0);
+				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 		}
 
 		WidthMove += Width;
@@ -100,32 +97,32 @@ void main(void)
 
 	if      (gl_VertexID == 0) //MainMoveBlock
 	{
-		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
-		vs_color = vec4(0.9, 0.8, 1.0, 1.0);
+		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		vs_color = vec4(0.9f, 0.8f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 1) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
-		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
+		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 2) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
-		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
+		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 3) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
-		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
+		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 4) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
-		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
+		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 5) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1, 1.0); 
-		vs_color = vec4(0.9, 1.0, 1.0, 1.0);
+		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 }
