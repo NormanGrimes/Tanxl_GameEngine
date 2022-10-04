@@ -64,16 +64,16 @@ void GameStateBase::CompileStateUnits(std::string Infor)
 	{
 		if (Infor.at(i) != ',' && Infor.at(i) != '-')
 			Text_Reader += Infor.at(i);
-		else if (Infor.at(i) == ',' || Infor.at(i) == '.')
+		else if (Infor.at(i) == ',')
 		{
 			Status_Id = std::stoi(Text_Reader);
+			this->_GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
 			Text_Reader = "";
 		}
 		else if (Infor.at(i) == '-')
 		{
 			State_Move = 0;//std::stoi(Text_Reader);
 			Text_Reader = "";
-			this->_GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
 			Status_Id = 0;
 			State_Move = 0;
 		}

@@ -3,6 +3,8 @@
 // 因大幅改进整理为0.00.00.10版本
 // 删除两个不必要的私有变量
 // 从初始化函数中整理出地图载入函数
+// 主绘制循环加入当前指向方块坐标计算
+// 修复最后一个方块显示错误的问题
 
 #pragma once
 
@@ -54,7 +56,8 @@ private:
 
 	GLint _StateInfor[201];
 
-	bool _Clear_Function = false;
+	bool _Clear_Function;
+	bool _Is_State_Changed;
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];

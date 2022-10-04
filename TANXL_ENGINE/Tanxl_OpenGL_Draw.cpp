@@ -2,8 +2,9 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(), _WidthInt(0),
-_renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight) {}
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(),
+_WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
+_Clear_Function(false), _Is_State_Changed(false) {}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
@@ -44,11 +45,11 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 		{
 			_StateInfor[i] = State->Get_GameState()->at(i)->Get_State_Id();
 		}
-		_StateInfor[State->Get_GameState()->size() - 1] = 0;
+		//_StateInfor[State->Get_GameState()->size() - 1] = 0;
 	}
 	else
 	{
-		for (int i = 0; i < _HeightInt * _WidthInt/* + 1*/; i++)
+		for (int i = 0; i < _HeightInt * _WidthInt; i++)
 		{
 			_StateInfor[i] = UIB->Random(0, 2) - 1;
 		}
@@ -105,8 +106,15 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 	float MoveX = 0.0f;
 	float MoveY = 0.0f;
 
+	double Each_Half_Height = 2.0f / (_HeightInt * 2);//10 0.2
+	double Each_Half_Width = 2.0f / (_WidthInt * 2);//10 0.2
+
 	while (!glfwWindowShouldClose(window))
 	{
+		std::cout << "EHH/EHW" << Each_Half_Height << "__" << Each_Half_Width << std::endl;
+
+		ReLoadState(State);
+
 		glClearDepth(1.0f);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -122,6 +130,21 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y);//获取输入
 
 		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
+
+		std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
+
+		double Current_Height = (MoveX + 1.0f) / Each_Half_Height;
+		double Current_Width = (MoveY + 1.0f) / Each_Half_Width;
+
+		std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
+
+		Current_Height = Current_Height / 2;
+		Current_Width = Current_Width / 2;
+
+		int CUH = Current_Height / 1;
+		int CUW = Current_Width / 1;
+
+		std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
 
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveX");
 		glProgramUniform1f(_renderingProgram, _Position, X);

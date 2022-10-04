@@ -18,9 +18,18 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{ &GameStateBase::Get_StateBase(5, 5) };
+	GameStateBase* GSB{ &GameStateBase::Get_StateBase(10, 10) };
 
-	GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0a-1,a-0,a-1,a-0,a-1,");
+	GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		                   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
