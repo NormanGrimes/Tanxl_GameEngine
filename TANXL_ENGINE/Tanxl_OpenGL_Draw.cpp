@@ -111,7 +111,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 	while (!glfwWindowShouldClose(window))
 	{
-		std::cout << "EHH/EHW" << Each_Half_Height << "__" << Each_Half_Width << std::endl;
+		//std::cout << "EHH/EHW" << Each_Half_Height << "__" << Each_Half_Width << std::endl;
 
 		ReLoadState(State);
 
@@ -133,16 +133,16 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
 
-		double Current_Height = (MoveX + 1.0f) / Each_Half_Height;
-		double Current_Width = (MoveY + 1.0f) / Each_Half_Width;
+		double Current_Height = (MoveY + 1.0f) / Each_Half_Height;
+		double Current_Width = (MoveX + 1.0f) / Each_Half_Width;
 
 		std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
 
 		Current_Height = Current_Height / 2;
 		Current_Width = Current_Width / 2;
 
-		int CUH = Current_Height / 1;
-		int CUW = Current_Width / 1;
+		int CUH = static_cast<int>(Current_Height) / 1;
+		int CUW = static_cast<int>(Current_Width) / 1;
 
 		std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
 

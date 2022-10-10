@@ -56,7 +56,20 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 
 void InsertEventBase::Set_MaxFloat(float Max_float)
 {
+	this->_Is_Max_Single = false;
 	this->_Max_float = Max_float;
+}
+
+void InsertEventBase::Set_MaxFloat_Height(float Max_float)
+{
+	this->_Is_Max_Single = true;
+	this->_Max_float_Height = Max_float;
+}
+
+void InsertEventBase::Set_MaxFloat_Width(float Max_float)
+{
+	this->_Is_Max_Single = true;
+	this->_Max_float_Width = Max_float;
 }
 
 void InsertEventBase::Set_MaxLine(int Max_Line)
@@ -87,12 +100,19 @@ float InsertEventBase::Get_Margin_Y()
 unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 {
 	unsigned Return_Value = 0;
+
+	if (_Is_Max_Single)
+		_Max_float = _Max_float_Width;
+
 	if (*MoveX > _Max_float)
 		*MoveX = _Max_float;
 	else if (*MoveX < -_Max_float)
 		*MoveX = -_Max_float;
 	else
 		Return_Value |= 1;
+
+	if (_Is_Max_Single)
+		_Max_float = _Max_float_Height;
 
 	if (*MoveY > _Max_float)
 		*MoveY = _Max_float;
@@ -106,7 +126,7 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 
 //UnImportant µ¥ÀýÊµÏÖ
 
-InsertEventBase::InsertEventBase() :_KeyEventS(NULL),
+InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
 _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true) {}
 
 InsertEventBase::~InsertEventBase()
@@ -117,7 +137,8 @@ InsertEventBase::~InsertEventBase()
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true) {}
+	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Is_Max_Single(false), 
+	_Max_float_Height(1), _Max_float_Width(1),_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

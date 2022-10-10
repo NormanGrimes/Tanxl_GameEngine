@@ -67,7 +67,10 @@ int main()
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
 	IEB->RegistEvent(MOVE_DOWN);
 
-	IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
+	//IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
+
+	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
+	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth()));
 
 	OpenGL_Draw OGD(600, 600);
 	OGD.mainLoop(GSB);
