@@ -101,6 +101,9 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 {
 	unsigned Return_Value = 0;
 
+	if (!_Is_State_Range)
+		return 3;
+
 	if (_Is_Max_Single)
 		_Max_float = _Max_float_Width;
 

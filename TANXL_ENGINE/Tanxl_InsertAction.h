@@ -5,6 +5,7 @@
 // 自动检测在有修改动作时返回二进制位
 // 加入单独对X/Y轴最大移动范围设置的函数
 // 自动检测函数加入对X/Y轴判断的支持
+// Set_StateRange功能实际安装
 
 #pragma once
 
@@ -68,7 +69,7 @@ public:
 	void Set_MaxFloat_Width(float Max_float);
 	void Set_MaxLine(int Max_Line);
 	void Get_MoveData(std::vector<bool>* PVB);
-	//设置移动操作是否会导致方块移动到地图外，State_Range的值默认为真
+	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
 private:
 	unsigned AutoCheck(float* MoveX, float* MoveY);

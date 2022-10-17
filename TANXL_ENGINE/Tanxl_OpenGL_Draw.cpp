@@ -32,20 +32,26 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_Position = glGetUniformLocation(_renderingProgram, "Margin");
 	glProgramUniform1f(_renderingProgram, _Position, 1.0f);
 
-	ReLoadState(State);
+	ReLoadState(State, _HeightInt / 2, _WidthInt / 2);
 }
 
-void OpenGL_Draw::ReLoadState(GameStateBase* State)
+void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
+	static int Last_PosX = PosX;
+	static int Last_PosY = PosY;
+
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < State->Get_GameState()->size(); i++)
+		for (int i = 0; i < _HeightInt * _WidthInt; i += 4)
 		{
-			_StateInfor[i] = State->Get_GameState()->at(i)->Get_State_Id();
+			_StateInfor[i] = State->Get_GameState()->at((PosX * _HeightInt + PosY - 2)% State->Get_GameState()->size())->Get_State_Id();
+			_StateInfor[i + 1] = State->Get_GameState()->at((PosX * _HeightInt + PosY - 1) % State->Get_GameState()->size())->Get_State_Id();
+			_StateInfor[i + 2] = State->Get_GameState()->at((PosX * _HeightInt + PosY) % State->Get_GameState()->size())->Get_State_Id();
+			_StateInfor[i + 3] = State->Get_GameState()->at((PosX * _HeightInt + PosY + 1) % State->Get_GameState()->size())->Get_State_Id();
+			_StateInfor[i + 4] = State->Get_GameState()->at((PosX * _HeightInt + PosY + 2) % State->Get_GameState()->size())->Get_State_Id();
 		}
-		//_StateInfor[State->Get_GameState()->size() - 1] = 0;
 	}
 	else
 	{
@@ -61,6 +67,9 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
 		glProgramUniform1i(_renderingProgram, StatePos, _StateInfor[i]);
 	}
+
+	Last_PosX = PosX;
+	Last_PosY = PosY;
 }
 
 void OpenGL_Draw::UpdateMargin(float& Margin)
@@ -111,10 +120,6 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 	while (!glfwWindowShouldClose(window))
 	{
-		//std::cout << "EHH/EHW" << Each_Half_Height << "__" << Each_Half_Width << std::endl;
-
-		ReLoadState(State);
-
 		glClearDepth(1.0f);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -133,18 +138,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
 
-		double Current_Height = (MoveY + 1.0f) / Each_Half_Height;
-		double Current_Width = (MoveX + 1.0f) / Each_Half_Width;
-
-		std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
-
-		Current_Height = Current_Height / 2;
-		Current_Width = Current_Width / 2;
+		double Current_Height = (MoveY + 1.0f) / (Each_Half_Height * 2);
+		double Current_Width = (MoveX + 1.0f) / (Each_Half_Width * 2);
 
 		int CUH = static_cast<int>(Current_Height) / 1;
 		int CUW = static_cast<int>(Current_Width) / 1;
 
-		std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
+		std::cout << "Current BLOCK : " << CUH << " " << CUW <<std::endl;
 
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveX");
 		glProgramUniform1f(_renderingProgram, _Position, X);
@@ -154,6 +154,8 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		display(window, glfwGetTime());
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		ReLoadState(State, CUH, CUW);
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();

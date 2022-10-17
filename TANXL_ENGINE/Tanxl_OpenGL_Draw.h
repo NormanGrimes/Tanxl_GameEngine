@@ -5,6 +5,7 @@
 // 从初始化函数中整理出地图载入函数
 // 主绘制循环加入当前指向方块坐标计算
 // 修复最后一个方块显示错误的问题
+// 地图更新函数修改用于测试可探索世界
 
 #pragma once
 
@@ -49,7 +50,7 @@ public:
 	void mainLoop(GameStateBase* State);
 	void UpdateMargin(float& Margin);
 	//用于第一次或重新加载整个地图场景
-	void ReLoadState(GameStateBase* State);
+	void ReLoadState(GameStateBase* State, int PosX, int PosY);
 private:
 
 	GLuint _Position;

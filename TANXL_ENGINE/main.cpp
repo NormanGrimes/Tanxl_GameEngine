@@ -18,7 +18,7 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{ &GameStateBase::Get_StateBase(10, 10) };
+	GameStateBase* GSB{ &GameStateBase::Get_StateBase(5, 5) };
 
 	GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
@@ -71,6 +71,8 @@ int main()
 
 	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth()));
+
+	//IEB->Set_StateRange(false);
 
 	OpenGL_Draw OGD(600, 600);
 	OGD.mainLoop(GSB);
