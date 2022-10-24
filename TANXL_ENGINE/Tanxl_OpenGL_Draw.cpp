@@ -44,9 +44,9 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < _HeightInt * _WidthInt; i += 4)
+		for (int i = 0; i < _HeightInt * _WidthInt; i += 5, PosX++)
 		{
-			_StateInfor[i] = State->Get_GameState()->at((PosX * _HeightInt + PosY - 2)% State->Get_GameState()->size())->Get_State_Id();
+			_StateInfor[i] = State->Get_GameState()->at((PosX * _HeightInt + PosY - 2) % State->Get_GameState()->size())->Get_State_Id();
 			_StateInfor[i + 1] = State->Get_GameState()->at((PosX * _HeightInt + PosY - 1) % State->Get_GameState()->size())->Get_State_Id();
 			_StateInfor[i + 2] = State->Get_GameState()->at((PosX * _HeightInt + PosY) % State->Get_GameState()->size())->Get_State_Id();
 			_StateInfor[i + 3] = State->Get_GameState()->at((PosX * _HeightInt + PosY + 1) % State->Get_GameState()->size())->Get_State_Id();

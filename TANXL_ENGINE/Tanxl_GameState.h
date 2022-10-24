@@ -3,6 +3,8 @@
 // 提供一个指针指向当前地图中心的地图单元
 // Set_CurrentLoc函数预加入重新加载地图功能
 // 修复编译地图会导致第一个元素编译失败的问题
+// 加入Move_State结构体标记移动位置
+// 提供Move_State结构体相关控制接口
 
 #pragma once
 
@@ -15,6 +17,15 @@
 #define STRING
 #include<string>
 #endif
+
+struct Move_State
+{
+	Move_State(int NX = 0, int PX = 0, int NY = 0, int PY = 0);
+	int _Move_NX;
+	int _Move_PX;
+	int _Move_NY;
+	int _Move_PY;
+};
 
 struct SLocation
 {
@@ -74,8 +85,10 @@ public:
 	size_t Get_StateSize();
 	StateUnit* Get_StateUnit(int Pos);
 	static GameStateBase& Get_StateBase(int Height = 0, int Width = 0);
+	Move_State Get_Move_State();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
+	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_State(int Width, int Height);
 	void CompileStateUnits(std::string Infor);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
@@ -98,6 +111,7 @@ private:
 	int _GameState_Height;
 	float _GameState_Adjust;
 	bool _Compile_Success;
+	Move_State _MState;//用于记录当前加载地图区域
 	SLocation _SLoc;//用于记录当前地图中心点
 	std::vector<StateUnit*> _GameState;
 	//用于记录当前地图中心的地图单元

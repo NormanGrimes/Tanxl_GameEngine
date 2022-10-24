@@ -74,6 +74,6 @@ int main()
 
 	//IEB->Set_StateRange(false);
 
-	OpenGL_Draw OGD(600, 600);
+	OpenGL_Draw OGD(800, 800);
 	OGD.mainLoop(GSB);
 }

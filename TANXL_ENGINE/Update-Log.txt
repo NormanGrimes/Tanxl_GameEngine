@@ -1,4 +1,10 @@
-TEnGinE Version-0.1 Build-27 2022-07-31 21:23 UPDATE_LOG
+TEnGinE Version-0.1 Build-28 2022-08-07 22:06 UPDATE_LOG
+////////////////////////////////////////////////////////
+重新整理头文件与源文件存放路径。State模块加入Move_State
+结构体标记移动位置。State模块提供Move_State结构体相关控
+制接口。
+
+TEnGinE Version-0.1 Build-27 2022-08-03 21:23 UPDATE_LOG
 ////////////////////////////////////////////////////////
 Set_StateRange功能实际安装。绘制模块地图更新函数修改用于
 测试可探索世界。导入STEAM相关依赖项并配置相关环境。

@@ -84,7 +84,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>..\GRAPHIC\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>..\GRAPHIC\include;\public\steam;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -163,51 +163,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="public\steam\isteamapplist.h" />
-    <ClInclude Include="public\steam\isteamapps.h" />
-    <ClInclude Include="public\steam\isteamappticket.h" />
-    <ClInclude Include="public\steam\isteamclient.h" />
-    <ClInclude Include="public\steam\isteamcontroller.h" />
-    <ClInclude Include="public\steam\isteamdualsense.h" />
-    <ClInclude Include="public\steam\isteamfriends.h" />
-    <ClInclude Include="public\steam\isteamgamecoordinator.h" />
-    <ClInclude Include="public\steam\isteamgameserver.h" />
-    <ClInclude Include="public\steam\isteamgameserverstats.h" />
-    <ClInclude Include="public\steam\isteamhtmlsurface.h" />
-    <ClInclude Include="public\steam\isteamhttp.h" />
-    <ClInclude Include="public\steam\isteaminput.h" />
-    <ClInclude Include="public\steam\isteaminventory.h" />
-    <ClInclude Include="public\steam\isteammatchmaking.h" />
-    <ClInclude Include="public\steam\isteammusic.h" />
-    <ClInclude Include="public\steam\isteammusicremote.h" />
-    <ClInclude Include="public\steam\isteamnetworking.h" />
-    <ClInclude Include="public\steam\isteamnetworkingmessages.h" />
-    <ClInclude Include="public\steam\isteamnetworkingsockets.h" />
-    <ClInclude Include="public\steam\isteamnetworkingutils.h" />
-    <ClInclude Include="public\steam\isteamparentalsettings.h" />
-    <ClInclude Include="public\steam\isteamps3overlayrenderer.h" />
-    <ClInclude Include="public\steam\isteamremoteplay.h" />
-    <ClInclude Include="public\steam\isteamremotestorage.h" />
-    <ClInclude Include="public\steam\isteamscreenshots.h" />
-    <ClInclude Include="public\steam\isteamugc.h" />
-    <ClInclude Include="public\steam\isteamuser.h" />
-    <ClInclude Include="public\steam\isteamuserstats.h" />
-    <ClInclude Include="public\steam\isteamutils.h" />
-    <ClInclude Include="public\steam\isteamvideo.h" />
-    <ClInclude Include="public\steam\matchmakingtypes.h" />
-    <ClInclude Include="public\steam\steamclientpublic.h" />
-    <ClInclude Include="public\steam\steamencryptedappticket.h" />
-    <ClInclude Include="public\steam\steamhttpenums.h" />
-    <ClInclude Include="public\steam\steamnetworkingfakeip.h" />
-    <ClInclude Include="public\steam\steamnetworkingtypes.h" />
-    <ClInclude Include="public\steam\steamps3params.h" />
-    <ClInclude Include="public\steam\steamtypes.h" />
-    <ClInclude Include="public\steam\steamuniverse.h" />
-    <ClInclude Include="public\steam\steam_api.h" />
-    <ClInclude Include="public\steam\steam_api_common.h" />
-    <ClInclude Include="public\steam\steam_api_flat.h" />
-    <ClInclude Include="public\steam\steam_api_internal.h" />
-    <ClInclude Include="public\steam\steam_gameserver.h" />
     <ClInclude Include="Tanxl_Console_List.h" />
     <ClInclude Include="Tanxl_DataBase.h" />
     <ClInclude Include="Tanxl_GameObject.h" />
@@ -226,13 +181,9 @@
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragShader.glsl">
-      <FileType>Document</FileType>
-    </None>
+    <None Include="fragShader.glsl" />
     <None Include="public\steam\lib\win64\sdkencryptedappticket64.dll" />
-    <None Include="vertShader.glsl">
-      <FileType>Document</FileType>
-    </None>
+    <None Include="vertShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />

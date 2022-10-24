@@ -12,176 +12,38 @@
     <Filter Include="源文件\Engine">
       <UniqueIdentifier>{d2a03b4e-ad5c-458b-b483-752cd313354f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\头文件">
+    <Filter Include="头文件">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="源文件\头文件\Engine">
+    <Filter Include="头文件\Engine">
       <UniqueIdentifier>{46f0d6e0-797d-4aa3-a790-91ce7b4d68a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="源文件\头文件\steam">
-      <UniqueIdentifier>{29139d9d-e004-4f82-9bc1-9919e07b3b59}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tanxl_Console_List.h">
-      <Filter>源文件\头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_DataBase.h">
-      <Filter>源文件\头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_GameState.h">
-      <Filter>源文件\头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_UniqueID.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_GameObject.h">
       <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_InsertAction.h">
-      <Filter>源文件\头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_OpenGL_Render.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_UniqueID.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_Console_List.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_DataBase.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_GameState.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_InsertAction.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Tanxl_OpenGL_Draw.h">
-      <Filter>源文件\头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamapplist.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamapps.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamappticket.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamclient.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamcontroller.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamdualsense.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamfriends.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamgamecoordinator.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamgameserver.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamgameserverstats.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamhtmlsurface.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamhttp.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteaminput.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteammatchmaking.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteaminventory.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteammusic.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamuserstats.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamuniverse.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamnetworking.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamnetworkingmessages.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteammusicremote.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamnetworkingsockets.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamnetworkingutils.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamparentalsettings.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamps3overlayrenderer.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamremoteplay.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamremotestorage.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamscreenshots.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamugc.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamuser.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamutils.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\isteamvideo.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\matchmakingtypes.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steam_api.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steam_api_common.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steam_api_flat.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steam_api_internal.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steam_gameserver.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamclientpublic.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamencryptedappticket.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamhttpenums.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamnetworkingfakeip.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamnetworkingtypes.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamps3params.h">
-      <Filter>源文件\头文件\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="public\steam\steamtypes.h">
-      <Filter>源文件\头文件\steam</Filter>
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -210,13 +72,13 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vertShader.glsl">
-      <Filter>资源文件</Filter>
-    </None>
+    <None Include="public\steam\lib\win64\sdkencryptedappticket64.dll" />
     <None Include="fragShader.glsl">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="public\steam\lib\win64\sdkencryptedappticket64.dll" />
+    <None Include="vertShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="public\steam\lib\win64\sdkencryptedappticket64.lib" />

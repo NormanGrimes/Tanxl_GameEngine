@@ -115,6 +115,11 @@ GameStateBase& GameStateBase::Get_StateBase(int Height, int Width)
 	return GameState;
 }
 
+Move_State GameStateBase::Get_Move_State()
+{
+	return this->_MState;
+}
+
 void GameStateBase::Set_ExacHeight(float& Current)
 {
 	static int EHCount = 0;
@@ -176,6 +181,19 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 	return &MAB;
 }
 
+void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
+{
+	this->_MState._Move_NX = NX;
+	this->_MState._Move_PX = PX;
+	this->_MState._Move_NY = NY;
+	this->_MState._Move_PY = PY;
+
+	int Line_Width = this->_MState._Move_PX - this->_MState._Move_NX;
+	int Coum_Width = this->_MState._Move_PX - this->_MState._Move_PY;
+
+	//TODO
+}
+
 void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 {
 
@@ -183,7 +201,7 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 
 GameStateBase::GameStateBase(int Height, int Width) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
-	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL) {}
+	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -259,7 +277,7 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL) {}
+_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
@@ -282,6 +300,10 @@ std::vector<StateUnit*>* GameStateBase::Get_GameState()
 {
 	return &this->_GameState;
 }
+
+//Move_State
+
+Move_State::Move_State(int NX, int PX, int NY, int PY) :_Move_NX(NY), _Move_NY(NY), _Move_PX(PX), _Move_PY(PY) {}
 
 //SLocation
 
