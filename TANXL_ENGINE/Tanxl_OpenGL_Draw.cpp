@@ -21,6 +21,9 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 
 	_HeightInt = State->Get_StateHeight();
 	_WidthInt = State->Get_StateWidth();
+	
+	State->Set_Move_State(0, _HeightInt - 1, 0, _WidthInt - 1);
+
 	_renderingProgram = OR::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
@@ -39,18 +42,29 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
-	static int Last_PosX = PosX;
-	static int Last_PosY = PosY;
+	int Move_NX = State->Get_Move_State()._Move_NX;
+	int Move_PX = State->Get_Move_State()._Move_PX;
+	int Move_NY = State->Get_Move_State()._Move_NY;
+	int Move_PY = State->Get_Move_State()._Move_PY;
 
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < _HeightInt * _WidthInt; i += 5, PosX++)
+		for (int i = 0; i < _HeightInt * _WidthInt; i ++)
 		{
-			_StateInfor[i] = State->Get_GameState()->at((PosX * _HeightInt + PosY - 2) % State->Get_GameState()->size())->Get_State_Id();
-			_StateInfor[i + 1] = State->Get_GameState()->at((PosX * _HeightInt + PosY - 1) % State->Get_GameState()->size())->Get_State_Id();
-			_StateInfor[i + 2] = State->Get_GameState()->at((PosX * _HeightInt + PosY) % State->Get_GameState()->size())->Get_State_Id();
-			_StateInfor[i + 3] = State->Get_GameState()->at((PosX * _HeightInt + PosY + 1) % State->Get_GameState()->size())->Get_State_Id();
-			_StateInfor[i + 4] = State->Get_GameState()->at((PosX * _HeightInt + PosY + 2) % State->Get_GameState()->size())->Get_State_Id();
+			if (Move_NX < 0 || Move_NX >(_WidthInt - 1) || Move_NY <0 || Move_NY >(_HeightInt - 1))
+			{
+				_StateInfor[i] = 3;
+			}
+			else
+				_StateInfor[i] = State->Get_GameState()->at
+				((Move_NX + Move_NY * _WidthInt) % State->Get_GameState()->size())->Get_State_Id();
+
+			Move_NX++;
+			if (Move_NX > Move_PX)//抵达尽头 重新获取初值
+			{
+				Move_NX = State->Get_Move_State()._Move_NX;
+				Move_NY++;
+			}
 		}
 	}
 	else
@@ -67,9 +81,6 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
 		glProgramUniform1i(_renderingProgram, StatePos, _StateInfor[i]);
 	}
-
-	Last_PosX = PosX;
-	Last_PosY = PosY;
 }
 
 void OpenGL_Draw::UpdateMargin(float& Margin)

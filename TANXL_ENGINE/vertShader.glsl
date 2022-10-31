@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-07-28 23:06
 // 加入地图移动浮点数用于移动整体画面
 // 浮点数格式标准化
+// 区域状态增加一种零状态 即渲染为黑色
 
 #version 430
 
@@ -41,48 +42,60 @@ void main(void)
 			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0f, 0.8f, 0.1f, 1.0f);
-			else
+			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 0.8f, 1.0f, 1.0f);
+			else
+				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 1) 
 		{ 
 			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f); 
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			else
+			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else
+				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 2) 
 		{ 
 			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			else
+			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else
+				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 3) 
 		{ 
 			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX, -Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f); 
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			else
+			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else
+				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 4) 
 		{
 			gl_Position = vec4( -Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			else
+			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else
+				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 5) 
 		{
 			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX,  Height / 2 + HeightMove + StateMoveY, 0.2f, 1.0f);
 			if(State[i - 1] == 0)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			else
+			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else
+				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 
 		WidthMove += Width;
