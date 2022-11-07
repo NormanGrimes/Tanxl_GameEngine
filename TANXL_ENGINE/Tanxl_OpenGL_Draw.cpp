@@ -47,17 +47,22 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 	int Move_NY = State->Get_Move_State()._Move_NY;
 	int Move_PY = State->Get_Move_State()._Move_PY;
 
+	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
+	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
+
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < _HeightInt * _WidthInt; i ++)
+		for (int i = 0; i < _HeightInt * _WidthInt; i++)
 		{
-			if (Move_NX < 0 || Move_NX >(_WidthInt - 1) || Move_NY <0 || Move_NY >(_HeightInt - 1))
+			if (Move_NX < 0 || Move_NX >(_WidthInt - 1) || Move_NY < 0 || Move_NY >(_HeightInt - 1))
 			{
 				_StateInfor[i] = 3;
 			}
 			else
-				_StateInfor[i] = State->Get_GameState()->at
-				((Move_NX + Move_NY * _WidthInt) % State->Get_GameState()->size())->Get_State_Id();
+			{
+				int x = Move_NX + Move_NY * 10;
+				_StateInfor[i] = State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id();
+			}
 
 			Move_NX++;
 			if (Move_NX > Move_PX)//抵达尽头 重新获取初值
@@ -152,8 +157,31 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		double Current_Height = (MoveY + 1.0f) / (Each_Half_Height * 2);
 		double Current_Width = (MoveX + 1.0f) / (Each_Half_Width * 2);
 
-		int CUH = static_cast<int>(Current_Height) / 1;
-		int CUW = static_cast<int>(Current_Width) / 1;
+		static int CUH = static_cast<int>(Current_Height) / 1;
+		static int CUW = static_cast<int>(Current_Width) / 1;
+
+		int NCUH = static_cast<int>(Current_Height) / 1;
+		int NCUW = static_cast<int>(Current_Width) / 1;
+
+		if (NCUH != CUH)
+		{
+			if (NCUH > CUH)
+				State->Set_Move_State(MoveToPH);
+			else
+				State->Set_Move_State(MoveToNH);
+			CUH = NCUH;
+			ReLoadState(State, CUH, CUW);
+		}
+
+		if (NCUW != CUW)
+		{
+			if (NCUW < CUW)
+				State->Set_Move_State(MoveToPW);
+			else
+				State->Set_Move_State(MoveToNW);
+			CUW = NCUW;
+			ReLoadState(State, CUH, CUW);
+		}
 
 		std::cout << "Current BLOCK : " << CUH << " " << CUW <<std::endl;
 
@@ -165,8 +193,6 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		display(window, glfwGetTime());
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
-		ReLoadState(State, CUH, CUW);
 	}
 	glfwDestroyWindow(window);
 	glfwTerminate();

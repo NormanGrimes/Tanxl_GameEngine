@@ -56,7 +56,7 @@ public:
 	float Get_AutoFloat(int Blocks);
 	float Get_Margin_X();
 	float Get_Margin_Y();
-	//注册一个按键功能，使之能够在窗口中反应，如果仅定义按键而不注册则不会产生任何效果
+	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit KU);
 	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX = NULL, float* StateY = NULL);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）

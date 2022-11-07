@@ -5,6 +5,7 @@
 // 修复编译地图会导致第一个元素编译失败的问题
 // 加入Move_State结构体标记移动位置
 // 提供Move_State结构体相关控制接口
+// 提供调整Move_State的重载函数与相关枚举
 
 #pragma once
 
@@ -17,6 +18,14 @@
 #define STRING
 #include<string>
 #endif
+
+enum EMove_State_EventId
+{
+	MoveToNW = 0,
+	MoveToPW = 1,
+	MoveToNH = 2,
+	MoveToPH = 3
+};
 
 struct Move_State
 {
@@ -49,6 +58,7 @@ private:
 class GameEventBase
 {
 public:
+	//注册游戏事件 如果仅定义事件而不注册则不会产生任何效果
 	void RegistEvent(GameEvent* Event);
 	static GameEventBase& GetEventBase();
 	GameEvent* GetGameEvent(std::string EventName);
@@ -89,6 +99,7 @@ public:
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
 	void Set_Move_State(int NX, int PX, int NY, int PY);
+	void Set_Move_State(int Event_Id);
 	void Set_State(int Width, int Height);
 	void CompileStateUnits(std::string Infor);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾

@@ -194,6 +194,29 @@ void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
 	//TODO
 }
 
+void GameStateBase::Set_Move_State(int Event_Id)
+{
+	switch (Event_Id)
+	{
+	case 0:
+		this->_MState._Move_NX++;
+		this->_MState._Move_PX++;
+		break;
+	case 1:
+		this->_MState._Move_NX--;
+		this->_MState._Move_PX--;
+		break;
+	case 2:
+		this->_MState._Move_NY++;
+		this->_MState._Move_PY++;
+		break;
+	case 3:
+		this->_MState._Move_NY--;
+		this->_MState._Move_PY--;
+		break;
+	}
+}
+
 void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 {
 

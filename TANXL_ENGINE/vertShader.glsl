@@ -3,6 +3,7 @@
 // 加入地图移动浮点数用于移动整体画面
 // 浮点数格式标准化
 // 区域状态增加一种零状态 即渲染为黑色
+// 零状态暂时增加颜色使效果更加明显
 
 #version 430
 
@@ -45,7 +46,7 @@ void main(void)
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 0.8f, 1.0f, 1.0f);
 			else
-				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+				vs_color = vec4(1.0f, 0.8f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 1) 
 		{ 
@@ -55,7 +56,7 @@ void main(void)
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 			else
-				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 2) 
 		{ 
@@ -65,7 +66,7 @@ void main(void)
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 			else
-				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 3) 
 		{ 
@@ -75,7 +76,7 @@ void main(void)
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 			else
-				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 4) 
 		{
@@ -85,7 +86,7 @@ void main(void)
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 			else
-				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 5) 
 		{
@@ -95,7 +96,7 @@ void main(void)
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 			else
-				vs_color = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
 
 		WidthMove += Width;
