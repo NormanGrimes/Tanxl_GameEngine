@@ -1,9 +1,6 @@
-//_VERSION_0_4_ UPDATE LOG
-// LAST_UPDATE 2022-07-28 23:06
-// 加入地图移动浮点数用于移动整体画面
-// 浮点数格式标准化
-// 区域状态增加一种零状态 即渲染为黑色
-// 零状态暂时增加颜色使效果更加明显
+//_VERSION_0_5_ UPDATE LOG
+// LAST_UPDATE 2022-08-15 22:27
+// 渲染地图额外的一圈内容 用于预加载
 
 #version 430
 
@@ -28,8 +25,8 @@ uniform float StateMoveY;
 void main(void)
 {
 	
-	float Height = 2.0f / SHeight;
-	float Width  = 2.0f / SWidth;
+	float Height = 2.0f / (SHeight - 2);
+	float Width  = 2.0f / (SWidth - 2);
 
 	int counts = 0;
 

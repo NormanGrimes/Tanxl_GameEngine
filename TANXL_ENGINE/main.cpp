@@ -69,8 +69,8 @@ int main()
 
 	//IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 
-	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
-	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth()));
+	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight() + 2));
+	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth() + 2));
 
 	//IEB->Set_StateRange(false);
 

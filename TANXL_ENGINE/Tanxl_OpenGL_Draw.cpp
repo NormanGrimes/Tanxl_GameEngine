@@ -22,20 +22,20 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_HeightInt = State->Get_StateHeight();
 	_WidthInt = State->Get_StateWidth();
 	
-	State->Set_Move_State(0, _HeightInt - 1, 0, _WidthInt - 1);
+	State->Set_Move_State(0, _HeightInt + 1, 0, _WidthInt + 1);
 
 	_renderingProgram = OR::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
 	_Position = glGetUniformLocation(_renderingProgram, "SHeight");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(_HeightInt));
+	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(_HeightInt + 2));
 	_Position = glGetUniformLocation(_renderingProgram, "SWidth");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(_WidthInt));
+	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(_WidthInt + 2));
 
 	_Position = glGetUniformLocation(_renderingProgram, "Margin");
 	glProgramUniform1f(_renderingProgram, _Position, 1.0f);
 
-	ReLoadState(State, _HeightInt / 2, _WidthInt / 2);
+	ReLoadState(State, (_HeightInt + 2) / 2, (_WidthInt + 2) / 2);
 }
 
 void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
@@ -52,12 +52,16 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < _HeightInt * _WidthInt; i++)
+		for (int i = 0; i < (_HeightInt + 2) * (_WidthInt + 2); i++)
 		{
-			if (Move_NX < 0 || Move_NX >(_WidthInt - 1) || Move_NY < 0 || Move_NY >(_HeightInt - 1))
+			if (Move_NX < 0 || Move_NX >(_WidthInt + 1) || Move_NY < 0 || Move_NY >(_HeightInt + 1))
 			{
 				_StateInfor[i] = 3;
 			}
+			//else if ((i + 1) % _WidthInt == 0 || (i + 1) % _WidthInt == 1 || (i + 1) % _WidthInt == _WidthInt - 1)
+			//{
+			//	_StateInfor[i] = 3;
+			//}
 			else
 			{
 				int x = Move_NX + Move_NY * 10;
@@ -74,13 +78,13 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 	}
 	else
 	{
-		for (int i = 0; i < _HeightInt * _WidthInt; i++)
+		for (int i = 0; i < (_HeightInt + 2) * (_WidthInt + 2); i++)
 		{
 			_StateInfor[i] = UIB->Random(0, 2) - 1;
 		}
 	}
 	GLuint StatePos;
-	for (int i = 0; i < _HeightInt * _WidthInt + 1; i++)
+	for (int i = 0; i < (_HeightInt + 2) * (_WidthInt + 2) + 1; i++)
 	{
 		std::string Tag = "State[" + std::to_string(i) + "]";
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
@@ -110,7 +114,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime)
 	//std::cout << HeightInt * WidthInt;
 
 	glUseProgram(_renderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, _HeightInt * _WidthInt * 6 + 6);
+	glDrawArrays(GL_TRIANGLES, 0, (_HeightInt + 2) * (_WidthInt + 2) * 6 + 6);
 }
 
 void OpenGL_Draw::mainLoop(GameStateBase* State)
@@ -118,7 +122,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.10", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.11", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
