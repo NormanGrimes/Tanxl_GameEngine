@@ -1,6 +1,7 @@
 //_VERSION_0_3_ UPDATE LOG
 // LAST_UPDATE 2022-08-15 22:41
 // 增加对地图额外一圈载入的相关操作
+// 主绘制循环现在支持无限世界展示
 
 #pragma once
 

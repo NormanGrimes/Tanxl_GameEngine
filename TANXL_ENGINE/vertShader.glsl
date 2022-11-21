@@ -1,6 +1,7 @@
 //_VERSION_0_5_ UPDATE LOG
 // LAST_UPDATE 2022-08-15 22:27
 // 渲染地图额外的一圈内容 用于预加载
+// 移除StateMove对可移动点的影响
 
 #version 430
 
@@ -108,32 +109,32 @@ void main(void)
 
 	if      (gl_VertexID == 0) //MainMoveBlock
 	{
-		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		gl_Position = vec4(  Width / 2 + MoveX, -Height / 2 + MoveY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 0.8f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 1) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 2) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 3) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX, -Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 4) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		gl_Position = vec4( -Width / 2 + MoveX,  Height / 2 + MoveY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 5) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX + StateMoveX,  Height / 2 + MoveY + StateMoveY, 0.1f, 1.0f); 
+		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 }

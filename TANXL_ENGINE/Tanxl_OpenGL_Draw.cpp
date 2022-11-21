@@ -169,10 +169,16 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		if (NCUH != CUH)
 		{
-			if (NCUH > CUH)
-				State->Set_Move_State(MoveToPH);
-			else
+			if (NCUH < CUH)
+			{
 				State->Set_Move_State(MoveToNH);
+				Y -= Each_Half_Width * 2;
+			}
+			else
+			{
+				State->Set_Move_State(MoveToPH);
+				Y += Each_Half_Width * 2;
+			}
 			CUH = NCUH;
 			ReLoadState(State, CUH, CUW);
 		}
@@ -180,9 +186,15 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		if (NCUW != CUW)
 		{
 			if (NCUW < CUW)
+			{
 				State->Set_Move_State(MoveToPW);
+				X -= Each_Half_Height * 2;
+			}
 			else
+			{
 				State->Set_Move_State(MoveToNW);
+				X += Each_Half_Height * 2;
+			}
 			CUW = NCUW;
 			ReLoadState(State, CUH, CUW);
 		}
