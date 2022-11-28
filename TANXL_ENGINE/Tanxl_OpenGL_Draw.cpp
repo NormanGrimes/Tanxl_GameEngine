@@ -28,9 +28,9 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
 	_Position = glGetUniformLocation(_renderingProgram, "SHeight");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(_HeightInt + 2));
+	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(/*_HeightInt*/10 + 2));
 	_Position = glGetUniformLocation(_renderingProgram, "SWidth");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(_WidthInt + 2));
+	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(/*_WidthInt*/10 + 2));
 
 	_Position = glGetUniformLocation(_renderingProgram, "Margin");
 	glProgramUniform1f(_renderingProgram, _Position, 1.0f);
@@ -52,9 +52,9 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < (_HeightInt + 2) * (_WidthInt + 2); i++)
+		for (int i = 0; i < (/*_HeightInt*/10 + 2) * (/*_WidthInt*/10 + 2); i++)
 		{
-			if (Move_NX < 0 || Move_NX >(_WidthInt + 1) || Move_NY < 0 || Move_NY >(_HeightInt + 1))
+			if (Move_NX < 0 || Move_NX >(/*_WidthInt*/10) || Move_NY < 0 || Move_NY >(/*_HeightInt*/10))
 			{
 				_StateInfor[i] = 3;
 			}
@@ -84,7 +84,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 		}
 	}
 	GLuint StatePos;
-	for (int i = 0; i < (_HeightInt + 2) * (_WidthInt + 2) + 1; i++)
+	for (int i = 0; i < (/*_HeightInt*/10 + 2) * (/*_WidthInt*/10 + 2) + 1; i++)
 	{
 		std::string Tag = "State[" + std::to_string(i) + "]";
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
@@ -114,7 +114,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime)
 	//std::cout << HeightInt * WidthInt;
 
 	glUseProgram(_renderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, (_HeightInt + 2) * (_WidthInt + 2) * 6 + 6);
+	glDrawArrays(GL_TRIANGLES, 0, (/*_HeightInt*/10 + 2) * (/*_WidthInt*/10 + 2) * 6 + 6);
 }
 
 void OpenGL_Draw::mainLoop(GameStateBase* State)
@@ -158,8 +158,8 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
 
-		double Current_Height = (MoveY + 1.0f) / (Each_Half_Height * 2);
-		double Current_Width = (MoveX + 1.0f) / (Each_Half_Width * 2);
+		double Current_Height = (MoveY + 1) / (Each_Half_Height * 2);
+		double Current_Width = (MoveX + 1) / (Each_Half_Width * 2);
 
 		static int CUH = static_cast<int>(Current_Height) / 1;
 		static int CUW = static_cast<int>(Current_Width) / 1;
@@ -172,12 +172,12 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 			if (NCUH < CUH)
 			{
 				State->Set_Move_State(MoveToNH);
-				Y -= Each_Half_Width * 2;
+				Y -= static_cast<float>(Each_Half_Width) * 2;
 			}
 			else
 			{
 				State->Set_Move_State(MoveToPH);
-				Y += Each_Half_Width * 2;
+				Y += static_cast<float>(Each_Half_Width) * 2;
 			}
 			CUH = NCUH;
 			ReLoadState(State, CUH, CUW);
@@ -188,12 +188,12 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 			if (NCUW < CUW)
 			{
 				State->Set_Move_State(MoveToPW);
-				X -= Each_Half_Height * 2;
+				X -= static_cast<float>(Each_Half_Height) * 2;
 			}
 			else
 			{
 				State->Set_Move_State(MoveToNW);
-				X += Each_Half_Height * 2;
+				X += static_cast<float>(Each_Half_Height) * 2;
 			}
 			CUW = NCUW;
 			ReLoadState(State, CUH, CUW);

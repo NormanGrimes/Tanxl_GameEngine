@@ -2,8 +2,6 @@
 
 #include "Tanxl_DataBase.h"
 
-TANXL_DataBase TDB_Instance(true);
-
 std::string Combine_Char(std::string data, int Start, int End)
 {
 	if (End < Start)
@@ -78,61 +76,46 @@ void Reset_Chain(TANXL_DataBase TDB, int A, int B, int Nums)
 
 void Data(bool Mode, bool Zero)
 {
-	if (!Zero)
+	TANXL_DataBase TDB_Instance(Zero);
+	for (unsigned Content = 0x11111f55; Content < 0x11112111; Content++)
 	{
-		for (unsigned Content = 0x111111; Content < 0x111ff6; Content += 11)
-		{
-			TDB_Instance.Set_Instance(Content++, "手枪");
-			TDB_Instance.Set_Instance(Content++, "地下水");
-			TDB_Instance.Set_Instance(Content++, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content++, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content++, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
-		}
+		TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
+		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "地下水");
+		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+		if (Mode)std::cout << TDB_Instance;
+		TDB_Instance.AppendItem();
 	}
-	else
+	for (unsigned Content = 0x22221f55; Content < 0x22222111; Content++)
 	{
-		for (unsigned Content = 0x11f55; Content < 0x12111; Content++)
-		{
-			TDB_Instance.Set_Instance(0x10000, "手枪");
-			TDB_Instance.Set_Instance(Content & 0x0f000, "地下水");
-			TDB_Instance.Set_Instance(Content & 0x00f00, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x000f0, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x0000f, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
-		}
-		for (unsigned Content = 0x21f55; Content < 0x22111; Content++)
-		{
-			TDB_Instance.Set_Instance(0x20000, "步枪");
-			TDB_Instance.Set_Instance(Content & 0x0f000, "M4A1-S");
-			TDB_Instance.Set_Instance(Content & 0x00f00, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x000f0, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x0000f, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
-		}
-		for (unsigned Content = 0x31f55; Content < 0x32111; Content++)
-		{
-			TDB_Instance.Set_Instance(0x30000, "重型武器");
-			TDB_Instance.Set_Instance(Content & 0x0f000, "Nova");
-			TDB_Instance.Set_Instance(Content & 0x00f00, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x000f0, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x0000f, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
-		}
-		for (unsigned Content = 0x41f55; Content < 0x42111; Content++)
-		{
-			TDB_Instance.Set_Instance(0x40000, "微型冲锋枪");
-			TDB_Instance.Set_Instance(Content & 0x0f000, "MP9");
-			TDB_Instance.Set_Instance(Content & 0x00f00, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x000f0, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x0000f, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
-		}
+		TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
+		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
+		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+		if (Mode)std::cout << TDB_Instance;
+		TDB_Instance.AppendItem();
+	}
+	for (unsigned Content = 0x33331f55; Content < 0x33332111; Content++)
+	{
+		TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
+		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
+		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+		if (Mode)std::cout << TDB_Instance;
+		TDB_Instance.AppendItem();
+	}
+	for (unsigned Content = 0x44441f55; Content < 0x44442111; Content++)
+	{
+		TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
+		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
+		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+		if (Mode)std::cout << TDB_Instance;
+		TDB_Instance.AppendItem();
 	}
 }
 
@@ -200,16 +183,21 @@ inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After
 
 inline void TANXL_DataBase::Combine_Status()
 {
-	Item_Instance.Item_Status = (Item_Instance.Status_1 << 16) + (Item_Instance.Status_2 << 12) + (Item_Instance.Status_3 << 8) + (Item_Instance.Status_4 << 4) + Item_Instance.Status_5;
+	Item_Instance.Item_Status = 
+		  (Item_Instance.Status_1 << 28)
+		+ (Item_Instance.Status_2 << 24)
+		+ (Item_Instance.Status_3 << 16)
+		+ (Item_Instance.Status_4 << 8 )
+		+  Item_Instance.Status_5;
 }
 
 void TANXL_DataBase::ResetInstance()
 {
 	Item_Instance.Status_1 = 0x0;
 	Item_Instance.Status_2 = 0x0;
-	Item_Instance.Status_3 = 0x0;
-	Item_Instance.Status_4 = 0x0;
-	Item_Instance.Status_5 = 0x0;
+	Item_Instance.Status_3 = 0x00;
+	Item_Instance.Status_4 = 0x00;
+	Item_Instance.Status_5 = 0x00;
 	Combine_Status();
 	Is_Instance_Data = false;
 }
@@ -217,41 +205,20 @@ void TANXL_DataBase::ResetInstance()
 void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 {
 	int SetTimes{ 0 };
-	if (!Is_Zero_Legal)
-	{
-		if (0 < ((Num & 0xf0000) >> 16) && ((Num & 0xf0000) >> 16) <= 15) {
-			Set_Code(Set, ((Num & 0xf0000) >> 16)); SetTimes++;
-		}
-		if (0 < ((Num & 0x0f000) >> 12) && ((Num & 0x0f000) >> 12) <= 15) {
-			Set_Name(Set, ((Num & 0x0f000) >> 12)); SetTimes++;
-		}
-		if (0 < ((Num & 0x00f00) >> 8) && ((Num & 0x00f00) >> 8) <= 15) {
-			Set_Oth1(Set, ((Num & 0x00f00) >> 8)); SetTimes++;
-		}
-		if (0 < ((Num & 0x000f0) >> 4) && ((Num & 0x000f0) >> 4) <= 15) {
-			Set_Oth2(Set, ((Num & 0x000f0) >> 4)); SetTimes++;
-		}
-		if (0 < (Num & 0x0000f) && (Num & 0x0000f) <= 15) {
-			Set_Oth3(Set, (Num & 0x0000f)); SetTimes++;
-		}
+	if (0 <= ((Num & 0xf0000000) >> 28) && ((Num & 0xf0000000) >> 28) < 15) {
+		Set_Code(Set, ((Num & 0xf00000000) >> 28)); SetTimes++;
 	}
-	else
-	{
-		if ((Num & 0x00000f) == 1) {
-			Set_Code(Set, ((Num & 0xf00000) >> 20)); SetTimes++;
-		}
-		else if ((Num & 0x00000f) == 2) {
-			Set_Name(Set, ((Num & 0x0f0000) >> 16)); SetTimes++;
-		}
-		else if ((Num & 0x00000f) == 3) {
-			Set_Oth1(Set, ((Num & 0x00f000) >> 12)); SetTimes++;
-		}
-		else if ((Num & 0x00000f) == 4) {
-			Set_Oth2(Set, ((Num & 0x000f00) >> 8)); SetTimes++;
-		}
-		else if ((Num & 0x00000f) == 5) {
-			Set_Oth3(Set, ((Num & 0x0000f0) >> 4)); SetTimes++;
-		}
+	if (0 <= ((Num & 0x0f000000) >> 24) && ((Num & 0x0f000000) >> 24) < 15) {
+		Set_Name(Set, ((Num & 0x0f000000) >> 24)); SetTimes++;
+	}
+	if (0 <= ((Num & 0x00ff0000) >> 16) && ((Num & 0x00ff0000) >> 16) < 255) {
+		Set_Oth1(Set, ((Num & 0x00ff0000) >> 16)); SetTimes++;
+	}
+	if (0 <= ((Num & 0x0000ff00) >> 8) && ((Num & 0x0000ff00) >> 8) < 255) {
+		Set_Oth2(Set, ((Num & 0x0000ff00) >> 8)); SetTimes++;
+	}
+	if (0 <= (Num & 0x000000ff) && (Num & 0x000000ff) < 255) {
+		Set_Oth3(Set, (Num & 0x000000ff)); SetTimes++;
 	}
 	if (SetTimes)
 		Is_Instance_Data = true;

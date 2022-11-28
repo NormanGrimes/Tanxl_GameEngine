@@ -1,15 +1,16 @@
 #include "Tanxl_OpenGL_Draw.h"
 #include "Tanxl_UniqueID.h"
 #include "Tanxl_DataBase.h"
+#include <iomanip>
 int main()
 {
 	//Data Function Test
 
-	TANXL_DataBase NData;
-	int n = 0x11111, i = 5;
+	TANXL_DataBase NData(true);
+	int n = 0x10101010, i = 5;
 	while (i--)
 	{
-		std::cout << "Updating : " << n << std::endl;
+		std::cout << "Updating : " << std::setbase(16) << n << std::endl;
 		NData.Set_Instance(n++, "Updating" + std::to_string(n));
 		std::cout << NData;
 		NData.AppendItem(false);
@@ -18,7 +19,7 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{ &GameStateBase::Get_StateBase(5, 5) };
+	GameStateBase* GSB{&GameStateBase::Get_StateBase(5, 5)};
 
 	GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
