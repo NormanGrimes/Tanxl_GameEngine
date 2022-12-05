@@ -1,6 +1,9 @@
-//_VERSION_1_6_ UPDATE LOG
-// LAST_UPDATE 2022-05-28 01:20
-// 调整结构体内容/类成员 以降低连续存储压力
+//_VERSION_1_7_ UPDATE LOG
+// LAST_UPDATE 2022-08-26 20:20
+// 使用八位十六进制值作为物品序号
+// 统一零合法与不合法的添加物品代码
+// 默认数据函数修改以支持最新添加方式
+// 移除源文件中定义的全局TDB变量
 
 #pragma once
 
@@ -51,26 +54,6 @@ enum ESet_Specified
 	SET_OTH1_STATUS = 2,
 	SET_OTH2_STATUS = 3,
 	SET_OTH3_STATUS = 4,
-};
-
-enum ESet_Instance
-{
-	SET_TYPE_0  = 0x00000, SET_EXAC_0  = 0x00000, SET_OTH1_0  = 0x00000, SET_OTH2_0  = 0x00000, SET_OTH3_0  = 0x00000,
-	SET_TYPE_1  = 0x10000, SET_EXAC_1  = 0x01000, SET_OTH1_1  = 0x00100, SET_OTH2_1  = 0x00010, SET_OTH3_1  = 0x00001,
-	SET_TYPE_2  = 0x20000, SET_EXAC_2  = 0x02000, SET_OTH1_2  = 0x00200, SET_OTH2_2  = 0x00020, SET_OTH3_2  = 0x00002,
-	SET_TYPE_3  = 0x30000, SET_EXAC_3  = 0x03000, SET_OTH1_3  = 0x00300, SET_OTH2_3  = 0x00030, SET_OTH3_3  = 0x00003,
-	SET_TYPE_4  = 0x40000, SET_EXAC_4  = 0x04000, SET_OTH1_4  = 0x00400, SET_OTH2_4  = 0x00040, SET_OTH3_4  = 0x00004,
-	SET_TYPE_5  = 0x50000, SET_EXAC_5  = 0x05000, SET_OTH1_5  = 0x00500, SET_OTH2_5  = 0x00050, SET_OTH3_5  = 0x00005,
-	SET_TYPE_6  = 0x60000, SET_EXAC_6  = 0x06000, SET_OTH1_6  = 0x00600, SET_OTH2_6  = 0x00060, SET_OTH3_6  = 0x00006,
-	SET_TYPE_7  = 0x70000, SET_EXAC_7  = 0x07000, SET_OTH1_7  = 0x00700, SET_OTH2_7  = 0x00070, SET_OTH3_7  = 0x00007,
-	SET_TYPE_8  = 0x80000, SET_EXAC_8  = 0x08000, SET_OTH1_8  = 0x00800, SET_OTH2_8  = 0x00080, SET_OTH3_8  = 0x00008,
-	SET_TYPE_9  = 0x90000, SET_EXAC_9  = 0x09000, SET_OTH1_9  = 0x00900, SET_OTH2_9  = 0x00090, SET_OTH3_9  = 0x00009,
-	SET_TYPE_10 = 0xa0000, SET_EXAC_10 = 0x0a000, SET_OTH1_10 = 0x00a00, SET_OTH2_10 = 0x000a0, SET_OTH3_10 = 0x0000a,
-	SET_TYPE_11 = 0xb0000, SET_EXAC_11 = 0x0b000, SET_OTH1_11 = 0x00b00, SET_OTH2_11 = 0x000b0, SET_OTH3_11 = 0x0000b,
-	SET_TYPE_12 = 0xc0000, SET_EXAC_12 = 0x0c000, SET_OTH1_12 = 0x00c00, SET_OTH2_12 = 0x000c0, SET_OTH3_12 = 0x0000c,
-	SET_TYPE_13 = 0xd0000, SET_EXAC_13 = 0x0d000, SET_OTH1_13 = 0x00d00, SET_OTH2_13 = 0x000d0, SET_OTH3_13 = 0x0000d,
-	SET_TYPE_14 = 0xe0000, SET_EXAC_14 = 0x0e000, SET_OTH1_14 = 0x00e00, SET_OTH2_14 = 0x000e0, SET_OTH3_14 = 0x0000e,
-	SET_TYPE_15 = 0xf0000, SET_EXAC_15 = 0x0f000, SET_OTH1_15 = 0x00f00, SET_OTH2_15 = 0x000f0, SET_OTH3_15 = 0x0000f,
 };
 
 struct Data_Vector//短数据表(Vector)
@@ -125,8 +108,8 @@ private:
 public:
 	TANXL_DataBase(bool Zero_Legal = false);//构造函数
 	bool Get_LocalData(std::string File_Name);//获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
-	//↓编辑实例 0x12345 1代表Code位 2代表Name位 3代表Oth1位 依此类推  仅在Is_Zero_Legal为false时可以正常工作
-	//↓零合法时接受的十六进制数为6位 0x123456 6用于表示当前指向的位编号 范围1~5 1代表 Oth3位 2代表 Oth2位... 除最后一位以外 其余位与零不合法时完全相反
+	//↓编辑实例 0x12030405 1代表Code位 2代表Name位 03代表Oth1位 依此类推
+	//↓在1.7版本中考虑到零合法的操作一致性 最大值已被作为不可选标志即 Code/Name位的F 或Oth位的FF
 	void Set_Instance(unsigned Num, std::string Set);
 	void Get_Specified(int Type, int Exac, int Nums);//读取指定Type(A)_Exac(B)级别的物品 并载入到单例结构中 Nums表示链表中的第几个(从0开始)
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...

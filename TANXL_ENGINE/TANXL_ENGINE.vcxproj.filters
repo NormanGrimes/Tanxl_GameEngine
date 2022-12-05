@@ -5,22 +5,25 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\Engine">
-      <UniqueIdentifier>{46f0d6e0-797d-4aa3-a790-91ce7b4d68a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="源文件\Engine">
       <UniqueIdentifier>{d2a03b4e-ad5c-458b-b483-752cd313354f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="头文件\Engine">
+      <UniqueIdentifier>{46f0d6e0-797d-4aa3-a790-91ce7b4d68a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Tanxl_UniqueID.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
     <ClInclude Include="Tanxl_Console_List.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
@@ -30,23 +33,17 @@
     <ClInclude Include="Tanxl_GameState.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Tanxl_UniqueID.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_GameObject.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_InsertAction.h">
       <Filter>头文件\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Tanxl_OpenGL_Render.h">
-      <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_OpenGL_Draw.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Tanxl_HitBox_Check.h">
+    <ClInclude Include="Tanxl_GameObject.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_OpenGL_Render.h">
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +65,9 @@
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Tanxl_OpenGL_Render.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt">
@@ -75,11 +75,15 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="vertShader.glsl">
-      <Filter>资源文件</Filter>
-    </None>
+    <None Include="public\steam\lib\win64\sdkencryptedappticket64.dll" />
     <None Include="fragShader.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="vertShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="public\steam\lib\win64\sdkencryptedappticket64.lib" />
   </ItemGroup>
 </Project>

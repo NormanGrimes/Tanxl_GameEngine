@@ -1,9 +1,11 @@
-//_VERSION_0_3_ UPDATE LOG
-// LAST_UPDATE 2022-06-07 23:51
-// 微调成员变量名称
-// 加入用于获取当前移动坐标的函数
-// SLocation提供构造函数
-// 实装地图单元编译功能
+//_VERSION_0_4_ UPDATE LOG
+// LAST_UPDATE 2022-07-26 21:35
+// 提供一个指针指向当前地图中心的地图单元
+// Set_CurrentLoc函数预加入重新加载地图功能
+// 修复编译地图会导致第一个元素编译失败的问题
+// 加入Move_State结构体标记移动位置
+// 提供Move_State结构体相关控制接口
+// 提供调整Move_State的重载函数与相关枚举
 
 #pragma once
 
@@ -16,6 +18,23 @@
 #define STRING
 #include<string>
 #endif
+
+enum EMove_State_EventId
+{
+	MoveToNW = 0,
+	MoveToPW = 1,
+	MoveToNH = 2,
+	MoveToPH = 3
+};
+
+struct Move_State
+{
+	Move_State(int NX = 0, int PX = 0, int NY = 0, int PY = 0);
+	int _Move_NX;
+	int _Move_PX;
+	int _Move_NY;
+	int _Move_PY;
+};
 
 struct SLocation
 {
@@ -39,6 +58,7 @@ private:
 class GameEventBase
 {
 public:
+	//注册游戏事件 如果仅定义事件而不注册则不会产生任何效果
 	void RegistEvent(GameEvent* Event);
 	static GameEventBase& GetEventBase();
 	GameEvent* GetGameEvent(std::string EventName);
@@ -75,18 +95,24 @@ public:
 	size_t Get_StateSize();
 	StateUnit* Get_StateUnit(int Pos);
 	static GameStateBase& Get_StateBase(int Height = 0, int Width = 0);
+	Move_State Get_Move_State();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
+	void Set_Move_State(int NX, int PX, int NY, int PY);
+	void Set_Move_State(int Event_Id);
 	void Set_State(int Width, int Height);
 	void CompileStateUnits(std::string Infor);
-	//CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
+	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
 	void Set_ExacHeight(float& Current);//可选功能 对2D棋盘上的物品微调位置
 	void Set_ExacWidth(float& Current);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
+	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
+	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
 	int Get_StateHeight()const;
+	//↓Get_StateWidth : 获取当前需要绘制的State的宽度值
 	int Get_StateWidth()const;
 private:
 	//地图初始化默认构造函数 采用单例模式进行第一次初始化
@@ -98,6 +124,9 @@ private:
 	int _GameState_Height;
 	float _GameState_Adjust;
 	bool _Compile_Success;
+	Move_State _MState;//用于记录当前加载地图区域
 	SLocation _SLoc;//用于记录当前地图中心点
-	std::vector<StateUnit*>GameState;
+	std::vector<StateUnit*> _GameState;
+	//用于记录当前地图中心的地图单元
+	StateUnit* _CurrentMid;
 };

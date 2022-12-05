@@ -49,11 +49,11 @@ void GameStateBase::Set_State(int Width, int Height)
 {
 	this->_GameState_Width = Width;
 	this->_GameState_Height = Height;
-	for (int i = 0; i < GameState.size(); i++)
-		delete GameState.at(i);
-	GameState.clear();
+	for (int i = 0; i < _GameState.size(); i++)
+		delete _GameState.at(i);
+	_GameState.clear();
 	for (int i = 0; i < Width * Height; i++)
-		GameState.push_back(new StateUnit);
+		_GameState.push_back(new StateUnit);
 }
 
 void GameStateBase::CompileStateUnits(std::string Infor)
@@ -64,16 +64,16 @@ void GameStateBase::CompileStateUnits(std::string Infor)
 	{
 		if (Infor.at(i) != ',' && Infor.at(i) != '-')
 			Text_Reader += Infor.at(i);
-		else if (Infor.at(i) == ',' || Infor.at(i) == '.')
+		else if (Infor.at(i) == ',')
 		{
 			Status_Id = std::stoi(Text_Reader);
+			this->_GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
 			Text_Reader = "";
 		}
 		else if (Infor.at(i) == '-')
 		{
 			State_Move = 0;//std::stoi(Text_Reader);
 			Text_Reader = "";
-			this->GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
 			Status_Id = 0;
 			State_Move = 0;
 		}
@@ -101,7 +101,7 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 		}
 		else
 		{
-			this->GameState.at(SetCount++)->SetEvent(Text_Reader, Status_Int);
+			this->_GameState.at(SetCount++)->SetEvent(Text_Reader, Status_Int);
 			if (Infor.at(i) == '.')
 				return;
 			Text_Reader = "";
@@ -113,6 +113,11 @@ GameStateBase& GameStateBase::Get_StateBase(int Height, int Width)
 {
 	static GameStateBase GameState(Height, Width);
 	return GameState;
+}
+
+Move_State GameStateBase::Get_Move_State()
+{
+	return this->_MState;
 }
 
 void GameStateBase::Set_ExacHeight(float& Current)
@@ -166,9 +171,9 @@ void GameStateBase::Set_ExacWidth(float& Current)
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 {
 	static std::vector<bool> MAB;
-	for (int i = 0; i < GameState.size(); i++)
+	for (int i = 0; i < _GameState.size(); i++)
 	{
-		if (GameState.at(i)->GetMoveAble())
+		if (_GameState.at(i)->GetMoveAble())
 			MAB.push_back(true);
 		else
 			MAB.push_back(false);
@@ -176,15 +181,56 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 	return &MAB;
 }
 
+void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
+{
+	this->_MState._Move_NX = NX;
+	this->_MState._Move_PX = PX;
+	this->_MState._Move_NY = NY;
+	this->_MState._Move_PY = PY;
+
+	int Line_Width = this->_MState._Move_PX - this->_MState._Move_NX;
+	int Coum_Width = this->_MState._Move_PX - this->_MState._Move_PY;
+
+	//TODO
+}
+
+void GameStateBase::Set_Move_State(int Event_Id)
+{
+	switch (Event_Id)
+	{
+	case 0:
+		this->_MState._Move_NX++;
+		this->_MState._Move_PX++;
+		break;
+	case 1:
+		this->_MState._Move_NX--;
+		this->_MState._Move_PX--;
+		break;
+	case 2:
+		this->_MState._Move_NY++;
+		this->_MState._Move_PY++;
+		break;
+	case 3:
+		this->_MState._Move_NY--;
+		this->_MState._Move_PY--;
+		break;
+	}
+}
+
+void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
+{
+
+}
+
 GameStateBase::GameStateBase(int Height, int Width) :
-	_GameState_Width(Height), _GameState_Height(Width), GameState(NULL), _GameState_Adjust(0.0f),
-	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false) {}
+	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
+	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0) {}
 
 GameStateBase::~GameStateBase()
 {
-	for (int i = 0; i < GameState.size(); i++)
-		delete GameState.at(i);
-	GameState.clear();
+	for (int i = 0; i < _GameState.size(); i++)
+		delete _GameState.at(i);
+	_GameState.clear();
 }
 
 //unimportant Stuff (GET/SET)
@@ -229,6 +275,13 @@ void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
 	this->_SLoc._LocX = CurrentX;
 	this->_SLoc._LocY = CurrentY;
+	float Compare_Width = 2.0f / _GameState_Width;
+	float Compare_Height = 2.0f / _GameState_Height;
+	if (_SLoc._LocX < Compare_Width || _SLoc._LocX > Compare_Width ||
+		_SLoc._LocY < Compare_Height || _SLoc._LocY > Compare_Height)
+	{
+		//TODO reload Map
+	}
 }
 
 void GameStateBase::Set_Adjust(float Adjust)
@@ -238,16 +291,16 @@ void GameStateBase::Set_Adjust(float Adjust)
 
 size_t GameStateBase::Get_StateSize()
 {
-	return GameState.size();
+	return _GameState.size();
 }
 
 StateUnit* GameStateBase::Get_StateUnit(int Pos)
 {
-	return this->GameState.at(Pos);
+	return this->_GameState.at(Pos);
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false) {}
+_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
@@ -268,8 +321,12 @@ int GameStateBase::Get_StateWidth()const
 
 std::vector<StateUnit*>* GameStateBase::Get_GameState()
 {
-	return &this->GameState;
+	return &this->_GameState;
 }
+
+//Move_State
+
+Move_State::Move_State(int NX, int PX, int NY, int PY) :_Move_NX(NY), _Move_NY(NY), _Move_PX(PX), _Move_PY(PY) {}
 
 //SLocation
 

@@ -1,15 +1,16 @@
 #include "Tanxl_OpenGL_Draw.h"
 #include "Tanxl_UniqueID.h"
 #include "Tanxl_DataBase.h"
+#include <iomanip>
 int main()
 {
 	//Data Function Test
 
-	TANXL_DataBase NData;
-	int n = 0x11111, i = 5;
+	TANXL_DataBase NData(true);
+	int n = 0x10101010, i = 5;
 	while (i--)
 	{
-		std::cout << "Updating : " << n << std::endl;
+		std::cout << "Updating : " << std::setbase(16) << n << std::endl;
 		NData.Set_Instance(n++, "Updating" + std::to_string(n));
 		std::cout << NData;
 		NData.AppendItem(false);
@@ -18,9 +19,29 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{ &GameStateBase::Get_StateBase(5, 5) };
+	GameStateBase* GSB{&GameStateBase::Get_StateBase(5, 5)};
 
-	GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0a-1,a-0,a-1,a-0,a-1,");
+	/*GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		                   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");TEST_STATE_1*/
+
+	GSB->CompileStateUnits("a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,"
+						   "a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
+						   "a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
+						   "a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
+						   "a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -58,8 +79,13 @@ int main()
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
 	IEB->RegistEvent(MOVE_DOWN);
 
-	IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
+	//IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 
-	OpenGL_Draw OGD(600, 600);
+	//IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight() + 2));
+	//IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth() + 2));
+
+	IEB->Set_StateRange(false);
+
+	OpenGL_Draw OGD(800, 800);
 	OGD.mainLoop(GSB);
 }
