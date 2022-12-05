@@ -24,13 +24,13 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	
 	State->Set_Move_State(0, _HeightInt + 1, 0, _WidthInt + 1);
 
-	_renderingProgram = OR::createShaderProgram("vertShader.glsl", "fragShader.glsl");
+	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
 	_Position = glGetUniformLocation(_renderingProgram, "SHeight");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(/*_HeightInt*/10 + 2));
+	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(State->Get_StateHeight() + 2));
 	_Position = glGetUniformLocation(_renderingProgram, "SWidth");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(/*_WidthInt*/10 + 2));
+	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(State->Get_StateWidth() + 2));
 
 	_Position = glGetUniformLocation(_renderingProgram, "Margin");
 	glProgramUniform1f(_renderingProgram, _Position, 1.0f);
@@ -52,16 +52,12 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < (/*_HeightInt*/10 + 2) * (/*_WidthInt*/10 + 2); i++)
+		for (int i = 0; i < (State->Get_StateHeight() + 2) * (State->Get_StateWidth() + 2); i++)
 		{
-			if (Move_NX < 0 || Move_NX >(/*_WidthInt*/10) || Move_NY < 0 || Move_NY >(/*_HeightInt*/10))
+			if (Move_NX < 0 || Move_NX >(State->Get_StateWidth() + 1) || Move_NY < 0 || Move_NY >(State->Get_StateHeight() + 1))
 			{
 				_StateInfor[i] = 3;
 			}
-			//else if ((i + 1) % _WidthInt == 0 || (i + 1) % _WidthInt == 1 || (i + 1) % _WidthInt == _WidthInt - 1)
-			//{
-			//	_StateInfor[i] = 3;
-			//}
 			else
 			{
 				int x = Move_NX + Move_NY * 10;
@@ -84,7 +80,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 		}
 	}
 	GLuint StatePos;
-	for (int i = 0; i < (/*_HeightInt*/10 + 2) * (/*_WidthInt*/10 + 2) + 1; i++)
+	for (int i = 0; i < (State->Get_StateHeight() + 2) * (State->Get_StateWidth() + 2) + 1; i++)
 	{
 		std::string Tag = "State[" + std::to_string(i) + "]";
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
@@ -98,7 +94,7 @@ void OpenGL_Draw::UpdateMargin(float& Margin)
 	glProgramUniform1f(_renderingProgram, _Position, Margin);
 }
 
-void OpenGL_Draw::display(GLFWwindow* window, double currentTime)
+void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	if (_Clear_Function)
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -114,7 +110,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime)
 	//std::cout << HeightInt * WidthInt;
 
 	glUseProgram(_renderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, (/*_HeightInt*/10 + 2) * (/*_WidthInt*/10 + 2) * 6 + 6);
+	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + 2) * (State->Get_StateWidth() + 2) * 6 + 6);
 }
 
 void OpenGL_Draw::mainLoop(GameStateBase* State)
@@ -206,7 +202,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveY");
 		glProgramUniform1f(_renderingProgram, _Position, Y);
 
-		display(window, glfwGetTime());
+		display(window, glfwGetTime(), State);
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

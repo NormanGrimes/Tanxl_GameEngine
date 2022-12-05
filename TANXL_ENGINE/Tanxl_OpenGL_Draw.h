@@ -41,7 +41,7 @@ public:
 	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
 	void init(GLFWwindow* window, GameStateBase* State);
-	void display(GLFWwindow* window, double currentTime);
+	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
 	//绘制主循环 在此之后的一切操作都会被忽略
 	void mainLoop(GameStateBase* State);
 	void UpdateMargin(float& Margin);

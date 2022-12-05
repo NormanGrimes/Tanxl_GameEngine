@@ -21,7 +21,7 @@ int main()
 
 	GameStateBase* GSB{&GameStateBase::Get_StateBase(5, 5)};
 
-	GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+	/*GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
 		                   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
@@ -30,7 +30,18 @@ int main()
 						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
 						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");
+						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");TEST_STATE_1*/
+
+	GSB->CompileStateUnits("a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,"
+						   "a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
+						   "a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
+						   "a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
+						   "a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
+						   "a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -73,7 +84,7 @@ int main()
 	//IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight() + 2));
 	//IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth() + 2));
 
-	//IEB->Set_StateRange(false);
+	IEB->Set_StateRange(false);
 
 	OpenGL_Draw OGD(800, 800);
 	OGD.mainLoop(GSB);

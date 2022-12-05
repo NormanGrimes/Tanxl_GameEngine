@@ -110,7 +110,9 @@ public:
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
+	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
 	int Get_StateHeight()const;
+	//↓Get_StateWidth : 获取当前需要绘制的State的宽度值
 	int Get_StateWidth()const;
 private:
 	//地图初始化默认构造函数 采用单例模式进行第一次初始化
