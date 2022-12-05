@@ -4,7 +4,7 @@ Project state: map generation & moving system finished.
 Need tanxl illustrating the framework and code running sequence to start my work.  
 
 2022/11/15 gungler
---------------------
+
 # Tanxl_GameEngine Version 0.1 Build 38 README
 This Project's SLN is only support VS2022 V143 BUILD TOOLS
 此项目的SLN文件仅支持在VS2022的构建工具V143下进行生成
@@ -17,3 +17,4 @@ Then you can run it with all Environment setted.
 在配好了里面所提供的环境后即可进行生成
 
 2022/09/16 10:11 WiChG_Programing
+--------------------
