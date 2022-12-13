@@ -54,7 +54,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
 	{
 		for (int i = 0; i < (State->Get_StateHeight() + 2) * (State->Get_StateWidth() + 2); i++)
 		{
-			if (Move_NX < 0 || Move_NX >(State->Get_StateWidth() + 1) || Move_NY < 0 || Move_NY >(State->Get_StateHeight() + 1))
+			if (Move_NX < 0 || Move_NX >(State->Get_DataWidth()) || Move_NY < 0 || Move_NY >(State->Get_DataHeight()))
 			{
 				_StateInfor[i] = 3;
 			}
@@ -118,7 +118,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.11", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.12", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);

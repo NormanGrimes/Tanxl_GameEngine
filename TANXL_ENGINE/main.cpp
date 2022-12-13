@@ -43,6 +43,8 @@ int main()
 						   "a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
 						   "a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
 
+	GSB->Set_DataAll_State(10, 10);
+
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
 	//InsertKey Init

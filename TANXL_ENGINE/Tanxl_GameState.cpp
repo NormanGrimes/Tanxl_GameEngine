@@ -45,7 +45,7 @@ void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 
 //GameStateBase
 
-void GameStateBase::Set_State(int Width, int Height)
+void GameStateBase::Set_Display_State(int Width, int Height)
 {
 	this->_GameState_Width = Width;
 	this->_GameState_Height = Height;
@@ -54,6 +54,12 @@ void GameStateBase::Set_State(int Width, int Height)
 	_GameState.clear();
 	for (int i = 0; i < Width * Height; i++)
 		_GameState.push_back(new StateUnit);
+}
+
+void GameStateBase::Set_DataAll_State(unsigned Width, unsigned Height)
+{
+	this->_Data_Width = Width - 1;
+	this->_Data_Height = Height - 1;
 }
 
 void GameStateBase::CompileStateUnits(std::string Infor)
@@ -109,9 +115,9 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 	}
 }
 
-GameStateBase& GameStateBase::Get_StateBase(int Height, int Width)
+GameStateBase& GameStateBase::Get_StateBase(int Display_Height, int Display_Width)
 {
-	static GameStateBase GameState(Height, Width);
+	static GameStateBase GameState(Display_Height, Display_Width);
 	return GameState;
 }
 
@@ -224,7 +230,7 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 
 GameStateBase::GameStateBase(int Height, int Width) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
-	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0) {}
+	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(Height), _Data_Width(Width) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -284,6 +290,16 @@ void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 	}
 }
 
+unsigned GameStateBase::Get_DataHeight()const
+{
+	return this->_Data_Height;
+}
+
+unsigned GameStateBase::Get_DataWidth()const
+{
+	return this->_Data_Width;
+}
+
 void GameStateBase::Set_Adjust(float Adjust)
 {
 	this->_GameState_Adjust = Adjust;
@@ -300,7 +316,7 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0) {}
+_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(0), _Data_Width(0) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 

@@ -94,13 +94,15 @@ public:
 	
 	size_t Get_StateSize();
 	StateUnit* Get_StateUnit(int Pos);
+	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& Get_StateBase(int Height = 0, int Width = 0);
 	Move_State Get_Move_State();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(int Event_Id);
-	void Set_State(int Width, int Height);
+	void Set_Display_State(int Width, int Height);
+	void Set_DataAll_State(unsigned Width, unsigned Height);
 	void CompileStateUnits(std::string Infor);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
@@ -110,6 +112,8 @@ public:
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
+	unsigned Get_DataHeight()const;
+	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
 	int Get_StateHeight()const;
 	//↓Get_StateWidth : 获取当前需要绘制的State的宽度值
@@ -120,6 +124,8 @@ private:
 	~GameStateBase();
 	GameStateBase(const GameStateBase&);
 	GameStateBase& operator=(const GameStateBase&);
+	unsigned _Data_Width;
+	unsigned _Data_Height;
 	int _GameState_Width;
 	int _GameState_Height;
 	float _GameState_Adjust;
