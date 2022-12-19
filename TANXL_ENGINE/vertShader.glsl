@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-08-15 22:27
 // 渲染地图额外的一圈内容 用于预加载
 // 移除StateMove对可移动点的影响
+// 修改顶点着色器以对应可自定义设置预加载
 
 #version 430
 
@@ -23,17 +24,19 @@ uniform float SWidth;
 uniform float StateMoveX;
 uniform float StateMoveY;
 
+uniform int PreLoads;
+
 void main(void)
 {
 	
-	float Height = 2.0f / (SHeight - 2);
-	float Width  = 2.0f / (SWidth - 2);
+	float Height = 2.0f / SHeight;
+	float Width  = 2.0f / SWidth;
 
 	int counts = 0;
 
-	float WidthMove = -((SWidth-1) / 2) * Width;
-	float HeightMove = ((SHeight-1) / 2) * Height;
-	for(int i = 1; i < SHeight * SWidth + 1; i++)
+	float WidthMove = -((SWidth + PreLoads - 1) / 2) * Width;
+	float HeightMove = ((SHeight + PreLoads - 1) / 2) * Height;
+	for(int i = 1; i < (SHeight + PreLoads) * (SWidth + PreLoads) + 1; i++)
 	{
 
 		if      (gl_VertexID == i * 6 + 0) 
@@ -99,10 +102,10 @@ void main(void)
 
 		WidthMove += Width;
 		counts++;
-		if(counts == SWidth)
+		if(counts == SWidth + PreLoads)
 		{
 			counts = 0;
-			WidthMove = -((SWidth-1) / 2) * Width;
+			WidthMove = -((SWidth + PreLoads - 1) / 2) * Width;
 			HeightMove -= Height;
 		}
 	}

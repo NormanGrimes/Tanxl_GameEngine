@@ -6,6 +6,7 @@
 // 加入Move_State结构体标记移动位置
 // 提供Move_State结构体相关控制接口
 // 提供调整Move_State的重载函数与相关枚举
+// 修改原地图尺寸属性为显示属性
 
 #pragma once
 

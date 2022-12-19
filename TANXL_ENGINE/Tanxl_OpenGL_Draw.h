@@ -2,6 +2,12 @@
 // LAST_UPDATE 2022-08-15 22:41
 // 增加对地图额外一圈载入的相关操作
 // 主绘制循环现在支持无限世界展示
+// 地图绘制部分的总地图尺寸采用自动获取方式
+// 绘制半边长采用函数自动获取
+// 提升重新载入世界的判断坐标精确性
+// 增加私有变量PreLoad用于自定义预加载环形区域数量
+// 增加总地图尺寸的获取与设置功能
+// 修复预加载内容非环状扩展的问题
 
 #pragma once
 
@@ -45,6 +51,7 @@ public:
 	//绘制主循环 在此之后的一切操作都会被忽略
 	void mainLoop(GameStateBase* State);
 	void UpdateMargin(float& Margin);
+	void Set_PreLoad(int PreLoads);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State, int PosX, int PosY);
 private:
@@ -67,4 +74,6 @@ private:
 	int _ScreenWidth;
 	//窗口的高度
 	int _ScreenHeight;
+	//记载额外加载的地图环数量
+	int _PreLoads;
 };

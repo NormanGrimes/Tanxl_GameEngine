@@ -89,5 +89,6 @@ int main()
 	IEB->Set_StateRange(false);
 
 	OpenGL_Draw OGD(800, 800);
+	OGD.Set_PreLoad(2);
 	OGD.mainLoop(GSB);
 }
