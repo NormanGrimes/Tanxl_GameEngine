@@ -83,12 +83,12 @@ int main()
 
 	//IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 
-	//IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight() + 2));
-	//IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth() + 2));
+	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight() - 2));
+	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth() - 2));
 
-	IEB->Set_StateRange(false);
+	IEB->Set_StateRange(true);
 
 	OpenGL_Draw OGD(800, 800);
-	OGD.Set_PreLoad(2);
+	OGD.Set_PreLoad(4);
 	OGD.mainLoop(GSB);
 }

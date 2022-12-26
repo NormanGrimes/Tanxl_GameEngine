@@ -3,6 +3,7 @@
 // 渲染地图额外的一圈内容 用于预加载
 // 移除StateMove对可移动点的影响
 // 修改顶点着色器以对应可自定义设置预加载
+// 加入视角移动位置记录
 
 #version 430
 
@@ -23,6 +24,9 @@ uniform float SWidth;
 
 uniform float StateMoveX;
 uniform float StateMoveY;
+
+uniform float VisionMoveX;
+uniform float VisionMoveY;
 
 uniform int PreLoads;
 

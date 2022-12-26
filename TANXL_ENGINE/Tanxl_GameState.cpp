@@ -125,52 +125,70 @@ Move_State GameStateBase::Get_Move_State()
 {
 	return this->_MState;
 }
-
-void GameStateBase::Set_ExacHeight(float& Current)
+#include <iostream>
+void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet)
 {
 	static int EHCount = 0;
-	int LevelCount = 0;
-	float SingleBlock = 2.0f / _GameState_Height;
-	while (SingleBlock < Current)
+	//int LevelCount = 0;
+	//float SingleBlock = 2.0f / _GameState_Height;
+	//while (SingleBlock < Current)
+	//{
+	//	SingleBlock += 2.0f / _GameState_Height;
+	//	LevelCount++;
+	//}
+	std::cout << "HCurrent :" << Current << std::endl;
+	if (/*SingleBlock*/(float)Current < 2.5/*Current - (SingleBlock - 2.0f / _GameState_Height)*/)
 	{
-		SingleBlock += 2.0f / _GameState_Height;
-		LevelCount++;
-	}
-	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / _GameState_Height))
-	{
+		std::cout << " < 2.5" << std::endl;
 		EHCount++;
-		if (EHCount == 10)
-			Current -= _GameState_Adjust;
+		if (EHCount == 1)
+		{
+			MoveSet -= _GameState_Adjust;
+			EHCount = 0;
+		}
 	}
-	else
+	else if ((float)Current > 2.5)
 	{
+		std::cout << " > 2.5" << std::endl;
 		EHCount++;
-		if (EHCount == 10)
-			Current += _GameState_Adjust;
+		if (EHCount == 1)
+		{
+			MoveSet += _GameState_Adjust;
+			EHCount = 0;
+		}
 	}
 }
 
-void GameStateBase::Set_ExacWidth(float& Current)
+void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet)
 {
 	static int EWCount = 0;
-	int LevelCount = 0;
-	float SingleBlock = 2.0f / _GameState_Width;
-	while (SingleBlock < Current)
+	//int LevelCount = 0;
+	//float SingleBlock = 2.0f / _GameState_Width;
+	//while (SingleBlock < Current)
+	//{
+	//	SingleBlock += 2.0f / _GameState_Width;
+	//	LevelCount++;
+	//}
+	std::cout << "WCurrent :" << Current << std::endl;
+	if (/*SingleBlock*/(float)Current < 2.5/*Current - (SingleBlock - 2.0f / _GameState_Width)*/)
 	{
-		SingleBlock += 2.0f / _GameState_Width;
-		LevelCount++;
-	}
-	if (SingleBlock - Current > Current - (SingleBlock - 2.0f / _GameState_Width))
-	{
+		std::cout << " < 2.5" << std::endl;
 		EWCount++;
-		if (EWCount == 10)
-			Current -= _GameState_Adjust;
+		if (EWCount == 1)
+		{
+			MoveSet -= _GameState_Adjust;
+			EWCount = 0;
+		}
 	}
-	else
+	else if ((float)Current > 2.5)
 	{
+		std::cout << " > 2.5" << std::endl;
 		EWCount++;
-		if (EWCount == 10)
-			Current += _GameState_Adjust;
+		if (EWCount == 1)
+		{
+			MoveSet += _GameState_Adjust;
+			EWCount = 0;
+		}
 	}
 }
 

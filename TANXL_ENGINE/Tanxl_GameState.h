@@ -108,8 +108,8 @@ public:
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
-	void Set_ExacHeight(float& Current);//可选功能 对2D棋盘上的物品微调位置
-	void Set_ExacWidth(float& Current);
+	void Set_ExacHeight(double& Current, float& MoveSet);//可选功能 对2D棋盘上的物品微调位置
+	void Set_ExacWidth(double& Current, float& MoveSet);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();

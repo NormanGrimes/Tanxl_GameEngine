@@ -160,16 +160,23 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
-		std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
+		//std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
 
 		double Current_Height = (MoveY * 2 + 1) / (Each_Half_Height * 2);
 		double Current_Width = (MoveX * 2 + 1) / (Each_Half_Width * 2);
+
+		std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
 
 		static int CUH = static_cast<int>(Current_Height) / 1;
 		static int CUW = static_cast<int>(Current_Width) / 1;
 
 		int NCUH = static_cast<int>(Current_Height) / 1;
 		int NCUW = static_cast<int>(Current_Width) / 1;
+
+		if (Current_Height < 0)
+			NCUH -= 1;
+		if (Current_Width < 0)
+			NCUW -= 1;
 
 		if (NCUH != CUH)
 		{
@@ -203,7 +210,11 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 			ReLoadState(State, CUH, CUW);
 		}
 
-		std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
+		State->Set_Adjust(0.00f);
+		State->Set_ExacHeight(Current_Height, Y);
+		State->Set_ExacWidth(Current_Width, X);
+
+		//std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
 		//std::cout << "Exac Location : " << MoveX * 2 << " " << MoveY * 2 << std::endl;//REAL LOCATION
 
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveX");
