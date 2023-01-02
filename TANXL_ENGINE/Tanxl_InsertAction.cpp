@@ -4,7 +4,7 @@
 
 Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f) {}
 
-Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, float MOVL)
+Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL)
 	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL) {}
 
 InsertEventBase& InsertEventBase::GetInsertBase()

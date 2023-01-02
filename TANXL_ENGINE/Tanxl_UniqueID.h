@@ -1,6 +1,7 @@
-//_VERSION_0_1_ UPDATE LOG
-// LAST_UPDATE 2022-04-28 22:11
-// Uniqt移动至类的私有成员
+//_VERSION_0_2_ UPDATE LOG
+// LAST_UPDATE 2022-09-15 21:18
+// 添加根据种子生成随机ID的功能
+// 格式调整
 #pragma once
 #include <string>
 #include <iostream>
@@ -14,6 +15,7 @@ public:
         static UniqueIdBase UNIBase;
         return UNIBase;
     }
+
     std::string Generate()
     {
         std::string Data{};
@@ -26,6 +28,20 @@ public:
         }
         return Data;
     }
+
+    std::string Generate(int seed)
+    {
+        std::string Data{};
+        srand(static_cast<unsigned int>(seed));
+        for (int i = 0; i < 15; i++)
+        {
+            if (i % 5 == 0 && i != 0)
+                Data += "-";
+            Data += Uniqt[rand() % 62];
+        }
+        return Data;
+    }
+
     int Random(int Start, int End)
     {
         if (End - Start <= 0)
@@ -33,7 +49,9 @@ public:
         
         return (rand() % (End - Start)) + Start;
     }
+
 private:
+
     std::string Uniqt[62] = {
     {"1"}, {"2"}, {"3"}, {"4"}, {"5"}, {"6"}, {"7"}, {"8"}, {"9"}, {"0"},
     {"a"}, {"b"}, {"c"}, {"d"}, {"e"}, {"f"}, {"g"}, {"h"}, {"i"}, {"j"},
@@ -43,7 +61,7 @@ private:
     {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"},
     {"Y"}, {"Z"} };
 
-    UniqueIdBase() {srand(static_cast<unsigned int>(time(0)));}
+    UniqueIdBase() { srand(static_cast<unsigned int>(time(0))); }
     ~UniqueIdBase() {}
     UniqueIdBase(const UniqueIdBase&) {}
     UniqueIdBase& operator=(const UniqueIdBase&) { return *this; }

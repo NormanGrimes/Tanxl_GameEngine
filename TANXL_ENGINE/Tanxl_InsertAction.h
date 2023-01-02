@@ -37,14 +37,14 @@
 struct Key_Unit
 {
 	Key_Unit();
-	Key_Unit(int GLKEY, bool MOVX, bool MOVY, float MOVL);
+	Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL);
 
 	int   GLFW_KEY;
 	//用于标记此按键是否会导致向X轴方向移动
 	bool  MoveToX;
 	//用于标记此按键是否会导致向Y轴方向移动
 	bool  MoveToY;
-	float MoveLen;
+	double MoveLen;
 };
 
 class InsertEventBase

@@ -6,6 +6,9 @@ int main()
 {
 	//Data Function Test
 
+	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
+	std::cout << "Generate : " << UIB->Generate() << std::endl;
+
 	TANXL_DataBase NData(true);
 	int n = 0x10101010, i = 5;
 	while (i--)
@@ -51,7 +54,7 @@ int main()
 
 	Key_Unit MOVE_UP;
 	MOVE_UP.GLFW_KEY = GLFW_KEY_UP;
-	MOVE_UP.MoveLen = 0.01f;
+	MOVE_UP.MoveLen = 0.01;
 	MOVE_UP.MoveToY = true;
 	IEB->RegistEvent(MOVE_UP);
 	MOVE_UP.GLFW_KEY = GLFW_KEY_W;
@@ -59,7 +62,7 @@ int main()
 
 	Key_Unit MOVE_LEFT;
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_LEFT;
-	MOVE_LEFT.MoveLen = -0.01f;
+	MOVE_LEFT.MoveLen = -0.01;
 	MOVE_LEFT.MoveToX = true;
 	IEB->RegistEvent(MOVE_LEFT);
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_A;
@@ -67,7 +70,7 @@ int main()
 
 	Key_Unit MOVE_RIGHT;
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_RIGHT;
-	MOVE_RIGHT.MoveLen = 0.01f;
+	MOVE_RIGHT.MoveLen = 0.01;
 	MOVE_RIGHT.MoveToX = true;
 	IEB->RegistEvent(MOVE_RIGHT);
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_D;
@@ -75,7 +78,7 @@ int main()
 
 	Key_Unit MOVE_DOWN;
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_DOWN;
-	MOVE_DOWN.MoveLen = -0.01f;
+	MOVE_DOWN.MoveLen = -0.01;
 	MOVE_DOWN.MoveToY = true;
 	IEB->RegistEvent(MOVE_DOWN);
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
