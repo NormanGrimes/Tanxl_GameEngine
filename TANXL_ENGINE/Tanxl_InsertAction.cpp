@@ -47,9 +47,10 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 				{
 					*StateX -= _Margin_X;
 					*StateY -= _Margin_Y;
+					_Is_Key_Pressed = true;
 				}
 			}
-			std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
+			//std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
 		}
 	}
 }
@@ -97,6 +98,13 @@ float InsertEventBase::Get_Margin_Y()
 	return this->_Margin_Y;
 }
 
+bool InsertEventBase::Get_Key_Pressed()
+{
+	bool Temp_Element = _Is_Key_Pressed;
+	_Is_Key_Pressed = false;
+	return Temp_Element;
+}
+
 unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 {
 	unsigned Return_Value = 0;
@@ -130,7 +138,7 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 //UnImportant µ¥ÀýÊµÏÖ
 
 InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true) {}
+_Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -141,7 +149,7 @@ InsertEventBase::~InsertEventBase()
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
 	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Is_Max_Single(false), 
-	_Max_float_Height(1), _Max_float_Width(1),_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true) {}
+	_Max_float_Height(1), _Max_float_Width(1),_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

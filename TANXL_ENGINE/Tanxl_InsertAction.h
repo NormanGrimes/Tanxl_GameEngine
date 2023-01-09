@@ -6,6 +6,7 @@
 // 加入单独对X/Y轴最大移动范围设置的函数
 // 自动检测函数加入对X/Y轴判断的支持
 // Set_StateRange功能实际安装
+// 提供用于标记是否执行了按键操作的布尔值
 
 #pragma once
 
@@ -56,6 +57,7 @@ public:
 	float Get_AutoFloat(int Blocks);
 	float Get_Margin_X();
 	float Get_Margin_Y();
+	bool Get_Key_Pressed();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit KU);
 	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX = NULL, float* StateY = NULL);
@@ -80,6 +82,7 @@ private:
 	bool _Is_State_Range;
 	//_Is_Max_Single 用于标记当前是否使用单一X/Y轴设置方式
 	bool _Is_Max_Single;
+	bool _Is_Key_Pressed;
 	//_Margin_X 代表当前主控制物品的X坐标
 	float _Margin_X;
 	//_Margin_Y 代表当前主控制物品的Y坐标
@@ -88,7 +91,6 @@ private:
 	float _Max_float_Height;
 	//_Max_float_Width  代表当前主控制物品在X轴的最大移动距离
 	float _Max_float_Width;
-
 	//单例实现私有构造函数
 	InsertEventBase();
 	~InsertEventBase();

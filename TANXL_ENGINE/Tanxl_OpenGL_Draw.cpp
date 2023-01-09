@@ -162,6 +162,9 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y);//获取输入
 
+		if (IEB->Get_Key_Pressed())
+			State->Set_Adjust_Flag(false);
+
 		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
 		//std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
@@ -169,13 +172,20 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		double Current_Height = (MoveY * 2 + 1) / (Each_Half_Height * 2);
 		double Current_Width = (MoveX * 2 + 1) / (Each_Half_Width * 2);
 
-		std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
+		//std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
+		
+		State->Set_Adjust(0.002f);
+		State->Set_ExacHeight(Current_Height, VY, &MoveY, &Y);
+		State->Set_ExacWidth(Current_Width, VX, &MoveX, &X);
 
 		static int CUH = static_cast<int>(Current_Height) / 1;
 		static int CUW = static_cast<int>(Current_Width) / 1;
 
 		int NCUH = static_cast<int>(Current_Height) / 1;
 		int NCUW = static_cast<int>(Current_Width) / 1;
+
+		std::cout << "X" << X << "__" << Y << std::endl;
+		std::cout << "Y" << MoveX << "__" << MoveY << std::endl;
 
 		if (Current_Height < 0)
 			NCUH -= 1;
@@ -186,13 +196,29 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		{
 			if (NCUH < CUH)
 			{
-				State->Set_Move_State(MoveToNH);
-				Y -= static_cast<float>(Each_Half_Width) * 2;
+				if (!State->Get_Adjust_Flag())
+				{
+					State->Set_Move_State(MoveToNH);
+					Y -= static_cast<float>(Each_Half_Width) * 2;
+				}
+				else
+				{
+					State->Set_Move_State(MoveToPH);
+					Y += static_cast<float>(Each_Half_Width) * 2;
+				}
 			}
 			else
 			{
-				State->Set_Move_State(MoveToPH);
-				Y += static_cast<float>(Each_Half_Width) * 2;
+				if (!State->Get_Adjust_Flag())
+				{
+					State->Set_Move_State(MoveToPH);
+					Y += static_cast<float>(Each_Half_Width) * 2;
+				}
+				else
+				{
+					State->Set_Move_State(MoveToNH);
+					Y -= static_cast<float>(Each_Half_Width) * 2;
+				}
 			}
 			CUH = NCUH;
 			ReLoadState(State, CUH, CUW);
@@ -202,21 +228,33 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		{
 			if (NCUW < CUW)
 			{
-				State->Set_Move_State(MoveToPW);
-				X -= static_cast<float>(Each_Half_Height) * 2;
+				if (!State->Get_Adjust_Flag())
+				{
+					State->Set_Move_State(MoveToPW);
+					X -= static_cast<float>(Each_Half_Height) * 2;
+				}
+				else
+				{
+					State->Set_Move_State(MoveToNW);
+					X += static_cast<float>(Each_Half_Height) * 2;
+				}
 			}
 			else
 			{
-				State->Set_Move_State(MoveToNW);
-				X += static_cast<float>(Each_Half_Height) * 2;
+				if (!State->Get_Adjust_Flag())
+				{
+					State->Set_Move_State(MoveToNW);
+					X += static_cast<float>(Each_Half_Height) * 2;
+				}
+				else
+				{
+					State->Set_Move_State(MoveToPW);
+					X -= static_cast<float>(Each_Half_Height) * 2;
+				}
 			}
 			CUW = NCUW;
 			ReLoadState(State, CUH, CUW);
 		}
-
-		State->Set_Adjust(0.002f);
-		State->Set_ExacHeight(Current_Height, VY, &MoveY, &Y);
-		State->Set_ExacWidth(Current_Width, VX, &MoveX, &X);
 
 		//std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
 		//std::cout << "Exac Location : " << MoveX * 2 << " " << MoveY * 2 << std::endl;//REAL LOCATION

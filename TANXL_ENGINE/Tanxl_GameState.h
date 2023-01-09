@@ -1,12 +1,7 @@
-//_VERSION_0_4_ UPDATE LOG
-// LAST_UPDATE 2022-07-26 21:35
-// 提供一个指针指向当前地图中心的地图单元
-// Set_CurrentLoc函数预加入重新加载地图功能
-// 修复编译地图会导致第一个元素编译失败的问题
-// 加入Move_State结构体标记移动位置
-// 提供Move_State结构体相关控制接口
-// 提供调整Move_State的重载函数与相关枚举
-// 修改原地图尺寸属性为显示属性
+//_VERSION_0_5_ UPDATE LOG
+// LAST_UPDATE 2022-09-20 22:38
+// 增加一个布尔值用于标记是否在自动调整场景
+// 修复自动调整间隔时长时短的问题
 
 #pragma once
 
@@ -104,6 +99,7 @@ public:
 	void Set_Move_State(int Event_Id);
 	void Set_Display_State(int Width, int Height);
 	void Set_DataAll_State(unsigned Width, unsigned Height);
+	void Set_Adjust_Flag(bool Adjust_Flag);
 	void CompileStateUnits(std::string Infor);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
@@ -113,6 +109,7 @@ public:
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
+	bool Get_Adjust_Flag();
 	unsigned Get_DataHeight()const;
 	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
@@ -130,6 +127,7 @@ private:
 	int _GameState_Width;
 	int _GameState_Height;
 	float _GameState_Adjust;
+	bool _Is_Adjusting;
 	bool _Compile_Success;
 	Move_State _MState;//用于记录当前加载地图区域
 	SLocation _SLoc;//用于记录当前地图中心点
