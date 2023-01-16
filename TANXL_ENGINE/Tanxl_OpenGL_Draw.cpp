@@ -160,10 +160,22 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		static float VX = 0.0f;
 		static float VY = 0.0f;
 
+		static int First_Adjust = 0;
+
+		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
+
 		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y);//获取输入
 
+		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
+
 		if (IEB->Get_Key_Pressed())
+		{
+			First_Adjust = 0;
+			std::cout << "TRUE -----------------------------T"<< std::endl;
 			State->Set_Adjust_Flag(false);
+		}
+		else
+			std::cout << "FALSE-----------------------------X" << std::endl;
 
 		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
@@ -175,8 +187,24 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		//std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
 		
 		State->Set_Adjust(0.002f);
-		State->Set_ExacHeight(Current_Height, VY, &MoveY, &Y);
-		State->Set_ExacWidth(Current_Width, VX, &MoveX, &X);
+
+		if (State->Get_Adjust_Flag())
+		{
+			State->Set_ExacHeight(Current_Height, VY, &MoveY, &Y);
+			State->Set_ExacWidth(Current_Width, VX, &MoveX, &X);
+			First_Adjust = 0;
+		}
+		else
+		{
+			std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
+
+			if (First_Adjust == 300)
+			{
+				State->Set_Adjust_Flag(true);
+			}
+			else
+				First_Adjust++;
+		}
 
 		static int CUH = static_cast<int>(Current_Height) / 1;
 		static int CUW = static_cast<int>(Current_Width) / 1;

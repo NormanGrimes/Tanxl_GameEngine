@@ -29,6 +29,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 	{
 		if (glfwGetKey(window, _KeyEventS.at(i).GLFW_KEY) == GLFW_PRESS)
 		{
+			_Is_Key_Pressed = true;
 			if (_KeyEventS.at(i).MoveToX)
 			{
 				*MoveX += _KeyEventS.at(i).MoveLen;
@@ -47,7 +48,6 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 				{
 					*StateX -= _Margin_X;
 					*StateY -= _Margin_Y;
-					_Is_Key_Pressed = true;
 				}
 			}
 			//std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
