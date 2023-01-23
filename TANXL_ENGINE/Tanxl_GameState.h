@@ -3,6 +3,7 @@
 // 增加一个布尔值用于标记是否在自动调整场景
 // 修复自动调整间隔时长时短的问题
 // 修复最后一段调节的判断条件错误问题
+// 调整微调坐标函数的接口增加两个传参
 
 #pragma once
 
@@ -105,8 +106,8 @@ public:
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
-	void Set_ExacHeight(double& Current, float& MoveSet, float* MoveState = NULL, float* MoveY = NULL);//可选功能 对2D棋盘上的物品微调位置
-	void Set_ExacWidth(double& Current, float& MoveSet, float* MoveState = NULL, float* MoveY = NULL);
+	void Set_ExacHeight(double& Current, float& MoveSet, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);//可选功能 对2D棋盘上的物品微调位置
+	void Set_ExacWidth(double& Current, float& MoveSet, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();

@@ -126,7 +126,7 @@ Move_State GameStateBase::Get_Move_State()
 	return this->_MState;
 }
 #include <iostream>
-void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveState, float* MoveY)
+void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveState, float* MoveY, float* Deputy)
 {
 	static int EHCountS = 0;
 	static int EHCountL = 0;
@@ -145,15 +145,16 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 	{
 		//std::cout << " < 2.5  _" << *MoveState << std::endl;
 		EHCountS++;
-		if (EHCountS == 50)
+		if (EHCountS == 3)
 		{
 			//MoveSet -= _GameState_Adjust;
-			if (*MoveState + _GameState_Adjust < 2.5)
+			if (*MoveState + _GameState_Adjust < 0)
 			{
+				*Deputy += _GameState_Adjust;
 				*MoveState += _GameState_Adjust;
 				*MoveY += _GameState_Adjust;
 			}
-			else if (- *MoveState < _GameState_Adjust)
+			else if (-*MoveState < _GameState_Adjust)
 			{
 				float Temp_Move = *MoveState;
 				while (Temp_Move > 2.5)
@@ -161,6 +162,7 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 				std::cout << " Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveY += Temp_Move;
+				*Deputy += Temp_Move;
 				*MoveState += Temp_Move;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				//*MoveState = *MoveState / 1;
@@ -176,11 +178,12 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 	{
 		//std::cout << " > 2.5  _" << *MoveState << std::endl;
 		EHCountL++;
-		if (EHCountL == 50)
+		if (EHCountL == 3)
 		{
 			//MoveSet += _GameState_Adjust;
-			if (*MoveState - _GameState_Adjust > 2.5)
+			if (*MoveState > _GameState_Adjust)
 			{
+				*Deputy -= _GameState_Adjust;
 				*MoveState -= _GameState_Adjust;
 				*MoveY -= _GameState_Adjust;
 			}
@@ -192,6 +195,7 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 				std::cout << " Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveY -= Temp_Move;
+				*Deputy -= Temp_Move;
 				*MoveState -= Temp_Move;
 				//*MoveState = *MoveState / 1;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
@@ -204,7 +208,7 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 		EHCountL = 0;
 }
 
-void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveState, float* MoveX)
+void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveState, float* MoveX, float* Deputy)
 {
 	static int EWCountS = 0;
 	static int EWCountL = 0;
@@ -223,11 +227,12 @@ void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveSt
 	{
 		//std::cout << " < 2.5  _" << *MoveState << std::endl;
 		EWCountS++;
-		if (EWCountS == 50)
+		if (EWCountS == 3)
 		{
 			//MoveSet -= _GameState_Adjust;
-			if (*MoveState + _GameState_Adjust < 2.5)
+			if (*MoveState + _GameState_Adjust < 0)
 			{
+				*Deputy += _GameState_Adjust;
 				*MoveState += _GameState_Adjust;
 				*MoveX += _GameState_Adjust;
 			}
@@ -239,6 +244,7 @@ void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveSt
 				std::cout << " Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveX += Temp_Move;
+				*Deputy += Temp_Move;
 				*MoveState += Temp_Move;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				//*MoveState = *MoveState / 1;
@@ -254,11 +260,12 @@ void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveSt
 	{
 		//std::cout << " > 2.5  _" << *MoveState << std::endl;
 		EWCountL++;
-		if (EWCountL == 50)
+		if (EWCountL == 3)
 		{
 			//MoveSet += _GameState_Adjust;
-			if (*MoveState - _GameState_Adjust > 2.5)
+			if (*MoveState > _GameState_Adjust)
 			{
+				*Deputy -= _GameState_Adjust;
 				*MoveState -= _GameState_Adjust;
 				*MoveX -= _GameState_Adjust;
 			}
@@ -270,6 +277,7 @@ void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveSt
 				std::cout << " Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveX -= Temp_Move;
+				*Deputy -= Temp_Move;
 				*MoveState -= Temp_Move;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				//*MoveState = *MoveState / 1;

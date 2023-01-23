@@ -38,10 +38,10 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_Position = glGetUniformLocation(_renderingProgram, "PreLoads");
 	glProgramUniform1i(_renderingProgram, _Position, _PreLoads);
 
-	ReLoadState(State, (_HeightInt + _PreLoads) / 2, (_WidthInt + _PreLoads) / 2);
+	ReLoadState(State);
 }
 
-void OpenGL_Draw::ReLoadState(GameStateBase* State, int PosX, int PosY)
+void OpenGL_Draw::ReLoadState(GameStateBase* State)
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
@@ -160,11 +160,21 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		static float VX = 0.0f;
 		static float VY = 0.0f;
 
+		static float DeptVX = 2.5f;
+		static float DeptVY = 2.5f;
+
+		static float MDeptVX = 2.5f;
+		static float MDeptVY = 2.5f;
+
 		static int First_Adjust = 0;
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y);//获取输入
+		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y, &MDeptVX, &MDeptVY);//获取输入
+
+		std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
+		std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
+
 
 		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
 
@@ -190,15 +200,15 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		if (State->Get_Adjust_Flag())
 		{
-			State->Set_ExacHeight(Current_Height, VY, &MoveY, &Y);
-			State->Set_ExacWidth(Current_Width, VX, &MoveX, &X);
+			State->Set_ExacHeight(Current_Height, VY, &MoveY, &Y, &DeptVY);
+			State->Set_ExacWidth(Current_Width, VX, &MoveX, &X, &DeptVX);
 			First_Adjust = 0;
 		}
 		else
 		{
-			std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
+			//std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
 
-			if (First_Adjust == 300)
+			if (First_Adjust == 10)
 			{
 				State->Set_Adjust_Flag(true);
 			}
@@ -206,82 +216,147 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 				First_Adjust++;
 		}
 
-		static int CUH = static_cast<int>(Current_Height) / 1;
-		static int CUW = static_cast<int>(Current_Width) / 1;
+		static int CUH = MDeptVY / Each_Half_Height;
+		static int CUW = MDeptVX / Each_Half_Width;
 
-		int NCUH = static_cast<int>(Current_Height) / 1;
-		int NCUW = static_cast<int>(Current_Width) / 1;
+		int NCUH = MDeptVY / Each_Half_Height;
+		int NCUW = MDeptVX / Each_Half_Width;
 
-		std::cout << "X" << X << "__" << Y << std::endl;
-		std::cout << "Y" << MoveX << "__" << MoveY << std::endl;
+		static int ACUH = static_cast<int>(Current_Height) / 1;
+		static int ACUW = static_cast<int>(Current_Width) / 1;
+
+		int ANCUH = 2;
+		int ANCUW = 2;
+
+		if (State->Get_Adjust_Flag())
+		{
+			int ANCUH = static_cast<int>(DeptVY) / 1;
+			int ANCUW = static_cast<int>(DeptVX) / 1;
+		}
+
+		//std::cout << "Current_Height/Current_Width" << Current_Height << "__" << Current_Width << std::endl;
+		std::cout << "CUH/CUW" << NCUH << "__" << NCUW << std::endl;
+
+		//std::cout << "X" << X << "__" << Y << std::endl;
+		//std::cout << "Y" << MoveX << "__" << MoveY << std::endl;
 
 		if (Current_Height < 0)
 			NCUH -= 1;
 		if (Current_Width < 0)
 			NCUW -= 1;
 
+		if (ANCUH != ACUH)
+		{
+			if (State->Get_Adjust_Flag())
+			{
+				if (ANCUH < ACUH)
+				{
+					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
+					State->Set_Move_State(MoveToPH);
+					Y += static_cast<float>(Each_Half_Width) * 2;
+				}
+				else
+				{
+					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
+					State->Set_Move_State(MoveToNH);
+					Y -= static_cast<float>(Each_Half_Width) * 2;
+				}
+				ACUH = ANCUH;
+				ReLoadState(State);
+			}
+		}
+
+		if (ANCUW != ACUW)
+		{
+			if (State->Get_Adjust_Flag())
+			{
+				if (ANCUW < ACUW)
+				{
+					//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
+					State->Set_Move_State(MoveToNW);
+					X += static_cast<float>(Each_Half_Height) * 2;
+				}
+				else
+				{
+					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
+					State->Set_Move_State(MoveToPW);
+					X -= static_cast<float>(Each_Half_Height) * 2;
+				}
+				ACUW = ANCUW;
+				ReLoadState(State);
+			}
+		}
+
 		if (NCUH != CUH)
 		{
-			if (NCUH < CUH)
+			if (!State->Get_Adjust_Flag())
 			{
-				if (!State->Get_Adjust_Flag())
+				if (NCUH > CUH)
 				{
+					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNH);
 					Y -= static_cast<float>(Each_Half_Width) * 2;
 				}
 				else
 				{
+					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPH);
 					Y += static_cast<float>(Each_Half_Width) * 2;
 				}
 			}
-			else
+			/*else
 			{
-				if (!State->Get_Adjust_Flag())
+				if (NCUH < CUH)
 				{
+					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPH);
 					Y += static_cast<float>(Each_Half_Width) * 2;
 				}
 				else
 				{
+					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNH);
 					Y -= static_cast<float>(Each_Half_Width) * 2;
 				}
-			}
+			}*/
 			CUH = NCUH;
-			ReLoadState(State, CUH, CUW);
+			ReLoadState(State);
 		}
 
 		if (NCUW != CUW)
 		{
-			if (NCUW < CUW)
+			if (!State->Get_Adjust_Flag())
 			{
-				if (!State->Get_Adjust_Flag())
+				if (NCUW > CUW)
 				{
+					//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPW);
 					X -= static_cast<float>(Each_Half_Height) * 2;
 				}
 				else
 				{
+					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNW);
 					X += static_cast<float>(Each_Half_Height) * 2;
 				}
 			}
-			else
+			/*else
 			{
-				if (!State->Get_Adjust_Flag())
+				if (NCUW < CUW)
 				{
+					//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNW);
 					X += static_cast<float>(Each_Half_Height) * 2;
 				}
 				else
 				{
+					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPW);
 					X -= static_cast<float>(Each_Half_Height) * 2;
 				}
-			}
+			}*/
 			CUW = NCUW;
-			ReLoadState(State, CUH, CUW);
+			ReLoadState(State);
 		}
 
 		//std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;

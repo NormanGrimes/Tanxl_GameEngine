@@ -7,6 +7,7 @@
 // 自动检测函数加入对X/Y轴判断的支持
 // Set_StateRange功能实际安装
 // 提供用于标记是否执行了按键操作的布尔值
+// 输入函数接口调整增加两个传参
 
 #pragma once
 
@@ -60,7 +61,7 @@ public:
 	bool Get_Key_Pressed();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit KU);
-	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX = NULL, float* StateY = NULL);
+	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX = NULL, float* StateY = NULL, float* deputyX = NULL, float* deputyY = NULL);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
 	//在使用后会导致Set_MaxFloat_Height/Width功能无效化
@@ -74,7 +75,7 @@ public:
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
 private:
-	unsigned AutoCheck(float* MoveX, float* MoveY);
+	unsigned AutoCheck(float* MoveX, float* MoveY, float* DeptX = NULL, float* DeptY = NULL);
 	std::vector<Key_Unit> _KeyEventS;
 	std::vector<bool>* _PTB;
 	float _Max_float;

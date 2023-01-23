@@ -5,6 +5,8 @@
 // 根据State模块调整标记对场景反向加载
 // 修复最后一段调节会导致循环偏移的问题
 // 修复开启自动载入后没有因输入操作而重置的问题
+// 简化重新加载地图接口
+// 已正式完成地图自动载入功能
 
 #pragma once
 
@@ -50,7 +52,7 @@ public:
 	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
 	//用于第一次或重新加载整个地图场景
-	void ReLoadState(GameStateBase* State, int PosX, int PosY);
+	void ReLoadState(GameStateBase* State);
 private:
 
 	GLuint _Position;
