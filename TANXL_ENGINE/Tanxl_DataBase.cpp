@@ -163,12 +163,6 @@ std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 	return fot;
 }
 
-inline void TANXL_DataBase::Set_Code(std::string set, unsigned status){ Item_Instance.Code = set; Item_Instance.Status_1 = status; Combine_Status(); }
-inline void TANXL_DataBase::Set_Name(std::string set, unsigned status){ Item_Instance.Name = set; Item_Instance.Status_2 = status; Combine_Status(); }
-inline void TANXL_DataBase::Set_Oth1(std::string set, unsigned status){ Item_Instance.Oth1 = set; Item_Instance.Status_3 = status; Combine_Status(); }
-inline void TANXL_DataBase::Set_Oth2(std::string set, unsigned status){ Item_Instance.Oth2 = set; Item_Instance.Status_4 = status; Combine_Status(); }
-inline void TANXL_DataBase::Set_Oth3(std::string set, unsigned status){ Item_Instance.Oth3 = set; Item_Instance.Status_5 = status; Combine_Status(); }
-
 TANXL_DataBase::TANXL_DataBase(bool Zero_Legal) :
 	Is_Instance_Data(false), Is_Chain_Empty(true), Is_Zero_Legal(Zero_Legal),
 	IC_Vector(new std::vector<Id_Vector*>),Current_Location(0) {}
@@ -205,20 +199,41 @@ void TANXL_DataBase::ResetInstance()
 void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 {
 	int SetTimes{ 0 };
-	if (0 <= ((Num & 0xf0000000) >> 28) && ((Num & 0xf0000000) >> 28) < 15) {
-		Set_Code(Set, ((Num & 0xf00000000) >> 28)); SetTimes++;
+	//std::cout << Num;
+	if (0 <= (Num >> 28) && (Num >> 28) < 15) {
+		Item_Instance.Code = Set;
+		Item_Instance.Status_1 = (Num >> 28);
+		//std::cout << " __ " << (Num >> 28);
+		Combine_Status();
+		SetTimes++;
 	}
 	if (0 <= ((Num & 0x0f000000) >> 24) && ((Num & 0x0f000000) >> 24) < 15) {
-		Set_Name(Set, ((Num & 0x0f000000) >> 24)); SetTimes++;
+		Item_Instance.Name = Set;
+		Item_Instance.Status_2 = ((Num & 0x0f000000) >> 24);
+		//std::cout << " __ " << ((Num & 0x0f000000) >> 24);
+		Combine_Status();
+		SetTimes++;
 	}
 	if (0 <= ((Num & 0x00ff0000) >> 16) && ((Num & 0x00ff0000) >> 16) < 255) {
-		Set_Oth1(Set, ((Num & 0x00ff0000) >> 16)); SetTimes++;
+		Item_Instance.Oth1 = Set;
+		Item_Instance.Status_3 = ((Num & 0x00ff0000) >> 16);
+		//std::cout << " __ " << ((Num & 0x00ff0000) >> 16);
+		Combine_Status();
+		SetTimes++;
 	}
 	if (0 <= ((Num & 0x0000ff00) >> 8) && ((Num & 0x0000ff00) >> 8) < 255) {
-		Set_Oth2(Set, ((Num & 0x0000ff00) >> 8)); SetTimes++;
+		Item_Instance.Oth2 = Set;
+		Item_Instance.Status_4 = ((Num & 0x0000ff00) >> 8);
+		//std::cout << " __ " << ((Num & 0x0000ff00) >> 8);
+		Combine_Status();
+		SetTimes++;
 	}
 	if (0 <= (Num & 0x000000ff) && (Num & 0x000000ff) < 255) {
-		Set_Oth3(Set, (Num & 0x000000ff)); SetTimes++;
+		Item_Instance.Oth3 = Set;
+		Item_Instance.Status_5 = (Num & 0x000000ff);
+		//std::cout << " __ " << (Num & 0x000000ff) << std::endl;
+		Combine_Status();
+		SetTimes++;
 	}
 	if (SetTimes)
 		Is_Instance_Data = true;
@@ -450,11 +465,11 @@ void TANXL_DataBase::Get_Specified(int Type, int Exac, int Nums)
 
 void TANXL_DataBase::Get_Item_Status()
 {
-	Item_Instance.Status_1 = ((Item_Instance.Item_Status & 0xf0000) >> 16);
-	Item_Instance.Status_2 = ((Item_Instance.Item_Status & 0x0f000) >> 12);
-	Item_Instance.Status_3 = ((Item_Instance.Item_Status & 0x00f00) >> 8 );
-	Item_Instance.Status_4 = ((Item_Instance.Item_Status & 0x000f0) >> 4 );
-	Item_Instance.Status_5 = ( Item_Instance.Item_Status & 0x0000f       );
+	Item_Instance.Status_1 = ((Item_Instance.Item_Status & 0xf0000000) >> 28);
+	Item_Instance.Status_2 = ((Item_Instance.Item_Status & 0x0f000000) >> 24);
+	Item_Instance.Status_3 = ((Item_Instance.Item_Status & 0x00ff0000) >> 16);
+	Item_Instance.Status_4 = ((Item_Instance.Item_Status & 0x0000ff00) >>  8);
+	Item_Instance.Status_5 = ( Item_Instance.Item_Status & 0x000000ff       );
 }
 
 void TANXL_DataBase::Print_Data()//输出当前链表中的所有内容 V3 Updated

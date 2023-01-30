@@ -1,9 +1,8 @@
-//_VERSION_1_7_ UPDATE LOG
-// LAST_UPDATE 2022-08-26 20:20
-// 使用八位十六进制值作为物品序号
-// 统一零合法与不合法的添加物品代码
-// 默认数据函数修改以支持最新添加方式
-// 移除源文件中定义的全局TDB变量
+//_VERSION_1_8_ UPDATE LOG
+// LAST_UPDATE 2022-09-24 00:39
+// 移除五个不必要的内部接口inline设置
+// 修复三十二位的获取Status函数采用二十位操作方式的错误
+// 储存模块设置物品函数执行效率提升
 
 #pragma once
 
@@ -91,11 +90,6 @@ private:
 	bool Is_Instance_Data;//用来判断Item_Instance中是否有数据
 	bool Is_Chain_Empty;//用来判断链表是否为空
 	bool Is_Zero_Legal;//值为true时0成为合法值 可在输出中显示/使用
-	inline void Set_Code(std::string set, unsigned status);
-	inline void Set_Name(std::string set, unsigned status);
-	inline void Set_Oth1(std::string set, unsigned status);
-	inline void Set_Oth2(std::string set, unsigned status);
-	inline void Set_Oth3(std::string set, unsigned status);
 	Id_Vector* Id_Chain_Locate(int Type, int Exac);//时间复杂度为logN的Id_Chain快速定位函数 Type Exac 指Id_Chain的同名变量
 	Data_Vector* Data_Chain_Locate(int Type, int Exac, int Depth);//借由Id_Chain_Locate函数对不同深度的Data_Chain定位
 	void Replace_Chain(int OldType, int OldExac, int OldDepth, int Type, int Exac);//转移Data_Chain到另一个Id_Chain下

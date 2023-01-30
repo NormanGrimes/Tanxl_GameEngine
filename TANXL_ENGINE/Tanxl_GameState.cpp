@@ -132,40 +132,28 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 	static int EHCountL = 0;
 	std::cout << " EHCountS  _  EHCountL" << EHCountS << " ___ " << EHCountL << std::endl;
 	std::cout << " MoveState  _" << *MoveState << std::endl;
-	//int LevelCount = 0;
-	//float SingleBlock = 2.0f / _GameState_Height;
-	//while (SingleBlock < Current)
-	//{
-	//	SingleBlock += 2.0f / _GameState_Height;
-	//	LevelCount++;
-	//}
-//	this->_Is_Adjusting = false;
-	//std::cout << "HCurrent :" << Current << std::endl;
-	if (/*SingleBlock*/(float)Current < 2.5/*Current - (SingleBlock - 2.0f / _GameState_Height)*/)
+	if ((float)Current < 2.5f)
 	{
-		//std::cout << " < 2.5  _" << *MoveState << std::endl;
 		EHCountS++;
 		if (EHCountS == 3)
 		{
-			//MoveSet -= _GameState_Adjust;
 			if (*MoveState + _GameState_Adjust < 0)
 			{
 				*Deputy += _GameState_Adjust;
 				*MoveState += _GameState_Adjust;
 				*MoveY += _GameState_Adjust;
 			}
-			else if (-*MoveState < _GameState_Adjust)
+			else if (*MoveState + _GameState_Adjust > 0)
 			{
 				float Temp_Move = *MoveState;
-				while (Temp_Move > 2.5)
-					Temp_Move -= 2.5;
+				//while (Temp_Move > 2.5)
+				//	Temp_Move -= 2.5;
 				std::cout << " Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveY += Temp_Move;
 				*Deputy += Temp_Move;
-				*MoveState += Temp_Move;
+				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
-				//*MoveState = *MoveState / 1;
 			}
 			EHCountS = 0;
 			this->_Is_Adjusting = true;
@@ -174,13 +162,11 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 	else
 		EHCountS = 0;
 
-	if ((float)Current > 2.5)
+	if ((float)Current > 2.5f)
 	{
-		//std::cout << " > 2.5  _" << *MoveState << std::endl;
 		EHCountL++;
 		if (EHCountL == 3)
 		{
-			//MoveSet += _GameState_Adjust;
 			if (*MoveState > _GameState_Adjust)
 			{
 				*Deputy -= _GameState_Adjust;
@@ -190,14 +176,13 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 			else if (*MoveState < _GameState_Adjust)
 			{
 				float Temp_Move = *MoveState;
-				while (Temp_Move > 2.5)
-					Temp_Move -= 2.5;
+				//while (Temp_Move > 2.5)
+				//	Temp_Move -= 2.5;
 				std::cout << " Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveY -= Temp_Move;
 				*Deputy -= Temp_Move;
-				*MoveState -= Temp_Move;
-				//*MoveState = *MoveState / 1;
+				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 			}
 			EHCountL = 0;
@@ -245,7 +230,7 @@ void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveSt
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveX += Temp_Move;
 				*Deputy += Temp_Move;
-				*MoveState += Temp_Move;
+				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				//*MoveState = *MoveState / 1;
 			}
@@ -278,7 +263,7 @@ void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveSt
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				*MoveX -= Temp_Move;
 				*Deputy -= Temp_Move;
-				*MoveState -= Temp_Move;
+				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				//*MoveState = *MoveState / 1;
 			}

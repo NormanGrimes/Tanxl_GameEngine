@@ -10,15 +10,26 @@ int main()
 	std::cout << "Generate : " << UIB->Generate() << std::endl;
 
 	TANXL_DataBase NData(true);
-	int n = 0x10101010, i = 5;
+	unsigned n = 0x10101010, i = 10;
 	while (i--)
 	{
+		if (i % 10 != 0)
+			n++;
+		else
+			n += 0x01000000;
+
+		if ((n & 0x0f000000) == 0x0f000000)
+			n -= 0x0f000000;
+
+		if ((n & 0xf0000000) == 0xf0000000)
+			n -= 0xf0000000;
+
 		std::cout << "Updating : " << std::setbase(16) << n << std::endl;
-		NData.Set_Instance(n++, "Updating" + std::to_string(n));
+		NData.Set_Instance (n, "Updating" + std::to_string(n));
 		std::cout << NData;
-		NData.AppendItem(false);
+		NData.AppendItem(true);
 	}
-	NData.Print_Data();
+	//NData.Print_Data();
 
 	//Get Instance
 
@@ -47,6 +58,8 @@ int main()
 						   "a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
 
 	GSB->Set_DataAll_State(10, 10);
+
+	GSB->Set_Adjust(0.002f);
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -86,12 +99,12 @@ int main()
 
 	//IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 
-	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight() - 2));
-	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth() - 2));
+	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
+	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth()));
 
 	IEB->Set_StateRange(true);
 
 	OpenGL_Draw OGD(800, 800);
-	OGD.Set_PreLoad(4);
+	OGD.Set_PreLoad(5);
 	OGD.mainLoop(GSB);
 }

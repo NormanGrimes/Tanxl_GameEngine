@@ -108,16 +108,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	if (_Clear_Function)
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	//float SinCurrent = static_cast<float>(sin(currentTime)) * 0.5f;
-	//float CosCurrent = static_cast<float>(cos(currentTime)) * 0.5f;
-
-	//PosA = glGetUniformLocation(renderingProgram, "SinCurrentTime");
-	//glProgramUniform1f(renderingProgram, PosA, SinCurrent);
-	//PosB = glGetUniformLocation(renderingProgram, "CosCurrentTime");
-	//glProgramUniform1f(renderingProgram, PosB, CosCurrent);
-	// 
-	//std::cout << HeightInt * WidthInt;
-
 	glUseProgram(_renderingProgram);
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 }
@@ -172,8 +162,8 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y, &MDeptVX, &MDeptVY);//获取输入
 
-		std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
-		std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
+		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
+		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
 
 
 		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
@@ -189,14 +179,12 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
-		//std::cout << "MXP/MYP" << (MoveX + 1.0f) << "__" << (MoveY + 1.0f) << std::endl;
+		std::cout << "MXP/MYP" << (MoveX/* + 1.0f*/) << "__" << (MoveY/* + 1.0f*/) << std::endl;
 
 		double Current_Height = (MoveY * 2 + 1) / (Each_Half_Height * 2);
 		double Current_Width = (MoveX * 2 + 1) / (Each_Half_Width * 2);
 
-		//std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
-		
-		State->Set_Adjust(0.002f);
+		std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
 
 		if (State->Get_Adjust_Flag())
 		{
@@ -216,34 +204,26 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 				First_Adjust++;
 		}
 
-		static int CUH = MDeptVY / Each_Half_Height;
-		static int CUW = MDeptVX / Each_Half_Width;
+		static int CUH = MDeptVY / (Each_Half_Height * 2);
+		static int CUW = MDeptVX / (Each_Half_Height * 2);
 
-		int NCUH = MDeptVY / Each_Half_Height;
-		int NCUW = MDeptVX / Each_Half_Width;
+		int NCUH = MDeptVY / (Each_Half_Height * 2);
+		int NCUW = MDeptVX / (Each_Half_Height * 2);
 
-		static int ACUH = static_cast<int>(Current_Height) / 1;
-		static int ACUW = static_cast<int>(Current_Width) / 1;
+		static int ACUH = DeptVY / (Each_Half_Height * 2);
+		static int ACUW = DeptVX / (Each_Half_Height * 2);
 
-		int ANCUH = 2;
-		int ANCUW = 2;
+		static int ANCUH = DeptVY / (Each_Half_Height * 2);
+		static int ANCUW = DeptVX / (Each_Half_Height * 2);
 
 		if (State->Get_Adjust_Flag())
 		{
-			int ANCUH = static_cast<int>(DeptVY) / 1;
-			int ANCUW = static_cast<int>(DeptVX) / 1;
+			ANCUH = DeptVY / (Each_Half_Height * 2);
+			ANCUW = DeptVX / (Each_Half_Height * 2);
 		}
 
-		//std::cout << "Current_Height/Current_Width" << Current_Height << "__" << Current_Width << std::endl;
-		std::cout << "CUH/CUW" << NCUH << "__" << NCUW << std::endl;
-
-		//std::cout << "X" << X << "__" << Y << std::endl;
-		//std::cout << "Y" << MoveX << "__" << MoveY << std::endl;
-
-		if (Current_Height < 0)
-			NCUH -= 1;
-		if (Current_Width < 0)
-			NCUW -= 1;
+		//std::cout << "DeptVX / DeptVY" << DeptVX << "__" << DeptVY << std::endl;
+		//std::cout << "MDeptVX / MDeptVY" << MDeptVX << "__" << MDeptVY << std::endl;
 
 		if (ANCUH != ACUH)
 		{
@@ -255,13 +235,15 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 					State->Set_Move_State(MoveToPH);
 					Y += static_cast<float>(Each_Half_Width) * 2;
 				}
-				else
+				else if (ANCUH > ACUH)
 				{
 					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNH);
 					Y -= static_cast<float>(Each_Half_Width) * 2;
 				}
+				std::cout << "ANCUH __ " << ANCUH << "ACUH __ " << ACUH << std::endl;
 				ACUH = ANCUH;
+				std::cout << "ANCUH != ACUH State->Get_Adjust_Flag() RELOAD" << std::endl;
 				ReLoadState(State);
 			}
 		}
@@ -276,13 +258,15 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 					State->Set_Move_State(MoveToNW);
 					X += static_cast<float>(Each_Half_Height) * 2;
 				}
-				else
+				else if (ANCUW > ACUW)
 				{
 					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPW);
 					X -= static_cast<float>(Each_Half_Height) * 2;
 				}
+				std::cout << "ANCUW __ " << ANCUW << "CUW __ " << ACUW << std::endl;
 				ACUW = ANCUW;
+				std::cout << "ANCUW != ACUW State->Get_Adjust_Flag() RELOAD" << std::endl;
 				ReLoadState(State);
 			}
 		}
@@ -297,29 +281,16 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 					State->Set_Move_State(MoveToNH);
 					Y -= static_cast<float>(Each_Half_Width) * 2;
 				}
-				else
+				else if (NCUH < CUH)
 				{
 					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPH);
 					Y += static_cast<float>(Each_Half_Width) * 2;
 				}
 			}
-			/*else
-			{
-				if (NCUH < CUH)
-				{
-					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToPH);
-					Y += static_cast<float>(Each_Half_Width) * 2;
-				}
-				else
-				{
-					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToNH);
-					Y -= static_cast<float>(Each_Half_Width) * 2;
-				}
-			}*/
+			std::cout << "NCUH __ " << NCUH << "CUH __ " << CUH << std::endl;
 			CUH = NCUH;
+			std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
 			ReLoadState(State);
 		}
 
@@ -333,29 +304,16 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 					State->Set_Move_State(MoveToPW);
 					X -= static_cast<float>(Each_Half_Height) * 2;
 				}
-				else
+				else if(NCUW < CUW)
 				{
 					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNW);
 					X += static_cast<float>(Each_Half_Height) * 2;
 				}
 			}
-			/*else
-			{
-				if (NCUW < CUW)
-				{
-					//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToNW);
-					X += static_cast<float>(Each_Half_Height) * 2;
-				}
-				else
-				{
-					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToPW);
-					X -= static_cast<float>(Each_Half_Height) * 2;
-				}
-			}*/
+			std::cout << "NCUW __ " << NCUW << "CUW __ " << CUW << std::endl;
 			CUW = NCUW;
+			std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
 			ReLoadState(State);
 		}
 
