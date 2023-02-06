@@ -45,6 +45,9 @@
     <ClInclude Include="Tanxl_OpenGL_Render.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_Engine_Manager.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

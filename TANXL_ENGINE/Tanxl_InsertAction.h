@@ -80,9 +80,11 @@ private:
 	std::vector<bool>* _PTB;
 	float _Max_float;
 	int _Max_Line;
+	//_Is_State_Range 用于标记当前是否限制了移动范围
 	bool _Is_State_Range;
 	//_Is_Max_Single 用于标记当前是否使用单一X/Y轴设置方式
 	bool _Is_Max_Single;
+	//_Is_Key_Pressed 用于标记当前是否按下了按键
 	bool _Is_Key_Pressed;
 	//_Margin_X 代表当前主控制物品的X坐标
 	float _Margin_X;

@@ -156,8 +156,8 @@ InsertEventBase::~InsertEventBase()
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Is_Max_Single(false), 
-	_Max_float_Height(1), _Max_float_Width(1),_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
+	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Is_Max_Single(false),
+	_Max_float_Height(1), _Max_float_Width(1), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

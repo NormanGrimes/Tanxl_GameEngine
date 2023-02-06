@@ -5,6 +5,7 @@
 // 修复最后一段调节的判断条件错误问题
 // 调整微调坐标函数的接口增加两个传参
 // 微调最后一段优化float误差问题使之更加稳定
+// 加入可以控制自动调整频率的功能
 
 #pragma once
 
@@ -109,6 +110,7 @@ public:
 	void Set_Adjust(float Adjust);
 	void Set_ExacHeight(double& Current, float& MoveSet, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);//可选功能 对2D棋盘上的物品微调位置
 	void Set_ExacWidth(double& Current, float& MoveSet, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);
+	void Set_Adjust_Frequency(int Frame);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
@@ -127,6 +129,8 @@ private:
 	GameStateBase& operator=(const GameStateBase&);
 	unsigned _Data_Width;
 	unsigned _Data_Height;
+	//_Adjust_Frame 用于控制当前每多少帧进行一次坐标控制
+	int _Adjust_Frame;
 	int _GameState_Width;
 	int _GameState_Height;
 	float _GameState_Adjust;
