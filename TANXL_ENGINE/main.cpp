@@ -1,10 +1,10 @@
-#include "Tanxl_OpenGL_Draw.h"
-#include "Tanxl_UniqueID.h"
-#include "Tanxl_DataBase.h"
+#include "Tanxl_Engine_Manager.h"
 #include <iomanip>
 int main()
 {
 	//Data Function Test
+
+	Tanxl_Engine TGE;
 
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	std::cout << "Generate : " << UIB->Generate() << std::endl;
@@ -33,29 +33,33 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{&GameStateBase::Get_StateBase(5, 5)};
+	GameStateBase* GSB{&GameStateBase::Get_StateBase(1, 1)};
 
-	/*GSB->CompileStateUnits("a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		                   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-						   "a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");TEST_STATE_1*/
+	TGE.Engine_State_Set_Display(5, 5);
 
-	GSB->CompileStateUnits("a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,"
-						   "a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
-						   "a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
-						   "a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
-						   "a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
-						   "a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
+	/*GSB->CompileStateUnits(
+		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");*/
+
+	TGE.Engine_State_Compile_Uints(
+		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,"
+		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
+		"a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
+		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
+		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
 
 	GSB->Set_DataAll_State(10, 10);
 

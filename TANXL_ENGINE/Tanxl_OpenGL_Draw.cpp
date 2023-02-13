@@ -4,7 +4,7 @@
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(),
 _WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
-_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0) {}
+_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f) {}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
@@ -41,7 +41,7 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	ReLoadState(State);
 }
 
-void OpenGL_Draw::ReLoadState(GameStateBase* State)
+void OpenGL_Draw::ReLoadState(GameStateBase* State)//TODO 通用性不足
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
@@ -57,8 +57,8 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	{
 		for (int i = 0; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads); i++)
 		{
-			if (Move_NX < 0 || (Move_NX >= 0 && Move_NX >(State->Get_DataWidth())) || 
-				Move_NY < 0 || (Move_NY >= 0 && Move_NY >(State->Get_DataHeight())))
+			if (Move_NX < 0 || Move_NX >(State->Get_DataWidth()) || 
+				Move_NY < 0 || Move_NY >(State->Get_DataHeight()))
 			{
 				_StateInfor[i] = 3;
 			}
@@ -117,7 +117,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.12", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.13", NULL, NULL);
 	glfwMakeContextCurrent(window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
@@ -144,12 +144,6 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		_Position = glGetUniformLocation(_renderingProgram, "MoveY");
 		glProgramUniform1f(_renderingProgram, _Position, MoveY);
 
-		static float X = 0.0f;
-		static float Y = 0.0f;
-
-		static float VX = 0.0f;
-		static float VY = 0.0f;
-
 		static float DeptVX = 2.5f;
 		static float DeptVY = 2.5f;
 
@@ -160,7 +154,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(window, &MoveX, &MoveY, &X, &Y, &MDeptVX, &MDeptVY);//获取输入
+		IEB->GetInsert(window, &MoveX, &MoveY, &_State_MoveX, &_State_MoveY, &MDeptVX, &MDeptVY);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
@@ -188,8 +182,8 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		if (State->Get_Adjust_Flag())
 		{
-			State->Set_ExacHeight(Current_Height, VY, &MoveY, &Y, &DeptVY);
-			State->Set_ExacWidth(Current_Width, VX, &MoveX, &X, &DeptVX);
+			State->Set_ExacHeight(Current_Height, &MoveY, &_State_MoveY, &DeptVY);
+			State->Set_ExacWidth(Current_Width, &MoveX, &_State_MoveX, &DeptVX);
 			First_Adjust = 0;
 		}
 		else
@@ -231,15 +225,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 			{
 				if (ANCUH < ACUH)
 				{
-					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPH);
-					Y += static_cast<float>(Each_Half_Width) * 2;
+					_State_MoveY += static_cast<float>(Each_Half_Width) * 2;
 				}
 				else if (ANCUH > ACUH)
 				{
-					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNH);
-					Y -= static_cast<float>(Each_Half_Width) * 2;
+					_State_MoveY -= static_cast<float>(Each_Half_Width) * 2;
 				}
 				std::cout << "ANCUH __ " << ANCUH << "ACUH __ " << ACUH << std::endl;
 				ACUH = ANCUH;
@@ -254,15 +246,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 			{
 				if (ANCUW < ACUW)
 				{
-					//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNW);
-					X += static_cast<float>(Each_Half_Height) * 2;
+					_State_MoveX += static_cast<float>(Each_Half_Height) * 2;
 				}
 				else if (ANCUW > ACUW)
 				{
-					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPW);
-					X -= static_cast<float>(Each_Half_Height) * 2;
+					_State_MoveX -= static_cast<float>(Each_Half_Height) * 2;
 				}
 				std::cout << "ANCUW __ " << ANCUW << "CUW __ " << ACUW << std::endl;
 				ACUW = ANCUW;
@@ -279,13 +269,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 				{
 					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNH);
-					Y -= static_cast<float>(Each_Half_Width) * 2;
+					_State_MoveY -= static_cast<float>(Each_Half_Width) * 2;
 				}
 				else if (NCUH < CUH)
 				{
 					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPH);
-					Y += static_cast<float>(Each_Half_Width) * 2;
+					_State_MoveY += static_cast<float>(Each_Half_Width) * 2;
 				}
 			}
 			std::cout << "NCUH __ " << NCUH << "CUH __ " << CUH << std::endl;
@@ -302,13 +292,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 				{
 					//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToPW);
-					X -= static_cast<float>(Each_Half_Height) * 2;
+					_State_MoveX -= static_cast<float>(Each_Half_Height) * 2;
 				}
 				else if(NCUW < CUW)
 				{
 					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNW);
-					X += static_cast<float>(Each_Half_Height) * 2;
+					_State_MoveX += static_cast<float>(Each_Half_Height) * 2;
 				}
 			}
 			std::cout << "NCUW __ " << NCUW << "CUW __ " << CUW << std::endl;
@@ -321,14 +311,14 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		//std::cout << "Exac Location : " << MoveX * 2 << " " << MoveY * 2 << std::endl;//REAL LOCATION
 
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveX");
-		glProgramUniform1f(_renderingProgram, _Position, X);
+		glProgramUniform1f(_renderingProgram, _Position, _State_MoveX);
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveY");
-		glProgramUniform1f(_renderingProgram, _Position, Y);
+		glProgramUniform1f(_renderingProgram, _Position, _State_MoveY);
 
-		_Position = glGetUniformLocation(_renderingProgram, "VisionMoveX");
-		glProgramUniform1f(_renderingProgram, _Position, VX);
-		_Position = glGetUniformLocation(_renderingProgram, "VisionMoveY");
-		glProgramUniform1f(_renderingProgram, _Position, VY);
+		//_Position = glGetUniformLocation(_renderingProgram, "VisionMoveX");
+		//glProgramUniform1f(_renderingProgram, _Position, VX);
+		//_Position = glGetUniformLocation(_renderingProgram, "VisionMoveY");
+		//glProgramUniform1f(_renderingProgram, _Position, VY);
 
 		display(window, glfwGetTime(), State);
 		glfwSwapBuffers(window);

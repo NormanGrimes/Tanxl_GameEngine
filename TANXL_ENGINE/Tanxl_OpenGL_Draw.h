@@ -1,14 +1,7 @@
-//_VERSION_0_4_ UPDATE LOG
-// LAST_UPDATE 2022-09-15 21:45
-// 修复重新载入地图功能无符号数与有符号数比较可能导致的问题
-// 自动移动背景功能修改入参并加入对多处坐标的修改
-// 根据State模块调整标记对场景反向加载
-// 修复最后一段调节会导致循环偏移的问题
-// 修复开启自动载入后没有因输入操作而重置的问题
-// 简化重新加载地图接口
-// 已正式完成地图自动载入功能
-// 地图载入的距离阈值修改为原来的两倍
-// 调整代码使地图载入效果更加稳定
+//_VERSION_0_5_ UPDATE LOG
+// LAST_UPDATE 2022-10-04 21:16
+// 优化减少主绘制循环的代码量
+// 优化ReLoadState冗余判断
 
 #pragma once
 
@@ -66,6 +59,11 @@ private:
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
+
+	//记录地图场景X轴移动距离
+	float _State_MoveX;
+	//记录地图场景Y轴移动距离
+	float _State_MoveY;
 
 	//记录地图场景的方块行数
 	int _HeightInt;

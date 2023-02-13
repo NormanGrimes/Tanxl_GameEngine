@@ -115,9 +115,9 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 	}
 }
 
-GameStateBase& GameStateBase::Get_StateBase(int Display_Height, int Display_Width)
+GameStateBase& GameStateBase::Get_StateBase(int Display_Width, int Display_Height)
 {
-	static GameStateBase GameState(Display_Height, Display_Width);
+	static GameStateBase GameState(Display_Width, Display_Height);
 	return GameState;
 }
 
@@ -126,7 +126,7 @@ Move_State GameStateBase::Get_Move_State()
 	return this->_MState;
 }
 #include <iostream>
-void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveState, float* MoveY, float* Deputy)
+void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* MoveY, float* Deputy)
 {
 	static int EHCountS = 0;
 	static int EHCountL = 0;
@@ -193,24 +193,14 @@ void GameStateBase::Set_ExacHeight(double& Current, float& MoveSet, float* MoveS
 		EHCountL = 0;
 }
 
-void GameStateBase::Set_ExacWidth(double& Current, float& MoveSet, float* MoveState, float* MoveX, float* Deputy)
+void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* MoveX, float* Deputy)
 {
 	static int EWCountS = 0;
 	static int EWCountL = 0;
 	std::cout << " EWCountS  _  EWCountL" << EWCountS << " ___ " << EWCountL << std::endl;
 	std::cout << " MoveState  _" << *MoveState << std::endl;
-	//int LevelCount = 0;
-	//float SingleBlock = 2.0f / _GameState_Width;
-	//while (SingleBlock < Current)
-	//{
-	//	SingleBlock += 2.0f / _GameState_Width;
-	//	LevelCount++;
-	//}
-//	this->_Is_Adjusting = false;
-	//std::cout << "WCurrent :" << Current << std::endl;
-	if (/*SingleBlock*/(float)Current < 2.5/*Current - (SingleBlock - 2.0f / _GameState_Width)*/)
+	if ((float)Current < 2.5)
 	{
-		//std::cout << " < 2.5  _" << *MoveState << std::endl;
 		EWCountS++;
 		if (EWCountS == this->_Adjust_Frame)
 		{
@@ -334,7 +324,7 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 
 }
 
-GameStateBase::GameStateBase(int Height, int Width) :
+GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
 	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(3) {}
 
