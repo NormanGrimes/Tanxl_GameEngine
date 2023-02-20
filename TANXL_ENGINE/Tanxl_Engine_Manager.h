@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-09-26 23:24
 // 初始版本
 // 2022/10/4加入两个State模块接口
+// 2022/10/10更新地图数据编译接口 增加InsertBase的支持
 
 #pragma once
 
@@ -38,17 +39,19 @@
 class Tanxl_Engine
 {
 public:
-	Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE), 
-		Tanxl_Engine_DataBase(new TANXL_DataBase(true)), 
-		Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()), 
+	Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE),
+		Tanxl_Engine_DataBase(new TANXL_DataBase(true)),
+		Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 		Tanxl_Engine_GameState(&GameStateBase::Get_StateBase(5, 5)),
-		Tanxl_Engine_OpenGL_Draw(new OpenGL_Draw) 
+		Tanxl_Engine_OpenGL_Draw(new OpenGL_Draw),
+		Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase())
 	{
 		if (!Tanxl_Engine_Console_List ||
 			!Tanxl_Engine_DataBase ||
 			!Tanxl_Engine_GameEvent ||
 			!Tanxl_Engine_GameState ||
-			!Tanxl_Engine_OpenGL_Draw)
+			!Tanxl_Engine_OpenGL_Draw||
+			!Tanxl_Engine_InsertBase)
 		{
 			std::cout << "Fail to start Engine !" << std::endl;
 		}
@@ -70,9 +73,10 @@ public:
 		}
 	}
 
-	void Engine_State_Compile_Uints(std::string Infor)
+	void Engine_State_Compile_Uints(std::string Infor, int Width, int Height)
 	{
 		Tanxl_Engine_GameState->CompileStateUnits(Infor);
+		Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);
 	}
 
 private:
@@ -81,4 +85,5 @@ private:
 	GameEventBase* Tanxl_Engine_GameEvent;
 	GameStateBase* Tanxl_Engine_GameState;
 	OpenGL_Draw* Tanxl_Engine_OpenGL_Draw;
+	InsertEventBase* Tanxl_Engine_InsertBase;
 };

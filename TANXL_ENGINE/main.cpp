@@ -35,9 +35,9 @@ int main()
 
 	GameStateBase* GSB{&GameStateBase::Get_StateBase(1, 1)};
 
-	TGE.Engine_State_Set_Display(5, 5);
+	TGE.Engine_State_Set_Display(7, 7);
 
-	/*GSB->CompileStateUnits(
+	/*TGE.Engine_State_Compile_Uints(
 		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
 		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
@@ -59,9 +59,7 @@ int main()
 		"a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
 		"a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
 		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
-		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
-
-	GSB->Set_DataAll_State(10, 10);
+		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,", 10, 10);
 
 	GSB->Set_Adjust(0.002f);
 
@@ -109,6 +107,6 @@ int main()
 	IEB->Set_StateRange(true);
 
 	OpenGL_Draw OGD(800, 800);
-	OGD.Set_PreLoad(5);
+	OGD.Set_PreLoad(3);
 	OGD.mainLoop(GSB);
 }

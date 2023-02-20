@@ -41,7 +41,7 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	ReLoadState(State);
 }
 
-void OpenGL_Draw::ReLoadState(GameStateBase* State)//TODO 通用性不足
+void OpenGL_Draw::ReLoadState(GameStateBase* State)
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
@@ -53,19 +53,24 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//TODO 通用性不足
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
 	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
 
+	//State->Clear_Display_Vector();
+
 	if (State->Get_Compile_Status())
 	{
 		for (int i = 0; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads); i++)
 		{
-			if (Move_NX < 0 || Move_NX >(State->Get_DataWidth()) || 
-				Move_NY < 0 || Move_NY >(State->Get_DataHeight()))
+			if (Move_PX < 0 || Move_NX >(State->Get_DataWidth()) || 
+				Move_PY < 0 || Move_NY >(State->Get_DataHeight()))
 			{
 				_StateInfor[i] = 3;
 			}
 			else
 			{
-				int x = Move_NX + Move_NY * 10;
-				_StateInfor[i] = State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id();
+				int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
+				
+				std::cout << "Init Data: " << x % State->Get_GameState()->size() <<" __ " 
+					<< State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id() << std::endl;
+				_StateInfor[i] = State->Get_StateUnit(x % State->Get_GameState()->size())->Get_State_Id();
 			}
 
 			Move_NX++;

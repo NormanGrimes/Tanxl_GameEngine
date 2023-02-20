@@ -45,6 +45,13 @@ void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 
 //GameStateBase
 
+void GameStateBase::Clear_Display_Vector()
+{
+	for (int i = 0; i < _GameState.size(); i++)
+		delete _GameState.at(i);
+	_GameState.clear();
+}
+
 void GameStateBase::Set_Display_State(int Width, int Height)
 {
 	this->_GameState_Width = Width;
@@ -52,8 +59,8 @@ void GameStateBase::Set_Display_State(int Width, int Height)
 	for (int i = 0; i < _GameState.size(); i++)
 		delete _GameState.at(i);
 	_GameState.clear();
-	for (int i = 0; i < Width * Height; i++)
-		_GameState.push_back(new StateUnit);
+	//for (int i = 0; i < Width * Height; i++)
+	//	_GameState.push_back(new StateUnit);
 }
 
 void GameStateBase::Set_DataAll_State(unsigned Width, unsigned Height)
@@ -126,7 +133,7 @@ Move_State GameStateBase::Get_Move_State()
 	return this->_MState;
 }
 #include <iostream>
-void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* MoveY, float* Deputy)
+void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* MoveY, float* Deputy)//TODO : BUG SPOTTED
 {
 	static int EHCountS = 0;
 	static int EHCountL = 0;

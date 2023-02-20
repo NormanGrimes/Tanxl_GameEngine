@@ -1,13 +1,8 @@
-//_VERSION_0_5_ UPDATE LOG
-// LAST_UPDATE 2022-09-20 22:38
-// 增加一个布尔值用于标记是否在自动调整场景
-// 修复自动调整间隔时长时短的问题
-// 修复最后一段调节的判断条件错误问题
-// 调整微调坐标函数的接口增加两个传参
-// 微调最后一段优化float误差问题使之更加稳定
-// 加入可以控制自动调整频率的功能
-// 移除一个微调接口不必要的入参
-// 统一W/H接口入参顺序
+//_VERSION_0_6_ UPDATE LOG
+// LAST_UPDATE 2022-10-10 22:37
+// 增加清理地图数据容器的接口
+// 修复Set_Display_State中的重复添加地图单元的问题
+// 地图数据改用特定接口获取
 
 #pragma once
 
@@ -101,6 +96,7 @@ public:
 	Move_State Get_Move_State();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
+	void Clear_Display_Vector();
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(int Event_Id);
 	void Set_Display_State(int Width, int Height);

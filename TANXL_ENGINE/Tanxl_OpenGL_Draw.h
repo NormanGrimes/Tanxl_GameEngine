@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-10-04 21:16
 // 优化减少主绘制循环的代码量
 // 优化ReLoadState冗余判断
+// 修复一处加载逻辑判断错误
 
 #pragma once
 
