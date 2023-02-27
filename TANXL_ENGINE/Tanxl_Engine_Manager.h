@@ -73,7 +73,7 @@ public:
 		}
 	}
 
-	void Engine_State_Compile_Uints(std::string Infor, int Width, int Height)
+	void Engine_State_Compile_Uints(int Width, int Height, std::string Infor)
 	{
 		Tanxl_Engine_GameState->CompileStateUnits(Infor);
 		Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);

@@ -4,7 +4,7 @@
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(),
 _WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
-_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f) {}
+_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0) {}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
@@ -108,6 +108,11 @@ void OpenGL_Draw::Set_PreLoad(int PreLoads)
 	this->_PreLoads = PreLoads;
 }
 
+void OpenGL_Draw::Set_WaitFra(int First_Adjust)
+{
+	this->_First_Adjust = First_Adjust;
+}
+
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	if (_Clear_Function)
@@ -149,13 +154,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		_Position = glGetUniformLocation(_renderingProgram, "MoveY");
 		glProgramUniform1f(_renderingProgram, _Position, MoveY);
 
-		static float DeptVX = 2.5f;
-		static float DeptVY = 2.5f;
+		static float DeptVX = ((float)State->Get_StateWidth()) / 2;
+		static float DeptVY = ((float)State->Get_StateHeight()) / 2;
 
-		static float MDeptVX = 2.5f;
-		static float MDeptVY = 2.5f;
+		static float MDeptVX = ((float)State->Get_StateWidth()) / 2;
+		static float MDeptVY = ((float)State->Get_StateHeight()) / 2;
 
-		static int First_Adjust = 0;
+		static int Wait_Frame = 0;
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
@@ -163,18 +168,19 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
-
-
 		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
 
 		if (IEB->Get_Key_Pressed())
 		{
-			First_Adjust = 0;
+			Wait_Frame = 0;
 			std::cout << "TRUE -----------------------------T"<< std::endl;
 			State->Set_Adjust_Flag(false);
 		}
 		else
+		{
 			std::cout << "FALSE-----------------------------X" << std::endl;
+			State->Set_Adjust_Flag(true);
+		}
 
 		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
@@ -189,18 +195,17 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		{
 			State->Set_ExacHeight(Current_Height, &MoveY, &_State_MoveY, &DeptVY);
 			State->Set_ExacWidth(Current_Width, &MoveX, &_State_MoveX, &DeptVX);
-			First_Adjust = 0;
+			Wait_Frame = 0;
 		}
 		else
 		{
 			//std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
-
-			if (First_Adjust == 10)
+			if (Wait_Frame == _First_Adjust)
 			{
 				State->Set_Adjust_Flag(true);
 			}
 			else
-				First_Adjust++;
+				Wait_Frame++;
 		}
 
 		static int CUH = MDeptVY / (Each_Half_Height * 2);
@@ -319,11 +324,6 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		glProgramUniform1f(_renderingProgram, _Position, _State_MoveX);
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveY");
 		glProgramUniform1f(_renderingProgram, _Position, _State_MoveY);
-
-		//_Position = glGetUniformLocation(_renderingProgram, "VisionMoveX");
-		//glProgramUniform1f(_renderingProgram, _Position, VX);
-		//_Position = glGetUniformLocation(_renderingProgram, "VisionMoveY");
-		//glProgramUniform1f(_renderingProgram, _Position, VY);
 
 		display(window, glfwGetTime(), State);
 		glfwSwapBuffers(window);

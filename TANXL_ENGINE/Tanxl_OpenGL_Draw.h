@@ -47,6 +47,7 @@ public:
 	void mainLoop(GameStateBase* State);
 	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
+	void Set_WaitFra(int First_Adjust);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
 private:
@@ -76,4 +77,6 @@ private:
 	int _ScreenHeight;
 	//记载额外加载的地图环数量
 	int _PreLoads;
+	//绘制模块自动调整等待帧
+	int _First_Adjust;
 };

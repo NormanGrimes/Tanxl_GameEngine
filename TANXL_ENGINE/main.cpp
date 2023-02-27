@@ -49,7 +49,7 @@ int main()
 		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");*/
 
-	TGE.Engine_State_Compile_Uints(
+	TGE.Engine_State_Compile_Uints(10, 10,
 		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,"
 		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
 		"a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
@@ -59,7 +59,7 @@ int main()
 		"a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
 		"a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
 		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
-		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,", 10, 10);
+		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
 
 	GSB->Set_Adjust(0.002f);
 
