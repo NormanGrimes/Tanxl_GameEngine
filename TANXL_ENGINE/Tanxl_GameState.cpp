@@ -137,8 +137,8 @@ void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* Mov
 {
 	static int EHCountS = 0;
 	static int EHCountL = 0;
-	std::cout << " EHCountS  _  EHCountL" << EHCountS << " ___ " << EHCountL << std::endl;
-	std::cout << " MoveState  _" << *MoveState << " Adjust  _" << _GameState_Adjust << std::endl;
+	//std::cout << " EHCountS  _  EHCountL" << EHCountS << " ___ " << EHCountL << std::endl;
+	//std::cout << " MoveState  _" << *MoveState << " Adjust  _" << _GameState_Adjust << std::endl;
 	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
 	{
 		EHCountS++;
@@ -200,8 +200,8 @@ void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* Move
 {
 	static int EWCountS = 0;
 	static int EWCountL = 0;
-	std::cout << " EWCountS  _  EWCountL" << EWCountS << " ___ " << EWCountL << std::endl;
-	std::cout << " MoveState  _" << *MoveState << " Adjust  _" << _GameState_Adjust << std::endl;
+	//std::cout << " EWCountS  _  EWCountL" << EWCountS << " ___ " << EWCountL << std::endl;
+	//std::cout << " MoveState  _" << *MoveState << " Adjust  _" << _GameState_Adjust << std::endl;
 	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
 	{
 		EWCountS++;

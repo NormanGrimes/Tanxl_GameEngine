@@ -68,8 +68,8 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 			{
 				int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
 				
-				std::cout << "Init Data: " << x % State->Get_GameState()->size() <<" __ " 
-					<< State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id() << std::endl;
+				//std::cout << "Init Data: " << x % State->Get_GameState()->size() <<" __ " 
+				//	<< State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id() << std::endl;
 				_StateInfor[i] = State->Get_StateUnit(x % State->Get_GameState()->size())->Get_State_Id();
 			}
 
@@ -160,54 +160,6 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		static float MDeptVX = ((float)State->Get_StateWidth()) / 2;
 		static float MDeptVY = ((float)State->Get_StateHeight()) / 2;
 
-		static int Wait_Frame = 0;
-
-		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
-
-		IEB->GetInsert(window, &MoveX, &MoveY, &_State_MoveX, &_State_MoveY, &MDeptVX, &MDeptVY);//获取输入
-
-		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
-		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
-		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
-
-		if (IEB->Get_Key_Pressed())
-		{
-			Wait_Frame = 0;
-			std::cout << "TRUE -----------------------------T"<< std::endl;
-			State->Set_Adjust_Flag(false);
-		}
-		else
-		{
-			std::cout << "FALSE-----------------------------X" << std::endl;
-			State->Set_Adjust_Flag(true);
-		}
-
-		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
-
-		std::cout << "MXP/MYP" << (MoveX/* + 1.0f*/) << "__" << (MoveY/* + 1.0f*/) << std::endl;
-
-		double Current_Height = (MoveY * 2 + 1) / (Each_Half_Height * 2);
-		double Current_Width = (MoveX * 2 + 1) / (Each_Half_Width * 2);
-
-		std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
-
-		if (State->Get_Adjust_Flag())
-		{
-			State->Set_ExacHeight(Current_Height, &MoveY, &_State_MoveY, &DeptVY);
-			State->Set_ExacWidth(Current_Width, &MoveX, &_State_MoveX, &DeptVX);
-			Wait_Frame = 0;
-		}
-		else
-		{
-			//std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
-			if (Wait_Frame == _First_Adjust)
-			{
-				State->Set_Adjust_Flag(true);
-			}
-			else
-				Wait_Frame++;
-		}
-
 		static int CUH = MDeptVY / (Each_Half_Height * 2);
 		static int CUW = MDeptVX / (Each_Half_Height * 2);
 
@@ -226,12 +178,44 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 			ANCUW = DeptVX / (Each_Half_Height * 2);
 		}
 
-		//std::cout << "DeptVX / DeptVY" << DeptVX << "__" << DeptVY << std::endl;
-		//std::cout << "MDeptVX / MDeptVY" << MDeptVX << "__" << MDeptVY << std::endl;
+		static int Wait_Frame = 0;
 
-		if (ANCUH != ACUH)
+		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
+
+		IEB->GetInsert(window, &MoveX, &MoveY, &_State_MoveX, &_State_MoveY, &MDeptVX, &MDeptVY);//获取输入
+
+		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
+		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
+		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
+
+		if (IEB->Get_Key_Pressed())
 		{
-			if (State->Get_Adjust_Flag())
+			Wait_Frame = 0;
+			//std::cout << "TRUE -----------------------------T"<< std::endl;
+			State->Set_Adjust_Flag(false);
+		}
+		else
+		{
+			//std::cout << "FALSE-----------------------------X" << std::endl;
+			State->Set_Adjust_Flag(true);
+		}
+
+		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
+
+		//std::cout << "MXP/MYP" << (MoveX/* + 1.0f*/) << "__" << (MoveY/* + 1.0f*/) << std::endl;
+
+		double Current_Height = (MoveY * 2 + 1) / (Each_Half_Height * 2);
+		double Current_Width = (MoveX * 2 + 1) / (Each_Half_Width * 2);
+
+		//std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
+
+		if (State->Get_Adjust_Flag())
+		{
+			State->Set_ExacHeight(Current_Height, &MoveY, &_State_MoveY, &DeptVY);
+			State->Set_ExacWidth(Current_Width, &MoveX, &_State_MoveX, &DeptVX);
+			Wait_Frame = 0;
+
+			if (ANCUH != ACUH)
 			{
 				if (ANCUH < ACUH)
 				{
@@ -248,11 +232,8 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 				std::cout << "ANCUH != ACUH State->Get_Adjust_Flag() RELOAD" << std::endl;
 				ReLoadState(State);
 			}
-		}
 
-		if (ANCUW != ACUW)
-		{
-			if (State->Get_Adjust_Flag())
+			if (ANCUW != ACUW)
 			{
 				if (ANCUW < ACUW)
 				{
@@ -270,10 +251,17 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 				ReLoadState(State);
 			}
 		}
-
-		if (NCUH != CUH)
+		else
 		{
-			if (!State->Get_Adjust_Flag())
+			//std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
+			if (Wait_Frame == _First_Adjust)
+			{
+				State->Set_Adjust_Flag(true);
+			}
+			else
+				Wait_Frame++;
+
+			if (NCUH != CUH)
 			{
 				if (NCUH > CUH)
 				{
@@ -287,16 +275,13 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 					State->Set_Move_State(MoveToPH);
 					_State_MoveY += static_cast<float>(Each_Half_Width) * 2;
 				}
+				std::cout << "NCUH __ " << NCUH << "CUH __ " << CUH << std::endl;
+				CUH = NCUH;
+				std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
+				ReLoadState(State);
 			}
-			std::cout << "NCUH __ " << NCUH << "CUH __ " << CUH << std::endl;
-			CUH = NCUH;
-			std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
-			ReLoadState(State);
-		}
 
-		if (NCUW != CUW)
-		{
-			if (!State->Get_Adjust_Flag())
+			if (NCUW != CUW)
 			{
 				if (NCUW > CUW)
 				{
@@ -304,18 +289,21 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 					State->Set_Move_State(MoveToPW);
 					_State_MoveX -= static_cast<float>(Each_Half_Height) * 2;
 				}
-				else if(NCUW < CUW)
+				else if (NCUW < CUW)
 				{
 					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 					State->Set_Move_State(MoveToNW);
 					_State_MoveX += static_cast<float>(Each_Half_Height) * 2;
 				}
+				std::cout << "NCUW __ " << NCUW << "CUW __ " << CUW << std::endl;
+				CUW = NCUW;
+				std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
+				ReLoadState(State);
 			}
-			std::cout << "NCUW __ " << NCUW << "CUW __ " << CUW << std::endl;
-			CUW = NCUW;
-			std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
-			ReLoadState(State);
 		}
+
+		//std::cout << "DeptVX / DeptVY" << DeptVX << "__" << DeptVY << std::endl;
+		//std::cout << "MDeptVX / MDeptVY" << MDeptVX << "__" << MDeptVY << std::endl;
 
 		//std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
 		//std::cout << "Exac Location : " << MoveX * 2 << " " << MoveY * 2 << std::endl;//REAL LOCATION

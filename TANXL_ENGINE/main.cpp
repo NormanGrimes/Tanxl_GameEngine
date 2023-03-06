@@ -35,7 +35,7 @@ int main()
 
 	GameStateBase* GSB{&GameStateBase::Get_StateBase(1, 1)};
 
-	TGE.Engine_State_Set_Display(7, 7);
+	TGE.Engine_State_Set_Display(5, 5);
 
 	/*TGE.Engine_State_Compile_Uints(
 		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
@@ -101,12 +101,9 @@ int main()
 
 	//IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 
-	IEB->Set_MaxFloat_Height(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
-	IEB->Set_MaxFloat_Width(IEB->Get_AutoFloat(GSB->Get_StateWidth()));
-
-	IEB->Set_StateRange(true);
+	TGE.Engine_Insert_State_Limit(true);
 
 	OpenGL_Draw OGD(800, 800);
-	OGD.Set_PreLoad(3);
+	OGD.Set_PreLoad(5);
 	OGD.mainLoop(GSB);
 }

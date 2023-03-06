@@ -57,8 +57,8 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 					*StateY -= _Margin_Y;
 				}
 			}
-			std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
-			std::cout << "BUTTON PUSHED x_" << *deputyX << "y_" << *deputyY << std::endl;
+			//std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
+			//std::cout << "BUTTON PUSHED x_" << *deputyX << "y_" << *deputyY << std::endl;
 		}
 	}
 }

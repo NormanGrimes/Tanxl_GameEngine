@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-09-15 21:18
 // 添加根据种子生成随机ID的功能
 // 格式调整
+// 增加生成储存条目功能
 #pragma once
 #include <string>
 #include <iostream>
@@ -16,6 +17,7 @@ public:
         return UNIBase;
     }
 
+    //Random by Time 不适合短时间大量生成
     std::string Generate()
     {
         std::string Data{};
@@ -29,6 +31,7 @@ public:
         return Data;
     }
 
+    //Random by Seed
     std::string Generate(int seed)
     {
         std::string Data{};
@@ -48,6 +51,19 @@ public:
             return 0;
         
         return (rand() % (End - Start)) + Start;
+    }
+
+    std::string Generate_Data(int Type, int Exac, std::string Key)
+    {
+        std::string Data;
+        Data = "\t<Type_Status : " + std::to_string(Type) + ">"
+            + "\t\t<Exac_Status : " + std::to_string(Exac) + ">"
+            + "\t\t\t<TDB_Item>"
+            + "\t\t\t\t<Oth1: " + Key + "</Oth1>"
+            + "\t\t\t</TDB_Item>"
+            + "\t\t</Exac_Status>"
+            + "\t</Type_Status>";
+        return Data;
     }
 
 private:
