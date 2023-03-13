@@ -301,19 +301,19 @@ void GameStateBase::Set_Move_State(int Event_Id)
 {
 	switch (Event_Id)
 	{
-	case 0:
+	case MoveToNW:
 		this->_MState._Move_NX++;
 		this->_MState._Move_PX++;
 		break;
-	case 1:
+	case MoveToPW:
 		this->_MState._Move_NX--;
 		this->_MState._Move_PX--;
 		break;
-	case 2:
+	case MoveToNH:
 		this->_MState._Move_NY++;
 		this->_MState._Move_PY++;
 		break;
-	case 3:
+	case MoveToPH:
 		this->_MState._Move_NY--;
 		this->_MState._Move_PY--;
 		break;

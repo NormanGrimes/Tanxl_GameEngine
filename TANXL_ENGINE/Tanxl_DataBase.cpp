@@ -138,21 +138,21 @@ void Combine_File(std::string FileA, std::string FileB)
 
 std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 {
-	if ((s.Item_Instance.Status_1 + s.Item_Instance.Status_2 + s.Item_Instance.Status_3 + s.Item_Instance.Status_4 + s.Item_Instance.Status_5) || s.Is_Zero_Legal)
+	if ((s.Item_Instance.Status_1 + s.Item_Instance.Status_2 + s.Item_Instance.Status_3 + s.Item_Instance.Status_4 + s.Item_Instance.Status_5) || s.Is_Full_Legal)
 	{
 		s.Get_Item_Status();
 		fot << "<Type_Status : " << s.Item_Instance.Code << " / " << s.Item_Instance.Status_1 << ">" << std::endl;
 		s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << s.Item_Instance.Name << " / " << s.Item_Instance.Status_2 << ">" << std::endl;
 		s.OstreamSpace(fot, 1, 1); fot << "<TDBS_Item>" << std::endl;
-		if (s.Item_Instance.Status_3 || s.Is_Zero_Legal) {
+		if (s.Item_Instance.Status_3 || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth1: " << s.Item_Instance.Status_3 << ">" << s.Item_Instance.Oth1 << "</Oth1>" << std::endl;
 		}
-		if (s.Item_Instance.Status_4 || s.Is_Zero_Legal) {
+		if (s.Item_Instance.Status_4 || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth2: " << s.Item_Instance.Status_4 << ">" << s.Item_Instance.Oth2 << "</Oth2>" << std::endl;
 		}
-		if (s.Item_Instance.Status_5 || s.Is_Zero_Legal) {
+		if (s.Item_Instance.Status_5 || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth3: " << s.Item_Instance.Status_5 << ">" << s.Item_Instance.Oth3 << "</Oth3>" << std::endl;
 		}
@@ -164,7 +164,7 @@ std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 }
 
 TANXL_DataBase::TANXL_DataBase(bool Zero_Legal) :
-	Is_Instance_Data(false), Is_Chain_Empty(true), Is_Zero_Legal(Zero_Legal),
+	Is_Instance_Data(false), Is_Chain_Empty(true), Is_Full_Legal(Zero_Legal),
 	IC_Vector(new std::vector<Id_Vector*>),Current_Location(0) {}
 
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
@@ -304,11 +304,11 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 			if ((*IODB)->Id_1 + (*IODB)->Id_2 + (*IODB)->Id_3 == -3)
 				continue;
 			out << "\t\t\t<TDB_Item>" << std::endl;
-			if ((*IODB)->Id_1 || Is_Zero_Legal)
+			if ((*IODB)->Id_1 || Is_Full_Legal)
 				out << "\t\t\t\t<Oth1: " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</Oth1>" << std::endl;
-			if ((*IODB)->Id_2 || Is_Zero_Legal)
+			if ((*IODB)->Id_2 || Is_Full_Legal)
 				out << "\t\t\t\t<Oth2: " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</Oth2>" << std::endl;
-			if ((*IODB)->Id_3 || Is_Zero_Legal)
+			if ((*IODB)->Id_3 || Is_Full_Legal)
 				out << "\t\t\t\t<Oth3: " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</Oth3>" << std::endl;
 			out << "\t\t\t</TDB_Item>" << std::endl;
 			IODB++;

@@ -4,6 +4,8 @@
 // 优化ReLoadState冗余判断
 // 修复一处加载逻辑判断错误
 // 移除绘制阶段重新载入地图的额外判断
+// 代码优化减少每次循环不必要的判断
+// 绘制模块将绘制循环改为一次绘制
 
 #pragma once
 
@@ -45,7 +47,7 @@ public:
 	void init(GLFWwindow* window, GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
 	//绘制主循环 在此之后的一切操作都会被忽略
-	void mainLoop(GameStateBase* State);
+	void Render_Once(GameStateBase* State);
 	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFra(int First_Adjust);
@@ -80,4 +82,5 @@ private:
 	int _PreLoads;
 	//绘制模块自动调整等待帧
 	int _First_Adjust;
+	GLFWwindow* _Main_Window;
 };

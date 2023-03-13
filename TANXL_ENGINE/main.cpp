@@ -25,7 +25,7 @@ int main()
 			n -= 0xf0000000;
 
 		std::cout << "Updating : " << std::setbase(16) << n << std::endl;
-		NData.Set_Instance (n, "Updating" + std::to_string(n));
+		NData.Set_Instance(n, "Updating" + std::to_string(n));
 		std::cout << NData;
 		NData.AppendItem(true);
 	}
@@ -33,7 +33,7 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{&GameStateBase::Get_StateBase(1, 1)};
+	GameStateBase* GSB{ &GameStateBase::Get_StateBase(1, 1) };
 
 	TGE.Engine_State_Set_Display(5, 5);
 
@@ -65,45 +65,71 @@ int main()
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
-	//InsertKey Init
+	bool CurrStatus = false;
+	bool Appended = false;
 
-	Key_Unit MOVE_UP;
-	MOVE_UP.GLFW_KEY = GLFW_KEY_UP;
-	MOVE_UP.MoveLen = 0.01;
-	MOVE_UP.MoveToY = true;
-	IEB->RegistEvent(MOVE_UP);
-	MOVE_UP.GLFW_KEY = GLFW_KEY_W;
-	IEB->RegistEvent(MOVE_UP);
+	Key_Unit* KU = new Key_Unit(GLFW_KEY_E, &CurrStatus);
 
-	Key_Unit MOVE_LEFT;
-	MOVE_LEFT.GLFW_KEY = GLFW_KEY_LEFT;
-	MOVE_LEFT.MoveLen = -0.01;
-	MOVE_LEFT.MoveToX = true;
-	IEB->RegistEvent(MOVE_LEFT);
-	MOVE_LEFT.GLFW_KEY = GLFW_KEY_A;
-	IEB->RegistEvent(MOVE_LEFT);
+	IEB->RegistEvent(KU);
 
-	Key_Unit MOVE_RIGHT;
-	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_RIGHT;
-	MOVE_RIGHT.MoveLen = 0.01;
-	MOVE_RIGHT.MoveToX = true;
-	IEB->RegistEvent(MOVE_RIGHT);
-	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_D;
-	IEB->RegistEvent(MOVE_RIGHT);
-
-	Key_Unit MOVE_DOWN;
-	MOVE_DOWN.GLFW_KEY = GLFW_KEY_DOWN;
-	MOVE_DOWN.MoveLen = -0.01;
-	MOVE_DOWN.MoveToY = true;
-	IEB->RegistEvent(MOVE_DOWN);
-	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
-	IEB->RegistEvent(MOVE_DOWN);
-
-	//IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
+	IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
 
 	TGE.Engine_Insert_State_Limit(true);
 
 	OpenGL_Draw OGD(800, 800);
 	OGD.Set_PreLoad(5);
-	OGD.mainLoop(GSB);
+
+	while (1)
+	{
+		static int First = 0;
+		static int Timer = 0;
+		Timer++;
+		std::cout << Appended << KU->MoveToX;
+		OGD.Render_Once(GSB);
+		if (Timer == 50)
+		{
+			Timer = 0;
+			if (KU->MoveToX == true)
+			{
+				First++;
+				if (First == 1)
+				{
+					Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);
+					IEB->RegistEvent(&MOVE_UP);
+					MOVE_UP = Key_Unit(GLFW_KEY_W, false, true, 0.01);
+					IEB->RegistEvent(&MOVE_UP);
+
+					Key_Unit MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
+					IEB->RegistEvent(&MOVE_LEFT);
+					MOVE_LEFT = Key_Unit(GLFW_KEY_A, true, false, -0.01);
+					IEB->RegistEvent(&MOVE_LEFT);
+
+					Key_Unit MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
+					IEB->RegistEvent(&MOVE_RIGHT);
+					MOVE_RIGHT = Key_Unit(GLFW_KEY_D, true, false, 0.01);
+					IEB->RegistEvent(&MOVE_RIGHT);
+
+					Key_Unit MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
+					IEB->RegistEvent(&MOVE_DOWN);
+					MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);
+					IEB->RegistEvent(&MOVE_DOWN);
+				}
+				Appended = true;
+			}
+			else
+			{
+				First = 0;
+				if (Appended)
+				{
+					Appended = false;
+					int i = 8;
+					while (i > 0)
+					{
+						i--;
+						IEB->RemoveEvent();
+					}
+				}
+			}
+		}
+	}
 }

@@ -3,6 +3,7 @@
 // 移除五个不必要的内部接口inline设置
 // 修复三十二位的获取Status函数采用二十位操作方式的错误
 // 储存模块设置物品函数执行效率提升
+// 修改一个私有变量名称使之贴合意思
 
 #pragma once
 
@@ -89,7 +90,7 @@ private:
 	int Current_Location;
 	bool Is_Instance_Data;//用来判断Item_Instance中是否有数据
 	bool Is_Chain_Empty;//用来判断链表是否为空
-	bool Is_Zero_Legal;//值为true时0成为合法值 可在输出中显示/使用
+	bool Is_Full_Legal;//值为true时0xF成为合法值 可在输出中显示/使用
 	Id_Vector* Id_Chain_Locate(int Type, int Exac);//时间复杂度为logN的Id_Chain快速定位函数 Type Exac 指Id_Chain的同名变量
 	Data_Vector* Data_Chain_Locate(int Type, int Exac, int Depth);//借由Id_Chain_Locate函数对不同深度的Data_Chain定位
 	void Replace_Chain(int OldType, int OldExac, int OldDepth, int Type, int Exac);//转移Data_Chain到另一个Id_Chain下

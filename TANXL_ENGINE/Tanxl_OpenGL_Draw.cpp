@@ -3,15 +3,22 @@
 #include "Tanxl_OpenGL_Draw.h"
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(),
-_WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
+_WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(NULL),
 _Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0) {}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
 	//示例提供四个按键操作事件 （单例模式于其他地方定义）
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
-
 	srand(static_cast<unsigned int>(time(0)));
+
+	if (!glfwInit()) { exit(EXIT_FAILURE); }
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.13", NULL, NULL);
+	glfwMakeContextCurrent(_Main_Window);
+	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
+	glfwSwapInterval(1);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -53,7 +60,6 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
 	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
 
-	//State->Clear_Display_Vector();
 
 	if (State->Get_Compile_Status())
 	{
@@ -122,28 +128,25 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 }
 
-void OpenGL_Draw::mainLoop(GameStateBase* State)
+void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
-	if (!glfwInit()) { exit(EXIT_FAILURE); }
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	GLFWwindow* window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.13", NULL, NULL);
-	glfwMakeContextCurrent(window);
-	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
-	glfwSwapInterval(1);
+	static bool First_Time = true;
+	if (First_Time)
+	{
+		First_Time = false;
+		init(_Main_Window, State);
+	}
+
+	static float MoveX = 0.0f;
+	static float MoveY = 0.0f;
+
+	static double Each_Half_Height = 2.0f / (State->Get_StateHeight() * 2);//10 0.2
+	static double Each_Half_Width = 2.0f / (State->Get_StateWidth() * 2);//10 0.2
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
 	GameStateBase* GSB{ &GameStateBase::Get_StateBase() };
 
-	init(window, State);
-
-	float MoveX = 0.0f;
-	float MoveY = 0.0f;
-
-	double Each_Half_Height = 2.0f / (State->Get_StateHeight() * 2);//10 0.2
-	double Each_Half_Width = 2.0f / (State->Get_StateWidth() * 2);//10 0.2
-
-	while (!glfwWindowShouldClose(window))
+	if (!glfwWindowShouldClose(_Main_Window))
 	{
 		glClearDepth(1.0f);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -182,7 +185,7 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(window, &MoveX, &MoveY, &_State_MoveX, &_State_MoveY, &MDeptVX, &MDeptVY);//获取输入
+		IEB->GetInsert(_Main_Window, &MoveX, &MoveY, &_State_MoveX, &_State_MoveY, &MDeptVX, &MDeptVY);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
@@ -313,11 +316,14 @@ void OpenGL_Draw::mainLoop(GameStateBase* State)
 		_Position = glGetUniformLocation(_renderingProgram, "StateMoveY");
 		glProgramUniform1f(_renderingProgram, _Position, _State_MoveY);
 
-		display(window, glfwGetTime(), State);
-		glfwSwapBuffers(window);
+		display(_Main_Window, glfwGetTime(), State);
+		glfwSwapBuffers(_Main_Window);
 		glfwPollEvents();
 	}
-	glfwDestroyWindow(window);
-	glfwTerminate();
-	exit(EXIT_SUCCESS);
+	else
+	{
+		glfwDestroyWindow(_Main_Window);
+		glfwTerminate();
+		//exit(EXIT_SUCCESS);
+	}
 }
