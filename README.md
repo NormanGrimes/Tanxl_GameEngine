@@ -9,6 +9,8 @@ Version 0.1 Build 59 TURBO 04 - 2023/01/09 10:32
 
 Version 0.1 Build 69 TURBO 05 - 2023/02/08 09:20
 
+Version 0.1 Build 78 TURBO 06 - 2023/02/28 15:44
+
 # Tanxl_GameEngine
 Keywords: OpenGL, Game Enigne Architecture, 2D Open world game.  
 Project state: map generation & moving system finished.  
