@@ -5,6 +5,10 @@ int main()
 	//Data Function Test
 
 	Tanxl_Engine TGE;
+	CONSOLE TCL;
+
+	TCL.Append_Item("New Item");
+	TCL.Append_Item("Sec Item");
 
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	std::cout << "Generate : " << UIB->Generate() << std::endl;
@@ -79,12 +83,19 @@ int main()
 	OpenGL_Draw OGD(800, 800);
 	OGD.Set_PreLoad(5);
 
+	system("cls");
+
 	while (1)
 	{
+
+		//TCL.Display();
+
+		std::cout << "1\b";
+
 		static int First = 0;
 		static int Timer = 0;
 		Timer++;
-		std::cout << Appended << KU->MoveToX;
+		//std::cout << Appended << KU->MoveToX;
 		OGD.Render_Once(GSB);
 		if (Timer == 50)
 		{

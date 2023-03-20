@@ -47,7 +47,6 @@ void CONSOLE::Append_Item(std::string New_Item, unsigned Space, void (*FunC)(), 
 
 void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 {
-	Col();
 	bool Is_Line_Need{ false };
 	_Page = this->_Selector / (_SSpace & 0x00ff);
 	for (int i = _Page * (_SSpace & 0x00ff); i < _SonList.size() && i < (_Page + 1) * static_cast<int>(_SSpace & 0x00ff); i++)
@@ -76,7 +75,6 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 			std::cout << std::endl;
 		if (Is_Line_Need)
 			Is_Line_Need = false;
-		Col();
 	}
 }
 

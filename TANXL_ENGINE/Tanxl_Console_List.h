@@ -1,6 +1,6 @@
-//_VERSION_1_6_ UPDATE LOG
-// LAST_UPDATE 2022-06-07 23:57
-// 微调成员变量名称
+//_VERSION_1_7_ UPDATE LOG
+// LAST_UPDATE 2022-11-17 00:30
+// Display接口去掉不必要的颜色清除功能
 
 #pragma once
 
