@@ -11,13 +11,6 @@ Version 0.1 Build 69 TURBO 05 - 2023/02/08 09:20
 
 Version 0.1 Build 78 TURBO 06 - 2023/02/28 15:44
 
-# Tanxl_GameEngine
-Keywords: OpenGL, Game Enigne Architecture, 2D Open world game.  
-Project state: map generation & moving system finished.  
-Need tanxl illustrating the framework and code running sequence to start my work.  
-
-2022/11/15 gungler
-
 # Tanxl_GameEngine Version 0.1 Build 38 README
 This Project's SLN is only support VS2022 V143 BUILD TOOLS
 此项目的SLN文件仅支持在VS2022的构建工具V143下进行生成
