@@ -1,10 +1,6 @@
-//_VERSION_0_6_ UPDATE LOG
-// LAST_UPDATE 2022-10-10 22:37
-// 增加清理地图数据容器的接口
-// 修复Set_Display_State中的重复添加地图单元的问题
-// 地图数据改用特定接口获取
-// 修复自动调整功能的通用性问题
-// 调整地图结构体的接口判断改进
+//_VERSION_0_7_ UPDATE LOG
+// LAST_UPDATE 2022-11-27 14:54
+// 提供开关自动调整坐标的接口
 
 #pragma once
 
@@ -108,6 +104,7 @@ public:
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
+	void Set_Enable_Adjust(bool Enable);
 	void Set_ExacHeight(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);//可选功能 对2D棋盘上的物品微调位置
 	void Set_ExacWidth(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);
 	void Set_Adjust_Frequency(int Frame);
@@ -135,7 +132,9 @@ private:
 	int _GameState_Width;
 	//_GameState_Height用于控制当前地图的显示高度
 	int _GameState_Height;
+	//_GameState_Adjust用于记录每次自动调整的距离
 	float _GameState_Adjust;
+	bool _Adjust_Enable;
 	bool _Is_Adjusting;
 	bool _Compile_Success;
 	Move_State _MState;//用于记录当前加载地图区域

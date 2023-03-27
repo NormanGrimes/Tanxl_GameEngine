@@ -78,7 +78,7 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 	}
 }
 
-void CONSOLE::MainLoop(unsigned Def_Col, unsigned Real_Sel)
+void CONSOLE::Display_Once()
 {
 	bool Insert{ true };
 	bool Cover{ false };
@@ -108,6 +108,8 @@ void CONSOLE::MainLoop(unsigned Def_Col, unsigned Real_Sel)
 			continue;
 		}
 		Insert = Insert_Action(Action_Num, Action_Bol, List_Size);
+		if (*Action_Num == -1)
+			break;
 	}
 }
 
@@ -117,6 +119,11 @@ bool CONSOLE::Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size)
 	if (key == 'c' || key == 'C')//如果输入了大小写的C则返回上一级
 	{
 		*Action_Bol = false;
+		return false;
+	}
+	else if (key == 'x' || key == 'X')
+	{
+		*Action_Num = -1;
 		return false;
 	}
 	if (static_cast<int>(key - 48) >= 0 && static_cast<int>(key - 48) <= 9)//判断是否是从零到九的数字

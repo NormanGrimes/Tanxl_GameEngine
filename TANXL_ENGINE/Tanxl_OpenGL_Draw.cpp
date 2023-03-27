@@ -2,9 +2,16 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
+OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
+{
+	static OpenGL_Draw* OGD = new OpenGL_Draw(ScreenWidth, ScreenHeight);
+	return *OGD;
+}
+
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(),
 _WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(NULL),
-_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0) {}
+_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0),
+_Adjust_While_Move(false){}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
@@ -119,6 +126,11 @@ void OpenGL_Draw::Set_WaitFra(int First_Adjust)
 	this->_First_Adjust = First_Adjust;
 }
 
+void OpenGL_Draw::Set_Adjust(bool Enable)
+{
+	this->_Adjust_While_Move = Enable;
+}
+
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	if (_Clear_Function)
@@ -191,16 +203,12 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
 		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
 
-		if (IEB->Get_Key_Pressed())
+		if (!_Adjust_While_Move)
 		{
-			Wait_Frame = 0;
-			//std::cout << "TRUE -----------------------------T"<< std::endl;
-			State->Set_Adjust_Flag(false);
-		}
-		else
-		{
-			//std::cout << "FALSE-----------------------------X" << std::endl;
-			State->Set_Adjust_Flag(true);
+			if (IEB->Get_Key_Pressed())
+				State->Set_Adjust_Flag(false);
+			else
+				State->Set_Adjust_Flag(true);
 		}
 
 		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标

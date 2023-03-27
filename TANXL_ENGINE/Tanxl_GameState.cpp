@@ -137,6 +137,8 @@ void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* Mov
 {
 	static int EHCountS = 0;
 	static int EHCountL = 0;
+	if (_Adjust_Enable == false)
+		return;
 	//std::cout << " EHCountS  _  EHCountL" << EHCountS << " ___ " << EHCountL << std::endl;
 	//std::cout << " MoveState  _" << *MoveState << " Adjust  _" << _GameState_Adjust << std::endl;
 	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
@@ -200,6 +202,8 @@ void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* Move
 {
 	static int EWCountS = 0;
 	static int EWCountL = 0;
+	if (_Adjust_Enable == false)
+		return;
 	//std::cout << " EWCountS  _  EWCountL" << EWCountS << " ___ " << EWCountL << std::endl;
 	//std::cout << " MoveState  _" << *MoveState << " Adjust  _" << _GameState_Adjust << std::endl;
 	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
@@ -327,7 +331,8 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
-	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(3) {}
+	_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(Height),
+	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(3), _Adjust_Enable(false) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -402,6 +407,11 @@ void GameStateBase::Set_Adjust(float Adjust)
 	this->_GameState_Adjust = Adjust;
 }
 
+void GameStateBase::Set_Enable_Adjust(bool Enable)
+{
+	this->_Adjust_Enable = Enable;
+}
+
 size_t GameStateBase::Get_StateSize()
 {
 	return _GameState.size();
@@ -413,7 +423,8 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), _Adjust_Frame(3) {}
+_SLoc(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(0), _Data_Width(0),
+_Is_Adjusting(false), _Adjust_Frame(3), _Adjust_Enable(false) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 

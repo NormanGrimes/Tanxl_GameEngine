@@ -45,7 +45,7 @@ public:
 		Tanxl_Engine_DataBase(new TANXL_DataBase(true)),
 		Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 		Tanxl_Engine_GameState(&GameStateBase::Get_StateBase(5, 5)),
-		Tanxl_Engine_OpenGL_Draw(new OpenGL_Draw),
+		Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
 		Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase())
 	{
 		if (!Tanxl_Engine_Console_List ||
@@ -97,6 +97,14 @@ public:
 			Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Max_Height);
 			Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Max_Widtd);
 		}
+	}
+
+	//Enable_Adjust设置是否启用自动调整 Adjust_Value为单次调整的距离 Enable_While_Move为是否启用移动中调整 后两项需要第一项启动才会生效
+	void Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move)
+	{
+		Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);
+		Tanxl_Engine_GameState->Set_Adjust(Adjust_Value);
+		Tanxl_Engine_OpenGL_Draw->Set_Adjust(Enable_While_Move);
 	}
 
 private:

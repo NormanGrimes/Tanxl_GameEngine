@@ -2,6 +2,8 @@
 // LAST_UPDATE 2022-11-19 00:12
 // 优化减少重新载入功能调用次数
 // 修复采用非矩形地图会导致移动跳跃的问题
+// 提供用于开关在移动中启用调整的接口
+// 此模块修改为单例模式
 
 #pragma once
 
@@ -38,7 +40,8 @@
 class OpenGL_Draw
 {
 public:
-	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
+	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800);
+	
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
 	void init(GLFWwindow* window, GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
@@ -47,9 +50,11 @@ public:
 	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFra(int First_Adjust);
+	void Set_Adjust(bool Enable);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
 private:
+	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
 
 	GLuint _Position;
 
@@ -57,6 +62,8 @@ private:
 
 	bool _Clear_Function;
 	bool _Is_State_Changed;
+	//用于标记是否在移动中启用调整
+	bool _Adjust_While_Move;
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];

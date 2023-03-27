@@ -39,8 +39,6 @@ int main()
 
 	GameStateBase* GSB{ &GameStateBase::Get_StateBase(1, 1) };
 
-	TGE.Engine_State_Set_Display(5, 5);
-
 	/*TGE.Engine_State_Compile_Uints(
 		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
@@ -65,8 +63,6 @@ int main()
 		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
 		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
 
-	GSB->Set_Adjust(0.002f);
-
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
 	bool CurrStatus = false;
@@ -75,28 +71,24 @@ int main()
 	Key_Unit* KU = new Key_Unit(GLFW_KEY_E, &CurrStatus);
 
 	IEB->RegistEvent(KU);
+	OpenGL_Draw* OGD{ &OpenGL_Draw::GetOpenGLBase() };
+	OGD->Set_PreLoad(5);
 
-	IEB->Set_MaxFloat(IEB->Get_AutoFloat(GSB->Get_StateHeight()));
-
+	TGE.Engine_State_Set_Display(5, 5);
 	TGE.Engine_Insert_State_Limit(true);
-
-	OpenGL_Draw OGD(800, 800);
-	OGD.Set_PreLoad(5);
-
+	TGE.Engine_Adjust_Multi_Set(true, 0.005f, false);
+	
 	system("cls");
 
 	while (1)
 	{
-
-		//TCL.Display();
-
 		std::cout << "1\b";
 
 		static int First = 0;
 		static int Timer = 0;
 		Timer++;
 		//std::cout << Appended << KU->MoveToX;
-		OGD.Render_Once(GSB);
+		OGD->Render_Once(GSB);
 		if (Timer == 50)
 		{
 			Timer = 0;

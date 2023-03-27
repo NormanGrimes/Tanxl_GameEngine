@@ -1,6 +1,8 @@
 //_VERSION_1_7_ UPDATE LOG
 // LAST_UPDATE 2022-11-17 00:30
 // Display接口去掉不必要的颜色清除功能
+// Display接口改为私有
+// 输入接口提供退出功能
 
 #pragma once
 
@@ -56,13 +58,12 @@ class CONSOLE
 public:
 	explicit CONSOLE(std::string Name = "UNdefined", unsigned Space = 0x171109, void(*FunC)() = NULL);
 
-	void Display(int Depth = 0, unsigned Def_Col = FONT_COLOR_WHITE | BACK_COLOR_RED, unsigned Real_Sel = FONT_COLOR_WHITE | BACK_COLOR_PURPLE);
-
-	void MainLoop(unsigned Def_Col = FONT_COLOR_WHITE | BACK_COLOR_RED, unsigned Real_Sel = FONT_COLOR_WHITE | BACK_COLOR_PURPLE);
+	void Display_Once();
 
 	void Append_Item(std::string New_Item, unsigned Space = 0x171109, void(*FunC)() = NULL, int Depth = 0, int* Ids = 0);
 
 private:
+	void Display(int Depth = 0, unsigned Def_Col = FONT_COLOR_WHITE | BACK_COLOR_RED, unsigned Real_Sel = FONT_COLOR_WHITE | BACK_COLOR_PURPLE);
 
 	bool Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size);
 
