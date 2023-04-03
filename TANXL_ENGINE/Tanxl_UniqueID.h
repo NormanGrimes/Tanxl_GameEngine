@@ -1,8 +1,8 @@
-//_VERSION_0_2_ UPDATE LOG
+ï»¿//_VERSION_0_2_ UPDATE LOG
 // LAST_UPDATE 2022-09-15 21:18
-// Ìí¼Ó¸ù¾İÖÖ×ÓÉú³ÉËæ»úIDµÄ¹¦ÄÜ
-// ¸ñÊ½µ÷Õû
-// Ôö¼ÓÉú³É´¢´æÌõÄ¿¹¦ÄÜ
+// æ·»åŠ æ ¹æ®ç§å­ç”ŸæˆéšæœºIDçš„åŠŸèƒ½
+// æ ¼å¼è°ƒæ•´
+// å¢åŠ ç”Ÿæˆå‚¨å­˜æ¡ç›®åŠŸèƒ½
 #pragma once
 #include <string>
 #include <iostream>
@@ -17,7 +17,7 @@ public:
         return UNIBase;
     }
 
-    //Random by Time ²»ÊÊºÏ¶ÌÊ±¼ä´óÁ¿Éú³É
+    //Random by Time ä¸é€‚åˆçŸ­æ—¶é—´å¤§é‡ç”Ÿæˆ
     std::string Generate()
     {
         std::string Data{};

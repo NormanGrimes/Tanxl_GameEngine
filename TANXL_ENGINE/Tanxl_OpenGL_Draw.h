@@ -1,9 +1,11 @@
-//_VERSION_0_6_ UPDATE LOG
+ï»¿//_VERSION_0_6_ UPDATE LOG
 // LAST_UPDATE 2022-11-19 00:12
-// ÓÅ»¯¼õÉÙÖØĞÂÔØÈë¹¦ÄÜµ÷ÓÃ´ÎÊı
-// ĞŞ¸´²ÉÓÃ·Ç¾ØĞÎµØÍ¼»áµ¼ÖÂÒÆ¶¯ÌøÔ¾µÄÎÊÌâ
-// Ìá¹©ÓÃÓÚ¿ª¹ØÔÚÒÆ¶¯ÖĞÆôÓÃµ÷ÕûµÄ½Ó¿Ú
-// ´ËÄ£¿éĞŞ¸ÄÎªµ¥ÀıÄ£Ê½
+// ä¼˜åŒ–å‡å°‘é‡æ–°è½½å…¥åŠŸèƒ½è°ƒç”¨æ¬¡æ•°
+// ä¿®å¤é‡‡ç”¨éçŸ©å½¢åœ°å›¾ä¼šå¯¼è‡´ç§»åŠ¨è·³è·ƒçš„é—®é¢˜
+// æä¾›ç”¨äºå¼€å…³åœ¨ç§»åŠ¨ä¸­å¯ç”¨è°ƒæ•´çš„æ¥å£
+// æ­¤æ¨¡å—ä¿®æ”¹ä¸ºå•ä¾‹æ¨¡å¼
+// å°†è‡ªåŠ¨è°ƒæ•´çš„è®°å½•å˜é‡ç§»å…¥ç±»æˆå‘˜å¹¶ä¿®æ”¹åç§°
+// ç»˜åˆ¶å¾ªç¯ä¸­çš„éšå¼è½¬å‹æ”¹ä¸ºæ˜¾å¼è½¬å‹
 
 #pragma once
 
@@ -42,16 +44,16 @@ class OpenGL_Draw
 public:
 	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800);
 	
-	//»æÖÆÄ£¿éÖ÷Òª³õÊ¼»¯º¯Êı windowÎªĞèÒª»æÖÆµÄ´°¿Ú StateÎªµ¥ÀıÀà£¬ĞèÒªÍê³ÉµØÍ¼ÉèÖÃºóÔÙµ÷ÓÃ´Ëº¯Êı³õÊ¼»¯
+	//ç»˜åˆ¶æ¨¡å—ä¸»è¦åˆå§‹åŒ–å‡½æ•° windowä¸ºéœ€è¦ç»˜åˆ¶çš„çª—å£ Stateä¸ºå•ä¾‹ç±»ï¼Œéœ€è¦å®Œæˆåœ°å›¾è®¾ç½®åå†è°ƒç”¨æ­¤å‡½æ•°åˆå§‹åŒ–
 	void init(GLFWwindow* window, GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
-	//»æÖÆÖ÷Ñ­»· ÔÚ´ËÖ®ºóµÄÒ»ÇĞ²Ù×÷¶¼»á±»ºöÂÔ
+	//ç»˜åˆ¶ä¸»å¾ªç¯ åœ¨æ­¤ä¹‹åçš„ä¸€åˆ‡æ“ä½œéƒ½ä¼šè¢«å¿½ç•¥
 	void Render_Once(GameStateBase* State);
 	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFra(int First_Adjust);
 	void Set_Adjust(bool Enable);
-	//ÓÃÓÚµÚÒ»´Î»òÖØĞÂ¼ÓÔØÕû¸öµØÍ¼³¡¾°
+	//ç”¨äºç¬¬ä¸€æ¬¡æˆ–é‡æ–°åŠ è½½æ•´ä¸ªåœ°å›¾åœºæ™¯
 	void ReLoadState(GameStateBase* State);
 private:
 	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
@@ -62,28 +64,32 @@ private:
 
 	bool _Clear_Function;
 	bool _Is_State_Changed;
-	//ÓÃÓÚ±ê¼ÇÊÇ·ñÔÚÒÆ¶¯ÖĞÆôÓÃµ÷Õû
+	//ç”¨äºæ ‡è®°æ˜¯å¦åœ¨ç§»åŠ¨ä¸­å¯ç”¨è°ƒæ•´
 	bool _Adjust_While_Move;
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
 
-	//¼ÇÂ¼µØÍ¼³¡¾°XÖáÒÆ¶¯¾àÀë
+	//è®°å½•åœ°å›¾åœºæ™¯Xè½´ç§»åŠ¨è·ç¦»
 	float _State_MoveX;
-	//¼ÇÂ¼µØÍ¼³¡¾°YÖáÒÆ¶¯¾àÀë
+	//è®°å½•åœ°å›¾åœºæ™¯Yè½´ç§»åŠ¨è·ç¦»
 	float _State_MoveY;
+	//è®°å½•è‡ªåŠ¨è°ƒæ•´çŠ¶æ€çš„Xè½´ç§»åŠ¨è·ç¦»
+	float _Auto_AdjustX = 0.0f;
+	//è®°å½•è‡ªåŠ¨è°ƒæ•´çŠ¶æ€çš„Yè½´ç§»åŠ¨è·ç¦»
+	float _Auto_AdjustY = 0.0f;
 
-	//¼ÇÂ¼µØÍ¼³¡¾°µÄ·½¿éĞĞÊı
+	//è®°å½•åœ°å›¾åœºæ™¯çš„æ–¹å—è¡Œæ•°
 	int _HeightInt;
-	//¼ÇÂ¼µØÍ¼³¡¾°µÄ·½¿éÁĞÊı
+	//è®°å½•åœ°å›¾åœºæ™¯çš„æ–¹å—åˆ—æ•°
 	int _WidthInt;
-	//´°¿ÚµÄ¿í¶È
+	//çª—å£çš„å®½åº¦
 	int _ScreenWidth;
-	//´°¿ÚµÄ¸ß¶È
+	//çª—å£çš„é«˜åº¦
 	int _ScreenHeight;
-	//¼ÇÔØ¶îÍâ¼ÓÔØµÄµØÍ¼»·ÊıÁ¿
+	//è®°è½½é¢å¤–åŠ è½½çš„åœ°å›¾ç¯æ•°é‡
 	int _PreLoads;
-	//»æÖÆÄ£¿é×Ô¶¯µ÷ÕûµÈ´ıÖ¡
+	//ç»˜åˆ¶æ¨¡å—è‡ªåŠ¨è°ƒæ•´ç­‰å¾…å¸§
 	int _First_Adjust;
 	GLFWwindow* _Main_Window;
 };

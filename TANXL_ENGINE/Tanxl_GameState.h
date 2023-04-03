@@ -1,6 +1,6 @@
-//_VERSION_0_7_ UPDATE LOG
+ï»¿//_VERSION_0_7_ UPDATE LOG
 // LAST_UPDATE 2022-11-27 14:54
-// Ìá¹©¿ª¹Ø×Ô¶¯µ÷Õû×ø±êµÄ½Ó¿Ú
+// æä¾›å¼€å…³è‡ªåŠ¨è°ƒæ•´åæ ‡çš„æ¥å£
 
 #pragma once
 
@@ -53,7 +53,7 @@ private:
 class GameEventBase
 {
 public:
-	//×¢²áÓÎÏ·ÊÂ¼ş Èç¹û½ö¶¨ÒåÊÂ¼ş¶ø²»×¢²áÔò²»»á²úÉúÈÎºÎĞ§¹û
+	//æ³¨å†Œæ¸¸æˆäº‹ä»¶ å¦‚æœä»…å®šä¹‰äº‹ä»¶è€Œä¸æ³¨å†Œåˆ™ä¸ä¼šäº§ç”Ÿä»»ä½•æ•ˆæœ
 	void RegistEvent(GameEvent* Event);
 	static GameEventBase& GetEventBase();
 	GameEvent* GetGameEvent(std::string EventName);
@@ -89,7 +89,7 @@ public:
 	
 	size_t Get_StateSize();
 	StateUnit* Get_StateUnit(int Pos);
-	//¡ıGet_StateBase : ·µ»ØStateµ¥ÀıÀà ×¢Òâ£¡ÆäÖĞµÄHeightºÍWidth½öÓÃÓÚÖ¸¶¨»æÖÆÏÔÊ¾µÄÇøÓò´óĞ¡
+	//â†“Get_StateBase : è¿”å›Stateå•ä¾‹ç±» æ³¨æ„ï¼å…¶ä¸­çš„Heightå’ŒWidthä»…ç”¨äºæŒ‡å®šç»˜åˆ¶æ˜¾ç¤ºçš„åŒºåŸŸå¤§å°
 	static GameStateBase& Get_StateBase(int Width = 0, int Height = 0);
 	Move_State Get_Move_State();
 	std::vector<StateUnit*>* Get_GameState();
@@ -101,11 +101,11 @@ public:
 	void Set_DataAll_State(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
 	void CompileStateUnits(std::string Infor);
-	//¡ıCompileStateEvent : Ê¹ÓÃÒ»¸ö×Ö·û´®À´Íê³ÉÕû¸öµØÍ¼×´Ì¬µÄÉè¼Æ ÒÔÓ¢ÎÄ¶ººÅ(,)Îª¼ä¶Ï ÒÔÓ¢ÎÄ¾äºÅ(.)Îª½áÎ²
+	//â†“CompileStateEvent : ä½¿ç”¨ä¸€ä¸ªå­—ç¬¦ä¸²æ¥å®Œæˆæ•´ä¸ªåœ°å›¾çŠ¶æ€çš„è®¾è®¡ ä»¥è‹±æ–‡é€—å·(,)ä¸ºé—´æ–­ ä»¥è‹±æ–‡å¥å·(.)ä¸ºç»“å°¾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
 	void Set_Enable_Adjust(bool Enable);
-	void Set_ExacHeight(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);//¿ÉÑ¡¹¦ÄÜ ¶Ô2DÆåÅÌÉÏµÄÎïÆ·Î¢µ÷Î»ÖÃ
+	void Set_ExacHeight(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);//å¯é€‰åŠŸèƒ½ å¯¹2Dæ£‹ç›˜ä¸Šçš„ç‰©å“å¾®è°ƒä½ç½®
 	void Set_ExacWidth(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);
 	void Set_Adjust_Frequency(int Frame);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
@@ -114,32 +114,32 @@ public:
 	bool Get_Adjust_Flag();
 	unsigned Get_DataHeight()const;
 	unsigned Get_DataWidth()const;
-	//¡ıGet_StateHeight : »ñÈ¡µ±Ç°ĞèÒª»æÖÆµÄStateµÄ¸ß¶ÈÖµ
+	//â†“Get_StateHeight : è·å–å½“å‰éœ€è¦ç»˜åˆ¶çš„Stateçš„é«˜åº¦å€¼
 	int Get_StateHeight()const;
-	//¡ıGet_StateWidth : »ñÈ¡µ±Ç°ĞèÒª»æÖÆµÄStateµÄ¿í¶ÈÖµ
+	//â†“Get_StateWidth : è·å–å½“å‰éœ€è¦ç»˜åˆ¶çš„Stateçš„å®½åº¦å€¼
 	int Get_StateWidth()const;
 private:
-	//µØÍ¼³õÊ¼»¯Ä¬ÈÏ¹¹Ôìº¯Êı ²ÉÓÃµ¥ÀıÄ£Ê½½øĞĞµÚÒ»´Î³õÊ¼»¯
+	//åœ°å›¾åˆå§‹åŒ–é»˜è®¤æ„é€ å‡½æ•° é‡‡ç”¨å•ä¾‹æ¨¡å¼è¿›è¡Œç¬¬ä¸€æ¬¡åˆå§‹åŒ–
 	GameStateBase(int Width = 0, int Height = 0);
 	~GameStateBase();
 	GameStateBase(const GameStateBase&);
 	GameStateBase& operator=(const GameStateBase&);
 	unsigned _Data_Width;
 	unsigned _Data_Height;
-	//_Adjust_Frame ÓÃÓÚ¿ØÖÆµ±Ç°Ã¿¶àÉÙÖ¡½øĞĞÒ»´Î×ø±ê¿ØÖÆ
+	//_Adjust_Frame ç”¨äºæ§åˆ¶å½“å‰æ¯å¤šå°‘å¸§è¿›è¡Œä¸€æ¬¡åæ ‡æ§åˆ¶
 	int _Adjust_Frame;
-	//_GameState_WidthÓÃÓÚ¿ØÖÆµ±Ç°µØÍ¼µÄÏÔÊ¾¿í¶È
+	//_GameState_Widthç”¨äºæ§åˆ¶å½“å‰åœ°å›¾çš„æ˜¾ç¤ºå®½åº¦
 	int _GameState_Width;
-	//_GameState_HeightÓÃÓÚ¿ØÖÆµ±Ç°µØÍ¼µÄÏÔÊ¾¸ß¶È
+	//_GameState_Heightç”¨äºæ§åˆ¶å½“å‰åœ°å›¾çš„æ˜¾ç¤ºé«˜åº¦
 	int _GameState_Height;
-	//_GameState_AdjustÓÃÓÚ¼ÇÂ¼Ã¿´Î×Ô¶¯µ÷ÕûµÄ¾àÀë
+	//_GameState_Adjustç”¨äºè®°å½•æ¯æ¬¡è‡ªåŠ¨è°ƒæ•´çš„è·ç¦»
 	float _GameState_Adjust;
 	bool _Adjust_Enable;
 	bool _Is_Adjusting;
 	bool _Compile_Success;
-	Move_State _MState;//ÓÃÓÚ¼ÇÂ¼µ±Ç°¼ÓÔØµØÍ¼ÇøÓò
-	SLocation _SLoc;//ÓÃÓÚ¼ÇÂ¼µ±Ç°µØÍ¼ÖĞĞÄµã
+	Move_State _MState;//ç”¨äºè®°å½•å½“å‰åŠ è½½åœ°å›¾åŒºåŸŸ
+	SLocation _SLoc;//ç”¨äºè®°å½•å½“å‰åœ°å›¾ä¸­å¿ƒç‚¹
 	std::vector<StateUnit*> _GameState;
-	//ÓÃÓÚ¼ÇÂ¼µ±Ç°µØÍ¼ÖĞĞÄµÄµØÍ¼µ¥Ôª
+	//ç”¨äºè®°å½•å½“å‰åœ°å›¾ä¸­å¿ƒçš„åœ°å›¾å•å…ƒ
 	StateUnit* _CurrentMid;
 };

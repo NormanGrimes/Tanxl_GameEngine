@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Tanxl_DataBase.h"
 
@@ -6,7 +6,7 @@ std::string Combine_Char(std::string data, int Start, int End)
 {
 	if (End < Start)
 	{
-		throw "´íÎó : Combine_Char µÄÊäÈëÖµStart´óÓÚEndµÄÖµ";
+		throw "é”™è¯¯ : Combine_Char çš„è¾“å…¥å€¼Startå¤§äºEndçš„å€¼";
 		return "";
 	}
 	std::string New_data{};
@@ -29,26 +29,26 @@ std::string Divid_Char(std::string data, int Mode)
 	char Left, Right;
 	switch (Mode)
 	{
-	case GET_STATUS_DAT://»ñÈ¡µ¥ÀıÊı¾İ0~15
+	case GET_STATUS_DAT://è·å–å•ä¾‹æ•°æ®0~15
 		Left = '/'; Right = '>';
 		break;
-	case GET_STORAG_DAT://»ñÈ¡´¢´æµÄĞÅÏ¢
+	case GET_STORAG_DAT://è·å–å‚¨å­˜çš„ä¿¡æ¯
 		Left = '>'; Right = '<';
 		break;
-	case GET_STATUS_TAG://ĞÅÏ¢ÌõÄ¿
+	case GET_STATUS_TAG://ä¿¡æ¯æ¡ç›®
 		Left = '<'; Right = ':';
 		break;
-	case GET_STATUS_STR://V3Á´±íÖ÷¸±¼üString
+	case GET_STATUS_STR://V3é“¾è¡¨ä¸»å‰¯é”®String
 		Left = ':'; Right = '/';
 		break;
 	case GET_OLDSTY_DAT:
 		Left = ':'; Right = '>';
 		break;
 	default:
-		throw "´íÎó : Divid_Char Ã»ÓĞ´ËÌõÄ¿µÄ¹¦ÄÜ(0~3 ÎªºÏ·¨ÄÚÈİ£¬¶øÄãÊäÈëÁË" + std::to_string(Mode) + ")";
+		throw "é”™è¯¯ : Divid_Char æ²¡æœ‰æ­¤æ¡ç›®çš„åŠŸèƒ½(0~3 ä¸ºåˆæ³•å†…å®¹ï¼Œè€Œä½ è¾“å…¥äº†" + std::to_string(Mode) + ")";
 		return "";
 	}
-	for (int i = 0; i < data.length(); i++)//»ñÈ¡ÄÚÈİ
+	for (int i = 0; i < data.length(); i++)//è·å–å†…å®¹
 	{
 		if ((data[i] == Left && Lock == -1) || (data[i] == Right && Lock != -1))
 		{
@@ -63,7 +63,7 @@ std::string Divid_Char(std::string data, int Mode)
 		if (Lock != -1 && Last != -1)
 			return Combine_Char(data, Lock, Last);
 	}
-	throw "Ê§°Ü : Divid_Char ¶ÁÈ¡´íÎó ²»´æÔÚÂú×ãÌõ¼şµÄÄÚÈİ";
+	throw "å¤±è´¥ : Divid_Char è¯»å–é”™è¯¯ ä¸å­˜åœ¨æ»¡è¶³æ¡ä»¶çš„å†…å®¹";
 	return "";
 }
 
@@ -79,8 +79,8 @@ void Data(bool Mode, bool Zero)
 	TANXL_DataBase TDB_Instance(Zero);
 	for (unsigned Content = 0x11111f55; Content < 0x11112111; Content++)
 	{
-		TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "ÊÖÇ¹");
-		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "µØÏÂË®");
+		TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "æ‰‹æª");
+		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "åœ°ä¸‹æ°´");
 		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
 		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
 		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
@@ -89,7 +89,7 @@ void Data(bool Mode, bool Zero)
 	}
 	for (unsigned Content = 0x22221f55; Content < 0x22222111; Content++)
 	{
-		TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "²½Ç¹");
+		TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "æ­¥æª");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
 		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
 		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
@@ -99,7 +99,7 @@ void Data(bool Mode, bool Zero)
 	}
 	for (unsigned Content = 0x33331f55; Content < 0x33332111; Content++)
 	{
-		TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "ÖØĞÍÎäÆ÷");
+		TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "é‡å‹æ­¦å™¨");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
 		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
 		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
@@ -109,7 +109,7 @@ void Data(bool Mode, bool Zero)
 	}
 	for (unsigned Content = 0x44441f55; Content < 0x44442111; Content++)
 	{
-		TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "Î¢ĞÍ³å·æÇ¹");
+		TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "å¾®å‹å†²é”‹æª");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
 		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
 		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
@@ -133,7 +133,7 @@ void Combine_File(std::string FileA, std::string FileB)
 			out << Line << std::endl;
 	}
 	else
-		throw "Ê§°Ü : Combine_File ÎŞ·¨´ò¿ªµÄÖ¸¶¨ÎÄ¼ş";
+		throw "å¤±è´¥ : Combine_File æ— æ³•æ‰“å¼€çš„æŒ‡å®šæ–‡ä»¶";
 }
 
 std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
@@ -169,7 +169,7 @@ TANXL_DataBase::TANXL_DataBase(bool Zero_Legal) :
 
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
 {
-	static int TDB_Status = 0;//¼¶±ğÊıÖµ ÓÃÓÚ¼ÇÂ¼µ±Ç°ĞĞµÄTabÊıÁ¿
+	static int TDB_Status = 0;//çº§åˆ«æ•°å€¼ ç”¨äºè®°å½•å½“å‰è¡Œçš„Tabæ•°é‡
 	TDB_Status += Before;
 	for (int i = 0; i < TDB_Status; i++)os << "\t";
 	TDB_Status += After;
@@ -243,7 +243,7 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 {
 	if (!Is_Instance_Data)
 	{
-		throw "Ìí¼ÓÊ§°Ü£¡ ½á¹¹ÄÚÈİÎª¿Õ";
+		throw "æ·»åŠ å¤±è´¥ï¼ ç»“æ„å†…å®¹ä¸ºç©º";
 		return;
 	}
 	else if (To_File)
@@ -266,10 +266,10 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 		Id_Vector* ITemp = new Id_Vector(
 			Item_Instance.Status_1, Item_Instance.Status_2,
 			Item_Instance.Code, Item_Instance.Name);
-		if (DTemp && ITemp)//ÅĞ¶ÏÊÇ·ñÉêÇë¿Õ¼ä³É¹¦
+		if (DTemp && ITemp)//åˆ¤æ–­æ˜¯å¦ç”³è¯·ç©ºé—´æˆåŠŸ
 			Append_Chain(*DTemp, *ITemp);
 		else
-			throw "Ìí¼ÓÊ§°Ü£¡ ÉêÇëÄÚ´æ¿Õ¼äÊ§°Ü";
+			throw "æ·»åŠ å¤±è´¥ï¼ ç”³è¯·å†…å­˜ç©ºé—´å¤±è´¥";
 	}
 }
 
@@ -278,12 +278,12 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 	if (Mode == SORT_LOCALF)
 		if (!Get_LocalData(In_File_Name))
 		{
-			throw "SortDataBase() Failed £¡ : Î´ÄÜ³É¹¦Æ¥ÅäÎÄ¼ş";
+			throw "SortDataBase() Failed ï¼ : æœªèƒ½æˆåŠŸåŒ¹é…æ–‡ä»¶";
 			return;
 		}
 	if (Is_Chain_Empty)
 	{
-		throw "SortDataBase() Failed £¡ : »ñÈ¡µ½µÄÊı¾İÎª¿Õ";
+		throw "SortDataBase() Failed ï¼ : è·å–åˆ°çš„æ•°æ®ä¸ºç©º";
 		return;
 	}
 	std::fstream out(Out_File_Name + ".sd", std::ios::out | std::ios::trunc);
@@ -343,13 +343,13 @@ void TANXL_DataBase::Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id)
 		int Mid{ (Left + Right) / 2 };
 		Id_Vector* PIC = IC_Vector->at(Mid);
 		int PIC_Value{ PIC->Type * 16 + PIC->Exac };
-		if (PIC_Value == Value)//Type BÆ¥ÅäÊ±
+		if (PIC_Value == Value)//Type BåŒ¹é…æ—¶
 		{
 			PIC->exac->push_back(&New_Data);
 			Is_Chain_Empty = false;
 			return;
 		}
-		else if (Left == Right && PIC_Value != Value)//Type B²»Æ¥Åä µ«ÒÑ¾­ÊÇ×î½Ó½üµÄÖµÊ±
+		else if (Left == Right && PIC_Value != Value)//Type Bä¸åŒ¹é… ä½†å·²ç»æ˜¯æœ€æ¥è¿‘çš„å€¼æ—¶
 		{
 			if (PIC_Value < Value)
 				Left += 1;
@@ -369,7 +369,7 @@ void TANXL_DataBase::Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id)
 			else Right = Left;
 		}
 	}
-	throw "Append() Failed ! : Î´ÖªÔ­Òò";
+	throw "Append() Failed ! : æœªçŸ¥åŸå› ";
 	return;
 }
 
@@ -380,7 +380,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		std::fstream in(File_Name + ".sd", std::ios::in);
 	if (in.is_open())
 	{
-		std::string Type_Data{}, Exac_Data{};//ĞèÒªÊ¹ÓÃÊ±ÔÙ¶¨Òå
+		std::string Type_Data{}, Exac_Data{};//éœ€è¦ä½¿ç”¨æ—¶å†å®šä¹‰
 		int  Type_Stat{}, Exac_Stat{};
 		int IData[3]{ 0 }, Target{ -1 };
 		std::string SData[3]{};
@@ -416,7 +416,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 						if (Data_Temp && Id_Temp)
 							Append_Chain(*Data_Temp, *Id_Temp);
 						else
-							throw "Ìí¼ÓÊ§°Ü£¡ ÉêÇëÄÚ´æ¿Õ¼äÊ§°Ü";
+							throw "æ·»åŠ å¤±è´¥ï¼ ç”³è¯·å†…å­˜ç©ºé—´å¤±è´¥";
 						continue;
 					}
 					else if (Tag == "Oth1")
@@ -460,7 +460,7 @@ void TANXL_DataBase::Get_Specified(int Type, int Exac, int Nums)
 		Combine_Status();
 		return;
 	}
-	throw "Get_Specified() Failed £¡ : Î´ÄÜ³É¹¦Æ¥ÅäÏàÍ¬Öµ";
+	throw "Get_Specified() Failed ï¼ : æœªèƒ½æˆåŠŸåŒ¹é…ç›¸åŒå€¼";
 }
 
 void TANXL_DataBase::Get_Item_Status()
@@ -472,7 +472,7 @@ void TANXL_DataBase::Get_Item_Status()
 	Item_Instance.Status_5 = ( Item_Instance.Item_Status & 0x000000ff       );
 }
 
-void TANXL_DataBase::Print_Data()//Êä³öµ±Ç°Á´±íÖĞµÄËùÓĞÄÚÈİ V3 Updated
+void TANXL_DataBase::Print_Data()//è¾“å‡ºå½“å‰é“¾è¡¨ä¸­çš„æ‰€æœ‰å†…å®¹ V3 Updated
 {
 	if (!Is_Chain_Empty)
 	{
@@ -494,7 +494,7 @@ void TANXL_DataBase::Print_Data()//Êä³öµ±Ç°Á´±íÖĞµÄËùÓĞÄÚÈİ V3 Updated
 		} while (PIC != *IOI);
 		return;
 	}
-	throw "Print_Data() Failed £¡ : Á´±íÄÚÈİÎª¿Õ";
+	throw "Print_Data() Failed ï¼ : é“¾è¡¨å†…å®¹ä¸ºç©º";
 }
 
 void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data) //V3 Updated
@@ -521,7 +521,7 @@ void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int 
 			PDC->Sd_3 = Data;
 			return;
 		}
-	throw "Set_Specified() Failed £¡ : ²éÕÒÏà¹ØÄÚÈİ²»³É¹¦»òÁ´±íÄÚÈİÎª¿Õ";
+	throw "Set_Specified() Failed ï¼ : æŸ¥æ‰¾ç›¸å…³å†…å®¹ä¸æˆåŠŸæˆ–é“¾è¡¨å†…å®¹ä¸ºç©º";
 }
 
 void TANXL_DataBase::Remove_Chain(int Type, int Exac)
@@ -529,9 +529,9 @@ void TANXL_DataBase::Remove_Chain(int Type, int Exac)
 	if (Id_Vector * PIC{ Id_Chain_Locate(Type, Exac) })
 	{
 		for (int i{ 0 }; i < PIC->exac->size(); i++)
-			delete PIC->exac->at(i);//ÊÍ·Å Data_Vector
+			delete PIC->exac->at(i);//é‡Šæ”¾ Data_Vector
 		PIC->exac->clear();
-		delete PIC;//ÊÍ·Å Id_Vector
+		delete PIC;//é‡Šæ”¾ Id_Vector
 		IC_Vector->erase(IC_Vector->begin() + Current_Location);
 	}
 }
@@ -547,7 +547,7 @@ Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 			Current_Location = 0;
 			return IC_Vector->at(0);
 		}
-		throw "Id_Chain_Locate Failed ! : Î´ÄÜ³É¹¦Æ¥ÅäÏàÍ¬Öµ";
+		throw "Id_Chain_Locate Failed ! : æœªèƒ½æˆåŠŸåŒ¹é…ç›¸åŒå€¼";
 		return NULL;
 	}
 	else
@@ -567,12 +567,12 @@ Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 				Left = Mid;
 			if (Left == Right)
 			{
-				throw "Id_Chain_Locate Failed ! : Î´ÄÜ³É¹¦Æ¥ÅäÏàÍ¬Öµ";
+				throw "Id_Chain_Locate Failed ! : æœªèƒ½æˆåŠŸåŒ¹é…ç›¸åŒå€¼";
 				return NULL;
 			}
 		}
 	}
-	throw "Id_Chain_Locate Failed ! : Î´ÖªÔ­Òò";
+	throw "Id_Chain_Locate Failed ! : æœªçŸ¥åŸå› ";
 	return NULL;
 }
 
@@ -581,7 +581,7 @@ Data_Vector* TANXL_DataBase::Data_Chain_Locate(int Type, int Exac, int Depth)
 	Id_Vector* PIC{ Id_Chain_Locate(Type, Exac) };
 	if (PIC->exac->size() < Depth)
 	{
-		throw "Data_Chain_Locate Failed ! : ³¬³öµ±Ç°ÈİÆ÷×î´óÉî¶È";
+		throw "Data_Chain_Locate Failed ! : è¶…å‡ºå½“å‰å®¹å™¨æœ€å¤§æ·±åº¦";
 		return NULL;
 	}
 	else if (Depth < 0 && Depth + static_cast<int>(PIC->exac->size()) >= 0)

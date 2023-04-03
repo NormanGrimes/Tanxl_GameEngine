@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Tanxl_Console_List.h"
 
-//void ColÊÇÔ­Console_ListµÄºËĞÄ¹¦ÄÜ£¬Ê¹ÓÃÁËLinux¿ØÖÆÌ¨µÄÖ¸Áî
-void Col(unsigned ColN, bool Under_Line)//ÉèÖÃ×Ô¶¨ÒåĞĞµÄ±³¾°ÑÕÉ«
+//void Colæ˜¯åŸConsole_Listçš„æ ¸å¿ƒåŠŸèƒ½ï¼Œä½¿ç”¨äº†Linuxæ§åˆ¶å°çš„æŒ‡ä»¤
+void Col(unsigned ColN, bool Under_Line)//è®¾ç½®è‡ªå®šä¹‰è¡Œçš„èƒŒæ™¯é¢œè‰²
 {
-	if (ColN == NULL)std::cout << "\033[0m";//Çå³ıÑÕÉ«
+	if (ColN == NULL)std::cout << "\033[0m";//æ¸…é™¤é¢œè‰²
 	else
 	{
 		if (Under_Line == true)
@@ -13,17 +13,17 @@ void Col(unsigned ColN, bool Under_Line)//ÉèÖÃ×Ô¶¨ÒåĞĞµÄ±³¾°ÑÕÉ«
 		std::cout << "\033[4;1;m";
 		if (((ColN & 0xf0) >> 4) > 0 && ((ColN & 0xf0) >> 4) <= 7)
 			std::cout << "\033[3" << ((ColN & 0xf0) >> 4) << "m";
-		else if ((ColN & 0xf0) >> 4 == 0);//ÖµÎª0²»×÷ĞŞ¸Ä
-		else//×ÖÌåÑÕÉ«: 1ºìÉ« 2ÂÌÉ« 3³ÈÉ« 4À¶É« 5×ÏÉ« 6µ­À¶ 7°×É«
+		else if ((ColN & 0xf0) >> 4 == 0);//å€¼ä¸º0ä¸ä½œä¿®æ”¹
+		else//å­—ä½“é¢œè‰²: 1çº¢è‰² 2ç»¿è‰² 3æ©™è‰² 4è“è‰² 5ç´«è‰² 6æ·¡è“ 7ç™½è‰²
 			std::cout << "\033[3" << rand() % 7 + 1 << "m";
 		if ((ColN & 0x0f) > 0 && ((ColN & 0x0f) <= 7))
 			std::cout << "\033[4" << (ColN & 0x0f) << "m";
-		else if ((ColN & 0x0f) == 0);//ÖµÎª0²»×÷ĞŞ¸Ä
-		else//±³¾°ÑÕÉ«: 1ºìÉ« 2ÂÌÉ« 3³ÈÉ« 4À¶É« 5×ÏÉ« 6µ­À¶ 7°×É«
+		else if ((ColN & 0x0f) == 0);//å€¼ä¸º0ä¸ä½œä¿®æ”¹
+		else//èƒŒæ™¯é¢œè‰²: 1çº¢è‰² 2ç»¿è‰² 3æ©™è‰² 4è“è‰² 5ç´«è‰² 6æ·¡è“ 7ç™½è‰²
 			std::cout << "\033[4" << rand() % 7 + 1 << "m";
 	}
 }
-//¹¹Ôìº¯Êı
+//æ„é€ å‡½æ•°
 CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
 	:_Selector(0), _Is_Selected(false), _SonList(NULL), _SSpace(Space), _Func(FunC), _Is_Funcwork(true), _Name(NamE), _Page(0)
 {
@@ -31,7 +31,7 @@ CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
 		_Is_Funcwork = false;
 }
 
-//Ìí¼Óº¯Êı
+//æ·»åŠ å‡½æ•°
 void CONSOLE::Append_Item(std::string New_Item, unsigned Space, void (*FunC)(), int Depth, int* Ids)
 {
 	if (Depth == 0)
@@ -59,7 +59,7 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 			Col(Def_Col);
 		std::cout << std::setw((_SSpace & 0xff0000) >> 16) << _SonList.at(i)._Name << std::setw((_SSpace & 0x00ff00) >> 8) << " " << std::endl;
 		Col();
-		if (_SonList.at(i)._SonList.size() == 0 && this->_Is_Selected == true && this->_Selector == i)//ÔÚ°üº¬×ÓÏîÄ¿Îª0Ê±×Ô¶¯ÍË³ö
+		if (_SonList.at(i)._SonList.size() == 0 && this->_Is_Selected == true && this->_Selector == i)//åœ¨åŒ…å«å­é¡¹ç›®ä¸º0æ—¶è‡ªåŠ¨é€€å‡º
 		{
 			if (_SonList.at(i)._Is_Funcwork)
 				_SonList.at(i)._Func();
@@ -116,7 +116,7 @@ void CONSOLE::Display_Once()
 bool CONSOLE::Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size)
 {
 	char key = _getch();
-	if (key == 'c' || key == 'C')//Èç¹ûÊäÈëÁË´óĞ¡Ğ´µÄCÔò·µ»ØÉÏÒ»¼¶
+	if (key == 'c' || key == 'C')//å¦‚æœè¾“å…¥äº†å¤§å°å†™çš„Cåˆ™è¿”å›ä¸Šä¸€çº§
 	{
 		*Action_Bol = false;
 		return false;
@@ -126,23 +126,23 @@ bool CONSOLE::Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size)
 		*Action_Num = -1;
 		return false;
 	}
-	if (static_cast<int>(key - 48) >= 0 && static_cast<int>(key - 48) <= 9)//ÅĞ¶ÏÊÇ·ñÊÇ´ÓÁãµ½¾ÅµÄÊı×Ö
+	if (static_cast<int>(key - 48) >= 0 && static_cast<int>(key - 48) <= 9)//åˆ¤æ–­æ˜¯å¦æ˜¯ä»é›¶åˆ°ä¹çš„æ•°å­—
 	{
-		if (static_cast<int>(key - 48) <= static_cast<int>(List_Size))//Èç¹ûÊÇ£¬ÇÒĞ¡ÓÚµÈÓÚÑ¡Ïî×ÜÊıÔòÖ±½ÓÖ¸¶¨Õâ¸öÑ¡Ïî
+		if (static_cast<int>(key - 48) <= static_cast<int>(List_Size))//å¦‚æœæ˜¯ï¼Œä¸”å°äºç­‰äºé€‰é¡¹æ€»æ•°åˆ™ç›´æ¥æŒ‡å®šè¿™ä¸ªé€‰é¡¹
 			*Action_Num = static_cast<int>(key - 48) - 1;
 		else
-			*Action_Num = static_cast<int>(List_Size) - 1;//Èç¹û³¬³öÁË×î´óÖµ£¬ÔòÖ¸Ïò×î´óÖµ
+			*Action_Num = static_cast<int>(List_Size) - 1;//å¦‚æœè¶…å‡ºäº†æœ€å¤§å€¼ï¼Œåˆ™æŒ‡å‘æœ€å¤§å€¼
 		*Action_Bol = true;
 	}
-	else if (key == 'w' || key == 'W' || key == 72)//Èç¹ûÊäÈëÁË´óĞ¡Ğ´µÄW»òÕßÉÏ¼ıÍ·£¬ÔòÖ´ĞĞMoveUp
+	else if (key == 'w' || key == 'W' || key == 72)//å¦‚æœè¾“å…¥äº†å¤§å°å†™çš„Wæˆ–è€…ä¸Šç®­å¤´ï¼Œåˆ™æ‰§è¡ŒMoveUp
 		*Action_Num = *Action_Num == 0 ? static_cast<int>(List_Size) - 1 : -- * Action_Num;
-	else if (key == 's' || key == 'S' || key == 80)//Èç¹ûÊäÈëÁË´óĞ¡Ğ´µÄS»òÕßÏÂ¼ıÍ·£¬ÔòÖ´ĞĞMoveDown
+	else if (key == 's' || key == 'S' || key == 80)//å¦‚æœè¾“å…¥äº†å¤§å°å†™çš„Sæˆ–è€…ä¸‹ç®­å¤´ï¼Œåˆ™æ‰§è¡ŒMoveDown
 		*Action_Num = *Action_Num == static_cast<int>(List_Size) - 1 ? 0 : ++ * Action_Num;
-	else if (key == 'a' || key == 'A' || key == 75)//Èç¹ûÊäÈëÁË´óĞ¡Ğ´µÄA»òÕß×ó¼ıÍ·£¬ÔòÖ´ĞĞÏòÉÏ·­Ò³
+	else if (key == 'a' || key == 'A' || key == 75)//å¦‚æœè¾“å…¥äº†å¤§å°å†™çš„Aæˆ–è€…å·¦ç®­å¤´ï¼Œåˆ™æ‰§è¡Œå‘ä¸Šç¿»é¡µ
 		*Action_Num = *Action_Num - static_cast<int>(_SSpace & 0x0000ff) < 0 ? 0 : *Action_Num - (_SSpace & 0x0000ff);
-	else if (key == 'd' || key == 'D' || key == 77)//Èç¹ûÊäÈëÁË´óĞ¡Ğ´µÄD»òÕßÓÒ¼ıÍ·£¬ÔòÖ´ĞĞÏòÏÂ·­Ò³
+	else if (key == 'd' || key == 'D' || key == 77)//å¦‚æœè¾“å…¥äº†å¤§å°å†™çš„Dæˆ–è€…å³ç®­å¤´ï¼Œåˆ™æ‰§è¡Œå‘ä¸‹ç¿»é¡µ
 		*Action_Num = *Action_Num + static_cast<int>(_SSpace & 0x0000ff) > static_cast<int>(List_Size) - 1 ? static_cast<int>(List_Size) - 1 : *Action_Num + (_SSpace & 0x0000ff);
-	else if (key == '\r')//»Ø³µÈ·ÈÏ
+	else if (key == '\r')//å›è½¦ç¡®è®¤
 		*Action_Bol = true;
 	return true;
 }

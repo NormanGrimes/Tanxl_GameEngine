@@ -1,7 +1,7 @@
-//_VERSION_0_2_ UPDATE LOG
+ï»¿//_VERSION_0_2_ UPDATE LOG
 // LAST_UPDATE 2022-05-15 22:37
-// ¸üÃûÎªOpenGL_Render
-// ÒÆ³ıstdµÄusingÓï¾ä
+// æ›´åä¸ºOpenGL_Render
+// ç§»é™¤stdçš„usingè¯­å¥
 
 #pragma once
 

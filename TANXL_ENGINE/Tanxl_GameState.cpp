@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Tanxl_GameState.h"
 
@@ -102,7 +102,7 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 	{
 		if (Infor.at(i) != ',' && Infor.at(i) != '=')
 			Text_Reader += Infor.at(i);
-		else if (Infor.at(i) == '=')//¶ÁÈ¡µÈºÅºóµÄÊı×ÖIDÖµ
+		else if (Infor.at(i) == '=')//è¯»å–ç­‰å·åçš„æ•°å­—IDå€¼
 		{
 			std::string Status_Reader{};
 			while (Infor.at(i) != ',')

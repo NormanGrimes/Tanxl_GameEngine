@@ -1,27 +1,27 @@
-//_VERSION_1_7_ UPDATE LOG
+ï»¿//_VERSION_1_7_ UPDATE LOG
 // LAST_UPDATE 2022-11-17 00:30
-// Display½Ó¿ÚÈ¥µô²»±ØÒªµÄÑÕÉ«Çå³ı¹¦ÄÜ
-// Display½Ó¿Ú¸ÄÎªË½ÓĞ
-// ÊäÈë½Ó¿ÚÌá¹©ÍË³ö¹¦ÄÜ
+// Displayæ¥å£å»æ‰ä¸å¿…è¦çš„é¢œè‰²æ¸…é™¤åŠŸèƒ½
+// Displayæ¥å£æ”¹ä¸ºç§æœ‰
+// è¾“å…¥æ¥å£æä¾›é€€å‡ºåŠŸèƒ½
 
 #pragma once
 
-#ifndef IOSTREAM//¼ì²éÊÇ·ñÒÑ¾­°üº¬IOSTREAM
+#ifndef IOSTREAM//æ£€æŸ¥æ˜¯å¦å·²ç»åŒ…å«IOSTREAM
 #define IOSTREAM
 #include <iostream>
 #endif
 
-#ifndef VECTOR//¼ì²éÊÇ·ñÒÑ¾­°üº¬VECTOR
+#ifndef VECTOR//æ£€æŸ¥æ˜¯å¦å·²ç»åŒ…å«VECTOR
 #define VECTOR
 #include <vector>
 #endif
 
-#ifndef CONIO_H//¼ì²éÊÇ·ñÒÑ¾­°üº¬CONIO_H
+#ifndef CONIO_H//æ£€æŸ¥æ˜¯å¦å·²ç»åŒ…å«CONIO_H
 #define CONIO_H
 #include <conio.h>
 #endif
 
-#ifndef IOMANIP//¼ì²éÊÇ·ñÒÑ¾­°üº¬IOMANIP
+#ifndef IOMANIP//æ£€æŸ¥æ˜¯å¦å·²ç»åŒ…å«IOMANIP
 #define IOMANIP
 #include <iomanip>
 #endif
@@ -50,9 +50,9 @@ enum EBack_Color
 	BACK_COLOR_WHITE     = 0x07
 };
 
-//void ColÊÇÔ­Console_ListµÄºËĞÄ¹¦ÄÜ£¬Ê¹ÓÃÁËLinux¿ØÖÆÌ¨µÄÖ¸Áî
-void Col(unsigned ColN = NULL, bool Under_Line = false);//ÉèÖÃ×Ô¶¨ÒåĞĞµÄ±³¾°ÑÕÉ«
-//ÎïÆ·Àà
+//void Colæ˜¯åŸConsole_Listçš„æ ¸å¿ƒåŠŸèƒ½ï¼Œä½¿ç”¨äº†Linuxæ§åˆ¶å°çš„æŒ‡ä»¤
+void Col(unsigned ColN = NULL, bool Under_Line = false);//è®¾ç½®è‡ªå®šä¹‰è¡Œçš„èƒŒæ™¯é¢œè‰²
+//ç‰©å“ç±»
 class CONSOLE
 {
 public:
@@ -80,5 +80,5 @@ private:
 
 	void (*_Func)();
 
-	unsigned _SSpace;// { 0x171109 }Ñ¡ÏîºÍ±êÌâµÄ¿Õ¸ñÊı AA-BB-CC AA×ó¿Õ¸ñ BBÓÒ¿Õ¸ñ CCÒ³ÃæÎïÆ·ÏŞÖÆÊıÁ¿
+	unsigned _SSpace;// { 0x171109 }é€‰é¡¹å’Œæ ‡é¢˜çš„ç©ºæ ¼æ•° AA-BB-CC AAå·¦ç©ºæ ¼ BBå³ç©ºæ ¼ CCé¡µé¢ç‰©å“é™åˆ¶æ•°é‡
 };

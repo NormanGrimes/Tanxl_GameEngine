@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Tanxl_InsertAction.h"
 
@@ -56,15 +56,15 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, 
 			if (_KeyEventS.at(i)->MoveToX)
 			{
 				//*deputyX += _KeyEventS.at(i).MoveLen;
-				*MoveX += _KeyEventS.at(i)->MoveLen;
-				_Margin_X = _KeyEventS.at(i)->MoveLen;
+				*MoveX += static_cast<float>(_KeyEventS.at(i)->MoveLen);
+				_Margin_X = static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_Y = 0;
 			}
 			if (_KeyEventS.at(i)->MoveToY)
 			{
 				//*deputyY += _KeyEventS.at(i).MoveLen;
-				*MoveY += _KeyEventS.at(i)->MoveLen;
-				_Margin_Y = _KeyEventS.at(i)->MoveLen;
+				*MoveY += static_cast<float>(_KeyEventS.at(i)->MoveLen);
+				_Margin_Y = static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_X = 0;
 			}
 			if (AutoCheck(MoveX, MoveY) == 3 && _KeyEventS.at(i)->Unit_Type == 0)
@@ -166,12 +166,12 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 	return Return_Value;
 }
 
-//UnImportant µ¥ÀýÊµÏÖ
+//UnImportant å•ä¾‹å®žçŽ°
 
 InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
 _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
 {
-	//InsertKey Init //¶à´Î×¢²á»áµ¼ÖÂ¶à´ÎÒÆ¶¯
+	//InsertKey Init //å¤šæ¬¡æ³¨å†Œä¼šå¯¼è‡´å¤šæ¬¡ç§»åŠ¨
 
 	/*Key_Unit MOVE_UP;
 	MOVE_UP.GLFW_KEY = GLFW_KEY_UP;
@@ -181,7 +181,7 @@ _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _I
 	this->RegistEvent(MOVE_UP);
 	MOVE_UP.GLFW_KEY = GLFW_KEY_W;
 	this->RegistEvent(MOVE_UP);*/
-	// OR ¡ý
+	// OR â†“
 	Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);
 	this->RegistEvent(&MOVE_UP);
 	MOVE_UP = Key_Unit(GLFW_KEY_W, false, true, 0.01);
@@ -195,7 +195,7 @@ _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _I
 	this->RegistEvent(MOVE_LEFT);
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_A;
 	this->RegistEvent(MOVE_LEFT);*/
-	// OR ¡ý
+	// OR â†“
 	Key_Unit MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
 	this->RegistEvent(&MOVE_LEFT);
 	MOVE_LEFT = Key_Unit(GLFW_KEY_A, true, false, -0.01);
@@ -209,7 +209,7 @@ _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _I
 	this->RegistEvent(MOVE_RIGHT);
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_D;
 	this->RegistEvent(MOVE_RIGHT);*/
-	// OR ¡ý
+	// OR â†“
 	Key_Unit MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
 	this->RegistEvent(&MOVE_RIGHT);
 	MOVE_RIGHT = Key_Unit(GLFW_KEY_D, true, false, 0.01);
@@ -223,7 +223,7 @@ _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _I
 	this->RegistEvent(MOVE_DOWN);
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
 	this->RegistEvent(MOVE_DOWN);*/
-	// OR ¡ý
+	// OR â†“
 	Key_Unit MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
 	this->RegistEvent(&MOVE_DOWN);
 	MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);

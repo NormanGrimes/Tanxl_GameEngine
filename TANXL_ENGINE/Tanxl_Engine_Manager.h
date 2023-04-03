@@ -1,9 +1,9 @@
-//_VERSION_0_1_ UPDATE LOG
+ï»¿//_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2022-09-26 23:24
-// ³õÊ¼°æ±¾
-// 2022/10/4¼ÓÈëÁ½¸öStateÄ£¿é½Ó¿Ú
-// 2022/10/10¸üĞÂµØÍ¼Êı¾İ±àÒë½Ó¿Ú Ôö¼ÓInsertBaseµÄÖ§³Ö
-// 2022/11/07ÒıÇæ¹ÜÀíÄ£¿éÔö¼Ó¿ØÖÆÒÆ¶¯×î´ó¾àÀëµÄ½Ó¿Ú
+// åˆå§‹ç‰ˆæœ¬
+// 2022/10/4åŠ å…¥ä¸¤ä¸ªStateæ¨¡å—æ¥å£
+// 2022/10/10æ›´æ–°åœ°å›¾æ•°æ®ç¼–è¯‘æ¥å£ å¢åŠ InsertBaseçš„æ”¯æŒ
+// 2022/11/07å¼•æ“ç®¡ç†æ¨¡å—å¢åŠ æ§åˆ¶ç§»åŠ¨æœ€å¤§è·ç¦»çš„æ¥å£
 
 #pragma once
 
@@ -40,7 +40,7 @@
 class Tanxl_Engine
 {
 public:
-	//ÒıÇæ³õÊ¼»¯¹¹Ôìº¯Êı
+	//å¼•æ“åˆå§‹åŒ–æ„é€ å‡½æ•°
 	Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE),
 		Tanxl_Engine_DataBase(new TANXL_DataBase(true)),
 		Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
@@ -61,7 +61,7 @@ public:
 
 	//Game State Part
 
-	//ÉèÖÃµ±Ç°ÏÔÊ¾´°¿ÚÖĞµÄXYÖá¾ØÕóÊıÁ¿ Width¿í¶È Height¸ß¶È
+	//è®¾ç½®å½“å‰æ˜¾ç¤ºçª—å£ä¸­çš„XYè½´çŸ©é˜µæ•°é‡ Widthå®½åº¦ Heighté«˜åº¦
 	void Engine_State_Set_Display(int Width, int Height)
 	{
 		static int ReservWidth = 5;
@@ -76,14 +76,14 @@ public:
 		}
 	}
 
-	//¸ù¾İÒ»´®ºÏÀíµÄ×Ö·û´®¶ÔµØÍ¼½øĞĞÉú³É WidthÔ¤Éè¿í¶È HeightÔ¤Éè¸ß¶È InforµØÍ¼Êı¾İ
+	//æ ¹æ®ä¸€ä¸²åˆç†çš„å­—ç¬¦ä¸²å¯¹åœ°å›¾è¿›è¡Œç”Ÿæˆ Widthé¢„è®¾å®½åº¦ Heighté¢„è®¾é«˜åº¦ Inforåœ°å›¾æ•°æ®
 	void Engine_State_Compile_Uints(int Width, int Height, std::string Infor)
 	{
 		Tanxl_Engine_GameState->CompileStateUnits(Infor);
 		Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);
 	}
 
-	//ÉèÖÃÊÇ·ñÆôÓÃÊäÈëÒÆ¶¯ÏŞÖÆ EanbleÆôÓÃ/¹Ø±Õ×Ô¶¯ÒÆ¶¯ÏŞÖÆ ÆôÓÃºó²»ĞèÒªÉèÖÃºóĞøÄÚÈİ Max_Height×î´óÒÆ¶¯¸ß¶È(¾ø¶ÔÖµ) Max_Widtd×î´óÒÆ¶¯¿í¶È(¾ø¶ÔÖµ)
+	//è®¾ç½®æ˜¯å¦å¯ç”¨è¾“å…¥ç§»åŠ¨é™åˆ¶ Eanbleå¯ç”¨/å…³é—­è‡ªåŠ¨ç§»åŠ¨é™åˆ¶ å¯ç”¨åä¸éœ€è¦è®¾ç½®åç»­å†…å®¹ Max_Heightæœ€å¤§ç§»åŠ¨é«˜åº¦(ç»å¯¹å€¼) Max_Widtdæœ€å¤§ç§»åŠ¨å®½åº¦(ç»å¯¹å€¼)
 	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Widtd = 0.0f)
 	{
 		Tanxl_Engine_InsertBase->Set_StateRange(Enable);
@@ -99,7 +99,7 @@ public:
 		}
 	}
 
-	//Enable_AdjustÉèÖÃÊÇ·ñÆôÓÃ×Ô¶¯µ÷Õû Adjust_ValueÎªµ¥´Îµ÷ÕûµÄ¾àÀë Enable_While_MoveÎªÊÇ·ñÆôÓÃÒÆ¶¯ÖĞµ÷Õû ºóÁ½ÏîĞèÒªµÚÒ»ÏîÆô¶¯²Å»áÉúĞ§
+	//Enable_Adjustè®¾ç½®æ˜¯å¦å¯ç”¨è‡ªåŠ¨è°ƒæ•´ Adjust_Valueä¸ºå•æ¬¡è°ƒæ•´çš„è·ç¦» Enable_While_Moveä¸ºæ˜¯å¦å¯ç”¨ç§»åŠ¨ä¸­è°ƒæ•´ åä¸¤é¡¹éœ€è¦ç¬¬ä¸€é¡¹å¯åŠ¨æ‰ä¼šç”Ÿæ•ˆ
 	void Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move)
 	{
 		Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);

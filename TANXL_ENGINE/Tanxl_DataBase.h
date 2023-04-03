@@ -1,9 +1,9 @@
-//_VERSION_1_8_ UPDATE LOG
+ï»¿//_VERSION_1_8_ UPDATE LOG
 // LAST_UPDATE 2022-09-24 00:39
-// ÒÆ³ıÎå¸ö²»±ØÒªµÄÄÚ²¿½Ó¿ÚinlineÉèÖÃ
-// ĞŞ¸´ÈıÊ®¶şÎ»µÄ»ñÈ¡Statusº¯Êı²ÉÓÃ¶şÊ®Î»²Ù×÷·½Ê½µÄ´íÎó
-// ´¢´æÄ£¿éÉèÖÃÎïÆ·º¯ÊıÖ´ĞĞĞ§ÂÊÌáÉı
-// ĞŞ¸ÄÒ»¸öË½ÓĞ±äÁ¿Ãû³ÆÊ¹Ö®ÌùºÏÒâË¼
+// ç§»é™¤äº”ä¸ªä¸å¿…è¦çš„å†…éƒ¨æ¥å£inlineè®¾ç½®
+// ä¿®å¤ä¸‰åäºŒä½çš„è·å–Statuså‡½æ•°é‡‡ç”¨äºŒåä½æ“ä½œæ–¹å¼çš„é”™è¯¯
+// å‚¨å­˜æ¨¡å—è®¾ç½®ç‰©å“å‡½æ•°æ‰§è¡Œæ•ˆç‡æå‡
+// ä¿®æ”¹ä¸€ä¸ªç§æœ‰å˜é‡åç§°ä½¿ä¹‹è´´åˆæ„æ€
 
 #pragma once
 
@@ -32,13 +32,13 @@
 #include<vector>
 #endif
 
-enum ESort_Mode//ÎªSortDataBaseº¯ÊıÌá¹©µÄ¹¦ÄÜÃ¶¾Ù
+enum ESort_Mode//ä¸ºSortDataBaseå‡½æ•°æä¾›çš„åŠŸèƒ½æšä¸¾
 {
 	SORT_LOCALF = 0,
 	SORT_MEMORY = 2,
 };
 
-enum EDivid_Mode//ÎªDivid_Charº¯ÊıÌá¹©µÄ¹¦ÄÜÃ¶¾Ù
+enum EDivid_Mode//ä¸ºDivid_Charå‡½æ•°æä¾›çš„åŠŸèƒ½æšä¸¾
 {
 	GET_STATUS_DAT = 0,
 	GET_STORAG_DAT = 1,
@@ -56,7 +56,7 @@ enum ESet_Specified
 	SET_OTH3_STATUS = 4,
 };
 
-struct Data_Vector//¶ÌÊı¾İ±í(Vector)
+struct Data_Vector//çŸ­æ•°æ®è¡¨(Vector)
 {
 	explicit Data_Vector(int I_A = 0, std::string D_A = NULL, int I_B = 0, std::string D_B = NULL, int I_C = 0, std::string D_C = NULL) :
 		Id_1(I_A), Id_2(I_B), Id_3(I_C), Sd_1(D_A), Sd_2(D_B), Sd_3(D_C) {}
@@ -64,13 +64,13 @@ struct Data_Vector//¶ÌÊı¾İ±í(Vector)
 	std::string Sd_1, Sd_2, Sd_3;
 };
 
-struct Id_Vector//¶ÌÀàĞÍ±í(Vector)
+struct Id_Vector//çŸ­ç±»å‹è¡¨(Vector)
 {
 	explicit Id_Vector(int Type, int Exac, std::string Code = "NULL", std::string Name = "NULL") :
 		Type(Type), Exac(Exac), StrA(Code), StrB(Name), exac(new std::vector<Data_Vector*>) {}
 	int Type, Exac;
 	std::string StrA, StrB;
-	std::vector<Data_Vector*>* exac;//ÓÃÓÚÖ§³ÖÕÛ°ë²éÕÒ
+	std::vector<Data_Vector*>* exac;//ç”¨äºæ”¯æŒæŠ˜åŠæŸ¥æ‰¾
 };
 
 class TANXL_DataBase
@@ -88,44 +88,44 @@ private:
 
 	std::vector<Id_Vector*>* IC_Vector;
 	int Current_Location;
-	bool Is_Instance_Data;//ÓÃÀ´ÅĞ¶ÏItem_InstanceÖĞÊÇ·ñÓĞÊı¾İ
-	bool Is_Chain_Empty;//ÓÃÀ´ÅĞ¶ÏÁ´±íÊÇ·ñÎª¿Õ
-	bool Is_Full_Legal;//ÖµÎªtrueÊ±0xF³ÉÎªºÏ·¨Öµ ¿ÉÔÚÊä³öÖĞÏÔÊ¾/Ê¹ÓÃ
-	Id_Vector* Id_Chain_Locate(int Type, int Exac);//Ê±¼ä¸´ÔÓ¶ÈÎªlogNµÄId_Chain¿ìËÙ¶¨Î»º¯Êı Type Exac Ö¸Id_ChainµÄÍ¬Ãû±äÁ¿
-	Data_Vector* Data_Chain_Locate(int Type, int Exac, int Depth);//½èÓÉId_Chain_Locateº¯Êı¶Ô²»Í¬Éî¶ÈµÄData_Chain¶¨Î»
-	void Replace_Chain(int OldType, int OldExac, int OldDepth, int Type, int Exac);//×ªÒÆData_Chainµ½ÁíÒ»¸öId_ChainÏÂ
-	void Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id);//Á´±íÌí¼ÓÄÚÈİV3 Ìí¼Óµ½VectorÖĞ
-	void Get_Item_Status();//»ñÈ¡ÎïÆ·ÊıÖµ ²¢¼ÓÔØµ½½á¹¹ÖĞ
-	void Clear_Chain();//ÇåÀíÁ´±í
-	void ResetInstance();//ÖØÖÃItem½á¹¹µÄÄÚÈİ
-	inline void OstreamSpace(std::ostream& os, int Before = 0, int After = 0);//¸ù¾İ¼¶±ğÊä³ö¿Õ¸ñ BeforeÓÃÓÚÖ´ĞĞÇ°¶Ô¼¶±ğÊıÖµ½øĞĞĞŞ¸Ä AfterÓÃÓÚÖ´ĞĞºó
-	inline void Combine_Status();//×éºÏStatus¸÷ÎïÆ·¼¶±ğ²¢ºÏ²¢µ½Item_InstanceÖĞ
+	bool Is_Instance_Data;//ç”¨æ¥åˆ¤æ–­Item_Instanceä¸­æ˜¯å¦æœ‰æ•°æ®
+	bool Is_Chain_Empty;//ç”¨æ¥åˆ¤æ–­é“¾è¡¨æ˜¯å¦ä¸ºç©º
+	bool Is_Full_Legal;//å€¼ä¸ºtrueæ—¶0xFæˆä¸ºåˆæ³•å€¼ å¯åœ¨è¾“å‡ºä¸­æ˜¾ç¤º/ä½¿ç”¨
+	Id_Vector* Id_Chain_Locate(int Type, int Exac);//æ—¶é—´å¤æ‚åº¦ä¸ºlogNçš„Id_Chainå¿«é€Ÿå®šä½å‡½æ•° Type Exac æŒ‡Id_Chainçš„åŒåå˜é‡
+	Data_Vector* Data_Chain_Locate(int Type, int Exac, int Depth);//å€Ÿç”±Id_Chain_Locateå‡½æ•°å¯¹ä¸åŒæ·±åº¦çš„Data_Chainå®šä½
+	void Replace_Chain(int OldType, int OldExac, int OldDepth, int Type, int Exac);//è½¬ç§»Data_Chainåˆ°å¦ä¸€ä¸ªId_Chainä¸‹
+	void Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id);//é“¾è¡¨æ·»åŠ å†…å®¹V3 æ·»åŠ åˆ°Vectorä¸­
+	void Get_Item_Status();//è·å–ç‰©å“æ•°å€¼ å¹¶åŠ è½½åˆ°ç»“æ„ä¸­
+	void Clear_Chain();//æ¸…ç†é“¾è¡¨
+	void ResetInstance();//é‡ç½®Itemç»“æ„çš„å†…å®¹
+	inline void OstreamSpace(std::ostream& os, int Before = 0, int After = 0);//æ ¹æ®çº§åˆ«è¾“å‡ºç©ºæ ¼ Beforeç”¨äºæ‰§è¡Œå‰å¯¹çº§åˆ«æ•°å€¼è¿›è¡Œä¿®æ”¹ Afterç”¨äºæ‰§è¡Œå
+	inline void Combine_Status();//ç»„åˆStatuså„ç‰©å“çº§åˆ«å¹¶åˆå¹¶åˆ°Item_Instanceä¸­
 public:
-	TANXL_DataBase(bool Zero_Legal = false);//¹¹Ôìº¯Êı
-	bool Get_LocalData(std::string File_Name);//»ñÈ¡±¾µØÊı¾İ ²¢ĞÂ½¨Ò»¸öÁ´±í Ö§³Ö´ò¿ªÈÎÒâ¸ñÊ½µÄÎÄ¼ş(.usd .sd)
-	//¡ı±à¼­ÊµÀı 0x12030405 1´ú±íCodeÎ» 2´ú±íNameÎ» 03´ú±íOth1Î» ÒÀ´ËÀàÍÆ
-	//¡ıÔÚ1.7°æ±¾ÖĞ¿¼ÂÇµ½ÁãºÏ·¨µÄ²Ù×÷Ò»ÖÂĞÔ ×î´óÖµÒÑ±»×÷Îª²»¿ÉÑ¡±êÖ¾¼´ Code/NameÎ»µÄF »òOthÎ»µÄFF
+	TANXL_DataBase(bool Zero_Legal = false);//æ„é€ å‡½æ•°
+	bool Get_LocalData(std::string File_Name);//è·å–æœ¬åœ°æ•°æ® å¹¶æ–°å»ºä¸€ä¸ªé“¾è¡¨ æ”¯æŒæ‰“å¼€ä»»æ„æ ¼å¼çš„æ–‡ä»¶(.usd .sd)
+	//â†“ç¼–è¾‘å®ä¾‹ 0x12030405 1ä»£è¡¨Codeä½ 2ä»£è¡¨Nameä½ 03ä»£è¡¨Oth1ä½ ä¾æ­¤ç±»æ¨
+	//â†“åœ¨1.7ç‰ˆæœ¬ä¸­è€ƒè™‘åˆ°é›¶åˆæ³•çš„æ“ä½œä¸€è‡´æ€§ æœ€å¤§å€¼å·²è¢«ä½œä¸ºä¸å¯é€‰æ ‡å¿—å³ Code/Nameä½çš„F æˆ–Othä½çš„FF
 	void Set_Instance(unsigned Num, std::string Set);
-	void Get_Specified(int Type, int Exac, int Nums);//¶ÁÈ¡Ö¸¶¨Type(A)_Exac(B)¼¶±ğµÄÎïÆ· ²¢ÔØÈëµ½µ¥Àı½á¹¹ÖĞ Nums±íÊ¾Á´±íÖĞµÄµÚ¼¸¸ö(´Ó0¿ªÊ¼)
-	//¡ıĞŞ¸ÄÖ¸¶¨Type(A)_Exac(B)¼¶±ğµÄÎïÆ· Nums±íÊ¾Á´±íÖĞµÄµÚ¼¸¸ö(´Ó0¿ªÊ¼) levelÈ¡Öµ·¶Î§Îª1~5 ÓÃÓÚÑ¡¶¨Type Exac Oth1 ...
-	//¡ıĞŞ¸ÄOTH1 OTH2 OTH3µÄÊ±ºòÖ±½Ó¸ü¸ÄÏà¹ØÄÚÈİ ĞŞ¸ÄTYPE-EXACÊ± »á×ªÒÆµ±Ç°Data_Chainµ½ĞÂµÄ·ûºÏĞŞ¸ÄºóµÄTYPE-EXACµÄId_ChainÏÂ
+	void Get_Specified(int Type, int Exac, int Nums);//è¯»å–æŒ‡å®šType(A)_Exac(B)çº§åˆ«çš„ç‰©å“ å¹¶è½½å…¥åˆ°å•ä¾‹ç»“æ„ä¸­ Numsè¡¨ç¤ºé“¾è¡¨ä¸­çš„ç¬¬å‡ ä¸ª(ä»0å¼€å§‹)
+	//â†“ä¿®æ”¹æŒ‡å®šType(A)_Exac(B)çº§åˆ«çš„ç‰©å“ Numsè¡¨ç¤ºé“¾è¡¨ä¸­çš„ç¬¬å‡ ä¸ª(ä»0å¼€å§‹) levelå–å€¼èŒƒå›´ä¸º1~5 ç”¨äºé€‰å®šType Exac Oth1 ...
+	//â†“ä¿®æ”¹OTH1 OTH2 OTH3çš„æ—¶å€™ç›´æ¥æ›´æ”¹ç›¸å…³å†…å®¹ ä¿®æ”¹TYPE-EXACæ—¶ ä¼šè½¬ç§»å½“å‰Data_Chainåˆ°æ–°çš„ç¬¦åˆä¿®æ”¹åçš„TYPE-EXACçš„Id_Chainä¸‹
 	void Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data);
-	void Remove_Chain(int Type, int Exac);//É¾³ıÄ³Ò»½ÚµãÓëÆäÏÂËùÓĞÄÚÈİ
-	//¡ıÊä³öµ±Ç°ÄÚ´æÖĞµÄÁ´±íµÄËùÓĞÄÚÈİ ½öÖ§³ÖÊä³öId_VectorºÍData_VectorÖĞµÄÄÚÈİ µ±Ç°ÄÚ´æÎª¿ÕÊ±»áÅ×³ö´íÎó
+	void Remove_Chain(int Type, int Exac);//åˆ é™¤æŸä¸€èŠ‚ç‚¹ä¸å…¶ä¸‹æ‰€æœ‰å†…å®¹
+	//â†“è¾“å‡ºå½“å‰å†…å­˜ä¸­çš„é“¾è¡¨çš„æ‰€æœ‰å†…å®¹ ä»…æ”¯æŒè¾“å‡ºId_Vectorå’ŒData_Vectorä¸­çš„å†…å®¹ å½“å‰å†…å­˜ä¸ºç©ºæ—¶ä¼šæŠ›å‡ºé”™è¯¯
 	void Print_Data();
-	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase.usd");//Ïò±¾µØÎÄ¼şÖĞ(.usd)Ìí¼ÓItemÎïÆ· ´Ëº¯Êı»áµ¼ÖÂItemµ¥ÀıÖØÖÃ
-	//¡ıÊ¹±¾µØ(.usd)ÎÄ¼şµÄÄÚÈİºÏÀí»¯ In_File_NameÎªÊäÈëÎÄ¼şÃû Out_File_NameÎªÊä³öÎÄ¼şÃû ÏÖÔÚ¾ßÓĞ±£´æÁ´±íĞŞ¸Ä¹¦ÄÜ
-	//¡ıModeÎªtrueÊ±´ÓÎÄ¼şÖĞ¶ÁÈ¡Êı¾İ ĞèÒªÌá¹©In/Out_File_Name Ö´ĞĞºóÇå¿ÕÄÚ´æÖĞµÄÁ´±í  ModeÎªfalseÊ±Ö±½Ó¶Ôµ±Ç°ÄÚ´æÖĞµÄÁ´±í½øĞĞÕûÀí ¿ÉÒÔÊ¹ÏÖÓĞÁ´±í¸ÄÎªÉıĞò Ö´ĞĞºó²»Çå¿Õ
+	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase.usd");//å‘æœ¬åœ°æ–‡ä»¶ä¸­(.usd)æ·»åŠ Itemç‰©å“ æ­¤å‡½æ•°ä¼šå¯¼è‡´Itemå•ä¾‹é‡ç½®
+	//â†“ä½¿æœ¬åœ°(.usd)æ–‡ä»¶çš„å†…å®¹åˆç†åŒ– In_File_Nameä¸ºè¾“å…¥æ–‡ä»¶å Out_File_Nameä¸ºè¾“å‡ºæ–‡ä»¶å ç°åœ¨å…·æœ‰ä¿å­˜é“¾è¡¨ä¿®æ”¹åŠŸèƒ½
+	//â†“Modeä¸ºtrueæ—¶ä»æ–‡ä»¶ä¸­è¯»å–æ•°æ® éœ€è¦æä¾›In/Out_File_Name æ‰§è¡Œåæ¸…ç©ºå†…å­˜ä¸­çš„é“¾è¡¨  Modeä¸ºfalseæ—¶ç›´æ¥å¯¹å½“å‰å†…å­˜ä¸­çš„é“¾è¡¨è¿›è¡Œæ•´ç† å¯ä»¥ä½¿ç°æœ‰é“¾è¡¨æ”¹ä¸ºå‡åº æ‰§è¡Œåä¸æ¸…ç©º
 	void SortDataBase(int Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_DataBase");
-	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s);//ÓÃÓÚÖ±½ÓÊä³öµ±Ç°Itemµ¥ÀıÄÚµÄĞÅÏ¢
+	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s);//ç”¨äºç›´æ¥è¾“å‡ºå½“å‰Itemå•ä¾‹å†…çš„ä¿¡æ¯
 };
 
-std::string Combine_Char(std::string data, int Start, int End);//²ğ·ÖcharÊı×é»ñÈ¡Ö¸¶¨ÄÚÈİ£¬StartÎª¿ªÊ¼Î»ÖÃEndÎª½áÊøÎ»ÖÃ(½áÊøÎ»ÖÃ²»±£Áô)
+std::string Combine_Char(std::string data, int Start, int End);//æ‹†åˆ†charæ•°ç»„è·å–æŒ‡å®šå†…å®¹ï¼ŒStartä¸ºå¼€å§‹ä½ç½®Endä¸ºç»“æŸä½ç½®(ç»“æŸä½ç½®ä¸ä¿ç•™)
 
-std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//²ğ·Öµ¥ĞĞÄÚÈİ»ñÈ¡ĞÅÏ¢
+std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//æ‹†åˆ†å•è¡Œå†…å®¹è·å–ä¿¡æ¯
 
-void Reset_Chain(TANXL_DataBase TDB, int Type, int Exac, int Nums);//ÖØÖÃÁ´±íÄ³Ò»µ¥Ôª Nums±íÊ¾A,B levelÏÂµÄµÚ¼¸¸ö(´Ó0¿ªÊ¼)
+void Reset_Chain(TANXL_DataBase TDB, int Type, int Exac, int Nums);//é‡ç½®é“¾è¡¨æŸä¸€å•å…ƒ Numsè¡¨ç¤ºA,B levelä¸‹çš„ç¬¬å‡ ä¸ª(ä»0å¼€å§‹)
 
-void Data(bool Mode = true, bool Zero = true);//²âÊÔÓÃÄ¬ÈÏÊı¾İ ÎªtrueÊ±Ã¿´ÎÌí¼ÓµÄÍ¬Ê±»¹»áÔÚÆÁÄ»ÉÏ´òÓ¡ ZeroÓÃÓÚÑ¡ÔñÌí¼ÓÄ£Ê½ ÎªTrueÊ±Ìí¼ÓµÄÎª0ºÏ·¨µÄÊı¾İ
+void Data(bool Mode = true, bool Zero = true);//æµ‹è¯•ç”¨é»˜è®¤æ•°æ® ä¸ºtrueæ—¶æ¯æ¬¡æ·»åŠ çš„åŒæ—¶è¿˜ä¼šåœ¨å±å¹•ä¸Šæ‰“å° Zeroç”¨äºé€‰æ‹©æ·»åŠ æ¨¡å¼ ä¸ºTrueæ—¶æ·»åŠ çš„ä¸º0åˆæ³•çš„æ•°æ®
 
-void Combine_File(std::string FileA, std::string FileB);//½«FileAºÍFileBµÄÄÚÈİÕûºÏµ½FileAÖĞ ½öÏŞUSD¸ñÊ½ÎÄ¼şÊ¹ÓÃ
+void Combine_File(std::string FileA, std::string FileB);//å°†FileAå’ŒFileBçš„å†…å®¹æ•´åˆåˆ°FileAä¸­ ä»…é™USDæ ¼å¼æ–‡ä»¶ä½¿ç”¨

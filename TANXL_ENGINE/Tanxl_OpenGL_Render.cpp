@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Tanxl_OpenGL_Render.h"
 

@@ -1,4 +1,4 @@
-#include "Tanxl_Engine_Manager.h"
+﻿#include "Tanxl_Engine_Manager.h"
 #include <iomanip>
 int main()
 {
@@ -31,9 +31,9 @@ int main()
 		std::cout << "Updating : " << std::setbase(16) << n << std::endl;
 		NData.Set_Instance(n, "Updating" + std::to_string(n));
 		std::cout << NData;
-		NData.AppendItem(true);
+		NData.AppendItem(false);
 	}
-	//NData.Print_Data();
+	NData.Print_Data();
 
 	//Get Instance
 
@@ -78,7 +78,7 @@ int main()
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, false);
 	
-	system("cls");
+	//system("cls");
 
 	while (1)
 	{

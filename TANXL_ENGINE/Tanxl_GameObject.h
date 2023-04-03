@@ -1,18 +1,18 @@
-//_VERSION_0_3_ UPDATE LOG
+ï»¿//_VERSION_0_3_ UPDATE LOG
 // LAST_UPDATE 2022-05-17 22:56
-// Ìá¹©Ò»¸ö³õÊ¼Ô¤ÉèÉúÃüÖµ×é¼ş
+// æä¾›ä¸€ä¸ªåˆå§‹é¢„è®¾ç”Ÿå‘½å€¼ç»„ä»¶
 
-#ifndef VECTOR//¼ì²éÊÇ·ñÒÑ¾­°üº¬VECTOR
+#ifndef VECTOR//æ£€æŸ¥æ˜¯å¦å·²ç»åŒ…å«VECTOR
 #define VECTOR
 #include <vector>
 #endif
 
-#ifndef STRING//¼ì²éÊÇ·ñÒÑ¾­°üº¬STRING
+#ifndef STRING//æ£€æŸ¥æ˜¯å¦å·²ç»åŒ…å«STRING
 #define STRING
 #include <string>
 #endif
 
-//×é¼şÀà
+//ç»„ä»¶ç±»
 
 class ComponmentBase
 {
@@ -27,7 +27,7 @@ private:
 	std::string ComponmentName;
 };
 
-//ÓÎÏ·ÎïÆ·Àà
+//æ¸¸æˆç‰©å“ç±»
 
 class GameObjectBase
 {
@@ -40,10 +40,10 @@ private:
 
 bool GameObjectBase::AppendComponment(ComponmentBase* CM)
 {
-	for (int i = 0; i < CMB.size(); i++)//¸ù¾İÃû³ÆÌí¼Ó
+	for (int i = 0; i < CMB.size(); i++)//æ ¹æ®åç§°æ·»åŠ 
 	{
 		if (CMB.at(i)->GetName() == CM->GetName())
-			return false;//³öÏÖÍ¬Ãû×é¼ş¡ª¡ªÌí¼ÓÊ§°Ü
+			return false;//å‡ºç°åŒåç»„ä»¶â€”â€”æ·»åŠ å¤±è´¥
 	}
 	CMB.push_back(CM);
 	return true;
@@ -51,7 +51,7 @@ bool GameObjectBase::AppendComponment(ComponmentBase* CM)
 
 bool GameObjectBase::RemoveComponment(std::string Name)
 {
-	for (std::vector<ComponmentBase*>::iterator IOCB; IOCB!= CMB.end(); IOCB++)//¸ù¾İÃû³ÆÉ¾³ı
+	for (std::vector<ComponmentBase*>::iterator IOCB; IOCB!= CMB.end(); IOCB++)//æ ¹æ®åç§°åˆ é™¤
 	{
 		if (( * IOCB)->GetName() == Name)
 		{
