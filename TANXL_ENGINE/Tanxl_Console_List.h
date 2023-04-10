@@ -3,28 +3,17 @@
 // Display接口去掉不必要的颜色清除功能
 // Display接口改为私有
 // 输入接口提供退出功能
+// 重新修订重复包含检查
 
 #pragma once
 
-#ifndef IOSTREAM//检查是否已经包含IOSTREAM
-#define IOSTREAM
+#ifndef _TANXL_CONSOLE_LIST_
+#define _TANXL_CONSOLE_LIST_
+
 #include <iostream>
-#endif
-
-#ifndef VECTOR//检查是否已经包含VECTOR
-#define VECTOR
 #include <vector>
-#endif
-
-#ifndef CONIO_H//检查是否已经包含CONIO_H
-#define CONIO_H
 #include <conio.h>
-#endif
-
-#ifndef IOMANIP//检查是否已经包含IOMANIP
-#define IOMANIP
 #include <iomanip>
-#endif
 
 enum EFont_Color
 {
@@ -82,3 +71,5 @@ private:
 
 	unsigned _SSpace;// { 0x171109 }选项和标题的空格数 AA-BB-CC AA左空格 BB右空格 CC页面物品限制数量
 };
+
+#endif

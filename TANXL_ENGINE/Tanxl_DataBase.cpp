@@ -67,7 +67,7 @@ std::string Divid_Char(std::string data, int Mode)
 	return "";
 }
 
-void Reset_Chain(TANXL_DataBase TDB, int A, int B, int Nums)
+void Reset_Chain(TANXL_DataBase& TDB, int A, int B, int Nums)
 {
 	TDB.Set_Specified(A, B, Nums, 3, -1, "NULL");
 	TDB.Set_Specified(A, B, Nums, 4, -1, "NULL");

@@ -177,10 +177,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Tanxl_Console_List.cpp" />
     <ClCompile Include="Tanxl_DataBase.cpp" />
+    <ClCompile Include="Tanxl_GameEvent.h" />
     <ClCompile Include="Tanxl_GameState.cpp" />
     <ClCompile Include="Tanxl_InsertAction.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Render.cpp" />
+    <ClCompile Include="Tanxl_GameEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragShader.glsl" />

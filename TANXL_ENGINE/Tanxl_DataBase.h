@@ -4,33 +4,19 @@
 // 修复三十二位的获取Status函数采用二十位操作方式的错误
 // 储存模块设置物品函数执行效率提升
 // 修改一个私有变量名称使之贴合意思
+// Reset_Chain接口现在需要传入地址
+// 重新修订重复包含检查
 
 #pragma once
 
-#ifndef IOSTREAM
-#define IOSTREAM
+#ifndef _TANXL_DATABASE_
+#define _TANXL_DATABASE_
+
 #include<iostream>
-#endif
-
-#ifndef FSTREAM
-#define FSTREAM
 #include<fstream>
-#endif
-
-#ifndef STRING
-#define STRING
 #include<string>
-#endif
-
-#ifndef SSTREAM
-#define SSTREAM
 #include<sstream>
-#endif
-
-#ifndef VECTOR
-#define VECTOR
 #include<vector>
-#endif
 
 enum ESort_Mode//为SortDataBase函数提供的功能枚举
 {
@@ -124,8 +110,10 @@ std::string Combine_Char(std::string data, int Start, int End);//拆分char数�
 
 std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//拆分单行内容获取信息
 
-void Reset_Chain(TANXL_DataBase TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
+void Reset_Chain(TANXL_DataBase& TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
 
 void Data(bool Mode = true, bool Zero = true);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印 Zero用于选择添加模式 为True时添加的为0合法的数据
 
 void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
+
+#endif

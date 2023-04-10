@@ -4,31 +4,6 @@
 
 //Core
 
-//GameEvent
-
-GameEvent::GameEvent(std::string Name) :_EventName(Name) {}
-
-//GameEventBase
-
-void GameEventBase::RegistEvent(GameEvent* Event)
-{
-	_GameEvents.push_back(Event);
-}
-
-GameEvent* GameEventBase::GetGameEvent(std::string EventName)
-{
-	for (int i = 0; i < _GameEvents.size(); i++)
-		if (_GameEvents.at(i)->GetEventName() == EventName)
-			return _GameEvents.at(i);
-	return NULL;
-}
-
-GameEventBase& GameEventBase::GetEventBase()
-{
-	static GameEventBase* EventBase = new GameEventBase;
-	return *EventBase;
-}
-
 //StateUnit
 
 StateUnit::StateUnit(GameEvent* GE, int State_Id, bool MoveTarget)

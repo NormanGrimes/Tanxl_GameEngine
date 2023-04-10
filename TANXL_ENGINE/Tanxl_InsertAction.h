@@ -6,33 +6,19 @@
 // 修改按键事件容器为指针容器
 // 根据不同类型的按键增加不同添加方式
 // 输入操作中的隐式转型改为显式转型
+// 重新修订重复包含检查
+// 获取输入接口移除默认参数且需要传入非空变量
 
 #pragma once
 
-#ifndef VECTOR
-#define VECTOR
+#ifndef _TANXL_INSERTACTION_
+#define _TANXL_INSERTACTION_
+
 #include <vector>
-#endif
-
-#ifndef IOSTREAM
-#define IOSTREAM
 #include <iostream>
-#endif
-
-#ifndef GL_GLEW_H
-#define GL_GLEW_H
 #include <GL\glew.h>
-#endif
-
-#ifndef GLFW_GLFW3_H
-#define GLFW_GLFW3_H
 #include <GLFW\glfw3.h>
-#endif
-
-#ifndef STRING
-#define STRING
 #include <string>
-#endif
 
 struct Key_Unit
 {
@@ -64,7 +50,7 @@ public:
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit* KU);
 	void RemoveEvent();
-	void GetInsert(GLFWwindow* window, float* MoveX, float* MoveY, float* StateX = NULL, float* StateY = NULL, float* deputyX = NULL, float* deputyY = NULL);
+	void GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& deputyX, float& deputyY);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
 	//在使用后会导致Set_MaxFloat_Height/Width功能无效化
@@ -103,3 +89,5 @@ private:
 	InsertEventBase(const InsertEventBase&);
 	InsertEventBase& operator=(const InsertEventBase&);
 };
+
+#endif

@@ -71,6 +71,12 @@
     <ClCompile Include="Tanxl_OpenGL_Render.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Tanxl_GameEvent.h">
+      <Filter>头文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanxl_GameEvent.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt">

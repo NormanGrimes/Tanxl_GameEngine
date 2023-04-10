@@ -6,38 +6,20 @@
 // 此模块修改为单例模式
 // 将自动调整的记录变量移入类成员并修改名称
 // 绘制循环中的隐式转型改为显式转型
+// 重新修订重复包含检查
+// 半边长计算改为边长计算
 
 #pragma once
 
-#ifndef TANXL_DATABASE_H
-#define TANXL_DATABASE_H
+#ifndef _TANXL_OPENGL_DRAW_
+#define _TANXL_OPENGL_DRAW_
+
 #include "Tanxl_DataBase.h"
-#endif
-
-#ifndef TANXL_GAMESTATE_H
-#define TANXL_GAMESTATE_H
 #include "Tanxl_GameState.h"
-#endif
-
-#ifndef TANXL_INSERTACTION_H
-#define TANXL_INSERTACTION_H
 #include "Tanxl_InsertAction.h"
-#endif
-
-#ifndef TANXL_OPENGL_RENDER_H
-#define TANXL_OPENGL_RENDER_H
 #include "Tanxl_OpenGL_Render.h"
-#endif
-
-#ifndef TANXL_UNIQUEID
-#define TANXL_UNIQUEID
 #include "Tanxl_UniqueID.h"
-#endif
-
-#ifndef MATH_H
-#define MATH_H
 #include <math.h>
-#endif
 
 class OpenGL_Draw
 {
@@ -93,3 +75,5 @@ private:
 	int _First_Adjust;
 	GLFWwindow* _Main_Window;
 };
+
+#endif

@@ -1,18 +1,14 @@
 ﻿//_VERSION_0_7_ UPDATE LOG
 // LAST_UPDATE 2022-11-27 14:54
 // 提供开关自动调整坐标的接口
+// 重新修订重复包含检查
 
 #pragma once
 
-#ifndef VECTOR
-#define VECTOR
-#include<vector>
-#endif
+#ifndef _TANXL_GAMESTATE_
+#define _TANXL_GAMESTATE_
 
-#ifndef STRING
-#define STRING
-#include<string>
-#endif
+#include "Tanxl_GameEvent.h"
 
 enum EMove_State_EventId
 {
@@ -36,33 +32,6 @@ struct SLocation
 	SLocation(float LocX, float LocY);
 	float _LocX;
 	float _LocY;
-};
-
-class GameEvent
-{
-public:
-	GameEvent(std::string Name = "");
-	std::string GetEventName();
-	virtual void EventAction() = 0;
-private:
-	std::string _EventName;
-};
-
-//GameEventBase
-
-class GameEventBase
-{
-public:
-	//注册游戏事件 如果仅定义事件而不注册则不会产生任何效果
-	void RegistEvent(GameEvent* Event);
-	static GameEventBase& GetEventBase();
-	GameEvent* GetGameEvent(std::string EventName);
-private:
-	GameEventBase();
-	~GameEventBase();
-	GameEventBase(const GameEventBase&);
-	GameEventBase& operator=(const GameEventBase&);
-	std::vector<GameEvent*> _GameEvents;
 };
 
 //StateUnit CLASS
@@ -143,3 +112,5 @@ private:
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
 };
+
+#endif
