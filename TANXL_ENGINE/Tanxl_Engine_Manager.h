@@ -4,38 +4,19 @@
 // 2022/10/4加入两个State模块接口
 // 2022/10/10更新地图数据编译接口 增加InsertBase的支持
 // 2022/11/07引擎管理模块增加控制移动最大距离的接口
+// 2022/12/27修改头文件包含方式
 
 #pragma once
 
-#ifndef TANXL_CONSOLE_LIST
-#define TANXL_CONSOLE_LIST
+#ifndef _TANXL_ENGINE_MANAGER_
+#define _TANXL_ENGINE_MANAGER_
+
 #include "Tanxl_Console_List.h"
-#endif
-
-#ifndef TANXL_DATABASE
-#define TANXL_DATABASE
 #include "Tanxl_DataBase.h"
-#endif
-
-#ifndef TANXL_GAMESTATE
-#define TANXL_GAMESTATE
 #include "Tanxl_GameState.h"
-#endif
-
-#ifndef TANXL_INSERTACTION
-#define TANXL_INSERTACTION
 #include "Tanxl_InsertAction.h"
-#endif
-
-#ifndef TANXL_OPENGL_DRAW
-#define TANXL_OPENGL_DRAW
 #include "Tanxl_OpenGL_Draw.h"
-#endif
-
-#ifndef TANXL_OPENGL_RENDER
-#define TANXL_OPENGL_RENDER
 #include "Tanxl_OpenGL_Render.h"
-#endif
 
 class Tanxl_Engine
 {
@@ -104,7 +85,7 @@ public:
 	{
 		Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);
 		Tanxl_Engine_GameState->Set_Adjust(Adjust_Value);
-		Tanxl_Engine_OpenGL_Draw->Set_Adjust(Enable_While_Move);
+		Tanxl_Engine_OpenGL_Draw->Set_Adjust_While_Move(Enable_While_Move);
 	}
 
 private:
@@ -115,3 +96,5 @@ private:
 	OpenGL_Draw* Tanxl_Engine_OpenGL_Draw;
 	InsertEventBase* Tanxl_Engine_InsertBase;
 };
+
+#endif

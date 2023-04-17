@@ -3,7 +3,12 @@
 // 添加根据种子生成随机ID的功能
 // 格式调整
 // 增加生成储存条目功能
+
 #pragma once
+
+#ifndef _TANXL_UNIQUEID_
+#define _TANXL_UNIQUEID_
+
 #include <string>
 #include <iostream>
 //using namespace std;
@@ -82,3 +87,5 @@ private:
     UniqueIdBase(const UniqueIdBase&) {}
     UniqueIdBase& operator=(const UniqueIdBase&) { return *this; }
 };
+
+#endif

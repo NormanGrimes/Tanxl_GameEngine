@@ -1,16 +1,14 @@
 ﻿//_VERSION_0_3_ UPDATE LOG
 // LAST_UPDATE 2022-05-17 22:56
 // 提供一个初始预设生命值组件
+// 修改头文件包含方式
 
-#ifndef VECTOR//检查是否已经包含VECTOR
-#define VECTOR
+
+#ifndef _TANXL_GAME_OBJECT_
+#define _TANXL_GAME_OBJECT_
+
 #include <vector>
-#endif
-
-#ifndef STRING//检查是否已经包含STRING
-#define STRING
 #include <string>
-#endif
 
 //组件类
 
@@ -92,3 +90,5 @@ public:
 private:
 	int _Life_Count;
 };
+
+#endif

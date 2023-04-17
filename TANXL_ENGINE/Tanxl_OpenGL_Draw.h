@@ -8,6 +8,7 @@
 // 绘制循环中的隐式转型改为显式转型
 // 重新修订重复包含检查
 // 半边长计算改为边长计算
+// 修改Set_Adjust函数名称
 
 #pragma once
 
@@ -34,7 +35,7 @@ public:
 	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFra(int First_Adjust);
-	void Set_Adjust(bool Enable);
+	void Set_Adjust_While_Move(bool Enable);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
 private:

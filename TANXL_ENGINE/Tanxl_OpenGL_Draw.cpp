@@ -129,7 +129,7 @@ void OpenGL_Draw::Set_WaitFra(int First_Adjust)
 	this->_First_Adjust = First_Adjust;
 }
 
-void OpenGL_Draw::Set_Adjust(bool Enable)
+void OpenGL_Draw::Set_Adjust_While_Move(bool Enable)
 {
 	this->_Adjust_While_Move = Enable;
 }
@@ -321,8 +321,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (Diff_Cnt != 0)
 				ReLoadState(State);
 		}
-
-
 
 		//std::cout << "DeptVX / DeptVY" << DeptVX << "__" << DeptVY << std::endl;
 		//std::cout << "MDeptVX / MDeptVY" << MDeptVX << "__" << MDeptVY << std::endl;

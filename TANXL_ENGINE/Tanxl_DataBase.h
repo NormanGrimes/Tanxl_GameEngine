@@ -6,6 +6,7 @@
 // 修改一个私有变量名称使之贴合意思
 // Reset_Chain接口现在需要传入地址
 // 重新修订重复包含检查
+// 为匿名结构体成员增加初始化
 
 #pragma once
 
@@ -65,11 +66,11 @@ private:
 	struct
 	{
 		unsigned Item_Status{ 0 };
-		unsigned Status_1{}; std::string Code;
-		unsigned Status_2{}; std::string Name;
-		unsigned Status_3{}; std::string Oth1;
-		unsigned Status_4{}; std::string Oth2;
-		unsigned Status_5{}; std::string Oth3;
+		unsigned Status_1{}; std::string Code{};
+		unsigned Status_2{}; std::string Name{};
+		unsigned Status_3{}; std::string Oth1{};
+		unsigned Status_4{}; std::string Oth2{};
+		unsigned Status_5{}; std::string Oth3{};
 	}Item_Instance;
 
 	std::vector<Id_Vector*>* IC_Vector;

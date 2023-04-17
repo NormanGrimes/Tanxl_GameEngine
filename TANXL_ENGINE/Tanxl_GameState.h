@@ -103,6 +103,7 @@ private:
 	int _GameState_Height;
 	//_GameState_Adjust用于记录每次自动调整的距离
 	float _GameState_Adjust;
+	//_Adjust_Enable用于标记是否启用了自动调整
 	bool _Adjust_Enable;
 	bool _Is_Adjusting;
 	bool _Compile_Success;
