@@ -30,7 +30,7 @@ int main()
 		if ((n & 0xf0000000) == 0xf0000000)
 			n -= 0xf0000000;
 
-		std::cout << "Updating : " << std::setbase(16) << n << std::endl;
+		//std::cout << "Updating : " << std::setbase(16) << n << std::endl;
 		NData.Set_Instance(n, "Updating" + std::to_string(n));
 		std::cout << NData;
 		NData.AppendItem(false);
@@ -54,16 +54,16 @@ int main()
 		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");*/
 
 	TGE.Engine_State_Compile_Uints(10, 10,
-		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,"
-		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
-		"a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-0,a-0,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-1,a-1,a-1,a-1,a-1,a-0,a-1,"
-		"a-1,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-0,a-1,"
-		"a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,");
+		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,"
+		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,"
+		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,"
+		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,"
+		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,"
+		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,"
+		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,");
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -78,14 +78,12 @@ int main()
 
 	TGE.Engine_State_Set_Display(5, 5);
 	TGE.Engine_Insert_State_Limit(true);
-	TGE.Engine_Adjust_Multi_Set(true, 0.005f, false);
+	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 	
 	//system("cls");
 
 	while (1)
 	{
-		std::cout << "1\b";
-
 		static int First = 0;
 		static int Timer = 0;
 		Timer++;

@@ -1,6 +1,7 @@
 //_VERSION_0_6_ UPDATE LOG
 // LAST_UPDATE 2022-09-15 21:30
 // 正式加入视角移动功能
+// 增加第四种状态颜色
 
 #version 430
 
@@ -45,8 +46,10 @@ void main(void)
 				vs_color = vec4(1.0f, 0.8f, 0.1f, 1.0f);
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 0.8f, 1.0f, 1.0f);
+			else if(State[i - 1] == 2)
+				vs_color = vec4(1.0f, 0.8f, 0.4f, 1.0f);
 			else
-				vs_color = vec4(1.0f, 0.8f, 1.0f, 1.0f);
+				vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
 		}
 		else if (gl_VertexID == i * 6 + 1) 
 		{ 
@@ -56,6 +59,8 @@ void main(void)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else if(State[i - 1] == 2)
+				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 			else
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
@@ -67,6 +72,8 @@ void main(void)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else if(State[i - 1] == 2)
+				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 			else
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
@@ -78,6 +85,8 @@ void main(void)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else if(State[i - 1] == 2)
+				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 			else
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
@@ -89,6 +98,8 @@ void main(void)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else if(State[i - 1] == 2)
+				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 			else
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}
@@ -100,6 +111,8 @@ void main(void)
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 			else if(State[i - 1] == 1)
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+			else if(State[i - 1] == 2)
+				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 			else
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 		}

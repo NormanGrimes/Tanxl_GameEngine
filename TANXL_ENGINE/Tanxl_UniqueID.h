@@ -3,6 +3,7 @@
 // 添加根据种子生成随机ID的功能
 // 格式调整
 // 增加生成储存条目功能
+// 增加每次调用都会修改种子的生成函数
 
 #pragma once
 
@@ -41,6 +42,20 @@ public:
     {
         std::string Data{};
         srand(static_cast<unsigned int>(seed));
+        for (int i = 0; i < 15; i++)
+        {
+            if (i % 5 == 0 && i != 0)
+                Data += "-";
+            Data += Uniqt[rand() % 62];
+        }
+        return Data;
+    }
+
+    std::string GenerateAutoSeed()
+    {
+        static unsigned int seed = 0;
+        std::string Data{};
+        srand(seed++);
         for (int i = 0; i < 15; i++)
         {
             if (i % 5 == 0 && i != 0)

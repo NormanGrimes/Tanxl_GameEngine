@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-11-27 14:54
 // 提供开关自动调整坐标的接口
 // 重新修订重复包含检查
+// 修订部分变量名称
 
 #pragma once
 
@@ -74,8 +75,8 @@ public:
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
 	void Set_Enable_Adjust(bool Enable);
-	void Set_ExacHeight(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);//可选功能 对2D棋盘上的物品微调位置
-	void Set_ExacWidth(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Deputy = NULL);
+	void Set_ExacHeight(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Auto_Adjust_Length = NULL);//可选功能 对2D棋盘上的物品微调位置
+	void Set_ExacWidth(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Auto_Adjust_Length = NULL);
 	void Set_Adjust_Frequency(int Frame);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);

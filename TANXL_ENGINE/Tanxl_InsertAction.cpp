@@ -2,13 +2,30 @@
 
 #include "Tanxl_InsertAction.h"
 
-Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0) {}
+Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0) 
+{
+	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
+	Unit_Name = UIB->GenerateAutoSeed();
+	std::cout << "KeyUnit :" << Unit_Name << std::endl;
+}
 
-Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL)
-	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0) {}
+Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
+	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0) 
+{
+	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
+	if (UNAM == "")
+		UNAM = UIB->GenerateAutoSeed();
+	std::cout << "KeyUnit :" << UNAM << std::endl;
+}
 
-Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY) :
-	GLFW_KEY(GLKEY), MoveToX(CustomX), MoveToY(CustomY), MoveLen(0.0f), Unit_Type(1) {}
+Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
+	GLFW_KEY(GLKEY), MoveToX(CustomX), MoveToY(CustomY), MoveLen(0.0f), Unit_Type(1) 
+{
+	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
+	if (UNAM == "")
+		UNAM = UIB->GenerateAutoSeed();
+	std::cout << "KeyUnit :" << UNAM << std::endl;
+}
 
 InsertEventBase& InsertEventBase::GetInsertBase()
 {
@@ -37,7 +54,7 @@ void InsertEventBase::RemoveEvent()
 	_KeyEventS.pop_back();
 }
 
-void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& deputyX, float& deputyY)
+void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& Move_AdjustX, float& Move_AdjustY)
 {
 	for (int i = 0; i < _KeyEventS.size(); i++)
 	{
@@ -55,30 +72,22 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 			}
 			if (_KeyEventS.at(i)->MoveToX)
 			{
-				//*deputyX += _KeyEventS.at(i).MoveLen;
 				MoveX += static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_X = static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_Y = 0;
 			}
 			if (_KeyEventS.at(i)->MoveToY)
 			{
-				//*deputyY += _KeyEventS.at(i).MoveLen;
 				MoveY += static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_Y = static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_X = 0;
 			}
 			if (AutoCheck(&MoveX, &MoveY) == 3 && _KeyEventS.at(i)->Unit_Type == 0)
 			{
-				deputyX -= _Margin_X;
-				deputyY -= _Margin_Y;
-
-				if (StateX != NULL && StateY != NULL)
-				{
-					//*deputyX -= _Margin_X;
-					//*deputyY -= _Margin_Y;
-					StateX -= _Margin_X;
-					StateY -= _Margin_Y;
-				}
+				Move_AdjustX -= _Margin_X;
+				Move_AdjustY -= _Margin_Y;
+				StateX -= _Margin_X;
+				StateY -= _Margin_Y;
 			}
 			//std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
 			//std::cout << "BUTTON PUSHED x_" << *deputyX << "y_" << *deputyY << std::endl;
@@ -134,6 +143,19 @@ bool InsertEventBase::Get_Key_Pressed()
 	bool Temp_Element = _Is_Key_Pressed;
 	_Is_Key_Pressed = false;
 	return Temp_Element;
+}
+
+bool InsertEventBase::RemoveEvent(std::string Event_Name)
+{
+	for (int i = 0; i < _KeyEventS.size(); i++)
+	{
+		if (_KeyEventS.at(i)->Unit_Name == Event_Name)
+		{
+			_KeyEventS.erase(_KeyEventS.begin() + i);
+			return true;
+		}
+	}
+	return false;
 }
 
 unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, float* DeptY)

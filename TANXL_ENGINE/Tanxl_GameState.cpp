@@ -108,7 +108,7 @@ Move_State GameStateBase::Get_Move_State()
 	return this->_MState;
 }
 #include <iostream>
-void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* MoveY, float* Deputy)
+void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* MoveY, float* Auto_Adjust_Length)
 {
 	static int EHCountS = 0;
 	static int EHCountL = 0;
@@ -127,13 +127,13 @@ void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* Mov
 				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "A MoveState  _" << *MoveState << std::endl;
 				*MoveY += Temp_Move;
-				*Deputy += Temp_Move;
+				*Auto_Adjust_Length += Temp_Move;
 				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 			}
 			else
 			{
-				*Deputy += _GameState_Adjust;
+				*Auto_Adjust_Length += _GameState_Adjust;
 				*MoveState += _GameState_Adjust;
 				*MoveY += _GameState_Adjust;
 			}
@@ -151,7 +151,7 @@ void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* Mov
 		{
 			if (*MoveState > _GameState_Adjust)
 			{
-				*Deputy -= _GameState_Adjust;
+				*Auto_Adjust_Length -= _GameState_Adjust;
 				*MoveState -= _GameState_Adjust;
 				*MoveY -= _GameState_Adjust;
 			}
@@ -161,7 +161,7 @@ void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* Mov
 				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "B MoveState  _" << *MoveState << std::endl;
 				*MoveY -= Temp_Move;
-				*Deputy -= Temp_Move;
+				*Auto_Adjust_Length -= Temp_Move;
 				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 			}
@@ -173,7 +173,7 @@ void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* Mov
 		EHCountL = 0;
 }
 
-void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* MoveX, float* Deputy)
+void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* MoveX, float* Auto_Adjust_Length)
 {
 	static int EWCountS = 0;
 	static int EWCountL = 0;
@@ -194,13 +194,13 @@ void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* Move
 				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "A MoveState  _" << *MoveState << std::endl;
 				*MoveX += Temp_Move;
-				*Deputy += Temp_Move;
+				*Auto_Adjust_Length += Temp_Move;
 				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 			}
 			else
 			{
-				*Deputy += _GameState_Adjust;
+				*Auto_Adjust_Length += _GameState_Adjust;
 				*MoveState += _GameState_Adjust;
 				*MoveX += _GameState_Adjust;
 			}
@@ -220,7 +220,7 @@ void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* Move
 			//MoveSet += _GameState_Adjust;
 			if (*MoveState > _GameState_Adjust)
 			{
-				*Deputy -= _GameState_Adjust;
+				*Auto_Adjust_Length -= _GameState_Adjust;
 				*MoveState -= _GameState_Adjust;
 				*MoveX -= _GameState_Adjust;
 			}
@@ -232,7 +232,7 @@ void GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* Move
 				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "B MoveState  _" << *MoveState << std::endl;
 				*MoveX -= Temp_Move;
-				*Deputy -= Temp_Move;
+				*Auto_Adjust_Length -= Temp_Move;
 				*MoveState = 0;
 				std::cout << " MoveState  _" << *MoveState << std::endl;
 				//*MoveState = *MoveState / 1;

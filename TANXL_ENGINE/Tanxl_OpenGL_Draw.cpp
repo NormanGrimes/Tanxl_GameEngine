@@ -22,7 +22,7 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.14", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.15", NULL, NULL);
 	glfwMakeContextCurrent(_Main_Window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
@@ -75,8 +75,8 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	{
 		for (int i = 0; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads); i++)
 		{
-			if (Move_PX < 0 || Move_NX >static_cast<int>(State->Get_DataWidth()) || //现阶段Data宽度不可能导致转换溢出
-				Move_PY < 0 || Move_NY >static_cast<int>(State->Get_DataHeight()))
+			if (Move_PX < 0 || static_cast<unsigned>(Move_NX) > State->Get_DataWidth() || //现阶段Data宽度不可能导致转换溢出
+				Move_PY < 0 || static_cast<unsigned>(Move_NY) > State->Get_DataHeight())
 			{
 				_StateInfor[i] = 3;
 			}
@@ -172,14 +172,14 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		_Position = glGetUniformLocation(_renderingProgram, "MoveY");
 		glProgramUniform1f(_renderingProgram, _Position, MoveY);
 
-		static float MDeptVX = ((float)State->Get_StateWidth()) / 2;
-		static float MDeptVY = ((float)State->Get_StateHeight()) / 2;
+		static float Move_AdjustX = ((float)State->Get_StateWidth()) / 2;
+		static float Move_AdjustY = ((float)State->Get_StateHeight()) / 2;
 
-		static int CUH = static_cast<int>(MDeptVY / Each_Height);
-		static int CUW = static_cast<int>(MDeptVX / Each_Width);
+		static int CUH = static_cast<int>(Move_AdjustY / Each_Height);
+		static int CUW = static_cast<int>(Move_AdjustX / Each_Width);
 
-		int NCUH = static_cast<int>(MDeptVY / Each_Height);
-		int NCUW = static_cast<int>(MDeptVX / Each_Width);
+		int NCUH = static_cast<int>(Move_AdjustY / Each_Height);
+		int NCUW = static_cast<int>(Move_AdjustX / Each_Width);
 
 		static int ACUH = static_cast<int>(_Auto_AdjustY / Each_Height);
 		static int ACUW = static_cast<int>(_Auto_AdjustX / Each_Width);
@@ -197,7 +197,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(_Main_Window, MoveX, MoveY, _State_MoveX, _State_MoveY, MDeptVX, MDeptVY);//获取输入
+		IEB->GetInsert(_Main_Window, MoveX, MoveY, _State_MoveX, _State_MoveY, Move_AdjustX, Move_AdjustY);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
@@ -226,102 +226,128 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			State->Set_ExacWidth(Current_Width, &MoveX, &_State_MoveX, &_Auto_AdjustX);
 			Wait_Frame = 0;
 			
-			int Diff_Cnt = 0;
-
 			if (ANCUH != ACUH)
 			{
+				std::cout << "ANCUH __ " << ANCUH << " ACUH __ " << ACUH << std::endl;
+				int TempVal = ANCUH;
+				std::cout << "ANCUH != ACUH State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (ANCUH < ACUH)
 				{
-					State->Set_Move_State(MoveToPH);
-					_State_MoveY += static_cast<float>(Each_Height);
+					while (ANCUH++ < ACUH)
+					{
+						State->Set_Move_State(MoveToPH);
+						_State_MoveY += static_cast<float>(Each_Height);
+					}
 				}
 				else if (ANCUH > ACUH)
 				{
-					State->Set_Move_State(MoveToNH);
-					_State_MoveY -= static_cast<float>(Each_Height);
+					while (ANCUH-- > ACUH)
+					{
+						State->Set_Move_State(MoveToNH);
+						_State_MoveY -= static_cast<float>(Each_Height);
+					}
 				}
-				Diff_Cnt++;
-				std::cout << "ANCUH __ " << ANCUH << "ACUH __ " << ACUH << std::endl;
-				ACUH = ANCUH;
-				std::cout << "ANCUH != ACUH State->Get_Adjust_Flag() RELOAD" << std::endl;
+				ACUH = TempVal;
+				_Is_State_Changed = true;
 			}
 
 			if (ANCUW != ACUW)
 			{
+				std::cout << "ANCUW __ " << ANCUW << " CUW __ " << ACUW << std::endl;
+				int TempVal = ANCUW;
+				std::cout << "ANCUW != ACUW State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (ANCUW < ACUW)
 				{
-					State->Set_Move_State(MoveToNW);
-					_State_MoveX += static_cast<float>(Each_Width);
+					while (ANCUW++ < ACUW)
+					{
+						State->Set_Move_State(MoveToNW);
+						_State_MoveX += static_cast<float>(Each_Width);
+					}
 				}
 				else if (ANCUW > ACUW)
 				{
-					State->Set_Move_State(MoveToPW);
-					_State_MoveX -= static_cast<float>(Each_Width);
+					while (ANCUW-- > ACUW)
+					{
+						State->Set_Move_State(MoveToPW);
+						_State_MoveX -= static_cast<float>(Each_Width);
+					}
 				}
-				Diff_Cnt++;
-				std::cout << "ANCUW __ " << ANCUW << "CUW __ " << ACUW << std::endl;
-				ACUW = ANCUW;
-				std::cout << "ANCUW != ACUW State->Get_Adjust_Flag() RELOAD" << std::endl;
+				ACUW = TempVal;
+				_Is_State_Changed = true;
 			}
-
-			if (Diff_Cnt != 0)
-				ReLoadState(State);
 		}
-		else
+		
+		if(!State->Get_Adjust_Flag() || _Adjust_While_Move)
 		{
 			//std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
 			if (Wait_Frame == _First_Adjust)
 			{
 				State->Set_Adjust_Flag(true);
+				Wait_Frame = 0;
 			}
 			else
 				Wait_Frame++;
 
-			int Diff_Cnt = 0;
-
 			if (NCUH != CUH)
 			{
+				std::cout << "NCUH __ " << NCUH << " CUH __ " << CUH << std::endl;
+				int TempVal = NCUH;
+				std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (NCUH > CUH)
 				{
-					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToNH);
-					_State_MoveY -= static_cast<float>(Each_Height);
+					while (NCUH-- > CUH)
+					{
+						//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
+						State->Set_Move_State(MoveToNH);
+						_State_MoveY -= static_cast<float>(Each_Height);
+					}
 				}
 				else if (NCUH < CUH)
 				{
-					//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToPH);
-					_State_MoveY += static_cast<float>(Each_Height);
+					while (NCUH++ < CUH)
+					{
+						//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
+						State->Set_Move_State(MoveToPH);
+						_State_MoveY += static_cast<float>(Each_Height);
+					}
 				}
-				Diff_Cnt++;
-				std::cout << "NCUH __ " << NCUH << "CUH __ " << CUH << std::endl;
-				CUH = NCUH;
-				std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
+				CUH = TempVal;
+				_Is_State_Changed = true;
 			}
 
 			if (NCUW != CUW)
 			{
+				std::cout << "NCUW __ " << NCUW << " CUW __ " << CUW << std::endl;
+				int TempVal = NCUW;
+				std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (NCUW > CUW)
 				{
-					//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToPW);
-					_State_MoveX -= static_cast<float>(Each_Width);
+					while (NCUW-- > CUW)
+					{
+						//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
+						State->Set_Move_State(MoveToPW);
+						_State_MoveX -= static_cast<float>(Each_Width);
+					}
 				}
 				else if (NCUW < CUW)
 				{
-					//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
-					State->Set_Move_State(MoveToNW);
-					_State_MoveX += static_cast<float>(Each_Width);
+					while (NCUW++ < CUW)
+					{
+						//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
+						State->Set_Move_State(MoveToNW);
+						_State_MoveX += static_cast<float>(Each_Width);
+					}
 				}
-				Diff_Cnt++;
-				std::cout << "NCUW __ " << NCUW << "CUW __ " << CUW << std::endl;
-				CUW = NCUW;
-				std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
+				CUW = TempVal;
+				_Is_State_Changed = true;
 			}
-			if (Diff_Cnt != 0)
-				ReLoadState(State);
+			
 		}
-
+		if (_Is_State_Changed)
+		{
+			ReLoadState(State);
+			_Is_State_Changed = false;
+		}
 		//std::cout << "DeptVX / DeptVY" << DeptVX << "__" << DeptVY << std::endl;
 		//std::cout << "MDeptVX / MDeptVY" << MDeptVX << "__" << MDeptVY << std::endl;
 

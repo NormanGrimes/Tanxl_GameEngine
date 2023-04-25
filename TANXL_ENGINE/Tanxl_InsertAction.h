@@ -1,13 +1,9 @@
-﻿//_VERSION_0_6_ UPDATE LOG
-// LAST_UPDATE 2022-11-12 10:43
-// 提供移除最近已注册按键的功能
-// 四个移动操作更改为预定义操作
-// 提供特殊按钮的功能
-// 修改按键事件容器为指针容器
-// 根据不同类型的按键增加不同添加方式
-// 输入操作中的隐式转型改为显式转型
-// 重新修订重复包含检查
-// 获取输入接口移除默认参数且需要传入非空变量
+﻿//_VERSION_0_7_ UPDATE LOG
+// LAST_UPDATE 2022-12-28 11:31
+// 调整部分变量名称
+// 修复输入操作物品移动与地图偏移不一致的问题
+// 按键单元结构体增加名称成员
+// 提供删除指定名称的输入按键功能
 
 #pragma once
 
@@ -19,12 +15,13 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <string>
+#include "Tanxl_UniqueID.h"
 
 struct Key_Unit
 {
 	Key_Unit();
-	Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL);
-	Key_Unit(int GLKEY, bool* CustomX = NULL, bool* CustomY = NULL);
+	Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM = "");
+	Key_Unit(int GLKEY, bool* CustomX = NULL, bool* CustomY = NULL, std::string UNAM = "");
 
 	//用于标记当前按键的类型
 	short Unit_Type;
@@ -34,7 +31,9 @@ struct Key_Unit
 	bool  MoveToX;
 	//用于标记此按键是否会导致向Y轴方向移动
 	bool  MoveToY;
+	//用于记录按键操作可能导致的移动距离
 	double MoveLen;
+	std::string Unit_Name;
 };
 
 class InsertEventBase
@@ -46,11 +45,15 @@ public:
 	float Get_AutoFloat(int Blocks);
 	float Get_Margin_X();
 	float Get_Margin_Y();
+	//获取当前是否按下了按键 并重置此变量状态为未按下
 	bool Get_Key_Pressed();
+	//删除指定名称的输入按键功能
+	bool RemoveEvent(std::string Event_Name);
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit* KU);
+	//移除最近一个添加的按键功能
 	void RemoveEvent();
-	void GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& deputyX, float& deputyY);
+	void GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& Move_AdjustX, float& Move_AdjustY);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
 	//在使用后会导致Set_MaxFloat_Height/Width功能无效化
@@ -75,9 +78,9 @@ private:
 	bool _Is_Max_Single;
 	//_Is_Key_Pressed 用于标记当前是否按下了按键
 	bool _Is_Key_Pressed;
-	//_Margin_X 代表当前主控制物品的X坐标
+	//_Margin_X 代表当前主控制物品最近一次移动的X坐标移动距离
 	float _Margin_X;
-	//_Margin_Y 代表当前主控制物品的Y坐标
+	//_Margin_Y 代表当前主控制物品最近一次移动的Y坐标移动距离
 	float _Margin_Y;
 	//_Max_float_Height 代表当前主控制物品在Y轴的最大移动距离
 	float _Max_float_Height;
