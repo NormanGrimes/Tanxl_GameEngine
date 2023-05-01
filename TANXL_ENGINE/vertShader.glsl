@@ -2,6 +2,7 @@
 // LAST_UPDATE 2022-09-15 21:30
 // 正式加入视角移动功能
 // 增加第四种状态颜色
+// 调整移动物品坐标的名称
 
 #version 430
 
@@ -14,8 +15,8 @@ uniform int State[200];
 
 uniform float Margin;
 
-uniform float MoveX;
-uniform float MoveY;
+uniform float Current_Move_LocationX;
+uniform float Current_Move_LocationY;
 
 uniform float SHeight;
 uniform float SWidth;
@@ -129,32 +130,32 @@ void main(void)
 
 	if      (gl_VertexID == 0) //MainMoveBlock
 	{
-		gl_Position = vec4(  Width / 2 + MoveX, -Height / 2 + MoveY, 0.1f, 1.0f); 
+		gl_Position = vec4(  Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 0.8f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 1) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1f, 1.0f); 
+		gl_Position = vec4( -Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 2) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1f, 1.0f); 
+		gl_Position = vec4(  Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 3) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX, -Height / 2 + MoveY, 0.1f, 1.0f); 
+		gl_Position = vec4( -Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 4) 
 	{
-		gl_Position = vec4( -Width / 2 + MoveX,  Height / 2 + MoveY, 0.1f, 1.0f); 
+		gl_Position = vec4( -Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 	else if (gl_VertexID == 5) 
 	{
-		gl_Position = vec4(  Width / 2 + MoveX,  Height / 2 + MoveY, 0.1f, 1.0f); 
+		gl_Position = vec4(  Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.1f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 	}
 }

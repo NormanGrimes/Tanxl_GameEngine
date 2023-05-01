@@ -4,6 +4,8 @@
 // 修复输入操作物品移动与地图偏移不一致的问题
 // 按键单元结构体增加名称成员
 // 提供删除指定名称的输入按键功能
+// 提供标记移动到地图边缘的相关功能
+// 修复按键单元初始化时为正确初始化NAME的问题
 
 #pragma once
 
@@ -49,6 +51,8 @@ public:
 	bool Get_Key_Pressed();
 	//删除指定名称的输入按键功能
 	bool RemoveEvent(std::string Event_Name);
+	//获取到当前移动操作是否导致移动到地图边缘 调用后会重置成员内容为否
+	bool Get_Reach_Edge();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit* KU);
 	//移除最近一个添加的按键功能
@@ -72,6 +76,8 @@ private:
 	std::vector<bool>* _PTB;
 	float _Max_float;
 	int _Max_Line;
+	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘
+	bool _Is_Reach_Edge = false;
 	//_Is_State_Range 用于标记当前是否限制了移动范围
 	bool _Is_State_Range;
 	//_Is_Max_Single 用于标记当前是否使用单一X/Y轴设置方式

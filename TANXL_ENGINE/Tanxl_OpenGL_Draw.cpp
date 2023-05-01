@@ -10,8 +10,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(),
 _WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(NULL),
-_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0),
-_Adjust_While_Move(false){}
+_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0){}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
@@ -129,11 +128,6 @@ void OpenGL_Draw::Set_WaitFra(int First_Adjust)
 	this->_First_Adjust = First_Adjust;
 }
 
-void OpenGL_Draw::Set_Adjust_While_Move(bool Enable)
-{
-	this->_Adjust_While_Move = Enable;
-}
-
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	if (_Clear_Function)
@@ -152,9 +146,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		init(_Main_Window, State);
 	}
 
-	static float MoveX = 0.0f;
-	static float MoveY = 0.0f;
-
 	static double Each_Height = 2.0f / State->Get_StateHeight();//10 0.2
 	static double Each_Width = 2.0f / State->Get_StateWidth();//10 0.2
 
@@ -167,10 +158,10 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-		_Position = glGetUniformLocation(_renderingProgram, "MoveX");//更新操作物品坐标
-		glProgramUniform1f(_renderingProgram, _Position, MoveX);
-		_Position = glGetUniformLocation(_renderingProgram, "MoveY");
-		glProgramUniform1f(_renderingProgram, _Position, MoveY);
+		_Position = glGetUniformLocation(_renderingProgram, "Current_Move_LocationX");//更新操作物品坐标
+		glProgramUniform1f(_renderingProgram, _Position, State->Get_Current_Loc()._LocX);
+		_Position = glGetUniformLocation(_renderingProgram, "Current_Move_LocationY");
+		glProgramUniform1f(_renderingProgram, _Position, State->Get_Current_Loc()._LocY);
 
 		static float Move_AdjustX = ((float)State->Get_StateWidth()) / 2;
 		static float Move_AdjustY = ((float)State->Get_StateHeight()) / 2;
@@ -197,13 +188,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(_Main_Window, MoveX, MoveY, _State_MoveX, _State_MoveY, Move_AdjustX, Move_AdjustY);//获取输入
+		IEB->GetInsert(_Main_Window, State->Get_Current_Loc()._LocX, State->Get_Current_Loc()._LocY, _State_MoveX, _State_MoveY, Move_AdjustX, Move_AdjustY);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
 		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
 
-		if (!_Adjust_While_Move)
+		if (!State->Get_Adjust_While_Move())
 		{
 			if (IEB->Get_Key_Pressed())
 				State->Set_Adjust_Flag(false);
@@ -211,19 +202,19 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				State->Set_Adjust_Flag(true);
 		}
 
-		GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
+		//GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
 		//std::cout << "MXP/MYP" << (MoveX/* + 1.0f*/) << "__" << (MoveY/* + 1.0f*/) << std::endl;
 
-		double Current_Height = (MoveY * 2 + 1) / (Each_Height);
-		double Current_Width = (MoveX * 2 + 1) / (Each_Width);
+		double Current_Height = (State->Get_Current_Loc()._LocY * 2 + 1) / (Each_Height);
+		double Current_Width = (State->Get_Current_Loc()._LocX * 2 + 1) / (Each_Width);
 
 		//std::cout << "CUH/CUW" << Current_Height << "__" << Current_Width << std::endl;
 
 		if (State->Get_Adjust_Flag())
 		{
-			State->Set_ExacHeight(Current_Height, &MoveY, &_State_MoveY, &_Auto_AdjustY);
-			State->Set_ExacWidth(Current_Width, &MoveX, &_State_MoveX, &_Auto_AdjustX);
+			State->Set_ExacHeight(Current_Height, &State->Get_Current_Loc()._LocY, &_State_MoveY, &_Auto_AdjustY);
+			State->Set_ExacWidth(Current_Width, &State->Get_Current_Loc()._LocX, &_State_MoveX, &_Auto_AdjustX);
 			Wait_Frame = 0;
 			
 			if (ANCUH != ACUH)
@@ -277,7 +268,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			}
 		}
 		
-		if(!State->Get_Adjust_Flag() || _Adjust_While_Move)
+		if(!State->Get_Adjust_Flag() || State->Get_Adjust_While_Move())
 		{
 			//std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
 			if (Wait_Frame == _First_Adjust)

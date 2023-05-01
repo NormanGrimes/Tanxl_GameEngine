@@ -85,7 +85,7 @@ public:
 	{
 		Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);
 		Tanxl_Engine_GameState->Set_Adjust(Adjust_Value);
-		Tanxl_Engine_OpenGL_Draw->Set_Adjust_While_Move(Enable_While_Move);
+		Tanxl_Engine_GameState->Set_Adjust_While_Move(Enable_While_Move);
 	}
 
 private:

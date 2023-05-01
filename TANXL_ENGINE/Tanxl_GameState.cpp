@@ -107,6 +107,12 @@ Move_State GameStateBase::Get_Move_State()
 {
 	return this->_MState;
 }
+
+SLocation& GameStateBase::Get_Current_Loc()
+{
+	return this->_SLoc;
+}
+
 #include <iostream>
 void GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* MoveY, float* Auto_Adjust_Length)
 {
@@ -382,6 +388,11 @@ void GameStateBase::Set_Adjust(float Adjust)
 	this->_GameState_Adjust = Adjust;
 }
 
+void GameStateBase::Set_Adjust_While_Move(bool Enable)
+{
+	this->_Adjust_While_Move = Enable;
+}
+
 void GameStateBase::Set_Enable_Adjust(bool Enable)
 {
 	this->_Adjust_Enable = Enable;
@@ -416,6 +427,11 @@ void GameStateBase::Set_Adjust_Flag(bool Adjust_Flag)
 bool GameStateBase::Get_Adjust_Flag()
 {
 	return this->_Is_Adjusting;
+}
+
+bool GameStateBase::Get_Adjust_While_Move()
+{
+	return this->_Adjust_While_Move;
 }
 
 int GameStateBase::Get_StateHeight()const

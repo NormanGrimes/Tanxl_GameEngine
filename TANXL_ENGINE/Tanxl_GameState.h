@@ -3,6 +3,8 @@
 // 提供开关自动调整坐标的接口
 // 重新修订重复包含检查
 // 修订部分变量名称
+// 绘制模块的移动坐标归入State模块管理
+// 设置启用移动中调整的功能归入State模块
 
 #pragma once
 
@@ -62,6 +64,7 @@ public:
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& Get_StateBase(int Width = 0, int Height = 0);
 	Move_State Get_Move_State();
+	SLocation& Get_Current_Loc();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
 	void Clear_Display_Vector();
@@ -74,6 +77,7 @@ public:
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
+	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
 	void Set_ExacHeight(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Auto_Adjust_Length = NULL);//可选功能 对2D棋盘上的物品微调位置
 	void Set_ExacWidth(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Auto_Adjust_Length = NULL);
@@ -82,6 +86,7 @@ public:
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
+	bool Get_Adjust_While_Move();
 	unsigned Get_DataHeight()const;
 	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
@@ -106,6 +111,8 @@ private:
 	float _GameState_Adjust;
 	//_Adjust_Enable用于标记是否启用了自动调整
 	bool _Adjust_Enable;
+	//_Adjust_Enable用于标记是否启用了移动中自动调整
+	bool _Adjust_While_Move = false;
 	bool _Is_Adjusting;
 	bool _Compile_Success;
 	Move_State _MState;//用于记录当前加载地图区域

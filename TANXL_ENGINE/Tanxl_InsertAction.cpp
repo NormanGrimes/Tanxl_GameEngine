@@ -5,8 +5,8 @@
 Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0) 
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
-	Unit_Name = UIB->GenerateAutoSeed();
-	std::cout << "KeyUnit :" << Unit_Name << std::endl;
+	this->Unit_Name = UIB->GenerateAutoSeed();
+	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
@@ -14,8 +14,10 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	if (UNAM == "")
-		UNAM = UIB->GenerateAutoSeed();
-	std::cout << "KeyUnit :" << UNAM << std::endl;
+		this->Unit_Name = UIB->GenerateAutoSeed();
+	else
+		this->Unit_Name = UNAM;
+	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
@@ -23,8 +25,10 @@ Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	if (UNAM == "")
-		UNAM = UIB->GenerateAutoSeed();
-	std::cout << "KeyUnit :" << UNAM << std::endl;
+		this->Unit_Name = UIB->GenerateAutoSeed();
+	else
+		this->Unit_Name = UNAM;
+	std::cout << "KeyUnit X :" << this->Unit_Name << std::endl;
 }
 
 InsertEventBase& InsertEventBase::GetInsertBase()
@@ -62,25 +66,25 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 		if (glfwGetKey(window, _KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
+			_Margin_X = 0;
+			_Margin_Y = 0;
 			if (_KeyEventS.at(i)->Unit_Type == 1)
 			{
 				_Is_Key_Pressed = false;
 				//std::cout << "_KeyEventS.at(i).MoveToX" << _KeyEventS.at(i)->MoveToX << std::endl;
-				_KeyEventS.at(i)->MoveToX = !_KeyEventS.at(i)->MoveToX;
-				_KeyEventS.at(i)->MoveToY = !_KeyEventS.at(i)->MoveToY;
+				_KeyEventS.at(i)->MoveToX = _KeyEventS.at(i)->MoveToX ? false : true;
+				_KeyEventS.at(i)->MoveToY = _KeyEventS.at(i)->MoveToY ? false : true;
 				//std::cout << "MoveToX" << _KeyEventS.at(i)->MoveToX << std::endl;
-			}
-			if (_KeyEventS.at(i)->MoveToX)
-			{
-				MoveX += static_cast<float>(_KeyEventS.at(i)->MoveLen);
-				_Margin_X = static_cast<float>(_KeyEventS.at(i)->MoveLen);
-				_Margin_Y = 0;
 			}
 			if (_KeyEventS.at(i)->MoveToY)
 			{
 				MoveY += static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_Y = static_cast<float>(_KeyEventS.at(i)->MoveLen);
-				_Margin_X = 0;
+			}
+			if (_KeyEventS.at(i)->MoveToX)
+			{
+				MoveX += static_cast<float>(_KeyEventS.at(i)->MoveLen);
+				_Margin_X = static_cast<float>(_KeyEventS.at(i)->MoveLen);
 			}
 			if (AutoCheck(&MoveX, &MoveY) == 3 && _KeyEventS.at(i)->Unit_Type == 0)
 			{
@@ -158,6 +162,13 @@ bool InsertEventBase::RemoveEvent(std::string Event_Name)
 	return false;
 }
 
+bool InsertEventBase::Get_Reach_Edge()
+{
+	bool Is_Reach_Edge = _Is_Reach_Edge;
+	_Is_Reach_Edge = false;
+	return Is_Reach_Edge;
+}
+
 unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, float* DeptY)
 {
 	unsigned Return_Value = 0;
@@ -169,7 +180,10 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 		_Max_float = _Max_float_Width;
 
 	if (*MoveX > _Max_float)
+	{
+		this->_Is_Reach_Edge = true;
 		*MoveX = _Max_float;
+	}
 	else if (*MoveX < -_Max_float)
 		*MoveX = -_Max_float;
 	else
@@ -179,7 +193,10 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 		_Max_float = _Max_float_Height;
 
 	if (*MoveY > _Max_float)
+	{
+		this->_Is_Reach_Edge = true;
 		*MoveY = _Max_float;
+	}
 	else if (*MoveY < -_Max_float)
 		*MoveY = -_Max_float;
 	else

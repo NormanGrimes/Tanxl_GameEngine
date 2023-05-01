@@ -41,8 +41,6 @@ private:
 
 	bool _Clear_Function;
 	bool _Is_State_Changed;
-	//用于标记是否在移动中启用调整
-	bool _Adjust_While_Move;
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];

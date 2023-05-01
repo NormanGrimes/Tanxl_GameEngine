@@ -76,15 +76,16 @@ int main()
 	OpenGL_Draw* OGD{ &OpenGL_Draw::GetOpenGLBase() };
 	OGD->Set_PreLoad(5);
 
+	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
+
 	TGE.Engine_State_Set_Display(5, 5);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
-	
-	//system("cls");
+
+	std::vector<std::string> KeyUnitNames;
 
 	while (1)
 	{
-		static int First = 0;
 		static int Timer = 0;
 		Timer++;
 		//std::cout << Appended << KU->MoveToX;
@@ -94,43 +95,53 @@ int main()
 			Timer = 0;
 			if (KU->MoveToX == true)
 			{
-				First++;
-				if (First == 1)
+				KU->MoveToX = false;
+				if (Appended == false)
 				{
 					Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);
 					IEB->RegistEvent(&MOVE_UP);
+					KeyUnitNames.push_back(MOVE_UP.Unit_Name);
 					MOVE_UP = Key_Unit(GLFW_KEY_W, false, true, 0.01);
 					IEB->RegistEvent(&MOVE_UP);
+					KeyUnitNames.push_back(MOVE_UP.Unit_Name);
 
 					Key_Unit MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
 					IEB->RegistEvent(&MOVE_LEFT);
+					KeyUnitNames.push_back(MOVE_LEFT.Unit_Name);
 					MOVE_LEFT = Key_Unit(GLFW_KEY_A, true, false, -0.01);
 					IEB->RegistEvent(&MOVE_LEFT);
+					KeyUnitNames.push_back(MOVE_LEFT.Unit_Name);
 
 					Key_Unit MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
 					IEB->RegistEvent(&MOVE_RIGHT);
+					KeyUnitNames.push_back(MOVE_RIGHT.Unit_Name);
 					MOVE_RIGHT = Key_Unit(GLFW_KEY_D, true, false, 0.01);
 					IEB->RegistEvent(&MOVE_RIGHT);
+					KeyUnitNames.push_back(MOVE_RIGHT.Unit_Name);
 
 					Key_Unit MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
 					IEB->RegistEvent(&MOVE_DOWN);
+					KeyUnitNames.push_back(MOVE_DOWN.Unit_Name);
 					MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);
 					IEB->RegistEvent(&MOVE_DOWN);
+					KeyUnitNames.push_back(MOVE_DOWN.Unit_Name);
+
+					Appended = true;
 				}
-				Appended = true;
-			}
-			else
-			{
-				First = 0;
-				if (Appended)
+				else
 				{
 					Appended = false;
-					int i = 8;
-					while (i > 0)
+					std::cout << "Removing All Temp KeyEvent" << std::endl;
+					for (int i = 0; i < KeyUnitNames.size(); i++)
+						std::cout << "DELETE NAME :" << KeyUnitNames.at(i) << std::endl;
+
+					for (int i = 0; i < KeyUnitNames.size(); i++)
 					{
-						i--;
-						IEB->RemoveEvent();
+						if (IEB->RemoveEvent(KeyUnitNames.at(i)))
+							std::cout << "Successfully REMOVE :" << i << std::endl;
 					}
+					KeyUnitNames.erase(KeyUnitNames.begin(), KeyUnitNames.end());
+					KeyUnitNames.clear();
 				}
 			}
 		}
