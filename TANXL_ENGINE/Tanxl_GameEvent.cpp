@@ -15,7 +15,7 @@ void GameEventBase::RegistEvent(GameEvent* Event)
 
 GameEvent* GameEventBase::GetGameEvent(std::string EventName)
 {
-	for (int i = 0; i < _GameEvents.size(); i++)
+	for (int i = 0; i < _GameEvents.size(); ++i)
 		if (_GameEvents.at(i)->GetEventName() == EventName)
 			return _GameEvents.at(i);
 	return NULL;

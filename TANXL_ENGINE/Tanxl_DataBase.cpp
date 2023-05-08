@@ -10,7 +10,7 @@ std::string Combine_Char(std::string data, int Start, int End)
 		return "";
 	}
 	std::string New_data{};
-	for (int i = Start, j = 0; i < End; i++, j++)
+	for (int i = Start, j = 0; i < End; ++i, ++j)
 	{
 		if (data[i] == '\t' || data[i] == '<')
 		{
@@ -45,10 +45,10 @@ std::string Divid_Char(std::string data, int Mode)
 		Left = ':'; Right = '>';
 		break;
 	default:
-		throw "错误 : Divid_Char 没有此条目的功能(0~3 为合法内容，而你输入了" + std::to_string(Mode) + ")";
+		throw "错误 : Divid_Char 没有此条目的功能(0~4 为合法内容，而你输入了" + std::to_string(Mode) + ")";
 		return "";
 	}
-	for (int i = 0; i < data.length(); i++)//获取内容
+	for (int i = 0; i < data.length(); ++i)//获取内容
 	{
 		if ((data[i] == Left && Lock == -1) || (data[i] == Right && Lock != -1))
 		{
@@ -77,7 +77,7 @@ void Reset_Chain(TANXL_DataBase& TDB, int A, int B, int Nums)
 void Data(bool Mode, bool Zero)
 {
 	TANXL_DataBase TDB_Instance(Zero);
-	for (unsigned Content = 0x11111f55; Content < 0x11112111; Content++)
+	for (unsigned Content = 0x11111f55; Content < 0x11112111; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "地下水");
@@ -87,7 +87,7 @@ void Data(bool Mode, bool Zero)
 		if (Mode)std::cout << TDB_Instance;
 		TDB_Instance.AppendItem();
 	}
-	for (unsigned Content = 0x22221f55; Content < 0x22222111; Content++)
+	for (unsigned Content = 0x22221f55; Content < 0x22222111; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
@@ -97,7 +97,7 @@ void Data(bool Mode, bool Zero)
 		if (Mode)std::cout << TDB_Instance;
 		TDB_Instance.AppendItem();
 	}
-	for (unsigned Content = 0x33331f55; Content < 0x33332111; Content++)
+	for (unsigned Content = 0x33331f55; Content < 0x33332111; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
@@ -107,7 +107,7 @@ void Data(bool Mode, bool Zero)
 		if (Mode)std::cout << TDB_Instance;
 		TDB_Instance.AppendItem();
 	}
-	for (unsigned Content = 0x44441f55; Content < 0x44442111; Content++)
+	for (unsigned Content = 0x44441f55; Content < 0x44442111; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
@@ -171,7 +171,7 @@ inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After
 {
 	static int TDB_Status = 0;//级别数值 用于记录当前行的Tab数量
 	TDB_Status += Before;
-	for (int i = 0; i < TDB_Status; i++)os << "\t";
+	for (int i = 0; i < TDB_Status; ++i)os << "\t";
 	TDB_Status += After;
 }
 
@@ -311,11 +311,11 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 			if ((*IODB)->Id_3 || Is_Full_Legal)
 				out << "\t\t\t\t<Oth3: " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</Oth3>" << std::endl;
 			out << "\t\t\t</TDB_Item>" << std::endl;
-			IODB++;
+			++IODB;
 		} while (IODB != IODE);
 		out << "\t\t</Exac_Status>" << std::endl;
 		out << "\t</Type_Status>" << std::endl;
-		IOIB++;
+		++IOIB;
 	} while (IOIB != IOIE);
 	out << "</Tanxl_DataBase Information>" << std::endl;
 	out.close();
@@ -442,7 +442,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 
 void TANXL_DataBase::Clear_Chain()
 {
-	for (int i = 0; i < IC_Vector->size(); i++)
+	for (int i = 0; i < IC_Vector->size(); ++i)
 		Remove_Chain(IC_Vector->at(i)->Type, IC_Vector->at(i)->Exac);
 	Is_Chain_Empty = true;
 }
@@ -528,7 +528,7 @@ void TANXL_DataBase::Remove_Chain(int Type, int Exac)
 {
 	if (Id_Vector * PIC{ Id_Chain_Locate(Type, Exac) })
 	{
-		for (int i{ 0 }; i < PIC->exac->size(); i++)
+		for (int i{ 0 }; i < PIC->exac->size(); ++i)
 			delete PIC->exac->at(i);//释放 Data_Vector
 		PIC->exac->clear();
 		delete PIC;//释放 Id_Vector

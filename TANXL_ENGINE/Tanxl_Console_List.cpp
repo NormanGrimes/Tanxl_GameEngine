@@ -39,7 +39,7 @@ void CONSOLE::Append_Item(std::string New_Item, unsigned Space, void (*FunC)(), 
 	else
 	{
 		CONSOLE* CP{ this };
-		for (int i = 0; i < Depth; i++)
+		for (int i = 0; i < Depth; ++i)
 			CP = &CP->_SonList.at(Ids[i]);
 		CP->_SonList.push_back(CONSOLE(New_Item, Space, FunC));
 	}
@@ -49,7 +49,7 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 {
 	bool Is_Line_Need{ false };
 	_Page = this->_Selector / (_SSpace & 0x00ff);
-	for (int i = _Page * (_SSpace & 0x00ff); i < _SonList.size() && i < (_Page + 1) * static_cast<int>(_SSpace & 0x00ff); i++)
+	for (int i = _Page * (_SSpace & 0x00ff); i < _SonList.size() && i < (_Page + 1) * static_cast<int>(_SSpace & 0x00ff); ++i)
 	{
 		for (int j = Depth; j > 0; j--)
 			std::cout << "\t";
@@ -151,7 +151,7 @@ CONSOLE* CONSOLE::Locate(int Target)
 {
 	if (Target == 0)
 	{
-		for (int i = 0; i < _SonList.size(); i++)
+		for (int i = 0; i < _SonList.size(); ++i)
 		{
 			if (i == _Selector && _Is_Selected == true)
 				return _SonList.at(i).Locate();
@@ -160,7 +160,7 @@ CONSOLE* CONSOLE::Locate(int Target)
 	}
 	else
 	{
-		for (int i = 0; i < _SonList.size(); i++)
+		for (int i = 0; i < _SonList.size(); ++i)
 		{
 			if (i == _Selector && _Is_Selected == true && _SonList.at(i)._SonList.size() != 0)
 				if (_SonList.at(i)._Is_Selected == false)

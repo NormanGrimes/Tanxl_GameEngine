@@ -22,7 +22,7 @@ void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 
 void GameStateBase::Clear_Display_Vector()
 {
-	for (int i = 0; i < _GameState.size(); i++)
+	for (int i = 0; i < _GameState.size(); ++i)
 		delete _GameState.at(i);
 	_GameState.clear();
 }
@@ -31,7 +31,7 @@ void GameStateBase::Set_Display_State(int Width, int Height)
 {
 	this->_GameState_Width = Width;
 	this->_GameState_Height = Height;
-	for (int i = 0; i < _GameState.size(); i++)
+	for (int i = 0; i < _GameState.size(); ++i)
 		delete _GameState.at(i);
 	_GameState.clear();
 	//for (int i = 0; i < Width * Height; i++)
@@ -48,7 +48,7 @@ void GameStateBase::CompileStateUnits(std::string Infor)
 {
 	std::string Text_Reader{};
 	int Status_Id{}, State_Move{};
-	for (int i = 0; i < Infor.size(); i++)
+	for (int i = 0; i < Infor.size(); ++i)
 	{
 		if (Infor.at(i) != ',' && Infor.at(i) != '-')
 			Text_Reader += Infor.at(i);
@@ -73,7 +73,7 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 {
 	std::string Text_Reader{};
 	int Status_Int{};
-	for (int i = 0, SetCount = 0; i < Infor.size(); i++)
+	for (int i = 0, SetCount = 0; i < Infor.size(); ++i)
 	{
 		if (Infor.at(i) != ',' && Infor.at(i) != '=')
 			Text_Reader += Infor.at(i);
@@ -259,7 +259,7 @@ void GameStateBase::Set_Adjust_Frequency(int Frame)
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 {
 	static std::vector<bool> MAB;
-	for (int i = 0; i < _GameState.size(); i++)
+	for (int i = 0; i < _GameState.size(); ++i)
 	{
 		if (_GameState.at(i)->GetMoveAble())
 			MAB.push_back(true);
@@ -317,7 +317,7 @@ GameStateBase::GameStateBase(int Width, int Height) :
 
 GameStateBase::~GameStateBase()
 {
-	for (int i = 0; i < _GameState.size(); i++)
+	for (int i = 0; i < _GameState.size(); ++i)
 		delete _GameState.at(i);
 	_GameState.clear();
 }

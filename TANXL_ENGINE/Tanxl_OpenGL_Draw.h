@@ -3,6 +3,9 @@
 // 修复重新加载功能可能导致多段移动只计算一段加载的问题
 // 修复地图绘制展示错误区块的问题
 // 修复在移动时调整开启时移动操作不会触发重新载入的问题
+// 删除_Position采用固定位置获取统一变量
+// Move_Adjust归入私有成员变量
+// 增加清屏设置函数
 
 #pragma once
 
@@ -29,13 +32,11 @@ public:
 	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFra(int First_Adjust);
-	void Set_Adjust_While_Move(bool Enable);
+	void Set_Clear(bool Clear);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
 private:
 	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
-
-	GLuint _Position;
 
 	GLint _StateInfor[201];
 
@@ -53,6 +54,10 @@ private:
 	float _Auto_AdjustX = 0.0f;
 	//记录自动调整状态的Y轴移动距离
 	float _Auto_AdjustY = 0.0f;
+	//记录手动移动状态的Y轴移动距离
+	float _Move_AdjustX = 0.0f;
+	//记录手动移动状态的Y轴移动距离
+	float _Move_AdjustY = 0.0f;
 
 	//记录地图场景的方块行数
 	int _HeightInt;

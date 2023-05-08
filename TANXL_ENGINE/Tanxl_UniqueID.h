@@ -28,7 +28,7 @@ public:
     {
         std::string Data{};
         srand(static_cast<unsigned int>(time(0)));
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 15; ++i)
         {
             if (i % 5 == 0 && i != 0)
                 Data += "-";
@@ -42,7 +42,7 @@ public:
     {
         std::string Data{};
         srand(static_cast<unsigned int>(seed));
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 15; ++i)
         {
             if (i % 5 == 0 && i != 0)
                 Data += "-";
@@ -56,7 +56,7 @@ public:
         static unsigned int seed = 0;
         std::string Data{};
         srand(seed++);
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 15; ++i)
         {
             if (i % 5 == 0 && i != 0)
                 Data += "-";

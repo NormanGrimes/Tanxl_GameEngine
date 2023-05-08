@@ -60,7 +60,7 @@ void InsertEventBase::RemoveEvent()
 
 void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& Move_AdjustX, float& Move_AdjustY)
 {
-	for (int i = 0; i < _KeyEventS.size(); i++)
+	for (int i = 0; i < _KeyEventS.size(); ++i)
 	{
 		//std::cout << "_KeyEventS.at(i)->GLFW_KEY" << _KeyEventS.at(i)->GLFW_KEY << std::endl;
 		if (glfwGetKey(window, _KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
@@ -151,7 +151,7 @@ bool InsertEventBase::Get_Key_Pressed()
 
 bool InsertEventBase::RemoveEvent(std::string Event_Name)
 {
-	for (int i = 0; i < _KeyEventS.size(); i++)
+	for (int i = 0; i < _KeyEventS.size(); ++i)
 	{
 		if (_KeyEventS.at(i)->Unit_Name == Event_Name)
 		{
@@ -271,7 +271,7 @@ _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _I
 
 InsertEventBase::~InsertEventBase()
 {
-	for (int i = 0; i < _KeyEventS.size(); i++)
+	for (int i = 0; i < _KeyEventS.size(); ++i)
 		delete & _KeyEventS.at(i);
 	_KeyEventS.clear();
 }

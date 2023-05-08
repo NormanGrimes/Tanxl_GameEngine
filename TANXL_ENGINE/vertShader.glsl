@@ -3,28 +3,29 @@
 // 正式加入视角移动功能
 // 增加第四种状态颜色
 // 调整移动物品坐标的名称
+// 统一变量采用固定位置
 
 #version 430
 
-layout (location=0) in vec3 position;
-layout (location=1) in vec4 color;
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec4 color;
 
 out vec4 vs_color;
 
+layout (location = 3) uniform float Margin;
+
+layout (location = 4) uniform float Current_Move_LocationX;
+layout (location = 5) uniform float Current_Move_LocationY;
+
+layout (location = 6) uniform float SHeight;
+layout (location = 7) uniform float SWidth;
+
+layout (location = 8) uniform float StateMoveX;
+layout (location = 9) uniform float StateMoveY;
+
+layout (location = 10) uniform int PreLoads;
+
 uniform int State[200];
-
-uniform float Margin;
-
-uniform float Current_Move_LocationX;
-uniform float Current_Move_LocationY;
-
-uniform float SHeight;
-uniform float SWidth;
-
-uniform float StateMoveX;
-uniform float StateMoveY;
-
-uniform int PreLoads;
 
 void main(void)
 {

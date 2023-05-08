@@ -1,7 +1,9 @@
-﻿//_VERSION_0_3_ UPDATE LOG
-// LAST_UPDATE 2022-05-17 22:56
-// 提供一个初始预设生命值组件
-// 修改头文件包含方式
+﻿//_VERSION_0_4_ UPDATE LOG
+// LAST_UPDATE 2023-01-03 14:31
+// 修复迭代器未初始化的错误
+// 增加固定的生命值组件
+// 增加组件结构体
+// 针对for循环的简易效率更新
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -11,6 +13,34 @@
 #include <string>
 
 //组件类
+class Health_Componment
+{
+public:
+	Health_Componment(int Life_Cnt, bool Unable_Damage = false) :_Life_Count(Life_Cnt), _Unable_Damage(Unable_Damage) {};
+
+	void RestoreHealth(int RestVal)
+	{
+		if (RestVal < 0 || this->_Unable_Damage)
+			return;
+		_Life_Count += RestVal;
+	}
+
+	void TakeDamage(int TakeVal)
+	{
+		if (TakeVal < 0 || this->_Unable_Damage)
+			return;
+		_Life_Count -= TakeVal;
+	}
+
+	int Check_Health()
+	{
+		return _Life_Count;
+	}
+
+private:
+	int _Life_Count;
+	bool _Unable_Damage;
+};
 
 class ComponmentBase
 {
@@ -25,6 +55,13 @@ private:
 	std::string ComponmentName;
 };
 
+//游戏物品结构
+struct GameObjectContent
+{
+	Health_Componment _Health_COM;
+	std::vector<ComponmentBase*> _CMB;
+};
+
 //游戏物品类
 
 class GameObjectBase
@@ -33,27 +70,27 @@ class GameObjectBase
 	bool RemoveComponment(std::string Name);
 	void FinishComponment();
 private:
-	std::vector<ComponmentBase*> CMB;
+	GameObjectContent _GOC;
 };
 
 bool GameObjectBase::AppendComponment(ComponmentBase* CM)
 {
-	for (int i = 0; i < CMB.size(); i++)//根据名称添加
+	for (int i = 0; i < _GOC._CMB.size(); ++i)//根据名称添加
 	{
-		if (CMB.at(i)->GetName() == CM->GetName())
+		if (_GOC._CMB.at(i)->GetName() == CM->GetName())
 			return false;//出现同名组件——添加失败
 	}
-	CMB.push_back(CM);
+	_GOC._CMB.push_back(CM);
 	return true;
 }
 
 bool GameObjectBase::RemoveComponment(std::string Name)
 {
-	for (std::vector<ComponmentBase*>::iterator IOCB; IOCB!= CMB.end(); IOCB++)//根据名称删除
+	for (std::vector<ComponmentBase*>::iterator IOCB{ _GOC._CMB.begin() }; IOCB != _GOC._CMB.end(); ++IOCB)//根据名称删除
 	{
-		if (( * IOCB)->GetName() == Name)
+		if ((*IOCB)->GetName() == Name)
 		{
-			CMB.erase(IOCB);
+			_GOC._CMB.erase(IOCB);
 			return true;
 		}
 	}
@@ -62,33 +99,8 @@ bool GameObjectBase::RemoveComponment(std::string Name)
 
 void GameObjectBase::FinishComponment()
 {
-	for (int i = 0; i < CMB.size(); i++)
-		CMB.at(i)->Special();
+	for (int i = 0; i < _GOC._CMB.size(); ++i)
+		_GOC._CMB.at(i)->Special();
 }
-
-//Componment Sample
-class Unit_Life : public ComponmentBase
-{
-public:
-	Unit_Life(int Life_Count) :ComponmentBase("Unit_Life"), _Life_Count(Life_Count) {}
-	virtual void Special()
-	{
-
-	}
-	void RestoreHealth()
-	{
-		_Life_Count++;
-	}
-	void TakeDamage()
-	{
-		_Life_Count--;
-	}
-	int Check_Health()
-	{
-		return _Life_Count;
-	}
-private:
-	int _Life_Count;
-};
 
 #endif

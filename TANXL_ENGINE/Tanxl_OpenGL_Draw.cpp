@@ -8,15 +8,14 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Position(0), _StateInfor(),
-_WidthInt(0), _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(NULL),
-_Clear_Function(false), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0){}
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _StateInfor(),_WidthInt(0),
+_renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(NULL),
+_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0){}
 
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
 	//示例提供四个按键操作事件 （单例模式于其他地方定义）
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
-	srand(static_cast<unsigned int>(time(0)));
 
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -37,22 +36,20 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 
 	_Auto_AdjustX = ((float)State->Get_StateWidth()) / 2;
 	_Auto_AdjustY = ((float)State->Get_StateHeight()) / 2;
+
+	_Move_AdjustX = _Auto_AdjustX;
+	_Move_AdjustY = _Auto_AdjustY;
 	
 	State->Set_Move_State(0, _HeightInt - 1 + _PreLoads, 0, _WidthInt - 1 + _PreLoads);
 
 	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
-	_Position = glGetUniformLocation(_renderingProgram, "SHeight");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(State->Get_StateHeight()));
-	_Position = glGetUniformLocation(_renderingProgram, "SWidth");
-	glProgramUniform1f(_renderingProgram, _Position, static_cast<float>(State->Get_StateWidth()));
 
-	_Position = glGetUniformLocation(_renderingProgram, "Margin");
-	glProgramUniform1f(_renderingProgram, _Position, 1.0f);
-
-	_Position = glGetUniformLocation(_renderingProgram, "PreLoads");
-	glProgramUniform1i(_renderingProgram, _Position, _PreLoads);
+	glProgramUniform1f(_renderingProgram, 6, static_cast<float>(State->Get_StateHeight()));//SHeight
+	glProgramUniform1f(_renderingProgram, 7, static_cast<float>(State->Get_StateWidth()));//SWidth
+	glProgramUniform1f(_renderingProgram, 3, 1.0f);//Margin
+	glProgramUniform1i(_renderingProgram, 10, _PreLoads);//PreLoads
 
 	ReLoadState(State);
 }
@@ -98,13 +95,13 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	}
 	else
 	{
-		for (int i = 0; i < (_HeightInt + _PreLoads) * (_WidthInt + _PreLoads); i++)
+		for (int i = 0; i < (_HeightInt + _PreLoads) * (_WidthInt + _PreLoads); ++i)
 		{
 			_StateInfor[i] = UIB->Random(0, 2) - 1;
 		}
 	}
 	GLuint StatePos;
-	for (int i = 0; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) + 1; i++)
+	for (int i = 0; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) + 1; ++i)
 	{
 		std::string Tag = "State[" + std::to_string(i) + "]";
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
@@ -114,8 +111,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 
 void OpenGL_Draw::UpdateMargin(float& Margin)
 {
-	_Position = glGetUniformLocation(_renderingProgram, "Margin");
-	glProgramUniform1f(_renderingProgram, _Position, Margin);
+	glProgramUniform1f(_renderingProgram, 3, Margin);//Margin
 }
 
 void OpenGL_Draw::Set_PreLoad(int PreLoads)
@@ -128,10 +124,18 @@ void OpenGL_Draw::Set_WaitFra(int First_Adjust)
 	this->_First_Adjust = First_Adjust;
 }
 
+void OpenGL_Draw::Set_Clear(bool Clear)
+{
+	this->_Clear_Function = Clear;
+}
+
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	if (_Clear_Function)
+	{
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		this->_Clear_Function = false;
+	}
 
 	glUseProgram(_renderingProgram);
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 6);
@@ -158,19 +162,14 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-		_Position = glGetUniformLocation(_renderingProgram, "Current_Move_LocationX");//更新操作物品坐标
-		glProgramUniform1f(_renderingProgram, _Position, State->Get_Current_Loc()._LocX);
-		_Position = glGetUniformLocation(_renderingProgram, "Current_Move_LocationY");
-		glProgramUniform1f(_renderingProgram, _Position, State->Get_Current_Loc()._LocY);
+		glProgramUniform1f(_renderingProgram, 4, State->Get_Current_Loc()._LocX);//Current_Move_LocationX
+		glProgramUniform1f(_renderingProgram, 5, State->Get_Current_Loc()._LocY);//Current_Move_LocationY
 
-		static float Move_AdjustX = ((float)State->Get_StateWidth()) / 2;
-		static float Move_AdjustY = ((float)State->Get_StateHeight()) / 2;
+		static int CUH = static_cast<int>(_Move_AdjustY / Each_Height);
+		static int CUW = static_cast<int>(_Move_AdjustX / Each_Width);
 
-		static int CUH = static_cast<int>(Move_AdjustY / Each_Height);
-		static int CUW = static_cast<int>(Move_AdjustX / Each_Width);
-
-		int NCUH = static_cast<int>(Move_AdjustY / Each_Height);
-		int NCUW = static_cast<int>(Move_AdjustX / Each_Width);
+		int NCUH = static_cast<int>(_Move_AdjustY / Each_Height);
+		int NCUW = static_cast<int>(_Move_AdjustX / Each_Width);
 
 		static int ACUH = static_cast<int>(_Auto_AdjustY / Each_Height);
 		static int ACUW = static_cast<int>(_Auto_AdjustX / Each_Width);
@@ -188,7 +187,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(_Main_Window, State->Get_Current_Loc()._LocX, State->Get_Current_Loc()._LocY, _State_MoveX, _State_MoveY, Move_AdjustX, Move_AdjustY);//获取输入
+		IEB->GetInsert(_Main_Window, State->Get_Current_Loc()._LocX, State->Get_Current_Loc()._LocY, _State_MoveX, _State_MoveY, _Move_AdjustX, _Move_AdjustY);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
@@ -345,10 +344,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		//std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
 		//std::cout << "Exac Location : " << MoveX * 2 << " " << MoveY * 2 << std::endl;//REAL LOCATION
 
-		_Position = glGetUniformLocation(_renderingProgram, "StateMoveX");
-		glProgramUniform1f(_renderingProgram, _Position, _State_MoveX);
-		_Position = glGetUniformLocation(_renderingProgram, "StateMoveY");
-		glProgramUniform1f(_renderingProgram, _Position, _State_MoveY);
+		glProgramUniform1f(_renderingProgram, 8, _State_MoveX);//State_MoveX
+		glProgramUniform1f(_renderingProgram, 9, _State_MoveY);//State_MoveY
 
 		display(_Main_Window, glfwGetTime(), State);
 		glfwSwapBuffers(_Main_Window);
