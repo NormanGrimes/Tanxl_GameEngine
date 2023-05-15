@@ -6,6 +6,7 @@
 // 删除_Position采用固定位置获取统一变量
 // Move_Adjust归入私有成员变量
 // 增加清屏设置函数
+// 自动调整丢弃的值加入绘制移动
 
 #pragma once
 
@@ -38,13 +39,18 @@ public:
 private:
 	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
 
-	GLint _StateInfor[201];
+	GLint _StateInfor[200];
 
 	bool _Clear_Function;
 	bool _Is_State_Changed;
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
+
+	//记录地图场景基本矩形的高度值
+	double _Each_Height = 0;
+	//记录地图场景基本矩形的宽度值
+	double _Each_Width = 0;
 
 	//记录地图场景X轴移动距离
 	float _State_MoveX;
@@ -59,9 +65,9 @@ private:
 	//记录手动移动状态的Y轴移动距离
 	float _Move_AdjustY = 0.0f;
 
-	//记录地图场景的方块行数
+	//记录地图场景的基本矩形行数
 	int _HeightInt;
-	//记录地图场景的方块列数
+	//记录地图场景的基本矩形列数
 	int _WidthInt;
 	//窗口的宽度
 	int _ScreenWidth;
@@ -71,6 +77,11 @@ private:
 	int _PreLoads;
 	//绘制模块自动调整等待帧
 	int _First_Adjust;
+	//记录手动移动指定的当前X轴基本矩形
+	int _Current_Move_Height = 0;
+	//记录手动移动指定的当前Y轴基本矩形
+	int _Current_Move_Width = 0;
+
 	GLFWwindow* _Main_Window;
 };
 

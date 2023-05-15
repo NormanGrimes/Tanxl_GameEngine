@@ -87,7 +87,7 @@ void CONSOLE::Display_Once()
 	size_t List_Size{ Locate()->_SonList.size() };
 	while (1)
 	{
-		system("cls");
+		//system("cls");
 		this->Display();
 		if (!Cover)
 		{
@@ -107,9 +107,9 @@ void CONSOLE::Display_Once()
 			Cover = true;
 			continue;
 		}
-		Insert = Insert_Action(Action_Num, Action_Bol, List_Size);
-		if (*Action_Num == -1)
-			break;
+		//Insert = Insert_Action(Action_Num, Action_Bol, List_Size);
+		//if (*Action_Num == -1)
+		break;
 	}
 }
 

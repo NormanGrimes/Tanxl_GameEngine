@@ -11,6 +11,7 @@ int main()
 
 	TCL.Append_Item("New Item");
 	TCL.Append_Item("Sec Item");
+	TCL.Display_Once();
 
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	std::cout << "Generate : " << UIB->Generate() << std::endl;
@@ -41,29 +42,17 @@ int main()
 
 	GameStateBase* GSB{ &GameStateBase::Get_StateBase(1, 1) };
 
-	/*TGE.Engine_State_Compile_Uints(
-		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");*/
-
-	TGE.Engine_State_Compile_Uints(10, 10,
-		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,"
-		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,"
-		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,"
-		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,"
-		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,"
-		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,"
-		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,");
+	TGE.Engine_State_Compile_Uints(20, 10,
+		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -74,7 +63,7 @@ int main()
 
 	IEB->RegistEvent(KU);
 	OpenGL_Draw* OGD{ &OpenGL_Draw::GetOpenGLBase() };
-	OGD->Set_PreLoad(5);
+	OGD->Set_PreLoad(-2);
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 

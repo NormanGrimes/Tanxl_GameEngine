@@ -1,9 +1,6 @@
-﻿//_VERSION_1_7_ UPDATE LOG
-// LAST_UPDATE 2022-11-17 00:30
-// Display接口去掉不必要的颜色清除功能
-// Display接口改为私有
-// 输入接口提供退出功能
-// 重新修订重复包含检查
+﻿//_VERSION_1_8_ UPDATE LOG
+// LAST_UPDATE 2023-01-05 16:44
+// Display_Once改为非阻塞式（暂时屏蔽Insert_Action函数）
 
 #pragma once
 
@@ -14,6 +11,7 @@
 #include <vector>
 #include <conio.h>
 #include <iomanip>
+#include "Tanxl_InsertAction.h"
 
 enum EFont_Color
 {

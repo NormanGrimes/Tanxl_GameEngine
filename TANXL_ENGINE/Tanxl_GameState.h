@@ -5,12 +5,14 @@
 // 修订部分变量名称
 // 绘制模块的移动坐标归入State模块管理
 // 设置启用移动中调整的功能归入State模块
+// 自动调整函数增加浮点数返回最后一步调节的差值
 
 #pragma once
 
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
 
+#include <iostream>
 #include "Tanxl_GameEvent.h"
 
 enum EMove_State_EventId
@@ -64,7 +66,7 @@ public:
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& Get_StateBase(int Width = 0, int Height = 0);
 	Move_State Get_Move_State();
-	SLocation& Get_Current_Loc();
+	SLocation& Get_Current_Distance();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
 	void Clear_Display_Vector();
@@ -79,14 +81,14 @@ public:
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
-	void Set_ExacHeight(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Auto_Adjust_Length = NULL);//可选功能 对2D棋盘上的物品微调位置
-	void Set_ExacWidth(double& Current, float* MoveState = NULL, float* MoveY = NULL, float* Auto_Adjust_Length = NULL);
 	void Set_Adjust_Frequency(int Frame);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
 	bool Get_Adjust_While_Move();
+	float Set_ExacHeight(double& Current, float* MoveState = NULL, float* State_MoveY = NULL, float* Auto_Adjust_Length = NULL);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(double& Current, float* MoveState = NULL, float* State_MoveX = NULL, float* Auto_Adjust_Length = NULL);
 	unsigned Get_DataHeight()const;
 	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
@@ -113,10 +115,12 @@ private:
 	bool _Adjust_Enable;
 	//_Adjust_Enable用于标记是否启用了移动中自动调整
 	bool _Adjust_While_Move = false;
+	//_Is_Adjusting用于标记是否正处于调整坐标中
 	bool _Is_Adjusting;
 	bool _Compile_Success;
 	Move_State _MState;//用于记录当前加载地图区域
-	SLocation _SLoc;//用于记录当前地图中心点
+	//_SLoc用于记录当前距离地图中心点的距离
+	SLocation _Distance_Mid;
 	std::vector<StateUnit*> _GameState;
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;

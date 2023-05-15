@@ -35,6 +35,7 @@ struct Key_Unit
 	bool  MoveToY;
 	//用于记录按键操作可能导致的移动距离
 	double MoveLen;
+	//用于记录按键事件的名称
 	std::string Unit_Name;
 };
 

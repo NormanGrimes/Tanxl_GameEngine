@@ -10,7 +10,7 @@ Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
-	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0) 
+	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0)
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	if (UNAM == "")
@@ -21,7 +21,7 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
-	GLFW_KEY(GLKEY), MoveToX(CustomX), MoveToY(CustomY), MoveLen(0.0f), Unit_Type(1) 
+	GLFW_KEY(GLKEY), MoveToX(CustomX), MoveToY(CustomY), MoveLen(0.0f), Unit_Type(1)
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	if (UNAM == "")
