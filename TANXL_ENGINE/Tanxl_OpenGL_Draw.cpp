@@ -12,6 +12,11 @@ OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _Sta
 _renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(NULL),
 _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0){}
 
+const std::string OpenGL_Draw::Get_Version()
+{
+	return this->_Version;
+}
+
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
 	//示例提供四个按键操作事件 （单例模式于其他地方定义）

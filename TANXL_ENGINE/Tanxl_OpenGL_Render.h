@@ -3,6 +3,7 @@
 // 更名为OpenGL_Render
 // 移除std的using语句
 // 重新修订重复包含检查
+// 增加版本变量与获取接口
 
 #pragma once
 
@@ -31,6 +32,9 @@ public:
 	static int finalizeShaderProgram(GLuint sprogram);
 	static bool checkOpenGLError();
 	static GLuint createShaderProgram(const char* vp, const char* fp);
+	const std::string Get_Version();
+private:
+	const std::string _Version{ "0.2" };
 };
 
 #endif

@@ -56,6 +56,8 @@ int main()
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
+	TGE.Engine_Save_Source_Infor("ULTRA");
+
 	bool CurrStatus = false;
 	bool Appended = false;
 
@@ -63,7 +65,7 @@ int main()
 
 	IEB->RegistEvent(KU);
 	OpenGL_Draw* OGD{ &OpenGL_Draw::GetOpenGLBase() };
-	OGD->Set_PreLoad(-2);
+	OGD->Set_PreLoad(3);
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 

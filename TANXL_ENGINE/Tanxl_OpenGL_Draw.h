@@ -7,6 +7,7 @@
 // Move_Adjust归入私有成员变量
 // 增加清屏设置函数
 // 自动调整丢弃的值加入绘制移动
+// 增加版本变量与获取接口
 
 #pragma once
 
@@ -25,6 +26,7 @@ class OpenGL_Draw
 public:
 	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800);
 	
+	const std::string Get_Version();
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
 	void init(GLFWwindow* window, GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
@@ -81,7 +83,7 @@ private:
 	int _Current_Move_Height = 0;
 	//记录手动移动指定的当前Y轴基本矩形
 	int _Current_Move_Width = 0;
-
+	const std::string _Version{ "0.7" };
 	GLFWwindow* _Main_Window;
 };
 

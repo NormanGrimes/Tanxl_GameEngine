@@ -144,15 +144,15 @@ std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 		fot << "<Type_Status : " << s.Item_Instance.Code << " / " << s.Item_Instance.Status_1 << ">" << std::endl;
 		s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << s.Item_Instance.Name << " / " << s.Item_Instance.Status_2 << ">" << std::endl;
 		s.OstreamSpace(fot, 1, 1); fot << "<TDBS_Item>" << std::endl;
-		if (s.Item_Instance.Status_3 || s.Is_Full_Legal) {
+		if (s.Item_Instance.Status_3 != 0xFF || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth1: " << s.Item_Instance.Status_3 << ">" << s.Item_Instance.Oth1 << "</Oth1>" << std::endl;
 		}
-		if (s.Item_Instance.Status_4 || s.Is_Full_Legal) {
+		if (s.Item_Instance.Status_4 != 0xFF || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth2: " << s.Item_Instance.Status_4 << ">" << s.Item_Instance.Oth2 << "</Oth2>" << std::endl;
 		}
-		if (s.Item_Instance.Status_5 || s.Is_Full_Legal) {
+		if (s.Item_Instance.Status_5 != 0xFF || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth3: " << s.Item_Instance.Status_5 << ">" << s.Item_Instance.Oth3 << "</Oth3>" << std::endl;
 		}
@@ -187,11 +187,11 @@ inline void TANXL_DataBase::Combine_Status()
 
 void TANXL_DataBase::ResetInstance()
 {
-	Item_Instance.Status_1 = 0x0;
-	Item_Instance.Status_2 = 0x0;
-	Item_Instance.Status_3 = 0x00;
-	Item_Instance.Status_4 = 0x00;
-	Item_Instance.Status_5 = 0x00;
+	Item_Instance.Status_1 = 0xF;
+	Item_Instance.Status_2 = 0xF;
+	Item_Instance.Status_3 = 0xFF;
+	Item_Instance.Status_4 = 0xFF;
+	Item_Instance.Status_5 = 0xFF;
 	Combine_Status();
 	Is_Instance_Data = false;
 }
@@ -200,35 +200,35 @@ void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 {
 	int SetTimes{ 0 };
 	//std::cout << Num;
-	if (0 <= (Num >> 28) && (Num >> 28) < 15) {
+	if (((Num >> 28) < 15) || Is_Full_Legal) {
 		Item_Instance.Code = Set;
 		Item_Instance.Status_1 = (Num >> 28);
 		//std::cout << " __ " << (Num >> 28);
 		Combine_Status();
 		SetTimes++;
 	}
-	if (0 <= ((Num & 0x0f000000) >> 24) && ((Num & 0x0f000000) >> 24) < 15) {
+	if ((((Num & 0x0f000000) >> 24) < 15) || Is_Full_Legal) {
 		Item_Instance.Name = Set;
 		Item_Instance.Status_2 = ((Num & 0x0f000000) >> 24);
 		//std::cout << " __ " << ((Num & 0x0f000000) >> 24);
 		Combine_Status();
 		SetTimes++;
 	}
-	if (0 <= ((Num & 0x00ff0000) >> 16) && ((Num & 0x00ff0000) >> 16) < 255) {
+	if ((((Num & 0x00ff0000) >> 16) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth1 = Set;
 		Item_Instance.Status_3 = ((Num & 0x00ff0000) >> 16);
 		//std::cout << " __ " << ((Num & 0x00ff0000) >> 16);
 		Combine_Status();
 		SetTimes++;
 	}
-	if (0 <= ((Num & 0x0000ff00) >> 8) && ((Num & 0x0000ff00) >> 8) < 255) {
+	if ((((Num & 0x0000ff00) >> 8) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth2 = Set;
 		Item_Instance.Status_4 = ((Num & 0x0000ff00) >> 8);
 		//std::cout << " __ " << ((Num & 0x0000ff00) >> 8);
 		Combine_Status();
 		SetTimes++;
 	}
-	if (0 <= (Num & 0x000000ff) && (Num & 0x000000ff) < 255) {
+	if (((Num & 0x000000ff) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth3 = Set;
 		Item_Instance.Status_5 = (Num & 0x000000ff);
 		//std::cout << " __ " << (Num & 0x000000ff) << std::endl;
@@ -249,7 +249,7 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 	else if (To_File)
 	{
 		Is_Instance_Data = true;
-		std::fstream out(File_Name, std::ios::app);
+		std::fstream out(File_Name + ".usd", std::ios::app);
 		if (out.is_open())
 		{
 			out << *this;
@@ -266,6 +266,7 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 		Id_Vector* ITemp = new Id_Vector(
 			Item_Instance.Status_1, Item_Instance.Status_2,
 			Item_Instance.Code, Item_Instance.Name);
+		this->ResetInstance();
 		if (DTemp && ITemp)//判断是否申请空间成功
 			Append_Chain(*DTemp, *ITemp);
 		else
@@ -304,11 +305,11 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 			if ((*IODB)->Id_1 + (*IODB)->Id_2 + (*IODB)->Id_3 == -3)
 				continue;
 			out << "\t\t\t<TDB_Item>" << std::endl;
-			if ((*IODB)->Id_1 || Is_Full_Legal)
+			if ((*IODB)->Id_1 != 0xFF || Is_Full_Legal)
 				out << "\t\t\t\t<Oth1: " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</Oth1>" << std::endl;
-			if ((*IODB)->Id_2 || Is_Full_Legal)
+			if ((*IODB)->Id_2 != 0xFF || Is_Full_Legal)
 				out << "\t\t\t\t<Oth2: " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</Oth2>" << std::endl;
-			if ((*IODB)->Id_3 || Is_Full_Legal)
+			if ((*IODB)->Id_3 != 0xFF || Is_Full_Legal)
 				out << "\t\t\t\t<Oth3: " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</Oth3>" << std::endl;
 			out << "\t\t\t</TDB_Item>" << std::endl;
 			++IODB;
@@ -382,7 +383,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 	{
 		std::string Type_Data{}, Exac_Data{};//需要使用时再定义
 		int  Type_Stat{}, Exac_Stat{};
-		int IData[3]{ 0 }, Target{ -1 };
+		int IData[3]{ 0xFF,0xFF,0xFF }, Target{ -1 };
 		std::string SData[3]{};
 		std::string Line{};
 		while (std::getline(in, Line))
@@ -412,7 +413,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					{
 						Data_Vector* Data_Temp = new Data_Vector(IData[0], SData[0], IData[1], SData[1], IData[2], SData[2]);
 						Id_Vector* Id_Temp = new Id_Vector(Type_Stat, Exac_Stat, Type_Data, Exac_Data);
-						IData[0] = 0; IData[1] = 0; IData[2] = 0; SData[0] = ""; SData[1] = ""; SData[2] = "";
+						IData[0] = 0xFF; IData[1] = 0xFF; IData[2] = 0xFF; SData[0] = ""; SData[1] = ""; SData[2] = "";
 						if (Data_Temp && Id_Temp)
 							Append_Chain(*Data_Temp, *Id_Temp);
 						else
@@ -599,4 +600,9 @@ void TANXL_DataBase::Replace_Chain(int OldType, int OldExac, int OldDepth, int T
 		PIC->exac->erase(PIC->exac->begin() + OldDepth);
 	else if (PIC->exac->size() + OldDepth >= 0 && PIC->exac->size() + OldDepth < PIC->exac->size())
 		PIC->exac->erase(PIC->exac->begin() + PIC->exac->size() + OldDepth);
+}
+
+const std::string TANXL_DataBase::Get_Version()
+{
+	return this->_Version;
 }

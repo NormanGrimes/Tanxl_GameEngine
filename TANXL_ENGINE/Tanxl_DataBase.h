@@ -1,12 +1,12 @@
-﻿//_VERSION_1_8_ UPDATE LOG
-// LAST_UPDATE 2022-09-24 00:39
-// 移除五个不必要的内部接口inline设置
-// 修复三十二位的获取Status函数采用二十位操作方式的错误
-// 储存模块设置物品函数执行效率提升
-// 修改一个私有变量名称使之贴合意思
-// Reset_Chain接口现在需要传入地址
-// 重新修订重复包含检查
-// 为匿名结构体成员增加初始化
+﻿//_VERSION_1_9_ UPDATE LOG
+// LAST_UPDATE 2023-01-06 12:27
+// 增加版本变量与获取接口
+// AppendItem接口默认添加文件到usd格式下
+// 修改数据结构体的默认Id为0xF 即不可用状态
+// AppendItem任何形式的添加都会导致私有结构体重置
+// 结构体重置函数现在默认重置所有值到0xF
+// 修正一些判断仍然以0合法为准的问题
+// 设置私有结构体功能去掉不必要的判断
 
 #pragma once
 
@@ -45,7 +45,7 @@ enum ESet_Specified
 
 struct Data_Vector//短数据表(Vector)
 {
-	explicit Data_Vector(int I_A = 0, std::string D_A = NULL, int I_B = 0, std::string D_B = NULL, int I_C = 0, std::string D_C = NULL) :
+	explicit Data_Vector(int I_A = 0xFF, std::string D_A = NULL, int I_B = 0xFF, std::string D_B = NULL, int I_C = 0xFF, std::string D_C = NULL) :
 		Id_1(I_A), Id_2(I_B), Id_3(I_C), Sd_1(D_A), Sd_2(D_B), Sd_3(D_C) {}
 	int Id_1, Id_2, Id_3;
 	std::string Sd_1, Sd_2, Sd_3;
@@ -66,13 +66,14 @@ private:
 	struct
 	{
 		unsigned Item_Status{ 0 };
-		unsigned Status_1{}; std::string Code{};
-		unsigned Status_2{}; std::string Name{};
-		unsigned Status_3{}; std::string Oth1{};
-		unsigned Status_4{}; std::string Oth2{};
-		unsigned Status_5{}; std::string Oth3{};
+		unsigned Status_1{ 0xF }; std::string Code{};
+		unsigned Status_2{ 0xF }; std::string Name{};
+		unsigned Status_3{ 0xFF }; std::string Oth1{};
+		unsigned Status_4{ 0xFF }; std::string Oth2{};
+		unsigned Status_5{ 0xFF }; std::string Oth3{};
 	}Item_Instance;
 
+	const std::string _Version{ "1.9" };
 	std::vector<Id_Vector*>* IC_Vector;
 	int Current_Location;
 	bool Is_Instance_Data;//用来判断Item_Instance中是否有数据
@@ -104,6 +105,7 @@ public:
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Mode为true时从文件中读取数据 需要提供In/Out_File_Name 执行后清空内存中的链表  Mode为false时直接对当前内存中的链表进行整理 可以使现有链表改为升序 执行后不清空
 	void SortDataBase(int Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_DataBase");
+	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s);//用于直接输出当前Item单例内的信息
 };
 

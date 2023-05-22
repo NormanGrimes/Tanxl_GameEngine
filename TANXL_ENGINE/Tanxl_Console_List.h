@@ -1,6 +1,7 @@
 ﻿//_VERSION_1_8_ UPDATE LOG
 // LAST_UPDATE 2023-01-05 16:44
 // Display_Once改为非阻塞式（暂时屏蔽Insert_Action函数）
+// 增加版本变量与获取接口
 
 #pragma once
 
@@ -45,6 +46,8 @@ class CONSOLE
 public:
 	explicit CONSOLE(std::string Name = "UNdefined", unsigned Space = 0x171109, void(*FunC)() = NULL);
 
+	const std::string Get_Version();
+
 	void Display_Once();
 
 	void Append_Item(std::string New_Item, unsigned Space = 0x171109, void(*FunC)() = NULL, int Depth = 0, int* Ids = 0);
@@ -68,6 +71,8 @@ private:
 	void (*_Func)();
 
 	unsigned _SSpace;// { 0x171109 }选项和标题的空格数 AA-BB-CC AA左空格 BB右空格 CC页面物品限制数量
+	
+	const std::string _Version{ "1.8" };
 };
 
 #endif

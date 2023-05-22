@@ -169,6 +169,11 @@ bool InsertEventBase::Get_Reach_Edge()
 	return Is_Reach_Edge;
 }
 
+const std::string InsertEventBase::Get_Version()
+{
+	return this->_Version;
+}
+
 unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, float* DeptY)
 {
 	unsigned Return_Value = 0;

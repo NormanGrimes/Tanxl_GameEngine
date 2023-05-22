@@ -5,6 +5,7 @@
 // 2022/10/10更新地图数据编译接口 增加InsertBase的支持
 // 2022/11/07引擎管理模块增加控制移动最大距离的接口
 // 2022/12/27修改头文件包含方式
+// 2023/01/06增加引擎信息存储功能
 
 #pragma once
 
@@ -23,7 +24,7 @@ class Tanxl_Engine
 public:
 	//引擎初始化构造函数
 	Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE),
-		Tanxl_Engine_DataBase(new TANXL_DataBase(true)),
+		Tanxl_Engine_DataBase(new TANXL_DataBase(false)),
 		Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 		Tanxl_Engine_GameState(&GameStateBase::Get_StateBase(5, 5)),
 		Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
@@ -86,6 +87,35 @@ public:
 		Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);
 		Tanxl_Engine_GameState->Set_Adjust(Adjust_Value);
 		Tanxl_Engine_GameState->Set_Adjust_While_Move(Enable_While_Move);
+	}
+
+	void Engine_Save_Source_Infor(std::string FileName)
+	{
+		Tanxl_Engine_DataBase->Set_Instance(0x0FFFFFFF, "0-VERSION_INFORMATION");
+		Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
+		Tanxl_Engine_DataBase->Set_Instance(0xFF00FFFF, "00-TANXL_CONSOLE_LIST " + Tanxl_Engine_Console_List->Get_Version());
+		Tanxl_Engine_DataBase->AppendItem(true, FileName);
+		Tanxl_Engine_DataBase->Set_Instance(0x0FFFFFFF, "0-VERSION_INFORMATION");
+		Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
+		Tanxl_Engine_DataBase->Set_Instance(0xFF01FFFF, "01-TANXL_DATABASE " + Tanxl_Engine_DataBase->Get_Version());
+		Tanxl_Engine_DataBase->AppendItem(true, FileName);
+		Tanxl_Engine_DataBase->Set_Instance(0x0FFFFFFF, "0-VERSION_INFORMATION");
+		Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
+		Tanxl_Engine_DataBase->Set_Instance(0xFF02FFFF, "02-TANXL_GAMEEVENT " + Tanxl_Engine_GameEvent->Get_Version());
+		Tanxl_Engine_DataBase->AppendItem(true, FileName);
+		Tanxl_Engine_DataBase->Set_Instance(0x0FFFFFFF, "0-VERSION_INFORMATION");
+		Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
+		Tanxl_Engine_DataBase->Set_Instance(0xFF03FFFF, "03-TANXL_GAMESTATE " + Tanxl_Engine_GameState->Get_Version());
+		Tanxl_Engine_DataBase->AppendItem(true, FileName);
+		Tanxl_Engine_DataBase->Set_Instance(0x0FFFFFFF, "0-VERSION_INFORMATION");
+		Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
+		Tanxl_Engine_DataBase->Set_Instance(0xFF04FFFF, "04-TANXL_INSERTACTION " + Tanxl_Engine_InsertBase->Get_Version());
+		Tanxl_Engine_DataBase->AppendItem(true, FileName);
+		Tanxl_Engine_DataBase->Set_Instance(0x0FFFFFFF, "0-VERSION_INFORMATION");
+		Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
+		Tanxl_Engine_DataBase->Set_Instance(0xFF05FFFF, "05-TANXL_OPENGL_DRAW " + Tanxl_Engine_OpenGL_Draw->Get_Version());
+		Tanxl_Engine_DataBase->AppendItem(true, FileName);
+		Tanxl_Engine_DataBase->SortDataBase(SORT_LOCALF, FileName, FileName);
 	}
 
 private:

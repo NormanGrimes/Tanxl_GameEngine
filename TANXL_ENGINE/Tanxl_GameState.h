@@ -6,6 +6,7 @@
 // 绘制模块的移动坐标归入State模块管理
 // 设置启用移动中调整的功能归入State模块
 // 自动调整函数增加浮点数返回最后一步调节的差值
+// 增加版本变量与获取接口
 
 #pragma once
 
@@ -69,6 +70,7 @@ public:
 	SLocation& Get_Current_Distance();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
+	const std::string Get_Version();
 	void Clear_Display_Vector();
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(int Event_Id);
@@ -124,6 +126,7 @@ private:
 	std::vector<StateUnit*> _GameState;
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
+	const std::string _Version{ "0.7" };
 };
 
 #endif

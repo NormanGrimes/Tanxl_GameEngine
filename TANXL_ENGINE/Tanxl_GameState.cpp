@@ -20,6 +20,11 @@ void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 
 //GameStateBase
 
+const std::string GameStateBase::Get_Version()
+{
+	return this->_Version;
+}
+
 void GameStateBase::Clear_Display_Vector()
 {
 	for (int i = 0; i < _GameState.size(); ++i)

@@ -8,6 +8,11 @@ GameEvent::GameEvent(std::string Name) :_EventName(Name) {}
 
 //GameEventBase
 
+const std::string GameEventBase::Get_Version()
+{
+	return this->_Version;
+}
+
 void GameEventBase::RegistEvent(GameEvent* Event)
 {
 	_GameEvents.push_back(Event);

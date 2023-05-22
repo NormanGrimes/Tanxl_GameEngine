@@ -78,6 +78,11 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 	}
 }
 
+const std::string CONSOLE::Get_Version()
+{
+	return this->_Version;
+}
+
 void CONSOLE::Display_Once()
 {
 	bool Insert{ true };

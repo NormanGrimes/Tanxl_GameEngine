@@ -102,3 +102,8 @@ GLuint OpenGL_Render::createShaderProgram(const char* vp, const char* fp)
 	finalizeShaderProgram(vfprogram);
 	return vfprogram;
 }
+
+const std::string OpenGL_Render::Get_Version()
+{
+	return this->_Version;
+}
