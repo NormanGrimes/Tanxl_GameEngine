@@ -117,11 +117,6 @@ void InsertEventBase::Set_MaxFloat_Width(float Max_float)
 	this->_Max_float_Width = Max_float;
 }
 
-void InsertEventBase::Set_MaxLine(int Max_Line)
-{
-	this->_Max_Line = Max_Line;
-}
-
 void InsertEventBase::Get_MoveData(std::vector<bool>* PVB)
 {
 	this->_PTB = PVB;
@@ -169,6 +164,23 @@ bool InsertEventBase::Get_Reach_Edge()
 	return Is_Reach_Edge;
 }
 
+bool InsertEventBase::Check_Insert(GLFWwindow* window, int Key, int frames)
+{
+	static int GLFW_Key_Cnts = 0;
+	if (glfwGetKey(window, Key) == GLFW_PRESS)
+	{
+		GLFW_Key_Cnts++;
+		if (GLFW_Key_Cnts == frames)
+		{
+			GLFW_Key_Cnts = 0;
+			return true;
+		}
+	}
+	else
+		GLFW_Key_Cnts = 0;
+	return false;
+}
+
 const std::string InsertEventBase::Get_Version()
 {
 	return this->_Version;
@@ -213,7 +225,7 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 //UnImportant 单例实现
 
 InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
+_Max_float(1.0f), _PTB(NULL), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
 {
 	//InsertKey Init //多次注册会导致多次移动
 
@@ -282,7 +294,7 @@ InsertEventBase::~InsertEventBase()
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Max_Line(0), _Is_Max_Single(false),
+	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Is_Max_Single(false),
 	_Max_float_Height(1), _Max_float_Width(1), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
 {
 	Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);

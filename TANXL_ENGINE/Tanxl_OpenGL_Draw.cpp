@@ -39,17 +39,17 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_HeightInt = State->Get_StateHeight();
 	_WidthInt = State->Get_StateWidth();
 
-	_Auto_AdjustX = ((float)State->Get_StateWidth()) / 2;
-	_Auto_AdjustY = ((float)State->Get_StateHeight()) / 2;
+	_Auto_AdjustX = 0.0f;
+	_Auto_AdjustY = 0.0f;
 
-	_Move_AdjustX = _Auto_AdjustX;
-	_Move_AdjustY = _Auto_AdjustY;
+	_Move_AdjustX = 0.0f;
+	_Move_AdjustY = 0.0f;
 
 	_Each_Height = 2.0f / State->Get_StateHeight();//10 0.2
 	_Each_Width = 2.0f / State->Get_StateWidth();//10 0.2
 
-	_Current_Move_Height = static_cast<int>(_Move_AdjustY / _Each_Height);
-	_Current_Move_Width = static_cast<int>(_Move_AdjustX / _Each_Width);
+	_Current_Move_Height = 0;
+	_Current_Move_Width = 0;
 	
 	State->Set_Move_State(0, _HeightInt - 1 + _PreLoads, 0, _WidthInt - 1 + _PreLoads);
 
@@ -57,8 +57,8 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
 
-	glProgramUniform1f(_renderingProgram, 6, static_cast<float>(State->Get_StateHeight()));//SHeight
-	glProgramUniform1f(_renderingProgram, 7, static_cast<float>(State->Get_StateWidth()));//SWidth
+	glProgramUniform1i(_renderingProgram, 6, _HeightInt);//SHeight
+	glProgramUniform1i(_renderingProgram, 7, _WidthInt);//SWidth
 	glProgramUniform1f(_renderingProgram, 3, 1.0f);//Margin
 	glProgramUniform1i(_renderingProgram, 10, _PreLoads);//PreLoads
 
@@ -90,6 +90,8 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 			else
 			{
 				int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
+				if (State->Get_GameState()->size() == 0)
+					return;
 				
 				//std::cout << "Init Data: " << x % State->Get_GameState()->size() <<" __ " 
 				//	<< State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id() << std::endl;
@@ -118,6 +120,11 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
 		glProgramUniform1i(_renderingProgram, StatePos, _StateInfor[i]);
 	}
+}
+
+GLFWwindow* OpenGL_Draw::Get_Window()const
+{
+	return this->_Main_Window;
 }
 
 void OpenGL_Draw::UpdateMargin(float& Margin)
@@ -182,6 +189,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		static int ANCUH = static_cast<int>(_Auto_AdjustY / _Each_Height);
 		static int ANCUW = static_cast<int>(_Auto_AdjustX / _Each_Width);
+
+		int TOCUH = static_cast<int>((_Move_AdjustY * 2) / _Each_Height);
+		int TOCUW = static_cast<int>((_Move_AdjustX * 2) / _Each_Height);
+
+		//std::cout << "TOUCH " << TOCUH << " -- TOCUW " << TOCUW << std::endl;
 
 		if (State->Get_Adjust_Flag())
 		{

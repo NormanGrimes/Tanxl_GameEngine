@@ -192,48 +192,48 @@ void TANXL_DataBase::ResetInstance()
 	Item_Instance.Status_3 = 0xFF;
 	Item_Instance.Status_4 = 0xFF;
 	Item_Instance.Status_5 = 0xFF;
+	Item_Instance.Item_Status = 0xFFFFFFFF;
 	Combine_Status();
 	Is_Instance_Data = false;
 }
 
 void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 {
-	int SetTimes{ 0 };
-	//std::cout << Num;
+	bool SetTimes{ false };
 	if (((Num >> 28) < 15) || Is_Full_Legal) {
 		Item_Instance.Code = Set;
 		Item_Instance.Status_1 = (Num >> 28);
-		//std::cout << " __ " << (Num >> 28);
-		Combine_Status();
-		SetTimes++;
+		Item_Instance.Item_Status ^= 0xF << 28;
+		Item_Instance.Item_Status |= Item_Instance.Status_1 << 28;
+		SetTimes = true;
 	}
 	if ((((Num & 0x0f000000) >> 24) < 15) || Is_Full_Legal) {
 		Item_Instance.Name = Set;
 		Item_Instance.Status_2 = ((Num & 0x0f000000) >> 24);
-		//std::cout << " __ " << ((Num & 0x0f000000) >> 24);
-		Combine_Status();
-		SetTimes++;
+		Item_Instance.Item_Status ^= 0xF << 24;
+		Item_Instance.Item_Status |= Item_Instance.Status_2 << 24;
+		SetTimes = true;
 	}
 	if ((((Num & 0x00ff0000) >> 16) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth1 = Set;
 		Item_Instance.Status_3 = ((Num & 0x00ff0000) >> 16);
-		//std::cout << " __ " << ((Num & 0x00ff0000) >> 16);
-		Combine_Status();
-		SetTimes++;
+		Item_Instance.Item_Status ^= 0xFF << 16;
+		Item_Instance.Item_Status |= Item_Instance.Status_3 << 16;
+		SetTimes = true;
 	}
 	if ((((Num & 0x0000ff00) >> 8) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth2 = Set;
 		Item_Instance.Status_4 = ((Num & 0x0000ff00) >> 8);
-		//std::cout << " __ " << ((Num & 0x0000ff00) >> 8);
-		Combine_Status();
-		SetTimes++;
+		Item_Instance.Item_Status ^= 0xFF << 8;
+		Item_Instance.Item_Status |= Item_Instance.Status_4 << 8;
+		SetTimes = true;
 	}
 	if (((Num & 0x000000ff) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth3 = Set;
-		Item_Instance.Status_5 = (Num & 0x000000ff);
-		//std::cout << " __ " << (Num & 0x000000ff) << std::endl;
-		Combine_Status();
-		SetTimes++;
+		Item_Instance.Status_5 = Num;
+		Item_Instance.Item_Status ^= 0xFF;
+		Item_Instance.Item_Status |= Item_Instance.Status_5;
+		SetTimes = true;
 	}
 	if (SetTimes)
 		Is_Instance_Data = true;
@@ -276,7 +276,7 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 
 void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name)
 {
-	if (Mode == SORT_LOCALF)
+	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
 		if (!Get_LocalData(In_File_Name))
 		{
 			throw "SortDataBase() Failed ！ : 未能成功匹配文件";
@@ -302,16 +302,33 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 		out << "\t\t<Exac_Status : " << (*IOIB)->StrB << " / " << (*IOIB)->Exac << ">" << std::endl;
 		do
 		{
+			std::string TAG = DataTag((*IOIB)->Type, (*IOIB)->Exac, (*IODB)->Id_1);
+			std::string TAG_OTH1 = TAG == "" ? "OTH1" : TAG;
+			TAG = DataTag((*IOIB)->Type, (*IOIB)->Exac, (*IODB)->Id_2);
+			std::string TAG_OTH2 = TAG == "" ? "OTH2" : TAG;
+			TAG = DataTag((*IOIB)->Type, (*IOIB)->Exac, (*IODB)->Id_3);
+			std::string TAG_OTH3 = TAG == "" ? "OTH3" : TAG;
 			if ((*IODB)->Id_1 + (*IODB)->Id_2 + (*IODB)->Id_3 == -3)
 				continue;
-			out << "\t\t\t<TDB_Item>" << std::endl;
+			if (Mode ^ 0x1)
+				out << "\t\t\t<TDB_Item>" << std::endl;
 			if ((*IODB)->Id_1 != 0xFF || Is_Full_Legal)
-				out << "\t\t\t\t<Oth1: " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</Oth1>" << std::endl;
+			{
+				if (Mode ^ 0x1)out << "\t";
+				out << "\t\t\t<" + TAG_OTH1 + ": " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</Oth1>" << std::endl;
+			}
 			if ((*IODB)->Id_2 != 0xFF || Is_Full_Legal)
-				out << "\t\t\t\t<Oth2: " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</Oth2>" << std::endl;
+			{
+				if (Mode ^ 0x1)out << "\t";
+				out << "\t\t\t<" + TAG_OTH2 + ": " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</Oth2>" << std::endl;
+			}
 			if ((*IODB)->Id_3 != 0xFF || Is_Full_Legal)
-				out << "\t\t\t\t<Oth3: " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</Oth3>" << std::endl;
-			out << "\t\t\t</TDB_Item>" << std::endl;
+			{
+				if (Mode ^ 0x1)out << "\t";
+				out << "\t\t\t<" + TAG_OTH3 + ": " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</Oth3>" << std::endl;
+			}
+			if (Mode ^ 0x1)
+				out << "\t\t\t</TDB_Item>" << std::endl;
 			++IODB;
 		} while (IODB != IODE);
 		out << "\t\t</Exac_Status>" << std::endl;
@@ -321,7 +338,7 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 	out << "</Tanxl_DataBase Information>" << std::endl;
 	out.close();
 	Clear_Chain();
-	if (Mode == SORT_LOCALF)
+	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
 	{
 		std::string s = In_File_Name + ".usd";
 		remove(s.c_str());

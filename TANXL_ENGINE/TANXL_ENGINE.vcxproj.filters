@@ -48,8 +48,11 @@
     <ClInclude Include="Tanxl_GameEvent.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Tanxl_Engine_Manager.h">
+    <ClInclude Include="Tanxl_DataDefine.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_Engine_Manager.h">
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +78,9 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_GameEvent.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanxl_Engine_Manager.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>

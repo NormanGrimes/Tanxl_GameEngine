@@ -8,6 +8,8 @@
 // 增加清屏设置函数
 // 自动调整丢弃的值加入绘制移动
 // 增加版本变量与获取接口
+// 初始化接口效率优化
+// 提供获取OpenGL窗口的函数
 
 #pragma once
 
@@ -38,6 +40,7 @@ public:
 	void Set_Clear(bool Clear);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
+	GLFWwindow* Get_Window()const;
 private:
 	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
 

@@ -7,6 +7,9 @@
 // 结构体重置函数现在默认重置所有值到0xF
 // 修正一些判断仍然以0合法为准的问题
 // 设置私有结构体功能去掉不必要的判断
+// 设置匿名结构体的函数性能优化
+// 文件整理函数新增两个特殊处理功能
+// 提供数据结构体Data_Vector的V4版本
 
 #pragma once
 
@@ -18,11 +21,14 @@
 #include<string>
 #include<sstream>
 #include<vector>
+#include"Tanxl_DataDefine.h"
 
 enum ESort_Mode//为SortDataBase函数提供的功能枚举
 {
 	SORT_LOCALF = 0,
+	FILE_UNITED = 1,
 	SORT_MEMORY = 2,
+	MEMO_UNITED = 3
 };
 
 enum EDivid_Mode//为Divid_Char函数提供的功能枚举
@@ -41,6 +47,39 @@ enum ESet_Specified
 	SET_OTH1_STATUS = 2,
 	SET_OTH2_STATUS = 3,
 	SET_OTH3_STATUS = 4,
+};
+
+struct Data_Unit
+{
+	Data_Unit(int Id, std::string Data) :_Id(Id), _Data(Data) {};
+
+	int _Id;
+	std::string _Data;
+};
+
+struct Data_Vector_V4//数据表V4
+{
+	explicit Data_Vector_V4(int Id, std::string Data)
+	{
+		_Data_Units.push_back(Data_Unit(Id, Data));
+	}
+
+	explicit Data_Vector_V4(Data_Unit Data)
+	{
+		_Data_Units.push_back(Data);
+	}
+
+	void Append_Data(int Id, std::string Data)
+	{
+		_Data_Units.push_back(Data_Unit(Id, Data));
+	}
+
+	void Append_Data(Data_Unit Data)
+	{
+		_Data_Units.push_back(Data);
+	}
+
+	std::vector<Data_Unit> _Data_Units;
 };
 
 struct Data_Vector//短数据表(Vector)
@@ -65,7 +104,7 @@ class TANXL_DataBase
 private:
 	struct
 	{
-		unsigned Item_Status{ 0 };
+		unsigned Item_Status{ 0xFFFFFFFF };
 		unsigned Status_1{ 0xF }; std::string Code{};
 		unsigned Status_2{ 0xF }; std::string Name{};
 		unsigned Status_3{ 0xFF }; std::string Oth1{};
@@ -94,19 +133,21 @@ public:
 	//↓编辑实例 0x12030405 1代表Code位 2代表Name位 03代表Oth1位 依此类推
 	//↓在1.7版本中考虑到零合法的操作一致性 最大值已被作为不可选标志即 Code/Name位的F 或Oth位的FF
 	void Set_Instance(unsigned Num, std::string Set);
-	void Get_Specified(int Type, int Exac, int Nums);//读取指定Type(A)_Exac(B)级别的物品 并载入到单例结构中 Nums表示链表中的第几个(从0开始)
+	//↓读取指定Type(A)_Exac(B)级别的物品 并载入到单例结构中 Nums表示该级别下的第几个物品(从0开始)
+	void Get_Specified(int Type, int Exac, int Nums);
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...
 	//↓修改OTH1 OTH2 OTH3的时候直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
 	void Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data);
 	void Remove_Chain(int Type, int Exac);//删除某一节点与其下所有内容
 	//↓输出当前内存中的链表的所有内容 仅支持输出Id_Vector和Data_Vector中的内容 当前内存为空时会抛出错误
 	void Print_Data();
-	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase.usd");//向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置
+	//↓向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置
+	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase.usd");
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Mode为true时从文件中读取数据 需要提供In/Out_File_Name 执行后清空内存中的链表  Mode为false时直接对当前内存中的链表进行整理 可以使现有链表改为升序 执行后不清空
 	void SortDataBase(int Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_DataBase");
 	const std::string Get_Version();
-	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s);//用于直接输出当前Item单例内的信息
+	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息
 };
 
 std::string Combine_Char(std::string data, int Start, int End);//拆分char数组获取指定内容，Start为开始位置End为结束位置(结束位置不保留)

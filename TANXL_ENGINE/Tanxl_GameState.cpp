@@ -36,11 +36,6 @@ void GameStateBase::Set_Display_State(int Width, int Height)
 {
 	this->_GameState_Width = Width;
 	this->_GameState_Height = Height;
-	for (int i = 0; i < _GameState.size(); ++i)
-		delete _GameState.at(i);
-	_GameState.clear();
-	//for (int i = 0; i < Width * Height; i++)
-	//	_GameState.push_back(new StateUnit);
 }
 
 void GameStateBase::Set_DataAll_State(unsigned Width, unsigned Height)

@@ -163,6 +163,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Tanxl_DataDefine.h" />
     <ClInclude Include="Tanxl_Console_List.h" />
     <ClInclude Include="Tanxl_DataBase.h" />
     <ClInclude Include="Tanxl_Engine_Manager.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Tanxl_Console_List.cpp" />
     <ClCompile Include="Tanxl_DataBase.cpp" />
+    <ClCompile Include="Tanxl_Engine_Manager.cpp" />
     <ClCompile Include="Tanxl_GameEvent.cpp" />
     <ClCompile Include="Tanxl_GameState.cpp" />
     <ClCompile Include="Tanxl_InsertAction.cpp" />

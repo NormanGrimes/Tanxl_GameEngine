@@ -7,6 +7,8 @@
 // 提供标记移动到地图边缘的相关功能
 // 修复按键单元初始化时未正确初始化NAME的问题
 // 增加版本变量与获取接口
+// 增加获取某一按键是否按下的判断函数
+// 移除未使用且意义不明的_Max_Line变量
 
 #pragma once
 
@@ -55,6 +57,7 @@ public:
 	bool RemoveEvent(std::string Event_Name);
 	//获取到当前移动操作是否导致移动到地图边缘 调用后会重置成员内容为否
 	bool Get_Reach_Edge();
+	bool Check_Insert(GLFWwindow* window, int Key, int frames);
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit* KU);
@@ -69,7 +72,6 @@ public:
 	void Set_MaxFloat_Height(float Max_float);
 	//设置当前操作可移动到的宽度方向最远距离 在使用后会导致Set_MaxFloat功能无效化 可在边长不规则情况下使用
 	void Set_MaxFloat_Width(float Max_float);
-	void Set_MaxLine(int Max_Line);
 	void Get_MoveData(std::vector<bool>* PVB);
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
@@ -77,8 +79,8 @@ private:
 	unsigned AutoCheck(float* MoveX, float* MoveY, float* DeptX = NULL, float* DeptY = NULL);
 	std::vector<Key_Unit*> _KeyEventS;
 	std::vector<bool>* _PTB;
+	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离
 	float _Max_float;
-	int _Max_Line;
 	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘
 	bool _Is_Reach_Edge = false;
 	//_Is_State_Range 用于标记当前是否限制了移动范围
@@ -95,6 +97,7 @@ private:
 	float _Max_float_Height;
 	//_Max_float_Width  代表当前主控制物品在X轴的最大移动距离
 	float _Max_float_Width;
+	//_Version 用于记录当前程序（输入模块-InserAction）的版本信息
 	const std::string _Version{ "0.7" };
 	//单例实现私有构造函数
 	InsertEventBase();

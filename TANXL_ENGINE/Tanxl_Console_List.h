@@ -2,6 +2,7 @@
 // LAST_UPDATE 2023-01-05 16:44
 // Display_Once改为非阻塞式（暂时屏蔽Insert_Action函数）
 // 增加版本变量与获取接口
+// 输入功能调整为OpenGL输入（不稳定，测试中）
 
 #pragma once
 
@@ -13,6 +14,7 @@
 #include <conio.h>
 #include <iomanip>
 #include "Tanxl_InsertAction.h"
+#include "Tanxl_OpenGL_Draw.h"
 
 enum EFont_Color
 {

@@ -4,6 +4,7 @@
 // 增加第四种状态颜色
 // 调整移动物品坐标的名称
 // 统一变量采用固定位置
+// SHeight/SWidth改为整型类型
 
 #version 430
 
@@ -17,8 +18,8 @@ layout (location = 3) uniform float Margin;
 layout (location = 4) uniform float Current_Move_LocationX;
 layout (location = 5) uniform float Current_Move_LocationY;
 
-layout (location = 6) uniform float SHeight;
-layout (location = 7) uniform float SWidth;
+layout (location = 6) uniform int SHeight;
+layout (location = 7) uniform int SWidth;
 
 layout (location = 8) uniform float StateMoveX;
 layout (location = 9) uniform float StateMoveY;

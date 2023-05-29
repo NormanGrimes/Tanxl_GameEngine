@@ -65,7 +65,7 @@ int main()
 
 	IEB->RegistEvent(KU);
 	OpenGL_Draw* OGD{ &OpenGL_Draw::GetOpenGLBase() };
-	OGD->Set_PreLoad(3);
+	OGD->Set_PreLoad(4);
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
