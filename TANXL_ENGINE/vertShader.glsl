@@ -8,10 +8,12 @@
 
 #version 430
 
-layout (location = 0) in vec3 position;
-layout (location = 1) in vec4 color;
+layout (binding = 0) uniform sampler2D samp;
 
-out vec4 vs_color;
+layout (location = 1) in vec2 texCoord;
+
+layout (location = 11) in vec3 position;
+layout (location = 12) in vec4 color;
 
 layout (location = 3) uniform float Margin;
 
@@ -28,8 +30,13 @@ layout (location = 10) uniform int PreLoads;
 
 uniform int State[200];
 
+out vec4 vs_color;
+out vec2 tc;
+flat out int Current_Cube;
+
 void main(void)
 {
+	tc = texCoord;
 	
 	float Height = 2.0f / SHeight;
 	float Width  = 2.0f / SWidth;
@@ -40,7 +47,7 @@ void main(void)
 	float HeightMove = ((SHeight + PreLoads - 1) / 2) * Height;
 	for(int i = 1; i < (SHeight + PreLoads) * (SWidth + PreLoads) + 1; i++)
 	{
-
+		Current_Cube = i;
 		if      (gl_VertexID == i * 6 + 0) 
 		{ 
 			gl_Position = vec4(  Width / 2 + WidthMove + StateMoveX, 

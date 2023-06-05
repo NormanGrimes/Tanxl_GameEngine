@@ -9,6 +9,7 @@
 // 增加版本变量与获取接口
 // 增加获取某一按键是否按下的判断函数
 // 移除未使用且意义不明的_Max_Line变量
+// 移除CheckInsert接口（功能重复）
 
 #pragma once
 
@@ -57,7 +58,6 @@ public:
 	bool RemoveEvent(std::string Event_Name);
 	//获取到当前移动操作是否导致移动到地图边缘 调用后会重置成员内容为否
 	bool Get_Reach_Edge();
-	bool Check_Insert(GLFWwindow* window, int Key, int frames);
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit* KU);

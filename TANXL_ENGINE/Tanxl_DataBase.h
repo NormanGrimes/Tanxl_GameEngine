@@ -10,6 +10,7 @@
 // 设置匿名结构体的函数性能优化
 // 文件整理函数新增两个特殊处理功能
 // 提供数据结构体Data_Vector的V4版本
+// 数据整理功能可选择是否处理完成后删除原文件
 
 #pragma once
 
@@ -145,7 +146,9 @@ public:
 	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase.usd");
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Mode为true时从文件中读取数据 需要提供In/Out_File_Name 执行后清空内存中的链表  Mode为false时直接对当前内存中的链表进行整理 可以使现有链表改为升序 执行后不清空
-	void SortDataBase(int Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_DataBase");
+	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
+	void SortDataBase(int Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_DataBase",bool Delete_After_Sort = false);
+	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息
 };

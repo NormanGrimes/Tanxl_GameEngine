@@ -274,7 +274,7 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 	}
 }
 
-void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name)
+void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)
 {
 	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
 		if (!Get_LocalData(In_File_Name))
@@ -288,9 +288,9 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 		return;
 	}
 	std::fstream out(Out_File_Name + ".sd", std::ios::out | std::ios::trunc);
-	Id_Vector* PIC{ this->IC_Vector->at(0)};
+	Id_Vector* PIC{ this->IC_Vector->at(0) };
 	out << "<Tanxl_DataBase Information>" << std::endl;
-	std::vector<Id_Vector*>::iterator IOIE{ IC_Vector->end()};
+	std::vector<Id_Vector*>::iterator IOIE{ IC_Vector->end() };
 	std::vector<Id_Vector*>::iterator IOIB{ IC_Vector->begin() };
 	do
 	{
@@ -338,10 +338,13 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 	out << "</Tanxl_DataBase Information>" << std::endl;
 	out.close();
 	Clear_Chain();
-	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
+	if (Delete_After_Sort)
 	{
-		std::string s = In_File_Name + ".usd";
-		remove(s.c_str());
+		if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
+		{
+			std::string s = In_File_Name + ".usd";
+			remove(s.c_str());
+		}
 	}
 }
 

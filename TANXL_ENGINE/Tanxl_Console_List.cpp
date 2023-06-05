@@ -29,6 +29,57 @@ CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
 {
 	if (_Func == NULL)
 		_Is_Funcwork = false;
+
+	for (int i = 0; i < 13; i++)
+		Insert_Keys[i] = &Keys[i];
+
+	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
+
+	std::cout << "START" << std::endl;
+
+	Key_Unit CURSOR_MOVE_UP = Key_Unit(GLFW_KEY_UP, Insert_Keys[0], NULL, "");
+	IEB->RegistEvent(&CURSOR_MOVE_UP);
+
+	Key_Unit CURSOR_MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, Insert_Keys[1], NULL, "");
+	IEB->RegistEvent(&CURSOR_MOVE_LEFT);
+
+	Key_Unit CURSOR_MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, Insert_Keys[2], NULL, "");
+	IEB->RegistEvent(&CURSOR_MOVE_RIGHT);
+
+	Key_Unit CURSOR_MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, Insert_Keys[3], NULL, "");
+	IEB->RegistEvent(&CURSOR_MOVE_DOWN);
+
+	Key_Unit CURSOR_KEY_0 = Key_Unit(GLFW_KEY_0, Insert_Keys[4], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_0);
+
+	Key_Unit CURSOR_KEY_1 = Key_Unit(GLFW_KEY_1, Insert_Keys[5], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_1);
+
+	Key_Unit CURSOR_KEY_2 = Key_Unit(GLFW_KEY_2, Insert_Keys[6], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_2);
+
+	Key_Unit CURSOR_KEY_3 = Key_Unit(GLFW_KEY_3, Insert_Keys[7], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_3);
+
+	Key_Unit CURSOR_KEY_4 = Key_Unit(GLFW_KEY_4, Insert_Keys[8], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_4);
+
+	Key_Unit CURSOR_KEY_5 = Key_Unit(GLFW_KEY_5, Insert_Keys[9], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_5);
+
+	Key_Unit CURSOR_KEY_6 = Key_Unit(GLFW_KEY_6, Insert_Keys[10], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_6);
+
+	Key_Unit CURSOR_KEY_7 = Key_Unit(GLFW_KEY_7, Insert_Keys[11], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_7);
+
+	Key_Unit CURSOR_KEY_8 = Key_Unit(GLFW_KEY_8, Insert_Keys[12], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_8);
+
+	Key_Unit CURSOR_KEY_9 = Key_Unit(GLFW_KEY_9, Insert_Keys[13], NULL, "");
+	IEB->RegistEvent(&CURSOR_KEY_9);
+
+	std::cout << "DONE" << std::endl;
 }
 
 //添加函数
@@ -85,13 +136,14 @@ const std::string CONSOLE::Get_Version()
 
 void CONSOLE::Display_Once()
 {
-	bool Insert{ true };
+	static bool Insert{ true };
 	bool Cover{ false };
 	int* Action_Num{ &Locate()->_Selector };
 	bool* Action_Bol{ &Locate()->_Is_Selected };
 	size_t List_Size{ Locate()->_SonList.size() };
 	while (1)
 	{
+		//system("cls");
 		this->Display();
 		if (!Cover)
 		{
@@ -111,7 +163,7 @@ void CONSOLE::Display_Once()
 			Cover = true;
 			continue;
 		}
-		//Insert = Insert_Action(Action_Num, Action_Bol, List_Size);
+		Insert = Insert_Action(Action_Num, Action_Bol, List_Size);
 		//if (*Action_Num == -1)
 		break;
 	}
@@ -121,47 +173,34 @@ bool CONSOLE::Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size)
 {
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	OpenGL_Draw* OGD{ &OpenGL_Draw::GetOpenGLBase() };
-	if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_C, 1))//如果输入了大小写的C则返回上一级
+	/*if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_C, 1))//如果输入了大小写的C则返回上一级
 	{
 		*Action_Bol = false;
 		return false;
-	}
-	else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_X, 1))
+	}*/
+	/*else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_X, 1))
 	{
 		*Action_Num = -1;
 		return false;
-	}
-	if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_0, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_1, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_2, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_3, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_4, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_5, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_6, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_7, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_8, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_9, 1))//判断是否是从零到九的数字
+	}*/
+	/*if (Keys[8] ~ 17)//判断是否是从零到九的数字
 	{
-		/*if (static_cast<int>(key - 48) <= static_cast<int>(List_Size))//如果是，且小于等于选项总数则直接指定这个选项
+		if (static_cast<int>(key - 48) <= static_cast<int>(List_Size))//如果是，且小于等于选项总数则直接指定这个选项
 			*Action_Num = static_cast<int>(key - 48) - 1;
 		else
 			*Action_Num = static_cast<int>(List_Size) - 1;//如果超出了最大值，则指向最大值
-		*Action_Bol = true;*/
-	}
-	else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_W, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_UP, 1))//如果输入了大小写的W或者上箭头，则执行MoveUp
-		*Action_Num = *Action_Num == 0 ? static_cast<int>(List_Size) - 1 : -- * Action_Num;
-	else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_S, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_DOWN, 1))//如果输入了大小写的S或者下箭头，则执行MoveDown
-		*Action_Num = *Action_Num == static_cast<int>(List_Size) - 1 ? 0 : ++ * Action_Num;
-	else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_A, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_LEFT, 1))//如果输入了大小写的A或者左箭头，则执行向上翻页
-		*Action_Num = *Action_Num - static_cast<int>(_SSpace & 0x0000ff) < 0 ? 0 : *Action_Num - (_SSpace & 0x0000ff);
-	else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_D, 1) ||
-		IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_RIGHT, 1))//如果输入了大小写的D或者右箭头，则执行向下翻页
-		*Action_Num = *Action_Num + static_cast<int>(_SSpace & 0x0000ff) > static_cast<int>(List_Size) - 1 ? static_cast<int>(List_Size) - 1 : *Action_Num + (_SSpace & 0x0000ff);
-	else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_ENTER, 1))//回车确认
 		*Action_Bol = true;
+	}
+	else */if (Keys[0] ||Keys[1])//如果输入了大小写的W或者上箭头，则执行MoveUp
+		*Action_Num = *Action_Num == 0 ? static_cast<int>(List_Size) - 1 : -- * Action_Num;
+	else if (Keys[2] || Keys[3])//如果输入了大小写的S或者下箭头，则执行MoveDown
+		*Action_Num = *Action_Num == static_cast<int>(List_Size) - 1 ? 0 : ++ * Action_Num;
+	else if (Keys[4] || Keys[5])//如果输入了大小写的A或者左箭头，则执行向上翻页
+		*Action_Num = *Action_Num - static_cast<int>(_SSpace & 0x0000ff) < 0 ? 0 : *Action_Num - (_SSpace & 0x0000ff);
+	else if (Keys[6] || Keys[7])//如果输入了大小写的D或者右箭头，则执行向下翻页
+		*Action_Num = *Action_Num + static_cast<int>(_SSpace & 0x0000ff) > static_cast<int>(List_Size) - 1 ? static_cast<int>(List_Size) - 1 : *Action_Num + (_SSpace & 0x0000ff);
+	//else if (IEB->Check_Insert(OGD->Get_Window(), GLFW_KEY_ENTER, 1))//回车确认
+	//	*Action_Bol = true;
 	return true;
 }
 

@@ -1,9 +1,7 @@
-﻿//_VERSION_0_2_ UPDATE LOG
-// LAST_UPDATE 2022-05-15 22:37
-// 更名为OpenGL_Render
-// 移除std的using语句
-// 重新修订重复包含检查
-// 增加版本变量与获取接口
+﻿//_VERSION_0_3_ UPDATE LOG
+// LAST_UPDATE 2023-01-16 09:50
+// 简易效率更新
+// 增加纹理获取功能
 
 #pragma once
 
@@ -32,6 +30,7 @@ public:
 	static int finalizeShaderProgram(GLuint sprogram);
 	static bool checkOpenGLError();
 	static GLuint createShaderProgram(const char* vp, const char* fp);
+	static GLuint loadTexture(const char *texImagePath);
 	const std::string Get_Version();
 private:
 	const std::string _Version{ "0.2" };

@@ -21,6 +21,7 @@
 #include "Tanxl_InsertAction.h"
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_UniqueID.h"
+#include "SOIL2/SOIL2.h"
 #include <math.h>
 
 class OpenGL_Draw

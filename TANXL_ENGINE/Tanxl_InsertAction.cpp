@@ -17,7 +17,7 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
-	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
+	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
@@ -28,7 +28,7 @@ Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
-	std::cout << "KeyUnit X :" << this->Unit_Name << std::endl;
+	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
 }
 
 InsertEventBase& InsertEventBase::GetInsertBase()
@@ -162,23 +162,6 @@ bool InsertEventBase::Get_Reach_Edge()
 	bool Is_Reach_Edge = _Is_Reach_Edge;
 	_Is_Reach_Edge = false;
 	return Is_Reach_Edge;
-}
-
-bool InsertEventBase::Check_Insert(GLFWwindow* window, int Key, int frames)
-{
-	static int GLFW_Key_Cnts = 0;
-	if (glfwGetKey(window, Key) == GLFW_PRESS)
-	{
-		GLFW_Key_Cnts++;
-		if (GLFW_Key_Cnts == frames)
-		{
-			GLFW_Key_Cnts = 0;
-			return true;
-		}
-	}
-	else
-		GLFW_Key_Cnts = 0;
-	return false;
 }
 
 const std::string InsertEventBase::Get_Version()

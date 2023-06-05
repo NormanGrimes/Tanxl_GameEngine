@@ -7,11 +7,15 @@ int main()
 	//Data Function Test
 
 	Tanxl_Engine TGE;
-	CONSOLE TCL;
+	//CONSOLE TCL;
 
-	TCL.Append_Item("New Item");
-	TCL.Append_Item("Sec Item");
-	TCL.Display_Once();
+	//TCL.Append_Item("New Item");
+	//TCL.Append_Item("Sec Item");
+	//TCL.Append_Item("Sec Item");
+	//TCL.Append_Item("Sec Item");
+	//TCL.Append_Item("Sec Item");
+	//TCL.Append_Item("Sec Item");
+	
 
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	std::cout << "Generate : " << UIB->Generate() << std::endl;
@@ -81,6 +85,7 @@ int main()
 		Timer++;
 		//std::cout << Appended << KU->MoveToX;
 		OGD->Render_Once(GSB);
+		//TCL.Display_Once();
 		if (Timer == 50)
 		{
 			Timer = 0;
