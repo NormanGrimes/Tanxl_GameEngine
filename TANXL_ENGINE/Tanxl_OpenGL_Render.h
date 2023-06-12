@@ -33,7 +33,7 @@ public:
 	static GLuint loadTexture(const char *texImagePath);
 	const std::string Get_Version();
 private:
-	const std::string _Version{ "0.2" };
+	const std::string _Version{ "0.3" };
 };
 
 #endif

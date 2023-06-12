@@ -66,8 +66,8 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 		if (glfwGetKey(window, _KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
-			_Margin_X = 0;
-			_Margin_Y = 0;
+			_Margin_X = 0.0f;
+			_Margin_Y = 0.0f;
 			if (_KeyEventS.at(i)->Unit_Type == 1)
 			{
 				_Is_Key_Pressed = false;

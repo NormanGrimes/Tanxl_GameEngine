@@ -40,6 +40,12 @@ public:
 	//向指定文件名称中输出当前系统的综合信息 FileName为输出的目标文件名称 调用此函数后目标文件会被重置
 	void Engine_Save_Source_Infor(std::string FileName);
 
+
+	void Engine_Save_Append_Infor(unsigned Id[], std::string SName[])
+	{
+
+	}
+
 private:
 	CONSOLE* Tanxl_Engine_Console_List;
 	TANXL_DataBase* Tanxl_Engine_DataBase;

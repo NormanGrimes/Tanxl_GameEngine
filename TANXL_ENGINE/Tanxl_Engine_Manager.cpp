@@ -86,5 +86,5 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
 	Tanxl_Engine_DataBase->Set_Instance(0xFF05FFFF, "VERSION " + Tanxl_Engine_OpenGL_Draw->Get_Version());
 	Tanxl_Engine_DataBase->AppendItem(true, FileName);
-	Tanxl_Engine_DataBase->SortDataBase(FILE_UNITED, FileName, FileName);
+	Tanxl_Engine_DataBase->SortDataBase(FILE_UNITED, FileName, FileName, true);
 }

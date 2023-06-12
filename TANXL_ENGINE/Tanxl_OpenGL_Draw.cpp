@@ -2,11 +2,9 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
-#define numVBOs 2
+GLuint vbo[1];
 
-GLuint vbo[numVBOs];
-
-
+GLuint brickTexture;
 
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
 {
@@ -31,17 +29,14 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.15", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.16", NULL, NULL);
 	glfwMakeContextCurrent(_Main_Window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
 
-	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
 
 	glDepthFunc(GL_LEQUAL);
-
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0f);
@@ -66,49 +61,198 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
+	glGenBuffers(1, vbo);
 
 	glProgramUniform1i(_renderingProgram, 6, _HeightInt);//SHeight
 	glProgramUniform1i(_renderingProgram, 7, _WidthInt);//SWidth
 	glProgramUniform1f(_renderingProgram, 3, 1.0f);//Margin
 	glProgramUniform1i(_renderingProgram, 10, _PreLoads);//PreLoads
 
-
-
-	float pyramidPositions[54] =
-	{ -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f,    //front
-		1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,    //right
-		1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  //back
-		-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f,  //left
-		-1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, //LF
-		1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f  //RR
+	float textureCoordinates[] =
+	{	
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 	};
-	float textureCoordinates[36] =
-	{ 0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f
-	};
-	glGenVertexArrays(1, _vao);
-	glBindVertexArray(_vao[0]);
-	glGenBuffers(numVBOs, vbo);
+	
+	brickTexture = OpenGL_Render::loadTexture("Texture/grass.jpg");
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidPositions), pyramidPositions, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
 
-	GLuint BrickTexture = OpenGL_Render::loadTexture("brick1.jpg");
-
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, BrickTexture);
+	glBindTexture(GL_TEXTURE_2D, brickTexture);
 
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-
-	glDrawArrays(GL_TRIANGLES, 0, 18);
+	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 
 	ReLoadState(State);
 }
@@ -228,6 +372,16 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glClearDepth(1.0f);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(1);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, brickTexture);
+
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
 
 		int NCUH = static_cast<int>(_Move_AdjustY / _Each_Height);
 		int NCUW = static_cast<int>(_Move_AdjustX / _Each_Width);

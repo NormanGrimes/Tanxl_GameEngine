@@ -77,6 +77,8 @@ int main()
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 
+	//TGE.Engine_Save_Append_Infor();
+
 	std::vector<std::string> KeyUnitNames;
 
 	while (1)

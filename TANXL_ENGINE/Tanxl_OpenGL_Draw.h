@@ -1,15 +1,8 @@
-﻿//_VERSION_0_7_ UPDATE LOG
-// LAST_UPDATE 2022-12-28 11:29
-// 修复重新加载功能可能导致多段移动只计算一段加载的问题
-// 修复地图绘制展示错误区块的问题
-// 修复在移动时调整开启时移动操作不会触发重新载入的问题
-// 删除_Position采用固定位置获取统一变量
-// Move_Adjust归入私有成员变量
-// 增加清屏设置函数
-// 自动调整丢弃的值加入绘制移动
-// 增加版本变量与获取接口
-// 初始化接口效率优化
-// 提供获取OpenGL窗口的函数
+﻿//_VERSION_0_8_ UPDATE LOG
+// LAST_UPDATE 2023-01-16 17:40
+// 纹理功能已调试完成并实装
+// 移除构造函数的默认参数
+// 代码删除部分冗余 等待下一次优化
 
 #pragma once
 
@@ -43,7 +36,7 @@ public:
 	void ReLoadState(GameStateBase* State);
 	GLFWwindow* Get_Window()const;
 private:
-	OpenGL_Draw(int ScreenWidth = 600, int ScreenHeight = 600);
+	OpenGL_Draw(int ScreenWidth, int ScreenHeight);
 
 	GLint _StateInfor[200];
 
@@ -70,7 +63,7 @@ private:
 	float _Move_AdjustX = 0.0f;
 	//记录手动移动状态的Y轴移动距离
 	float _Move_AdjustY = 0.0f;
-
+	
 	//记录地图场景的基本矩形行数
 	int _HeightInt;
 	//记录地图场景的基本矩形列数
@@ -87,7 +80,7 @@ private:
 	int _Current_Move_Height = 0;
 	//记录手动移动指定的当前Y轴基本矩形
 	int _Current_Move_Width = 0;
-	const std::string _Version{ "0.7" };
+	const std::string _Version{ "0.8" };
 	GLFWwindow* _Main_Window;
 };
 
