@@ -25,6 +25,8 @@ layout (location = 10) uniform int PreLoads;
 layout (location = 11) in vec3 position;
 layout (location = 12) in vec4 color;
 
+layout (location = 13) uniform int Move_With;
+
 uniform int State[200];
 
 out vec4 vs_color;

@@ -8,6 +8,7 @@
 // 自动调整函数增加浮点数返回最后一步调节的差值
 // 增加版本变量与获取接口
 // 设置显示范围的接口不再清理地图数据
+// 移动状态枚举增加五种其他情况
 
 #pragma once
 
@@ -19,10 +20,15 @@
 
 enum EMove_State_EventId
 {
-	MoveToNW = 0,
-	MoveToPW = 1,
-	MoveToNH = 2,
-	MoveToPH = 3
+	MoveToNO = 0,
+	MoveToNW = 1,
+	MoveToPW = 2,
+	MoveToNH = 4,
+	MoveToNWNH = 5,
+	MoveToPWNH = 6,
+	MoveToPH = 8,
+	MoveToNWPH = 9,
+	MoveToPWPH = 10
 };
 
 struct Move_State

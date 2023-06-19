@@ -7,21 +7,14 @@ int main()
 	//Data Function Test
 
 	Tanxl_Engine TGE;
-	//CONSOLE TCL;
-
-	//TCL.Append_Item("New Item");
-	//TCL.Append_Item("Sec Item");
-	//TCL.Append_Item("Sec Item");
-	//TCL.Append_Item("Sec Item");
-	//TCL.Append_Item("Sec Item");
-	//TCL.Append_Item("Sec Item");
-	
 
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	std::cout << "Generate : " << UIB->Generate() << std::endl;
 
-	TANXL_DataBase NData(true);
-	unsigned n = 0x10101010, i = 10;
+	TANXL_DataBase NData;
+	Data(true, false);
+	NData.Get_LocalData("Tanxl_DataBase");
+	/*unsigned n = 0x10101010, i = 10;
 	while (i--)
 	{
 		if (i % 10 != 0)
@@ -39,7 +32,7 @@ int main()
 		NData.Set_Instance(n, "Updating" + std::to_string(n));
 		std::cout << NData;
 		NData.AppendItem(false);
-	}
+	}*/
 	NData.Print_Data();
 
 	//Get Instance

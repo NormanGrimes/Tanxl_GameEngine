@@ -77,17 +77,17 @@ void Reset_Chain(TANXL_DataBase& TDB, int A, int B, int Nums)
 void Data(bool Mode, bool Zero)
 {
 	TANXL_DataBase TDB_Instance(Zero);
-	for (unsigned Content = 0x11111f55; Content < 0x11112111; ++Content)
+	for (unsigned Content = 0x11111ff8; Content != 0x11112000; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
-		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "地下水");
-		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance((Content & 0x0f000000) | 0xf0ffffff, "地下水");
+		TDB_Instance.Set_Instance((Content & 0x00ff0000) | 0xff00ffff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance((Content & 0x0000ff00) | 0xffff00ff, std::to_string(rand() % 100));
+		TDB_Instance.Set_Instance((Content & 0x000000ff) | 0xffffff00, std::to_string(rand() % 100));
 		if (Mode)std::cout << TDB_Instance;
 		TDB_Instance.AppendItem();
 	}
-	for (unsigned Content = 0x22221f55; Content < 0x22222111; ++Content)
+	for (unsigned Content = 0x22221ff8; Content != 0x22222000; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
@@ -97,7 +97,7 @@ void Data(bool Mode, bool Zero)
 		if (Mode)std::cout << TDB_Instance;
 		TDB_Instance.AppendItem();
 	}
-	for (unsigned Content = 0x33331f55; Content < 0x33332111; ++Content)
+	for (unsigned Content = 0x33331ff8; Content != 0x33332000; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
@@ -107,7 +107,7 @@ void Data(bool Mode, bool Zero)
 		if (Mode)std::cout << TDB_Instance;
 		TDB_Instance.AppendItem();
 	}
-	for (unsigned Content = 0x44441f55; Content < 0x44442111; ++Content)
+	for (unsigned Content = 0x44441ff8; Content != 0x44442000; ++Content)
 	{
 		TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
 		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
@@ -140,19 +140,19 @@ std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 {
 	if ((s.Item_Instance.Status_1 + s.Item_Instance.Status_2 + s.Item_Instance.Status_3 + s.Item_Instance.Status_4 + s.Item_Instance.Status_5) || s.Is_Full_Legal)
 	{
-		s.Get_Item_Status();
+		//s.Get_Item_Status();
 		fot << "<Type_Status : " << s.Item_Instance.Code << " / " << s.Item_Instance.Status_1 << ">" << std::endl;
 		s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << s.Item_Instance.Name << " / " << s.Item_Instance.Status_2 << ">" << std::endl;
 		s.OstreamSpace(fot, 1, 1); fot << "<TDBS_Item>" << std::endl;
-		if (s.Item_Instance.Status_3 != 0xFF || s.Is_Full_Legal) {
+		if ((s.Item_Instance.Status_3 != 0xFF) || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth1: " << s.Item_Instance.Status_3 << ">" << s.Item_Instance.Oth1 << "</Oth1>" << std::endl;
 		}
-		if (s.Item_Instance.Status_4 != 0xFF || s.Is_Full_Legal) {
+		if ((s.Item_Instance.Status_4 != 0xFF) || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth2: " << s.Item_Instance.Status_4 << ">" << s.Item_Instance.Oth2 << "</Oth2>" << std::endl;
 		}
-		if (s.Item_Instance.Status_5 != 0xFF || s.Is_Full_Legal) {
+		if ((s.Item_Instance.Status_5 != 0xFF) || s.Is_Full_Legal) {
 			s.OstreamSpace(fot);
 			fot << "<Oth3: " << s.Item_Instance.Status_5 << ">" << s.Item_Instance.Oth3 << "</Oth3>" << std::endl;
 		}
@@ -203,34 +203,34 @@ void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 	if (((Num >> 28) < 15) || Is_Full_Legal) {
 		Item_Instance.Code = Set;
 		Item_Instance.Status_1 = (Num >> 28);
-		Item_Instance.Item_Status ^= 0xF << 28;
+		Item_Instance.Item_Status ^= (0xF << 28);
 		Item_Instance.Item_Status |= Item_Instance.Status_1 << 28;
 		SetTimes = true;
 	}
 	if ((((Num & 0x0f000000) >> 24) < 15) || Is_Full_Legal) {
 		Item_Instance.Name = Set;
 		Item_Instance.Status_2 = ((Num & 0x0f000000) >> 24);
-		Item_Instance.Item_Status ^= 0xF << 24;
+		Item_Instance.Item_Status ^= (0xF << 24);
 		Item_Instance.Item_Status |= Item_Instance.Status_2 << 24;
 		SetTimes = true;
 	}
 	if ((((Num & 0x00ff0000) >> 16) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth1 = Set;
 		Item_Instance.Status_3 = ((Num & 0x00ff0000) >> 16);
-		Item_Instance.Item_Status ^= 0xFF << 16;
+		Item_Instance.Item_Status ^= (0xFF << 16);
 		Item_Instance.Item_Status |= Item_Instance.Status_3 << 16;
 		SetTimes = true;
 	}
 	if ((((Num & 0x0000ff00) >> 8) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth2 = Set;
 		Item_Instance.Status_4 = ((Num & 0x0000ff00) >> 8);
-		Item_Instance.Item_Status ^= 0xFF << 8;
+		Item_Instance.Item_Status ^= (0xFF << 8);
 		Item_Instance.Item_Status |= Item_Instance.Status_4 << 8;
 		SetTimes = true;
 	}
 	if (((Num & 0x000000ff) < 255) || Is_Full_Legal) {
 		Item_Instance.Oth3 = Set;
-		Item_Instance.Status_5 = Num;
+		Item_Instance.Status_5 = (Num & 0x000000ff);
 		Item_Instance.Item_Status ^= 0xFF;
 		Item_Instance.Item_Status |= Item_Instance.Status_5;
 		SetTimes = true;

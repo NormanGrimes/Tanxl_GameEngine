@@ -241,10 +241,9 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 	};
 	
-	brickTexture = OpenGL_Render::loadTexture("Texture/grass.jpg");
+	brickTexture = OpenGL_Render::loadTexture("Texture/TANXL_GRASS_200X200.jpg");
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
@@ -253,6 +252,8 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glBindTexture(GL_TEXTURE_2D, brickTexture);
 
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
+
+	Set_Trigger_Range(true, 0.6f, 0.6f);
 
 	ReLoadState(State);
 }
@@ -339,6 +340,45 @@ void OpenGL_Draw::Set_Clear(bool Clear)
 	this->_Clear_Function = Clear;
 }
 
+void OpenGL_Draw::Set_Trigger_Range(bool Enable, float Height, float Width)
+{
+	_Is_Trigger_Enable = Enable;
+	_Trigger_Height = Height;
+	_Trigger_Width = Width;
+}
+
+EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
+{
+	if (_Is_Trigger_Enable)
+	{
+		EMove_State_EventId Value{ MoveToNO };
+		if (Height > 0 && Height > _Trigger_Height)
+			Value = MoveToPH;
+		if (Height < 0 && _Trigger_Height + Height < 0)
+			Value = MoveToNH;
+		if (Width > 0 && Width > _Trigger_Width)
+		{
+			if (Value == MoveToPH)
+				Value = MoveToPWPH;
+			else if(Value == MoveToNH)
+				Value = MoveToPWNH;
+			else
+				Value = MoveToPW;
+		}
+		if (Width < 0 && _Trigger_Width + Width < 0)
+		{
+			if (Value == MoveToPH)
+				Value = MoveToNWPH;
+			else if (Value == MoveToNH)
+				Value = MoveToNWNH;
+			else
+				Value = MoveToNW;
+		}
+		return Value;
+	}
+	return MoveToNO;
+}
+
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	if (_Clear_Function)
@@ -405,6 +445,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		static int Wait_Frame = 0;
 
+		bool Press_Flg = false;
+
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
 		IEB->GetInsert(_Main_Window, State->Get_Current_Distance()._LocX, State->Get_Current_Distance()._LocY, _State_MoveX, _State_MoveY, _Move_AdjustX, _Move_AdjustY);//获取输入
@@ -413,10 +455,17 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
 		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
 
+		if (IEB->Get_Key_Pressed())
+		{
+			Press_Flg = true;
+		}
+
 		if (!State->Get_Adjust_While_Move())
 		{
 			if (IEB->Get_Key_Pressed())
+			{
 				State->Set_Adjust_Flag(false);
+			}
 			else
 				State->Set_Adjust_Flag(true);
 		}
@@ -552,6 +601,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			
 		}
 
+		//std::cout << "State->Get_Current_Distance()._LocX :" << State->Get_Current_Distance()._LocX << std::endl;
+		//std::cout << "State->Get_Current_Distance()._LocX :" << State->Get_Current_Distance()._LocY << std::endl;
+
 		glProgramUniform1f(_renderingProgram, 4, State->Get_Current_Distance()._LocX + Temp_MoveX);//Current_Move_LocationX
 		glProgramUniform1f(_renderingProgram, 5, State->Get_Current_Distance()._LocY + Temp_MoveY);//Current_Move_LocationY
 
@@ -560,8 +612,60 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			ReLoadState(State);
 			_Is_State_Changed = false;
 		}
-		//std::cout << "Current BLOCK : " << CUH << " " << CUW << std::endl;
-		//std::cout << "Exac Location : " << MoveX * 2 << " " << MoveY * 2 << std::endl;//REAL LOCATION
+
+		if (Press_Flg)
+		{
+			int Moves = Auto_Update_Trigger(State->Get_Current_Distance()._LocY, State->Get_Current_Distance()._LocX);
+
+			if ((Moves & MoveToNH) == MoveToNH)
+			{
+				_State_MoveY += 0.01f;
+				_Move_AdjustY += 0.01f;
+			}
+			if ((Moves & MoveToPH) == MoveToPH)
+			{
+				_State_MoveY -= 0.01f;
+				_Move_AdjustY -= 0.01f;
+			}
+			if ((Moves & MoveToNW) == MoveToNW)
+			{
+				_State_MoveX += 0.01f;
+				_Move_AdjustX += 0.01f;
+			}
+			if ((Moves & MoveToPW) == MoveToPW)
+			{
+				_State_MoveX -= 0.01f;
+				_Move_AdjustX -= 0.01f;
+			}/*
+			else if (Moves == MoveToPWPH)
+			{
+				_State_MoveX -= 0.01f;
+				_Move_AdjustX -= 0.01f;
+				_State_MoveY -= 0.01f;
+				_Move_AdjustY -= 0.01f;
+			}
+			else if (Moves == MoveToNWPH)
+			{
+				_State_MoveX += 0.01f;
+				_Move_AdjustX += 0.01f;
+				_State_MoveY -= 0.01f;
+				_Move_AdjustY -= 0.01f;
+			}
+			else if (Moves == MoveToPWNH)
+			{
+				_State_MoveX -= 0.01f;
+				_Move_AdjustX -= 0.01f;
+				_State_MoveY += 0.01f;
+				_Move_AdjustY += 0.01f;
+			}
+			else if (Moves == MoveToNWNH)
+			{
+				_State_MoveX += 0.01f;
+				_Move_AdjustX += 0.01f;
+				_State_MoveY += 0.01f;
+				_Move_AdjustY += 0.01f;
+			}*/
+		}
 
 		glProgramUniform1f(_renderingProgram, 8, _State_MoveX);//State_MoveX
 		glProgramUniform1f(_renderingProgram, 9, _State_MoveY);//State_MoveY

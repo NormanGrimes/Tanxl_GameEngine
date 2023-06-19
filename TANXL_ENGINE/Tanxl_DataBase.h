@@ -11,6 +11,7 @@
 // 文件整理函数新增两个特殊处理功能
 // 提供数据结构体Data_Vector的V4版本
 // 数据整理功能可选择是否处理完成后删除原文件
+// 修复设置存储结构体的OTH3位以及按位异或错误的问题
 
 #pragma once
 
@@ -143,7 +144,7 @@ public:
 	//↓输出当前内存中的链表的所有内容 仅支持输出Id_Vector和Data_Vector中的内容 当前内存为空时会抛出错误
 	void Print_Data();
 	//↓向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置
-	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase.usd");
+	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase");
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Mode为true时从文件中读取数据 需要提供In/Out_File_Name 执行后清空内存中的链表  Mode为false时直接对当前内存中的链表进行整理 可以使现有链表改为升序 执行后不清空
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
@@ -159,7 +160,7 @@ std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//拆分单�
 
 void Reset_Chain(TANXL_DataBase& TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
 
-void Data(bool Mode = true, bool Zero = true);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印 Zero用于选择添加模式 为True时添加的为0合法的数据
+void Data(bool Mode = true, bool Zero = false);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印 Zero用于选择添加模式 为True时添加的为0合法的数据
 
 void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
 

@@ -1,0 +1,1136 @@
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>17</Oth1>
+			<Oth2: 31>57</Oth2>
+			<Oth3: 248>71</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>20</Oth1>
+			<Oth2: 31>37</Oth2>
+			<Oth3: 249>71</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>75</Oth1>
+			<Oth2: 31>67</Oth2>
+			<Oth3: 250>20</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>58</Oth1>
+			<Oth2: 31>60</Oth2>
+			<Oth3: 251>90</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>7</Oth1>
+			<Oth2: 31>11</Oth2>
+			<Oth3: 252>84</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>61</Oth1>
+			<Oth2: 31>60</Oth2>
+			<Oth3: 253>94</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>90</Oth1>
+			<Oth2: 31>20</Oth2>
+			<Oth3: 254>37</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>88</Oth1>
+			<Oth2: 31>15</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>63</Oth1>
+			<Oth2: 31>64</Oth2>
+			<Oth3: 248>16</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>78</Oth1>
+			<Oth2: 31>90</Oth2>
+			<Oth3: 249>45</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>62</Oth1>
+			<Oth2: 31>35</Oth2>
+			<Oth3: 250>28</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>9</Oth1>
+			<Oth2: 31>15</Oth2>
+			<Oth3: 251>3</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>60</Oth1>
+			<Oth2: 31>21</Oth2>
+			<Oth3: 252>87</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>44</Oth1>
+			<Oth2: 31>13</Oth2>
+			<Oth3: 253>33</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>89</Oth1>
+			<Oth2: 31>10</Oth2>
+			<Oth3: 254>23</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>52</Oth1>
+			<Oth2: 31>31</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>78</Oth1>
+			<Oth2: 31>32</Oth2>
+			<Oth3: 248>78</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>66</Oth1>
+			<Oth2: 31>72</Oth2>
+			<Oth3: 249>99</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>19</Oth1>
+			<Oth2: 31>18</Oth2>
+			<Oth3: 250>20</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>1</Oth1>
+			<Oth2: 31>62</Oth2>
+			<Oth3: 251>90</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>68</Oth1>
+			<Oth2: 31>70</Oth2>
+			<Oth3: 252>25</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>17</Oth1>
+			<Oth2: 31>18</Oth2>
+			<Oth3: 253>34</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>21</Oth1>
+			<Oth2: 31>17</Oth2>
+			<Oth3: 254>59</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>79</Oth1>
+			<Oth2: 31>72</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>99</Oth1>
+			<Oth2: 31>78</Oth2>
+			<Oth3: 248>35</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>55</Oth1>
+			<Oth2: 31>97</Oth2>
+			<Oth3: 249>30</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>51</Oth1>
+			<Oth2: 31>88</Oth2>
+			<Oth3: 250>26</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>93</Oth1>
+			<Oth2: 31>1</Oth2>
+			<Oth3: 251>10</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>76</Oth1>
+			<Oth2: 31>19</Oth2>
+			<Oth3: 252>86</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>26</Oth1>
+			<Oth2: 31>29</Oth2>
+			<Oth3: 253>40</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>62</Oth1>
+			<Oth2: 31>66</Oth2>
+			<Oth3: 254>8</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>58</Oth1>
+			<Oth2: 31>74</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>80</Oth1>
+			<Oth2: 31>65</Oth2>
+			<Oth3: 248>54</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>35</Oth1>
+			<Oth2: 31>62</Oth2>
+			<Oth3: 249>19</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>45</Oth1>
+			<Oth2: 31>89</Oth2>
+			<Oth3: 250>79</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>2</Oth1>
+			<Oth2: 31>93</Oth2>
+			<Oth3: 251>35</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>41</Oth1>
+			<Oth2: 31>73</Oth2>
+			<Oth3: 252>46</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>88</Oth1>
+			<Oth2: 31>76</Oth2>
+			<Oth3: 253>3</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>1</Oth1>
+			<Oth2: 31>27</Oth2>
+			<Oth3: 254>23</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>36</Oth1>
+			<Oth2: 31>62</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>16</Oth1>
+			<Oth2: 31>94</Oth2>
+			<Oth3: 248>6</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>68</Oth1>
+			<Oth2: 31>74</Oth2>
+			<Oth3: 249>73</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>38</Oth1>
+			<Oth2: 31>76</Oth2>
+			<Oth3: 250>91</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>30</Oth1>
+			<Oth2: 31>60</Oth2>
+			<Oth3: 251>31</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>78</Oth1>
+			<Oth2: 31>26</Oth2>
+			<Oth3: 252>44</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>52</Oth1>
+			<Oth2: 31>66</Oth2>
+			<Oth3: 253>35</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>86</Oth1>
+			<Oth2: 31>42</Oth2>
+			<Oth3: 254>84</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>67</Oth1>
+			<Oth2: 31>38</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>81</Oth1>
+			<Oth2: 31>13</Oth2>
+			<Oth3: 248>16</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>90</Oth1>
+			<Oth2: 31>52</Oth2>
+			<Oth3: 249>64</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>85</Oth1>
+			<Oth2: 31>96</Oth2>
+			<Oth3: 250>3</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>77</Oth1>
+			<Oth2: 31>65</Oth2>
+			<Oth3: 251>23</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>23</Oth1>
+			<Oth2: 31>45</Oth2>
+			<Oth3: 252>74</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>66</Oth1>
+			<Oth2: 31>81</Oth2>
+			<Oth3: 253>23</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>85</Oth1>
+			<Oth2: 31>82</Oth2>
+			<Oth3: 254>22</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>79</Oth1>
+			<Oth2: 31>68</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>98</Oth1>
+			<Oth2: 31>74</Oth2>
+			<Oth3: 248>44</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>62</Oth1>
+			<Oth2: 31>17</Oth2>
+			<Oth3: 249>24</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>76</Oth1>
+			<Oth2: 31>14</Oth2>
+			<Oth3: 250>13</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>92</Oth1>
+			<Oth2: 31>93</Oth2>
+			<Oth3: 251>91</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>52</Oth1>
+			<Oth2: 31>50</Oth2>
+			<Oth3: 252>88</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>70</Oth1>
+			<Oth2: 31>38</Oth2>
+			<Oth3: 253>71</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>77</Oth1>
+			<Oth2: 31>62</Oth2>
+			<Oth3: 254>69</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>36</Oth1>
+			<Oth2: 31>48</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>36</Oth1>
+			<Oth2: 31>52</Oth2>
+			<Oth3: 248>42</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>99</Oth1>
+			<Oth2: 31>49</Oth2>
+			<Oth3: 249>76</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>11</Oth1>
+			<Oth2: 31>6</Oth2>
+			<Oth3: 250>72</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>11</Oth1>
+			<Oth2: 31>94</Oth2>
+			<Oth3: 251>11</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>9</Oth1>
+			<Oth2: 31>18</Oth2>
+			<Oth3: 252>92</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>27</Oth1>
+			<Oth2: 31>33</Oth2>
+			<Oth3: 253>50</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>90</Oth1>
+			<Oth2: 31>10</Oth2>
+			<Oth3: 254>47</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>34</Oth1>
+			<Oth2: 31>60</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>63</Oth1>
+			<Oth2: 31>49</Oth2>
+			<Oth3: 248>23</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>8</Oth1>
+			<Oth2: 31>56</Oth2>
+			<Oth3: 249>77</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>91</Oth1>
+			<Oth2: 31>32</Oth2>
+			<Oth3: 250>71</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>68</Oth1>
+			<Oth2: 31>76</Oth2>
+			<Oth3: 251>74</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>77</Oth1>
+			<Oth2: 31>17</Oth2>
+			<Oth3: 252>12</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>14</Oth1>
+			<Oth2: 31>45</Oth2>
+			<Oth3: 253>79</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>89</Oth1>
+			<Oth2: 31>1</Oth2>
+			<Oth3: 254>85</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>29</Oth1>
+			<Oth2: 31>66</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>42</Oth1>
+			<Oth2: 31>62</Oth2>
+			<Oth3: 248>52</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>63</Oth1>
+			<Oth2: 31>98</Oth2>
+			<Oth3: 249>71</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>75</Oth1>
+			<Oth2: 31>45</Oth2>
+			<Oth3: 250>58</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>53</Oth1>
+			<Oth2: 31>95</Oth2>
+			<Oth3: 251>40</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>61</Oth1>
+			<Oth2: 31>1</Oth2>
+			<Oth3: 252>52</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>33</Oth1>
+			<Oth2: 31>12</Oth2>
+			<Oth3: 253>9</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>76</Oth1>
+			<Oth2: 31>62</Oth2>
+			<Oth3: 254>9</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>18</Oth1>
+			<Oth2: 31>95</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>36</Oth1>
+			<Oth2: 31>74</Oth2>
+			<Oth3: 248>27</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>97</Oth1>
+			<Oth2: 31>12</Oth2>
+			<Oth3: 249>26</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>57</Oth1>
+			<Oth2: 31>24</Oth2>
+			<Oth3: 250>60</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>36</Oth1>
+			<Oth2: 31>95</Oth2>
+			<Oth3: 251>24</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>31</Oth1>
+			<Oth2: 31>81</Oth2>
+			<Oth3: 252>64</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>9</Oth1>
+			<Oth2: 31>52</Oth2>
+			<Oth3: 253>22</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>61</Oth1>
+			<Oth2: 31>35</Oth2>
+			<Oth3: 254>13</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>72</Oth1>
+			<Oth2: 31>46</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>83</Oth1>
+			<Oth2: 31>5</Oth2>
+			<Oth3: 248>38</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>66</Oth1>
+			<Oth2: 31>31</Oth2>
+			<Oth3: 249>24</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>53</Oth1>
+			<Oth2: 31>95</Oth2>
+			<Oth3: 250>95</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>90</Oth1>
+			<Oth2: 31>33</Oth2>
+			<Oth3: 251>33</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>10</Oth1>
+			<Oth2: 31>66</Oth2>
+			<Oth3: 252>58</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>18</Oth1>
+			<Oth2: 31>0</Oth2>
+			<Oth3: 253>23</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>6</Oth1>
+			<Oth2: 31>85</Oth2>
+			<Oth3: 254>68</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 手枪 / 1>
+	<Exac_Status : 地下水 / 1>
+		<TDBS_Item>
+			<Oth1: 17>57</Oth1>
+			<Oth2: 31>49</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>67</Oth1>
+			<Oth2: 31>85</Oth2>
+			<Oth3: 248>33</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>50</Oth1>
+			<Oth2: 31>2</Oth2>
+			<Oth3: 249>21</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>47</Oth1>
+			<Oth2: 31>18</Oth2>
+			<Oth3: 250>26</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>47</Oth1>
+			<Oth2: 31>79</Oth2>
+			<Oth3: 251>5</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>39</Oth1>
+			<Oth2: 31>17</Oth2>
+			<Oth3: 252>6</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>85</Oth1>
+			<Oth2: 31>20</Oth2>
+			<Oth3: 253>25</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>94</Oth1>
+			<Oth2: 31>82</Oth2>
+			<Oth3: 254>37</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 步枪 / 2>
+	<Exac_Status : M4A1-S / 2>
+		<TDBS_Item>
+			<Oth1: 34>21</Oth1>
+			<Oth2: 31>46</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>26</Oth1>
+			<Oth2: 31>74</Oth2>
+			<Oth3: 248>59</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>39</Oth1>
+			<Oth2: 31>35</Oth2>
+			<Oth3: 249>17</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>2</Oth1>
+			<Oth2: 31>30</Oth2>
+			<Oth3: 250>34</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>59</Oth1>
+			<Oth2: 31>66</Oth2>
+			<Oth3: 251>94</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>77</Oth1>
+			<Oth2: 31>1</Oth2>
+			<Oth3: 252>24</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>35</Oth1>
+			<Oth2: 31>60</Oth2>
+			<Oth3: 253>74</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>34</Oth1>
+			<Oth2: 31>30</Oth2>
+			<Oth3: 254>63</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 重型武器 / 3>
+	<Exac_Status : Nova / 3>
+		<TDBS_Item>
+			<Oth1: 51>67</Oth1>
+			<Oth2: 31>81</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>52</Oth1>
+			<Oth2: 31>11</Oth2>
+			<Oth3: 248>2</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>11</Oth1>
+			<Oth2: 31>30</Oth2>
+			<Oth3: 249>1</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>43</Oth1>
+			<Oth2: 31>24</Oth2>
+			<Oth3: 250>22</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>30</Oth1>
+			<Oth2: 31>77</Oth2>
+			<Oth3: 251>45</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>52</Oth1>
+			<Oth2: 31>24</Oth2>
+			<Oth3: 252>52</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>55</Oth1>
+			<Oth2: 31>78</Oth2>
+			<Oth3: 253>95</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>19</Oth1>
+			<Oth2: 31>98</Oth2>
+			<Oth3: 254>57</Oth3>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>
+<Type_Status : 微型冲锋枪 / 4>
+	<Exac_Status : MP9 / 4>
+		<TDBS_Item>
+			<Oth1: 68>46</Oth1>
+			<Oth2: 31>70</Oth2>
+		</TDBS_Item>
+	</Exac_Status>
+</Type_Status>

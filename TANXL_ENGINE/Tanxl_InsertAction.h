@@ -10,11 +10,14 @@
 // 增加获取某一按键是否按下的判断函数
 // 移除未使用且意义不明的_Max_Line变量
 // 移除CheckInsert接口（功能重复）
+// 增加宏来控制控制台输出的开启与关闭
 
 #pragma once
 
 #ifndef _TANXL_INSERTACTION_
 #define _TANXL_INSERTACTION_
+
+#define _TANXL_INSERTACTION_CONSOLE_OUTPUT_
 
 #include <vector>
 #include <iostream>

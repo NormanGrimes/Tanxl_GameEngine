@@ -6,6 +6,7 @@
 // 2022/11/07引擎管理模块增加控制移动最大距离的接口
 // 2022/12/27修改头文件包含方式
 // 2023/01/06增加引擎信息存储功能
+// 2023/01/19增加随移动操作移动地图的功能
 
 #pragma once
 
@@ -34,17 +35,14 @@ public:
 	//设置是否启用输入移动限制 Eanble启用/关闭自动移动限制 启用后不需要设置后续内容 Max_Height最大移动高度(绝对值) Max_Widtd最大移动宽度(绝对值)
 	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Widtd = 0.0f);
 
+	//设置是否启用移动到达地图边缘化地图随着移动操作而移动 Enable启用/关闭此功能 Compaer_Height/Width为触发的比较值
+	void Engine_Insert_Satate_MoveWith(bool Enable, float Compare_Height, float Compare_Width);
+
 	//Enable_Adjust设置是否启用自动调整 Adjust_Value为单次调整的距离 Enable_While_Move为是否启用移动中调整 后两项需要第一项启动才会生效
 	void Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move);
 
 	//向指定文件名称中输出当前系统的综合信息 FileName为输出的目标文件名称 调用此函数后目标文件会被重置
 	void Engine_Save_Source_Infor(std::string FileName);
-
-
-	void Engine_Save_Append_Infor(unsigned Id[], std::string SName[])
-	{
-
-	}
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

@@ -1,6 +1,7 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2023-01-10 09:43
 // 为存储模块系统信息提供标准文档
+// 为所有switch增加默认的break
 
 #pragma once
 
@@ -26,6 +27,8 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, in
 			break;
 		case 0:
 			return "VERSION_INFORMATION";
+		default:
+			break;
 		}
 
 		switch (Exac)
@@ -34,22 +37,24 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, in
 			break;
 		case 0:
 			return "ENGINE-CORE";
+		default:
+			break;
 		}
 	}
-	// -----|-----------------------|------|-----------------------|
-	// Type |                       | Exac |                       |
-	// -----|-----------------------|------|-----------------------|
-	//   0  | VERSION_INFORMATION   |   0  | ENGINE-CORE           |
-	// -----|-----------------------|------|-----------------------|
-	// OTH1 |                       |
-	// -----|-----------------------|
-	//  00  | TANXL_CONSOLE_LIST    |
-	//  01  | TANXL_DATABASE        |
-	//  02  | TANXL_GAMEEVENT       |
-	//  03  | TANXL_GAMESTATE       |
-	//  04  | TANXL_INSERTACTION    |
-	//  05  | TANXL_OPENGL_DRAW     |
-	// -----|-----------------------|
+	// |------|-----------------------|------|-----------------------|
+	// | Type |                       | Exac |                       |
+	// |------|-----------------------|------|-----------------------|
+	// |   0  | VERSION_INFORMATION   |   0  | ENGINE-CORE           |
+	// |------|-----------------------|------|-----------------------|
+	// | OTH1 |                       |
+	// |------|-----------------------|
+	// |  00  | TANXL_CONSOLE_LIST    |
+	// |  01  | TANXL_DATABASE        |
+	// |  02  | TANXL_GAMEEVENT       |
+	// |  03  | TANXL_GAMESTATE       |
+	// |  04  | TANXL_INSERTACTION    |
+	// |  05  | TANXL_OPENGL_DRAW     |
+	// |------|-----------------------|
 
 	if (Type == 0 && Exac == 0)
 	{
@@ -67,6 +72,8 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, in
 			return "TANXL_INSERTACTION";
 		case 05:
 			return "TANXL_OPENGL_DRAW";
+		default:
+			break;
 		}
 	}
 

@@ -6,7 +6,9 @@ Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 	this->Unit_Name = UIB->GenerateAutoSeed();
+	#ifdef _TANXL_INSERTACTION_CONSOLE_OUTPUT_
 	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
+	#endif
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
@@ -17,7 +19,9 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
+	#ifdef _TANXL_INSERTACTION_CONSOLE_OUTPUT_
 	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
+	#endif
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
@@ -28,7 +32,9 @@ Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
+	#ifdef _TANXL_INSERTACTION_CONSOLE_OUTPUT_
 	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
+	#endif
 }
 
 InsertEventBase& InsertEventBase::GetInsertBase()
