@@ -12,27 +12,8 @@ int main()
 	std::cout << "Generate : " << UIB->Generate() << std::endl;
 
 	TANXL_DataBase NData;
-	Data(true, false);
+	TanxlDB::Data(true);
 	NData.Get_LocalData("Tanxl_DataBase");
-	/*unsigned n = 0x10101010, i = 10;
-	while (i--)
-	{
-		if (i % 10 != 0)
-			n++;
-		else
-			n += 0x01000000;
-
-		if ((n & 0x0f000000) == 0x0f000000)
-			n -= 0x0f000000;
-
-		if ((n & 0xf0000000) == 0xf0000000)
-			n -= 0xf0000000;
-
-		//std::cout << "Updating : " << std::setbase(16) << n << std::endl;
-		NData.Set_Instance(n, "Updating" + std::to_string(n));
-		std::cout << NData;
-		NData.AppendItem(false);
-	}*/
 	NData.Print_Data();
 
 	//Get Instance
@@ -53,7 +34,7 @@ int main()
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
-	TGE.Engine_Save_Source_Infor("ULTRA");
+	TGE.Engine_Save_Source_Infor("Tanxl Engine VersionMes");
 
 	bool CurrStatus = false;
 	bool Appended = false;

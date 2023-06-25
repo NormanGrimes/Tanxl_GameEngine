@@ -11,6 +11,8 @@
 // 移除未使用且意义不明的_Max_Line变量
 // 移除CheckInsert接口（功能重复）
 // 增加宏来控制控制台输出的开启与关闭
+// 是否到达边缘的标记改为short类型且获取函数改为线程安全式
+// 修复边缘标记不标记符号小于的问题
 
 #pragma once
 
@@ -60,7 +62,7 @@ public:
 	//删除指定名称的输入按键功能
 	bool RemoveEvent(std::string Event_Name);
 	//获取到当前移动操作是否导致移动到地图边缘 调用后会重置成员内容为否
-	bool Get_Reach_Edge();
+	short Get_Reach_Edge();
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	void RegistEvent(Key_Unit* KU);
@@ -84,8 +86,8 @@ private:
 	std::vector<bool>* _PTB;
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离
 	float _Max_float;
-	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘
-	bool _Is_Reach_Edge = false;
+	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘 0为未到达边缘 1为左边缘 2为右边缘 3为上边缘 4为下边缘
+	short _Is_Reach_Edge = 0;
 	//_Is_State_Range 用于标记当前是否限制了移动范围
 	bool _Is_State_Range;
 	//_Is_Max_Single 用于标记当前是否使用单一X/Y轴设置方式

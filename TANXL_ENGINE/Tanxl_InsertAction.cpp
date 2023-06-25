@@ -99,8 +99,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 				StateX -= _Margin_X;
 				StateY -= _Margin_Y;
 			}
-			//std::cout << "BUTTON PUSHED x_" << *MoveX << "y_" << *MoveY << std::endl;
-			//std::cout << "BUTTON PUSHED x_" << *deputyX << "y_" << *deputyY << std::endl;
+			std::cout << "BUTTON PUSHED x_" << MoveX << "y_" << MoveY << std::endl;
 		}
 	}
 }
@@ -163,11 +162,9 @@ bool InsertEventBase::RemoveEvent(std::string Event_Name)
 	return false;
 }
 
-bool InsertEventBase::Get_Reach_Edge()
+short InsertEventBase::Get_Reach_Edge()
 {
-	bool Is_Reach_Edge = _Is_Reach_Edge;
-	_Is_Reach_Edge = false;
-	return Is_Reach_Edge;
+	return this->_Is_Reach_Edge;
 }
 
 const std::string InsertEventBase::Get_Version()
@@ -178,6 +175,7 @@ const std::string InsertEventBase::Get_Version()
 unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, float* DeptY)
 {
 	unsigned Return_Value = 0;
+	this->_Is_Reach_Edge = 0;
 
 	if (!_Is_State_Range)
 		return 3;
@@ -187,11 +185,14 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 
 	if (*MoveX > _Max_float)
 	{
-		this->_Is_Reach_Edge = true;
+		this->_Is_Reach_Edge += 2;
 		*MoveX = _Max_float;
 	}
 	else if (*MoveX < -_Max_float)
+	{
+		this->_Is_Reach_Edge += 1;
 		*MoveX = -_Max_float;
+	}
 	else
 		Return_Value |= 1;
 
@@ -200,11 +201,14 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 
 	if (*MoveY > _Max_float)
 	{
-		this->_Is_Reach_Edge = true;
+		this->_Is_Reach_Edge += 3;
 		*MoveY = _Max_float;
 	}
 	else if (*MoveY < -_Max_float)
+	{
+		this->_Is_Reach_Edge += 4;
 		*MoveY = -_Max_float;
+	}
 	else
 		Return_Value |= 2;
 

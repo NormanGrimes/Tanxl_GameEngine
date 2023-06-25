@@ -12,6 +12,8 @@
 // 提供数据结构体Data_Vector的V4版本
 // 数据整理功能可选择是否处理完成后删除原文件
 // 修复设置存储结构体的OTH3位以及按位异或错误的问题
+// 移除零/满合法的设定（数据为15进制，忽略0xF）
+// 为五个额外的特殊功能限定名称空间
 
 #pragma once
 
@@ -119,7 +121,6 @@ private:
 	int Current_Location;
 	bool Is_Instance_Data;//用来判断Item_Instance中是否有数据
 	bool Is_Chain_Empty;//用来判断链表是否为空
-	bool Is_Full_Legal;//值为true时0xF成为合法值 可在输出中显示/使用
 	Id_Vector* Id_Chain_Locate(int Type, int Exac);//时间复杂度为logN的Id_Chain快速定位函数 Type Exac 指Id_Chain的同名变量
 	Data_Vector* Data_Chain_Locate(int Type, int Exac, int Depth);//借由Id_Chain_Locate函数对不同深度的Data_Chain定位
 	void Replace_Chain(int OldType, int OldExac, int OldDepth, int Type, int Exac);//转移Data_Chain到另一个Id_Chain下
@@ -130,7 +131,7 @@ private:
 	inline void OstreamSpace(std::ostream& os, int Before = 0, int After = 0);//根据级别输出空格 Before用于执行前对级别数值进行修改 After用于执行后
 	inline void Combine_Status();//组合Status各物品级别并合并到Item_Instance中
 public:
-	TANXL_DataBase(bool Zero_Legal = false);//构造函数
+	TANXL_DataBase();//构造函数
 	bool Get_LocalData(std::string File_Name);//获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
 	//↓编辑实例 0x12030405 1代表Code位 2代表Name位 03代表Oth1位 依此类推
 	//↓在1.7版本中考虑到零合法的操作一致性 最大值已被作为不可选标志即 Code/Name位的F 或Oth位的FF
@@ -154,14 +155,17 @@ public:
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息
 };
 
-std::string Combine_Char(std::string data, int Start, int End);//拆分char数组获取指定内容，Start为开始位置End为结束位置(结束位置不保留)
+namespace TanxlDB
+{
+	std::string Combine_Char(std::string data, int Start, int End);//拆分char数组获取指定内容，Start为开始位置End为结束位置(结束位置不保留)
 
-std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//拆分单行内容获取信息
+	std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//拆分单行内容获取信息
 
-void Reset_Chain(TANXL_DataBase& TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
+	void Reset_Chain(TANXL_DataBase& TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
 
-void Data(bool Mode = true, bool Zero = false);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印 Zero用于选择添加模式 为True时添加的为0合法的数据
+	void Data(bool Mode = true);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印
 
-void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
+	void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
+}
 
 #endif

@@ -1,7 +1,7 @@
 #include "Tanxl_Engine_Manager.h"
 
 Tanxl_Engine::Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE),
-Tanxl_Engine_DataBase(new TANXL_DataBase(false)),
+Tanxl_Engine_DataBase(new TANXL_DataBase),
 Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 Tanxl_Engine_GameState(&GameStateBase::Get_StateBase(5, 5)),
 Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
@@ -53,8 +53,9 @@ void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, floa
 	}
 }
 
-void Tanxl_Engine::Engine_Insert_Satate_MoveWith(bool Enable, float Compare_Height, float Compare_Width)
+void Tanxl_Engine::Engine_Insert_Satate_MoveWith(bool Enable, bool Mode, float Compare_Height, float Compare_Width)
 {
+	Tanxl_Engine_OpenGL_Draw->Set_Trigger_Mode(Mode);
 	Tanxl_Engine_OpenGL_Draw->Set_Trigger_Range(Enable, Compare_Height, Compare_Width);
 }
 

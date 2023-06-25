@@ -237,10 +237,6 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
 	};
 	
 	brickTexture = OpenGL_Render::loadTexture("Texture/TANXL_GRASS_200X200.jpg");
@@ -340,6 +336,11 @@ void OpenGL_Draw::Set_Clear(bool Clear)
 	this->_Clear_Function = Clear;
 }
 
+void OpenGL_Draw::Set_Trigger_Mode(bool Mode)
+{
+	this->_Trigger_Mode = Mode;
+}
+
 void OpenGL_Draw::Set_Trigger_Range(bool Enable, float Height, float Width)
 {
 	_Is_Trigger_Enable = Enable;
@@ -377,6 +378,11 @@ EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
 		return Value;
 	}
 	return MoveToNO;
+}
+
+EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(short Edge)
+{
+	return static_cast<EMove_State_EventId>(Edge);
 }
 
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
@@ -615,7 +621,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if (Press_Flg)
 		{
-			int Moves = Auto_Update_Trigger(State->Get_Current_Distance()._LocY, State->Get_Current_Distance()._LocX);
+			int Moves;
+			if (_Trigger_Mode)
+				Moves = Auto_Update_Trigger(IEB->Get_Reach_Edge());//TODO
+			else
+				Moves = Auto_Update_Trigger(State->Get_Current_Distance()._LocY, State->Get_Current_Distance()._LocX);
 
 			if ((Moves & MoveToNH) == MoveToNH)
 			{

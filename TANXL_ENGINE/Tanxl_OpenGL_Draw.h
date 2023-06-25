@@ -4,6 +4,8 @@
 // 移除构造函数的默认参数
 // 代码删除部分冗余 等待下一次优化
 // 增加地图背景随着移动操作而移动的功能
+// 增加根据输入边缘位置生成移动事件Id的功能
+// 增加移动事件Id生成方式切换的功能
 
 #pragma once
 
@@ -33,8 +35,10 @@ public:
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFra(int First_Adjust);
 	void Set_Clear(bool Clear);
+	void Set_Trigger_Mode(bool Mode);
 	void Set_Trigger_Range(bool Enable, float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
+	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
 	GLFWwindow* Get_Window()const;
@@ -45,6 +49,7 @@ private:
 
 	bool _Clear_Function;
 	bool _Is_State_Changed;
+	bool _Trigger_Mode = false;
 	//标记是否启用地图随移动而移动的功能
 	bool _Is_Trigger_Enable = false;
 

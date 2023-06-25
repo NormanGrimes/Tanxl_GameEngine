@@ -2,157 +2,163 @@
 
 #include "Tanxl_DataBase.h"
 
-std::string Combine_Char(std::string data, int Start, int End)
+namespace TanxlDB
 {
-	if (End < Start)
-	{
-		throw "错误 : Combine_Char 的输入值Start大于End的值";
-		return "";
-	}
-	std::string New_data{};
-	for (int i = Start, j = 0; i < End; ++i, ++j)
-	{
-		if (data[i] == '\t' || data[i] == '<')
-		{
-			End++; j--;
-			continue;
-		}
-		if (j < 0)j = 0;
-		New_data = New_data + data[i];
-	}
-	return New_data;
-}
 
-std::string Divid_Char(std::string data, int Mode)
-{
-	int Lock{ -1 }, Last{ -1 };
-	char Left, Right;
-	switch (Mode)
+	std::string Combine_Char(std::string data, int Start, int End)
 	{
-	case GET_STATUS_DAT://获取单例数据0~15
-		Left = '/'; Right = '>';
-		break;
-	case GET_STORAG_DAT://获取储存的信息
-		Left = '>'; Right = '<';
-		break;
-	case GET_STATUS_TAG://信息条目
-		Left = '<'; Right = ':';
-		break;
-	case GET_STATUS_STR://V3链表主副键String
-		Left = ':'; Right = '/';
-		break;
-	case GET_OLDSTY_DAT:
-		Left = ':'; Right = '>';
-		break;
-	default:
-		throw "错误 : Divid_Char 没有此条目的功能(0~4 为合法内容，而你输入了" + std::to_string(Mode) + ")";
-		return "";
-	}
-	for (int i = 0; i < data.length(); ++i)//获取内容
-	{
-		if ((data[i] == Left && Lock == -1) || (data[i] == Right && Lock != -1))
+		if (End < Start)
 		{
-			if (Lock == -1)
+			throw "错误 : Combine_Char 的输入值Start大于End的值";
+			return "";
+		}
+		std::string New_data{};
+		for (int i = Start, j = 0; i < End; ++i, ++j)
+		{
+			if (data[i] == '\t' || data[i] == '<')
 			{
-				Lock = i + 1;
+				End++; j--;
 				continue;
 			}
-			else
-				Last = i;
+			if (j < 0)j = 0;
+			New_data = New_data + data[i];
 		}
-		if (Lock != -1 && Last != -1)
-			return Combine_Char(data, Lock, Last);
+		return New_data;
 	}
-	throw "失败 : Divid_Char 读取错误 不存在满足条件的内容";
-	return "";
+
+	std::string Divid_Char(std::string data, int Mode)
+	{
+		int Lock{ -1 }, Last{ -1 };
+		char Left, Right;
+		switch (Mode)
+		{
+		case GET_STATUS_DAT://获取单例数据0~15
+			Left = '/'; Right = '>';
+			break;
+		case GET_STORAG_DAT://获取储存的信息
+			Left = '>'; Right = '<';
+			break;
+		case GET_STATUS_TAG://信息条目
+			Left = '<'; Right = ':';
+			break;
+		case GET_STATUS_STR://V3链表主副键String
+			Left = ':'; Right = '/';
+			break;
+		case GET_OLDSTY_DAT:
+			Left = ':'; Right = '>';
+			break;
+		default:
+			throw "错误 : Divid_Char 没有此条目的功能(0~4 为合法内容，而你输入了" + std::to_string(Mode) + ")";
+			return "";
+		}
+		for (int i = 0; i < data.length(); ++i)//获取内容
+		{
+			if ((data[i] == Left && Lock == -1) || (data[i] == Right && Lock != -1))
+			{
+				if (Lock == -1)
+				{
+					Lock = i + 1;
+					continue;
+				}
+				else
+					Last = i;
+			}
+			if (Lock != -1 && Last != -1)
+				return Combine_Char(data, Lock, Last);
+		}
+		throw "失败 : Divid_Char 读取错误 不存在满足条件的内容";
+		return "";
+	}
+
+	void Reset_Chain(TANXL_DataBase& TDB, int A, int B, int Nums)
+	{
+		TDB.Set_Specified(A, B, Nums, 3, -1, "NULL");
+		TDB.Set_Specified(A, B, Nums, 4, -1, "NULL");
+		TDB.Set_Specified(A, B, Nums, 5, -1, "NULL");
+	}
+
+	void Data(bool Mode)
+	{
+		TANXL_DataBase TDB_Instance;
+		for (unsigned Content = 0x11111ff8; Content != 0x11112000; ++Content)
+		{
+			TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
+			TDB_Instance.Set_Instance((Content & 0x0f000000) | 0xf0ffffff, "地下水");
+			TDB_Instance.Set_Instance((Content & 0x00ff0000) | 0xff00ffff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance((Content & 0x0000ff00) | 0xffff00ff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance((Content & 0x000000ff) | 0xffffff00, std::to_string(rand() % 100));
+			if (Mode)std::cout << TDB_Instance;
+			TDB_Instance.AppendItem();
+		}
+		for (unsigned Content = 0x22221ff8; Content != 0x22222000; ++Content)
+		{
+			TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
+			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
+			TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+			if (Mode)std::cout << TDB_Instance;
+			TDB_Instance.AppendItem();
+		}
+		for (unsigned Content = 0x33331ff8; Content != 0x33332000; ++Content)
+		{
+			TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
+			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
+			TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+			if (Mode)std::cout << TDB_Instance;
+			TDB_Instance.AppendItem();
+		}
+		for (unsigned Content = 0x44441ff8; Content != 0x44442000; ++Content)
+		{
+			TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
+			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
+			TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+			TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+			if (Mode)std::cout << TDB_Instance;
+			TDB_Instance.AppendItem();
+		}
+	}
+
+	void Combine_File(std::string FileA, std::string FileB)
+	{
+		std::string Line{};
+		std::fstream in(FileB + ".usd", std::ios::in);
+		if (!in.is_open())
+			std::fstream in(FileB + ".sd", std::ios::in);
+		std::fstream out(FileA + ".sd", std::ios::app);
+		if (in.is_open() && out.is_open())
+		{
+			out << std::endl;
+			while (std::getline(in, Line))
+				out << Line << std::endl;
+		}
+		else
+			throw "失败 : Combine_File 无法打开的指定文件";
+	}
 }
 
-void Reset_Chain(TANXL_DataBase& TDB, int A, int B, int Nums)
-{
-	TDB.Set_Specified(A, B, Nums, 3, -1, "NULL");
-	TDB.Set_Specified(A, B, Nums, 4, -1, "NULL");
-	TDB.Set_Specified(A, B, Nums, 5, -1, "NULL");
-}
-
-void Data(bool Mode, bool Zero)
-{
-	TANXL_DataBase TDB_Instance(Zero);
-	for (unsigned Content = 0x11111ff8; Content != 0x11112000; ++Content)
-	{
-		TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
-		TDB_Instance.Set_Instance((Content & 0x0f000000) | 0xf0ffffff, "地下水");
-		TDB_Instance.Set_Instance((Content & 0x00ff0000) | 0xff00ffff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance((Content & 0x0000ff00) | 0xffff00ff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance((Content & 0x000000ff) | 0xffffff00, std::to_string(rand() % 100));
-		if (Mode)std::cout << TDB_Instance;
-		TDB_Instance.AppendItem();
-	}
-	for (unsigned Content = 0x22221ff8; Content != 0x22222000; ++Content)
-	{
-		TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
-		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
-		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
-		if (Mode)std::cout << TDB_Instance;
-		TDB_Instance.AppendItem();
-	}
-	for (unsigned Content = 0x33331ff8; Content != 0x33332000; ++Content)
-	{
-		TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
-		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
-		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
-		if (Mode)std::cout << TDB_Instance;
-		TDB_Instance.AppendItem();
-	}
-	for (unsigned Content = 0x44441ff8; Content != 0x44442000; ++Content)
-	{
-		TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
-		TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
-		TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-		TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
-		if (Mode)std::cout << TDB_Instance;
-		TDB_Instance.AppendItem();
-	}
-}
-
-void Combine_File(std::string FileA, std::string FileB)
-{
-	std::string Line{};
-	std::fstream in(FileB + ".usd", std::ios::in);
-	if (!in.is_open())
-		std::fstream in(FileB + ".sd", std::ios::in);
-	std::fstream out(FileA + ".sd", std::ios::app);
-	if (in.is_open() && out.is_open())
-	{
-		out << std::endl;
-		while (std::getline(in, Line))
-			out << Line << std::endl;
-	}
-	else
-		throw "失败 : Combine_File 无法打开的指定文件";
-}
+using namespace TanxlDB;
 
 std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 {
-	if ((s.Item_Instance.Status_1 + s.Item_Instance.Status_2 + s.Item_Instance.Status_3 + s.Item_Instance.Status_4 + s.Item_Instance.Status_5) || s.Is_Full_Legal)
+	if (s.Item_Instance.Status_1 + s.Item_Instance.Status_2 + s.Item_Instance.Status_3 + s.Item_Instance.Status_4 + s.Item_Instance.Status_5)
 	{
 		//s.Get_Item_Status();
 		fot << "<Type_Status : " << s.Item_Instance.Code << " / " << s.Item_Instance.Status_1 << ">" << std::endl;
 		s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << s.Item_Instance.Name << " / " << s.Item_Instance.Status_2 << ">" << std::endl;
 		s.OstreamSpace(fot, 1, 1); fot << "<TDBS_Item>" << std::endl;
-		if ((s.Item_Instance.Status_3 != 0xFF) || s.Is_Full_Legal) {
+		if (s.Item_Instance.Status_3 != 0xFF) {
 			s.OstreamSpace(fot);
 			fot << "<Oth1: " << s.Item_Instance.Status_3 << ">" << s.Item_Instance.Oth1 << "</Oth1>" << std::endl;
 		}
-		if ((s.Item_Instance.Status_4 != 0xFF) || s.Is_Full_Legal) {
+		if (s.Item_Instance.Status_4 != 0xFF) {
 			s.OstreamSpace(fot);
 			fot << "<Oth2: " << s.Item_Instance.Status_4 << ">" << s.Item_Instance.Oth2 << "</Oth2>" << std::endl;
 		}
-		if ((s.Item_Instance.Status_5 != 0xFF) || s.Is_Full_Legal) {
+		if (s.Item_Instance.Status_5 != 0xFF) {
 			s.OstreamSpace(fot);
 			fot << "<Oth3: " << s.Item_Instance.Status_5 << ">" << s.Item_Instance.Oth3 << "</Oth3>" << std::endl;
 		}
@@ -163,8 +169,8 @@ std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 	return fot;
 }
 
-TANXL_DataBase::TANXL_DataBase(bool Zero_Legal) :
-	Is_Instance_Data(false), Is_Chain_Empty(true), Is_Full_Legal(Zero_Legal),
+TANXL_DataBase::TANXL_DataBase() :
+	Is_Instance_Data(false), Is_Chain_Empty(true),
 	IC_Vector(new std::vector<Id_Vector*>),Current_Location(0) {}
 
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
@@ -200,35 +206,35 @@ void TANXL_DataBase::ResetInstance()
 void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 {
 	bool SetTimes{ false };
-	if (((Num >> 28) < 15) || Is_Full_Legal) {
+	if ((Num >> 28) < 15) {
 		Item_Instance.Code = Set;
 		Item_Instance.Status_1 = (Num >> 28);
 		Item_Instance.Item_Status ^= (0xF << 28);
 		Item_Instance.Item_Status |= Item_Instance.Status_1 << 28;
 		SetTimes = true;
 	}
-	if ((((Num & 0x0f000000) >> 24) < 15) || Is_Full_Legal) {
+	if (((Num & 0x0f000000) >> 24) < 15) {
 		Item_Instance.Name = Set;
 		Item_Instance.Status_2 = ((Num & 0x0f000000) >> 24);
 		Item_Instance.Item_Status ^= (0xF << 24);
 		Item_Instance.Item_Status |= Item_Instance.Status_2 << 24;
 		SetTimes = true;
 	}
-	if ((((Num & 0x00ff0000) >> 16) < 255) || Is_Full_Legal) {
+	if (((Num & 0x00ff0000) >> 16) < 255) {
 		Item_Instance.Oth1 = Set;
 		Item_Instance.Status_3 = ((Num & 0x00ff0000) >> 16);
 		Item_Instance.Item_Status ^= (0xFF << 16);
 		Item_Instance.Item_Status |= Item_Instance.Status_3 << 16;
 		SetTimes = true;
 	}
-	if ((((Num & 0x0000ff00) >> 8) < 255) || Is_Full_Legal) {
+	if (((Num & 0x0000ff00) >> 8) < 255) {
 		Item_Instance.Oth2 = Set;
 		Item_Instance.Status_4 = ((Num & 0x0000ff00) >> 8);
 		Item_Instance.Item_Status ^= (0xFF << 8);
 		Item_Instance.Item_Status |= Item_Instance.Status_4 << 8;
 		SetTimes = true;
 	}
-	if (((Num & 0x000000ff) < 255) || Is_Full_Legal) {
+	if ((Num & 0x000000ff) < 255) {
 		Item_Instance.Oth3 = Set;
 		Item_Instance.Status_5 = (Num & 0x000000ff);
 		Item_Instance.Item_Status ^= 0xFF;
@@ -312,17 +318,17 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 				continue;
 			if (Mode ^ 0x1)
 				out << "\t\t\t<TDB_Item>" << std::endl;
-			if ((*IODB)->Id_1 != 0xFF || Is_Full_Legal)
+			if ((*IODB)->Id_1 != 0xFF)
 			{
 				if (Mode ^ 0x1)out << "\t";
 				out << "\t\t\t<" + TAG_OTH1 + ": " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</Oth1>" << std::endl;
 			}
-			if ((*IODB)->Id_2 != 0xFF || Is_Full_Legal)
+			if ((*IODB)->Id_2 != 0xFF)
 			{
 				if (Mode ^ 0x1)out << "\t";
 				out << "\t\t\t<" + TAG_OTH2 + ": " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</Oth2>" << std::endl;
 			}
-			if ((*IODB)->Id_3 != 0xFF || Is_Full_Legal)
+			if ((*IODB)->Id_3 != 0xFF)
 			{
 				if (Mode ^ 0x1)out << "\t";
 				out << "\t\t\t<" + TAG_OTH3 + ": " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</Oth3>" << std::endl;
