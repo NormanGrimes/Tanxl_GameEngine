@@ -20,8 +20,8 @@ Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase())
 
 void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height)
 {
-	static int ReservWidth = 5;
-	static int ReservHeight = 5;
+	static int ReservWidth{ 5 };
+	static int ReservHeight{ 5 };
 	Tanxl_Engine_GameState->Get_StateBase(ReservWidth, ReservHeight);
 
 	if (ReservWidth != Width || ReservHeight != Height)

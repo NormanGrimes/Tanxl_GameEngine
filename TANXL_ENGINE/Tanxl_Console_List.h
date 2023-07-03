@@ -4,6 +4,7 @@
 // 增加版本变量与获取接口
 // 输入功能调整为OpenGL输入（不稳定，测试中）
 // 回退输入操作方面的改动
+// 指针初始化nullptr取代NULL
 
 #pragma once
 
@@ -47,13 +48,13 @@ void Col(unsigned ColN = NULL, bool Under_Line = false);//设置自定义行的�
 class CONSOLE
 {
 public:
-	explicit CONSOLE(std::string Name = "UNdefined", unsigned Space = 0x171109, void(*FunC)() = NULL);
+	explicit CONSOLE(std::string Name = "UNdefined", unsigned Space = 0x171109, void(*FunC)() = nullptr);
 
 	const std::string Get_Version();
 
 	void Display_Once();
 
-	void Append_Item(std::string New_Item, unsigned Space = 0x171109, void(*FunC)() = NULL, int Depth = 0, int* Ids = 0);
+	void Append_Item(std::string New_Item, unsigned Space = 0x171109, void(*FunC)() = nullptr, int Depth = 0, int* Ids = nullptr);
 
 private:
 	void Display(int Depth = 0, unsigned Def_Col = FONT_COLOR_WHITE | BACK_COLOR_RED, unsigned Real_Sel = FONT_COLOR_WHITE | BACK_COLOR_PURPLE);
@@ -72,7 +73,7 @@ private:
 	std::vector<CONSOLE> _SonList;
 
 	bool Keys[14]{ false };
-	bool* Insert_Keys[14]{};
+	bool* Insert_Keys[14]{ nullptr };
 
 	void (*_Func)();
 

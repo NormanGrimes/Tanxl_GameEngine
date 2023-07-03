@@ -9,6 +9,7 @@
 // 增加版本变量与获取接口
 // 设置显示范围的接口不再清理地图数据
 // 移动状态枚举增加五种其他情况
+// 范围循环测试
 
 #pragma once
 
@@ -52,7 +53,7 @@ struct SLocation
 class StateUnit
 {
 public:
-	StateUnit(GameEvent* GE = NULL, int State_Id = 0, bool MoveTarget = true);
+	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, bool MoveTarget = true);
 	void SetEvent(std::string GameEventName, int State_Id = -1);
 	bool GetMoveAble();
 	int Get_State_Id();
@@ -96,8 +97,8 @@ public:
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
 	bool Get_Adjust_While_Move();
-	float Set_ExacHeight(double& Current, float* MoveState = NULL, float* State_MoveY = NULL, float* Auto_Adjust_Length = NULL);//可选功能 对2D棋盘上的物品微调位置
-	float Set_ExacWidth(double& Current, float* MoveState = NULL, float* State_MoveX = NULL, float* Auto_Adjust_Length = NULL);
+	float Set_ExacHeight(double& Current, float* MoveState = nullptr, float* State_MoveY = nullptr, float* Auto_Adjust_Length = nullptr);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(double& Current, float* MoveState = nullptr, float* State_MoveX = nullptr, float* Auto_Adjust_Length = nullptr);
 	unsigned Get_DataHeight()const;
 	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值

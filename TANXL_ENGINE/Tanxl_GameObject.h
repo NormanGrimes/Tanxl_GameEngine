@@ -4,6 +4,7 @@
 // 增加固定的生命值组件
 // 增加组件结构体
 // 针对for循环的简易效率更新
+// 范围循环测试
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -75,9 +76,9 @@ private:
 
 bool GameObjectBase::AppendComponment(ComponmentBase* CM)
 {
-	for (int i = 0; i < _GOC._CMB.size(); ++i)//根据名称添加
+	for (auto Componment : _GOC._CMB)//根据名称添加
 	{
-		if (_GOC._CMB.at(i)->GetName() == CM->GetName())
+		if (Componment->GetName() == CM->GetName())
 			return false;//出现同名组件——添加失败
 	}
 	_GOC._CMB.push_back(CM);

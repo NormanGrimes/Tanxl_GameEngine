@@ -13,6 +13,8 @@
 // 增加宏来控制控制台输出的开启与关闭
 // 是否到达边缘的标记改为short类型且获取函数改为线程安全式
 // 修复边缘标记不标记符号小于的问题
+// 修复边缘标记上方边缘错误的问题
+// 指针初始化采用nullptr替代NULL
 
 #pragma once
 
@@ -32,7 +34,7 @@ struct Key_Unit
 {
 	Key_Unit();
 	Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM = "");
-	Key_Unit(int GLKEY, bool* CustomX = NULL, bool* CustomY = NULL, std::string UNAM = "");
+	Key_Unit(int GLKEY, bool* CustomX = nullptr, bool* CustomY = nullptr, std::string UNAM = "");
 
 	//用于标记当前按键的类型
 	short Unit_Type;
@@ -81,7 +83,7 @@ public:
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
 private:
-	unsigned AutoCheck(float* MoveX, float* MoveY, float* DeptX = NULL, float* DeptY = NULL);
+	unsigned AutoCheck(float* MoveX, float* MoveY, float* DeptX = nullptr , float* DeptY = nullptr);
 	std::vector<Key_Unit*> _KeyEventS;
 	std::vector<bool>* _PTB;
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离

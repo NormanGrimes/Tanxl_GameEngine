@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include "Tanxl_Engine_Manager.h"
 #include <iomanip>
 int main()
@@ -9,7 +8,6 @@ int main()
 	Tanxl_Engine TGE;
 
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
-	std::cout << "Generate : " << UIB->Generate() << std::endl;
 
 	TANXL_DataBase NData;
 	TanxlDB::Data(true);
@@ -50,8 +48,6 @@ int main()
 	TGE.Engine_State_Set_Display(5, 5);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
-
-	//TGE.Engine_Save_Append_Infor();
 
 	std::vector<std::string> KeyUnitNames;
 

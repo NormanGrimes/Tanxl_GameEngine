@@ -4,7 +4,6 @@
 
 namespace TanxlDB
 {
-
 	std::string Combine_Char(std::string data, int Start, int End)
 	{
 		if (End < Start)
@@ -77,10 +76,10 @@ namespace TanxlDB
 		TDB.Set_Specified(A, B, Nums, 5, -1, "NULL");
 	}
 
-	void Data(bool Mode)
+	void Data(bool Mode, unsigned Length_Each)
 	{
 		TANXL_DataBase TDB_Instance;
-		for (unsigned Content = 0x11111ff8; Content != 0x11112000; ++Content)
+		for (unsigned Content = (0x11112000 - Length_Each); Content != 0x11112000; ++Content)
 		{
 			TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
 			TDB_Instance.Set_Instance((Content & 0x0f000000) | 0xf0ffffff, "地下水");
@@ -90,7 +89,7 @@ namespace TanxlDB
 			if (Mode)std::cout << TDB_Instance;
 			TDB_Instance.AppendItem();
 		}
-		for (unsigned Content = 0x22221ff8; Content != 0x22222000; ++Content)
+		for (unsigned Content = 0x22222000 - Length_Each; Content != 0x22222000; ++Content)
 		{
 			TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
 			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
@@ -100,7 +99,7 @@ namespace TanxlDB
 			if (Mode)std::cout << TDB_Instance;
 			TDB_Instance.AppendItem();
 		}
-		for (unsigned Content = 0x33331ff8; Content != 0x33332000; ++Content)
+		for (unsigned Content = 0x33332000 - Length_Each; Content != 0x33332000; ++Content)
 		{
 			TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
 			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
@@ -110,7 +109,7 @@ namespace TanxlDB
 			if (Mode)std::cout << TDB_Instance;
 			TDB_Instance.AppendItem();
 		}
-		for (unsigned Content = 0x44441ff8; Content != 0x44442000; ++Content)
+		for (unsigned Content = 0x44442000 - Length_Each; Content != 0x44442000; ++Content)
 		{
 			TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
 			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
@@ -139,8 +138,6 @@ namespace TanxlDB
 			throw "失败 : Combine_File 无法打开的指定文件";
 	}
 }
-
-using namespace TanxlDB;
 
 std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 {
@@ -414,26 +411,67 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		std::string Line{};
 		while (std::getline(in, Line))
 		{
-			std::string Tag{ Combine_Char(Line, 1, 5) };
+			std::string Tag{ TanxlDB::Combine_Char(Line, 1, 5) };
 			if (Tag == "Type")
 			{
-				Type_Stat = std::stoi(Divid_Char(Line, GET_STATUS_DAT));
-				Type_Data = Divid_Char(Line, GET_STATUS_STR);
-				std::getline(in, Line);
-				Exac_Stat = std::stoi(Divid_Char(Line, GET_STATUS_DAT));
-				Exac_Data = Divid_Char(Line, GET_STATUS_STR);
+				try
+				{
+					Type_Stat = std::stoi(TanxlDB::Divid_Char(Line, GET_STATUS_DAT));
+					Type_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
+					std::getline(in, Line);
+					Exac_Stat = std::stoi(TanxlDB::Divid_Char(Line, GET_STATUS_DAT));
+					Exac_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
+				}
+				catch (std::invalid_argument&)
+				{
+					std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+					Type_Stat = 0;
+					Exac_Stat = 0;
+				}
+				catch (std::out_of_range&)
+				{
+					std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+					Type_Stat = 0;
+					Exac_Stat = 0;
+				}
 				while (std::getline(in, Line))
 				{
-					Tag = Combine_Char(Line, 1, 5);
+					Tag = TanxlDB::Combine_Char(Line, 1, 5);
 					if (Tag == "Type")
 					{
-						Type_Stat = std::stoi(Divid_Char(Line, GET_STATUS_DAT));
-						Type_Data = Divid_Char(Line, GET_STATUS_STR);
+						try
+						{
+							Type_Stat = std::stoi(TanxlDB::Divid_Char(Line, GET_STATUS_DAT));
+						}
+						catch (std::invalid_argument&)
+						{
+							std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+							Type_Stat = 0;
+						}
+						catch (std::out_of_range&)
+						{
+							std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+							Type_Stat = 0;
+						}
+						Type_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
 					}
 					else if (Tag == "Exac")
 					{
-						Exac_Stat = std::stoi(Divid_Char(Line, GET_STATUS_DAT));
-						Exac_Data = Divid_Char(Line, GET_STATUS_STR);
+						try
+						{
+							Exac_Stat = std::stoi(TanxlDB::Divid_Char(Line, GET_STATUS_DAT));
+						}
+						catch (std::invalid_argument&)
+						{
+							std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+							Exac_Stat = 0;
+						}
+						catch (std::out_of_range&)
+						{
+							std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+							Exac_Stat = 0;
+						}
+						Exac_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
 					}
 					else if (Tag == "/TDB")
 					{
@@ -454,8 +492,21 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 						Target = 2;
 					if (Target == -1)
 						continue;
-					IData[Target] = std::stoi(Divid_Char(Line, GET_OLDSTY_DAT));
-					SData[Target] = Divid_Char(Line, GET_STORAG_DAT);
+					try
+					{
+						IData[Target] = std::stoi(TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT));
+					}
+					catch (std::invalid_argument&)
+					{
+						std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+						IData[Target] = 0;
+					}
+					catch (std::out_of_range&)
+					{
+						std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+						IData[Target] = 0;
+					}
+					SData[Target] = TanxlDB::Divid_Char(Line, GET_STORAG_DAT);
 					Target = -1;
 				}
 			}
@@ -503,15 +554,15 @@ void TANXL_DataBase::Print_Data()//输出当前链表中的所有内容 V3 Updat
 {
 	if (!Is_Chain_Empty)
 	{
-		Id_Vector* PIC{};
-		Data_Vector* PDC{};
+		Id_Vector* PIC{ nullptr };
+		Data_Vector* PDC{ nullptr };
 		int PIC_Count{ 0 };
-		std::vector<Id_Vector*>::iterator IOI = IC_Vector->end() - 1;
+		std::vector<Id_Vector*>::iterator IOI = (IC_Vector->end() - 1);
 		do
 		{
 			int PDC_Count{ 0 };
 			PIC = this->IC_Vector->at(PIC_Count++);
-			std::vector<Data_Vector*>::iterator IOD = PIC->exac->end() - 1;
+			std::vector<Data_Vector*>::iterator IOD = (PIC->exac->end() - 1);
 			std::cout << "Id_Vector :" << PIC->Type << " - " << PIC->StrA << " - " << PIC->Exac << " - " << PIC->StrB << std::endl;
 			do
 			{
@@ -575,7 +626,7 @@ Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 			return IC_Vector->at(0);
 		}
 		throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
-		return NULL;
+		return nullptr;
 	}
 	else
 	{
@@ -595,12 +646,12 @@ Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 			if (Left == Right)
 			{
 				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
-				return NULL;
+				return nullptr;
 			}
 		}
 	}
 	throw "Id_Chain_Locate Failed ! : 未知原因";
-	return NULL;
+	return nullptr;
 }
 
 Data_Vector* TANXL_DataBase::Data_Chain_Locate(int Type, int Exac, int Depth)
@@ -609,7 +660,7 @@ Data_Vector* TANXL_DataBase::Data_Chain_Locate(int Type, int Exac, int Depth)
 	if (PIC->exac->size() < Depth)
 	{
 		throw "Data_Chain_Locate Failed ! : 超出当前容器最大深度";
-		return NULL;
+		return nullptr;
 	}
 	else if (Depth < 0 && Depth + static_cast<int>(PIC->exac->size()) >= 0)
 		return PIC->exac->at(Depth + PIC->exac->size());

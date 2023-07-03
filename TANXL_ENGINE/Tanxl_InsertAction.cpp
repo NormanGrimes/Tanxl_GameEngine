@@ -144,7 +144,7 @@ float InsertEventBase::Get_Margin_Y()
 
 bool InsertEventBase::Get_Key_Pressed()
 {
-	bool Temp_Element = _Is_Key_Pressed;
+	bool Temp_Element{ _Is_Key_Pressed };
 	_Is_Key_Pressed = false;
 	return Temp_Element;
 }
@@ -174,7 +174,7 @@ const std::string InsertEventBase::Get_Version()
 
 unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, float* DeptY)
 {
-	unsigned Return_Value = 0;
+	unsigned Return_Value{ 0 };
 	this->_Is_Reach_Edge = 0;
 
 	if (!_Is_State_Range)
@@ -201,7 +201,7 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 
 	if (*MoveY > _Max_float)
 	{
-		this->_Is_Reach_Edge += 3;
+		this->_Is_Reach_Edge += 8;
 		*MoveY = _Max_float;
 	}
 	else if (*MoveY < -_Max_float)
@@ -218,7 +218,7 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 //UnImportant 单例实现
 
 InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Max_float(1.0f), _PTB(NULL), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
+_Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
 {
 	//InsertKey Init //多次注册会导致多次移动
 
@@ -287,7 +287,7 @@ InsertEventBase::~InsertEventBase()
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _PTB(NULL), _Is_Max_Single(false),
+	_KeyEventS(NULL), _Max_float(1.0f), _PTB(nullptr), _Is_Max_Single(false),
 	_Max_float_Height(1), _Max_float_Width(1), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
 {
 	Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);

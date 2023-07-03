@@ -4,17 +4,15 @@
 
 GLuint vbo[1];
 
-GLuint brickTexture;
-
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
 {
 	static OpenGL_Draw* OGD = new OpenGL_Draw(ScreenWidth, ScreenHeight);
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _StateInfor(),_WidthInt(0),
-_renderingProgram(0), _vao(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(NULL),
-_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0){}
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _StateInfor(), _WidthInt(0),
+_renderingProgram(0), _vao(), _Texture(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr),
+_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0) {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -69,183 +67,185 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glProgramUniform1i(_renderingProgram, 10, _PreLoads);//PreLoads
 
 	float textureCoordinates[] =
-	{	
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+	{
+		/*1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,*///ORIGIN
+		/*0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,*///REVERSE
+		/*0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,*///RANDOM
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
 	};
 	
-	brickTexture = OpenGL_Render::loadTexture("Texture/TANXL_GRASS_200X200.jpg");
+	_Texture = OpenGL_Render::loadTexture(TanxlOD::TexGrass_Snowy_02_200X200);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, brickTexture);
+	glBindTexture(GL_TEXTURE_2D, _Texture);
 
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 
@@ -258,10 +258,10 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 {
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
-	int Move_NX = State->Get_Move_State()._Move_NX;
-	int Move_PX = State->Get_Move_State()._Move_PX;
-	int Move_NY = State->Get_Move_State()._Move_NY;
-	int Move_PY = State->Get_Move_State()._Move_PY;
+	int Move_NX{ State->Get_Move_State()._Move_NX };
+	int Move_PX{ State->Get_Move_State()._Move_PX };
+	int Move_NY{ State->Get_Move_State()._Move_NY };
+	int Move_PY{ State->Get_Move_State()._Move_PY };
 
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
 	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
@@ -297,15 +297,15 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	}
 	else
 	{
-		for (int i = 0; i < (_HeightInt + _PreLoads) * (_WidthInt + _PreLoads); ++i)
+		for (int i{ 0 }; i < (_HeightInt + _PreLoads) * (_WidthInt + _PreLoads); ++i)
 		{
 			_StateInfor[i] = UIB->Random(0, 2) - 1;
 		}
 	}
 	GLuint StatePos;
-	for (int i = 0; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) + 1; ++i)
+	for (int i{ 0 }; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) + 1; ++i)
 	{
-		std::string Tag = "State[" + std::to_string(i) + "]";
+		std::string Tag{ "State[" + std::to_string(i) + "]" };
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
 		glProgramUniform1i(_renderingProgram, StatePos, _StateInfor[i]);
 	}
@@ -399,10 +399,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
-	static bool First_Time = true;
+	static bool First_Time{ true };
 
-	float Temp_MoveX = 0.0f;
-	float Temp_MoveY = 0.0f;
+	float Temp_MoveX{ 0.0f };
+	float Temp_MoveY{ 0.0f };
 
 	if (First_Time)
 	{
@@ -423,23 +423,20 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(1);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, brickTexture);
-
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
 
-		int NCUH = static_cast<int>(_Move_AdjustY / _Each_Height);
-		int NCUW = static_cast<int>(_Move_AdjustX / _Each_Width);
+		int NCUH{ static_cast<int>(_Move_AdjustY / _Each_Height) };
+		int NCUW{ static_cast<int>(_Move_AdjustX / _Each_Width) };
 
-		static int ACUH = static_cast<int>(_Auto_AdjustY / _Each_Height);
-		static int ACUW = static_cast<int>(_Auto_AdjustX / _Each_Width);
+		static int ACUH{ static_cast<int>(_Auto_AdjustY / _Each_Height) };
+		static int ACUW{ static_cast<int>(_Auto_AdjustX / _Each_Width) };
 
-		static int ANCUH = static_cast<int>(_Auto_AdjustY / _Each_Height);
-		static int ANCUW = static_cast<int>(_Auto_AdjustX / _Each_Width);
+		static int ANCUH{ static_cast<int>(_Auto_AdjustY / _Each_Height) };
+		static int ANCUW{ static_cast<int>(_Auto_AdjustX / _Each_Width) };
 
-		int TOCUH = static_cast<int>((_Move_AdjustY * 2) / _Each_Height);
-		int TOCUW = static_cast<int>((_Move_AdjustX * 2) / _Each_Height);
+		int TOCUH{ static_cast<int>((_Move_AdjustY * 2) / _Each_Height) };
+		int TOCUW{ static_cast<int>((_Move_AdjustX * 2) / _Each_Width) };
 
 		//std::cout << "TOUCH " << TOCUH << " -- TOCUW " << TOCUW << std::endl;
 
@@ -449,9 +446,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			ANCUW = static_cast<int>(_Auto_AdjustX / _Each_Width);
 		}
 
-		static int Wait_Frame = 0;
-
-		bool Press_Flg = false;
+		static int Wait_Frame{ 0 };
+		bool Press_Flg{ false };
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
@@ -468,7 +464,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if (!State->Get_Adjust_While_Move())
 		{
-			if (IEB->Get_Key_Pressed())
+			if (Press_Flg)
 			{
 				State->Set_Adjust_Flag(false);
 			}
@@ -478,8 +474,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
-		double Current_Height = (State->Get_Current_Distance()._LocY * 2 + 1) / (_Each_Height);
-		double Current_Width = (State->Get_Current_Distance()._LocX * 2 + 1) / (_Each_Width);
+		double Current_Height{ (State->Get_Current_Distance()._LocY * 2 + 1) / (_Each_Height) };
+		double Current_Width{ (State->Get_Current_Distance()._LocX * 2 + 1) / (_Each_Width) };
 
 		//std::cout << "CUH/CUW" << State->Get_Current_Distance()._LocY << "__" << State->Get_Current_Distance()._LocX << std::endl;
 
@@ -492,7 +488,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (ANCUH != ACUH)
 			{
 				std::cout << "ANCUH __ " << ANCUH << " ACUH __ " << ACUH << std::endl;
-				int TempVal = ANCUH;
+				int TempVal{ ANCUH };
 				std::cout << "ANCUH != ACUH State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (ANCUH < ACUH)
 				{
@@ -517,7 +513,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (ANCUW != ACUW)
 			{
 				std::cout << "ANCUW __ " << ANCUW << " CUW __ " << ACUW << std::endl;
-				int TempVal = ANCUW;
+				int TempVal{ ANCUW };
 				std::cout << "ANCUW != ACUW State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (ANCUW < ACUW)
 				{
@@ -554,7 +550,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (NCUH != _Current_Move_Height)
 			{
 				std::cout << "NCUH __ " << NCUH << " CUH __ " << _Current_Move_Height << std::endl;
-				int TempVal = NCUH;
+				int TempVal{ NCUH };
 				std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (NCUH > _Current_Move_Height)
 				{
@@ -581,7 +577,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (NCUW != _Current_Move_Width)
 			{
 				std::cout << "NCUW __ " << NCUW << " CUW __ " << _Current_Move_Width << std::endl;
-				int TempVal = NCUW;
+				int TempVal{ NCUW };
 				std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
 				if (NCUW > _Current_Move_Width)
 				{
@@ -621,7 +617,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if (Press_Flg)
 		{
-			int Moves;
+			int Moves{};
+			_Trigger_Mode = true;
 			if (_Trigger_Mode)
 				Moves = Auto_Update_Trigger(IEB->Get_Reach_Edge());//TODO
 			else

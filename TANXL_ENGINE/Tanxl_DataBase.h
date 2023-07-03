@@ -14,6 +14,9 @@
 // 修复设置存储结构体的OTH3位以及按位异或错误的问题
 // 移除零/满合法的设定（数据为15进制，忽略0xF）
 // 为五个额外的特殊功能限定名称空间
+// 指针初始化采用nullptr替代NULL
+// 增加stoi的异常处理机制
+// 默认数据功能现在可设置输出数量
 
 #pragma once
 
@@ -55,10 +58,11 @@ enum ESet_Specified
 
 struct Data_Unit
 {
-	Data_Unit(int Id, std::string Data) :_Id(Id), _Data(Data) {};
+	Data_Unit(int Id, std::string Data) :_Id(Id), _Data(Data), _Next(nullptr) {};
 
 	int _Id;
 	std::string _Data;
+	Data_Unit* _Next;
 };
 
 struct Data_Vector_V4//数据表V4
@@ -108,13 +112,21 @@ class TANXL_DataBase
 private:
 	struct
 	{
-		unsigned Item_Status{ 0xFFFFFFFF };
+		unsigned long Item_Status{ 0xFFFFFFFF };
 		unsigned Status_1{ 0xF }; std::string Code{};
 		unsigned Status_2{ 0xF }; std::string Name{};
 		unsigned Status_3{ 0xFF }; std::string Oth1{};
 		unsigned Status_4{ 0xFF }; std::string Oth2{};
 		unsigned Status_5{ 0xFF }; std::string Oth3{};
 	}Item_Instance;
+
+	struct
+	{
+		unsigned int Item_Status{ 0xFFFF };//Type 8位 Exac 8位
+		std::string Type{ "" };
+		std::string Exac{ "" };
+		Data_Unit* Data{ nullptr };
+	};//Item_Instance V4
 
 	const std::string _Version{ "1.9" };
 	std::vector<Id_Vector*>* IC_Vector;
@@ -163,7 +175,7 @@ namespace TanxlDB
 
 	void Reset_Chain(TANXL_DataBase& TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
 
-	void Data(bool Mode = true);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印
+	void Data(bool Mode = true, unsigned Length_Each = 5);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印 Length_Each为每个分类数据的长度 总共四个分类
 
 	void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
 }

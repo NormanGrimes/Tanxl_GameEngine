@@ -27,7 +27,7 @@ void Col(unsigned ColN, bool Under_Line)//设置自定义行的背景颜色
 CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
 	:_Selector(0), _Is_Selected(false), _SonList(NULL), _SSpace(Space), _Func(FunC), _Is_Funcwork(true), _Name(NamE), _Page(0)
 {
-	if (_Func == NULL)
+	if (_Func == nullptr)
 		_Is_Funcwork = false;
 
 	//for (int i = 0; i < 13; i++)

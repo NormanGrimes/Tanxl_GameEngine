@@ -12,7 +12,6 @@
 
 #include <string>
 #include <iostream>
-//using namespace std;
 
 class UniqueIdBase
 {
@@ -40,7 +39,7 @@ public:
     //Random by Seed
     std::string Generate(int seed)
     {
-        std::string Data{};
+        std::string Data{ "" };
         srand(static_cast<unsigned int>(seed));
         for (int i = 0; i < 15; ++i)
         {
@@ -53,7 +52,7 @@ public:
 
     std::string GenerateAutoSeed()
     {
-        static unsigned int seed = 0;
+        static unsigned int seed{ 0 };
         std::string Data{};
         srand(seed++);
         for (int i = 0; i < 15; ++i)
@@ -69,13 +68,12 @@ public:
     {
         if (End - Start <= 0)
             return 0;
-        
         return (rand() % (End - Start)) + Start;
     }
 
     std::string Generate_Data(int Type, int Exac, std::string Key)
     {
-        std::string Data;
+        std::string Data{ "" };
         Data = "\t<Type_Status : " + std::to_string(Type) + ">"
             + "\t\t<Exac_Status : " + std::to_string(Exac) + ">"
             + "\t\t\t<TDB_Item>"

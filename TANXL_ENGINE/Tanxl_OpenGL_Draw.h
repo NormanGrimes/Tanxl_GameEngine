@@ -6,6 +6,10 @@
 // 增加地图背景随着移动操作而移动的功能
 // 增加根据输入边缘位置生成移动事件Id的功能
 // 增加移动事件Id生成方式切换的功能
+// 新增正常与左右反转的正方形纹理数组
+// 增加贴图文件的索引常量
+// 指针初始化采用nullptr替代NULL
+// 纹理变量收为私有成员
 
 #pragma once
 
@@ -19,6 +23,16 @@
 #include "Tanxl_UniqueID.h"
 #include "SOIL2/SOIL2.h"
 #include <math.h>
+
+namespace TanxlOD
+{
+	static const char* TexForestDDPAT_01_200X200{ "Texture/TANXL_FOREST_DDPAT_200X200.jpg" };
+	static const char* TexGrass_01_100X100{ "Texture/TANXL_GRASS_100X100.jpg" };
+	static const char* TexGrass_01_200X200{ "Texture/TANXL_GRASS_200X200.jpg" };
+	static const char* TexGrass_Snowy_01_200X200{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg" };
+	static const char* TexGrass_Snowy_02_200X200{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg" };
+	static const char* TexTest_Color_01_300X300{ "Texture/TANXL_TEST_COLOR_01_300X300.png" };
+}
 
 class OpenGL_Draw
 {
@@ -55,6 +69,7 @@ private:
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
+	GLuint _Texture;
 
 	//记录地图场景基本矩形的高度值
 	double _Each_Height = 0;

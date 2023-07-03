@@ -55,7 +55,7 @@ void GameStateBase::CompileStateUnits(std::string Infor)
 		else if (Infor.at(i) == ',')
 		{
 			Status_Id = std::stoi(Text_Reader);
-			this->_GameState.push_back(new StateUnit(NULL, Status_Id, State_Move));
+			this->_GameState.push_back(new StateUnit(nullptr, Status_Id, State_Move));
 			Text_Reader = "";
 		}
 		else if (Infor.at(i) == '-')
@@ -115,13 +115,13 @@ SLocation& GameStateBase::Get_Current_Distance()
 
 float GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* State_MoveY, float* Auto_Adjust_Length)
 {
-	static int EHCountS = 0;
-	static int EHCountL = 0;
+	static int EHCountS{ 0 };
+	static int EHCountL{ 0 };
 	if (_Adjust_Enable == false)
 		return 0.0f;
 	//std::cout << " EHCountS  _  EHCountL" << EHCountS << " ___ " << EHCountL << std::endl;
 	//std::cout << " MoveState  _" << *MoveState << " Adjust  _" << _GameState_Adjust << std::endl;
-	float Temp_Move = 0.0f;
+	float Temp_Move{ 0.0f };
 	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
 	{
 		EHCountS++;
@@ -183,11 +183,11 @@ float GameStateBase::Set_ExacHeight(double& Current, float* MoveState, float* St
 
 float GameStateBase::Set_ExacWidth(double& Current, float* MoveState, float* State_MoveX, float* Auto_Adjust_Length)
 {
-	static int EWCountS = 0;
-	static int EWCountL = 0;
+	static int EWCountS{ 0 };
+	static int EWCountL{ 0 };
 	if (_Adjust_Enable == false)
 		return 0.0f;
-	float Temp_Move = 0.0f;
+	float Temp_Move{ 0.0f };
 	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
 	{
 		EWCountS++;
@@ -261,10 +261,10 @@ void GameStateBase::Set_Adjust_Frequency(int Frame)
 
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 {
-	static std::vector<bool> MAB;
-	for (int i = 0; i < _GameState.size(); ++i)
+	static std::vector<bool> MAB{};
+	for (auto State : _GameState)
 	{
-		if (_GameState.at(i)->GetMoveAble())
+		if (State->GetMoveAble())
 			MAB.push_back(true);
 		else
 			MAB.push_back(false);
@@ -279,8 +279,8 @@ void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
 	this->_MState._Move_NY = NY;
 	this->_MState._Move_PY = PY;
 
-	int Line_Width = this->_MState._Move_PX - this->_MState._Move_NX;
-	int Coum_Width = this->_MState._Move_PX - this->_MState._Move_PY;
+	int Line_Width{ this->_MState._Move_PX - this->_MState._Move_NX };
+	int Coum_Width{ this->_MState._Move_PX - this->_MState._Move_PY };
 
 	//TODO
 }
@@ -315,7 +315,7 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
-	_Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(Height),
+	_Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(Height),
 	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(3), _Adjust_Enable(false) {}
 
 GameStateBase::~GameStateBase()
@@ -367,8 +367,8 @@ void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
 	this->_Distance_Mid._LocX = CurrentX;
 	this->_Distance_Mid._LocY = CurrentY;
-	float Compare_Width = 2.0f / _GameState_Width;
-	float Compare_Height = 2.0f / _GameState_Height;
+	float Compare_Width{ 2.0f / _GameState_Width };
+	float Compare_Height{ 2.0f / _GameState_Height };
 	if (_Distance_Mid._LocX < Compare_Width || _Distance_Mid._LocX > Compare_Width ||
 		_Distance_Mid._LocY < Compare_Height || _Distance_Mid._LocY > Compare_Height)
 	{
@@ -412,7 +412,7 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(NULL), _MState(0), _Data_Height(0), _Data_Width(0),
+_Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0),
 _Is_Adjusting(false), _Adjust_Frame(3), _Adjust_Enable(false) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
