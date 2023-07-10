@@ -8,6 +8,7 @@
 // 2023/01/06增加引擎信息存储功能
 // 2023/01/19增加随移动操作移动地图的功能
 // 2023/01/29操作移动地图的功能增加自动获取的方式
+// 2023/01/31增加引擎管理模块的版本功能
 
 #pragma once
 
@@ -52,6 +53,8 @@ private:
 	GameStateBase* Tanxl_Engine_GameState;
 	OpenGL_Draw* Tanxl_Engine_OpenGL_Draw;
 	InsertEventBase* Tanxl_Engine_InsertBase;
+
+	const std::string __ENGINE_VERSION__ = "0.1";
 };
 
 #endif

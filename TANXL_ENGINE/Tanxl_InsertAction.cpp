@@ -68,12 +68,11 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 {
 	for (int i = 0; i < _KeyEventS.size(); ++i)
 	{
-		//std::cout << "_KeyEventS.at(i)->GLFW_KEY" << _KeyEventS.at(i)->GLFW_KEY << std::endl;
+		_Margin_X = 0.0f;
+		_Margin_Y = 0.0f;
 		if (glfwGetKey(window, _KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
-			_Margin_X = 0.0f;
-			_Margin_Y = 0.0f;
 			if (_KeyEventS.at(i)->Unit_Type == 1)
 			{
 				_Is_Key_Pressed = false;
@@ -92,14 +91,14 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 				MoveX += static_cast<float>(_KeyEventS.at(i)->MoveLen);
 				_Margin_X = static_cast<float>(_KeyEventS.at(i)->MoveLen);
 			}
-			if (AutoCheck(&MoveX, &MoveY) == 3 && _KeyEventS.at(i)->Unit_Type == 0)
-			{
-				Move_AdjustX -= _Margin_X;
-				Move_AdjustY -= _Margin_Y;
-				StateX -= _Margin_X;
-				StateY -= _Margin_Y;
-			}
-			std::cout << "BUTTON PUSHED x_" << MoveX << "y_" << MoveY << std::endl;
+			//std::cout << "BUTTON PUSHED x_" << MoveX << "y_" << MoveY << std::endl;
+		}
+		if ((i == _KeyEventS.size() - 1) && AutoCheck(&MoveX, &MoveY) == 3)
+		{
+			Move_AdjustX -= _Margin_X;
+			Move_AdjustY -= _Margin_Y;
+			StateX -= _Margin_X;
+			StateY -= _Margin_Y;
 		}
 	}
 }

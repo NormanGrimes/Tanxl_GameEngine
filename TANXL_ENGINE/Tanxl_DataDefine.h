@@ -54,6 +54,7 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, in
 	// |  03  | TANXL_GAMESTATE       |
 	// |  04  | TANXL_INSERTACTION    |
 	// |  05  | TANXL_OPENGL_DRAW     |
+	// |  06  | TANXL_ENGINE_MANAGER  |
 	// |------|-----------------------|
 
 	if (Type == 0 && Exac == 0)
@@ -72,7 +73,9 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, in
 			return "TANXL_INSERTACTION";
 		case 05:
 			return "TANXL_OPENGL_DRAW";
-		default:
+		case 06:
+			return "TANXL_ENGINE_MANAGER";
+		default://(0xFF or else)
 			break;
 		}
 	}

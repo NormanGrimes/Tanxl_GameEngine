@@ -242,7 +242,14 @@ void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 		Is_Instance_Data = true;
 }
 
-void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
+void TANXL_DataBase::Set_Instance_V4(unsigned Status, std::string Type_Name, std::string Exac_Name)
+{
+	this->_Interior_Data.Item_Status = Status;
+	this->_Interior_Data.Type = Type_Name;
+	this->_Interior_Data.Exac = Exac_Name;
+}
+
+void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name, bool Keep_Instance)
 {
 	if (!Is_Instance_Data)
 	{
@@ -256,7 +263,8 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 		if (out.is_open())
 		{
 			out << *this;
-			this->ResetInstance();
+			if (!Keep_Instance)
+				this->ResetInstance();
 			out.close();
 		}
 	}
@@ -269,7 +277,8 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name)
 		Id_Vector* ITemp = new Id_Vector(
 			Item_Instance.Status_1, Item_Instance.Status_2,
 			Item_Instance.Code, Item_Instance.Name);
-		this->ResetInstance();
+		if (!Keep_Instance)
+			this->ResetInstance();
 		if (DTemp && ITemp)//判断是否申请空间成功
 			Append_Chain(*DTemp, *ITemp);
 		else
@@ -318,17 +327,17 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 			if ((*IODB)->Id_1 != 0xFF)
 			{
 				if (Mode ^ 0x1)out << "\t";
-				out << "\t\t\t<" + TAG_OTH1 + ": " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</Oth1>" << std::endl;
+				out << "\t\t\t<" + TAG_OTH1 + ": " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</" + TAG_OTH1 +">" << std::endl;
 			}
 			if ((*IODB)->Id_2 != 0xFF)
 			{
 				if (Mode ^ 0x1)out << "\t";
-				out << "\t\t\t<" + TAG_OTH2 + ": " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</Oth2>" << std::endl;
+				out << "\t\t\t<" + TAG_OTH2 + ": " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</" + TAG_OTH2 + ">" << std::endl;
 			}
 			if ((*IODB)->Id_3 != 0xFF)
 			{
 				if (Mode ^ 0x1)out << "\t";
-				out << "\t\t\t<" + TAG_OTH3 + ": " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</Oth3>" << std::endl;
+				out << "\t\t\t<" + TAG_OTH3 + ": " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</" + TAG_OTH3 + ">" << std::endl;
 			}
 			if (Mode ^ 0x1)
 				out << "\t\t\t</TDB_Item>" << std::endl;

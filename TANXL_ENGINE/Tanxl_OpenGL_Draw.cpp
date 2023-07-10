@@ -2,8 +2,6 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
-GLuint vbo[1];
-
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
 {
 	static OpenGL_Draw* OGD = new OpenGL_Draw(ScreenWidth, ScreenHeight);
@@ -11,7 +9,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
 }
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _StateInfor(), _WidthInt(0),
-_renderingProgram(0), _vao(), _Texture(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr),
+_renderingProgram(0), _vao(), _vbo(), _Texture(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr),
 _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0) {}
 
 const std::string OpenGL_Draw::Get_Version()
@@ -59,7 +57,7 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
-	glGenBuffers(1, vbo);
+	glGenBuffers(1, _vbo);
 
 	glProgramUniform1i(_renderingProgram, 6, _HeightInt);//SHeight
 	glProgramUniform1i(_renderingProgram, 7, _WidthInt);//SWidth
@@ -237,11 +235,13 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
 	};
 	
-	_Texture = OpenGL_Render::loadTexture(TanxlOD::TexGrass_Snowy_02_200X200);
+	_Texture = OpenGL_Render::loadTexture(TanxlOD::TexGrass_01_200X200);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -419,7 +419,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+		glBindBuffer(GL_ARRAY_BUFFER, _vbo[0]);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(1);
 

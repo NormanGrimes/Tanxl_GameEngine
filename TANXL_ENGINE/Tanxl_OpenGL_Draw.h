@@ -10,6 +10,7 @@
 // 增加贴图文件的索引常量
 // 指针初始化采用nullptr替代NULL
 // 纹理变量收为私有成员
+// vbo收入私有成员
 
 #pragma once
 
@@ -69,6 +70,7 @@ private:
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
+	GLuint _vbo[1];
 	GLuint _Texture;
 
 	//记录地图场景基本矩形的高度值
@@ -108,6 +110,7 @@ private:
 	int _Current_Move_Height = 0;
 	//记录手动移动指定的当前Y轴基本矩形
 	int _Current_Move_Width = 0;
+	//当前此模块的版本号
 	const std::string _Version{ "0.8" };
 	GLFWwindow* _Main_Window;
 };

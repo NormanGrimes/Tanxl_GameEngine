@@ -316,7 +316,7 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
 	_Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(Height),
-	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(3), _Adjust_Enable(false) {}
+	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -413,7 +413,7 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
 _Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0),
-_Is_Adjusting(false), _Adjust_Frame(3), _Adjust_Enable(false) {}
+_Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 

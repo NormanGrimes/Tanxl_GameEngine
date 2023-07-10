@@ -1,22 +1,8 @@
-﻿//_VERSION_1_9_ UPDATE LOG
-// LAST_UPDATE 2023-01-06 12:27
-// 增加版本变量与获取接口
-// AppendItem接口默认添加文件到usd格式下
-// 修改数据结构体的默认Id为0xF 即不可用状态
-// AppendItem任何形式的添加都会导致私有结构体重置
-// 结构体重置函数现在默认重置所有值到0xF
-// 修正一些判断仍然以0合法为准的问题
-// 设置私有结构体功能去掉不必要的判断
-// 设置匿名结构体的函数性能优化
-// 文件整理函数新增两个特殊处理功能
-// 提供数据结构体Data_Vector的V4版本
-// 数据整理功能可选择是否处理完成后删除原文件
-// 修复设置存储结构体的OTH3位以及按位异或错误的问题
-// 移除零/满合法的设定（数据为15进制，忽略0xF）
-// 为五个额外的特殊功能限定名称空间
-// 指针初始化采用nullptr替代NULL
-// 增加stoi的异常处理机制
-// 默认数据功能现在可设置输出数量
+﻿//_VERSION_2_0_ UPDATE LOG
+// LAST_UPDATE 2023-01-31 14:15
+// 添加物品功能可选在添加后不清理数据
+// 修复整理数据函数中未对应修改尾部/OTH的值
+// V4_UPDATE 增加第四版私有结构体的设置函数
 
 #pragma once
 
@@ -126,7 +112,7 @@ private:
 		std::string Type{ "" };
 		std::string Exac{ "" };
 		Data_Unit* Data{ nullptr };
-	};//Item_Instance V4
+	}_Interior_Data;
 
 	const std::string _Version{ "1.9" };
 	std::vector<Id_Vector*>* IC_Vector;
@@ -148,6 +134,7 @@ public:
 	//↓编辑实例 0x12030405 1代表Code位 2代表Name位 03代表Oth1位 依此类推
 	//↓在1.7版本中考虑到零合法的操作一致性 最大值已被作为不可选标志即 Code/Name位的F 或Oth位的FF
 	void Set_Instance(unsigned Num, std::string Set);
+	void Set_Instance_V4(unsigned Status, std::string Type_Name, std::string Exac_Name);
 	//↓读取指定Type(A)_Exac(B)级别的物品 并载入到单例结构中 Nums表示该级别下的第几个物品(从0开始)
 	void Get_Specified(int Type, int Exac, int Nums);
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...
@@ -156,8 +143,8 @@ public:
 	void Remove_Chain(int Type, int Exac);//删除某一节点与其下所有内容
 	//↓输出当前内存中的链表的所有内容 仅支持输出Id_Vector和Data_Vector中的内容 当前内存为空时会抛出错误
 	void Print_Data();
-	//↓向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置
-	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase");
+	//↓向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置 To_File为true时会向文件输出 否则存储到内存中 File_Name指定文件名称 不需要添加后缀 Keep_Instance可在为true时 完成添加后不清理Instance数据
+	void AppendItem(bool To_File = true, std::string File_Name = "Tanxl_DataBase", bool Keep_Instance = false);
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Mode为true时从文件中读取数据 需要提供In/Out_File_Name 执行后清空内存中的链表  Mode为false时直接对当前内存中的链表进行整理 可以使现有链表改为升序 执行后不清空
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
