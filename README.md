@@ -19,6 +19,11 @@ Version 0.2 Build 02 TURBO 09 - 2023/05/06 15:56
 
 Version 0.2 Build 11 TURBO 10 - 2023/06/25 14:31
 
+# Tanxl_GameEngine Version 0.2 Build 18 README
+This game is currently available on steam
+此游戏目前已在STEAM上可用
+[TANXL](https://store.steampowered.com/app/1929530/Tanxl/)
+
 # Tanxl_GameEngine Version 0.1 Build 38 README
 This Project's SLN is only support VS2022 V143 BUILD TOOLS
 此项目的SLN文件仅支持在VS2022的构建工具V143下进行生成
