@@ -9,6 +9,8 @@ int main()
 
 	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
 
+	UIB->Suffle_UniData(1);
+
 	TANXL_DataBase NData;
 	TanxlDB::Data(true);
 	NData.Get_LocalData("Tanxl_DataBase");
@@ -55,7 +57,7 @@ int main()
 	{
 		static int Timer = 0;
 		Timer++;
-		//std::cout << Appended << KU->MoveToX;
+		//std::cout << KU->MoveToX << "_";
 		OGD->Render_Once(GSB);
 		//TCL.Display_Once();
 		if (Timer == 50)
@@ -66,33 +68,37 @@ int main()
 				KU->MoveToX = false;
 				if (Appended == false)
 				{
-					Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);
+					Key_Unit MOVE_UP(GLFW_KEY_UP, false, true, 0.01);
 					IEB->RegistEvent(&MOVE_UP);
 					KeyUnitNames.push_back(MOVE_UP.Unit_Name);
 					MOVE_UP = Key_Unit(GLFW_KEY_W, false, true, 0.01);
 					IEB->RegistEvent(&MOVE_UP);
 					KeyUnitNames.push_back(MOVE_UP.Unit_Name);
 
-					Key_Unit MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
+					Key_Unit MOVE_LEFT(GLFW_KEY_LEFT, true, false, -0.01);
 					IEB->RegistEvent(&MOVE_LEFT);
 					KeyUnitNames.push_back(MOVE_LEFT.Unit_Name);
 					MOVE_LEFT = Key_Unit(GLFW_KEY_A, true, false, -0.01);
 					IEB->RegistEvent(&MOVE_LEFT);
 					KeyUnitNames.push_back(MOVE_LEFT.Unit_Name);
 
-					Key_Unit MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
+					Key_Unit MOVE_RIGHT(GLFW_KEY_RIGHT, true, false, 0.01);
 					IEB->RegistEvent(&MOVE_RIGHT);
 					KeyUnitNames.push_back(MOVE_RIGHT.Unit_Name);
 					MOVE_RIGHT = Key_Unit(GLFW_KEY_D, true, false, 0.01);
 					IEB->RegistEvent(&MOVE_RIGHT);
 					KeyUnitNames.push_back(MOVE_RIGHT.Unit_Name);
 
-					Key_Unit MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
+					Key_Unit MOVE_DOWN(GLFW_KEY_DOWN, false, true, -0.01);
 					IEB->RegistEvent(&MOVE_DOWN);
 					KeyUnitNames.push_back(MOVE_DOWN.Unit_Name);
 					MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);
 					IEB->RegistEvent(&MOVE_DOWN);
 					KeyUnitNames.push_back(MOVE_DOWN.Unit_Name);
+
+					//Key_Unit NOT_MOVE = Key_Unit(GLFW_KEY_X, false, false, 0.0);
+					//IEB->RegistEvent(&NOT_MOVE);
+					//KeyUnitNames.push_back(NOT_MOVE.Unit_Name);
 
 					Appended = true;
 				}

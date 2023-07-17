@@ -3,6 +3,8 @@
 // 添加物品功能可选在添加后不清理数据
 // 修复整理数据函数中未对应修改尾部/OTH的值
 // V4_UPDATE 增加第四版私有结构体的设置函数
+// V4_UPDATE 增加第四版的序号数据结构
+// V4_UPDATE 为数据数据结构增加一种数据添加方式
 
 #pragma once
 
@@ -51,14 +53,14 @@ struct Data_Unit
 	Data_Unit* _Next;
 };
 
-struct Data_Vector_V4//数据表V4
+struct Data_Link_V4//数据数据结构V4
 {
-	explicit Data_Vector_V4(int Id, std::string Data)
+	explicit Data_Link_V4(int Id, std::string Data)
 	{
 		_Data_Units.push_back(Data_Unit(Id, Data));
 	}
 
-	explicit Data_Vector_V4(Data_Unit Data)
+	explicit Data_Link_V4(Data_Unit Data)
 	{
 		_Data_Units.push_back(Data);
 	}
@@ -73,7 +75,31 @@ struct Data_Vector_V4//数据表V4
 		_Data_Units.push_back(Data);
 	}
 
+	void Append_Data(Data_Link_V4* Data)
+	{
+		for (int i{ 0 }; i < Data->_Data_Units.size(); ++i)
+			_Data_Units.push_back(Data->_Data_Units.at(i));
+		Data->_Data_Units.erase(Data->_Data_Units.begin(), Data->_Data_Units.end());
+		Data->_Data_Units.clear();
+	}
+
 	std::vector<Data_Unit> _Data_Units;
+};
+
+struct Id_Link_V4//序号数据结构V4
+{
+	explicit Id_Link_V4(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link_V4* Data = nullptr) :
+		_Type(Type), _Type_Name(Type_Name), _Exac(Exac), _Exac_Name(Exac_Name), _Data(Data) {}
+	void Append_Data_Link(Data_Link_V4* Data)
+	{
+		if (_Data == nullptr)
+			_Data = Data;
+		else
+			_Data->Append_Data(Data);
+	}
+	int _Type, _Exac;
+	std::string _Type_Name, _Exac_Name;
+	Data_Link_V4* _Data;
 };
 
 struct Data_Vector//短数据表(Vector)

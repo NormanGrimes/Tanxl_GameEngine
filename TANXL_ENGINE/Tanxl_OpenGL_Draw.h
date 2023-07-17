@@ -70,8 +70,8 @@ private:
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
-	GLuint _vbo[1];
-	GLuint _Texture;
+	GLuint _vbo[10];
+	std::vector<GLuint> _Texture;
 
 	//记录地图场景基本矩形的高度值
 	double _Each_Height = 0;

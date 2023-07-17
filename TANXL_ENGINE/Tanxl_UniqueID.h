@@ -4,6 +4,7 @@
 // 格式调整
 // 增加生成储存条目功能
 // 增加每次调用都会修改种子的生成函数
+// 新增对初始数据进行打乱的功能
 
 #pragma once
 
@@ -31,7 +32,7 @@ public:
         {
             if (i % 5 == 0 && i != 0)
                 Data += "-";
-            Data += Uniqt[rand() % 62];
+            Data += UniData[rand() % 62];
         }
         return Data;
     }
@@ -45,7 +46,7 @@ public:
         {
             if (i % 5 == 0 && i != 0)
                 Data += "-";
-            Data += Uniqt[rand() % 62];
+            Data += UniData[rand() % 62];
         }
         return Data;
     }
@@ -59,7 +60,7 @@ public:
         {
             if (i % 5 == 0 && i != 0)
                 Data += "-";
-            Data += Uniqt[rand() % 62];
+            Data += UniData[rand() % 62];
         }
         return Data;
     }
@@ -84,9 +85,24 @@ public:
         return Data;
     }
 
+    void Suffle_UniData(int Times)
+    {
+        srand(static_cast<unsigned int>(time(0)));
+        while (Times--)
+        {
+            for (int i{ 0 }; i < 62; ++i)
+            {
+                std::string Temp = UniData[i];
+                int Exchange_Val = rand() % 62;
+                UniData[i] = UniData[Exchange_Val];
+                UniData[Exchange_Val] = Temp;
+            }
+        }
+    }
+
 private:
 
-    std::string Uniqt[62] = {
+    std::string UniData[62] = {
     {"1"}, {"2"}, {"3"}, {"4"}, {"5"}, {"6"}, {"7"}, {"8"}, {"9"}, {"0"},
     {"a"}, {"b"}, {"c"}, {"d"}, {"e"}, {"f"}, {"g"}, {"h"}, {"i"}, {"j"},
     {"k"}, {"l"}, {"m"}, {"n"}, {"o"}, {"p"}, {"q"}, {"r"}, {"s"}, {"t"},

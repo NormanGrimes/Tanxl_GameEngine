@@ -64,7 +64,7 @@ void InsertEventBase::RemoveEvent()
 	_KeyEventS.pop_back();
 }
 
-void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& Move_AdjustX, float& Move_AdjustY)
+void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY)
 {
 	for (int i = 0; i < _KeyEventS.size(); ++i)
 	{
@@ -75,7 +75,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 			_Is_Key_Pressed = true;
 			if (_KeyEventS.at(i)->Unit_Type == 1)
 			{
-				_Is_Key_Pressed = false;
+				//_Is_Key_Pressed = false;
 				//std::cout << "_KeyEventS.at(i).MoveToX" << _KeyEventS.at(i)->MoveToX << std::endl;
 				_KeyEventS.at(i)->MoveToX = _KeyEventS.at(i)->MoveToX ? false : true;
 				_KeyEventS.at(i)->MoveToY = _KeyEventS.at(i)->MoveToY ? false : true;
@@ -93,14 +93,12 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, 
 			}
 			//std::cout << "BUTTON PUSHED x_" << MoveX << "y_" << MoveY << std::endl;
 		}
-		if ((i == _KeyEventS.size() - 1) && AutoCheck(&MoveX, &MoveY) == 3)
-		{
-			Move_AdjustX -= _Margin_X;
-			Move_AdjustY -= _Margin_Y;
-			StateX -= _Margin_X;
-			StateY -= _Margin_Y;
-		}
 	}
+	AutoCheck(&MoveX, &MoveY);
+	//Move_AdjustX -= _Margin_X;
+	//Move_AdjustY -= _Margin_Y;
+	//StateX -= _Margin_X;
+	//StateY -= _Margin_Y;
 }
 
 void InsertEventBase::Set_MaxFloat(float Max_float)
@@ -171,13 +169,12 @@ const std::string InsertEventBase::Get_Version()
 	return this->_Version;
 }
 
-unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, float* DeptY)
+void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
 {
-	unsigned Return_Value{ 0 };
 	this->_Is_Reach_Edge = 0;
 
 	if (!_Is_State_Range)
-		return 3;
+		return;
 
 	if (_Is_Max_Single)
 		_Max_float = _Max_float_Width;
@@ -192,8 +189,6 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 		this->_Is_Reach_Edge += 1;
 		*MoveX = -_Max_float;
 	}
-	else
-		Return_Value |= 1;
 
 	if (_Is_Max_Single)
 		_Max_float = _Max_float_Height;
@@ -208,10 +203,6 @@ unsigned InsertEventBase::AutoCheck(float* MoveX, float* MoveY, float* DeptX, fl
 		this->_Is_Reach_Edge += 4;
 		*MoveY = -_Max_float;
 	}
-	else
-		Return_Value |= 2;
-
-	return Return_Value;
 }
 
 //UnImportant 单例实现

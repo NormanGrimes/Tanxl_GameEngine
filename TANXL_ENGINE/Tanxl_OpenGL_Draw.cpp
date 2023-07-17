@@ -57,7 +57,7 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
-	glGenBuffers(1, _vbo);
+	glGenBuffers(3, _vbo);
 
 	glProgramUniform1i(_renderingProgram, 6, _HeightInt);//SHeight
 	glProgramUniform1i(_renderingProgram, 7, _WidthInt);//SWidth
@@ -238,14 +238,27 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
 	};
-	
-	_Texture = OpenGL_Render::loadTexture(TanxlOD::TexGrass_01_200X200);
 
+	_Texture.push_back(OpenGL_Render::loadTexture(TanxlOD::TexGrass_01_200X200));
+	_Texture.push_back(OpenGL_Render::loadTexture(TanxlOD::TexGrass_Snowy_01_200X200));
+	_Texture.push_back(OpenGL_Render::loadTexture(TanxlOD::TexGrass_Snowy_02_200X200));
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _Texture);
+	glBindTexture(GL_TEXTURE_2D, _Texture.at(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, _Texture.at(1));
+
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, _Texture.at(2));
 
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 
@@ -266,13 +279,12 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
 	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
 
-
 	if (State->Get_Compile_Status())
 	{
-		for (int i = 0; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads); i++)
+		for (int i{ 0 }; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads); ++i)
 		{
-			if (Move_PX < 0 || static_cast<unsigned>(Move_NX) > State->Get_DataWidth() || //现阶段Data宽度不可能导致转换溢出
-				Move_PY < 0 || static_cast<unsigned>(Move_NY) > State->Get_DataHeight())
+			if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth()) || //现阶段Data宽度不可能导致转换溢出
+				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()))
 			{
 				_StateInfor[i] = 3;
 			}
@@ -281,7 +293,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 				int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
 				if (State->Get_GameState()->size() == 0)
 					return;
-				
+
 				//std::cout << "Init Data: " << x % State->Get_GameState()->size() <<" __ " 
 				//	<< State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id() << std::endl;
 				_StateInfor[i] = State->Get_StateUnit(x % State->Get_GameState()->size())->Get_State_Id();
@@ -353,11 +365,11 @@ EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
 	if (_Is_Trigger_Enable)
 	{
 		EMove_State_EventId Value{ MoveToNO };
-		if (Height > 0 && Height > _Trigger_Height)
+		if ((Height > 0) && (Height > _Trigger_Height))
 			Value = MoveToPH;
-		if (Height < 0 && _Trigger_Height + Height < 0)
+		if ((Height < 0) && (_Trigger_Height + Height < 0))
 			Value = MoveToNH;
-		if (Width > 0 && Width > _Trigger_Width)
+		if ((Width > 0) && (Width > _Trigger_Width))
 		{
 			if (Value == MoveToPH)
 				Value = MoveToPWPH;
@@ -366,7 +378,7 @@ EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
 			else
 				Value = MoveToPW;
 		}
-		if (Width < 0 && _Trigger_Width + Width < 0)
+		if ((Width < 0) && (_Trigger_Width + Width < 0))
 		{
 			if (Value == MoveToPH)
 				Value = MoveToNWPH;
@@ -421,6 +433,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo[0]);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
 		glEnableVertexAttribArray(1);
 
 		glEnable(GL_DEPTH_TEST);
@@ -451,7 +464,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(_Main_Window, State->Get_Current_Distance()._LocX, State->Get_Current_Distance()._LocY, _State_MoveX, _State_MoveY, _Move_AdjustX, _Move_AdjustY);//获取输入
+		IEB->GetInsert(_Main_Window, State->Get_Current_Distance()._LocX, State->Get_Current_Distance()._LocY);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;

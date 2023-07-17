@@ -5,8 +5,6 @@
 
 #version 430
 
-layout (binding = 0) uniform sampler2D samp;
-
 layout (location = 1) in vec2 texCoord;
 
 layout (location = 3) uniform float Margin;

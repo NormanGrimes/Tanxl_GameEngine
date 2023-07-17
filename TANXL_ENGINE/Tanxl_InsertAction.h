@@ -16,6 +16,10 @@
 // 修复边缘标记上方边缘错误的问题
 // 指针初始化采用nullptr替代NULL
 // 输入操作的执行步骤延迟到完整检测之后
+// 修复输入操作最后一个操作执行错误的问题
+// AutoCheck接口移除两个未使用入参
+// GetInsert接口移除四个不需要的入参
+// AutoCheck接口取消地图移动并优化为不返回值
 
 #pragma once
 
@@ -71,7 +75,7 @@ public:
 	void RegistEvent(Key_Unit* KU);
 	//移除最近一个添加的按键功能
 	void RemoveEvent();
-	void GetInsert(GLFWwindow* window, float& MoveX, float& MoveY, float& StateX, float& StateY, float& Move_AdjustX, float& Move_AdjustY);
+	void GetInsert(GLFWwindow* window, float& MoveX, float& MoveY);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
 	//在使用后会导致Set_MaxFloat_Height/Width功能无效化
@@ -84,7 +88,7 @@ public:
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
 private:
-	unsigned AutoCheck(float* MoveX, float* MoveY, float* DeptX = nullptr , float* DeptY = nullptr);
+	void AutoCheck(float* MoveX, float* MoveY);
 	std::vector<Key_Unit*> _KeyEventS;
 	std::vector<bool>* _PTB;
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离

@@ -29,57 +29,6 @@ CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
 {
 	if (_Func == nullptr)
 		_Is_Funcwork = false;
-
-	//for (int i = 0; i < 13; i++)
-	//	Insert_Keys[i] = &Keys[i];
-
-	//InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
-
-	//std::cout << "START" << std::endl;
-
-	//Key_Unit CURSOR_MOVE_UP = Key_Unit(GLFW_KEY_UP, Insert_Keys[0], NULL, "");
-	//IEB->RegistEvent(&CURSOR_MOVE_UP);
-
-	//Key_Unit CURSOR_MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, Insert_Keys[1], NULL, "");
-	//IEB->RegistEvent(&CURSOR_MOVE_LEFT);
-
-	//Key_Unit CURSOR_MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, Insert_Keys[2], NULL, "");
-	//IEB->RegistEvent(&CURSOR_MOVE_RIGHT);
-
-	//Key_Unit CURSOR_MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, Insert_Keys[3], NULL, "");
-	//IEB->RegistEvent(&CURSOR_MOVE_DOWN);
-
-	//Key_Unit CURSOR_KEY_0 = Key_Unit(GLFW_KEY_0, Insert_Keys[4], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_0);
-
-	//Key_Unit CURSOR_KEY_1 = Key_Unit(GLFW_KEY_1, Insert_Keys[5], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_1);
-
-	//Key_Unit CURSOR_KEY_2 = Key_Unit(GLFW_KEY_2, Insert_Keys[6], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_2);
-
-	//Key_Unit CURSOR_KEY_3 = Key_Unit(GLFW_KEY_3, Insert_Keys[7], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_3);
-
-	//Key_Unit CURSOR_KEY_4 = Key_Unit(GLFW_KEY_4, Insert_Keys[8], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_4);
-
-	//Key_Unit CURSOR_KEY_5 = Key_Unit(GLFW_KEY_5, Insert_Keys[9], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_5);
-
-	//Key_Unit CURSOR_KEY_6 = Key_Unit(GLFW_KEY_6, Insert_Keys[10], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_6);
-
-	//Key_Unit CURSOR_KEY_7 = Key_Unit(GLFW_KEY_7, Insert_Keys[11], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_7);
-
-	//Key_Unit CURSOR_KEY_8 = Key_Unit(GLFW_KEY_8, Insert_Keys[12], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_8);
-
-	//Key_Unit CURSOR_KEY_9 = Key_Unit(GLFW_KEY_9, Insert_Keys[13], NULL, "");
-	//IEB->RegistEvent(&CURSOR_KEY_9);
-
-	//std::cout << "DONE" << std::endl;
 }
 
 //添加函数
