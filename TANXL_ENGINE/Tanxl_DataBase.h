@@ -5,6 +5,8 @@
 // V4_UPDATE 增加第四版私有结构体的设置函数
 // V4_UPDATE 增加第四版的序号数据结构
 // V4_UPDATE 为数据数据结构增加一种数据添加方式
+// V4_UPDATE 数据数据结构增加取代式添加方式
+// V4_UPDATE 增加内部私有结构体的数据设置功能与对应枚举
 
 #pragma once
 
@@ -17,6 +19,13 @@
 #include<sstream>
 #include<vector>
 #include"Tanxl_DataDefine.h"
+
+enum ELinkSet_Mode
+{
+	SIMPLE_SET = 0,
+	APPEND_CUR = 1,
+	APPEND_TAK = 2,
+};
 
 enum ESort_Mode//为SortDataBase函数提供的功能枚举
 {
@@ -59,26 +68,27 @@ struct Data_Link_V4//数据数据结构V4
 	{
 		_Data_Units.push_back(Data_Unit(Id, Data));
 	}
-
 	explicit Data_Link_V4(Data_Unit Data)
 	{
 		_Data_Units.push_back(Data);
 	}
-
 	void Append_Data(int Id, std::string Data)
 	{
 		_Data_Units.push_back(Data_Unit(Id, Data));
 	}
-
 	void Append_Data(Data_Unit Data)
 	{
 		_Data_Units.push_back(Data);
 	}
-
-	void Append_Data(Data_Link_V4* Data)
+	void Append_Data(Data_Link_V4* Data, bool Replace = false)
 	{
+		if (Replace)
+		{
+			this->_Data_Units.erase(Data->_Data_Units.begin(), Data->_Data_Units.end());
+			this->_Data_Units.clear();
+		}
 		for (int i{ 0 }; i < Data->_Data_Units.size(); ++i)
-			_Data_Units.push_back(Data->_Data_Units.at(i));
+			this->_Data_Units.push_back(Data->_Data_Units.at(i));
 		Data->_Data_Units.erase(Data->_Data_Units.begin(), Data->_Data_Units.end());
 		Data->_Data_Units.clear();
 	}
@@ -89,17 +99,17 @@ struct Data_Link_V4//数据数据结构V4
 struct Id_Link_V4//序号数据结构V4
 {
 	explicit Id_Link_V4(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link_V4* Data = nullptr) :
-		_Type(Type), _Type_Name(Type_Name), _Exac(Exac), _Exac_Name(Exac_Name), _Data(Data) {}
+		_Type(Type), _Type_Name(Type_Name), _Exac(Exac), _Exac_Name(Exac_Name), _Next(Data) {}
 	void Append_Data_Link(Data_Link_V4* Data)
 	{
-		if (_Data == nullptr)
-			_Data = Data;
+		if (_Next == nullptr)
+			_Next = Data;
 		else
-			_Data->Append_Data(Data);
+			_Next->Append_Data(Data);
 	}
 	int _Type, _Exac;
 	std::string _Type_Name, _Exac_Name;
-	Data_Link_V4* _Data;
+	Data_Link_V4* _Next;
 };
 
 struct Data_Vector//短数据表(Vector)
@@ -134,13 +144,13 @@ private:
 
 	struct
 	{
-		unsigned int Item_Status{ 0xFFFF };//Type 8位 Exac 8位
-		std::string Type{ "" };
-		std::string Exac{ "" };
-		Data_Unit* Data{ nullptr };
-	}_Interior_Data;
+		unsigned int _Item_Status{ 0xFFFF };//Type 8位 Exac 8位
+		std::string _Type_Name{ "" };
+		std::string _Exac_Name{ "" };
+		Data_Link_V4* _Data{ nullptr };
+	}_Internal_Data;
 
-	const std::string _Version{ "1.9" };
+	const std::string _Version{ "2.0" };
 	std::vector<Id_Vector*>* IC_Vector;
 	int Current_Location;
 	bool Is_Instance_Data;//用来判断Item_Instance中是否有数据
@@ -160,7 +170,8 @@ public:
 	//↓编辑实例 0x12030405 1代表Code位 2代表Name位 03代表Oth1位 依此类推
 	//↓在1.7版本中考虑到零合法的操作一致性 最大值已被作为不可选标志即 Code/Name位的F 或Oth位的FF
 	void Set_Instance(unsigned Num, std::string Set);
-	void Set_Instance_V4(unsigned Status, std::string Type_Name, std::string Exac_Name);
+	void Set_Internal_Id_V4(unsigned Status, std::string Type_Name, std::string Exac_Name);
+	void Set_Internal_Data_V4(Data_Link_V4* Data, ELinkSet_Mode Set_Mode);
 	//↓读取指定Type(A)_Exac(B)级别的物品 并载入到单例结构中 Nums表示该级别下的第几个物品(从0开始)
 	void Get_Specified(int Type, int Exac, int Nums);
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...

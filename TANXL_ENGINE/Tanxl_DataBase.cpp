@@ -79,6 +79,7 @@ namespace TanxlDB
 	void Data(bool Mode, unsigned Length_Each)
 	{
 		TANXL_DataBase TDB_Instance;
+		remove("Tanxl_DataBase.usd");
 		for (unsigned Content = (0x11112000 - Length_Each); Content != 0x11112000; ++Content)
 		{
 			TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
@@ -242,12 +243,30 @@ void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 		Is_Instance_Data = true;
 }
 
-void TANXL_DataBase::Set_Instance_V4(unsigned Status, std::string Type_Name, std::string Exac_Name)
+void TANXL_DataBase::Set_Internal_Id_V4(unsigned Status, std::string Type_Name, std::string Exac_Name)
 {
-	this->_Interior_Data.Item_Status = Status;
-	this->_Interior_Data.Type = Type_Name;
-	this->_Interior_Data.Exac = Exac_Name;
+	this->_Internal_Data._Item_Status = Status;
+	this->_Internal_Data._Type_Name = Type_Name;
+	this->_Internal_Data._Exac_Name = Exac_Name;
 }
+
+void TANXL_DataBase::Set_Internal_Data_V4(Data_Link_V4* Data, ELinkSet_Mode Set_Mode)
+{
+	switch (Set_Mode)
+	{
+	case SIMPLE_SET:
+		this->_Internal_Data._Data = Data;
+		break;
+	case APPEND_CUR:
+		this->_Internal_Data._Data->Append_Data(Data);
+		break;
+	case APPEND_TAK:
+		if (this->_Internal_Data._Data != nullptr)
+			this->_Internal_Data._Data->Append_Data(Data, true);
+		break;
+	}
+}
+
 
 void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name, bool Keep_Instance)
 {

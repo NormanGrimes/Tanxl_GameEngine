@@ -30,6 +30,9 @@ void main(void)
 		color = texture(Samp_01, tc);
 	else if(Cube == 3)
 		color = texture(Samp_02, tc);
+	else if(Cube == 0)
+		color = texture(Samp_03, tc);
 	else
-		color = vs_color;
+		color = texture(Samp_04, tc);
+	//color = vs_color;
 }

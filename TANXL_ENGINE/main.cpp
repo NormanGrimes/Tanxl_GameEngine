@@ -12,7 +12,7 @@ int main()
 	UIB->Suffle_UniData(1);
 
 	TANXL_DataBase NData;
-	TanxlDB::Data(true);
+	TanxlDB::Data(false);
 	NData.Get_LocalData("Tanxl_DataBase");
 	NData.Print_Data();
 
@@ -20,7 +20,7 @@ int main()
 
 	GameStateBase* GSB{ &GameStateBase::Get_StateBase(1, 1) };
 
-	TGE.Engine_State_Compile_Uints(20, 10,
+	TGE.Engine_State_Compile_Units(20, 10,
 		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
 		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"

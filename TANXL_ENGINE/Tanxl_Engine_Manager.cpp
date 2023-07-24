@@ -32,7 +32,7 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height)
 	}
 }
 
-void Tanxl_Engine::Engine_State_Compile_Uints(int Width, int Height, std::string Infor)
+void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string Infor)
 {
 	Tanxl_Engine_GameState->CompileStateUnits(Infor);
 	Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);

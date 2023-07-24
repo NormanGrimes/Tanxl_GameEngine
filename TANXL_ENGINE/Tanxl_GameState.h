@@ -98,8 +98,8 @@ public:
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
 	bool Get_Adjust_While_Move();
-	float Set_ExacHeight(double& Current, float* MoveState = nullptr, float* State_MoveY = nullptr, float* Auto_Adjust_Length = nullptr);//可选功能 对2D棋盘上的物品微调位置
-	float Set_ExacWidth(double& Current, float* MoveState = nullptr, float* State_MoveX = nullptr, float* Auto_Adjust_Length = nullptr);
+	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, float& Auto_Adjust_Length);
 	unsigned Get_DataHeight()const;
 	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值

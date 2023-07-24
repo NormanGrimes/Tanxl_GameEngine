@@ -32,7 +32,7 @@ public:
 	void Engine_State_Set_Display(int Width, int Height);
 
 	//根据一串合理的字符串对地图进行生成 Width预设宽度 Height预设高度 Infor地图数据
-	void Engine_State_Compile_Uints(int Width, int Height, std::string Infor);
+	void Engine_State_Compile_Units(int Width, int Height, std::string Infor);
 
 	//设置是否启用输入移动限制 Eanble启用/关闭自动移动限制 启用后不需要设置后续内容 Max_Height最大移动高度(绝对值) Max_Widtd最大移动宽度(绝对值)
 	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Widtd = 0.0f);

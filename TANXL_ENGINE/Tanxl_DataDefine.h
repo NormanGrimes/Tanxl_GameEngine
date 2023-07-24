@@ -2,6 +2,7 @@
 // LAST_UPDATE 2023-01-10 09:43
 // 为存储模块系统信息提供标准文档
 // 为所有switch增加默认的break
+// 增加地图块数据的预定义
 
 #pragma once
 
@@ -10,21 +11,17 @@
 
 #include <string>
 
-const int TANXL_TYPE_MAXIMUM = 0;
+const int TANXL_TYPE_MAXIMUM = 1;
 const int TANXL_EXAC_MAXIMUM = 0;
 
-const int TANXL_DATATAG_OTH1[TANXL_TYPE_MAXIMUM + 1][TANXL_EXAC_MAXIMUM + 1]{ {6} };
-const int TANXL_DATATAG_OTH2[TANXL_TYPE_MAXIMUM + 1][TANXL_EXAC_MAXIMUM + 1]{ {0} };
-const int TANXL_DATATAG_OTH3[TANXL_TYPE_MAXIMUM + 1][TANXL_EXAC_MAXIMUM + 1]{ {0} };
+const int TANXL_DATA_LENGTH[TANXL_TYPE_MAXIMUM + 1][TANXL_EXAC_MAXIMUM + 1]{ {1}, {2} };
 
-static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, int OTH2 = 0xFF, int OTH3 = 0xFF)
+static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int DAT1 = 0xFF, int DAT2 = 0xFF, int DAT3 = 0xFF)
 {
-	if ((OTH1 == 0xFF) && (OTH2 == 0xFF) && (OTH3 == 0xFF))
+	if ((DAT1 == 0xFF) && (DAT2 == 0xFF) && (DAT3 == 0xFF))
 	{
 		switch (Type)
 		{
-		case 0xFF:
-			break;
 		case 0:
 			return "VERSION_INFORMATION";
 		default:
@@ -33,8 +30,6 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, in
 
 		switch (Exac)
 		{
-		case 0xFF:
-			break;
 		case 0:
 			return "ENGINE-CORE";
 		default:
@@ -59,41 +54,94 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int OTH1 = 0xFF, in
 
 	if (Type == 0 && Exac == 0)
 	{
-		switch (OTH1)
+		switch (DAT1)
 		{
-		case 00:
+		case 0:
 			return "TANXL_CONSOLE_LIST";
-		case 01:
+		case 1:
 			return "TANXL_DATABASE";
-		case 02:
+		case 2:
 			return "TANXL_GAMEEVENT";
-		case 03:
+		case 3:
 			return "TANXL_GAMESTATE";
-		case 04:
+		case 4:
 			return "TANXL_INSERTACTION";
-		case 05:
+		case 5:
 			return "TANXL_OPENGL_DRAW";
-		case 06:
+		case 6:
 			return "TANXL_ENGINE_MANAGER";
-		default://(0xFF or else)
+		default:
 			break;
 		}
 	}
 
-	// -----|-----------------------|------|-----------------------|
-	// Type |                       | Exac |                       |
-	// -----|-----------------------|------|-----------------------|
-	//   0  | //////////////////    |   0  | //////////////////    |
-	// -----|-----------------------|------|-----------------------|------|-----------------------|
-	// DAT1 |                       | DAT2 |                       | DAT2 |                       |
-	// -----|-----------------------|------|-----------------------|------|-----------------------|
-	//  00  | //////////////////    |      |                       |      |                       |
-	//  01  | //////////////////    |      |                       |      |                       |
-	//  02  | //////////////////    |      |                       |      |                       |
-	//  03  | //////////////////    |      |                       |      |                       |
-	//  04  | //////////////////    |      |                       |      |                       |
-	//  05  | //////////////////    |      |                       |      |                       |
-	// -----|-----------------------|------|-----------------------|------|-----------------------|
+	// |------|-----------------------|
+	// | Type |                       |
+	// |------|-----------------------|
+	// |   1  | GAME_STATE_SAVE       |
+	// |------|-----------------------|------|-----------------------|
+	// | DAT1 |                       | DAT2 |                       |
+	// |------|-----------------------|------|-----------------------|
+	// |  00  | CURRENT_UNIQUE_ID     |  00  | GAME_STATE_BLOCK_DATA |
+	// |  01  | UNIQUE_ID_LEFT        |------|-----------------------|
+	// |  02  | UNIQUE_ID_RIGHT       |
+	// |  03  | UNIQUE_ID_ABOVE       |
+	// |  04  | UNIQUE_ID_BELOW       |
+	// |  05  | UNIQUE_ID_LEFT_ABOVE  |
+	// |  06  | UNIQUE_ID_LEFT_BELOW  |
+	// |  07  | UNIQUE_ID_RIGHT_ABOVE |
+	// |  08  | UNIQUE_ID_RIGHT_BELOW |
+	// |------|-----------------------|
+
+	else if (Type == 1)
+	{
+		switch (DAT1)
+		{
+		case 0:
+			return "CURRENT_UNIQUE_ID";
+		case 1:
+			return "UNIQUE_ID_LEFT";
+		case 2:
+			return "UNIQUE_ID_RIGHT";
+		case 3:
+			return "UNIQUE_ID_ABOVE";
+		case 4:
+			return "UNIQUE_ID_BELOW";
+		case 5:
+			return "UNIQUE_ID_LEFT_ABOVE";
+		case 6:
+			return "UNIQUE_ID_LEFT_BELOW";
+		case 7:
+			return "UNIQUE_ID_RIGHT_ABOVE";
+		case 8:
+			return "UNIQUE_ID_RIGHT_BELOW";
+		default:
+			break;
+		}
+
+		switch (DAT2)
+		{
+		case 0:
+			return "GAME_STATE_BLOCK_DATA";
+		default:
+			break;
+		}
+	}
+
+	// |------|-----------------------|------|-----------------------|
+	// | Type |                       | Exac |                       |
+	// |------|-----------------------|------|-----------------------|
+	// |      | //////////////////    |      | //////////////////    |
+	// |------|-----------------------|------|-----------------------|------|-----------------------|
+	// | DAT1 |                       | DAT2 |                       | DAT3 |                       |
+	// |------|-----------------------|------|-----------------------|------|-----------------------|
+	// |  00  | //////////////////    |      |                       |      |                       |
+	// |  01  | //////////////////    |      |                       |      |                       |
+	// |  02  | //////////////////    |      |                       |      |                       |
+	// |  03  | //////////////////    |      |                       |      |                       |
+	// |  04  | //////////////////    |      |                       |      |                       |
+	// |  05  | //////////////////    |      |                       |      |                       |
+	// |------|-----------------------|------|-----------------------|------|-----------------------|
 	//throw "UNKNOWN DATA PLEASE CHECK DATATAG() FOR MORE INFORMATION";
 	return "";
 }

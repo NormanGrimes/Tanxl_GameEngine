@@ -55,210 +55,24 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	State->Set_Move_State(0, _HeightInt - 1 + _PreLoads, 0, _WidthInt - 1 + _PreLoads);
 
 	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
+	//remove("vertShader.glsl");
+	//remove("fragShader.glsl");
+
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
-	glGenBuffers(3, _vbo);
+	glGenBuffers(1, _vbo);
 
 	glProgramUniform1i(_renderingProgram, 6, _HeightInt);//SHeight
 	glProgramUniform1i(_renderingProgram, 7, _WidthInt);//SWidth
 	glProgramUniform1f(_renderingProgram, 3, 1.0f);//Margin
 	glProgramUniform1i(_renderingProgram, 10, _PreLoads);//PreLoads
 
-	float textureCoordinates[] =
-	{
-		/*1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,*///ORIGIN
-		/*0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,*///REVERSE
-		/*0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 1.0f,*///RANDOM
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-	};
-
-	_Texture.push_back(OpenGL_Render::loadTexture(TanxlOD::TexGrass_01_200X200));
-	_Texture.push_back(OpenGL_Render::loadTexture(TanxlOD::TexGrass_Snowy_01_200X200));
-	_Texture.push_back(OpenGL_Render::loadTexture(TanxlOD::TexGrass_Snowy_02_200X200));
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _Texture.at(0));
-
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, _Texture.at(1));
-
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo[2]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoordinates), textureCoordinates, GL_STATIC_DRAW);
-
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, _Texture.at(2));
+	Append_Texture(TanxlOD::TexGrass_01_200X200);       //1
+	Append_Texture(TanxlOD::TexGrass_01_200X200);       //2
+	Append_Texture(TanxlOD::TexGrass_Snowy_01_200X200); //3
+	Append_Texture(TanxlOD::TexGrass_Snowy_02_200X200); //4
+	Append_Texture(TanxlOD::TexForestDDPAT_01_200X200); //5
+	Append_Texture(TanxlOD::TexTest_Color_01_300X300);  //6
 
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 
@@ -360,6 +174,26 @@ void OpenGL_Draw::Set_Trigger_Range(bool Enable, float Height, float Width)
 	_Trigger_Width = Width;
 }
 
+void OpenGL_Draw::Append_Texture(const char* Texture)
+{
+	/*if ((Id < 0) || (Id > 9))
+	{
+		std::cout << "Appen_Texture : Input wrong index !" << std::endl;
+		return;
+	}*/
+	static int Id = 0;
+
+	_Texture.push_back(OpenGL_Render::loadTexture(Texture));
+
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
+
+	glActiveTexture(GL_TEXTURE0 + Id);
+
+	glBindTexture(GL_TEXTURE_2D, _Texture.at(Id));
+	Id++;
+}
+
 EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
 {
 	if (_Is_Trigger_Enable)
@@ -448,8 +282,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		static int ANCUH{ static_cast<int>(_Auto_AdjustY / _Each_Height) };
 		static int ANCUW{ static_cast<int>(_Auto_AdjustX / _Each_Width) };
 
-		int TOCUH{ static_cast<int>((_Move_AdjustY * 2) / _Each_Height) };
-		int TOCUW{ static_cast<int>((_Move_AdjustX * 2) / _Each_Width) };
+		int TOCUH{ static_cast<int>((static_cast<double>(_Move_AdjustY) * 2) / _Each_Height) };
+		int TOCUW{ static_cast<int>((static_cast<double>(_Move_AdjustX) * 2) / _Each_Width) };
 
 		//std::cout << "TOUCH " << TOCUH << " -- TOCUW " << TOCUW << std::endl;
 
@@ -487,15 +321,15 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
-		double Current_Height{ (State->Get_Current_Distance()._LocY * 2 + 1) / (_Each_Height) };
-		double Current_Width{ (State->Get_Current_Distance()._LocX * 2 + 1) / (_Each_Width) };
+		double Current_Height{ (static_cast<double>(State->Get_Current_Distance()._LocY) * 2 + 1) / (_Each_Height) };
+		double Current_Width{ (static_cast<double>(State->Get_Current_Distance()._LocX) * 2 + 1) / (_Each_Width) };
 
 		//std::cout << "CUH/CUW" << State->Get_Current_Distance()._LocY << "__" << State->Get_Current_Distance()._LocX << std::endl;
 
 		if (State->Get_Adjust_Flag())
 		{
-			Temp_MoveY = State->Set_ExacHeight(Current_Height, &State->Get_Current_Distance()._LocY, &_State_MoveY, &_Auto_AdjustY);
-			Temp_MoveX = State->Set_ExacWidth(Current_Width, &State->Get_Current_Distance()._LocX, &_State_MoveX, &_Auto_AdjustX);
+			Temp_MoveY = State->Set_ExacHeight(Current_Height, State->Get_Current_Distance()._LocY, _State_MoveY, _Auto_AdjustY);
+			Temp_MoveX = State->Set_ExacWidth(Current_Width, State->Get_Current_Distance()._LocX, _State_MoveX, _Auto_AdjustX);
 			Wait_Frame = 0;
 			
 			if (ANCUH != ACUH)

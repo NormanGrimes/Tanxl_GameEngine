@@ -1,25 +1,6 @@
-﻿//_VERSION_0_7_ UPDATE LOG
-// LAST_UPDATE 2022-12-28 11:31
-// 调整部分变量名称
-// 修复输入操作物品移动与地图偏移不一致的问题
-// 按键单元结构体增加名称成员
-// 提供删除指定名称的输入按键功能
-// 提供标记移动到地图边缘的相关功能
-// 修复按键单元初始化时未正确初始化NAME的问题
-// 增加版本变量与获取接口
-// 增加获取某一按键是否按下的判断函数
-// 移除未使用且意义不明的_Max_Line变量
-// 移除CheckInsert接口（功能重复）
-// 增加宏来控制控制台输出的开启与关闭
-// 是否到达边缘的标记改为short类型且获取函数改为线程安全式
-// 修复边缘标记不标记符号小于的问题
-// 修复边缘标记上方边缘错误的问题
-// 指针初始化采用nullptr替代NULL
-// 输入操作的执行步骤延迟到完整检测之后
-// 修复输入操作最后一个操作执行错误的问题
-// AutoCheck接口移除两个未使用入参
-// GetInsert接口移除四个不需要的入参
-// AutoCheck接口取消地图移动并优化为不返回值
+﻿//_VERSION_0_8_ UPDATE LOG
+// LAST_UPDATE 2023-02-03 18:01
+// 自动调整功能入参形式修改（后三位禁止输入空指针且必须输入地址）
 
 #pragma once
 
@@ -110,7 +91,7 @@ private:
 	//_Max_float_Width  代表当前主控制物品在X轴的最大移动距离
 	float _Max_float_Width;
 	//_Version 用于记录当前程序（输入模块-InserAction）的版本信息
-	const std::string _Version{ "0.7" };
+	const std::string _Version{ "0.8" };
 	//单例实现私有构造函数
 	InsertEventBase();
 	~InsertEventBase();
