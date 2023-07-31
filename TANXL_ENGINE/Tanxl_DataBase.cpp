@@ -201,6 +201,16 @@ void TANXL_DataBase::ResetInstance()
 	Is_Instance_Data = false;
 }
 
+void TANXL_DataBase::ResetInstance_V4()
+{
+	this->_Internal_Data._Item_Status = 0xFFFF;
+	this->_Internal_Data._Type_Name = "";
+	this->_Internal_Data._Exac_Name = "";
+	this->_Internal_Data._Data = nullptr;
+	this->_Internal_Data._Type_Set = false;
+	this->_Internal_Data._Data_Set = false;
+}
+
 void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
 {
 	bool SetTimes{ false };
@@ -248,6 +258,8 @@ void TANXL_DataBase::Set_Internal_Id_V4(unsigned Status, std::string Type_Name, 
 	this->_Internal_Data._Item_Status = Status;
 	this->_Internal_Data._Type_Name = Type_Name;
 	this->_Internal_Data._Exac_Name = Exac_Name;
+
+	this->_Internal_Data._Type_Set = true;
 }
 
 void TANXL_DataBase::Set_Internal_Data_V4(Data_Link_V4* Data, ELinkSet_Mode Set_Mode)
@@ -256,17 +268,21 @@ void TANXL_DataBase::Set_Internal_Data_V4(Data_Link_V4* Data, ELinkSet_Mode Set_
 	{
 	case SIMPLE_SET:
 		this->_Internal_Data._Data = Data;
+		this->_Internal_Data._Data_Set = true;
 		break;
 	case APPEND_CUR:
 		this->_Internal_Data._Data->Append_Data(Data);
+		this->_Internal_Data._Data_Set = true;
 		break;
 	case APPEND_TAK:
 		if (this->_Internal_Data._Data != nullptr)
+		{
 			this->_Internal_Data._Data->Append_Data(Data, true);
+			this->_Internal_Data._Data_Set = true;
+		}
 		break;
 	}
 }
-
 
 void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name, bool Keep_Instance)
 {
@@ -305,7 +321,41 @@ void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name, bool Keep_I
 	}
 }
 
-void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)
+void TANXL_DataBase::AppendItem_V4(EAppendItem_Mode Mode, std::string File_Name)
+{
+	if ((this->_Internal_Data._Type_Set == false) || (this->_Internal_Data._Data_Set == false))
+	{
+		throw "添加失败！内部不完整的数据 : Incomplete data in Internal_Data";
+		return;
+	}
+
+	if ((Mode == APPENDTO_FILE) || (Mode == APPENDTO_BOTH))
+	{
+		std::fstream out(File_Name + ".usd", std::ios::app);
+		if (out.is_open())
+		{
+			out << *this;
+			out.close();
+		}
+	}
+	if ((Mode == APPENDTO_MEMO) || (Mode == APPENDTO_BOTH))
+	{
+		Data_Link_V4* DaLink = new Data_Link_V4(
+			this->_Internal_Data._Data
+		);
+		Id_Link_V4* IdLink = new Id_Link_V4(
+			this->_Internal_Data._Item_Status & 0xff00, this->_Internal_Data._Type_Name,
+			this->_Internal_Data._Item_Status & 0x00ff, this->_Internal_Data._Exac_Name
+		);
+		this->ResetInstance();
+		/*if (DaLink && IdLink)//判断是否申请空间成功//UNFINISH YET
+			Append_Chain(*DTemp, *ITemp);
+		else
+			throw "添加失败！ 申请内存空间失败";*/
+	}
+}
+
+void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)//即将弃用
 {
 	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
 		if (!Get_LocalData(In_File_Name))
@@ -666,6 +716,46 @@ Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
 			{
 				Current_Location = Mid;
 				return IC_Vector->at(Mid);
+			}
+			else if (Mid_Value > Value)
+				Right = Mid;
+			else if (Mid_Value < Value)
+				Left = Mid;
+			if (Left == Right)
+			{
+				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
+				return nullptr;
+			}
+		}
+	}
+	throw "Id_Chain_Locate Failed ! : 未知原因";
+	return nullptr;
+}
+
+Id_Link_V4* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
+{
+	int Left{ 0 }, Value{ Type * 16 + Exac },
+		Right{ static_cast<int>(this->_Id_Links->size()) - 1 >= 0 ? static_cast<int>(this->_Id_Links->size()) - 1 : 0 };;
+	if (Left == Right)
+	{
+		if (Value == this->_Id_Links->at(0)->_Type * 16 + this->_Id_Links->at(0)->_Exac)
+		{
+			Current_Location = 0;
+			return this->_Id_Links->at(0);
+		}
+		throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
+		return nullptr;
+	}
+	else
+	{
+		while (Left != Right)
+		{
+			int Mid{ (Left + Right) / 2 };
+			int Mid_Value{ this->_Id_Links->at(Mid)->_Type * 16 + this->_Id_Links->at(Mid)->_Exac };
+			if (Mid_Value == Value)
+			{
+				Current_Location = Mid;
+				return this->_Id_Links->at(Mid);
 			}
 			else if (Mid_Value > Value)
 				Right = Mid;

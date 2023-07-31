@@ -15,6 +15,7 @@ Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase())
 		!Tanxl_Engine_InsertBase)
 	{
 		std::cout << "Fail to start Engine !" << std::endl;
+		delete this;
 	}
 }
 
@@ -22,13 +23,13 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height)
 {
 	static int ReservWidth{ 5 };
 	static int ReservHeight{ 5 };
-	Tanxl_Engine_GameState->Get_StateBase(ReservWidth, ReservHeight);
 
 	if (ReservWidth != Width || ReservHeight != Height)
 	{
-		Tanxl_Engine_GameState->Set_Display_State(Width, Height);
 		ReservWidth = Width;
 		ReservHeight = Height;
+		Tanxl_Engine_GameState->Get_StateBase(Width, Height);
+		Tanxl_Engine_GameState->Set_Display_State(Width, Height);
 	}
 }
 

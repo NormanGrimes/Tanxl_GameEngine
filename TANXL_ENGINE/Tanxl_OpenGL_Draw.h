@@ -247,7 +247,7 @@ private:
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
-	GLuint _vbo[10];
+	GLuint _vbo[31];
 	std::vector<GLuint> _Texture;
 
 	//记录地图场景基本矩形的高度值
