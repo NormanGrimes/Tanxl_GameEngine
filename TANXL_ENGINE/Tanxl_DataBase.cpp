@@ -71,9 +71,9 @@ namespace TanxlDB
 
 	void Reset_Chain(TANXL_DataBase& TDB, int A, int B, int Nums)
 	{
-		TDB.Set_Specified(A, B, Nums, 3, -1, "NULL");
+		/*TDB.Set_Specified(A, B, Nums, 3, -1, "NULL");
 		TDB.Set_Specified(A, B, Nums, 4, -1, "NULL");
-		TDB.Set_Specified(A, B, Nums, 5, -1, "NULL");
+		TDB.Set_Specified(A, B, Nums, 5, -1, "NULL");*/
 	}
 
 	void Data(bool Mode, unsigned Length_Each)
@@ -82,43 +82,43 @@ namespace TanxlDB
 		remove("Tanxl_DataBase.usd");
 		for (unsigned Content = (0x11112000 - Length_Each); Content != 0x11112000; ++Content)
 		{
-			TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
-			TDB_Instance.Set_Instance((Content & 0x0f000000) | 0xf0ffffff, "地下水");
-			TDB_Instance.Set_Instance((Content & 0x00ff0000) | 0xff00ffff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance((Content & 0x0000ff00) | 0xffff00ff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance((Content & 0x000000ff) | 0xffffff00, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
+			//TDB_Instance.Set_Instance((Content & 0x0f000000) | 0xf0ffffff, "地下水");
+			//TDB_Instance.Set_Instance((Content & 0x00ff0000) | 0xff00ffff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance((Content & 0x0000ff00) | 0xffff00ff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance((Content & 0x000000ff) | 0xffffff00, std::to_string(rand() % 100));
 			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
+			//TDB_Instance.AppendItem();
 		}
 		for (unsigned Content = 0x22222000 - Length_Each; Content != 0x22222000; ++Content)
 		{
-			TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
-			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
-			TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
+			//TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
+			//TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
 			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
+			//TDB_Instance.AppendItem();
 		}
 		for (unsigned Content = 0x33332000 - Length_Each; Content != 0x33332000; ++Content)
 		{
-			TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
-			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
-			TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
+			//TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
+			//TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
 			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
+			//TDB_Instance.AppendItem();
 		}
 		for (unsigned Content = 0x44442000 - Length_Each; Content != 0x44442000; ++Content)
 		{
-			TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
-			TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
-			TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-			TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
+			//TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
+			//TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
+			//TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
 			if (Mode)std::cout << TDB_Instance;
-			TDB_Instance.AppendItem();
+			//TDB_Instance.AppendItem();
 		}
 	}
 
@@ -142,34 +142,26 @@ namespace TanxlDB
 
 std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 {
-	if (s.Item_Instance.Status_1 + s.Item_Instance.Status_2 + s.Item_Instance.Status_3 + s.Item_Instance.Status_4 + s.Item_Instance.Status_5)
+	fot << "<Type_Status : " << (s._Internal_Data._Item_Status & 0xFF00) << " / " << s._Internal_Data._Type_Name << ">" << std::endl;
+	s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << (s._Internal_Data._Item_Status & 0x00FF) << " / " << s._Internal_Data._Exac_Name << ">" << std::endl;
+	s.OstreamSpace(fot, 1, 1); fot << "<TDBS_Item>" << std::endl;
+	for (int i = 0; i < s._Internal_Data._Data->_Data_Units.size(); i++)
 	{
-		//s.Get_Item_Status();
-		fot << "<Type_Status : " << s.Item_Instance.Code << " / " << s.Item_Instance.Status_1 << ">" << std::endl;
-		s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << s.Item_Instance.Name << " / " << s.Item_Instance.Status_2 << ">" << std::endl;
-		s.OstreamSpace(fot, 1, 1); fot << "<TDBS_Item>" << std::endl;
-		if (s.Item_Instance.Status_3 != 0xFF) {
+		if (s._Internal_Data._Data->_Data_Units.at(i)._Id)
+		{
 			s.OstreamSpace(fot);
-			fot << "<Oth1: " << s.Item_Instance.Status_3 << ">" << s.Item_Instance.Oth1 << "</Oth1>" << std::endl;
+			fot << "<Data: " << s._Internal_Data._Data->_Data_Units.at(i)._Id << ">"
+				<< s._Internal_Data._Data->_Data_Units.at(i)._Data << "</Data>" << std::endl;
 		}
-		if (s.Item_Instance.Status_4 != 0xFF) {
-			s.OstreamSpace(fot);
-			fot << "<Oth2: " << s.Item_Instance.Status_4 << ">" << s.Item_Instance.Oth2 << "</Oth2>" << std::endl;
-		}
-		if (s.Item_Instance.Status_5 != 0xFF) {
-			s.OstreamSpace(fot);
-			fot << "<Oth3: " << s.Item_Instance.Status_5 << ">" << s.Item_Instance.Oth3 << "</Oth3>" << std::endl;
-		}
-		s.OstreamSpace(fot, -1); fot << "</TDBS_Item>" << std::endl;
-		s.OstreamSpace(fot, -1); fot << "</Exac_Status>" << std::endl;
-		s.OstreamSpace(fot, -1); fot << "</Type_Status>" << std::endl;
 	}
+	s.OstreamSpace(fot, -1); fot << "</TDBS_Item>" << std::endl;
+	s.OstreamSpace(fot, -1); fot << "</Exac_Status>" << std::endl;
+	s.OstreamSpace(fot, -1); fot << "</Type_Status>" << std::endl;
 	return fot;
 }
 
 TANXL_DataBase::TANXL_DataBase() :
-	Is_Instance_Data(false), Is_Chain_Empty(true),
-	IC_Vector(new std::vector<Id_Vector*>),Current_Location(0) {}
+	Is_Instance_Data(false), Is_Chain_Empty(true), _Id_Links(new std::vector<Id_Link*>),Current_Location(0) {}
 
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
 {
@@ -191,139 +183,41 @@ inline void TANXL_DataBase::Combine_Status()
 
 void TANXL_DataBase::ResetInstance()
 {
-	Item_Instance.Status_1 = 0xF;
-	Item_Instance.Status_2 = 0xF;
-	Item_Instance.Status_3 = 0xFF;
-	Item_Instance.Status_4 = 0xFF;
-	Item_Instance.Status_5 = 0xFF;
-	Item_Instance.Item_Status = 0xFFFFFFFF;
-	Combine_Status();
-	Is_Instance_Data = false;
-}
-
-void TANXL_DataBase::ResetInstance_V4()
-{
 	this->_Internal_Data._Item_Status = 0xFFFF;
 	this->_Internal_Data._Type_Name = "";
 	this->_Internal_Data._Exac_Name = "";
 	this->_Internal_Data._Data = nullptr;
-	this->_Internal_Data._Type_Set = false;
-	this->_Internal_Data._Data_Set = false;
 }
 
-void TANXL_DataBase::Set_Instance(unsigned Num, std::string Set)
-{
-	bool SetTimes{ false };
-	if ((Num >> 28) < 15) {
-		Item_Instance.Code = Set;
-		Item_Instance.Status_1 = (Num >> 28);
-		Item_Instance.Item_Status ^= (0xF << 28);
-		Item_Instance.Item_Status |= Item_Instance.Status_1 << 28;
-		SetTimes = true;
-	}
-	if (((Num & 0x0f000000) >> 24) < 15) {
-		Item_Instance.Name = Set;
-		Item_Instance.Status_2 = ((Num & 0x0f000000) >> 24);
-		Item_Instance.Item_Status ^= (0xF << 24);
-		Item_Instance.Item_Status |= Item_Instance.Status_2 << 24;
-		SetTimes = true;
-	}
-	if (((Num & 0x00ff0000) >> 16) < 255) {
-		Item_Instance.Oth1 = Set;
-		Item_Instance.Status_3 = ((Num & 0x00ff0000) >> 16);
-		Item_Instance.Item_Status ^= (0xFF << 16);
-		Item_Instance.Item_Status |= Item_Instance.Status_3 << 16;
-		SetTimes = true;
-	}
-	if (((Num & 0x0000ff00) >> 8) < 255) {
-		Item_Instance.Oth2 = Set;
-		Item_Instance.Status_4 = ((Num & 0x0000ff00) >> 8);
-		Item_Instance.Item_Status ^= (0xFF << 8);
-		Item_Instance.Item_Status |= Item_Instance.Status_4 << 8;
-		SetTimes = true;
-	}
-	if ((Num & 0x000000ff) < 255) {
-		Item_Instance.Oth3 = Set;
-		Item_Instance.Status_5 = (Num & 0x000000ff);
-		Item_Instance.Item_Status ^= 0xFF;
-		Item_Instance.Item_Status |= Item_Instance.Status_5;
-		SetTimes = true;
-	}
-	if (SetTimes)
-		Is_Instance_Data = true;
-}
-
-void TANXL_DataBase::Set_Internal_Id_V4(unsigned Status, std::string Type_Name, std::string Exac_Name)
+void TANXL_DataBase::Set_Internal_Id(unsigned Status, std::string Type_Name, std::string Exac_Name)
 {
 	this->_Internal_Data._Item_Status = Status;
 	this->_Internal_Data._Type_Name = Type_Name;
 	this->_Internal_Data._Exac_Name = Exac_Name;
-
-	this->_Internal_Data._Type_Set = true;
 }
 
-void TANXL_DataBase::Set_Internal_Data_V4(Data_Link_V4* Data, ELinkSet_Mode Set_Mode)
+void TANXL_DataBase::Set_Internal_Data(Data_Link* Data, ELinkSet_Mode Set_Mode)
 {
 	switch (Set_Mode)
 	{
 	case SIMPLE_SET:
 		this->_Internal_Data._Data = Data;
-		this->_Internal_Data._Data_Set = true;
 		break;
 	case APPEND_CUR:
 		this->_Internal_Data._Data->Append_Data(Data);
-		this->_Internal_Data._Data_Set = true;
 		break;
 	case APPEND_TAK:
 		if (this->_Internal_Data._Data != nullptr)
 		{
 			this->_Internal_Data._Data->Append_Data(Data, true);
-			this->_Internal_Data._Data_Set = true;
 		}
 		break;
 	}
 }
 
-void TANXL_DataBase::AppendItem(bool To_File, std::string File_Name, bool Keep_Instance)
+void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name)
 {
-	if (!Is_Instance_Data)
-	{
-		throw "添加失败！ 结构内容为空";
-		return;
-	}
-	else if (To_File)
-	{
-		Is_Instance_Data = true;
-		std::fstream out(File_Name + ".usd", std::ios::app);
-		if (out.is_open())
-		{
-			out << *this;
-			if (!Keep_Instance)
-				this->ResetInstance();
-			out.close();
-		}
-	}
-	else
-	{
-		Data_Vector* DTemp = new Data_Vector(
-			Item_Instance.Status_3, Item_Instance.Oth1,
-			Item_Instance.Status_4, Item_Instance.Oth2,
-			Item_Instance.Status_5, Item_Instance.Oth3);
-		Id_Vector* ITemp = new Id_Vector(
-			Item_Instance.Status_1, Item_Instance.Status_2,
-			Item_Instance.Code, Item_Instance.Name);
-		if (!Keep_Instance)
-			this->ResetInstance();
-		if (DTemp && ITemp)//判断是否申请空间成功
-			Append_Chain(*DTemp, *ITemp);
-		else
-			throw "添加失败！ 申请内存空间失败";
-	}
-}
-
-void TANXL_DataBase::AppendItem_V4(EAppendItem_Mode Mode, std::string File_Name)
-{
-	if ((this->_Internal_Data._Type_Set == false) || (this->_Internal_Data._Data_Set == false))
+	if (this->_Internal_Data._Data == nullptr)
 	{
 		throw "添加失败！内部不完整的数据 : Incomplete data in Internal_Data";
 		return;
@@ -340,22 +234,22 @@ void TANXL_DataBase::AppendItem_V4(EAppendItem_Mode Mode, std::string File_Name)
 	}
 	if ((Mode == APPENDTO_MEMO) || (Mode == APPENDTO_BOTH))
 	{
-		Data_Link_V4* DaLink = new Data_Link_V4(
+		Data_Link* DaLink = new Data_Link(
 			this->_Internal_Data._Data
 		);
-		Id_Link_V4* IdLink = new Id_Link_V4(
+		Id_Link* IdLink = new Id_Link(
 			this->_Internal_Data._Item_Status & 0xff00, this->_Internal_Data._Type_Name,
 			this->_Internal_Data._Item_Status & 0x00ff, this->_Internal_Data._Exac_Name
 		);
 		this->ResetInstance();
-		/*if (DaLink && IdLink)//判断是否申请空间成功//UNFINISH YET
-			Append_Chain(*DTemp, *ITemp);
+		if (DaLink && IdLink)//判断是否申请空间成功//UNFINISH YET
+			Append_Link(*IdLink, *DaLink);
 		else
-			throw "添加失败！ 申请内存空间失败";*/
+			throw "添加失败！ 申请内存空间失败";
 	}
 }
 
-void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)//即将弃用
+/*void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)//即将弃用
 {
 	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
 		if (!Get_LocalData(In_File_Name))
@@ -418,7 +312,9 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 	} while (IOIB != IOIE);
 	out << "</Tanxl_DataBase Information>" << std::endl;
 	out.close();
-	Clear_Chain();
+	for (int i = 0; i < _Id_Links->size(); ++i)
+		Remove_Link(_Id_Links->at(i)->_Type, _Id_Links->at(i)->_Exac);
+	Is_Chain_Empty = true;
 	if (Delete_After_Sort)
 	{
 		if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
@@ -427,27 +323,27 @@ void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::stri
 			remove(s.c_str());
 		}
 	}
-}
+}*/
 
-void TANXL_DataBase::Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id)
+void TANXL_DataBase::Append_Link(Id_Link& New_Id, Data_Link& New_Data)
 {
 	if (Is_Chain_Empty)
 	{
-		IC_Vector->push_back(&New_Id);
-		IC_Vector->at(0)->exac->push_back(&New_Data);
+		this->_Id_Links->push_back(&New_Id);
+		this->_Id_Links->at(0)->Append_Data_Link(&New_Data);
 		Is_Chain_Empty = false;
 		return;
 	}
-	int Left{ 0 }, Value{ New_Id.Type * 16 + New_Id.Exac },
-		Right{ static_cast<int>(IC_Vector->size()) - 1 <= 0 ? 0 : static_cast<int>(IC_Vector->size()) - 1 };
+	int Left{ 0 }, Value{ New_Id._Type * 16 * 16 + New_Id._Exac },
+		Right{ static_cast<int>(this->_Id_Links->size()) - 1 <= 0 ? 0 : static_cast<int>(this->_Id_Links->size()) - 1 };
 	while (true)
 	{
 		int Mid{ (Left + Right) / 2 };
-		Id_Vector* PIC = IC_Vector->at(Mid);
-		int PIC_Value{ PIC->Type * 16 + PIC->Exac };
+		Id_Link* PIC = this->_Id_Links->at(Mid);
+		int PIC_Value{ PIC->_Type * 16 *16 + PIC->_Exac };
 		if (PIC_Value == Value)//Type B匹配时
 		{
-			PIC->exac->push_back(&New_Data);
+			PIC->_Data->Append_Data(&New_Data);
 			Is_Chain_Empty = false;
 			return;
 		}
@@ -455,8 +351,8 @@ void TANXL_DataBase::Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id)
 		{
 			if (PIC_Value < Value)
 				Left += 1;
-			this->IC_Vector->insert(IC_Vector->begin() + Left, &New_Id);
-			IC_Vector->at(Left)->exac->push_back(&New_Data);
+			this->_Id_Links->insert(this->_Id_Links->begin() + Left, &New_Id);
+			this->_Id_Links->at(Left)->Append_Data_Link(&New_Data);
 			Is_Chain_Empty = false;
 			return;
 		}
@@ -471,7 +367,7 @@ void TANXL_DataBase::Append_Chain(Data_Vector& New_Data, Id_Vector& New_Id)
 			else Right = Left;
 		}
 	}
-	throw "Append() Failed ! : 未知原因";
+	throw "Append_Link() Failed ! : 未知原因";
 	return;
 }
 
@@ -482,9 +378,9 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		std::fstream in(File_Name + ".sd", std::ios::in);
 	if (in.is_open())
 	{
-		std::string Type_Data{}, Exac_Data{};//需要使用时再定义
-		int  Type_Stat{}, Exac_Stat{};
-		int IData[3]{ 0xFF,0xFF,0xFF }, Target{ -1 };
+		std::string Type_Data{}, Exac_Data{},Data;//需要使用时再定义
+		int  Type_Stat{}, Exac_Stat{},Id;
+		Data_Link DTL;
 		std::string SData[3]{};
 		std::string Line{};
 		while (std::getline(in, Line))
@@ -553,39 +449,32 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					}
 					else if (Tag == "/TDB")
 					{
-						Data_Vector* Data_Temp = new Data_Vector(IData[0], SData[0], IData[1], SData[1], IData[2], SData[2]);
-						Id_Vector* Id_Temp = new Id_Vector(Type_Stat, Exac_Stat, Type_Data, Exac_Data);
-						IData[0] = 0xFF; IData[1] = 0xFF; IData[2] = 0xFF; SData[0] = ""; SData[1] = ""; SData[2] = "";
-						if (Data_Temp && Id_Temp)
-							Append_Chain(*Data_Temp, *Id_Temp);
+						Id_Link* Id_Temp = new Id_Link(Type_Stat, Type_Data, Exac_Stat, Exac_Data, &DTL);
+						if (Id_Temp)
+							Append_Link(*Id_Temp, DTL);
 						else
 							throw "添加失败！ 申请内存空间失败";
 						continue;
 					}
-					else if (Tag == "Oth1")
-						Target = 0;
-					else if (Tag == "Oth2")
-						Target = 1;
-					else if (Tag == "Oth3")
-						Target = 2;
-					if (Target == -1)
-						continue;
-					try
+					else if (Tag == "Data")
 					{
-						IData[Target] = std::stoi(TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT));
+						try
+						{
+							Id = std::stoi(TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT));
+						}
+						catch (std::invalid_argument&)
+						{
+							std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+							Id = 0xFF;
+						}
+						catch (std::out_of_range&)
+						{
+							std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+							Id = 0xFF;
+						}
+						Data = TanxlDB::Divid_Char(Line, GET_STORAG_DAT);
+						DTL.Append_Data(Data_Unit(Id, Data));
 					}
-					catch (std::invalid_argument&)
-					{
-						std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
-						IData[Target] = 0;
-					}
-					catch (std::out_of_range&)
-					{
-						std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
-						IData[Target] = 0;
-					}
-					SData[Target] = TanxlDB::Divid_Char(Line, GET_STORAG_DAT);
-					Target = -1;
 				}
 			}
 		}
@@ -596,14 +485,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		return false;
 }
 
-void TANXL_DataBase::Clear_Chain()
-{
-	for (int i = 0; i < IC_Vector->size(); ++i)
-		Remove_Chain(IC_Vector->at(i)->Type, IC_Vector->at(i)->Exac);
-	Is_Chain_Empty = true;
-}
-
-void TANXL_DataBase::Get_Specified(int Type, int Exac, int Nums)
+/*void TANXL_DataBase::Get_Specified(int Type, int Exac, int Nums)
 {
 	if (Data_Vector * PDC{ Data_Chain_Locate(Type, Exac, Nums) })
 	{
@@ -617,7 +499,7 @@ void TANXL_DataBase::Get_Specified(int Type, int Exac, int Nums)
 		return;
 	}
 	throw "Get_Specified() Failed ！ : 未能成功匹配相同值";
-}
+}*/
 
 void TANXL_DataBase::Get_Item_Status()
 {
@@ -628,34 +510,25 @@ void TANXL_DataBase::Get_Item_Status()
 	Item_Instance.Status_5 = ( Item_Instance.Item_Status & 0x000000ff       );
 }
 
-void TANXL_DataBase::Print_Data()//输出当前链表中的所有内容 V3 Updated
+void TANXL_DataBase::Print_Data()
 {
-	if (!Is_Chain_Empty)
+	std::vector<Id_Link*>::iterator BOI{ (this->_Id_Links->begin()) };
+	std::vector<Id_Link*>::iterator EOI{ (this->_Id_Links->end() - 1) };
+	while (true)
 	{
-		Id_Vector* PIC{ nullptr };
-		Data_Vector* PDC{ nullptr };
-		int PIC_Count{ 0 };
-		std::vector<Id_Vector*>::iterator IOI = (IC_Vector->end() - 1);
-		do
-		{
-			int PDC_Count{ 0 };
-			PIC = this->IC_Vector->at(PIC_Count++);
-			std::vector<Data_Vector*>::iterator IOD = (PIC->exac->end() - 1);
-			std::cout << "Id_Vector :" << PIC->Type << " - " << PIC->StrA << " - " << PIC->Exac << " - " << PIC->StrB << std::endl;
-			do
-			{
-				PDC = PIC->exac->at(PDC_Count++);
-				std::cout << "\tData_Vector :" << PDC->Id_1 << "-" << PDC->Id_2 << "-" << PDC->Id_3 << std::endl;
-			} while (PDC != *IOD);
-		} while (PIC != *IOI);
-		return;
-	}
-	throw "Print_Data() Failed ！ : 链表内容为空";
+		std::cout << "Id_Link :" << (*BOI)->_Type << " - " << (*BOI)->_Type_Name << " - " << (*BOI)->_Exac << " - " << (*BOI)->_Exac_Name << std::endl;
+		Data_Link* DL{ ((*BOI)->_Data) };
+		for (int i = 0; i < DL->_Data_Units.size(); ++i)
+			std::cout << "\tData_Link :" << DL->_Data_Units.at(i)._Id << " - " << DL->_Data_Units.at(i)._Data << std::endl;
+		if (BOI == EOI)
+			break;
+		BOI++;
+	} 
 }
 
-void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data) //V3 Updated
+/*void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data) //V3 Updated
 {
-	if (Data_Vector * PDC{ Data_Chain_Locate(Type, Exac, Nums) })
+	if (Data_Link * PDC{ Data_Link_Locate(Type, Exac, Nums) })
 		switch (level)
 		{
 		case SET_TYPE_STATUS:
@@ -678,61 +551,19 @@ void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int 
 			return;
 		}
 	throw "Set_Specified() Failed ！ : 查找相关内容不成功或链表内容为空";
-}
+}*/
 
-void TANXL_DataBase::Remove_Chain(int Type, int Exac)
+void TANXL_DataBase::Remove_Link(int Type, int Exac)
 {
-	if (Id_Vector * PIC{ Id_Chain_Locate(Type, Exac) })
+	if (Id_Link * PIC{ Id_Link_Locate(Type, Exac) })
 	{
-		for (int i{ 0 }; i < PIC->exac->size(); ++i)
-			delete PIC->exac->at(i);//释放 Data_Vector
-		PIC->exac->clear();
-		delete PIC;//释放 Id_Vector
-		IC_Vector->erase(IC_Vector->begin() + Current_Location);
+		delete PIC->_Data;
+		delete PIC;
+		_Id_Links->erase(_Id_Links->begin() + Current_Location);
 	}
 }
 
-Id_Vector* TANXL_DataBase::Id_Chain_Locate(int Type, int Exac)
-{
-	int Left{ 0 },Value{ Type * 16 + Exac },
-		Right{ static_cast<int>(IC_Vector->size()) - 1 >= 0 ? static_cast<int>(IC_Vector->size()) - 1 : 0 };;
-	if (Left == Right)
-	{
-		if (Value == IC_Vector->at(0)->Type * 16 + IC_Vector->at(0)->Exac)
-		{
-			Current_Location = 0;
-			return IC_Vector->at(0);
-		}
-		throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
-		return nullptr;
-	}
-	else
-	{
-		while (Left != Right)
-		{
-			int Mid{ (Left + Right) / 2 };
-			int Mid_Value{ IC_Vector->at(Mid)->Type * 16 + IC_Vector->at(Mid)->Exac };
-			if (Mid_Value == Value)
-			{
-				Current_Location = Mid;
-				return IC_Vector->at(Mid);
-			}
-			else if (Mid_Value > Value)
-				Right = Mid;
-			else if (Mid_Value < Value)
-				Left = Mid;
-			if (Left == Right)
-			{
-				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
-				return nullptr;
-			}
-		}
-	}
-	throw "Id_Chain_Locate Failed ! : 未知原因";
-	return nullptr;
-}
-
-Id_Link_V4* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
+Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 {
 	int Left{ 0 }, Value{ Type * 16 + Exac },
 		Right{ static_cast<int>(this->_Id_Links->size()) - 1 >= 0 ? static_cast<int>(this->_Id_Links->size()) - 1 : 0 };;
@@ -772,29 +603,29 @@ Id_Link_V4* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 	return nullptr;
 }
 
-Data_Vector* TANXL_DataBase::Data_Chain_Locate(int Type, int Exac, int Depth)
+Data_Unit* TANXL_DataBase::Data_Link_Locate(int Type, int Exac, int Depth)
 {
-	Id_Vector* PIC{ Id_Chain_Locate(Type, Exac) };
-	if (PIC->exac->size() < Depth)
+	Id_Link* PIC{ Id_Link_Locate(Type, Exac) };
+	if (PIC->_Data->_Data_Units.size() < Depth)
 	{
-		throw "Data_Chain_Locate Failed ! : 超出当前容器最大深度";
+		throw "Data_Link_Locate Failed ! : 超出当前容器最大深度";
 		return nullptr;
 	}
-	else if (Depth < 0 && Depth + static_cast<int>(PIC->exac->size()) >= 0)
-		return PIC->exac->at(Depth + PIC->exac->size());
-	while (Depth + static_cast<int>(PIC->exac->size() < 0))
-		Depth += static_cast<int>(PIC->exac->size());
-	return PIC->exac->at(Depth);
+	else if (Depth < 0 && Depth + static_cast<int>(PIC->_Data->_Data_Units.size()) >= 0)
+		return &(PIC->_Data->_Data_Units.at(Depth + PIC->_Data->_Data_Units.size()));
+	while (Depth + static_cast<int>(PIC->_Data->_Data_Units.size() < 0))
+		Depth += static_cast<int>(PIC->_Data->_Data_Units.size());
+	return &(PIC->_Data->_Data_Units.at(Depth));
 }
 
-void TANXL_DataBase::Replace_Chain(int OldType, int OldExac, int OldDepth, int Type, int Exac)
+void TANXL_DataBase::Replace_Link(int OldType, int OldExac, int OldDepth, int Type, int Exac)
 {
-	Id_Vector* PIC{ Id_Chain_Locate(OldType, OldExac) };
-	Append_Chain(*PIC->exac->at(OldDepth), *new Id_Vector(Type, Exac));
-	if (PIC->exac->size() > OldDepth && OldDepth >= 0)
-		PIC->exac->erase(PIC->exac->begin() + OldDepth);
-	else if (PIC->exac->size() + OldDepth >= 0 && PIC->exac->size() + OldDepth < PIC->exac->size())
-		PIC->exac->erase(PIC->exac->begin() + PIC->exac->size() + OldDepth);
+	Id_Link* PIC{ Id_Link_Locate(OldType, OldExac) };
+	//Append_Chain(*PIC->exac->at(OldDepth), *new Id_Vector(Type, Exac));
+	if (PIC->_Data->_Data_Units.size() > OldDepth && OldDepth >= 0)
+		PIC->_Data->_Data_Units.erase(PIC->_Data->_Data_Units.begin() + OldDepth);
+	else if (PIC->_Data->_Data_Units.size() + OldDepth >= 0 && PIC->_Data->_Data_Units.size() + OldDepth < PIC->_Data->_Data_Units.size())
+		PIC->_Data->_Data_Units.erase(PIC->_Data->_Data_Units.begin() + PIC->_Data->_Data_Units.size() + OldDepth);
 }
 
 const std::string TANXL_DataBase::Get_Version()

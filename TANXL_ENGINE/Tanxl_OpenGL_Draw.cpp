@@ -20,7 +20,7 @@ const std::string OpenGL_Draw::Get_Version()
 void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 {
 	//示例提供四个按键操作事件 （单例模式于其他地方定义）
-	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
+	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -83,7 +83,7 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 
 void OpenGL_Draw::ReLoadState(GameStateBase* State)
 {
-	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
+	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 
 	int Move_NX{ State->Get_Move_State()._Move_NX };
 	int Move_PX{ State->Get_Move_State()._Move_PX };

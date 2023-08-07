@@ -173,7 +173,7 @@
     <ClInclude Include="Tanxl_InsertAction.h" />
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
     <ClInclude Include="Tanxl_OpenGL_Render.h" />
-    <ClInclude Include="Tanxl_UniqueID.h" />
+    <ClInclude Include="Tanxl_RandomBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -185,6 +185,7 @@
     <ClCompile Include="Tanxl_InsertAction.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Render.cpp" />
+    <ClCompile Include="Tanxl_RandomBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragShader.glsl" />

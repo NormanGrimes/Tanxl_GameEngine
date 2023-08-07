@@ -69,21 +69,14 @@ void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Valu
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 {
-	Tanxl_Engine_DataBase->Set_Instance(0x0FFFFFFF, "0-VERSION_INFORMATION");
-	Tanxl_Engine_DataBase->Set_Instance(0xF0FFFFFF, "0-ENGINE-CORE");
-	Tanxl_Engine_DataBase->Set_Instance(0xFF00FFFF, "VERSION " + Tanxl_Engine_Console_List->Get_Version());
-	Tanxl_Engine_DataBase->AppendItem(true, FileName, true);
-	Tanxl_Engine_DataBase->Set_Instance(0xFF01FFFF, "VERSION " + Tanxl_Engine_DataBase->Get_Version());
-	Tanxl_Engine_DataBase->AppendItem(true, FileName, true);
-	Tanxl_Engine_DataBase->Set_Instance(0xFF02FFFF, "VERSION " + Tanxl_Engine_GameEvent->Get_Version());
-	Tanxl_Engine_DataBase->AppendItem(true, FileName, true);
-	Tanxl_Engine_DataBase->Set_Instance(0xFF03FFFF, "VERSION " + Tanxl_Engine_GameState->Get_Version());
-	Tanxl_Engine_DataBase->AppendItem(true, FileName, true);
-	Tanxl_Engine_DataBase->Set_Instance(0xFF04FFFF, "VERSION " + Tanxl_Engine_InsertBase->Get_Version());
-	Tanxl_Engine_DataBase->AppendItem(true, FileName, true);
-	Tanxl_Engine_DataBase->Set_Instance(0xFF05FFFF, "VERSION " + Tanxl_Engine_OpenGL_Draw->Get_Version());
-	Tanxl_Engine_DataBase->AppendItem(true, FileName, true);
-	Tanxl_Engine_DataBase->Set_Instance(0xFF06FFFF, "VERSION " + this->__ENGINE_VERSION__);
-	Tanxl_Engine_DataBase->AppendItem(true, FileName);
-	Tanxl_Engine_DataBase->SortDataBase(FILE_UNITED, FileName, FileName, true);
+	Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "00-VERSION_INFORMATION", "00-ENGINE-CORE");
+	Data_Link* Data = new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version());
+	Data->Append_Data(1, "VERSION " + Tanxl_Engine_DataBase->Get_Version());
+	Data->Append_Data(2, "VERSION " + Tanxl_Engine_GameEvent->Get_Version());
+	Data->Append_Data(3, "VERSION " + Tanxl_Engine_GameState->Get_Version());
+	Data->Append_Data(4, "VERSION " + Tanxl_Engine_InsertBase->Get_Version());
+	Data->Append_Data(5, "VERSION " + Tanxl_Engine_OpenGL_Draw->Get_Version());
+	Data->Append_Data(6, "VERSION " + this->__ENGINE_VERSION__);
+	delete Data;
+	//Tanxl_Engine_DataBase->SortDataBase(FILE_UNITED, FileName, FileName, true);
 }

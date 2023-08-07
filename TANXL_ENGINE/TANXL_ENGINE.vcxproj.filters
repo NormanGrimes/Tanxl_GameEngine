@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tanxl_UniqueID.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_Console_List.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
@@ -54,6 +51,9 @@
     <ClInclude Include="Tanxl_Engine_Manager.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_RandomBase.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,6 +81,9 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_Engine_Manager.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanxl_RandomBase.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>

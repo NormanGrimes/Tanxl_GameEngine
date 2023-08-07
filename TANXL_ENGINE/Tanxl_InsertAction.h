@@ -10,11 +10,9 @@
 #define _TANXL_INSERTACTION_CONSOLE_OUTPUT_
 
 #include <vector>
-#include <iostream>
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
-#include <string>
-#include "Tanxl_UniqueID.h"
+#include "Tanxl_RandomBase.h"
 
 struct Key_Unit
 {

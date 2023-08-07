@@ -7,13 +7,28 @@ int main()
 
 	Tanxl_Engine TGE;
 
-	UniqueIdBase* UIB{ &UniqueIdBase::GetIdGenerator() };
+	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 
 	UIB->Suffle_UniData(1);
 
+	std::cout << UIB->GenerateAutoSeed() << std::endl;
+
 	TANXL_DataBase NData;
-	TanxlDB::Data(false);
-	NData.Get_LocalData("Tanxl_DataBase");
+	NData.Set_Internal_Id(0x1122, "TANXL1", "GAME1");
+
+	Data_Link* D4 = new Data_Link(1, "NUMS1");
+	D4->Append_Data(2, "NUMS2");
+	D4->Append_Data(3, "NUMS3");
+	D4->Append_Data(4, "NUMS4");
+	D4->Append_Data(5, "NUMS5");
+
+	NData.Set_Internal_Data(D4, SIMPLE_SET);
+	NData.AppendItem(APPENDTO_BOTH);
+	NData.Set_Internal_Id(0x3322, "TANXL2", "GAME2");
+	D4->Append_Data(6, "NUMS6");
+	NData.Set_Internal_Data(D4, SIMPLE_SET);
+	NData.AppendItem(APPENDTO_BOTH);
+
 	NData.Print_Data();
 
 	//Get Instance
@@ -34,7 +49,7 @@ int main()
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
-	TGE.Engine_Save_Source_Infor("Tanxl Engine VersionMes");
+	//TGE.Engine_Save_Source_Infor("Tanxl Engine VersionMes");
 
 	bool CurrStatus = false;
 	bool Appended = false;
