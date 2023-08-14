@@ -14,6 +14,7 @@ int main()
 	std::cout << UIB->GenerateAutoSeed() << std::endl;
 
 	TANXL_DataBase NData;
+
 	NData.Set_Internal_Id(0x1122, "TANXL1", "GAME1");
 
 	Data_Link* D4 = new Data_Link(1, "NUMS1");
@@ -28,6 +29,10 @@ int main()
 	D4->Append_Data(6, "NUMS6");
 	NData.Set_Internal_Data(D4, SIMPLE_SET);
 	NData.AppendItem(APPENDTO_BOTH);
+
+	delete D4;
+
+	NData.SortDataBase();
 
 	NData.Print_Data();
 

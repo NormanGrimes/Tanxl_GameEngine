@@ -142,8 +142,8 @@ namespace TanxlDB
 
 std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& s)
 {
-	fot << "<Type_Status : " << (s._Internal_Data._Item_Status & 0xFF00) << " / " << s._Internal_Data._Type_Name << ">" << std::endl;
-	s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << (s._Internal_Data._Item_Status & 0x00FF) << " / " << s._Internal_Data._Exac_Name << ">" << std::endl;
+	fot << "<Type_Status : " << s._Internal_Data._Type_Name << " / " << (s._Internal_Data._Item_Status & 0xFF00) << ">" << std::endl;
+	s.OstreamSpace(fot, 1); fot << "<Exac_Status : " << s._Internal_Data._Exac_Name << " / " << (s._Internal_Data._Item_Status & 0x00FF) << ">" << std::endl;
 	s.OstreamSpace(fot, 1, 1); fot << "<TDBS_Item>" << std::endl;
 	for (int i = 0; i < s._Internal_Data._Data->_Data_Units.size(); i++)
 	{
@@ -171,16 +171,6 @@ inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After
 	TDB_Status += After;
 }
 
-inline void TANXL_DataBase::Combine_Status()
-{
-	Item_Instance.Item_Status = 
-		  (Item_Instance.Status_1 << 28)
-		+ (Item_Instance.Status_2 << 24)
-		+ (Item_Instance.Status_3 << 16)
-		+ (Item_Instance.Status_4 << 8 )
-		+  Item_Instance.Status_5;
-}
-
 void TANXL_DataBase::ResetInstance()
 {
 	this->_Internal_Data._Item_Status = 0xFFFF;
@@ -201,10 +191,12 @@ void TANXL_DataBase::Set_Internal_Data(Data_Link* Data, ELinkSet_Mode Set_Mode)
 	switch (Set_Mode)
 	{
 	case SIMPLE_SET:
+		delete this->_Internal_Data._Data;
 		this->_Internal_Data._Data = Data;
 		break;
 	case APPEND_CUR:
 		this->_Internal_Data._Data->Append_Data(Data);
+		delete Data;
 		break;
 	case APPEND_TAK:
 		if (this->_Internal_Data._Data != nullptr)
@@ -249,7 +241,7 @@ void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name)
 	}
 }
 
-/*void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)//即将弃用
+void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)//即将弃用
 {
 	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
 		if (!Get_LocalData(In_File_Name))
@@ -263,47 +255,23 @@ void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name)
 		return;
 	}
 	std::fstream out(Out_File_Name + ".sd", std::ios::out | std::ios::trunc);
-	Id_Vector* PIC{ this->IC_Vector->at(0) };
+	Id_Link* PIC{ this->_Id_Links->at(0) };
 	out << "<Tanxl_DataBase Information>" << std::endl;
-	std::vector<Id_Vector*>::iterator IOIE{ IC_Vector->end() };
-	std::vector<Id_Vector*>::iterator IOIB{ IC_Vector->begin() };
+	std::vector<Id_Link*>::iterator IOIE{ this->_Id_Links->end() };
+	std::vector<Id_Link*>::iterator IOIB{ this->_Id_Links->begin() };
 	do
 	{
-		std::vector<Data_Vector*>::iterator IODE{ (*IOIB)->exac->end() };
-		std::vector<Data_Vector*>::iterator IODB{ (*IOIB)->exac->begin() };
-		std::cout << "\t<Type_Status : " << (*IOIB)->StrA << " / " << (*IOIB)->Type << ">" << std::endl;
-		std::cout << "\t\t<Exac_Status : " << (*IOIB)->StrB << " / " << (*IOIB)->Exac << ">" << std::endl;
-		out << "\t<Type_Status : " << (*IOIB)->StrA << " / " << (*IOIB)->Type << ">" << std::endl;
-		out << "\t\t<Exac_Status : " << (*IOIB)->StrB << " / " << (*IOIB)->Exac << ">" << std::endl;
+		std::vector<Data_Unit>::iterator IODE{ (*IOIB)->_Data->_Data_Units.end() };
+		std::vector<Data_Unit>::iterator IODB{ (*IOIB)->_Data->_Data_Units.begin() };
+		std::cout << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
+		std::cout << "\t\t<Exac_Status : " << (*IOIB)->_Exac_Name << " / " << (*IOIB)->_Exac << ">" << std::endl;
+		out << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
+		out << "\t\t<Exac_Status : " << (*IOIB)->_Exac_Name << " / " << (*IOIB)->_Exac << ">" << std::endl;
 		do
 		{
-			std::string TAG = DataTag((*IOIB)->Type, (*IOIB)->Exac, (*IODB)->Id_1);
-			std::string TAG_OTH1 = TAG == "" ? "OTH1" : TAG;
-			TAG = DataTag((*IOIB)->Type, (*IOIB)->Exac, (*IODB)->Id_2);
-			std::string TAG_OTH2 = TAG == "" ? "OTH2" : TAG;
-			TAG = DataTag((*IOIB)->Type, (*IOIB)->Exac, (*IODB)->Id_3);
-			std::string TAG_OTH3 = TAG == "" ? "OTH3" : TAG;
-			if ((*IODB)->Id_1 + (*IODB)->Id_2 + (*IODB)->Id_3 == -3)
-				continue;
-			if (Mode ^ 0x1)
-				out << "\t\t\t<TDB_Item>" << std::endl;
-			if ((*IODB)->Id_1 != 0xFF)
-			{
-				if (Mode ^ 0x1)out << "\t";
-				out << "\t\t\t<" + TAG_OTH1 + ": " << (*IODB)->Id_1 << ">" << (*IODB)->Sd_1 << "</" + TAG_OTH1 +">" << std::endl;
-			}
-			if ((*IODB)->Id_2 != 0xFF)
-			{
-				if (Mode ^ 0x1)out << "\t";
-				out << "\t\t\t<" + TAG_OTH2 + ": " << (*IODB)->Id_2 << ">" << (*IODB)->Sd_2 << "</" + TAG_OTH2 + ">" << std::endl;
-			}
-			if ((*IODB)->Id_3 != 0xFF)
-			{
-				if (Mode ^ 0x1)out << "\t";
-				out << "\t\t\t<" + TAG_OTH3 + ": " << (*IODB)->Id_3 << ">" << (*IODB)->Sd_3 << "</" + TAG_OTH3 + ">" << std::endl;
-			}
-			if (Mode ^ 0x1)
-				out << "\t\t\t</TDB_Item>" << std::endl;
+			std::string TAG = DataTag((*IOIB)->_Type, (*IOIB)->_Exac, (*IODB)._Id) == "" ? "DATA" : DataTag((*IOIB)->_Type, (*IOIB)->_Exac, (*IODB)._Id);
+			out << "\t\t\t<" + TAG + ": " << (*IODB)._Id << ">" << (*IODB)._Data << "</" + TAG + ">" << std::endl;
+			std::cout << "\t\t\t<" + TAG + ": " << (*IODB)._Id << ">" << (*IODB)._Data << "</" + TAG + ">" << std::endl;
 			++IODB;
 		} while (IODB != IODE);
 		out << "\t\t</Exac_Status>" << std::endl;
@@ -312,8 +280,6 @@ void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name)
 	} while (IOIB != IOIE);
 	out << "</Tanxl_DataBase Information>" << std::endl;
 	out.close();
-	for (int i = 0; i < _Id_Links->size(); ++i)
-		Remove_Link(_Id_Links->at(i)->_Type, _Id_Links->at(i)->_Exac);
 	Is_Chain_Empty = true;
 	if (Delete_After_Sort)
 	{
@@ -323,7 +289,7 @@ void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name)
 			remove(s.c_str());
 		}
 	}
-}*/
+}
 
 void TANXL_DataBase::Append_Link(Id_Link& New_Id, Data_Link& New_Data)
 {
@@ -378,10 +344,9 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		std::fstream in(File_Name + ".sd", std::ios::in);
 	if (in.is_open())
 	{
-		std::string Type_Data{}, Exac_Data{},Data;//需要使用时再定义
-		int  Type_Stat{}, Exac_Stat{},Id;
+		std::string Type_Data{}, Exac_Data{}, Data;//需要使用时再定义
+		int  Type_Stat{}, Exac_Stat{}, Id;
 		Data_Link DTL;
-		std::string SData[3]{};
 		std::string Line{};
 		while (std::getline(in, Line))
 		{
@@ -447,7 +412,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 						}
 						Exac_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
 					}
-					else if (Tag == "/TDB")
+					else if ((Tag == "/TDB") || (Tag == "/Exa"))
 					{
 						Id_Link* Id_Temp = new Id_Link(Type_Stat, Type_Data, Exac_Stat, Exac_Data, &DTL);
 						if (Id_Temp)
@@ -485,73 +450,56 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		return false;
 }
 
-/*void TANXL_DataBase::Get_Specified(int Type, int Exac, int Nums)
+void TANXL_DataBase::Get_Specified(int Type, int Exac, int Depth)
 {
-	if (Data_Vector * PDC{ Data_Chain_Locate(Type, Exac, Nums) })
+	if (Data_Unit * PDC{ Data_Link_Locate(Type, Exac, Depth) })
 	{
-		Id_Vector* PIC = { Id_Chain_Locate(Type, Exac) };
-		Item_Instance.Status_1 = PIC->Type;  Item_Instance.Code = PIC->StrA;
-		Item_Instance.Status_2 = PIC->Exac;  Item_Instance.Name = PIC->StrB;
-		Item_Instance.Status_3 = PDC->Id_1;  Item_Instance.Oth1 = PDC->Sd_1;
-		Item_Instance.Status_4 = PDC->Id_2;  Item_Instance.Oth2 = PDC->Sd_2;
-		Item_Instance.Status_5 = PDC->Id_3;  Item_Instance.Oth3 = PDC->Sd_3;
-		Combine_Status();
+		Id_Link* PIC = { Id_Link_Locate(Type, Exac) };
+		this->_Internal_Data._Item_Status = ((PIC->_Type << 8) + PIC->_Exac);
+		this->_Internal_Data._Type_Name = PIC->_Type_Name;
+		this->_Internal_Data._Exac_Name = PIC->_Exac_Name;
+		this->_Internal_Data._Data = PIC->_Data;
 		return;
 	}
 	throw "Get_Specified() Failed ！ : 未能成功匹配相同值";
-}*/
-
-void TANXL_DataBase::Get_Item_Status()
-{
-	Item_Instance.Status_1 = ((Item_Instance.Item_Status & 0xf0000000) >> 28);
-	Item_Instance.Status_2 = ((Item_Instance.Item_Status & 0x0f000000) >> 24);
-	Item_Instance.Status_3 = ((Item_Instance.Item_Status & 0x00ff0000) >> 16);
-	Item_Instance.Status_4 = ((Item_Instance.Item_Status & 0x0000ff00) >>  8);
-	Item_Instance.Status_5 = ( Item_Instance.Item_Status & 0x000000ff       );
 }
 
 void TANXL_DataBase::Print_Data()
 {
-	std::vector<Id_Link*>::iterator BOI{ (this->_Id_Links->begin()) };
-	std::vector<Id_Link*>::iterator EOI{ (this->_Id_Links->end() - 1) };
+	std::vector<Id_Link*>::iterator BOI{ this->_Id_Links->begin() };
+	std::vector<Id_Link*>::iterator EOI{ this->_Id_Links->end() - 1 };
 	while (true)
 	{
 		std::cout << "Id_Link :" << (*BOI)->_Type << " - " << (*BOI)->_Type_Name << " - " << (*BOI)->_Exac << " - " << (*BOI)->_Exac_Name << std::endl;
 		Data_Link* DL{ ((*BOI)->_Data) };
+		if (DL == nullptr)
+			break;
 		for (int i = 0; i < DL->_Data_Units.size(); ++i)
 			std::cout << "\tData_Link :" << DL->_Data_Units.at(i)._Id << " - " << DL->_Data_Units.at(i)._Data << std::endl;
 		if (BOI == EOI)
 			break;
 		BOI++;
-	} 
+	}
 }
 
-/*void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data) //V3 Updated
+void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data) //V3 Updated
 {
-	if (Data_Link * PDC{ Data_Link_Locate(Type, Exac, Nums) })
+	if (Data_Unit * PDC{Data_Link_Locate(Type, Exac, Nums)})
 		switch (level)
 		{
 		case SET_TYPE_STATUS:
-			Replace_Chain(Type, Exac, Nums, Id, Exac);
+			Replace_Link(Type, Exac, Nums, Id, Data);
 			return;
 		case SET_EXAC_STATUS:
-			Replace_Chain(Type, Exac, Nums, Type, Id);
+			Replace_Link(Type, Exac, Nums, Type, Data);
 			return;
-		case SET_OTH1_STATUS:
-			PDC->Id_1 = Id;
-			PDC->Sd_1 = Data;
-			return;
-		case SET_OTH2_STATUS:
-			PDC->Id_2 = Id;
-			PDC->Sd_2 = Data;
-			return;
-		case SET_OTH3_STATUS:
-			PDC->Id_3 = Id;
-			PDC->Sd_3 = Data;
+		case SET_UNIT_IDADAT:
+			PDC->_Id = Id;
+			PDC->_Data = Data;
 			return;
 		}
 	throw "Set_Specified() Failed ！ : 查找相关内容不成功或链表内容为空";
-}*/
+}
 
 void TANXL_DataBase::Remove_Link(int Type, int Exac)
 {
@@ -618,10 +566,10 @@ Data_Unit* TANXL_DataBase::Data_Link_Locate(int Type, int Exac, int Depth)
 	return &(PIC->_Data->_Data_Units.at(Depth));
 }
 
-void TANXL_DataBase::Replace_Link(int OldType, int OldExac, int OldDepth, int Type, int Exac)
+void TANXL_DataBase::Replace_Link(int OldType, int OldExac, int OldDepth, int Id, std::string Data)
 {
 	Id_Link* PIC{ Id_Link_Locate(OldType, OldExac) };
-	//Append_Chain(*PIC->exac->at(OldDepth), *new Id_Vector(Type, Exac));
+	Append_Link(*PIC, *new Data_Link(Id, Data));
 	if (PIC->_Data->_Data_Units.size() > OldDepth && OldDepth >= 0)
 		PIC->_Data->_Data_Units.erase(PIC->_Data->_Data_Units.begin() + OldDepth);
 	else if (PIC->_Data->_Data_Units.size() + OldDepth >= 0 && PIC->_Data->_Data_Units.size() + OldDepth < PIC->_Data->_Data_Units.size())

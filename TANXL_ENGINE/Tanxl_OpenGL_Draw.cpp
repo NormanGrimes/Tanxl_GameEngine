@@ -71,8 +71,8 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_01_200X200);       //2
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200X200); //3
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200X200); //4
-	Append_Texture(TanxlOD::TexForestDDPAT_01_200X200); //5
-	Append_Texture(TanxlOD::TexTest_Color_01_300X300);  //6
+	Append_Texture(TanxlOD::TexOcean_01_200X200); //5
+	Append_Texture(TanxlOD::TexForestDDPAT_01_200X200);  //6
 
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 

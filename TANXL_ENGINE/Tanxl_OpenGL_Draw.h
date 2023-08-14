@@ -14,6 +14,7 @@
 // 增加简化的纹理添加接口
 // 纹理数组移动到绘制模块附属名称空间中
 // 增加一个海洋纹理
+// 移除颜色测试纹理
 
 #pragma once
 
@@ -33,7 +34,6 @@ namespace TanxlOD
 	static const char* TexGrass_01_200X200{ "Texture/TANXL_GRASS_01_200X200.jpg" };
 	static const char* TexGrass_Snowy_01_200X200{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg" };
 	static const char* TexGrass_Snowy_02_200X200{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg" };
-	static const char* TexTest_Color_01_300X300{ "Texture/TANXL_TEST_COLOR_01_300X300.png" };
 	static const char* TexOcean_01_200X200{ "Texture/TANXL_OCEAN_01_200X200.jpg" };
 
 	static float textureCoordinates[] =
