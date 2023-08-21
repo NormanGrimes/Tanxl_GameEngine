@@ -77,6 +77,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Data->Append_Data(4, "VERSION " + Tanxl_Engine_InsertBase->Get_Version());
 	Data->Append_Data(5, "VERSION " + Tanxl_Engine_OpenGL_Draw->Get_Version());
 	Data->Append_Data(6, "VERSION " + this->__ENGINE_VERSION__);
-	delete Data;
-	//Tanxl_Engine_DataBase->SortDataBase(FILE_UNITED, FileName, FileName, true);
+	Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
+	Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName);
+	Tanxl_Engine_DataBase->SortDataBase(MEMO_UNITED, FileName, FileName, true);
 }

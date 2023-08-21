@@ -55,8 +55,6 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	State->Set_Move_State(0, _HeightInt - 1 + _PreLoads, 0, _WidthInt - 1 + _PreLoads);
 
 	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
-	//remove("vertShader.glsl");
-	//remove("fragShader.glsl");
 
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);

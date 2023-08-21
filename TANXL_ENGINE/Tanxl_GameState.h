@@ -133,6 +133,7 @@ private:
 	//_SLoc用于记录当前距离地图中心点的距离
 	SLocation _Distance_Mid;
 	std::vector<StateUnit*> _GameState;
+	std::vector<StateUnit*>* _GameStateX[9]{};
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
 	const std::string _Version{ "0.7" };

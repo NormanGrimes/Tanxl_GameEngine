@@ -15,26 +15,28 @@ int main()
 
 	TANXL_DataBase NData;
 
-	NData.Set_Internal_Id(0x1122, "TANXL1", "GAME1");
-
+	NData.Set_Internal_Id(0x1322, "TANXL1", "GAME1");
 	Data_Link* D4 = new Data_Link(1, "NUMS1");
 	D4->Append_Data(2, "NUMS2");
 	D4->Append_Data(3, "NUMS3");
 	D4->Append_Data(4, "NUMS4");
 	D4->Append_Data(5, "NUMS5");
-
 	NData.Set_Internal_Data(D4, SIMPLE_SET);
-	NData.AppendItem(APPENDTO_BOTH);
-	NData.Set_Internal_Id(0x3322, "TANXL2", "GAME2");
+	NData.AppendItem(APPENDTO_MEMO);
+
+	NData.Set_Internal_Id(0x1022, "TANXL2", "GAME2");
+	Data_Link* D5 = new Data_Link(1, "NUMS1");
+	D4->Append_Data(2, "NUMS2");
+	D4->Append_Data(3, "NUMS3");
+	D4->Append_Data(4, "NUMS4");
+	D4->Append_Data(5, "NUMS5");
 	D4->Append_Data(6, "NUMS6");
-	NData.Set_Internal_Data(D4, SIMPLE_SET);
-	NData.AppendItem(APPENDTO_BOTH);
-
-	delete D4;
-
-	NData.SortDataBase();
+	NData.Set_Internal_Data(D5, SIMPLE_SET);
+	NData.AppendItem(APPENDTO_MEMO);
 
 	NData.Print_Data();
+
+	/*NData.SortDataBase();*/
 
 	//Get Instance
 
@@ -54,7 +56,7 @@ int main()
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
-	//TGE.Engine_Save_Source_Infor("Tanxl Engine VersionMes");
+	TGE.Engine_Save_Source_Infor("Tanxl Engine VersionMes");
 
 	bool CurrStatus = false;
 	bool Appended = false;
@@ -77,9 +79,7 @@ int main()
 	{
 		static int Timer = 0;
 		Timer++;
-		//std::cout << KU->MoveToX << "_";
 		OGD->Render_Once(GSB);
-		//TCL.Display_Once();
 		if (Timer == 50)
 		{
 			Timer = 0;
@@ -115,10 +115,6 @@ int main()
 					MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);
 					IEB->RegistEvent(&MOVE_DOWN);
 					KeyUnitNames.push_back(MOVE_DOWN.Unit_Name);
-
-					//Key_Unit NOT_MOVE = Key_Unit(GLFW_KEY_X, false, false, 0.0);
-					//IEB->RegistEvent(&NOT_MOVE);
-					//KeyUnitNames.push_back(NOT_MOVE.Unit_Name);
 
 					Appended = true;
 				}
