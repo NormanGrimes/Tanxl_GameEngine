@@ -2,6 +2,20 @@
 
 #include "Tanxl_RandomBase.h"
 
+RandomBase::RandomBase() 
+{ 
+    srand(static_cast<unsigned int>(time(0)));
+}
+
+RandomBase::~RandomBase() {}
+
+RandomBase::RandomBase(const RandomBase&) {}
+
+RandomBase& RandomBase::operator=(const RandomBase&) 
+{ 
+    return *this;
+}
+
 RandomBase& RandomBase::GetRandomBase()
 {
     static RandomBase RB;
@@ -31,7 +45,21 @@ std::string RandomBase::Generate(int seed)
             Data += "-";
         Data += UniData[rand() % 62];
     }
+    srand(static_cast<unsigned int>(time(0)));
     return Data;
+}
+
+std::string RandomBase::Generate_State(unsigned Width, unsigned Height)
+{
+    this->Suffle_UniData(1);
+    std::string ReturnVal{ "" };
+    for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
+    {
+        ReturnVal += "a-";
+        ReturnVal += std::to_string(this->Random(0, 3));
+        ReturnVal += ",";
+    }
+    return ReturnVal;
 }
 
 std::string RandomBase::GenerateAutoSeed()
@@ -53,12 +81,14 @@ int RandomBase::Random(int Start, int End)
     if (End <= Start)
         return Start;
     srand(static_cast<unsigned int>(time(0)));
+    static unsigned seed = rand();
+    srand(static_cast<unsigned int>(seed));
+    seed++;
     return (rand() % (End - Start)) + Start;
 }
 
 void RandomBase::Suffle_UniData(int Times)
 {
-    srand(static_cast<unsigned int>(time(0)));
     while (Times--)
     {
         for (int i{ 0 }; i < 62; ++i)

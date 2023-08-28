@@ -123,7 +123,8 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	{
 		for (int i{ 0 }; i < (_HeightInt + _PreLoads) * (_WidthInt + _PreLoads); ++i)
 		{
-			_StateInfor[i] = UIB->Random(0, 2) - 1;
+			_StateInfor[i] = UIB->Random(0, 3);
+			std::cout << _StateInfor[i];
 		}
 	}
 	GLuint StatePos;
@@ -174,11 +175,6 @@ void OpenGL_Draw::Set_Trigger_Range(bool Enable, float Height, float Width)
 
 void OpenGL_Draw::Append_Texture(const char* Texture)
 {
-	/*if ((Id < 0) || (Id > 9))
-	{
-		std::cout << "Appen_Texture : Input wrong index !" << std::endl;
-		return;
-	}*/
 	static int Id = 0;
 
 	_Texture.push_back(OpenGL_Render::loadTexture(Texture));
@@ -322,8 +318,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		double Current_Height{ (static_cast<double>(State->Get_Current_Distance()._LocY) * 2 + 1) / (_Each_Height) };
 		double Current_Width{ (static_cast<double>(State->Get_Current_Distance()._LocX) * 2 + 1) / (_Each_Width) };
 
-		//std::cout << "CUH/CUW" << State->Get_Current_Distance()._LocY << "__" << State->Get_Current_Distance()._LocX << std::endl;
-
 		if (State->Get_Adjust_Flag())
 		{
 			Temp_MoveY = State->Set_ExacHeight(Current_Height, State->Get_Current_Distance()._LocY, _State_MoveY, _Auto_AdjustY);
@@ -448,9 +442,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			
 		}
 
-		//std::cout << "State->Get_Current_Distance()._LocX :" << State->Get_Current_Distance()._LocX << std::endl;
-		//std::cout << "State->Get_Current_Distance()._LocX :" << State->Get_Current_Distance()._LocY << std::endl;
-
 		glProgramUniform1f(_renderingProgram, 4, State->Get_Current_Distance()._LocX + Temp_MoveX);//Current_Move_LocationX
 		glProgramUniform1f(_renderingProgram, 5, State->Get_Current_Distance()._LocY + Temp_MoveY);//Current_Move_LocationY
 
@@ -488,35 +479,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			{
 				_State_MoveX -= 0.01f;
 				_Move_AdjustX -= 0.01f;
-			}/*
-			else if (Moves == MoveToPWPH)
-			{
-				_State_MoveX -= 0.01f;
-				_Move_AdjustX -= 0.01f;
-				_State_MoveY -= 0.01f;
-				_Move_AdjustY -= 0.01f;
 			}
-			else if (Moves == MoveToNWPH)
-			{
-				_State_MoveX += 0.01f;
-				_Move_AdjustX += 0.01f;
-				_State_MoveY -= 0.01f;
-				_Move_AdjustY -= 0.01f;
-			}
-			else if (Moves == MoveToPWNH)
-			{
-				_State_MoveX -= 0.01f;
-				_Move_AdjustX -= 0.01f;
-				_State_MoveY += 0.01f;
-				_Move_AdjustY += 0.01f;
-			}
-			else if (Moves == MoveToNWNH)
-			{
-				_State_MoveX += 0.01f;
-				_Move_AdjustX += 0.01f;
-				_State_MoveY += 0.01f;
-				_Move_AdjustY += 0.01f;
-			}*/
 		}
 
 		glProgramUniform1f(_renderingProgram, 8, _State_MoveX);//State_MoveX

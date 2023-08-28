@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include "Tanxl_GameEvent.h"
+#include "Tanxl_DataBase.h"
 
 enum EMove_State_EventId
 {

@@ -175,8 +175,8 @@ void TANXL_DataBase::ResetInstance(bool Delete)
 	this->_Internal_Data._Exac_Name = "";
 	if (Delete && this->_Internal_Data._Data != nullptr)
 	{
+		std::vector<Data_Unit*>().swap(this->_Internal_Data._Data->_Data_Units);
 		delete this->_Internal_Data._Data;
-		this->_Internal_Data._Data = new Data_Link;
 	}
 	this->_Internal_Data._Data = nullptr;
 }
@@ -230,15 +230,15 @@ void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name, bo
 			this->_Internal_Data._Item_Status & 0x00ff, this->_Internal_Data._Exac_Name,
 			new Data_Link(this->_Internal_Data._Data)
 		);
-		this->ResetInstance(Delete_After);
 		if (IdLink)//判断是否申请空间成功//UNFINISH YET
 			Append_Link(*IdLink);
 		else
 			throw "添加失败！ 申请内存空间失败";
 	}
+	this->ResetInstance(Delete_After);
 }
 
-void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)//即将弃用
+void TANXL_DataBase::SortDataBase(int Mode, std::string Out_File_Name, std::string In_File_Name, bool Delete_After_Sort)
 {
 	if (Mode == SORT_LOCALF || Mode == FILE_UNITED)
 		if (!Get_LocalData(In_File_Name))
@@ -294,7 +294,6 @@ void TANXL_DataBase::Append_Link(Id_Link& New_Id)
 	if (this->_Id_Links->size() == 0)
 	{
 		this->_Id_Links->insert(this->_Id_Links->begin(), &New_Id);
-		this->_Id_Links->at(0)->Append_Data_Link(New_Id._Data);
 		return;
 	}
 	int Left{ 0 }, Value{ New_Id._Type * 16 * 16 + New_Id._Exac },
@@ -314,7 +313,6 @@ void TANXL_DataBase::Append_Link(Id_Link& New_Id)
 			if (PIC_Value < Value)
 				Left += 1;
 			this->_Id_Links->insert(this->_Id_Links->begin() + Left, &New_Id);
-			this->_Id_Links->at(Left)->Append_Data_Link(New_Id._Data);
 			return;
 		}
 		else if (PIC_Value < Value)
@@ -380,9 +378,12 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 			else if (Tag == "/TDB")
 			{
 				Id_Link* Id_Temp = new Id_Link(Type_Stat, Type_Data, Exac_Stat, Exac_Data, &DTL);
-				std::vector<Data_Unit*>(DTL._Data_Units).swap(DTL._Data_Units);//释放内存
+				std::vector<Data_Unit*>().swap(DTL._Data_Units);//释放内存
 				if (Id_Temp)
+				{
 					Append_Link(*Id_Temp);
+					std::cout << "1";
+				}
 				else
 					throw "添加失败！ 申请内存空间失败";
 				continue;
@@ -404,7 +405,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					Id = 0xFF;
 				}
 				Data = TanxlDB::Divid_Char(Line, GET_STORAG_DAT);
-				DTL.Append_Data(Data_Unit(Id, Data));
+				DTL.Append_Data(Id, Data);
 			}
 		}
 		in.close();
@@ -467,7 +468,7 @@ void TANXL_DataBase::Remove_Link(int Type, int Exac)
 {
 	if (Id_Link * PIC{Id_Link_Locate(Type, Exac)})
 	{
-		delete PIC->_Data;
+		std::vector<Data_Unit*>().swap(PIC->_Data->_Data_Units);
 		delete PIC;
 		_Id_Links->erase(_Id_Links->begin() + Current_Location);
 	}
@@ -476,7 +477,7 @@ void TANXL_DataBase::Remove_Link(int Type, int Exac)
 Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 {
 	int Left{ 0 }, Value{ Type * 16 + Exac },
-		Right{ static_cast<int>(this->_Id_Links->size()) - 1 >= 0 ? static_cast<int>(this->_Id_Links->size()) - 1 : 0 };;
+		Right{ static_cast<int>(this->_Id_Links->size()) - 1 >= 0 ? static_cast<int>(this->_Id_Links->size()) - 1 : 0 };
 	if (Left == Right)
 	{
 		if (Value == this->_Id_Links->at(0)->_Type * 16 + this->_Id_Links->at(0)->_Exac)
@@ -536,6 +537,27 @@ void TANXL_DataBase::Replace_Link(int OldType, int OldExac, int OldDepth, int Id
 		PIC->_Data->_Data_Units.erase(PIC->_Data->_Data_Units.begin() + OldDepth);
 	else if (PIC->_Data->_Data_Units.size() + OldDepth >= 0 && PIC->_Data->_Data_Units.size() + OldDepth < PIC->_Data->_Data_Units.size())
 		PIC->_Data->_Data_Units.erase(PIC->_Data->_Data_Units.begin() + PIC->_Data->_Data_Units.size() + OldDepth);
+}
+
+void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide)
+{
+	static int Div = static_cast<int>(Divide);
+	static int Cur = 0;
+	if (Divide != 0)
+		Div = Divide;
+	static unsigned Type = 0x01;
+	static unsigned Exac = 0x00;
+	this->ResetInstance(true);
+	this->Set_Internal_Id((Type << 8) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
+	Data_Link* DL = new Data_Link(Cur, Data);
+	this->Set_Internal_Data(DL, SIMPLE_SET);
+	this->AppendItem(APPENDTO_FILE, "Data_Chain_File", true);
+	Cur++;
+	if (Cur == Div)
+	{
+		Cur = 0;
+		Exac = (Exac + 1) > 0xFF ? 0x00 : (Exac + 1);
+	}
 }
 
 const std::string TANXL_DataBase::Get_Version()

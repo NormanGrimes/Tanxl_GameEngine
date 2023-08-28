@@ -1,16 +1,7 @@
-﻿//_VERSION_0_1_ UPDATE LOG
-// LAST_UPDATE 2022-09-26 23:24
-// 初始版本
-// 2022/10/4加入两个State模块接口
-// 2022/10/10更新地图数据编译接口 增加InsertBase的支持
-// 2022/11/07引擎管理模块增加控制移动最大距离的接口
-// 2022/12/27修改头文件包含方式
-// 2023/01/06增加引擎信息存储功能
-// 2023/01/19增加随移动操作移动地图的功能
-// 2023/01/29操作移动地图的功能增加自动获取的方式
-// 2023/01/31增加引擎管理模块的版本功能
-// 2023/02/07优化设置显示函数的流程 增加模块初始化失败销毁的步骤
-// 2023/02/08针对第四版存储模块修改储存信息流程
+﻿//_VERSION_0_2_ UPDATE LOG
+// LAST_UPDATE 2023-02-15 17:06
+// 2023/02/15 随机模块纳入引擎管理模块
+// 2023/02/15 增加随机地图数据生成功能
 
 #pragma once
 
@@ -23,6 +14,7 @@
 #include "Tanxl_InsertAction.h"
 #include "Tanxl_OpenGL_Draw.h"
 #include "Tanxl_OpenGL_Render.h"
+#include "Tanxl_RandomBase.h"
 
 class Tanxl_Engine
 {
@@ -48,6 +40,9 @@ public:
 	//向指定文件名称中输出当前系统的综合信息 FileName为输出的目标文件名称 调用此函数后目标文件会被重置
 	void Engine_Save_Source_Infor(std::string FileName);
 
+	//选定是否开启游戏世界无限扩展的功能
+	void Engine_Save_Infinite_State();
+
 private:
 	CONSOLE* Tanxl_Engine_Console_List;
 	TANXL_DataBase* Tanxl_Engine_DataBase;
@@ -55,8 +50,9 @@ private:
 	GameStateBase* Tanxl_Engine_GameState;
 	OpenGL_Draw* Tanxl_Engine_OpenGL_Draw;
 	InsertEventBase* Tanxl_Engine_InsertBase;
+	RandomBase* Tanxl_Engine_RandomBase;
 
-	const std::string __ENGINE_VERSION__ = "0.1";
+	const std::string __ENGINE_VERSION__ = "0.2";
 };
 
 #endif

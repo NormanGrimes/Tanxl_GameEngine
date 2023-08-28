@@ -5,14 +5,16 @@ Tanxl_Engine_DataBase(new TANXL_DataBase),
 Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 Tanxl_Engine_GameState(&GameStateBase::Get_StateBase(5, 5)),
 Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
-Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase())
+Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
+Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 {
-	if (!Tanxl_Engine_Console_List ||
-		!Tanxl_Engine_DataBase ||
-		!Tanxl_Engine_GameEvent ||
-		!Tanxl_Engine_GameState ||
-		!Tanxl_Engine_OpenGL_Draw ||
-		!Tanxl_Engine_InsertBase)
+	if (!this->Tanxl_Engine_Console_List ||
+		!this->Tanxl_Engine_DataBase ||
+		!this->Tanxl_Engine_GameEvent ||
+		!this->Tanxl_Engine_GameState ||
+		!this->Tanxl_Engine_OpenGL_Draw ||
+		!this->Tanxl_Engine_InsertBase||
+		!this->Tanxl_Engine_RandomBase)
 	{
 		std::cout << "Fail to start Engine !" << std::endl;
 		delete this;
@@ -28,56 +30,66 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height)
 	{
 		ReservWidth = Width;
 		ReservHeight = Height;
-		Tanxl_Engine_GameState->Get_StateBase(Width, Height);
-		Tanxl_Engine_GameState->Set_Display_State(Width, Height);
+		this->Tanxl_Engine_GameState->Get_StateBase(Width, Height);
+		this->Tanxl_Engine_GameState->Set_Display_State(Width, Height);
 	}
 }
 
 void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string Infor)
 {
-	Tanxl_Engine_GameState->CompileStateUnits(Infor);
-	Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);
+	this->Tanxl_Engine_GameState->CompileStateUnits(Infor);
+	this->Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);
 }
 
 void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, float Max_Widtd)
 {
-	Tanxl_Engine_InsertBase->Set_StateRange(Enable);
+	this->Tanxl_Engine_InsertBase->Set_StateRange(Enable);
 	if (Enable)
 	{
-		Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Tanxl_Engine_InsertBase->Get_AutoFloat(Tanxl_Engine_GameState->Get_StateHeight()));
-		Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Tanxl_Engine_InsertBase->Get_AutoFloat(Tanxl_Engine_GameState->Get_StateWidth()));
+		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateHeight()));
+		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateWidth()));
 	}
 	else
 	{
-		Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Max_Height);
-		Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Max_Widtd);
+		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Max_Height);
+		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Max_Widtd);
 	}
 }
 
 void Tanxl_Engine::Engine_Insert_Satate_MoveWith(bool Enable, bool Mode, float Compare_Height, float Compare_Width)
 {
-	Tanxl_Engine_OpenGL_Draw->Set_Trigger_Mode(Mode);
-	Tanxl_Engine_OpenGL_Draw->Set_Trigger_Range(Enable, Compare_Height, Compare_Width);
+	this->Tanxl_Engine_OpenGL_Draw->Set_Trigger_Mode(Mode);
+	this->Tanxl_Engine_OpenGL_Draw->Set_Trigger_Range(Enable, Compare_Height, Compare_Width);
 }
 
 void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move)
 {
-	Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);
-	Tanxl_Engine_GameState->Set_Adjust(Adjust_Value);
-	Tanxl_Engine_GameState->Set_Adjust_While_Move(Enable_While_Move);
+	this->Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);
+	this->Tanxl_Engine_GameState->Set_Adjust(Adjust_Value);
+	this->Tanxl_Engine_GameState->Set_Adjust_While_Move(Enable_While_Move);
 }
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 {
-	Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "00-VERSION_INFORMATION", "00-ENGINE-CORE");
+	this->Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "00-VERSION_INFORMATION", "00-ENGINE-CORE");
 	Data_Link* Data = new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version());
-	Data->Append_Data(1, "VERSION " + Tanxl_Engine_DataBase->Get_Version());
-	Data->Append_Data(2, "VERSION " + Tanxl_Engine_GameEvent->Get_Version());
-	Data->Append_Data(3, "VERSION " + Tanxl_Engine_GameState->Get_Version());
-	Data->Append_Data(4, "VERSION " + Tanxl_Engine_InsertBase->Get_Version());
-	Data->Append_Data(5, "VERSION " + Tanxl_Engine_OpenGL_Draw->Get_Version());
+	Data->Append_Data(1, "VERSION " + this->Tanxl_Engine_DataBase->Get_Version());
+	Data->Append_Data(2, "VERSION " + this->Tanxl_Engine_GameEvent->Get_Version());
+	Data->Append_Data(3, "VERSION " + this->Tanxl_Engine_GameState->Get_Version());
+	Data->Append_Data(4, "VERSION " + this->Tanxl_Engine_InsertBase->Get_Version());
+	Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
 	Data->Append_Data(6, "VERSION " + this->__ENGINE_VERSION__);
-	Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
-	Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName);
-	Tanxl_Engine_DataBase->SortDataBase(MEMO_UNITED, FileName, FileName, true);
+	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
+	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_MEMO, FileName);
+	this->Tanxl_Engine_DataBase->SortDataBase(MEMO_UNITED, FileName);
+}
+
+void Tanxl_Engine::Engine_Save_Infinite_State()
+{
+	for (int i = 0; i < 0xFF; ++i)
+	{
+		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
+		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);
+		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10));
+	}
 }

@@ -18,6 +18,8 @@
 // 移除内存中数据是否为空的标记
 // 多处细节改进与小问题修复
 // 改进本地文件读取功能
+// 针对内存部分进行优化
+// 增加一个简化步骤的数据添加接口
 
 #pragma once
 
@@ -104,7 +106,7 @@ struct Data_Link//数据数据结构V4
 		if (Data == nullptr)
 			return;
 		if (Replace)
-			std::vector<Data_Unit*>(this->_Data_Units).swap(this->_Data_Units);
+			std::vector<Data_Unit*>().swap(this->_Data_Units);
 		int TempVal = static_cast<int>(Data->_Data_Units.size());
 		for (int i = 0; i < TempVal; ++i)//防止自己给自己添加造成无限循环
 			this->_Data_Units.push_back(Data->_Data_Units.at(i));
@@ -181,6 +183,7 @@ public:
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
 	void SortDataBase(int Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
 	//↓获取当前存储模块的版本信息
+	void Append_DataChain(std::string Data, unsigned Divide = 0);//添加数据链 TDB指定添加的目标 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元
 	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息
 };

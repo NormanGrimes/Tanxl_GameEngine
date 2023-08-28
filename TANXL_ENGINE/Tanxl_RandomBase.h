@@ -1,6 +1,8 @@
 ﻿//_VERSION_0_3_ UPDATE LOG
 // LAST_UPDATE 2023-02-08 09:23
 // 整理至引擎核心层
+// 取随机数接口增加随机性
+// 增加生成随机地图区块的功能
 
 #pragma once
 
@@ -22,6 +24,9 @@ public:
     //根据提供的种子生成一组序列号 相同的种子结果相同
     std::string Generate(int seed);
 
+    //随机生成一组地图数据 Width为数据宽度 Height为数据高度
+    std::string Generate_State(unsigned Width, unsigned Height);
+
     //根据内部提供的种子生成一组序列号 可用于短时间大量生成 重启后若不调用Suffle_UniData刷新字典再调用会出现重复序列号
     std::string GenerateAutoSeed();
 
@@ -42,10 +47,10 @@ private:
     {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"},
     {"Y"}, {"Z"} };
 
-    RandomBase() { srand(static_cast<unsigned int>(time(0))); }
-    ~RandomBase() {}
-    RandomBase(const RandomBase&) {}
-    RandomBase& operator=(const RandomBase&) { return *this; }
+    RandomBase();
+    ~RandomBase();
+    RandomBase(const RandomBase&);
+    RandomBase& operator=(const RandomBase&);
 };
 
 #endif
