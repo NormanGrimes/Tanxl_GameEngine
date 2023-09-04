@@ -320,9 +320,9 @@ GameStateBase::GameStateBase(int Width, int Height) :
 
 GameStateBase::~GameStateBase()
 {
-	for (int i = 0; i < _GameState.size(); ++i)
-		delete _GameState.at(i);
-	_GameState.clear();
+	std::vector<StateUnit*>().swap(this->_GameState);
+	for (int i{ 0 }; i < 9; ++i)
+		delete this->_GameStateX[i];
 }
 
 //unimportant Stuff (GET/SET)
@@ -338,7 +338,11 @@ std::string GameEvent::GetEventName()
 
 GameEventBase::GameEventBase() :_GameEvents(NULL) {}
 
-GameEventBase::~GameEventBase() { delete& _GameEvents; }
+GameEventBase::~GameEventBase()
+{
+	std::vector<GameEvent*>().swap(this->_GameEvents);
+	delete& _GameEvents;
+}
 
 GameEventBase::GameEventBase(const GameEventBase&) {}
 

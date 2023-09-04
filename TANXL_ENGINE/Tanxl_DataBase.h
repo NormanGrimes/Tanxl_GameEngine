@@ -20,6 +20,10 @@
 // 改进本地文件读取功能
 // 针对内存部分进行优化
 // 增加一个简化步骤的数据添加接口
+// 恢复重置指定数据的功能
+// 变量名称对应最新版本进行修改
+// 获取本地数据接口的内存清理步骤优化
+// 数据整理功能将联合整理设为默认并取代旧式整理
 
 #pragma once
 
@@ -49,9 +53,7 @@ enum ELinkSet_Mode
 enum ESort_Mode//为SortDataBase函数提供的功能枚举
 {
 	SORT_LOCALF,
-	FILE_UNITED,
-	SORT_MEMORY,
-	MEMO_UNITED
+	SORT_MEMORY
 };
 
 enum EDivid_Mode//为Divid_Char函数提供的功能枚举
@@ -179,9 +181,8 @@ public:
 	//↓向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置 To_File为true时会向文件输出 否则存储到内存中 File_Name指定文件名称 不需要添加后缀 Keep_Instance可在为true时 完成添加后不清理Instance数据
 	void AppendItem(EAppendItem_Mode Mode, std::string File_Name = "Tanxl_Data", bool Delete_After = false);
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
-	//↓Mode为true时从文件中读取数据 需要提供In/Out_File_Name 执行后清空内存中的链表  Mode为false时直接对当前内存中的链表进行整理 可以使现有链表改为升序 执行后不清空
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
-	void SortDataBase(int Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
+	void SortDataBase(ESort_Mode Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
 	//↓获取当前存储模块的版本信息
 	void Append_DataChain(std::string Data, unsigned Divide = 0);//添加数据链 TDB指定添加的目标 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元
 	const std::string Get_Version();

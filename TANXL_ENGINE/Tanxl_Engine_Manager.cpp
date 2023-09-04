@@ -80,8 +80,8 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
 	Data->Append_Data(6, "VERSION " + this->__ENGINE_VERSION__);
 	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
-	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_MEMO, FileName);
-	this->Tanxl_Engine_DataBase->SortDataBase(MEMO_UNITED, FileName);
+	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_MEMO, FileName, true);
+	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
 }
 
 void Tanxl_Engine::Engine_Save_Infinite_State()

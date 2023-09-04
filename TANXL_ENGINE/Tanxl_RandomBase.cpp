@@ -80,10 +80,8 @@ int RandomBase::Random(int Start, int End)
 {
     if (End <= Start)
         return Start;
-    srand(static_cast<unsigned int>(time(0)));
-    static unsigned seed = rand();
-    srand(static_cast<unsigned int>(seed));
-    seed++;
+    static unsigned seed = 0;
+    srand(static_cast<unsigned int>(seed++));
     return (rand() % (End - Start)) + Start;
 }
 

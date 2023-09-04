@@ -107,16 +107,16 @@ GLuint OpenGL_Render::loadTexture(const char *texImagePath)
 {
 	GLuint textureRef{ SOIL_load_OGL_texture(texImagePath, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y) };
 	if (textureRef == 0) std::cout << "didnt find texture file " << texImagePath << std::endl;
-	// ----- mipmap/anisotropic section
+	// ----- mipmap/anisotroPIL section
 	glBindTexture(GL_TEXTURE_2D, textureRef);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	if (glewIsSupported("GL_EXT_texture_filter_anisotropic")) {
+	if (glewIsSupported("GL_EXT_texture_filter_anisotroPIL")) {
 		GLfloat anisoset = 0.0f;
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisoset);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisoset);
 	}
-	// ----- end of mipmap/anisotropic section
+	// ----- end of mipmap/anisotroPIL section
 	return textureRef;
 }
 
