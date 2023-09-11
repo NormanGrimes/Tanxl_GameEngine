@@ -50,13 +50,7 @@ float InsertEventBase::Get_AutoFloat(int Blocks)
 
 void InsertEventBase::RegistEvent(Key_Unit* KU)
 {
-	if (KU->Unit_Type == 0)
-	{
-		Key_Unit* NKU = new Key_Unit(KU->GLFW_KEY, KU->MoveToX, KU->MoveToY, KU->MoveLen);
-		_KeyEventS.push_back(NKU);
-	}
-	else
-		_KeyEventS.push_back(KU);
+	_KeyEventS.push_back(KU);
 }
 
 void InsertEventBase::RemoveEvent()
@@ -221,10 +215,10 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_UP.GLFW_KEY = GLFW_KEY_W;
 	this->RegistEvent(MOVE_UP);*/
 	// OR ↓
-	Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);
-	this->RegistEvent(&MOVE_UP);
-	MOVE_UP = Key_Unit(GLFW_KEY_W, false, true, 0.01);
-	this->RegistEvent(&MOVE_UP);
+	Key_Unit* MOVE_UP = new Key_Unit(GLFW_KEY_UP, false, true, 0.01);
+	this->RegistEvent(MOVE_UP);
+	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.01);
+	this->RegistEvent(MOVE_UP);
 
 	/*Key_Unit MOVE_LEFT;
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_LEFT;
@@ -235,10 +229,10 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_A;
 	this->RegistEvent(MOVE_LEFT);*/
 	// OR ↓
-	Key_Unit MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
-	this->RegistEvent(&MOVE_LEFT);
-	MOVE_LEFT = Key_Unit(GLFW_KEY_A, true, false, -0.01);
-	this->RegistEvent(&MOVE_LEFT);
+	Key_Unit* MOVE_LEFT = new Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
+	this->RegistEvent(MOVE_LEFT);
+	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.01);
+	this->RegistEvent(MOVE_LEFT);
 
 	/*Key_Unit MOVE_RIGHT;
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_RIGHT;
@@ -249,10 +243,10 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_D;
 	this->RegistEvent(MOVE_RIGHT);*/
 	// OR ↓
-	Key_Unit MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
-	this->RegistEvent(&MOVE_RIGHT);
-	MOVE_RIGHT = Key_Unit(GLFW_KEY_D, true, false, 0.01);
-	this->RegistEvent(&MOVE_RIGHT);
+	Key_Unit* MOVE_RIGHT = new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
+	this->RegistEvent(MOVE_RIGHT);
+	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.01);
+	this->RegistEvent(MOVE_RIGHT);
 
 	/*Key_Unit MOVE_DOWN;
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_DOWN;
@@ -263,10 +257,10 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
 	this->RegistEvent(MOVE_DOWN);*/
 	// OR ↓
-	Key_Unit MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
-	this->RegistEvent(&MOVE_DOWN);
-	MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);
-	this->RegistEvent(&MOVE_DOWN);
+	Key_Unit* MOVE_DOWN = new Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
+	this->RegistEvent(MOVE_DOWN);
+	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.01);
+	this->RegistEvent(MOVE_DOWN);
 }
 
 InsertEventBase::~InsertEventBase()
@@ -280,25 +274,25 @@ InsertEventBase::InsertEventBase(const InsertEventBase&) :
 	_KeyEventS(NULL), _Max_float(1.0f), _PTB(nullptr), _Is_Max_Single(false),
 	_Max_float_Height(1), _Max_float_Width(1), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
 {
-	Key_Unit MOVE_UP = Key_Unit(GLFW_KEY_UP, false, true, 0.01);
-	this->RegistEvent(&MOVE_UP);
-	MOVE_UP = Key_Unit(GLFW_KEY_W, false, true, 0.01);
-	this->RegistEvent(&MOVE_UP);
+	Key_Unit* MOVE_UP = new Key_Unit(GLFW_KEY_UP, false, true, 0.01);
+	this->RegistEvent(MOVE_UP);
+	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.01);
+	this->RegistEvent(MOVE_UP);
 
-	Key_Unit MOVE_LEFT = Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
-	this->RegistEvent(&MOVE_LEFT);
-	MOVE_LEFT = Key_Unit(GLFW_KEY_A, true, false, -0.01);
-	this->RegistEvent(&MOVE_LEFT);
+	Key_Unit* MOVE_LEFT = new Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
+	this->RegistEvent(MOVE_LEFT);
+	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.01);
+	this->RegistEvent(MOVE_LEFT);
 
-	Key_Unit MOVE_RIGHT = Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
-	this->RegistEvent(&MOVE_RIGHT);
-	MOVE_RIGHT = Key_Unit(GLFW_KEY_D, true, false, 0.01);
-	this->RegistEvent(&MOVE_RIGHT);
+	Key_Unit* MOVE_RIGHT = new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
+	this->RegistEvent(MOVE_RIGHT);
+	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.01);
+	this->RegistEvent(MOVE_RIGHT);
 
-	Key_Unit MOVE_DOWN = Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
-	this->RegistEvent(&MOVE_DOWN);
-	MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);
-	this->RegistEvent(&MOVE_DOWN);
+	Key_Unit* MOVE_DOWN = new Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
+	this->RegistEvent(MOVE_DOWN);
+	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.01);
+	this->RegistEvent(MOVE_DOWN);
 }
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)

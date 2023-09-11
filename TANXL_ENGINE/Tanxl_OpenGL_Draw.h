@@ -15,6 +15,8 @@
 // 纹理数组移动到绘制模块附属名称空间中
 // 增加一个海洋纹理
 // 移除颜色测试纹理
+// 增加获取预加载值的接口
+// 修复初始化时移动范围矩阵X/Y轴写反的问题
 
 #pragma once
 
@@ -230,6 +232,7 @@ public:
 	void Set_Trigger_Mode(bool Mode);
 	void Set_Trigger_Range(bool Enable, float Height, float Width);
 	void Append_Texture(const char* Texture);
+	int Get_PreLoad();
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//用于第一次或重新加载整个地图场景

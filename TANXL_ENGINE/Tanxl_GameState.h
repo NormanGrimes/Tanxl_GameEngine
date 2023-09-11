@@ -12,6 +12,7 @@
 // 范围循环测试
 // 默认初始化绘制频率为每帧一次
 // 析构函数优化
+// 增加地图指针指向枚举
 
 #pragma once
 
@@ -33,6 +34,19 @@ enum EMove_State_EventId
 	MoveToPH = 8,
 	MoveToNWPH = 9,
 	MoveToPWPH = 10
+};
+
+enum EState_Point
+{
+	STATE_ID_LEFT_ABOVE  = 0,
+	STATE_ID_ABOVE       = 1,
+	STATE_ID_RIGHT_ABOVE = 2,
+	STATE_ID_LEFT        = 3,
+	STATE_ID_MID         = 4,
+	STATE_ID_RIGHT       = 5,      
+	STATE_ID_LEFT_BELOW  = 6,
+	STATE_ID_BELOW       = 7,
+	STATE_ID_RIGHT_BELOW = 8
 };
 
 struct Move_State

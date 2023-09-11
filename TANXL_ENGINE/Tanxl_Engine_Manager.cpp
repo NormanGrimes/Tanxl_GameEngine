@@ -21,11 +21,12 @@ Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 	}
 }
 
-void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height)
+void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
 {
 	static int ReservWidth{ 5 };
 	static int ReservHeight{ 5 };
 
+	this->Tanxl_Engine_OpenGL_Draw->Set_PreLoad(PreLoads);
 	if (ReservWidth != Width || ReservHeight != Height)
 	{
 		ReservWidth = Width;
@@ -92,4 +93,19 @@ void Tanxl_Engine::Engine_Save_Infinite_State()
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10));
 	}
+	this->Tanxl_Engine_DataBase->SortDataBase(SORT_LOCALF, "TANXL_STATE_DATA", "Data_Chain_File");
+}
+
+void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)
+{
+	this->Tanxl_Engine_OpenGL_Draw->Render_Once(&this->Tanxl_Engine_GameState->Get_StateBase());
+	int Temp_Preload = this->Tanxl_Engine_OpenGL_Draw->Get_PreLoad() + PreLoad_Adjust;
+	this->Tanxl_Engine_OpenGL_Draw->Set_PreLoad(Temp_Preload < 0 ? 0 : Temp_Preload);
+}
+
+std::string Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)
+{
+	Key_Unit* KEYU = new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length);
+	this->Tanxl_Engine_InsertBase->RegistEvent(KEYU);
+	return KEYU->Unit_Name;
 }

@@ -24,6 +24,7 @@
 // 变量名称对应最新版本进行修改
 // 获取本地数据接口的内存清理步骤优化
 // 数据整理功能将联合整理设为默认并取代旧式整理
+// 移除随机测试数据功能
 
 #pragma once
 
@@ -196,8 +197,6 @@ namespace TanxlDB
 	std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//拆分单行内容获取信息
 
 	void Reset_Chain(TANXL_DataBase& TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
-
-	void Data(bool Mode = true, unsigned Length_Each = 5);//测试用默认数据 为true时每次添加的同时还会在屏幕上打印 Length_Each为每个分类数据的长度 总共四个分类
 
 	void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
 }

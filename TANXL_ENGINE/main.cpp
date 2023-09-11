@@ -61,8 +61,8 @@ int main()
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 
+	remove("Data_Chain_File.usd");
 	TGE.Engine_Save_Infinite_State();
-	NData.SortDataBase(SORT_LOCALF, "TANXL_STATE_DATA", "Data_Chain_File");
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -74,22 +74,19 @@ int main()
 	Key_Unit* KU = new Key_Unit(GLFW_KEY_E, &CurrStatus);
 
 	IEB->RegistEvent(KU);
-	OpenGL_Draw* OGD{ &OpenGL_Draw::GetOpenGLBase() };
-	OGD->Set_PreLoad(4);
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
-	TGE.Engine_State_Set_Display(5, 5);
+	TGE.Engine_State_Set_Display(5, 5, 4);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 
 	std::vector<std::string> KeyUnitNames;
-
 	while (1)
 	{
 		static int Timer = 0;
 		Timer++;
-		OGD->Render_Once(GSB);
+		TGE.Engine_Draw_State_Adjust(0);
 		if (Timer == 50)
 		{
 			Timer = 0;
@@ -98,33 +95,25 @@ int main()
 				KU->MoveToX = false;
 				if (Appended == false)
 				{
-					Key_Unit MOVE_UP(GLFW_KEY_UP, false, true, 0.01);
-					IEB->RegistEvent(&MOVE_UP);
-					KeyUnitNames.push_back(MOVE_UP.Unit_Name);
-					MOVE_UP = Key_Unit(GLFW_KEY_W, false, true, 0.01);
-					IEB->RegistEvent(&MOVE_UP);
-					KeyUnitNames.push_back(MOVE_UP.Unit_Name);
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_UP, false, true, 0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_W, false, true, 0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
-					Key_Unit MOVE_LEFT(GLFW_KEY_LEFT, true, false, -0.01);
-					IEB->RegistEvent(&MOVE_LEFT);
-					KeyUnitNames.push_back(MOVE_LEFT.Unit_Name);
-					MOVE_LEFT = Key_Unit(GLFW_KEY_A, true, false, -0.01);
-					IEB->RegistEvent(&MOVE_LEFT);
-					KeyUnitNames.push_back(MOVE_LEFT.Unit_Name);
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_LEFT, true, false, -0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_A, true, false, -0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
-					Key_Unit MOVE_RIGHT(GLFW_KEY_RIGHT, true, false, 0.01);
-					IEB->RegistEvent(&MOVE_RIGHT);
-					KeyUnitNames.push_back(MOVE_RIGHT.Unit_Name);
-					MOVE_RIGHT = Key_Unit(GLFW_KEY_D, true, false, 0.01);
-					IEB->RegistEvent(&MOVE_RIGHT);
-					KeyUnitNames.push_back(MOVE_RIGHT.Unit_Name);
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_RIGHT, true, false, 0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_D, true, false, 0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
-					Key_Unit MOVE_DOWN(GLFW_KEY_DOWN, false, true, -0.01);
-					IEB->RegistEvent(&MOVE_DOWN);
-					KeyUnitNames.push_back(MOVE_DOWN.Unit_Name);
-					MOVE_DOWN = Key_Unit(GLFW_KEY_S, false, true, -0.01);
-					IEB->RegistEvent(&MOVE_DOWN);
-					KeyUnitNames.push_back(MOVE_DOWN.Unit_Name);
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_DOWN, false, true, -0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_S, false, true, -0.01));
+					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
 					Appended = true;
 				}
@@ -132,13 +121,14 @@ int main()
 				{
 					Appended = false;
 					std::cout << "Removing All Temp KeyEvent" << std::endl;
-					for (int i = 0; i < KeyUnitNames.size(); i++)
-						std::cout << "DELETE NAME :" << KeyUnitNames.at(i) << std::endl;
 
 					for (int i = 0; i < KeyUnitNames.size(); i++)
 					{
+						std::cout << "DELETE NAME :" << KeyUnitNames.at(i) << std::endl;
 						if (IEB->RemoveEvent(KeyUnitNames.at(i)))
 							std::cout << "Successfully REMOVE :" << i << std::endl;
+						else
+							std::cout << "Delete Fail !" << std::endl;
 					}
 					KeyUnitNames.erase(KeyUnitNames.begin(), KeyUnitNames.end());
 					KeyUnitNames.clear();

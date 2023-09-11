@@ -76,52 +76,6 @@ namespace TanxlDB
 		TDB.Set_Specified(A, B, Nums, 5, -1, "NULL");
 	}
 
-	void Data(bool Mode, unsigned Length_Each)
-	{
-		TANXL_DataBase TDB_Instance;
-		remove("Tanxl_DataBase.usd");
-		for (unsigned Content = (0x11112000 - Length_Each); Content != 0x11112000; ++Content)
-		{
-			//TDB_Instance.Set_Instance(0x10000000 | 0x0fffffff, "手枪");
-			//TDB_Instance.Set_Instance((Content & 0x0f000000) | 0xf0ffffff, "地下水");
-			//TDB_Instance.Set_Instance((Content & 0x00ff0000) | 0xff00ffff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance((Content & 0x0000ff00) | 0xffff00ff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance((Content & 0x000000ff) | 0xffffff00, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			//TDB_Instance.AppendItem();
-		}
-		for (unsigned Content = 0x22222000 - Length_Each; Content != 0x22222000; ++Content)
-		{
-			//TDB_Instance.Set_Instance(0x20000000 | 0x0fffffff, "步枪");
-			//TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "M4A1-S");
-			//TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			//TDB_Instance.AppendItem();
-		}
-		for (unsigned Content = 0x33332000 - Length_Each; Content != 0x33332000; ++Content)
-		{
-			//TDB_Instance.Set_Instance(0x30000000 | 0x0fffffff, "重型武器");
-			//TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "Nova");
-			//TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			//TDB_Instance.AppendItem();
-		}
-		for (unsigned Content = 0x44442000 - Length_Each; Content != 0x44442000; ++Content)
-		{
-			//TDB_Instance.Set_Instance(0x40000000 | 0x0fffffff, "微型冲锋枪");
-			//TDB_Instance.Set_Instance(Content & 0x0f000000 | 0xf0ffffff, "MP9");
-			//TDB_Instance.Set_Instance(Content & 0x00ff0000 | 0xff00ffff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance(Content & 0x0000ff00 | 0xffff00ff, std::to_string(rand() % 100));
-			//TDB_Instance.Set_Instance(Content & 0x000000ff | 0xffffff00, std::to_string(rand() % 100));
-			if (Mode)std::cout << TDB_Instance;
-			//TDB_Instance.AppendItem();
-		}
-	}
-
 	void Combine_File(std::string FileA, std::string FileB)
 	{
 		std::string Line{};

@@ -2,6 +2,10 @@
 // LAST_UPDATE 2023-02-15 17:06
 // 2023/02/15 随机模块纳入引擎管理模块
 // 2023/02/15 增加随机地图数据生成功能
+// 2023/02/17 增加简化输入按键注册功能
+// 2023/02/17 无限世界生成接口默认加入数据整理
+// 2023/02/17 设置显示窗口接口增加预载设置
+// 2023/02/17 增加绘制窗口与调整预载功能
 
 #pragma once
 
@@ -23,7 +27,7 @@ public:
 	Tanxl_Engine();
 
 	//设置当前显示窗口中的XY轴矩阵数量 Width宽度 Height高度
-	void Engine_State_Set_Display(int Width, int Height);
+	void Engine_State_Set_Display(int Width, int Height, int PreLoads);
 
 	//根据一串合理的字符串对地图进行生成 Width预设宽度 Height预设高度 Infor地图数据
 	void Engine_State_Compile_Units(int Width, int Height, std::string Infor);
@@ -40,8 +44,14 @@ public:
 	//向指定文件名称中输出当前系统的综合信息 FileName为输出的目标文件名称 调用此函数后目标文件会被重置
 	void Engine_Save_Source_Infor(std::string FileName);
 
-	//选定是否开启游戏世界无限扩展的功能
+	//选定是否开启游戏世界无限扩展的功能 执行后会自动生成TANXL_STATE_DATA文件并存放255 10X10个地图单元数据
 	void Engine_Save_Infinite_State();
+
+	//提供基本的绘制功能与预加载数据的调整功能 PreLoad_Adjust为预加载调整值
+	void Engine_Draw_State_Adjust(int PreLoad_Adjust);
+
+	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
+	std::string Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length);
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

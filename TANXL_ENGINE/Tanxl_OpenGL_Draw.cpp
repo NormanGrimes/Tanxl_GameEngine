@@ -52,7 +52,7 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	_Current_Move_Height = 0;
 	_Current_Move_Width = 0;
 	
-	State->Set_Move_State(0, _HeightInt - 1 + _PreLoads, 0, _WidthInt - 1 + _PreLoads);
+	State->Set_Move_State(0, _WidthInt - 1 + _PreLoads, 0, _HeightInt - 1 + _PreLoads);
 
 	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 
@@ -188,6 +188,11 @@ void OpenGL_Draw::Append_Texture(const char* Texture)
 	Id++;
 }
 
+int OpenGL_Draw::Get_PreLoad()
+{
+	return this->_PreLoads;
+}
+
 EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
 {
 	if (_Is_Trigger_Enable)
@@ -279,7 +284,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		int TOCUH{ static_cast<int>((static_cast<double>(_Move_AdjustY) * 2) / _Each_Height) };
 		int TOCUW{ static_cast<int>((static_cast<double>(_Move_AdjustX) * 2) / _Each_Width) };
 
-		//std::cout << "TOUCH " << TOCUH << " -- TOCUW " << TOCUW << std::endl;
+		std::cout << "TOUCH " << TOCUH << " -- TOCUW " << TOCUW << std::endl;
 
 		if (State->Get_Adjust_Flag())
 		{
