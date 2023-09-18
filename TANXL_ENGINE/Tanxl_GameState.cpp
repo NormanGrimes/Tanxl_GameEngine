@@ -108,9 +108,14 @@ Move_State GameStateBase::Get_Move_State()
 	return this->_MState;
 }
 
-SLocation& GameStateBase::Get_Current_Distance()
+SLocation& GameStateBase::Get_Screen_Distance()
 {
-	return this->_Distance_Mid;
+	return this->_Distance_Screen_Mid;
+}
+
+SLocation& GameStateBase::Get_Move_Distance()
+{
+	return this->_Distance_Move;
 }
 
 float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length)
@@ -315,7 +320,8 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
-	_Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(Height),
+	_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)),
+	_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(Height),
 	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false) {}
 
 GameStateBase::~GameStateBase()
@@ -369,12 +375,12 @@ void StateUnit::Set_State_Id(int State_Id)
 
 void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
-	this->_Distance_Mid._LocX = CurrentX;
-	this->_Distance_Mid._LocY = CurrentY;
+	this->_Distance_Screen_Mid._LocX = CurrentX;
+	this->_Distance_Screen_Mid._LocY = CurrentY;
 	float Compare_Width{ 2.0f / _GameState_Width };
 	float Compare_Height{ 2.0f / _GameState_Height };
-	if (_Distance_Mid._LocX < Compare_Width || _Distance_Mid._LocX > Compare_Width ||
-		_Distance_Mid._LocY < Compare_Height || _Distance_Mid._LocY > Compare_Height)
+	if (_Distance_Screen_Mid._LocX < Compare_Width || _Distance_Screen_Mid._LocX > Compare_Width ||
+		_Distance_Screen_Mid._LocY < Compare_Height || _Distance_Screen_Mid._LocY > Compare_Height)
 	{
 		//TODO reload Map
 	}
@@ -416,7 +422,8 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_Distance_Mid(SLocation(0.0f, 0.0f)), _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0),
+_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)),
+_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0),
 _Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }

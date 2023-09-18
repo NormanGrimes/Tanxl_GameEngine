@@ -69,12 +69,16 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_01_200X200);       //2
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200X200); //3
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200X200); //4
-	Append_Texture(TanxlOD::TexOcean_01_200X200); //5
+	Append_Texture(TanxlOD::TexOcean_02_200X200); //5
 	Append_Texture(TanxlOD::TexForestDDPAT_01_200X200);  //6
 
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 
 	Set_Trigger_Range(true, 0.6f, 0.6f);
+
+	int Min = State->Get_StateHeight() > State->Get_StateWidth() ? State->Get_StateWidth() : State->Get_StateHeight();
+	State->Get_Move_Distance()._LocX = 2.0f / Min * (Min - 1);//ORIGIN ((2.0f / Min) * 2) * ((Min - 1) / 2.0f)
+	State->Get_Move_Distance()._LocY = -(2.0f / Min * (Min - 1));
 
 	ReLoadState(State);
 }
@@ -284,7 +288,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		int TOCUH{ static_cast<int>((static_cast<double>(_Move_AdjustY) * 2) / _Each_Height) };
 		int TOCUW{ static_cast<int>((static_cast<double>(_Move_AdjustX) * 2) / _Each_Width) };
 
-		std::cout << "TOUCH " << TOCUH << " -- TOCUW " << TOCUW << std::endl;
+		//std::cout << "X " << State->Get_Screen_Distance()._LocX << " -- Y " << State->Get_Screen_Distance()._LocY << std::endl;
 
 		if (State->Get_Adjust_Flag())
 		{
@@ -297,7 +301,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(_Main_Window, State->Get_Current_Distance()._LocX, State->Get_Current_Distance()._LocY);//获取输入
+		IEB->GetInsert(_Main_Window, State->Get_Screen_Distance()._LocX, State->Get_Screen_Distance()._LocY,
+			State->Get_Move_Distance()._LocX, State->Get_Move_Distance()._LocY);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
@@ -320,13 +325,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
-		double Current_Height{ (static_cast<double>(State->Get_Current_Distance()._LocY) * 2 + 1) / (_Each_Height) };
-		double Current_Width{ (static_cast<double>(State->Get_Current_Distance()._LocX) * 2 + 1) / (_Each_Width) };
+		double Current_Height{ (static_cast<double>(State->Get_Screen_Distance()._LocY) * 2 + 1) / (_Each_Height) };
+		double Current_Width{ (static_cast<double>(State->Get_Screen_Distance()._LocX) * 2 + 1) / (_Each_Width) };
 
 		if (State->Get_Adjust_Flag())
 		{
-			Temp_MoveY = State->Set_ExacHeight(Current_Height, State->Get_Current_Distance()._LocY, _State_MoveY, _Auto_AdjustY);
-			Temp_MoveX = State->Set_ExacWidth(Current_Width, State->Get_Current_Distance()._LocX, _State_MoveX, _Auto_AdjustX);
+			Temp_MoveY = State->Set_ExacHeight(Current_Height, State->Get_Screen_Distance()._LocY, _State_MoveY, _Auto_AdjustY);
+			Temp_MoveX = State->Set_ExacWidth(Current_Width, State->Get_Screen_Distance()._LocX, _State_MoveX, _Auto_AdjustX);
 			Wait_Frame = 0;
 			
 			if (ANCUH != ACUH)
@@ -446,9 +451,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			}
 			
 		}
-
-		glProgramUniform1f(_renderingProgram, 4, State->Get_Current_Distance()._LocX + Temp_MoveX);//Current_Move_LocationX
-		glProgramUniform1f(_renderingProgram, 5, State->Get_Current_Distance()._LocY + Temp_MoveY);//Current_Move_LocationY
+		//std::cout << State->Get_Screen_Distance()._LocX + Temp_MoveX << "__" << State->Get_Screen_Distance()._LocY + Temp_MoveY << std::endl;
+		glProgramUniform1f(_renderingProgram, 4, State->Get_Screen_Distance()._LocX + Temp_MoveX);//Current_Move_LocationX
+		glProgramUniform1f(_renderingProgram, 5, State->Get_Screen_Distance()._LocY + Temp_MoveY);//Current_Move_LocationY
 
 		if (_Is_State_Changed)
 		{
@@ -463,7 +468,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (_Trigger_Mode)
 				Moves = Auto_Update_Trigger(IEB->Get_Reach_Edge());//TODO
 			else
-				Moves = Auto_Update_Trigger(State->Get_Current_Distance()._LocY, State->Get_Current_Distance()._LocX);
+				Moves = Auto_Update_Trigger(State->Get_Screen_Distance()._LocY, State->Get_Screen_Distance()._LocX);
 
 			if ((Moves & MoveToNH) == MoveToNH)
 			{

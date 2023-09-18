@@ -6,7 +6,7 @@ Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	this->Unit_Name = UIB->GenerateAutoSeed();
-	#ifdef _TANXL_INSERTACTION_CONSOLE_OUTPUT_
+	#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
 	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
 	#endif
 }
@@ -19,7 +19,7 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
-	#ifdef _TANXL_INSERTACTION_CONSOLE_OUTPUT_
+	#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
 	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
 	#endif
 }
@@ -32,7 +32,7 @@ Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
-	#ifdef _TANXL_INSERTACTION_CONSOLE_OUTPUT_
+	#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
 	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
 	#endif
 }
@@ -58,41 +58,40 @@ void InsertEventBase::RemoveEvent()
 	_KeyEventS.pop_back();
 }
 
-void InsertEventBase::GetInsert(GLFWwindow* window, float& MoveX, float& MoveY)
+void InsertEventBase::GetInsert(GLFWwindow* window, float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY)
 {
-	for (int i = 0; i < _KeyEventS.size(); ++i)
+	this->_Margin_X = 0.0f;
+	this->_Margin_Y = 0.0f;
+	for (int i = 0; i < this->_KeyEventS.size(); ++i)
 	{
-		_Margin_X = 0.0f;
-		_Margin_Y = 0.0f;
-		if (glfwGetKey(window, _KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
+		
+		if (glfwGetKey(window, this->_KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
-			if (_KeyEventS.at(i)->Unit_Type == 1)
+			if (this->_KeyEventS.at(i)->Unit_Type == 1)
 			{
-				//_Is_Key_Pressed = false;
-				//std::cout << "_KeyEventS.at(i).MoveToX" << _KeyEventS.at(i)->MoveToX << std::endl;
-				_KeyEventS.at(i)->MoveToX = _KeyEventS.at(i)->MoveToX ? false : true;
-				_KeyEventS.at(i)->MoveToY = _KeyEventS.at(i)->MoveToY ? false : true;
-				//std::cout << "MoveToX" << _KeyEventS.at(i)->MoveToX << std::endl;
+				this->_KeyEventS.at(i)->MoveToX = this->_KeyEventS.at(i)->MoveToX ? false : true;
+				this->_KeyEventS.at(i)->MoveToY = this->_KeyEventS.at(i)->MoveToY ? false : true;
+				continue;
 			}
-			if (_KeyEventS.at(i)->MoveToY)
+			if (this->_KeyEventS.at(i)->MoveToY)
 			{
-				MoveY += static_cast<float>(_KeyEventS.at(i)->MoveLen);
-				_Margin_Y = static_cast<float>(_KeyEventS.at(i)->MoveLen);
+				Screen_MoveY += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				Move_DistanceY += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				this->_Margin_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
 			}
-			if (_KeyEventS.at(i)->MoveToX)
+			if (this->_KeyEventS.at(i)->MoveToX)
 			{
-				MoveX += static_cast<float>(_KeyEventS.at(i)->MoveLen);
-				_Margin_X = static_cast<float>(_KeyEventS.at(i)->MoveLen);
+				Screen_MoveX += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				Move_DistanceX += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
 			}
-			//std::cout << "BUTTON PUSHED x_" << MoveX << "y_" << MoveY << std::endl;
 		}
 	}
-	AutoCheck(&MoveX, &MoveY);
-	//Move_AdjustX -= _Margin_X;
-	//Move_AdjustY -= _Margin_Y;
-	//StateX -= _Margin_X;
-	//StateY -= _Margin_Y;
+	AutoCheck(Screen_MoveX, Screen_MoveY, Move_DistanceX, Move_DistanceY);
+	#if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
+	std::cout << "Move Distance X :" << Move_DistanceX << " -  Y :" << Move_DistanceY << std::endl;
+	#endif
 }
 
 void InsertEventBase::Set_MaxFloat(float Max_float)
@@ -163,39 +162,43 @@ const std::string InsertEventBase::Get_Version()
 	return this->_Version;
 }
 
-void InsertEventBase::AutoCheck(float* MoveX, float* MoveY)
+void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY)
 {
 	this->_Is_Reach_Edge = 0;
 
-	if (!_Is_State_Range)
+	if (!this->_Is_State_Range)
 		return;
 
-	if (_Is_Max_Single)
-		_Max_float = _Max_float_Width;
-
-	if (*MoveX > _Max_float)
+	if (this->_Is_Max_Single)
+		this->_Max_float = this->_Max_float_Width;
+	if (Screen_MoveX > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 2;
-		*MoveX = _Max_float;
+		Move_DistanceX -= (this->_Margin_X + this->_Max_float - Screen_MoveX);
+		Screen_MoveX = this->_Max_float;
+
 	}
-	else if (*MoveX < -_Max_float)
+	else if (Screen_MoveX < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 1;
-		*MoveX = -_Max_float;
+		Move_DistanceX -= (this->_Margin_X - Screen_MoveX - this->_Max_float);
+		Screen_MoveX = -this->_Max_float;
 	}
 
-	if (_Is_Max_Single)
-		_Max_float = _Max_float_Height;
+	if (this->_Is_Max_Single)
+		this->_Max_float = this->_Max_float_Height;
 
-	if (*MoveY > _Max_float)
+	if (Screen_MoveY > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 8;
-		*MoveY = _Max_float;
+		Move_DistanceY -= (this->_Margin_Y + this->_Max_float - Screen_MoveY);
+		Screen_MoveY = this->_Max_float;
 	}
-	else if (*MoveY < -_Max_float)
+	else if (Screen_MoveY < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 4;
-		*MoveY = -_Max_float;
+		Move_DistanceY -= (this->_Margin_Y - Screen_MoveY - this->_Max_float);
+		Screen_MoveY = -this->_Max_float;
 	}
 }
 

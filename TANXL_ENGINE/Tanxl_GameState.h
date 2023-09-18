@@ -1,18 +1,6 @@
-﻿//_VERSION_0_7_ UPDATE LOG
-// LAST_UPDATE 2022-11-27 14:54
-// 提供开关自动调整坐标的接口
-// 重新修订重复包含检查
-// 修订部分变量名称
-// 绘制模块的移动坐标归入State模块管理
-// 设置启用移动中调整的功能归入State模块
-// 自动调整函数增加浮点数返回最后一步调节的差值
-// 增加版本变量与获取接口
-// 设置显示范围的接口不再清理地图数据
-// 移动状态枚举增加五种其他情况
-// 范围循环测试
-// 默认初始化绘制频率为每帧一次
-// 析构函数优化
-// 增加地图指针指向枚举
+﻿//_VERSION_0_8_ UPDATE LOG
+// LAST_UPDATE 2023-02-20 10:57
+// 增加变量记录各方向总移动距离
 
 #pragma once
 
@@ -92,7 +80,8 @@ public:
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& Get_StateBase(int Width = 0, int Height = 0);
 	Move_State Get_Move_State();
-	SLocation& Get_Current_Distance();
+	SLocation& Get_Screen_Distance();
+	SLocation& Get_Move_Distance();
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
 	const std::string Get_Version();
@@ -102,6 +91,7 @@ public:
 	void Set_Display_State(int Width, int Height);
 	void Set_DataAll_State(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
+	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateUnits(std::string Infor);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
@@ -144,15 +134,18 @@ private:
 	bool _Adjust_While_Move = false;
 	//_Is_Adjusting用于标记是否正处于调整坐标中
 	bool _Is_Adjusting;
+	//_Compile_Success用于标记输入的地图数据是否编译成功
 	bool _Compile_Success;
-	Move_State _MState;//用于记录当前加载地图区域
-	//_SLoc用于记录当前距离地图中心点的距离
-	SLocation _Distance_Mid;
+	//_MState用于记录当前加载地图区域
+	Move_State _MState;
+	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
+	SLocation _Distance_Screen_Mid;
+	SLocation _Distance_Move;
 	std::vector<StateUnit*> _GameState;
-	std::vector<StateUnit*>* _GameStateX[9]{};
+	std::vector<StateUnit*>* _GameStateX[9]{};//TODO
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
-	const std::string _Version{ "0.7" };
+	const std::string _Version{ "0.8" };
 };
 
 #endif

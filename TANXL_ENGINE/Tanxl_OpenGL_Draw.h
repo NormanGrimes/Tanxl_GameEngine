@@ -17,6 +17,7 @@
 // 移除颜色测试纹理
 // 增加获取预加载值的接口
 // 修复初始化时移动范围矩阵X/Y轴写反的问题
+// 初始化时计算当前真实坐标
 
 #pragma once
 
@@ -37,6 +38,7 @@ namespace TanxlOD
 	static const char* TexGrass_Snowy_01_200X200{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg" };
 	static const char* TexGrass_Snowy_02_200X200{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg" };
 	static const char* TexOcean_01_200X200{ "Texture/TANXL_OCEAN_01_200X200.jpg" };
+	static const char* TexOcean_02_200X200{ "Texture/TANXL_OCEAN_02_200X200.jpg" };
 
 	static float textureCoordinates[] =
 	{
@@ -241,7 +243,7 @@ public:
 private:
 	OpenGL_Draw(int ScreenWidth, int ScreenHeight);
 
-	GLint _StateInfor[200];
+	GLint _StateInfor[300];
 
 	bool _Clear_Function;
 	bool _Is_State_Changed;

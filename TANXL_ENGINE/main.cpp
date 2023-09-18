@@ -13,33 +13,6 @@ int main()
 
 	std::cout << UIB->GenerateAutoSeed() << std::endl;
 
-	TANXL_DataBase NData;
-
-	remove("Tanxl_Data.usd");
-
-	NData.Set_Internal_Id(0x1322, "TANXL1", "GAME1");
-	Data_Link* D4 = new Data_Link(1, "NUMS1 1");
-	D4->Append_Data(2, "NUMS1 2");
-	D4->Append_Data(3, "NUMS1 3");
-	D4->Append_Data(4, "NUMS1 4");
-	D4->Append_Data(5, "NUMS1 5");
-	NData.Set_Internal_Data(D4, SIMPLE_SET);
-	NData.AppendItem(APPENDTO_FILE);
-
-	NData.Set_Internal_Id(0x1022, "TANXL2", "GAME2");
-	Data_Link* D5 = new Data_Link(1, "NUMS2 1");
-	D5->Append_Data(2, "NUMS2 2");
-	D5->Append_Data(3, "NUMS2 3");
-	D5->Append_Data(4, "NUMS2 4");
-	D5->Append_Data(5, "NUMS2 5");
-	D5->Append_Data(6, "NUMS2 6");
-	NData.Set_Internal_Data(D5, SIMPLE_SET);
-	NData.AppendItem(APPENDTO_FILE);
-
-	NData.Print_Data();
-
-	NData.SortDataBase();
-
 	//Get Instance
 
 	GameStateBase* GSB{ &GameStateBase::Get_StateBase(1, 1) };

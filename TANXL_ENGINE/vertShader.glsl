@@ -25,7 +25,7 @@ layout (location = 12) in vec4 color;
 
 layout (location = 13) uniform int Move_With;
 
-uniform int State[200];
+uniform int State[300];
 
 out vec4 vs_color;
 out vec2 tc;
@@ -42,6 +42,7 @@ void main(void)
 
 	float WidthMove = -((SWidth + PreLoads - 1) / 2) * Width;
 	float HeightMove = ((SHeight + PreLoads - 1) / 2) * Height;
+
 	for(int i = 1; i < (SHeight + PreLoads) * (SWidth + PreLoads) + 1; i++)
 	{
 		if      (gl_VertexID == i * 6 + 0) 

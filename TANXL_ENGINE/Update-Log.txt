@@ -1,3 +1,11 @@
+TEnGinE Version-0.1 Build-75 2023-02-20 09:19 UPDATE_LOG
+////////////////////////////////////////////////////////
+英文更新内容已部分添加。地图模块增加变量记录各方向总移动
+距离。输入模块按键输入功能增加对总移动距离计算的支持。输
+入模块自动检查功能增加移动距离的精确计算。增加二号海洋纹
+理。输入模块控制台信息输出宏细化。移除主函数的数据存储功
+能检测。绘制模块初始化时计算当前真实坐标。
+
 TEnGinE Version-0.1 Build-74 2023-02-17 10:33 UPDATE_LOG
 ////////////////////////////////////////////////////////
 输入模块注册事件功能简化。地图模块增加地图指针指向枚举。
@@ -485,6 +493,12 @@ TEnGinE Version-0.1 Build-5 2022-05-01 00:42 UPDATE_LOG
 ///////////////////////////////////////////////////////
 修复SOIL2库缺失PDB文件的问题。Utils模块移除两个目前使用
 不到的函数。从目前确认加入引擎的四个类中移除初始宏定义。
+-------------------------------------------------------
+Fixed the issue that the SOIL2 library was missing PDB 
+files. The Utils module removes two functions that are 
+not currently used. Remove the initial macro 
+definition from the four classes currently confirmed 
+for joining the engine.
 
 TEnGinE Version-0.1 Build-4 2022-04-29 23:48 UPDATE_LOG
 ///////////////////////////////////////////////////////
@@ -492,17 +506,35 @@ TEnGinE Version-0.1 Build-4 2022-04-29 23:48 UPDATE_LOG
 不随机的问题。Tanxl_OpneGL_Draw类加入包含检查，并取消对
 名称空间std的using。移除Utils.cpp中对于Utils.h的重复包含
 ，并为Utils.h加入包含检查。
+-------------------------------------------------------
+Fixed the issue that the UniqueID singleton return 
+value type is incorrect. Fixed the issue that UniqueID 
+random numbers were not random. Tanxl_OpneGL_Draw 
+class adds an inclusion check and unuses the namespace 
+std. Remove duplicate inclusions of Utils.h from the 
+Utils .cpp and add an include check to Utils.h.
 
 TEnGinE Version-0.1 Build-3 2022-04-28 22:11 UPDATE_LOG
 ///////////////////////////////////////////////////////
 增加一个UniqueID头文件，用于给任意游戏资产生成独一无二的
 ID。修复InsertAction头文件中复制构造函数的未初始化错误。
 GLSL文件调整图形单元的颜色，显示每个独立方块更加直观。
+-------------------------------------------------------
+Add a UniqueID header file to generate unique IDs for 
+any game asset. Fixed the uninitialized error of the 
+copy constructor in the InsertAction header file. GLSL 
+files adjust the color of the graphics unit to display 
+each individual square more intuitively.
 
 TEnGinE Version-0.1 Build-2 2022-04-27 22:36 UPDATE_LOG
 ///////////////////////////////////////////////////////
 增加运行环境的配置，为每个模块添加版本号。
+-------------------------------------------------------
+Increase the configuration of the runtime environment 
+and add the version number for each module.
 
 TEnGinE Version-0.1 Build-1 2022-04-26 21:47 UPDATE_LOG
 ///////////////////////////////////////////////////////
 整理初始内容，引擎立项。
+-------------------------------------------------------
+Organize the initial content and set up the engine.
