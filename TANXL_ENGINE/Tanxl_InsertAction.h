@@ -5,24 +5,26 @@
 // 按键输入功能增加对总移动距离计算的支持
 // 自动检查功能增加移动距离的精确计算
 // 控制台信息输出宏细化
+// 获取输入接口入参调整
 
 #pragma once
 
 #ifndef _TANXL_INSERTACTION_
 #define _TANXL_INSERTACTION_
 
-#define _ENABLE_TANXL_INSERTACTION_CONSOLE_OUTPUT_ 1
+#define _ENABLE_TANXL_INSERTACTION_CONSOLE_OUTPUT_ 0
 
 #if _ENABLE_TANXL_INSERTACTION_CONSOLE_OUTPUT_
 
 #define _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_   1
-#define _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_ 0
+#define _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_ 1
 
 #endif
 
 #include <vector>
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
+#include "Tanxl_GameState.h"
 #include "Tanxl_RandomBase.h"
 
 struct Key_Unit
@@ -65,8 +67,8 @@ public:
 	void RegistEvent(Key_Unit* KU);
 	//移除最近一个添加的按键功能
 	void RemoveEvent();
-	//获取输入 window为需要获取输入的OpenGL窗口 Screen开头的变量为临时计算值 取值范围0.0~1.0 Move开头变量记录总移动距离
-	void GetInsert(GLFWwindow* window, float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);
+	//获取输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图
+	void GetInsert(GLFWwindow* window, GameStateBase* State);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
 	//在使用后会导致Set_MaxFloat_Height/Width功能无效化

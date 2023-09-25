@@ -34,7 +34,6 @@ int main()
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 
-	remove("Data_Chain_File.usd");
 	TGE.Engine_Save_Infinite_State();
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };

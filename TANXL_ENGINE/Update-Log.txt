@@ -1,3 +1,11 @@
+TEnGinE Version-0.1 Build-76 2023-02-21 14:17 UPDATE_LOG
+////////////////////////////////////////////////////////
+引擎管理模块无限世界生成接口增加数据清理。地图模块增加变
+量记录各单元的半宽高。地图模块增加根据中点计算当前单元格
+的功能。输入模块获取输入接口入参调整。地图模块增加方格多
+个点的边缘检测枚举。存储模块增加宏控制控制台输出的开启与
+关闭。多处细节改进。移除旧海洋纹理。增加一个草地纹理。
+
 TEnGinE Version-0.1 Build-75 2023-02-20 09:19 UPDATE_LOG
 ////////////////////////////////////////////////////////
 英文更新内容已部分添加。地图模块增加变量记录各方向总移动
@@ -465,29 +473,60 @@ TEnGinE Version-0.1 Build-10 2022-05-11 00:20 UPDATE_LOG
 DataBase模块加入内存申请成功与否的判断。绘制模块移除早期
 遗留变量。GameState模块新增加两个可用于对2D棋盘上的物品
 微调位置的功能。Utils模块移除三个现阶段无用的函数。
+--------------------------------------------------------
+Determine whether the DataBase module joins the memory 
+application successfully. The drawing module removes 
+older legacy variables. The GameState module adds two 
+new functions that can be used to fine-tune the 
+position of items on a 2D board. The Utils module 
+removes three functions that are currently useless.
 
 TEnGinE Version-0.1 Build-9 2022-05-10 01:16 UPDATE_LOG
 ///////////////////////////////////////////////////////
 绘制模块已解决深度测试难题，现在支持多层次绘制。GLSL文件
 名称简化。物品基类提供删除组件功能。
+-------------------------------------------------------
+The Draw module has solved depth testing and now 
+supports multi-level drawing. GLSL file name 
+simplification. The item base class provides the 
+ability to delete components.
 
 TEnGinE Version-0.1 Build-8 2022-05-08 23:03 UPDATE_LOG
 ///////////////////////////////////////////////////////
 整合GameEvent类至GameState类中。考虑代码简洁性，移除初始
 化模块。游戏物品类功能性更新，提供组件添加功能。移除绘制
 模块中明显重复的头文件包含。在绘制模块中加入字母输入。
+-------------------------------------------------------
+Integrate the GameEvent class into the GameState 
+class. For code brevity, remove the initialization 
+module. Functional updates for game items, providing 
+component additions. Remove clearly duplicate header 
+file inclusions in the drawing module. Add letter 
+input to the drawing module.
 
 TEnGinE Version-0.1 Build-7 2022-05-04 22:10 UPDATE_LOG
 ///////////////////////////////////////////////////////
 新增初始化模块，用以对所有基类进行初始化。InsertAction模
 块新增四个操作范例，并整理至引擎核心。游戏物品类内容更新
 。修改VertShader并初始化版本为0.1。
+-------------------------------------------------------
+Added an initialization module to initialize all base 
+classes. The InsertAction module adds four new 
+operation examples and organizes them into the engine 
+core. Game item content updates. Modify VertShader and 
+initialize the version to 0.1.
 
 TEnGinE Version-0.1 Build-6 2022-05-02 22:34 UPDATE_LOG
 ///////////////////////////////////////////////////////
 InsertAction类进行完整的重写，并已证实其功能可用。添加游
 戏物品类，用于在游戏中加入新的对象。添加物品组件类，用于
 给游戏物品添加特别的功能。
+-------------------------------------------------------
+The InsertAction class is completely overridden and 
+has proven that its functionality is available. Add 
+game item classes to add new objects to your game. Add 
+item component classes to add special functionality to 
+game items.
 
 TEnGinE Version-0.1 Build-5 2022-05-01 00:42 UPDATE_LOG
 ///////////////////////////////////////////////////////

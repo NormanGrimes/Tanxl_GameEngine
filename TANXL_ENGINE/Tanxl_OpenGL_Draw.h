@@ -35,10 +35,10 @@ namespace TanxlOD
 {
 	static const char* TexForestDDPAT_01_200X200{ "Texture/TANXL_FOREST_DDPAT_200X200.jpg" };
 	static const char* TexGrass_01_200X200{ "Texture/TANXL_GRASS_01_200X200.jpg" };
+	static const char* TexGrass_02_200X200{ "Texture/TANXL_GRASS_02_200X200.jpg" };
 	static const char* TexGrass_Snowy_01_200X200{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg" };
 	static const char* TexGrass_Snowy_02_200X200{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg" };
 	static const char* TexOcean_01_200X200{ "Texture/TANXL_OCEAN_01_200X200.jpg" };
-	static const char* TexOcean_02_200X200{ "Texture/TANXL_OCEAN_02_200X200.jpg" };
 
 	static float textureCoordinates[] =
 	{

@@ -72,8 +72,8 @@ void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Valu
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 {
-	this->Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "00-VERSION_INFORMATION", "00-ENGINE-CORE");
-	Data_Link* Data = new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version());
+	this->Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");
+	Data_Link* Data{ new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version()) };
 	Data->Append_Data(1, "VERSION " + this->Tanxl_Engine_DataBase->Get_Version());
 	Data->Append_Data(2, "VERSION " + this->Tanxl_Engine_GameEvent->Get_Version());
 	Data->Append_Data(3, "VERSION " + this->Tanxl_Engine_GameState->Get_Version());
@@ -81,19 +81,20 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
 	Data->Append_Data(6, "VERSION " + this->__ENGINE_VERSION__);
 	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
-	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_MEMO, FileName, true);
+	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
 }
 
 void Tanxl_Engine::Engine_Save_Infinite_State()
 {
-	for (int i = 0; i < 0xFF; ++i)
+	for (int i{ 0 }; i < 0xFF; ++i)
 	{
 		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10));
 	}
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_LOCALF, "TANXL_STATE_DATA", "Data_Chain_File");
+	remove("Data_Chain_File.usd");
 }
 
 void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)

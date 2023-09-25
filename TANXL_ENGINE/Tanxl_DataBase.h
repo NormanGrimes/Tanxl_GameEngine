@@ -25,11 +25,21 @@
 // 获取本地数据接口的内存清理步骤优化
 // 数据整理功能将联合整理设为默认并取代旧式整理
 // 移除随机测试数据功能
+// 增加宏控制控制台输出的开启与关闭
 
 #pragma once
 
 #ifndef _TANXL_DATABASE_
 #define _TANXL_DATABASE_
+
+#define _ENABLE_TANXL_DATABASE_CONSOLE_OUTPUT_ 0
+
+#if _ENABLE_TANXL_DATABASE_CONSOLE_OUTPUT_
+
+#define _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_   1
+#define _TANXL_DATABASE_CONSOLE_FILE_OUTPUT_   1
+
+#endif
 
 #include<iostream>
 #include<fstream>
@@ -151,8 +161,8 @@ private:
 
 	const std::string _Version{ "2.0+" };
 	std::vector<Id_Link*>* _Id_Links;
-	int Current_Location;
-	bool Is_Instance_Data;//用来判断Item_Instance中是否有数据
+	int _Current_Location;
+	bool _Is_Instance_Data;//用来判断Item_Instance中是否有数据
 	//↓时间复杂度为logN的Id_Chain快速定位函数 Type Exac 指Id_Link的同名变量
 	Id_Link* Id_Link_Locate(int Type, int Exac);
 	//借由Id_Link_Locate函数对不同深度的Data_Chain定位

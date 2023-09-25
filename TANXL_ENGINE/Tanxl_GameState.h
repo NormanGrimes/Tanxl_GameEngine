@@ -1,6 +1,9 @@
 ﻿//_VERSION_0_8_ UPDATE LOG
 // LAST_UPDATE 2023-02-20 10:57
 // 增加变量记录各方向总移动距离
+// 增加变量记录各单元的半宽高
+// 增加根据中点计算当前单元格的功能
+// 增加方格多个点的边缘检测枚举
 
 #pragma once
 
@@ -13,13 +16,13 @@
 
 enum EMove_State_EventId
 {
-	MoveToNO = 0,
-	MoveToNW = 1,
-	MoveToPW = 2,
-	MoveToNH = 4,
+	MoveToNO   = 0,
+	MoveToNW   = 1,
+	MoveToPW   = 2,
+	MoveToNH   = 4,
 	MoveToNWNH = 5,
 	MoveToPWNH = 6,
-	MoveToPH = 8,
+	MoveToPH   = 8,
 	MoveToNWPH = 9,
 	MoveToPWPH = 10
 };
@@ -35,6 +38,19 @@ enum EState_Point
 	STATE_ID_LEFT_BELOW  = 6,
 	STATE_ID_BELOW       = 7,
 	STATE_ID_RIGHT_BELOW = 8
+};
+
+enum ECheck_Edge
+{
+	CHECK_EDGE_NO,
+	CHECK_EDGE_LA,
+	CHECK_EDGE_MA,
+	CHECK_EDGE_RA,
+	CHECK_EDGE_LM,
+	CHECK_EDGE_RM,
+	CHECK_EDGE_LB,
+	CHECK_EDGE_MB,
+	CHECK_EDGE_RB
 };
 
 struct Move_State
@@ -101,9 +117,12 @@ public:
 	void Set_Adjust_Frequency(int Frame);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
+	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_NO);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
 	bool Get_Adjust_While_Move();
+	int Get_LocationX();
+	int Get_LocationY();
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length);//可选功能 对2D棋盘上的物品微调位置
 	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, float& Auto_Adjust_Length);
 	unsigned Get_DataHeight()const;
@@ -120,6 +139,10 @@ private:
 	GameStateBase& operator=(const GameStateBase&);
 	unsigned _Data_Width;
 	unsigned _Data_Height;
+	float _Half_State_Width{ 0.0f };
+	float _Half_State_Height{ 0.0f };
+	int _Exac_LocationX;
+	int _Exac_LocationY;
 	//_Adjust_Frame 用于控制当前每多少帧进行一次坐标控制
 	int _Adjust_Frame;
 	//_GameState_Width用于控制当前地图的显示宽度

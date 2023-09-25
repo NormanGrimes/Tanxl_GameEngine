@@ -37,7 +37,7 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int Data = 0xFF)
 		switch (Exac)
 		{
 		case 0:
-			return "ENGINE-CORE";
+			return "ENGINE_CORE";
 		default:
 			break;
 		}

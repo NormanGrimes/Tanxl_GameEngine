@@ -4,7 +4,7 @@
 
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
 {
-	static OpenGL_Draw* OGD = new OpenGL_Draw(ScreenWidth, ScreenHeight);
+	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight) };
 	return *OGD;
 }
 
@@ -37,46 +37,46 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0f);
 
-	_HeightInt = State->Get_StateHeight();
-	_WidthInt = State->Get_StateWidth();
+	this->_HeightInt = State->Get_StateHeight();
+	this->_WidthInt = State->Get_StateWidth();
 
-	_Auto_AdjustX = 0.0f;
-	_Auto_AdjustY = 0.0f;
+	this->_Auto_AdjustX = 0.0f;
+	this->_Auto_AdjustY = 0.0f;
 
-	_Move_AdjustX = 0.0f;
-	_Move_AdjustY = 0.0f;
+	this->_Move_AdjustX = 0.0f;
+	this->_Move_AdjustY = 0.0f;
 
-	_Each_Height = 2.0f / State->Get_StateHeight();//10 0.2
-	_Each_Width = 2.0f / State->Get_StateWidth();//10 0.2
+	this->_Each_Height = 2.0f / State->Get_StateHeight();//10 0.2
+	this->_Each_Width = 2.0f / State->Get_StateWidth();//10 0.2
 
-	_Current_Move_Height = 0;
-	_Current_Move_Width = 0;
+	this->_Current_Move_Height = 0;
+	this->_Current_Move_Width = 0;
 	
-	State->Set_Move_State(0, _WidthInt - 1 + _PreLoads, 0, _HeightInt - 1 + _PreLoads);
+	State->Set_Move_State(0, this->_WidthInt - 1 + this->_PreLoads, 0, this->_HeightInt - 1 + this->_PreLoads);
 
-	_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
+	this->_renderingProgram = OpenGL_Render::createShaderProgram("vertShader.glsl", "fragShader.glsl");
 
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
 	glGenBuffers(1, _vbo);
 
-	glProgramUniform1i(_renderingProgram, 6, _HeightInt);//SHeight
-	glProgramUniform1i(_renderingProgram, 7, _WidthInt);//SWidth
-	glProgramUniform1f(_renderingProgram, 3, 1.0f);//Margin
-	glProgramUniform1i(_renderingProgram, 10, _PreLoads);//PreLoads
+	glProgramUniform1i(this->_renderingProgram, 6, this->_HeightInt);//SHeight
+	glProgramUniform1i(this->_renderingProgram, 7, this->_WidthInt);//SWidth
+	glProgramUniform1f(this->_renderingProgram, 3, 1.0f);//Margin
+	glProgramUniform1i(this->_renderingProgram, 10, this->_PreLoads);//PreLoads
 
 	Append_Texture(TanxlOD::TexGrass_01_200X200);       //1
-	Append_Texture(TanxlOD::TexGrass_01_200X200);       //2
+	Append_Texture(TanxlOD::TexGrass_02_200X200);       //2
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200X200); //3
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200X200); //4
-	Append_Texture(TanxlOD::TexOcean_02_200X200); //5
+	Append_Texture(TanxlOD::TexOcean_01_200X200); //5
 	Append_Texture(TanxlOD::TexForestDDPAT_01_200X200);  //6
 
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
 
 	Set_Trigger_Range(true, 0.6f, 0.6f);
 
-	int Min = State->Get_StateHeight() > State->Get_StateWidth() ? State->Get_StateWidth() : State->Get_StateHeight();
+	int Min{ State->Get_StateHeight() > State->Get_StateWidth() ? State->Get_StateWidth() : State->Get_StateHeight() };
 	State->Get_Move_Distance()._LocX = 2.0f / Min * (Min - 1);//ORIGIN ((2.0f / Min) * 2) * ((Min - 1) / 2.0f)
 	State->Get_Move_Distance()._LocY = -(2.0f / Min * (Min - 1));
 
@@ -172,14 +172,14 @@ void OpenGL_Draw::Set_Trigger_Mode(bool Mode)
 
 void OpenGL_Draw::Set_Trigger_Range(bool Enable, float Height, float Width)
 {
-	_Is_Trigger_Enable = Enable;
-	_Trigger_Height = Height;
-	_Trigger_Width = Width;
+	this->_Is_Trigger_Enable = Enable;
+	this->_Trigger_Height = Height;
+	this->_Trigger_Width = Width;
 }
 
 void OpenGL_Draw::Append_Texture(const char* Texture)
 {
-	static int Id = 0;
+	static int Id{ 0 };
 
 	_Texture.push_back(OpenGL_Render::loadTexture(Texture));
 
@@ -288,7 +288,16 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		int TOCUH{ static_cast<int>((static_cast<double>(_Move_AdjustY) * 2) / _Each_Height) };
 		int TOCUW{ static_cast<int>((static_cast<double>(_Move_AdjustX) * 2) / _Each_Width) };
 
-		//std::cout << "X " << State->Get_Screen_Distance()._LocX << " -- Y " << State->Get_Screen_Distance()._LocY << std::endl;
+		/*
+		save first val
+		for 1 to 4
+		check different edge
+		TODO ..
+		*/
+
+		State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LA);
+
+		//std::cout << "X " << State->Get_LocationX() << " -- Y " << State->Get_LocationY() << std::endl;
 
 		if (State->Get_Adjust_Flag())
 		{
@@ -301,8 +310,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
 
-		IEB->GetInsert(_Main_Window, State->Get_Screen_Distance()._LocX, State->Get_Screen_Distance()._LocY,
-			State->Get_Move_Distance()._LocX, State->Get_Move_Distance()._LocY);//获取输入
+		IEB->GetInsert(_Main_Window, State);//获取输入
 
 		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
 		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;

@@ -5,7 +5,8 @@
 //void Col是原Console_List的核心功能，使用了Linux控制台的指令
 void Col(unsigned ColN, bool Under_Line)//设置自定义行的背景颜色
 {
-	if (ColN == NULL)std::cout << "\033[0m";//清除颜色
+	if (ColN == NULL)
+		std::cout << "\033[0m";//清除颜色
 	else
 	{
 		if (Under_Line == true)
@@ -39,7 +40,7 @@ void CONSOLE::Append_Item(std::string New_Item, unsigned Space, void (*FunC)(), 
 	else
 	{
 		CONSOLE* CP{ this };
-		for (int i = 0; i < Depth; ++i)
+		for (int i{ 0 }; i < Depth; ++i)
 			CP = &CP->_SonList.at(Ids[i]);
 		CP->_SonList.push_back(CONSOLE(New_Item, Space, FunC));
 	}
@@ -52,7 +53,7 @@ void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 	_Page = this->_Selector / (_SSpace & 0x00ff);
 	for (int i = _Page * (_SSpace & 0x00ff); i < _SonList.size() && i < (_Page + 1) * static_cast<int>(_SSpace & 0x00ff); ++i)
 	{
-		for (int j = Depth; j > 0; j--)
+		for (int j{ Depth }; j > 0; j--)
 			std::cout << "\t";
 		if (i == _Selector)
 			Col(Real_Sel);
@@ -153,7 +154,7 @@ CONSOLE* CONSOLE::Locate(int Target)
 {
 	if (Target == 0)
 	{
-		for (int i = 0; i < _SonList.size(); ++i)
+		for (int i{ 0 }; i < _SonList.size(); ++i)
 		{
 			if (i == _Selector && _Is_Selected == true)
 				return _SonList.at(i).Locate();
@@ -162,7 +163,7 @@ CONSOLE* CONSOLE::Locate(int Target)
 	}
 	else
 	{
-		for (int i = 0; i < _SonList.size(); ++i)
+		for (int i{ 0 }; i < _SonList.size(); ++i)
 		{
 			if (i == _Selector && _Is_Selected == true && _SonList.at(i)._SonList.size() != 0)
 				if (_SonList.at(i)._Is_Selected == false)

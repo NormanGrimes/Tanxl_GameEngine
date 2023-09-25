@@ -81,7 +81,7 @@ int RandomBase::Random(int Start, int End)
     if (End <= Start)
         return Start;
     static unsigned seed = 0;
-    srand(static_cast<unsigned int>(seed++));
+    srand(static_cast<unsigned int>(time(0) + seed++));
     return (rand() % (End - Start)) + Start;
 }
 

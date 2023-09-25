@@ -2,13 +2,13 @@
 
 #include "Tanxl_InsertAction.h"
 
-Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0) 
+Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0)
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	this->Unit_Name = UIB->GenerateAutoSeed();
-	#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
+#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
 	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
-	#endif
+#endif
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
@@ -19,9 +19,9 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
-	#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
+#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
 	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
-	#endif
+#endif
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
@@ -32,9 +32,9 @@ Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
 		this->Unit_Name = UIB->GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
-	#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
+#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
 	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
-	#endif
+#endif
 }
 
 InsertEventBase& InsertEventBase::GetInsertBase()
@@ -58,13 +58,13 @@ void InsertEventBase::RemoveEvent()
 	_KeyEventS.pop_back();
 }
 
-void InsertEventBase::GetInsert(GLFWwindow* window, float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY)
+void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
 	for (int i = 0; i < this->_KeyEventS.size(); ++i)
 	{
-		
+
 		if (glfwGetKey(window, this->_KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
@@ -76,22 +76,22 @@ void InsertEventBase::GetInsert(GLFWwindow* window, float& Screen_MoveX, float& 
 			}
 			if (this->_KeyEventS.at(i)->MoveToY)
 			{
-				Screen_MoveY += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-				Move_DistanceY += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				State->Get_Screen_Distance()._LocY += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				State->Get_Move_Distance()._LocY += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
 				this->_Margin_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
 			}
 			if (this->_KeyEventS.at(i)->MoveToX)
 			{
-				Screen_MoveX += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-				Move_DistanceX += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				State->Get_Screen_Distance()._LocX += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				State->Get_Move_Distance()._LocX += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
 				this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
 			}
 		}
 	}
-	AutoCheck(Screen_MoveX, Screen_MoveY, Move_DistanceX, Move_DistanceY);
-	#if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
-	std::cout << "Move Distance X :" << Move_DistanceX << " -  Y :" << Move_DistanceY << std::endl;
-	#endif
+	AutoCheck(State->Get_Screen_Distance()._LocX, State->Get_Screen_Distance()._LocY, State->Get_Move_Distance()._LocX, State->Get_Move_Distance()._LocY);
+#if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
+	std::cout << "Move Distance X :" << State->Get_Move_Distance()._LocX << " -  Y :" << State->Get_Move_Distance()._LocY << std::endl;
+#endif
 }
 
 void InsertEventBase::Set_MaxFloat(float Max_float)
@@ -135,17 +135,17 @@ float InsertEventBase::Get_Margin_Y()
 bool InsertEventBase::Get_Key_Pressed()
 {
 	bool Temp_Element{ _Is_Key_Pressed };
-	_Is_Key_Pressed = false;
+	this->_Is_Key_Pressed = false;
 	return Temp_Element;
 }
 
 bool InsertEventBase::RemoveEvent(std::string Event_Name)
 {
-	for (int i = 0; i < _KeyEventS.size(); ++i)
+	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
-		if (_KeyEventS.at(i)->Unit_Name == Event_Name)
+		if (this->_KeyEventS.at(i)->Unit_Name == Event_Name)
 		{
-			_KeyEventS.erase(_KeyEventS.begin() + i);
+			this->_KeyEventS.erase(_KeyEventS.begin() + i);
 			return true;
 		}
 	}
@@ -268,31 +268,31 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 
 InsertEventBase::~InsertEventBase()
 {
-	for (int i = 0; i < _KeyEventS.size(); ++i)
-		delete & _KeyEventS.at(i);
-	_KeyEventS.clear();
+	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
+		delete & this->_KeyEventS.at(i);
+	this->_KeyEventS.clear();
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
 	_KeyEventS(NULL), _Max_float(1.0f), _PTB(nullptr), _Is_Max_Single(false),
 	_Max_float_Height(1), _Max_float_Width(1), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) 
 {
-	Key_Unit* MOVE_UP = new Key_Unit(GLFW_KEY_UP, false, true, 0.01);
+	Key_Unit* MOVE_UP{ new Key_Unit(GLFW_KEY_UP, false, true, 0.01) };
 	this->RegistEvent(MOVE_UP);
 	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.01);
 	this->RegistEvent(MOVE_UP);
 
-	Key_Unit* MOVE_LEFT = new Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
+	Key_Unit* MOVE_LEFT{ new Key_Unit(GLFW_KEY_LEFT, true, false, -0.01) };
 	this->RegistEvent(MOVE_LEFT);
 	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.01);
 	this->RegistEvent(MOVE_LEFT);
 
-	Key_Unit* MOVE_RIGHT = new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
+	Key_Unit* MOVE_RIGHT{ new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01) };
 	this->RegistEvent(MOVE_RIGHT);
 	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.01);
 	this->RegistEvent(MOVE_RIGHT);
 
-	Key_Unit* MOVE_DOWN = new Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
+	Key_Unit* MOVE_DOWN{ new Key_Unit(GLFW_KEY_DOWN, false, true, -0.01) };
 	this->RegistEvent(MOVE_DOWN);
 	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.01);
 	this->RegistEvent(MOVE_DOWN);
