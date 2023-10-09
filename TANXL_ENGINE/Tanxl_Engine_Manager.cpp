@@ -83,6 +83,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
 	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
+	remove((FileName + ".usd").c_str());
 }
 
 void Tanxl_Engine::Engine_Save_Infinite_State()

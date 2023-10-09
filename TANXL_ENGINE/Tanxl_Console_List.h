@@ -5,6 +5,8 @@
 // 输入功能调整为OpenGL输入（不稳定，测试中）
 // 回退输入操作方面的改动
 // 指针初始化nullptr取代NULL
+// 移除未使用的私有成员
+// 代码整理优化
 
 #pragma once
 
@@ -71,9 +73,6 @@ private:
 	bool _Is_Funcwork;
 
 	std::vector<CONSOLE> _SonList;
-
-	bool Keys[14]{ false };
-	bool* Insert_Keys[14]{ nullptr };
 
 	void (*_Func)();
 

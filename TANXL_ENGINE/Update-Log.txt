@@ -1,3 +1,12 @@
+TEnGinE Version-0.1 Build-77 2023-02-22 10:04 UPDATE_LOG
+////////////////////////////////////////////////////////
+绘制模块增加根据方块数值限制移动功能。顶点着色器移除未使
+用变量并重新编号。存储模块修复数据整理功能出现未优化内容
+的问题。系统管理模块在输出系统信息后删除未整理文件。控制
+台模块移除未使用的私有成员。控制台模块代码整理优化。绘制
+模块移除一个未使用接口。时间模块新增搜索已注册游戏事件功
+能。增加版本信息。
+
 TEnGinE Version-0.1 Build-76 2023-02-21 14:17 UPDATE_LOG
 ////////////////////////////////////////////////////////
 引擎管理模块无限世界生成接口增加数据清理。地图模块增加变
@@ -442,10 +451,22 @@ TEnGinE Version-0.1 Build-15 2022-05-28 02:11 UPDATE_LOG
 Tanxl_DataBase类进行结构优化改进内存使用效率。为核心功能
 的文件限定只编译一次。考虑重复包含问题暂时回滚Render模块
 。绘制模块移除两个重复成员变量。主函数提供存储模块例程。
+--------------------------------------------------------
+Tanxl_DataBase class for structural optimization to 
+improve memory efficiency. Files for core functionality 
+are limited to compiling only once. Consider the 
+duplicate inclusion issue to temporarily roll back the 
+Render module. The drawing module removes the two 
+duplicate member variables. The main function provides 
+the enclosure routines.
 
 TEnGinE Version-0.1 Build-14 2022-05-27 00:09 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块加入构造函数。UniqueIdBase类提供生成随机数功能。
+--------------------------------------------------------
+The drawing module joins the constructor. The 
+UniqueIdBase class provides the ability to generate 
+random numbers.
 
 TEnGinE Version-0.1 Build-13 2022-05-17 22:28 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -453,6 +474,15 @@ TEnGinE Version-0.1 Build-13 2022-05-17 22:28 UPDATE_LOG
 块修复单例功能错误的问题，并将初始化代码调整到主函数。绘
 制模块额外绘制一个方块用于铺满屏幕。游戏物品类提供一个初
 始预设生命值组件。绘制模块整合至类中，隐藏所有全局变量。
+--------------------------------------------------------
+The input module provides the ability to limit the 
+maximum movement position of the manipulable block. The 
+input module fixes the singleton function error and 
+adjusts the initialization code to the main function. 
+The drawing module draws an additional square to cover 
+the screen. The Game Item class provides an initial 
+preset health component. The drawing module is 
+integrated into the class, hiding all global variables.
 
 TEnGinE Version-0.1 Build-12 2022-05-16 23:58 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -460,6 +490,15 @@ TEnGinE Version-0.1 Build-12 2022-05-16 23:58 UPDATE_LOG
 块修复地图数据传输错误的问题。StateUnit类增加对每一格的
 ID设定，同时源文件代码结构调整。StateUnit编译地图功能现
 在可以编译地图ID数值。顶点着色器提供一个基础地图参数。
+--------------------------------------------------------
+Vertex shaders are equipped with the ability to produce 
+different colors depending on the type of block. The 
+drawing module fixes the problem of map data 
+transmission error. The StateUnit class adds ID 
+settings for each cell, and the source file code 
+structure is adjusted. The StateUnit Compile Map 
+feature now compiles map ID values. The vertex shader 
+provides a base map parameter.
 
 TEnGinE Version-0.1 Build-11 2022-05-15 23:07 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -467,6 +506,14 @@ Utils头文件以及源文件修改为OpenGL_Render。GameStateBase
 修复CompileState读取错误的问题。GameState类功能性更新。
 UniqueID类Uniqt移动至类的私有成员。游戏物品类增加一键执
 行所有组件功能的函数。
+--------------------------------------------------------
+The Utils header file and the source file are modified 
+to OpenGL_Render. GameStateBase fixes the problem of 
+CompileState reading errors. Functional updates to the 
+GameState class. The UniqueID class Uniqt moves to the 
+private member of the class. The game item class adds 
+functions that perform all component functions with one 
+click.
 
 TEnGinE Version-0.1 Build-10 2022-05-11 00:20 UPDATE_LOG
 ////////////////////////////////////////////////////////

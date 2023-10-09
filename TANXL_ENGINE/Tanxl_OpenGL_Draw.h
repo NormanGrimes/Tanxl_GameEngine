@@ -18,6 +18,8 @@
 // 增加获取预加载值的接口
 // 修复初始化时移动范围矩阵X/Y轴写反的问题
 // 初始化时计算当前真实坐标
+// 增加根据方块数值限制移动功能（不稳定）
+// 移除一个未使用接口
 
 #pragma once
 
@@ -227,7 +229,6 @@ public:
 	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
 	//绘制主循环 在此之后的一切操作都会被忽略
 	void Render_Once(GameStateBase* State);
-	void UpdateMargin(float& Margin);
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFra(int First_Adjust);
 	void Set_Clear(bool Clear);

@@ -54,6 +54,9 @@
     <ClInclude Include="Tanxl_RandomBase.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,5 +106,10 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="public\steam\lib\win64\sdkencryptedappticket64.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TANXL_ENGINE.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -2,28 +2,25 @@
 // LAST_UPDATE 2023-01-16 17:41
 // 纹理功能已调试完成并实装
 // 修复Cube不能正确传入片段着色器的问题
+// 移除未使用变量并重新排序
 
 #version 430
 
 layout (location = 1) in vec2 texCoord;
 
-layout (location = 3) uniform float Margin;
+layout (location = 2) uniform float Current_Move_LocationX;
+layout (location = 3) uniform float Current_Move_LocationY;
 
-layout (location = 4) uniform float Current_Move_LocationX;
-layout (location = 5) uniform float Current_Move_LocationY;
+layout (location = 4) uniform int SHeight;
+layout (location = 5) uniform int SWidth;
 
-layout (location = 6) uniform int SHeight;
-layout (location = 7) uniform int SWidth;
+layout (location = 6) uniform float StateMoveX;
+layout (location = 7) uniform float StateMoveY;
 
-layout (location = 8) uniform float StateMoveX;
-layout (location = 9) uniform float StateMoveY;
+layout (location = 8) uniform int PreLoads;
 
-layout (location = 10) uniform int PreLoads;
-
-layout (location = 11) in vec3 position;
-layout (location = 12) in vec4 color;
-
-layout (location = 13) uniform int Move_With;
+in vec3 position;
+in vec4 color;
 
 uniform int State[300];
 

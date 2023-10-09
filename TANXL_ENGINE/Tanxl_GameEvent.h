@@ -3,6 +3,7 @@
 // 从GameState模块中独立出来进行处理
 // 增加版本变量与获取接口
 // 析构函数优化清理内存中的遗留数据
+// 新增搜索已注册游戏事件功能
 
 #pragma once
 
@@ -32,6 +33,8 @@ public:
 	void RegistEvent(GameEvent* Event);
 	static GameEventBase& GetEventBase();
 	GameEvent* GetGameEvent(std::string EventName);
+	//搜索游戏事件 查看是否已添加相关名称的游戏事件
+	bool Search_GameEvent(std::string EventName);
 private:
 	GameEventBase();
 	~GameEventBase();

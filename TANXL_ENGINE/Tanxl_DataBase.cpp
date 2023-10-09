@@ -209,6 +209,7 @@ void TANXL_DataBase::SortDataBase(ESort_Mode Mode, std::string Out_File_Name, st
 	out << "<Tanxl_DataBase Information>" << std::endl;
 	std::vector<Id_Link*>::iterator IOIE{ this->_Id_Links->end() };
 	std::vector<Id_Link*>::iterator IOIB{ this->_Id_Links->begin() };
+	int last{ -1 };
 	do
 	{
 #if _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_
@@ -220,32 +221,33 @@ void TANXL_DataBase::SortDataBase(ESort_Mode Mode, std::string Out_File_Name, st
 		std::cout << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
 		std::cout << "\t\t<Exac_Status : " << (*IOIB)->_Exac_Name << " / " << (*IOIB)->_Exac << ">" << std::endl;
 #endif
-		out << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
-		out << "\t\t<Exac_Status : " << (*IOIB)->_Exac_Name << " / " << (*IOIB)->_Exac << ">" << std::endl;
+		if ((*IOIB)->_Type != last)
+			out << "\t</Type_Status>" << std::endl;
+		if ((*IOIB)->_Type != last)
+			out << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
+		int Count{ 0 };
 		do
 		{
-			std::string TAG = DataTag((*IOIB)->_Type, (*IOIB)->_Exac, (*IODB)->_Id);
+			if (Count == 0)
+				out << "\t\t<Exac_Status : " << (*IOIB)->_Exac_Name << " / " << (*IOIB)->_Exac << ">" << std::endl;
+			std::string TAG{ DataTag((*IOIB)->_Type, (*IOIB)->_Exac, (*IODB)->_Id) };
 			TAG = (TAG == "" ? "DATA" : TAG);
 			out << "\t\t\t<" + TAG + ": " << (*IODB)->_Id << ">" << (*IODB)->_Data << "</" + TAG + ">" << std::endl;
 #if _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_
 			std::cout << "\t\t\t<" + TAG + ": " << (*IODB)->_Id << ">" << (*IODB)->_Data << "</" + TAG + ">" << std::endl;
 #endif
+			++Count;
 			++IODB;
 		} while (IODB != IODE);
 		out << "\t\t</Exac_Status>" << std::endl;
-		out << "\t</Type_Status>" << std::endl;
+		last = (*IOIB)->_Type;
 		++IOIB;
 	} while (IOIB != IOIE);
+	out << "\t</Type_Status>" << std::endl;
 	out << "</Tanxl_DataBase Information>" << std::endl;
 	out.close();
-	if (Delete_After_Sort)
-	{
-		if (Mode == SORT_LOCALF)
-		{
-			std::string s = In_File_Name + ".usd";
-			remove(s.c_str());
-		}
-	}
+	if (Delete_After_Sort && (Mode == SORT_LOCALF))
+		remove((In_File_Name + ".usd").c_str());
 }
 
 void TANXL_DataBase::Append_Link(Id_Link& New_Id)
@@ -267,7 +269,7 @@ void TANXL_DataBase::Append_Link(Id_Link& New_Id)
 			PIL->_Data->Append_Data(New_Id._Data);
 			return;
 		}
-		else if (Left == Right && PIL_Value != Value)//Type B不匹配 但已经是最接近的值时
+		else if ((Left == Right) && (PIL_Value != Value))//Type B不匹配 但已经是最接近的值时
 		{
 			if (PIL_Value < Value)
 				Left += 1;

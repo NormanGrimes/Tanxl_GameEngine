@@ -174,14 +174,16 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 	if (Screen_MoveX > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 2;
-		Move_DistanceX -= (this->_Margin_X + this->_Max_float - Screen_MoveX);
+		//this->_Margin_X = this->_Margin_X + this->_Max_float - Screen_MoveX;
+		Move_DistanceX -= this->_Margin_X + this->_Max_float - Screen_MoveX;//this->_Margin_X;
 		Screen_MoveX = this->_Max_float;
 
 	}
 	else if (Screen_MoveX < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 1;
-		Move_DistanceX -= (this->_Margin_X - Screen_MoveX - this->_Max_float);
+		//this->_Margin_X = this->_Margin_X - Screen_MoveX - this->_Max_float;
+		Move_DistanceX -= this->_Margin_X - Screen_MoveX - this->_Max_float;//this->_Margin_X;
 		Screen_MoveX = -this->_Max_float;
 	}
 
@@ -191,15 +193,18 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 	if (Screen_MoveY > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 8;
-		Move_DistanceY -= (this->_Margin_Y + this->_Max_float - Screen_MoveY);
+		//this->_Margin_Y = this->_Margin_Y + this->_Max_float - Screen_MoveY;
+		Move_DistanceY -= this->_Margin_Y + this->_Max_float - Screen_MoveY;// this->_Margin_Y;
 		Screen_MoveY = this->_Max_float;
 	}
 	else if (Screen_MoveY < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 4;
-		Move_DistanceY -= (this->_Margin_Y - Screen_MoveY - this->_Max_float);
+		//this->_Margin_Y = this->_Margin_Y - Screen_MoveY - this->_Max_float;
+		Move_DistanceY -= this->_Margin_Y - Screen_MoveY - this->_Max_float;// this->_Margin_Y;
 		Screen_MoveY = -this->_Max_float;
 	}
+	//std::cout << "this->_Margin_X " << this->_Margin_X << " this->_Margin_Y " << this->_Margin_X << std::endl;
 }
 
 //UnImportant 单例实现
