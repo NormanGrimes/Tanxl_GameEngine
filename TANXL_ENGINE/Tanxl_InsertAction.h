@@ -6,6 +6,8 @@
 // 自动检查功能增加移动距离的精确计算
 // 控制台信息输出宏细化
 // 获取输入接口入参调整
+// 修复自动检查中计算精确坐标错误的问题
+// 增加自动检查接口的控制台输出宏
 
 #pragma once
 
@@ -18,6 +20,7 @@
 
 #define _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_   1
 #define _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_ 1
+#define _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_   1
 
 #endif
 

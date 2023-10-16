@@ -1,3 +1,15 @@
+TEnGinE Version-0.1 Build-78 TURBO 2023-02-28 15:44 UPDATE_LOG
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+输入模块修复自动检查中计算精确坐标错误的问题。输入模块增加自动
+检查接口的控制台输出宏。地图模块边缘检查枚举功能减少到五个。绘
+制模块移动到边缘检查功能优化。存储模块修复整理文件次数大于一次
+时出现多余内容的问题。引擎管理模块无限世界接口增加一个区块。存
+储模块设置指定接口加入添加数据单元功能。存储模块获取指定功能改
+为返回数据单元。引擎管理模块无限世界接口增加构建连接选项。地图
+模块增加地图扩展结构体。地图模块地图单元编译功能增加对扩展地图
+的支持。片段着色器指定主移动方块的纹理。绘制模块移除图片纹理容
+器。绘制模块增加低画质模式。
+
 TEnGinE Version-0.1 Build-77 2023-02-22 10:04 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块增加根据方块数值限制移动功能。顶点着色器移除未使
@@ -420,18 +432,35 @@ TEnGinE Version-0.1 Build-20 2022-07-03 23:38 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块变量名称调整，并添加移动边缘功能。顶点着色器加入
 移动边缘的判断功能。GameState模块调整变量名称。
+--------------------------------------------------------
+Draw module variable name adjustments and add mobile 
+edge functionality. Vertex shaders add the ability to 
+judge moving edges. The GameState module adjusts the 
+variable name.
 
 TEnGinE Version-0.1 Build-19 2022-06-19 18:06 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块支持对窗口分辨率进行预设。设置地图移动最远距离的
 功能现在提供自动计算方法。State模块实装地图单元编译功能，
 目前可用于对地图ID进行编辑。
+--------------------------------------------------------
+The drawing module supports presetting the window 
+resolution. The ability to set the farthest distance 
+the map moves now provides an automatic calculation 
+method. The State module implements the map unit 
+compilation function and can be used to edit the map ID.
 
 TEnGinE Version-0.1 Build-18 2022-06-15 23:56 UPDATE_LOG
 ////////////////////////////////////////////////////////
 Console_List模块微调成员变量名称。SLocation结构体提供构造
 函数。调整数值以支持一次性绘制更多的方块。InsertAction模
 块微调成员变量名称。
+--------------------------------------------------------
+Console_List module fine-tune member variable names. 
+The SLocation struct provides the constructor. Adjust 
+the values to support drawing more squares at once. 
+Insert an action module fine-tuning member variable 
+name.
 
 TEnGinE Version-0.1 Build-17 2022-06-07 23:57 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -439,12 +468,28 @@ GameState模块微调成员变量名称。Console_List模块微调成员
 变量名称。GameState模块加入用于获取当前移动坐标的函数。
 绘制模块暂时禁用片段着色器的功能。绘制模块修复存在一个空
 循环的问题。绘制模块优化去掉大量中间变量。
+--------------------------------------------------------
+The GameState module fine-tunes member variable names. 
+Console_List module fine-tune member variable names. 
+The GameState module adds a function for getting the 
+coordinates of the current movement. The Draw module 
+temporarily disables the functionality of the fragment 
+shader. The draw module fixes an issue where there is 
+an empty loop. Drawing module optimization removes a 
+large number of intermediate variables.
 
 TEnGinE Version-0.1 Build-16 2022-05-30 01:18 UPDATE_LOG
 ////////////////////////////////////////////////////////
 调整GameState函数名称，并加入获取地图数据函数与编辑地图
 函数。LocationBase模块的功能整合至核心模块InsertAction。
 预先增加碰撞模块。InsertAction模块提供编译地图内容功能。
+--------------------------------------------------------
+Adjust the name of the GameState function and add the 
+Get Map Data function and the Edit Map function. The 
+functionality of the LocationBase module is integrated 
+into the core module InsertAction. Collision modules 
+are added in advance. The InsertAction module provides 
+the ability to compile map content.
 
 TEnGinE Version-0.1 Build-15 2022-05-28 02:11 UPDATE_LOG
 ////////////////////////////////////////////////////////

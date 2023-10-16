@@ -64,7 +64,6 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	this->_Margin_Y = 0.0f;
 	for (int i = 0; i < this->_KeyEventS.size(); ++i)
 	{
-
 		if (glfwGetKey(window, this->_KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
@@ -174,16 +173,14 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 	if (Screen_MoveX > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 2;
-		//this->_Margin_X = this->_Margin_X + this->_Max_float - Screen_MoveX;
-		Move_DistanceX -= this->_Margin_X + this->_Max_float - Screen_MoveX;//this->_Margin_X;
+		Move_DistanceX -= Screen_MoveX - this->_Max_float;
 		Screen_MoveX = this->_Max_float;
 
 	}
 	else if (Screen_MoveX < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 1;
-		//this->_Margin_X = this->_Margin_X - Screen_MoveX - this->_Max_float;
-		Move_DistanceX -= this->_Margin_X - Screen_MoveX - this->_Max_float;//this->_Margin_X;
+		Move_DistanceX -= Screen_MoveX + this->_Max_float;
 		Screen_MoveX = -this->_Max_float;
 	}
 
@@ -193,18 +190,18 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 	if (Screen_MoveY > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 8;
-		//this->_Margin_Y = this->_Margin_Y + this->_Max_float - Screen_MoveY;
-		Move_DistanceY -= this->_Margin_Y + this->_Max_float - Screen_MoveY;// this->_Margin_Y;
+		Move_DistanceY -= Screen_MoveY - this->_Max_float;
 		Screen_MoveY = this->_Max_float;
 	}
 	else if (Screen_MoveY < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 4;
-		//this->_Margin_Y = this->_Margin_Y - Screen_MoveY - this->_Max_float;
-		Move_DistanceY -= this->_Margin_Y - Screen_MoveY - this->_Max_float;// this->_Margin_Y;
+		Move_DistanceY -= Screen_MoveY + this->_Max_float;
 		Screen_MoveY = -this->_Max_float;
 	}
-	//std::cout << "this->_Margin_X " << this->_Margin_X << " this->_Margin_Y " << this->_Margin_X << std::endl;
+#if _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_
+	std::cout << "this->_Margin_X " << this->_Margin_X << " this->_Margin_Y " << this->_Margin_X << std::endl;
+#endif
 }
 
 //UnImportant 单例实现

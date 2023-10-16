@@ -3,6 +3,7 @@
 // 纹理功能已调试完成并实装
 // 更新多纹理支持（最高十个纹理）
 // 支持的纹理数量提升到上限值
+// 增加指定主移动方块的纹理
 
 #version 430
 
@@ -55,6 +56,8 @@ void main(void)
 		color = texture(Samp_02, tc);
 	else if(Cube == 0)
 		color = texture(Samp_03, tc);
+	else if(Cube == -1)
+		color = texture(Samp_05, tc);
 	else
 		color = texture(Samp_04, tc);
 	//color = vs_color;

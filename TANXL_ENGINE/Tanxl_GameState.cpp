@@ -46,10 +46,58 @@ void GameStateBase::Set_DataAll_State(unsigned Width, unsigned Height)
 	this->_Data_Height = Height - 1;
 }
 
-void GameStateBase::CompileStateUnits(std::string Infor)
+void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 {
 	std::string Text_Reader{};
 	int Status_Id{}, State_Move{};
+	std::vector<StateUnit*>* Target{ nullptr };
+	switch (Extend)
+	{
+	case STATE_ORIGIN_MIDD:
+		Target = &this->_GameState;
+		break;
+	case STATE_EXTEND_LEFT:
+		delete this->_GameState_Extend._LEFT;
+		this->_GameState_Extend._LEFT = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._LEFT;
+		break;
+	case STATE_EXTEND_RIGH:
+		delete this->_GameState_Extend._RIGH;
+		this->_GameState_Extend._RIGH = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._RIGH;
+		break;
+	case STATE_EXTEND_ABOV:
+		delete this->_GameState_Extend._ABOV;
+		this->_GameState_Extend._ABOV = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._ABOV;
+		break;
+	case STATE_EXTEND_BELO:
+		delete this->_GameState_Extend._BELO;
+		this->_GameState_Extend._BELO = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._BELO;
+		break;
+	case STATE_EXTEND_LEFT_ABOV:
+		delete this->_GameState_Extend._LEFT_ABOV;
+		this->_GameState_Extend._LEFT_ABOV = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._LEFT_ABOV;
+		break;
+	case STATE_EXTEND_LEFT_BELO:
+		delete this->_GameState_Extend._LEFT_BELO;
+		this->_GameState_Extend._LEFT_BELO = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._LEFT_BELO;
+		break;
+	case STATE_EXTEND_RIGH_ABOV:
+		delete this->_GameState_Extend._RIGH_ABOV;
+		this->_GameState_Extend._RIGH_ABOV = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._RIGH_ABOV;
+		break;
+	case STATE_EXTEND_RIGH_BELO:
+		delete this->_GameState_Extend._RIGH_BELO;
+		this->_GameState_Extend._RIGH_BELO = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._RIGH_BELO;
+		break;
+	}
+
 	for (int i{ 0 }; i < Infor.size(); ++i)
 	{
 		if (Infor.at(i) != ',' && Infor.at(i) != '-')
@@ -57,7 +105,7 @@ void GameStateBase::CompileStateUnits(std::string Infor)
 		else if (Infor.at(i) == ',')
 		{
 			Status_Id = std::stoi(Text_Reader);
-			this->_GameState.push_back(new StateUnit(nullptr, Status_Id, State_Move));
+			Target->push_back(new StateUnit(nullptr, Status_Id, State_Move));
 			Text_Reader = "";
 		}
 		else if (Infor.at(i) == '-')
@@ -319,47 +367,36 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 {
 	switch (Check)
 	{
-	case CHECK_EDGE_NO:
+	case CHECK_EDGE_CURR:
+		MoveX = 0.0f;
+		MoveY = 0.0f;
 		break;
-	case CHECK_EDGE_LA:
+	case CHECK_EDGE_LEFT:
 		MoveX -= this->_Half_State_Width;
+		MoveY = 0.0f;
+		break;
+	case CHECK_EDGE_RIGH:
+		MoveX += this->_Half_State_Width;
+		MoveY = 0.0f;
+		break;
+	case CHECK_EDGE_BELO:
+		MoveX = 0.0f;
+		MoveY -= this->_Half_State_Height;
+		break;
+	case CHECK_EDGE_ABOV:
+		MoveX = 0.0f;
 		MoveY += this->_Half_State_Height;
-		break;
-	case CHECK_EDGE_MA:
-		MoveX -= this->_Half_State_Width;
-		break;
-	case CHECK_EDGE_RA:
-		MoveX += this->_Half_State_Width;
-		MoveY += this->_Half_State_Height;
-		break;
-	case CHECK_EDGE_LM:
-		MoveX -= this->_Half_State_Width;
-		break;
-	case CHECK_EDGE_RM:
-		MoveX += this->_Half_State_Width;
-		break;
-	case CHECK_EDGE_LB:
-		MoveX -= this->_Half_State_Width;
-		MoveY -= this->_Half_State_Height;
-		break;
-	case CHECK_EDGE_MB:
-		MoveY -= this->_Half_State_Height;
-		break;
-	case CHECK_EDGE_RB:
-		MoveX += this->_Half_State_Width;
-		MoveY -= this->_Half_State_Height;
 		break;
 	}
 
-	if (this->_Half_State_Width == 0.0f)
-		this->_Half_State_Width = 1.0f / this->_GameState_Width;
-	if (this->_Half_State_Height == 0.0f)
-		this->_Half_State_Height = 1.0f / this->_GameState_Height;
-	this->_Exac_LocationX = static_cast<int>((this->_Distance_Move._LocX + MoveX + this->_Half_State_Width) * this->_GameState_Width / 2.0f);
-	this->_Exac_LocationY = static_cast<int>((this->_Distance_Move._LocY + MoveY - this->_Half_State_Height) * this->_GameState_Height / 2.0f) + 1;
-	if (this->_Distance_Move._LocX + this->_Half_State_Width < 0)
+	std::cout << "X :" << static_cast<int>((this->_Distance_Move._LocX + MoveX) * (this->_GameState_Width / 2.0f)) << "___"
+		<< "Y :" << static_cast<int>((this->_Distance_Move._LocY + MoveY) * (this->_GameState_Height / 2.0f)) + 1 << std::endl;
+
+	this->_Exac_LocationX = static_cast<int>((this->_Distance_Move._LocX + MoveX) * (this->_GameState_Width / 2.0f));
+	this->_Exac_LocationY = static_cast<int>((this->_Distance_Move._LocY + MoveY) * (this->_GameState_Height / 2.0f)) + 1;
+	if (this->_Distance_Move._LocX + MoveX < 0)
 		--this->_Exac_LocationX;
-	if (this->_Distance_Move._LocY - this->_Half_State_Height < 0)
+	if (this->_Distance_Move._LocY + MoveY < 0)
 		--this->_Exac_LocationY;
 	this->_Exac_LocationY = -this->_Exac_LocationY;
 }
@@ -369,13 +406,11 @@ GameStateBase::GameStateBase(int Width, int Height) :
 	_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)),
 	_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(Height),
 	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false),
-	_Exac_LocationX(0), _Exac_LocationY(0) {}
+	_Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend() {}
 
 GameStateBase::~GameStateBase()
 {
 	std::vector<StateUnit*>().swap(this->_GameState);
-	for (int i{ 0 }; i < 9; ++i)
-		delete this->_GameStateX[i];
 }
 
 //unimportant Stuff (GET/SET)
@@ -469,9 +504,9 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)),
-_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0),
-_Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0) {}
+_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)), _Compile_Success(false),
+_CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), _Adjust_Frame(1),
+_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend() {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 

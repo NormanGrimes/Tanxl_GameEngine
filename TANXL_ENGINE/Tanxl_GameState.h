@@ -4,6 +4,9 @@
 // 增加变量记录各单元的半宽高
 // 增加根据中点计算当前单元格的功能
 // 增加方格多个点的边缘检测枚举
+// 边缘检查枚举减少到五个
+// 增加地图扩展结构体
+// 地图单元编译功能增加对扩展地图的支持
 
 #pragma once
 
@@ -42,15 +45,26 @@ enum EState_Point
 
 enum ECheck_Edge
 {
-	CHECK_EDGE_NO,
-	CHECK_EDGE_LA,
-	CHECK_EDGE_MA,
-	CHECK_EDGE_RA,
-	CHECK_EDGE_LM,
-	CHECK_EDGE_RM,
-	CHECK_EDGE_LB,
-	CHECK_EDGE_MB,
-	CHECK_EDGE_RB
+	CHECK_EDGE_CURR,
+	CHECK_EDGE_LEFT,
+	CHECK_EDGE_RIGH,
+	CHECK_EDGE_BELO,
+	CHECK_EDGE_ABOV
+};
+
+enum EState_Extend
+{
+	STATE_ORIGIN_MIDD,
+
+	STATE_EXTEND_MIDD,
+	STATE_EXTEND_LEFT,
+	STATE_EXTEND_RIGH,
+	STATE_EXTEND_ABOV,
+	STATE_EXTEND_BELO,
+	STATE_EXTEND_LEFT_ABOV,
+	STATE_EXTEND_LEFT_BELO,
+	STATE_EXTEND_RIGH_ABOV,
+	STATE_EXTEND_RIGH_BELO
 };
 
 struct Move_State
@@ -108,7 +122,7 @@ public:
 	void Set_DataAll_State(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
 	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
-	void CompileStateUnits(std::string Infor);
+	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_ORIGIN_MIDD);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
 	void Set_Adjust(float Adjust);
@@ -117,7 +131,7 @@ public:
 	void Set_Adjust_Frequency(int Frame);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
-	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_NO);
+	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
 	bool Get_Adjust_While_Move();
@@ -132,6 +146,21 @@ public:
 	//↓Get_StateWidth : 获取当前需要绘制的State的宽度值
 	int Get_StateWidth()const;
 private:
+	struct State_Extend
+	{		
+		std::vector<StateUnit*>* _MIDD;
+
+		std::vector<StateUnit*>* _LEFT;
+		std::vector<StateUnit*>* _RIGH;
+		std::vector<StateUnit*>* _ABOV;
+		std::vector<StateUnit*>* _BELO;
+
+		std::vector<StateUnit*>* _LEFT_ABOV;
+		std::vector<StateUnit*>* _LEFT_BELO;
+		std::vector<StateUnit*>* _RIGH_ABOV;
+		std::vector<StateUnit*>* _RIGH_BELO;
+	}_GameState_Extend;
+
 	//地图初始化默认构造函数 采用单例模式进行第一次初始化
 	GameStateBase(int Width = 0, int Height = 0);
 	~GameStateBase();
@@ -163,9 +192,9 @@ private:
 	Move_State _MState;
 	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
 	SLocation _Distance_Screen_Mid;
+	//_Distance_Move用于记录当前相对于原点的移动距离
 	SLocation _Distance_Move;
 	std::vector<StateUnit*> _GameState;
-	std::vector<StateUnit*>* _GameStateX[9]{};//TODO
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
 	const std::string _Version{ "0.8" };

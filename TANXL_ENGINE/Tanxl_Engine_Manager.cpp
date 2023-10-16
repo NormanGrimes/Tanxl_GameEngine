@@ -86,9 +86,9 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	remove((FileName + ".usd").c_str());
 }
 
-void Tanxl_Engine::Engine_Save_Infinite_State()
+void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect)
 {
-	for (int i{ 0 }; i < 0xFF; ++i)
+	for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)//16x16
 	{
 		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);
@@ -96,6 +96,46 @@ void Tanxl_Engine::Engine_Save_Infinite_State()
 	}
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_LOCALF, "TANXL_STATE_DATA", "Data_Chain_File");
 	remove("Data_Chain_File.usd");
+
+	if (Build_Connect)
+	{
+		for (int i = 0; i < 16; i++)
+			for (int j = 0; j < 16; j++)
+			{
+				std::string LEFT_STR = "NULL", LEFT_ABOV_STR = "NULL";
+				std::string RIGH_STR = "NULL", LEFT_BELO_STR = "NULL";
+				std::string ABOV_STR = "NULL", RIGH_ABOV_STR = "NULL";
+				std::string BELO_STR = "NULL", RIGH_BELO_STR = "NULL";
+
+				if (j != 0)
+					LEFT_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 16 + j - 1, 1)->_Data;
+				if (j != 15)
+					RIGH_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 16 + j + 1, 1)->_Data;
+				if (i != 0)
+					ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j, 1)->_Data;
+				if (i != 15)
+					BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j, 1)->_Data;
+
+				if ((j != 0) && (i != 0))
+					LEFT_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j - 1, 1)->_Data;
+				if ((j != 0) && (i != 15))
+					LEFT_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j - 1, 1)->_Data;
+				if ((j != 15) && (i != 0))
+					RIGH_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j + 1, 1)->_Data;
+				if ((j != 15) && (i != 15))
+					RIGH_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j + 1, 1)->_Data;
+
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 4, ABOV_STR);
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 5, BELO_STR);
+
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 6, LEFT_ABOV_STR);
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
+				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
+			}
+	}
 }
 
 void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)

@@ -27,6 +27,9 @@
 // 移除随机测试数据功能
 // 增加宏控制控制台输出的开启与关闭
 // 修复数据整理功能出现未优化内容的问题
+// 修复整理文件次数大于一次时出现多余内容的问题
+// 设置指定接口加入添加数据单元功能
+// 获取指定功能改为返回数据单元
 
 #pragma once
 
@@ -81,7 +84,8 @@ enum ESet_Specified
 {
 	SET_TYPE_STATUS,
 	SET_EXAC_STATUS,
-	SET_UNIT_IDADAT
+	SET_UNIT_IDADAT,
+	ADD_UNIT_IDADAT
 };
 
 struct Data_Unit
@@ -182,7 +186,7 @@ public:
 	//↓为当前内存中的匿名结构体通过 Set_Mode 的方式添加 Data_Link数据
 	void Set_Internal_Data(Data_Link* Data, ELinkSet_Mode Set_Mode);
 	//↓读取指定Type(A)_Exac(B)级别的物品 并载入到单例结构中 Depth表示该级别下的第几个物品(从0开始)
-	void Get_Specified(int Type, int Exac, int Depth);
+	Data_Unit* Get_Specified(int Type, int Exac, int Depth);
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...
 	//↓修改OTH1 OTH2 OTH3的时候直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
 	void Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data);

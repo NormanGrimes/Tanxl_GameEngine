@@ -221,7 +221,7 @@ void TANXL_DataBase::SortDataBase(ESort_Mode Mode, std::string Out_File_Name, st
 		std::cout << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
 		std::cout << "\t\t<Exac_Status : " << (*IOIB)->_Exac_Name << " / " << (*IOIB)->_Exac << ">" << std::endl;
 #endif
-		if ((*IOIB)->_Type != last)
+		if (((*IOIB)->_Type != last) && last != -1)
 			out << "\t</Type_Status>" << std::endl;
 		if ((*IOIB)->_Type != last)
 			out << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
@@ -369,18 +369,12 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		return false;
 }
 
-void TANXL_DataBase::Get_Specified(int Type, int Exac, int Depth)
+Data_Unit* TANXL_DataBase::Get_Specified(int Type, int Exac, int Depth)
 {
 	if (Data_Unit * PDU{ Data_Link_Locate(Type, Exac, Depth) })
-	{
-		Id_Link* PIL{ Id_Link_Locate(Type, Exac) };
-		this->_Internal_Data._Item_Status = ((PIL->_Type << 8) + PIL->_Exac);
-		this->_Internal_Data._Type_Name = PIL->_Type_Name;
-		this->_Internal_Data._Exac_Name = PIL->_Exac_Name;
-		this->_Internal_Data._Data = PIL->_Data;
-		return;
-	}
+		return PDU;
 	throw "Get_Specified() Failed ！ : 未能成功匹配相同值";
+	return nullptr;
 }
 
 void TANXL_DataBase::Print_Data()
@@ -399,9 +393,9 @@ void TANXL_DataBase::Print_Data()
 	}
 }
 
-void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data) //V3 Updated
+void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data)
 {
-	if (Data_Unit * PDU{Data_Link_Locate(Type, Exac, Nums)})
+	if (Data_Unit * PDU{ Data_Link_Locate(Type, Exac, Nums) })
 		switch (level)
 		{
 		case SET_TYPE_STATUS:
@@ -414,6 +408,12 @@ void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int 
 			PDU->_Id = Id;
 			PDU->_Data = Data;
 			return;
+		case ADD_UNIT_IDADAT:
+		{
+			Id_Link* PIL = { Id_Link_Locate(Type,Exac) };
+			PIL->Append_Data_Link(new Data_Link(Id, Data));
+			return;
+		}
 		}
 	throw "Set_Specified() Failed ！ : 查找相关内容不成功或链表内容为空";
 }
@@ -446,6 +446,7 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 	{
 		while (Left != Right)
 		{
+			//std::cout << "LEFT :" << Left << "RIGHT :" << Right << std::endl;
 			int Mid{ (Left + Right) / 2 };
 			int Mid_Value{ this->_Id_Links->at(Mid)->_Type * 16 + this->_Id_Links->at(Mid)->_Exac };
 			if (Mid_Value == Value)
@@ -461,6 +462,11 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 			{
 				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
 				return nullptr;
+			}
+			if ((Left + 1 == Right)&&(this->_Id_Links->at(Right)->_Type * 16 + this->_Id_Links->at(Right)->_Exac == Value))
+			{
+				this->_Current_Location = Right;
+				return this->_Id_Links->at(Right);
 			}
 		}
 	}
@@ -510,7 +516,7 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide)
 	if (Cur == Div)
 	{
 		Cur = 0;
-		Exac = (Exac + 1) > 0xFF ? 0x00 : (Exac + 1);
+		Exac = Exac == 0xFF ? 0x00 : (Exac + 1);
 	}
 }
 

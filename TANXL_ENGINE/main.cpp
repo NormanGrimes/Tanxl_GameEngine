@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "Tanxl_Engine_Manager.h"
-#include <iomanip>
 
 int main()
 {

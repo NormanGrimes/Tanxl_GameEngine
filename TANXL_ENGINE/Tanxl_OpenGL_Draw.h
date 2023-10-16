@@ -20,6 +20,9 @@
 // 初始化时计算当前真实坐标
 // 增加根据方块数值限制移动功能（不稳定）
 // 移除一个未使用接口
+// 移动到边缘检查功能优化
+// 移除图片纹理容器
+// 增加低画质模式
 
 #pragma once
 
@@ -246,6 +249,7 @@ private:
 
 	GLint _StateInfor[300];
 
+	bool _Advanced_Mode = true;
 	bool _Clear_Function;
 	bool _Is_State_Changed;
 	bool _Trigger_Mode = false;
@@ -255,13 +259,11 @@ private:
 	GLuint _renderingProgram;
 	GLuint _vao[1];
 	GLuint _vbo[31];
-	std::vector<GLuint> _Texture;
 
 	//记录地图场景基本矩形的高度值
 	double _Each_Height = 0;
 	//记录地图场景基本矩形的宽度值
 	double _Each_Width = 0;
-
 	//记录地图场景X轴移动距离
 	float _State_MoveX;
 	//记录地图场景Y轴移动距离
