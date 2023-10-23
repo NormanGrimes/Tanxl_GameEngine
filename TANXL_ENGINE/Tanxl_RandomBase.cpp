@@ -26,9 +26,9 @@ std::string RandomBase::Generate()
 {
     std::string Data{};
     srand(static_cast<unsigned int>(time(0)));
-    for (int i = 0; i < 15; ++i)
+    for (int i{ 0 }; i < 15; ++i)
     {
-        if (i % 5 == 0 && i != 0)
+        if ((i % 5 == 0) && (i != 0))
             Data += "-";
         Data += UniData[rand() % 62];
     }
@@ -39,9 +39,9 @@ std::string RandomBase::Generate(int seed)
 {
     std::string Data{ "" };
     srand(static_cast<unsigned int>(seed));
-    for (int i = 0; i < 15; ++i)
+    for (int i{ 0 }; i < 15; ++i)
     {
-        if (i % 5 == 0 && i != 0)
+        if ((i % 5 == 0) && (i != 0))
             Data += "-";
         Data += UniData[rand() % 62];
     }

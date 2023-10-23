@@ -116,7 +116,6 @@ void CONSOLE::Display_Once()
 			continue;
 		}
 		Insert = Insert_Action(Action_Num, Action_Bol, List_Size);
-		//if (*Action_Num == -1)
 		break;
 	}
 }
@@ -124,12 +123,12 @@ void CONSOLE::Display_Once()
 bool CONSOLE::Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size)
 {
 	char key = _getch();
-	if (key == 'c' || key == 'C')//如果输入了大小写的C则返回上一级
+	if ((key == 'c') || (key == 'C'))//如果输入了大小写的C则返回上一级
 	{
 		*Action_Bol = false;
 		return false;
 	}
-	if (static_cast<int>(key - 48) >= 0 && static_cast<int>(key - 48) <= 9)//判断是否是从零到九的数字
+	if ((static_cast<int>(key - 48) >= 0) && (static_cast<int>(key - 48) <= 9))//判断是否是从零到九的数字
 	{
 		if (static_cast<int>(key - 48) <= static_cast<int>(List_Size))//如果是，且小于等于选项总数则直接指定这个选项
 			*Action_Num = static_cast<int>(key - 48) - 1;
@@ -137,13 +136,13 @@ bool CONSOLE::Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size)
 			*Action_Num = static_cast<int>(List_Size) - 1;//如果超出了最大值，则指向最大值
 		*Action_Bol = true;
 	}
-	else if (key == 'w' || key == 'W' || key == 72)//如果输入了大小写的W或者上箭头，则执行MoveUp
+	else if ((key == 'w') || (key == 'W') || (key == 72))//如果输入了大小写的W或者上箭头，则执行MoveUp
 		*Action_Num = *Action_Num == 0 ? static_cast<int>(List_Size) - 1 : -- * Action_Num;
-	else if (key == 's' || key == 'S' || key == 80)//如果输入了大小写的S或者下箭头，则执行MoveDown
+	else if ((key == 's') || (key == 'S') || (key == 80))//如果输入了大小写的S或者下箭头，则执行MoveDown
 		*Action_Num = *Action_Num == static_cast<int>(List_Size) - 1 ? 0 : ++ * Action_Num;
-	else if (key == 'a' || key == 'A' || key == 75)//如果输入了大小写的A或者左箭头，则执行向上翻页
+	else if ((key == 'a') || (key == 'A') || (key == 75))//如果输入了大小写的A或者左箭头，则执行向上翻页
 		*Action_Num = *Action_Num - static_cast<int>(this->_SSpace & 0x0000ff) < 0 ? 0 : *Action_Num - (this->_SSpace & 0x0000ff);
-	else if (key == 'd' || key == 'D' || key == 77)//如果输入了大小写的D或者右箭头，则执行向下翻页
+	else if ((key == 'd') || (key == 'D') || (key == 77))//如果输入了大小写的D或者右箭头，则执行向下翻页
 		*Action_Num = *Action_Num + static_cast<int>(this->_SSpace & 0x0000ff) > static_cast<int>(List_Size) - 1 ? static_cast<int>(List_Size) - 1 : *Action_Num + (this->_SSpace & 0x0000ff);
 	else if (key == '\r')//回车确认
 		*Action_Bol = true;

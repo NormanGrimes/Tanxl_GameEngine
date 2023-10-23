@@ -62,7 +62,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
-	for (int i = 0; i < this->_KeyEventS.size(); ++i)
+	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
 		if (glfwGetKey(window, this->_KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
 		{
@@ -173,14 +173,14 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 	if (Screen_MoveX > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 2;
-		Move_DistanceX -= Screen_MoveX - this->_Max_float;
+		Move_DistanceX -= (Screen_MoveX - this->_Max_float);
 		Screen_MoveX = this->_Max_float;
 
 	}
 	else if (Screen_MoveX < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 1;
-		Move_DistanceX -= Screen_MoveX + this->_Max_float;
+		Move_DistanceX -= (Screen_MoveX + this->_Max_float);
 		Screen_MoveX = -this->_Max_float;
 	}
 
@@ -190,13 +190,13 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 	if (Screen_MoveY > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 8;
-		Move_DistanceY -= Screen_MoveY - this->_Max_float;
+		Move_DistanceY -= (Screen_MoveY - this->_Max_float);
 		Screen_MoveY = this->_Max_float;
 	}
 	else if (Screen_MoveY < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 4;
-		Move_DistanceY -= Screen_MoveY + this->_Max_float;
+		Move_DistanceY -= (Screen_MoveY + this->_Max_float);
 		Screen_MoveY = -this->_Max_float;
 	}
 #if _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_
@@ -220,7 +220,7 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_UP.GLFW_KEY = GLFW_KEY_W;
 	this->RegistEvent(MOVE_UP);*/
 	// OR ↓
-	Key_Unit* MOVE_UP = new Key_Unit(GLFW_KEY_UP, false, true, 0.01);
+	Key_Unit* MOVE_UP{ new Key_Unit(GLFW_KEY_UP, false, true, 0.01) };
 	this->RegistEvent(MOVE_UP);
 	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.01);
 	this->RegistEvent(MOVE_UP);
@@ -234,7 +234,7 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_A;
 	this->RegistEvent(MOVE_LEFT);*/
 	// OR ↓
-	Key_Unit* MOVE_LEFT = new Key_Unit(GLFW_KEY_LEFT, true, false, -0.01);
+	Key_Unit* MOVE_LEFT{ new Key_Unit(GLFW_KEY_LEFT, true, false, -0.01) };
 	this->RegistEvent(MOVE_LEFT);
 	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.01);
 	this->RegistEvent(MOVE_LEFT);
@@ -248,7 +248,7 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_D;
 	this->RegistEvent(MOVE_RIGHT);*/
 	// OR ↓
-	Key_Unit* MOVE_RIGHT = new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01);
+	Key_Unit* MOVE_RIGHT{ new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.01) };
 	this->RegistEvent(MOVE_RIGHT);
 	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.01);
 	this->RegistEvent(MOVE_RIGHT);
@@ -262,7 +262,7 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
 	this->RegistEvent(MOVE_DOWN);*/
 	// OR ↓
-	Key_Unit* MOVE_DOWN = new Key_Unit(GLFW_KEY_DOWN, false, true, -0.01);
+	Key_Unit* MOVE_DOWN{ new Key_Unit(GLFW_KEY_DOWN, false, true, -0.01) };
 	this->RegistEvent(MOVE_DOWN);
 	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.01);
 	this->RegistEvent(MOVE_DOWN);

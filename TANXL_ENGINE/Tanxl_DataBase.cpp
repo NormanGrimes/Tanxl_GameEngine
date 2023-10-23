@@ -12,9 +12,9 @@ namespace TanxlDB
 			return "";
 		}
 		std::string New_data{};
-		for (int i{ Start }, j = 0; i < End; ++i, ++j)
+		for (int i{ Start }, j{ 0 }; i < End; ++i, ++j)
 		{
-			if (data[i] == '\t' || data[i] == '<')
+			if ((data[i] == '\t') || (data[i] == '<'))
 			{
 				End++; j--;
 				continue;
@@ -52,7 +52,7 @@ namespace TanxlDB
 		}
 		for (int i{ 0 }; i < data.length(); ++i)//获取内容
 		{
-			if ((data[i] == Left && Lock == -1) || (data[i] == Right && Lock != -1))
+			if (((data[i] == Left) && (Lock == -1)) || ((data[i] == Right) && (Lock != -1)))
 			{
 				if (Lock == -1)
 				{
@@ -62,7 +62,7 @@ namespace TanxlDB
 				else
 					Last = i;
 			}
-			if (Lock != -1 && Last != -1)
+			if ((Lock != -1) && (Last != -1))
 				return Combine_Char(data, Lock, Last);
 		}
 		throw "失败 : Divid_Char 读取错误 不存在满足条件的内容";
@@ -127,7 +127,7 @@ void TANXL_DataBase::ResetInstance(bool Delete)
 	this->_Internal_Data._Item_Status = 0xFFFF;
 	this->_Internal_Data._Type_Name = "";
 	this->_Internal_Data._Exac_Name = "";
-	if (Delete && this->_Internal_Data._Data != nullptr)
+	if (Delete && (this->_Internal_Data._Data != nullptr))
 	{
 		std::vector<Data_Unit*>().swap(this->_Internal_Data._Data->_Data_Units);
 		delete this->_Internal_Data._Data;
@@ -182,8 +182,7 @@ void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name, bo
 		Id_Link* IdLink{ new Id_Link(
 			(this->_Internal_Data._Item_Status & 0xff00) >> 8, this->_Internal_Data._Type_Name,
 			this->_Internal_Data._Item_Status & 0x00ff, this->_Internal_Data._Exac_Name,
-			new Data_Link(this->_Internal_Data._Data)
-		) };
+			new Data_Link(this->_Internal_Data._Data)) };
 		if (IdLink)//判断是否申请空间成功//UNFINISH YET
 			Append_Link(*IdLink);
 		else
@@ -296,7 +295,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 	std::vector<Id_Link*>().swap(*this->_Id_Links);
 	std::fstream in(File_Name + ".usd", std::ios::in);
 	if (!in.is_open())
-		std::fstream in(File_Name + ".sd", std::ios::in);
+		in.open(File_Name + ".sd", std::ios::in);
 	if (in.is_open())
 	{
 		std::string Type_Data{}, Exac_Data{}, Data{};//需要使用时再定义
@@ -332,7 +331,25 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					Exac_Stat = 0;
 				}
 			}
-			else if (Tag == "/TDB")
+			if (Tag == "Exac")
+			{
+				try
+				{
+					Exac_Stat = std::stoi(TanxlDB::Divid_Char(Line, GET_STATUS_DAT));
+					Exac_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
+				}
+				catch (std::invalid_argument&)
+				{
+					std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+					Exac_Stat = 0;
+				}
+				catch (std::out_of_range&)
+				{
+					std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+					Exac_Stat = 0;
+				}
+			}
+			else if ((Tag == "/TDB") || (Tag == "/Exa"))
 			{
 				Id_Link* Id_Temp{ new Id_Link(Type_Stat, Type_Data, Exac_Stat, Exac_Data, &DTL) };
 				std::vector<Data_Unit*>().swap(DTL._Data_Units);//释放内存
@@ -342,7 +359,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					throw "添加失败！ 申请内存空间失败";
 				continue;
 			}
-			else if (Tag == "Data")
+			else if ((Tag == "Data") || (Tag == "CURR") || (Tag == "UNIQ") || (Tag == "TANX") || (Tag == "GAME"))
 			{
 				try
 				{
@@ -366,7 +383,10 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		return true;
 	}
 	else
+	{
+		in.close();
 		return false;
+	}
 }
 
 Data_Unit* TANXL_DataBase::Get_Specified(int Type, int Exac, int Depth)
@@ -385,10 +405,9 @@ void TANXL_DataBase::Print_Data()
 	{
 		std::cout << "Id_Link :" << (*BOI)->_Type << " - " << (*BOI)->_Type_Name << " - " << (*BOI)->_Exac << " - " << (*BOI)->_Exac_Name << std::endl;
 		Data_Link* DL{ ((*BOI)->_Data) };
-		if (DL == nullptr)
-			break;
-		for (int i{ 0 }; i < DL->_Data_Units.size(); ++i)
-			std::cout << "\tData_Link :" << DL->_Data_Units.at(i)->_Id << " - " << DL->_Data_Units.at(i)->_Data << std::endl;
+		if (DL != nullptr)
+			for (int i{ 0 }; i < DL->_Data_Units.size(); ++i)
+				std::cout << "\tData_Link :" << DL->_Data_Units.at(i)->_Id << " - " << DL->_Data_Units.at(i)->_Data << std::endl;
 		++BOI;
 	}
 }
@@ -463,10 +482,20 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
 				return nullptr;
 			}
-			if ((Left + 1 == Right)&&(this->_Id_Links->at(Right)->_Type * 16 + this->_Id_Links->at(Right)->_Exac == Value))
+			if (Left + 1 == Right)
 			{
-				this->_Current_Location = Right;
-				return this->_Id_Links->at(Right);
+				if (this->_Id_Links->at(Right)->_Type * 16 + this->_Id_Links->at(Right)->_Exac == Value)
+				{
+					this->_Current_Location = Right;
+					return this->_Id_Links->at(Right);
+				}
+				else if(this->_Id_Links->at(Left)->_Type * 16 + this->_Id_Links->at(Left)->_Exac == Value)
+				{
+					this->_Current_Location = Left;
+					return this->_Id_Links->at(Left);
+				}
+				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
+				return nullptr;
 			}
 		}
 	}
@@ -484,7 +513,7 @@ Data_Unit* TANXL_DataBase::Data_Link_Locate(int Type, int Exac, int Depth)
 	}
 	else if (Depth < 0 && Depth + static_cast<int>(PIL->_Data->_Data_Units.size()) >= 0)
 		return PIL->_Data->_Data_Units.at(Depth + PIL->_Data->_Data_Units.size());
-	while (Depth + static_cast<int>(PIL->_Data->_Data_Units.size() < 0))
+	while (Depth + static_cast<int>(PIL->_Data->_Data_Units.size()) < 0)
 		Depth += static_cast<int>(PIL->_Data->_Data_Units.size());
 	return PIL->_Data->_Data_Units.at(Depth);
 }
@@ -499,13 +528,12 @@ void TANXL_DataBase::Replace_Link(int OldType, int OldExac, int OldDepth, int Id
 		PIL->_Data->_Data_Units.erase(PIL->_Data->_Data_Units.begin() + PIL->_Data->_Data_Units.size() + OldDepth);
 }
 
-void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide)
+void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigned Type)
 {
 	static int Div{ static_cast<int>(Divide) };
 	static int Cur{ 0 };
 	if (Divide != 0)
 		Div = Divide;
-	static unsigned Type{ 0x01 };
 	static unsigned Exac{ 0x00 };
 	this->ResetInstance(true);
 	this->Set_Internal_Id((Type << 8) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
@@ -516,7 +544,7 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide)
 	if (Cur == Div)
 	{
 		Cur = 0;
-		Exac = Exac == 0xFF ? 0x00 : (Exac + 1);
+		Exac = (Exac == 0xFF ? 0x00 : (Exac + 1));
 	}
 }
 

@@ -7,6 +7,8 @@
 // 边缘检查枚举减少到五个
 // 增加地图扩展结构体
 // 地图单元编译功能增加对扩展地图的支持
+// 获取区域是否可移动功能性能优化
+// 设置当前坐标接口移除未使用代码
 
 #pragma once
 
@@ -125,6 +127,7 @@ public:
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_ORIGIN_MIDD);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
+	void Set_SquareState(std::string State_Id);
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
@@ -148,17 +151,17 @@ public:
 private:
 	struct State_Extend
 	{		
-		std::vector<StateUnit*>* _MIDD;
+		std::vector<StateUnit*>* _MIDD{ nullptr };
 
-		std::vector<StateUnit*>* _LEFT;
-		std::vector<StateUnit*>* _RIGH;
-		std::vector<StateUnit*>* _ABOV;
-		std::vector<StateUnit*>* _BELO;
+		std::vector<StateUnit*>* _LEFT{ nullptr };
+		std::vector<StateUnit*>* _RIGH{ nullptr };
+		std::vector<StateUnit*>* _ABOV{ nullptr };
+		std::vector<StateUnit*>* _BELO{ nullptr };
 
-		std::vector<StateUnit*>* _LEFT_ABOV;
-		std::vector<StateUnit*>* _LEFT_BELO;
-		std::vector<StateUnit*>* _RIGH_ABOV;
-		std::vector<StateUnit*>* _RIGH_BELO;
+		std::vector<StateUnit*>* _LEFT_ABOV{ nullptr };
+		std::vector<StateUnit*>* _LEFT_BELO{ nullptr };
+		std::vector<StateUnit*>* _RIGH_ABOV{ nullptr };
+		std::vector<StateUnit*>* _RIGH_BELO{ nullptr };
 	}_GameState_Extend;
 
 	//地图初始化默认构造函数 采用单例模式进行第一次初始化
@@ -166,6 +169,7 @@ private:
 	~GameStateBase();
 	GameStateBase(const GameStateBase&);
 	GameStateBase& operator=(const GameStateBase&);
+	TANXL_DataBase _Data_Base{};
 	unsigned _Data_Width;
 	unsigned _Data_Height;
 	float _Half_State_Width{ 0.0f };

@@ -1,7 +1,7 @@
 #include "Tanxl_Engine_Manager.h"
 
 Tanxl_Engine::Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE),
-Tanxl_Engine_DataBase(new TANXL_DataBase),
+Tanxl_Engine_DataBase(new TANXL_DataBase()),
 Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 Tanxl_Engine_GameState(&GameStateBase::Get_StateBase(5, 5)),
 Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
@@ -9,11 +9,11 @@ Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
 Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 {
 	if (!this->Tanxl_Engine_Console_List ||
-		!this->Tanxl_Engine_DataBase ||
-		!this->Tanxl_Engine_GameEvent ||
-		!this->Tanxl_Engine_GameState ||
-		!this->Tanxl_Engine_OpenGL_Draw ||
-		!this->Tanxl_Engine_InsertBase||
+		!this->Tanxl_Engine_DataBase     ||
+		!this->Tanxl_Engine_GameEvent    ||
+		!this->Tanxl_Engine_GameState    ||
+		!this->Tanxl_Engine_OpenGL_Draw  ||
+		!this->Tanxl_Engine_InsertBase   ||
 		!this->Tanxl_Engine_RandomBase)
 	{
 		std::cout << "Fail to start Engine !" << std::endl;
@@ -99,13 +99,13 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect)
 
 	if (Build_Connect)
 	{
-		for (int i = 0; i < 16; i++)
-			for (int j = 0; j < 16; j++)
+		for (int i{ 0 }; i < 16; ++i)
+			for (int j{ 0 }; j < 16; ++j)
 			{
-				std::string LEFT_STR = "NULL", LEFT_ABOV_STR = "NULL";
-				std::string RIGH_STR = "NULL", LEFT_BELO_STR = "NULL";
-				std::string ABOV_STR = "NULL", RIGH_ABOV_STR = "NULL";
-				std::string BELO_STR = "NULL", RIGH_BELO_STR = "NULL";
+				std::string LEFT_STR{ "NULL" }, LEFT_ABOV_STR{ "NULL" };
+				std::string RIGH_STR{ "NULL" }, LEFT_BELO_STR{ "NULL" };
+				std::string ABOV_STR{ "NULL" }, RIGH_ABOV_STR{ "NULL" };
+				std::string BELO_STR{ "NULL" }, RIGH_BELO_STR{ "NULL" };
 
 				if (j != 0)
 					LEFT_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 16 + j - 1, 1)->_Data;
@@ -147,7 +147,7 @@ void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)
 
 std::string Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)
 {
-	Key_Unit* KEYU = new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length);
+	Key_Unit* KEYU{ new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length) };
 	this->Tanxl_Engine_InsertBase->RegistEvent(KEYU);
 	return KEYU->Unit_Name;
 }

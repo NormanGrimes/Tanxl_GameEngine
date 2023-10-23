@@ -100,7 +100,7 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 
 	for (int i{ 0 }; i < Infor.size(); ++i)
 	{
-		if (Infor.at(i) != ',' && Infor.at(i) != '-')
+		if ((Infor.at(i) != ',') && (Infor.at(i) != '-'))
 			Text_Reader += Infor.at(i);
 		else if (Infor.at(i) == ',')
 		{
@@ -123,16 +123,16 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 {
 	std::string Text_Reader{};
 	int Status_Int{};
-	for (int i{ 0 }, SetCount = 0; i < Infor.size(); ++i)
+	for (int i{ 0 }, SetCount{ 0 }; i < Infor.size(); ++i)
 	{
-		if (Infor.at(i) != ',' && Infor.at(i) != '=')
+		if ((Infor.at(i) != ',') && (Infor.at(i) != '='))
 			Text_Reader += Infor.at(i);
 		else if (Infor.at(i) == '=')//读取等号后的数字ID值
 		{
 			std::string Status_Reader{};
 			while (Infor.at(i) != ',')
 			{
-				if (Infor.at(i) != ' ' && (Infor.at(i) >= '0' && Infor.at(i) <= '9'))
+				if ((Infor.at(i) != ' ') && ((Infor.at(i) >= '0') && (Infor.at(i) <= '9')))
 					Status_Reader += Infor.at(i);
 			}
 			Status_Int = std::stoi(Status_Reader);
@@ -144,6 +144,15 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 				return;
 			Text_Reader = "";
 		}
+	}
+}
+
+void GameStateBase::Set_SquareState(std::string State_Id)
+{
+	if (this->_Data_Base.Get_LocalData("Tanxl Engine VersionMes"))
+	{
+		for (int i = 0; i <= static_cast<int>(0xFF); ++i)
+			std::cout << _Data_Base.Get_Specified(1, i, 1)->_Data << std::endl;
 	}
 }
 
@@ -312,7 +321,7 @@ void GameStateBase::Set_Adjust_Frequency(int Frame)
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 {
 	static std::vector<bool> MAB{};
-	for (auto State : _GameState)
+	for (const auto& State : _GameState)
 	{
 		if (State->GetMoveAble())
 			MAB.push_back(true);
@@ -459,13 +468,6 @@ void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
 	this->_Distance_Screen_Mid._LocX = CurrentX;
 	this->_Distance_Screen_Mid._LocY = CurrentY;
-	float Compare_Width{ 2.0f / _GameState_Width };
-	float Compare_Height{ 2.0f / _GameState_Height };
-	if (_Distance_Screen_Mid._LocX < Compare_Width || _Distance_Screen_Mid._LocX > Compare_Width ||
-		_Distance_Screen_Mid._LocY < Compare_Height || _Distance_Screen_Mid._LocY > Compare_Height)
-	{
-		//TODO reload Map
-	}
 }
 
 unsigned GameStateBase::Get_DataHeight()const

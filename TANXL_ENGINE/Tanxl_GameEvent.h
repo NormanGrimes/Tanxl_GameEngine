@@ -40,6 +40,7 @@ private:
 	~GameEventBase();
 	GameEventBase(const GameEventBase&);
 	GameEventBase& operator=(const GameEventBase&);
+
 	std::vector<GameEvent*> _GameEvents;
 	const std::string _Version{ "0.1" };
 };

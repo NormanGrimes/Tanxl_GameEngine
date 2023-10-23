@@ -109,8 +109,6 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 				if (State->Get_GameState()->size() == 0)
 					return;
 
-				//std::cout << "Init Data: " << x % State->Get_GameState()->size() <<" __ " 
-				//	<< State->Get_GameState()->at(x % State->Get_GameState()->size())->Get_State_Id() << std::endl;
 				_StateInfor[i] = State->Get_StateUnit(x % State->Get_GameState()->size())->Get_State_Id();
 			}
 
@@ -314,7 +312,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(),CHECK_EDGE_LEFT);
 			if (Current_LX != State->Get_LocationX() || MOV_LEFT)
 			{
-				//std::cout << "STOP !!!!" << std::endl;
 				if (State->Get_LocationX() >= 0)
 				{
 					//std::cout << "STATUS A :" << State->Get_StateUnit(State->Get_LocationY() * State->Get_DataWidth() + State->Get_LocationX())->Get_State_Id() << std::endl;
@@ -352,7 +349,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (Current_LX != State->Get_LocationX() || MOV_RIGH)
 			{
 				std::cout << static_cast<int>(State->Get_DataWidth()) << std::endl;
-				//std::cout << "STOP !!!!" << std::endl;
 				if (State->Get_LocationX() < static_cast<int>(State->Get_DataWidth()))
 				{
 					//std::cout << "STATUS A :" << State->Get_StateUnit(State->Get_LocationY() * State->Get_DataWidth() + State->Get_LocationX())->Get_State_Id() << std::endl;
@@ -390,7 +386,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (Current_LX != State->Get_LocationY() || MOV_ABOV)
 			{
 				std::cout << static_cast<int>(State->Get_DataHeight()) << std::endl;
-				//std::cout << "STOP !!!!" << std::endl;
 				if (State->Get_LocationY() >= 0)
 				{
 					//std::cout << "STATUS A :" << State->Get_StateUnit(State->Get_LocationY() * State->Get_DataWidth() + State->Get_LocationX())->Get_State_Id() << std::endl;
@@ -428,7 +423,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (Current_LX != State->Get_LocationY() || MOV_BELO)
 			{
 				std::cout << static_cast<int>(State->Get_DataHeight()) << std::endl;
-				//std::cout << "STOP !!!!" << std::endl;
 				if (State->Get_LocationY() < static_cast<int>(State->Get_DataHeight()))
 				{
 					//std::cout << "STATUS A :" << State->Get_StateUnit(State->Get_LocationY() * State->Get_DataWidth() + State->Get_LocationX())->Get_State_Id() << std::endl;

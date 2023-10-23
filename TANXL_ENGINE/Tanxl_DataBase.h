@@ -30,6 +30,11 @@
 // 修复整理文件次数大于一次时出现多余内容的问题
 // 设置指定接口加入添加数据单元功能
 // 获取指定功能改为返回数据单元
+// 链式添加增加自定义添加编号功能
+// 修复数据定位功能的一处错误
+// 修复无法获取整理后本地数据的问题
+// 等级定位功能增加多种情况处理
+// 获取本地数据功能增加单独副级修改功能
 
 #pragma once
 
@@ -126,7 +131,7 @@ struct Data_Link//数据数据结构V4
 		if (Replace)
 			std::vector<Data_Unit*>().swap(this->_Data_Units);
 		int TempVal = static_cast<int>(Data->_Data_Units.size());
-		for (int i = 0; i < TempVal; ++i)//防止自己给自己添加造成无限循环
+		for (int i{ 0 }; i < TempVal; ++i)//防止自己给自己添加造成无限循环
 			this->_Data_Units.push_back(Data->_Data_Units.at(i));
 	}
 
@@ -199,8 +204,9 @@ public:
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
 	void SortDataBase(ESort_Mode Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
+	//↓添加数据链 TDB指定添加的目标 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元 Type指定输入到的Type编号
+	void Append_DataChain(std::string Data, unsigned Divide = 0, unsigned Type = 0x01);
 	//↓获取当前存储模块的版本信息
-	void Append_DataChain(std::string Data, unsigned Divide = 0);//添加数据链 TDB指定添加的目标 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元
 	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息
 };

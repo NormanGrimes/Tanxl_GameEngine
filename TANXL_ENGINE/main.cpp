@@ -54,6 +54,8 @@ int main()
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 
+	GSB->Set_SquareState("XXXXX-XXXXX-XXXXX");
+
 	std::vector<std::string> KeyUnitNames;
 	while (1)
 	{
