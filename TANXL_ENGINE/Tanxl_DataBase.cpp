@@ -2,6 +2,59 @@
 
 #include "Tanxl_DataBase.h"
 
+Data_Unit::Data_Unit(int Id, std::string Data) :_Id(Id), _Data(Data) {}
+
+Data_Link::Data_Link() :_Data_Units() {}
+
+Data_Link::Data_Link(int Id, std::string Data)
+{
+	_Data_Units.push_back(new Data_Unit(Id, Data));
+}
+
+Data_Link::Data_Link(Data_Unit& Data)
+{
+	_Data_Units.push_back(&Data);
+}
+
+Data_Link::Data_Link(Data_Link* DataLink)
+{
+	this->_Data_Units = DataLink->_Data_Units;
+}
+
+void Data_Link::Append_Data(int Id, std::string Data)
+{
+	_Data_Units.push_back(new Data_Unit(Id, Data));
+}
+void Data_Link::Append_Data(Data_Unit Data)
+{
+	_Data_Units.push_back(&Data);
+}
+void Data_Link::Append_Data(Data_Link* Data, bool Replace)
+{
+	if (Data == nullptr)
+		return;
+	if (Replace)
+		std::vector<Data_Unit*>().swap(this->_Data_Units);
+	int TempVal = static_cast<int>(Data->_Data_Units.size());
+	for (int i{ 0 }; i < TempVal; ++i)//防止自己给自己添加造成无限循环
+		this->_Data_Units.push_back(Data->_Data_Units.at(i));
+}
+
+Id_Link::Id_Link(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link* Data) :
+	_Type(Type), _Type_Name(Type_Name), _Exac(Exac), _Exac_Name(Exac_Name)
+{
+	_Data = new Data_Link;
+	_Data->Append_Data(Data);
+}
+
+void Id_Link::Append_Data_Link(Data_Link* Data)
+{
+	if (_Data == nullptr)
+		_Data = new Data_Link(Data);
+	else
+		_Data->Append_Data(Data);
+}
+
 namespace TanxlDB
 {
 	std::string Combine_Char(std::string data, int Start, int End)
@@ -331,7 +384,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					Exac_Stat = 0;
 				}
 			}
-			if (Tag == "Exac")
+			else if (Tag == "Exac")
 			{
 				try
 				{

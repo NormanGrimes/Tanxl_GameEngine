@@ -1,40 +1,7 @@
-﻿//_VERSION_2_0+_ UPDATE LOG
-// LAST_UPDATE 2023-02-13 15:11
-// V4_UPDATE 增加第四版替换物品功能
-// 移除组合物品等级接口
-// 移除第三版内部匿名结构体
-// V4_UPDATE 增加第四版指定获取功能
-// 移除获取物品等级功能
-// V4_UPDATE 增加第四版设置指定功能
-// V4_UPDATE 增加第四版数据整理功能
-// 修复数据打印空指针未处理的问题
-// 修复输出重载的输出顺序错误的问题
-// 修复SIMPLE_SET未析构丢弃内容的问题
-// 匿名结构体重置函数可选是否析构其指针所指内容
-// 修复匿名结构体的取代功能会在本身指针为空时失效的问题
-// 添加物品功能可选是否添加完成后删除
-// 添加序号结构体的函数不再需要输入数据结构体
-// 修复数据结构体添加数据可能造成无限循环的问题
-// 移除内存中数据是否为空的标记
-// 多处细节改进与小问题修复
-// 改进本地文件读取功能
-// 针对内存部分进行优化
-// 增加一个简化步骤的数据添加接口
-// 恢复重置指定数据的功能
-// 变量名称对应最新版本进行修改
-// 获取本地数据接口的内存清理步骤优化
-// 数据整理功能将联合整理设为默认并取代旧式整理
-// 移除随机测试数据功能
-// 增加宏控制控制台输出的开启与关闭
-// 修复数据整理功能出现未优化内容的问题
-// 修复整理文件次数大于一次时出现多余内容的问题
-// 设置指定接口加入添加数据单元功能
-// 获取指定功能改为返回数据单元
-// 链式添加增加自定义添加编号功能
-// 修复数据定位功能的一处错误
-// 修复无法获取整理后本地数据的问题
-// 等级定位功能增加多种情况处理
-// 获取本地数据功能增加单独副级修改功能
+﻿//_VERSION_2_1_ UPDATE LOG
+// LAST_UPDATE 2023-03-08 11:27
+// 数据属性链表定位接口改为公开
+// 结构体定义移入源文件
 
 #pragma once
 
@@ -95,7 +62,7 @@ enum ESet_Specified
 
 struct Data_Unit
 {
-	Data_Unit(int Id, std::string Data) :_Id(Id), _Data(Data) {}
+	Data_Unit(int Id, std::string Data);
 
 	int _Id;
 	std::string _Data;
@@ -103,56 +70,21 @@ struct Data_Unit
 
 struct Data_Link//数据数据结构V4
 {
-	explicit Data_Link() :_Data_Units() {}
-	explicit Data_Link(int Id, std::string Data)
-	{
-		_Data_Units.push_back(new Data_Unit(Id, Data));
-	}
-	explicit Data_Link(Data_Unit& Data)
-	{
-		_Data_Units.push_back(&Data);
-	}
-	explicit Data_Link(Data_Link* DataLink)
-	{
-		this->_Data_Units = DataLink->_Data_Units;
-	}
-	void Append_Data(int Id, std::string Data)
-	{
-		_Data_Units.push_back(new Data_Unit(Id, Data));
-	}
-	void Append_Data(Data_Unit Data)
-	{
-		_Data_Units.push_back(&Data);
-	}
-	void Append_Data(Data_Link* Data, bool Replace = false)
-	{
-		if (Data == nullptr)
-			return;
-		if (Replace)
-			std::vector<Data_Unit*>().swap(this->_Data_Units);
-		int TempVal = static_cast<int>(Data->_Data_Units.size());
-		for (int i{ 0 }; i < TempVal; ++i)//防止自己给自己添加造成无限循环
-			this->_Data_Units.push_back(Data->_Data_Units.at(i));
-	}
+	explicit Data_Link();
+	explicit Data_Link(int Id, std::string Data);
+	explicit Data_Link(Data_Unit& Data);
+	explicit Data_Link(Data_Link* DataLink);
+	void Append_Data(int Id, std::string Data);
+	void Append_Data(Data_Unit Data);
+	void Append_Data(Data_Link* Data, bool Replace = false);
 
 	std::vector<Data_Unit*> _Data_Units;
 };
 
 struct Id_Link//序号数据结构V4
 {
-	explicit Id_Link(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link* Data = nullptr) :
-		_Type(Type), _Type_Name(Type_Name), _Exac(Exac), _Exac_Name(Exac_Name)
-	{
-		_Data = new Data_Link;
-		_Data->Append_Data(Data);
-	}
-	void Append_Data_Link(Data_Link* Data)
-	{
-		if (_Data == nullptr)
-			_Data = new Data_Link(Data);
-		else
-			_Data->Append_Data(Data);
-	}
+	explicit Id_Link(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link* Data = nullptr);
+	void Append_Data_Link(Data_Link* Data);
 	int _Type, _Exac;
 	std::string _Type_Name, _Exac_Name;
 	Data_Link* _Data;
@@ -169,12 +101,10 @@ private:
 		Data_Link* _Data{ nullptr };
 	}_Internal_Data;
 
-	const std::string _Version{ "2.0+" };
+	const std::string _Version{ "2.1" };
 	std::vector<Id_Link*>* _Id_Links;
 	int _Current_Location;
 	bool _Is_Instance_Data;//用来判断Item_Instance中是否有数据
-	//↓时间复杂度为logN的Id_Chain快速定位函数 Type Exac 指Id_Link的同名变量
-	Id_Link* Id_Link_Locate(int Type, int Exac);
 	//借由Id_Link_Locate函数对不同深度的Data_Chain定位
 	Data_Unit* Data_Link_Locate(int Type, int Exac, int Depth);
 	void Replace_Link(int OldType, int OldExac, int OldDepth, int Id, std::string Data);//转移Data_Chain到另一个Id_Chain下
@@ -185,7 +115,10 @@ private:
 	inline void OstreamSpace(std::ostream& os, int Before = 0, int After = 0);//根据级别输出空格 Before用于执行前对级别数值进行修改 After用于执行后
 public:
 	TANXL_DataBase();//构造函数
-	bool Get_LocalData(std::string File_Name);//获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
+	//↓时间复杂度为logN的Id_Link快速定位函数 Type Exac 指Id_Link的同名变量
+	Id_Link* Id_Link_Locate(int Type, int Exac);
+	//↓获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
+	bool Get_LocalData(std::string File_Name);
 	//↓编辑实例 0x1122 11代表Type位 22代表Exac位 Type_Name为Type字符串 Exac_Name为Exac字符串
 	void Set_Internal_Id(unsigned Status, std::string Type_Name, std::string Exac_Name);
 	//↓为当前内存中的匿名结构体通过 Set_Mode 的方式添加 Data_Link数据

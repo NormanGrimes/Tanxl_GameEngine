@@ -108,22 +108,22 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect)
 				std::string BELO_STR{ "NULL" }, RIGH_BELO_STR{ "NULL" };
 
 				if (j != 0)
-					LEFT_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 16 + j - 1, 1)->_Data;
+					LEFT_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 16 + j - 1, 0)->_Data;
 				if (j != 15)
-					RIGH_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 16 + j + 1, 1)->_Data;
+					RIGH_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 16 + j + 1, 0)->_Data;
 				if (i != 0)
-					ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j, 1)->_Data;
+					ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j, 0)->_Data;
 				if (i != 15)
-					BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j, 1)->_Data;
+					BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j, 0)->_Data;
 
 				if ((j != 0) && (i != 0))
-					LEFT_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j - 1, 1)->_Data;
+					LEFT_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j - 1, 0)->_Data;
 				if ((j != 0) && (i != 15))
-					LEFT_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j - 1, 1)->_Data;
+					LEFT_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j - 1, 0)->_Data;
 				if ((j != 15) && (i != 0))
-					RIGH_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j + 1, 1)->_Data;
+					RIGH_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 16 + j + 1, 0)->_Data;
 				if ((j != 15) && (i != 15))
-					RIGH_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j + 1, 1)->_Data;
+					RIGH_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 16 + j + 1, 0)->_Data;
 
 				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
 				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 16 + j, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);

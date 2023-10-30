@@ -10,6 +10,7 @@
 // 2023/02/22 输出系统信息后删除未整理文件
 // 2023/03/01 无限世界接口生成增加一个区块
 // 2023/03/01 无限世界接口增加构建连接选项
+// 2023/03/08 修复构建连接因借口变动导致的问题
 
 #pragma once
 
@@ -46,7 +47,7 @@ public:
 	void Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move);
 
 	//向指定文件名称中输出当前系统的综合信息 FileName为输出的目标文件名称 调用此函数后目标文件会被重置
-	void Engine_Save_Source_Infor(std::string FileName);
+	void Engine_Save_Source_Infor(std::string FileName = "Tanxl Engine VersionMe");
 
 	//选定是否开启游戏世界无限扩展的功能 执行后会自动生成TANXL_STATE_DATA文件并存放256: 16X16个地图单元数据 Build_Connect为true时会额外构建各区块的连接ID
 	void Engine_Save_Infinite_State(bool Build_Connect = true);

@@ -9,6 +9,10 @@
 // 地图单元编译功能增加对扩展地图的支持
 // 获取区域是否可移动功能性能优化
 // 设置当前坐标接口移除未使用代码
+// 增加通过编号定位地图数据的接口
+// 增加根据内置数据库内容生成地图的功能
+// 增加内置的地图属性结构体
+// 地图单元编译功能增加地图属性结构体的支持
 
 #pragma once
 
@@ -117,6 +121,7 @@ public:
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
 	const std::string Get_Version();
+	std::string Locate_Extend_State(std::string State_Id);
 	void Clear_Display_Vector();
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(int Event_Id);
@@ -163,6 +168,21 @@ private:
 		std::vector<StateUnit*>* _RIGH_ABOV{ nullptr };
 		std::vector<StateUnit*>* _RIGH_BELO{ nullptr };
 	}_GameState_Extend;
+
+	struct State_Extend_Id
+	{
+		std::string _MIDD{ "NULL" };
+
+		std::string _LEFT{ "NULL" };
+		std::string _RIGH{ "NULL" };
+		std::string _ABOV{ "NULL" };
+		std::string _BELO{ "NULL" };
+
+		std::string _LEFT_ABOV{ "NULL" };
+		std::string _LEFT_BELO{ "NULL" };
+		std::string _RIGH_ABOV{ "NULL" };
+		std::string _RIGH_BELO{ "NULL" };
+	}_GameState_Id;
 
 	//地图初始化默认构造函数 采用单例模式进行第一次初始化
 	GameStateBase(int Width = 0, int Height = 0);

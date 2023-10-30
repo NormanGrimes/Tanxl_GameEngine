@@ -25,6 +25,15 @@ const std::string GameStateBase::Get_Version()
 	return this->_Version;
 }
 
+std::string GameStateBase::Locate_Extend_State(std::string State_Id)
+{
+	for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+	{
+		if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == State_Id)
+			return this->_Data_Base.Get_Specified(1, i, 1)->_Data;
+	}
+}
+
 void GameStateBase::Clear_Display_Vector()
 {
 	for (int i = 0; i < _GameState.size(); ++i)
@@ -151,8 +160,31 @@ void GameStateBase::Set_SquareState(std::string State_Id)
 {
 	if (this->_Data_Base.Get_LocalData("Tanxl Engine VersionMes"))
 	{
-		for (int i = 0; i <= static_cast<int>(0xFF); ++i)
-			std::cout << _Data_Base.Get_Specified(1, i, 1)->_Data << std::endl;
+		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+		{
+			if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == State_Id)
+			{
+				Id_Link* Link = this->_Data_Base.Id_Link_Locate(1, i);
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(1)->_Data, STATE_EXTEND_MIDD);
+				this->_GameState_Id._MIDD = Link->_Data->_Data_Units.at(1)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(2)->_Data, STATE_EXTEND_LEFT);
+				this->_GameState_Id._LEFT = Link->_Data->_Data_Units.at(2)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(3)->_Data, STATE_EXTEND_RIGH);
+				this->_GameState_Id._RIGH = Link->_Data->_Data_Units.at(3)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(4)->_Data, STATE_EXTEND_ABOV);
+				this->_GameState_Id._ABOV = Link->_Data->_Data_Units.at(4)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(5)->_Data, STATE_EXTEND_BELO);
+				this->_GameState_Id._BELO = Link->_Data->_Data_Units.at(5)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(6)->_Data, STATE_EXTEND_LEFT_ABOV);
+				this->_GameState_Id._LEFT_ABOV = Link->_Data->_Data_Units.at(6)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(7)->_Data, STATE_EXTEND_LEFT_BELO);
+				this->_GameState_Id._LEFT_BELO = Link->_Data->_Data_Units.at(7)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(8)->_Data, STATE_EXTEND_RIGH_ABOV);
+				this->_GameState_Id._RIGH_ABOV = Link->_Data->_Data_Units.at(8)->_Id;
+				this->CompileStateUnits(Link->_Data->_Data_Units.at(9)->_Data, STATE_EXTEND_RIGH_BELO);
+				this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Id;
+			}
+		}
 	}
 }
 
