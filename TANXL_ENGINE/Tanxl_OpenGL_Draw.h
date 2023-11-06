@@ -249,37 +249,37 @@ private:
 
 	GLint _StateInfor[300];
 
-	bool _Advanced_Mode = true;
+	bool _Advanced_Mode{ true };
 	bool _Clear_Function;
 	bool _Is_State_Changed;
-	bool _Trigger_Mode = false;
+	bool _Trigger_Mode{ false };
 	//标记是否启用地图随移动而移动的功能
-	bool _Is_Trigger_Enable = false;
+	bool _Is_Trigger_Enable{ false };
 
 	GLuint _renderingProgram;
 	GLuint _vao[1];
 	GLuint _vbo[31];
 
 	//记录地图场景基本矩形的高度值
-	double _Each_Height = 0;
+	double _Each_Height{ 0 };
 	//记录地图场景基本矩形的宽度值
-	double _Each_Width = 0;
+	double _Each_Width{ 0 };
 	//记录地图场景X轴移动距离
 	float _State_MoveX;
 	//记录地图场景Y轴移动距离
 	float _State_MoveY;
 	//记录自动调整状态的X轴移动距离
-	float _Auto_AdjustX = 0.0f;
+	float _Auto_AdjustX{ 0.0f };
 	//记录自动调整状态的Y轴移动距离
-	float _Auto_AdjustY = 0.0f;
+	float _Auto_AdjustY{ 0.0f };
 	//记录手动移动状态的Y轴移动距离
-	float _Move_AdjustX = 0.0f;
+	float _Move_AdjustX{ 0.0f };
 	//记录手动移动状态的Y轴移动距离
-	float _Move_AdjustY = 0.0f;
+	float _Move_AdjustY{ 0.0f };
 	//触发地图移动事件时的最低高度方向移动距离
-	float _Trigger_Height = 1.0f;
+	float _Trigger_Height{ 1.0f };
 	//触发地图移动事件时的最低宽度方向移动距离
-	float _Trigger_Width  = 1.0f;
+	float _Trigger_Width{ 1.0f };
 	//记录地图场景的基本矩形行数
 	int _HeightInt;
 	//记录地图场景的基本矩形列数
@@ -293,9 +293,9 @@ private:
 	//绘制模块自动调整等待帧
 	int _First_Adjust;
 	//记录手动移动指定的当前X轴基本矩形
-	int _Current_Move_Height = 0;
+	int _Current_Move_Height{ 0 };
 	//记录手动移动指定的当前Y轴基本矩形
-	int _Current_Move_Width = 0;
+	int _Current_Move_Width{ 0 };
 	//当前此模块的版本号
 	const std::string _Version{ "0.8" };
 	GLFWwindow* _Main_Window;

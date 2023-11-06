@@ -27,11 +27,24 @@ const std::string GameStateBase::Get_Version()
 
 std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 {
-	for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+	if (this->Get_Engine_File())
 	{
-		if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == State_Id)
-			return this->_Data_Base.Get_Specified(1, i, 1)->_Data;
+		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+		{
+			if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == State_Id)
+				return this->_Data_Base.Get_Specified(1, i, 1)->_Data;
+		}
 	}
+	throw "Locate_Extend_State : Locate State Fail !";
+	return "NULL";
+}
+
+std::string GameStateBase::Get_State_Id(int Location)
+{
+	if (this->Get_Engine_File())
+		return this->_Data_Base.Get_Specified(1, Location, 0)->_Data;
+	throw "Get_State_Id : Get State Fail !";
+	return "NULL";
 }
 
 void GameStateBase::Clear_Display_Vector()
@@ -64,6 +77,11 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 	{
 	case STATE_ORIGIN_MIDD:
 		Target = &this->_GameState;
+		break;
+	case STATE_EXTEND_MIDD:
+		delete this->_GameState_Extend._MIDD;
+		this->_GameState_Extend._MIDD = new std::vector<StateUnit*>;
+		Target = this->_GameState_Extend._MIDD;
 		break;
 	case STATE_EXTEND_LEFT:
 		delete this->_GameState_Extend._LEFT;
@@ -106,6 +124,9 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 		Target = this->_GameState_Extend._RIGH_BELO;
 		break;
 	}
+
+	if (Infor == "NULL")
+		return;
 
 	for (int i{ 0 }; i < Infor.size(); ++i)
 	{
@@ -156,15 +177,15 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 	}
 }
 
-void GameStateBase::Set_SquareState(std::string State_Id)
+void GameStateBase::Set_SquareState(int State_Id)
 {
-	if (this->_Data_Base.Get_LocalData("Tanxl Engine VersionMes"))
+	if (this->Get_Engine_File())
 	{
+		std::string Data_Name{ this->Get_State_Id(State_Id) };
 		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
-		{
-			if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == State_Id)
+			if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == Data_Name)
 			{
-				Id_Link* Link = this->_Data_Base.Id_Link_Locate(1, i);
+				Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 				this->CompileStateUnits(Link->_Data->_Data_Units.at(1)->_Data, STATE_EXTEND_MIDD);
 				this->_GameState_Id._MIDD = Link->_Data->_Data_Units.at(1)->_Id;
 				this->CompileStateUnits(Link->_Data->_Data_Units.at(2)->_Data, STATE_EXTEND_LEFT);
@@ -183,8 +204,10 @@ void GameStateBase::Set_SquareState(std::string State_Id)
 				this->_GameState_Id._RIGH_ABOV = Link->_Data->_Data_Units.at(8)->_Id;
 				this->CompileStateUnits(Link->_Data->_Data_Units.at(9)->_Data, STATE_EXTEND_RIGH_BELO);
 				this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Id;
+				//this->_Data_Height = 1600;
+				//this->_Data_Width = 1600;
+				return;
 			}
-		}
 	}
 }
 
@@ -447,7 +470,7 @@ GameStateBase::GameStateBase(int Width, int Height) :
 	_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)),
 	_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(Height),
 	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false),
-	_Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend() {}
+	_Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false) {}
 
 GameStateBase::~GameStateBase()
 {
@@ -540,7 +563,7 @@ StateUnit* GameStateBase::Get_StateUnit(int Pos)
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
 _Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)), _Compile_Success(false),
 _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), _Adjust_Frame(1),
-_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend() {}
+_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false) {}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
@@ -562,6 +585,14 @@ bool GameStateBase::Get_Adjust_Flag()
 bool GameStateBase::Get_Adjust_While_Move()
 {
 	return this->_Adjust_While_Move;
+}
+
+bool GameStateBase::Get_Engine_File()
+{
+	if (!this->_Is_Data_Set)
+		if (!this->_Data_Base.Get_LocalData("Tanxl Engine VersionMes"))
+			return false;
+	return true;
 }
 
 int GameStateBase::Get_LocationX()

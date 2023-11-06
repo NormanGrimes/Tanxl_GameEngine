@@ -1,3 +1,11 @@
+TEnGinE Version-0.1 Build-81 2023-03-09 14:48 UPDATE_LOG
+////////////////////////////////////////////////////////
+地图模块地图接口增加对地图尺寸的设置。地图模块增加获取指
+定编号区块属性的接口。地图模块增加私有变量标记是否从文件
+中获取到了地图数据。地图模块增加获取引擎文件接口。地图模
+块修复地图单元编译功能缺失扩展地图中心的问题。地图模块地
+图生成功能入参修改为序号。
+
 TEnGinE Version-0.1 Build-80 2023-03-08 09:36 UPDATE_LOG
 ////////////////////////////////////////////////////////
 引擎管理模块修复构建连接因借口变动导致的问题。地图模块增
@@ -423,6 +431,14 @@ TEnGinE Version-0.1 Build-25 2022-07-30 21:23 UPDATE_LOG
 扩展自定义游戏地图大小。绘制模块主绘制循环加入当前指向方
 块坐标计算。State模块修复编译地图会导致第一个元素编译失败
 的问题。绘制模块修复最后一个方块显示错误的问题。
+--------------------------------------------------------
+Extend the custom game map size. The drawing module 
+main drawing loop joins the current pointer to the 
+square coordinate calculation. The State module fixes 
+the problem that compiling the map will cause the first 
+element to fail to compile. The drawing module fixes 
+the issue where the last square is displayed 
+incorrectly.
 
 TEnGinE Version-0.1 Build-24 2022-07-28 23:01 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -430,21 +446,45 @@ TEnGinE Version-0.1 Build-24 2022-07-28 23:01 UPDATE_LOG
 个布尔值用于标记地图移动范围控制是否有极限。输入模块自动
 检测在有修改动作时返回二进制数，未修改的位置一。顶点着色
 器的数据格式标准化。
+--------------------------------------------------------
+The input module modifies the automatic detection 
+judgment conditions to reduce the number of operations. 
+The input module adds a Boolean value to mark whether 
+the map movement range control has a limit. The input 
+module automatically detects that it returns a binary 
+number when there is a modification action, and the 
+position one that has not been modified. Data format 
+standardization for vertex shaders.
 
 TEnGinE Version-0.1 Build-23 2022-07-26 21:28 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块删除两个不必要的私有变量。State模块Set_CurrentLoc
 函数预加入重新加载地图功能。绘制模块从初始化函数中整理出
 地图载入函数。添加了更多的内容介绍。
+--------------------------------------------------------
+The drawing module removes two unnecessary private 
+variables. The State module pre-incorporates the reload 
+map function Set_CurrentLoc function. The drawing 
+module sorts out the map loading function from the 
+initialization function. Added more content 
+introduction.
 
 TEnGinE Version-0.1 Build-22 2022-07-24 16:17 UPDATE_LOG
 ////////////////////////////////////////////////////////
 将地图背景移动的功能整合至输入模块。移动背景功能已经成功
 完善。碰撞检测整合至移动模块。
+--------------------------------------------------------
+Integrate the ability to move the map background into 
+the input module. The mobile background feature has 
+been successfully improved. Collision detection is 
+integrated into the mobile module.
 
 TEnGinE Version-0.1 Build-21 2022-07-13 23:29 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块变量名称调整。调整绘制函数移动功能。
+--------------------------------------------------------
+Draw module variable name adjustments. Adjust the 
+drawing function movement function.
 
 TEnGinE Version-0.1 Build-20 2022-07-03 23:38 UPDATE_LOG
 ////////////////////////////////////////////////////////

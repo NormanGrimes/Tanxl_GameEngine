@@ -13,6 +13,12 @@
 // 增加根据内置数据库内容生成地图的功能
 // 增加内置的地图属性结构体
 // 地图单元编译功能增加地图属性结构体的支持
+// 地图接口增加对地图尺寸的设置
+// 增加获取指定编号区块属性的接口
+// 增加私有变量标记是否从文件中获取到了地图数据
+// 增加获取引擎文件接口
+// 修复地图单元编译功能确实扩展地图中心的问题
+// 地图生成功能入参修改为序号
 
 #pragma once
 
@@ -121,7 +127,7 @@ public:
 	std::vector<StateUnit*>* Get_GameState();
 	std::vector<bool>* Get_GameState_MoveAble();
 	const std::string Get_Version();
-	std::string Locate_Extend_State(std::string State_Id);
+	std::string Get_State_Id(int Location);
 	void Clear_Display_Vector();
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(int Event_Id);
@@ -132,7 +138,7 @@ public:
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_ORIGIN_MIDD);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor);
-	void Set_SquareState(std::string State_Id);
+	void Set_SquareState(int State_Id);
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
@@ -143,6 +149,7 @@ public:
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
 	bool Get_Adjust_While_Move();
+	bool Get_Engine_File();
 	int Get_LocationX();
 	int Get_LocationY();
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length);//可选功能 对2D棋盘上的物品微调位置
@@ -154,6 +161,7 @@ public:
 	//↓Get_StateWidth : 获取当前需要绘制的State的宽度值
 	int Get_StateWidth()const;
 private:
+	std::string Locate_Extend_State(std::string State_Id);
 	struct State_Extend
 	{		
 		std::vector<StateUnit*>* _MIDD{ nullptr };
@@ -204,6 +212,8 @@ private:
 	int _GameState_Height;
 	//_GameState_Adjust用于记录每次自动调整的距离
 	float _GameState_Adjust;
+	//_Is_Data_Set用于标记是否从文件中获取到了地图数据
+	bool _Is_Data_Set;
 	//_Adjust_Enable用于标记是否启用了自动调整
 	bool _Adjust_Enable;
 	//_Adjust_Enable用于标记是否启用了移动中自动调整
