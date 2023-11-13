@@ -50,7 +50,7 @@ int main()
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
-	TGE.Engine_State_Set_Display(5, 5, 4);
+	TGE.Engine_State_Set_Display(5, 5, 0);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 
@@ -97,7 +97,7 @@ int main()
 					Appended = false;
 					std::cout << "Removing All Temp KeyEvent" << std::endl;
 
-					for (int i = 0; i < KeyUnitNames.size(); i++)
+					for (int i{ 0 }; i < KeyUnitNames.size(); i++)
 					{
 						std::cout << "DELETE NAME :" << KeyUnitNames.at(i) << std::endl;
 						if (IEB->RemoveEvent(KeyUnitNames.at(i)))

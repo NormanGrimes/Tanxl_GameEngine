@@ -49,7 +49,7 @@ std::string GameStateBase::Get_State_Id(int Location)
 
 void GameStateBase::Clear_Display_Vector()
 {
-	for (int i = 0; i < _GameState.size(); ++i)
+	for (int i{ 0 }; i < _GameState.size(); ++i)
 		delete _GameState.at(i);
 	_GameState.clear();
 }

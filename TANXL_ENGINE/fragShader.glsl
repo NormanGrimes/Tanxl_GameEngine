@@ -4,6 +4,8 @@
 // 更新多纹理支持（最高十个纹理）
 // 支持的纹理数量提升到上限值
 // 增加指定主移动方块的纹理
+// 调用新增的两个纹理
+
 
 #version 430
 
@@ -48,17 +50,21 @@ layout (binding = 31) uniform sampler2D Samp_31;
 
 void main(void)
 {	
-	if(Cube == 1)
+	if	    (Cube == 1)
 		color = texture(Samp_00, tc);
-	else if(Cube == 2)
+	else if (Cube == 2)
 		color = texture(Samp_01, tc);
-	else if(Cube == 3)
+	else if (Cube == 3)
 		color = texture(Samp_02, tc);
-	else if(Cube == 0)
+	else if (Cube == 0)
 		color = texture(Samp_03, tc);
-	else if(Cube == -1)
+	else if (Cube == 4)
+		color = texture(Samp_06, tc);
+	else if (Cube == 5)
+		color = texture(Samp_07, tc);
+
+	else if (Cube == -1)
 		color = texture(Samp_05, tc);
 	else
-		color = texture(Samp_04, tc);
-	//color = vs_color;
+		color = vs_color;
 }

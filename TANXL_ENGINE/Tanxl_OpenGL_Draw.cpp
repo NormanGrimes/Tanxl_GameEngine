@@ -60,6 +60,9 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glBindVertexArray(_vao[0]);
 	glGenBuffers(1, _vbo);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glProgramUniform1i(this->_renderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_renderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1i(this->_renderingProgram, 8, this->_PreLoads);//PreLoads
@@ -68,10 +71,12 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200X200); //2 01
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200X200); //3 02
 	Append_Texture(TanxlOD::TexOcean_01_200X200);       //4 03
-	Append_Texture(TanxlOD::TexGrass_01_200X200);       //5 04
-	Append_Texture(TanxlOD::TexForestDDPAT_01_200X200); //6 05
+	Append_Texture(TanxlOD::TexWood_01_32x32);          //5 04
+	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//6 05
+	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
+	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
 
-	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads)* (State->Get_StateWidth() + _PreLoads) * 6 + 6);
+	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 12);
 
 	Set_Trigger_Range(true, 0.6f, 0.6f);
 
@@ -91,12 +96,14 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 	int Move_NY{ State->Get_Move_State()._Move_NY };
 	int Move_PY{ State->Get_Move_State()._Move_PY };
 
+	int State_Length{ (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) + 1 };
+
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
 	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
 
 	if (State->Get_Compile_Status())
 	{
-		for (int i{ 0 }; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads); ++i)
+		for (int i{ 0 }; i < State_Length; ++i)
 		{
 			if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth()) || //现阶段Data宽度不可能导致转换溢出
 				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()))
@@ -110,26 +117,29 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 					return;
 
 				_StateInfor[i] = State->Get_StateUnit(x % State->Get_GameState()->size())->Get_State_Id();
+				std::cout << " X_" << x << "_" << _StateInfor[i];
 			}
 
 			Move_NX++;
 			if (Move_NX > Move_PX)//抵达尽头 重新获取初值
 			{
+				std::cout << std::endl;
 				Move_NX = State->Get_Move_State()._Move_NX;
 				Move_NY++;
 			}
 		}
+		std::cout << std::endl;
 	}
 	else
 	{
-		for (int i{ 0 }; i < (_HeightInt + _PreLoads) * (_WidthInt + _PreLoads); ++i)
+		for (int i{ 0 }; i < State_Length; ++i)
 		{
 			_StateInfor[i] = UIB->Random(0, 3);
 			std::cout << _StateInfor[i];
 		}
 	}
 	GLuint StatePos;
-	for (int i{ 0 }; i < (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) + 1; ++i)
+	for (int i{ 0 }; i < State_Length; ++i)
 	{
 		std::string Tag{ "State[" + std::to_string(i) + "]" };
 		StatePos = glGetUniformLocation(_renderingProgram, Tag.c_str());
@@ -237,7 +247,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 
 	glUseProgram(_renderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 6);
+	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 30);
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
