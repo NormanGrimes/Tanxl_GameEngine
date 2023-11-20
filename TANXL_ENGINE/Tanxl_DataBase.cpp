@@ -373,13 +373,17 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 				}
 				catch (std::invalid_argument&)
 				{
-					std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#if _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_
+					std::cout << "Type Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#endif
 					Type_Stat = 0;
 					Exac_Stat = 0;
 				}
 				catch (std::out_of_range&)
 				{
-					std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#if _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_
+					std::cout << "Type Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#endif
 					Type_Stat = 0;
 					Exac_Stat = 0;
 				}
@@ -393,12 +397,16 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 				}
 				catch (std::invalid_argument&)
 				{
-					std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#if _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_
+					std::cout << "Exac Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#endif
 					Exac_Stat = 0;
 				}
 				catch (std::out_of_range&)
 				{
-					std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#if _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_
+					std::cout << "Exac Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
+#endif
 					Exac_Stat = 0;
 				}
 			}
@@ -420,12 +428,16 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 				}
 				catch (std::invalid_argument&)
 				{
-					std::cout << "Invalid argument :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+#if _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_
+					std::cout << "Id Invalid argument :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+#endif
 					Id = 0xFF;
 				}
 				catch (std::out_of_range&)
 				{
-					std::cout << "Out of range :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+#if _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_
+					std::cout << "Id Out of range :" << TanxlDB::Divid_Char(Line, GET_OLDSTY_DAT) << ", Reset to zero" << std::endl;
+#endif
 					Id = 0xFF;
 				}
 				Data = TanxlDB::Divid_Char(Line, GET_STORAG_DAT);

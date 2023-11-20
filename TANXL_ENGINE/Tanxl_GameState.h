@@ -19,6 +19,9 @@
 // 增加获取引擎文件接口
 // 修复地图单元编译功能确实扩展地图中心的问题
 // 地图生成功能入参修改为序号
+// 地图生成功能修复中心以外会编译错误的问题
+// 多个定位接口性能优化
+// 增加扩展版本的地图单元获取功能
 
 #pragma once
 
@@ -119,6 +122,7 @@ public:
 	
 	size_t Get_StateSize();
 	StateUnit* Get_StateUnit(int Pos);
+	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& Get_StateBase(int Width = 0, int Height = 0);
 	Move_State Get_Move_State();

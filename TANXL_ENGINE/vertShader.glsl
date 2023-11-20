@@ -21,6 +21,7 @@ layout (location = 6) uniform float StateMoveX;
 layout (location = 7) uniform float StateMoveY;
 
 layout (location = 8) uniform int PreLoads;
+int BeginPos = 486;
 
 in vec3 position;
 in vec4 color;
@@ -40,7 +41,7 @@ void main(void)
 
 	int counts = 0;
 	int VertexId = 0;
-	int State_Datas = (SHeight + PreLoads) * (SWidth + PreLoads) + 1;
+	int State_Datas = (SHeight + PreLoads) * (SWidth + PreLoads) ;
 
 	float WidthMove = -((SWidth + PreLoads - 1) / 2) * Width;
 	float HeightMove = ((SHeight + PreLoads - 1) / 2) * Height;
@@ -208,191 +209,188 @@ void main(void)
 		}
 	}
 
-	if(gl_VertexID >= (VertexId - 1) * 6)
-	{
-		if      (gl_VertexID == (VertexId) * 6 - 6)//(gl_VertexID == 0) //MainMoveBlock 0.2F
+		if      (gl_VertexID == BeginPos + 0) //MainMoveBlock 0.2F
 		{
 			gl_Position = vec4(  Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
 			vs_color = vec4(0.9f, 0.8f, 1.0f, 1.0f);
 			Cube = -1;
 		}
-		else if (gl_VertexID == (VertexId) * 6 - 5)//(gl_VertexID == 1) 
+		else if (gl_VertexID == BeginPos + 1)
 		{
 			gl_Position = vec4( -Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = -1;
 		}
-		else if (gl_VertexID == (VertexId) * 6 - 4)//(gl_VertexID == 2) 
+		else if (gl_VertexID == BeginPos + 2)
 		{
 			gl_Position = vec4(  Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = -1;
 		}
-		else if (gl_VertexID == (VertexId) * 6 - 3)//(gl_VertexID == 3) 
+		else if (gl_VertexID == BeginPos + 3)
 		{
 			gl_Position = vec4( -Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = -1;
 		}
-		else if (gl_VertexID == (VertexId) * 6 - 2)//(gl_VertexID == 4) 
+		else if (gl_VertexID == BeginPos + 4)
 		{
 			gl_Position = vec4( -Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = -1;
 		}
-		else if (gl_VertexID == (VertexId) * 6 - 1)//(gl_VertexID == 5) 
+		else if (gl_VertexID == BeginPos + 5)
 		{
 			gl_Position = vec4(  Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = -1;
 		}
 
-		else if (gl_VertexID == (VertexId) * 6 + 0)
+		else if (gl_VertexID == BeginPos + 6)
 		{
 			gl_Position = vec4(  Width / 16 + 0.9f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 1)
+		else if (gl_VertexID == BeginPos + 7)
 		{
 			gl_Position = vec4( -Width / 16 + 0.9f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 2)
+		else if (gl_VertexID == BeginPos + 8)
 		{
 			gl_Position = vec4(  Width / 16 + 0.9f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 3)
+		else if (gl_VertexID == BeginPos + 9)
 		{
 			gl_Position = vec4( -Width / 16 + 0.9f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 4)
+		else if (gl_VertexID == BeginPos + 10)
 		{
 			gl_Position = vec4( -Width / 16 + 0.9f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 5)
+		else if (gl_VertexID == BeginPos + 11)
 		{
 			gl_Position = vec4(  Width / 16 + 0.9f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
 		/////////////////////////////////////////////////////////////////////////////
-		else if (gl_VertexID == (VertexId) * 6 + 6)
+		else if (gl_VertexID == BeginPos + 12)
 		{
 			gl_Position = vec4(  Width / 16 + 0.8f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 7)
+		else if (gl_VertexID == BeginPos + 13)
 		{
 			gl_Position = vec4( -Width / 16 + 0.8f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 8)
+		else if (gl_VertexID == BeginPos + 14)
 		{
 			gl_Position = vec4(  Width / 16 + 0.8f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 9)
+		else if (gl_VertexID == BeginPos + 15)
 		{
 			gl_Position = vec4( -Width / 16 + 0.8f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 10)
+		else if (gl_VertexID == BeginPos + 16)
 		{
 			gl_Position = vec4( -Width / 16 + 0.8f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 11)
+		else if (gl_VertexID == BeginPos + 17)
 		{
 			gl_Position = vec4(  Width / 16 + 0.8f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
 		/////////////////////////////////////////////////////////////////////////////
-		else if (gl_VertexID == (VertexId) * 6 + 12)
+		else if (gl_VertexID == BeginPos + 18)
 		{
 			gl_Position = vec4(  Width / 16 + 0.7f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 13)
+		else if (gl_VertexID == BeginPos + 19)
 		{
 			gl_Position = vec4( -Width / 16 + 0.7f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 14)
+		else if (gl_VertexID == BeginPos + 20)
 		{
 			gl_Position = vec4(  Width / 16 + 0.7f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 15)
+		else if (gl_VertexID == BeginPos + 21)
 		{
 			gl_Position = vec4( -Width / 16 + 0.7f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 16)
+		else if (gl_VertexID == BeginPos + 22)
 		{
 			gl_Position = vec4( -Width / 16 + 0.7f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 17)
+		else if (gl_VertexID == BeginPos + 23)
 		{
 			gl_Position = vec4(  Width / 16 + 0.7f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 4;
 		}
 		/////////////////////////////////////////////////////////////////////////////
-		else if (gl_VertexID == (VertexId) * 6 + 18)
+		else if (gl_VertexID == BeginPos + 24)
 		{
 			gl_Position = vec4(  Width / 16 + 0.6f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 5;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 19)
+		else if (gl_VertexID == BeginPos + 25)
 		{
 			gl_Position = vec4( -Width / 16 + 0.6f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 5;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 20)
+		else if (gl_VertexID == BeginPos + 26)
 		{
 			gl_Position = vec4(  Width / 16 + 0.6f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 5;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 21)
+		else if (gl_VertexID == BeginPos + 27)
 		{
 			gl_Position = vec4( -Width / 16 + 0.6f, -Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 5;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 22)
+		else if (gl_VertexID == BeginPos + 28)
 		{
 			gl_Position = vec4( -Width / 16 + 0.6f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 5;
 		}
-		else if (gl_VertexID == (VertexId) * 6 + 23)
+		else if (gl_VertexID == BeginPos + 29)
 		{
 			gl_Position = vec4(  Width / 16 + 0.6f,  Height / 16 + 0.9f, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 5;
 		}
-	}
 }

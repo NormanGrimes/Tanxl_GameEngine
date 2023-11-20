@@ -2,6 +2,7 @@
 // LAST_UPDATE 2023-03-08 11:27
 // 数据属性链表定位接口改为公开
 // 结构体定义移入源文件
+// 增加控制异常输出信息的宏
 
 #pragma once
 
@@ -14,6 +15,7 @@
 
 #define _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_   1
 #define _TANXL_DATABASE_CONSOLE_FILE_OUTPUT_   1
+#define _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_  1
 
 #endif
 

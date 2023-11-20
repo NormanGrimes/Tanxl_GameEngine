@@ -8,6 +8,7 @@ Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
 Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
 Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 {
+	
 	if (!this->Tanxl_Engine_Console_List ||
 		!this->Tanxl_Engine_DataBase     ||
 		!this->Tanxl_Engine_GameEvent    ||
@@ -19,6 +20,20 @@ Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 		std::cout << "Fail to start Engine !" << std::endl;
 		delete this;
 	}
+
+#if _STEAM_ALPHA_TEST_EDITION_
+	if (SteamAPI_RestartAppIfNecessary(1929530))
+		std::cout << "Fail to init SteamAPI_RestartAppIfNecessary(1929530) !" << std::endl;
+	if (!SteamAPI_Init())
+		std::cout << "Fail to init Steam API !" << std::endl;
+	else
+	{
+		std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
+		std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
+		std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
+		std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
+	}
+#endif
 }
 
 void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
@@ -27,7 +42,7 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
 	static int ReservHeight{ 5 };
 
 	this->Tanxl_Engine_OpenGL_Draw->Set_PreLoad(PreLoads);
-	if (ReservWidth != Width || ReservHeight != Height)
+	if ((ReservWidth != Width) || (ReservHeight != Height))
 	{
 		ReservWidth = Width;
 		ReservHeight = Height;
@@ -88,7 +103,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 
 void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, unsigned State_Size, int Width, int Height)
 {
-	for (int i{ 0 }; i <= static_cast<int>(State_Size); ++i)//16x16
+	for (int i{ 0 }; i < static_cast<int>(State_Size); ++i)//16x16
 	{
 		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);

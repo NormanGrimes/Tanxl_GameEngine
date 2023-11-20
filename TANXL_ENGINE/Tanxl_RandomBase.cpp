@@ -2,10 +2,7 @@
 
 #include "Tanxl_RandomBase.h"
 
-RandomBase::RandomBase() 
-{ 
-    srand(static_cast<unsigned int>(time(0)));
-}
+RandomBase::RandomBase() {}
 
 RandomBase::~RandomBase() {}
 
@@ -25,12 +22,13 @@ RandomBase& RandomBase::GetRandomBase()
 std::string RandomBase::Generate()
 {
     std::string Data{};
-    srand(static_cast<unsigned int>(time(0)));
+    std::default_random_engine DRE(time(0));
+    std::uniform_int_distribution<int> UID(0, 61);
     for (int i{ 0 }; i < 15; ++i)
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        Data += UniData[rand() % 62];
+        Data += UniData[UID(DRE)];
     }
     return Data;
 }
@@ -38,25 +36,27 @@ std::string RandomBase::Generate()
 std::string RandomBase::Generate(int seed)
 {
     std::string Data{ "" };
-    srand(static_cast<unsigned int>(seed));
+    std::default_random_engine DRE(seed);
+    std::uniform_int_distribution<int> UID(0, 61);
     for (int i{ 0 }; i < 15; ++i)
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        Data += UniData[rand() % 62];
+        Data += UniData[UID(DRE)];
     }
-    srand(static_cast<unsigned int>(time(0)));
     return Data;
 }
 
 std::string RandomBase::Generate_State(unsigned Width, unsigned Height)
 {
+    std::default_random_engine DRE(time(0));
+    std::uniform_int_distribution<int> UID(0, 3);
     this->Suffle_UniData(1);
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
     {
         ReturnVal += "a-";
-        ReturnVal += std::to_string(this->Random(0, 3));
+        ReturnVal += std::to_string(UID(DRE));
         ReturnVal += ",";
     }
     return ReturnVal;
@@ -66,12 +66,13 @@ std::string RandomBase::GenerateAutoSeed()
 {
     static unsigned int seed{ 0 };
     std::string Data{};
-    srand(seed++);
+    std::default_random_engine DRE(seed++);
+    std::uniform_int_distribution<int> UID(0, 61);
     for (int i{ 0 }; i < 15; ++i)
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        Data += UniData[rand() % 62];
+        Data += UniData[UID(DRE)];
     }
     return Data;
 }
@@ -81,18 +82,21 @@ int RandomBase::Random(int Start, int End)
     if (End <= Start)
         return Start;
     static unsigned seed{ 0 };
-    srand(static_cast<unsigned int>(++seed + time(0)));
-    return (rand() % (End - Start)) + Start;
+    std::default_random_engine DRE(++seed + time(0));
+    std::uniform_int_distribution<int> UID(Start, End);
+    return UID(DRE);
 }
 
 void RandomBase::Suffle_UniData(int Times)
 {
+    std::default_random_engine DRE(time(0));
+    std::uniform_int_distribution<int> UID(0, 61);
     while (Times--)
     {
         for (int i{ 0 }; i < 62; ++i)
         {
             std::string Temp{ UniData[i] };
-            int Exchange_Val{ rand() % 62 };
+            int Exchange_Val{ UID(DRE)};
             UniData[i] = UniData[Exchange_Val];
             UniData[Exchange_Val] = Temp;
         }

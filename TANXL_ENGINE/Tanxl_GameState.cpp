@@ -28,14 +28,12 @@ const std::string GameStateBase::Get_Version()
 std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 {
 	if (this->Get_Engine_File())
-	{
 		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
 		{
-			if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == State_Id)
-				return this->_Data_Base.Get_Specified(1, i, 1)->_Data;
+			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
+			if (Link->_Data->_Data_Units.at(0)->_Data == State_Id)
+				return Link->_Data->_Data_Units.at(1)->_Data;
 		}
-	}
-	throw "Locate_Extend_State : Locate State Fail !";
 	return "NULL";
 }
 
@@ -43,7 +41,6 @@ std::string GameStateBase::Get_State_Id(int Location)
 {
 	if (this->Get_Engine_File())
 		return this->_Data_Base.Get_Specified(1, Location, 0)->_Data;
-	throw "Get_State_Id : Get State Fail !";
 	return "NULL";
 }
 
@@ -183,31 +180,31 @@ void GameStateBase::Set_SquareState(int State_Id)
 	{
 		std::string Data_Name{ this->Get_State_Id(State_Id) };
 		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
-			if (this->_Data_Base.Get_Specified(1, i, 0)->_Data == Data_Name)
+		{
+			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
+			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
 			{
-				Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 				this->CompileStateUnits(Link->_Data->_Data_Units.at(1)->_Data, STATE_EXTEND_MIDD);
-				this->_GameState_Id._MIDD = Link->_Data->_Data_Units.at(1)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(2)->_Data, STATE_EXTEND_LEFT);
+				this->_GameState_Id._MIDD = Link->_Data->_Data_Units.at(0)->_Id;
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(2)->_Data), STATE_EXTEND_LEFT);
 				this->_GameState_Id._LEFT = Link->_Data->_Data_Units.at(2)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(3)->_Data, STATE_EXTEND_RIGH);
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(3)->_Data), STATE_EXTEND_RIGH);
 				this->_GameState_Id._RIGH = Link->_Data->_Data_Units.at(3)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(4)->_Data, STATE_EXTEND_ABOV);
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(4)->_Data), STATE_EXTEND_ABOV);
 				this->_GameState_Id._ABOV = Link->_Data->_Data_Units.at(4)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(5)->_Data, STATE_EXTEND_BELO);
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(5)->_Data), STATE_EXTEND_BELO);
 				this->_GameState_Id._BELO = Link->_Data->_Data_Units.at(5)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(6)->_Data, STATE_EXTEND_LEFT_ABOV);
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(6)->_Data), STATE_EXTEND_LEFT_ABOV);
 				this->_GameState_Id._LEFT_ABOV = Link->_Data->_Data_Units.at(6)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(7)->_Data, STATE_EXTEND_LEFT_BELO);
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(7)->_Data), STATE_EXTEND_LEFT_BELO);
 				this->_GameState_Id._LEFT_BELO = Link->_Data->_Data_Units.at(7)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(8)->_Data, STATE_EXTEND_RIGH_ABOV);
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(8)->_Data), STATE_EXTEND_RIGH_ABOV);
 				this->_GameState_Id._RIGH_ABOV = Link->_Data->_Data_Units.at(8)->_Id;
-				this->CompileStateUnits(Link->_Data->_Data_Units.at(9)->_Data, STATE_EXTEND_RIGH_BELO);
+				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
 				this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Id;
-				//this->_Data_Height = 1600;
-				//this->_Data_Width = 1600;
 				return;
 			}
+		}
 	}
 }
 
@@ -558,6 +555,34 @@ size_t GameStateBase::Get_StateSize()
 StateUnit* GameStateBase::Get_StateUnit(int Pos)
 {
 	return this->_GameState.at(Pos);
+}
+
+StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
+{
+	switch (State)
+	{
+	case STATE_ORIGIN_MIDD:
+		return this->_GameState.at(Pos);
+	case STATE_EXTEND_MIDD:
+		return this->_GameState_Extend._MIDD->at(Pos);
+	case STATE_EXTEND_LEFT:
+		return this->_GameState_Extend._LEFT->at(Pos);
+	case STATE_EXTEND_RIGH:
+		return this->_GameState_Extend._RIGH->at(Pos);
+	case STATE_EXTEND_ABOV:
+		return this->_GameState_Extend._ABOV->at(Pos);
+	case STATE_EXTEND_BELO:
+		return this->_GameState_Extend._BELO->at(Pos);
+	case STATE_EXTEND_LEFT_ABOV:
+		return this->_GameState_Extend._LEFT_ABOV->at(Pos);
+	case STATE_EXTEND_LEFT_BELO:
+		return this->_GameState_Extend._LEFT_BELO->at(Pos);
+	case STATE_EXTEND_RIGH_ABOV:
+		return this->_GameState_Extend._RIGH_ABOV->at(Pos);
+	case STATE_EXTEND_RIGH_BELO:
+		return this->_GameState_Extend._RIGH_BELO->at(Pos);
+	}
+	return nullptr;
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),

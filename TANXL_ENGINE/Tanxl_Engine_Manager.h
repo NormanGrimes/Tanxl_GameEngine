@@ -12,11 +12,18 @@
 // 2023/03/01 无限世界接口增加构建连接选项
 // 2023/03/08 修复构建连接因借口变动导致的问题
 // 2023/03/10 无限世界接口增加自定义数据的支持
+// 2023/03/13 启用对STEAM_API的支持
+// 2023/03/14 增加宏控制STEAM_API的启用
 
 #pragma once
 
 #ifndef _TANXL_ENGINE_MANAGER_
 #define _TANXL_ENGINE_MANAGER_
+
+#define _CRT_SECURE_NO_WARNINGS
+# pragma warning (disable:4819)
+
+#define _STEAM_ALPHA_TEST_EDITION_ 0
 
 #include "Tanxl_Console_List.h"
 #include "Tanxl_DataBase.h"
@@ -25,6 +32,9 @@
 #include "Tanxl_OpenGL_Draw.h"
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_RandomBase.h"
+
+#include "public/steam/steam_api.h"
+#include "public/steam/isteamapps.h"
 
 class Tanxl_Engine
 {

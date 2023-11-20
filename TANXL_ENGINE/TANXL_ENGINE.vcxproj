@@ -103,9 +103,11 @@
       <RegisterOutput>false</RegisterOutput>
       <EntryPointSymbol>
       </EntryPointSymbol>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"
+xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -128,9 +130,11 @@
       </EntryPointSymbol>
       <Version>
       </Version>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"
+xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -150,9 +154,11 @@
       <RegisterOutput>false</RegisterOutput>
       <EntryPointSymbol>
       </EntryPointSymbol>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"
+xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -175,9 +181,11 @@
       </EntryPointSymbol>
       <Version>
       </Version>
+      <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"
+xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -208,17 +216,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fragShader.glsl" />
-    <None Include="public\steam\lib\win64\sdkencryptedappticket64.dll" />
+    <None Include="public\steam\lib\win64\steam_api64.dll" />
     <None Include="vertShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="public\steam\lib\win64\sdkencryptedappticket64.lib" />
+    <ResourceCompile Include="TANXL_ENGINE.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="TANXL_ENGINE.rc" />
+    <Library Include="public\steam\lib\win64\steam_api64.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,6 +4,7 @@
 // 取随机数接口增加随机性
 // 增加生成随机地图区块的功能
 // 随机数接口代码简化
+// 随机功能改用标准库实现
 
 #pragma once
 
@@ -12,6 +13,7 @@
 
 #include <string>
 #include <iostream>
+#include <random>
 
 class RandomBase
 {

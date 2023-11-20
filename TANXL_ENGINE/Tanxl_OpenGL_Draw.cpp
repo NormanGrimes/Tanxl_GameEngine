@@ -65,6 +65,11 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 
 	glProgramUniform1i(this->_renderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_renderingProgram, 5, this->_WidthInt);//SWidth
+
+	//int Length = (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6;
+	//glProgramUniform1i(this->_renderingProgram, 9, Length);
+	//std::cout << Length << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
+
 	glProgramUniform1i(this->_renderingProgram, 8, this->_PreLoads);//PreLoads
 
     Append_Texture(TanxlOD::TexGrass_02_200X200);       //1 00
@@ -76,7 +81,9 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
 	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
 
-	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 12);
+	std::cout << "___" << State->Get_StateHeight() << "___" << State->Get_StateWidth() << "___" << this->_PreLoads << std::endl;
+
+	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 30);
 
 	Set_Trigger_Range(true, 0.6f, 0.6f);
 
@@ -116,19 +123,16 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 				if (State->Get_GameState()->size() == 0)
 					return;
 
-				_StateInfor[i] = State->Get_StateUnit(x % State->Get_GameState()->size())->Get_State_Id();
-				std::cout << " X_" << x << "_" << _StateInfor[i];
+				_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState()->size())->Get_State_Id();
 			}
 
 			Move_NX++;
 			if (Move_NX > Move_PX)//抵达尽头 重新获取初值
 			{
-				std::cout << std::endl;
 				Move_NX = State->Get_Move_State()._Move_NX;
 				Move_NY++;
 			}
 		}
-		std::cout << std::endl;
 	}
 	else
 	{
@@ -247,6 +251,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 
 	glUseProgram(_renderingProgram);
+	//std::cout << "___" << (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 30 << std::endl;
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 30);
 }
 
@@ -309,10 +314,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		IEB->GetInsert(_Main_Window, State);//获取输入
 
-		//std::cout << "DEPT -----------------------------" << MDeptVX << "____" << MDeptVY << std::endl;
-		//std::cout << "REAL -----------------------------" << MoveX << "____" << MoveY << std::endl;
-		//std::cout << "FLAG ----------------------------A" << State->Get_Adjust_Flag() << std::endl;
-
 		static bool MOV_LEFT = false;
 
 		if (IEB->Get_Margin_X() < 0)
@@ -338,9 +339,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				else
 				{
 					State->Get_Screen_Distance()._LocX = Res_SCDX;
-					State->Get_Screen_Distance()._LocY = Res_SCDY;
+					//State->Get_Screen_Distance()._LocY = Res_SCDY;
 					State->Get_Move_Distance()._LocX = Res_SMDX;
-					State->Get_Move_Distance()._LocY = Res_SMDY;
+					//State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_LEFT = true;
 				}
@@ -375,9 +376,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				else
 				{
 					State->Get_Screen_Distance()._LocX = Res_SCDX;
-					State->Get_Screen_Distance()._LocY = Res_SCDY;
+					//State->Get_Screen_Distance()._LocY = Res_SCDY;
 					State->Get_Move_Distance()._LocX = Res_SMDX;
-					State->Get_Move_Distance()._LocY = Res_SMDY;
+					//State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_RIGH = true;
 				}
@@ -411,9 +412,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				}
 				else
 				{
-					State->Get_Screen_Distance()._LocX = Res_SCDX;
+					//State->Get_Screen_Distance()._LocX = Res_SCDX;
 					State->Get_Screen_Distance()._LocY = Res_SCDY;
-					State->Get_Move_Distance()._LocX = Res_SMDX;
+					//State->Get_Move_Distance()._LocX = Res_SMDX;
 					State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_ABOV = true;
@@ -448,9 +449,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				}
 				else
 				{
-					State->Get_Screen_Distance()._LocX = Res_SCDX;
+					//State->Get_Screen_Distance()._LocX = Res_SCDX;
 					State->Get_Screen_Distance()._LocY = Res_SCDY;
-					State->Get_Move_Distance()._LocX = Res_SMDX;
+					//State->Get_Move_Distance()._LocX = Res_SMDX;
 					State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_BELO = true;
