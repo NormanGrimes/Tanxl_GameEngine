@@ -1,3 +1,11 @@
+TEnGinE Version-0.1 Build-84 2023-03-15 10:04 UPDATE_LOG
+////////////////////////////////////////////////////////
+绘制模块优化初始化函数内的重复调用。绘制模块增加OpenGL窗
+口初始化错误检测。绘制模块初始化接口入参调整。绘制模块增
+加修改窗口尺寸后自动调整窗口内容的回调函数。绘制模块构造
+函数增加可选是否开启自动调整窗口功能。片段着色器变量名称
+调整。
+
 TEnGinE Version-0.1 Build-83 2023-03-13 15:03 UPDATE_LOG
 ////////////////////////////////////////////////////////
 引擎管理模块启用对SteamAPI的支持。存储模块增加控制异常输
@@ -420,28 +428,59 @@ TEnGinE Version-0.1 Build-30 2022-08-11 20:29 UPDATE_LOG
 提供调整Move_State的重载函数与相关枚举。绘制模块主绘制循
 环完成基本自动加载功能的构建。绘制模块主绘制循环降低自动
 加载的频率。
+--------------------------------------------------------
+The drawing module fixes an issue where the map 
+background drawing line uses the wrong value. The State 
+module provides overloaded functions and related 
+enumerations for tuning Move_State. The drawing module 
+main drawing loop completes the build of the basic 
+auto-loading feature. The drawing module main drawing 
+cycle reduces the frequency of autoloading.
 
 TEnGinE Version-0.1 Build-29 2022-08-09 23:36 UPDATE_LOG
 ////////////////////////////////////////////////////////
 顶点着色器区域状态增加一种零状态。绘制模块采用全新自动化
 算法完成编译地图绘制。
+--------------------------------------------------------
+The vertex shader region state adds a zero state. The 
+drawing module uses a new automated algorithm to 
+compile the map.
 
 TEnGinE Version-0.1 Build-28 2022-08-07 22:06 UPDATE_LOG
 ////////////////////////////////////////////////////////
 重新整理头文件与源文件存放路径。State模块加入Move_State
 结构体标记移动位置。State模块提供Move_State结构体相关控
 制接口。
+--------------------------------------------------------
+Rearrange the header and source file storage paths. The 
+State module joins Move_State struct marks the movement 
+position. The State module provides Move_State 
+structure-related control interface.
 
 TEnGinE Version-0.1 Build-27 2022-08-03 21:23 UPDATE_LOG
 ////////////////////////////////////////////////////////
 Set_StateRange功能实际安装。绘制模块地图更新函数修改用于
 测试可探索世界。导入STEAM相关依赖项并配置相关环境。
+--------------------------------------------------------
+Set_StateRange features are actually installed. The 
+Draw Module Map update function is modified for testing 
+explorable worlds. Import Steam-related dependencies 
+and configure related environments.
 
 TEnGinE Version-0.1 Build-26 2022-07-31 13:31 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块的计算坐标部分加入显式转换避免警告。输入模块加入
 单独对X/Y轴最大移动范围设置的函数。输入模块自动检测函数加
 入对X/Y轴判断的支持。坐标计算部分修复X/Y轴颠倒计算的问题。
+--------------------------------------------------------
+The Calculate Coordinates section of the drawing module 
+incorporates explicit transformations to avoid 
+warnings. The input module adds functions that are set 
+separately for the maximum range of movement on the X/Y 
+axis. The input module automatically detects the 
+function and adds support for X/Y axis judgment. The 
+coordinate calculation part fixes the problem of X/Y 
+axis inverted calculation.
 
 TEnGinE Version-0.1 Build-25 2022-07-30 21:23 UPDATE_LOG
 ////////////////////////////////////////////////////////

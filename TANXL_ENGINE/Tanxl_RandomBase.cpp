@@ -22,7 +22,7 @@ RandomBase& RandomBase::GetRandomBase()
 std::string RandomBase::Generate()
 {
     std::string Data{};
-    std::default_random_engine DRE(time(0));
+    std::default_random_engine DRE(static_cast<unsigned>(time(0)));
     std::uniform_int_distribution<int> UID(0, 61);
     for (int i{ 0 }; i < 15; ++i)
     {
@@ -49,7 +49,7 @@ std::string RandomBase::Generate(int seed)
 
 std::string RandomBase::Generate_State(unsigned Width, unsigned Height)
 {
-    std::default_random_engine DRE(time(0));
+    std::default_random_engine DRE(static_cast<unsigned>(time(0)));
     std::uniform_int_distribution<int> UID(0, 3);
     this->Suffle_UniData(1);
     std::string ReturnVal{ "" };
@@ -82,14 +82,14 @@ int RandomBase::Random(int Start, int End)
     if (End <= Start)
         return Start;
     static unsigned seed{ 0 };
-    std::default_random_engine DRE(++seed + time(0));
+    std::default_random_engine DRE(++seed + static_cast<unsigned>(time(0)));
     std::uniform_int_distribution<int> UID(Start, End);
     return UID(DRE);
 }
 
 void RandomBase::Suffle_UniData(int Times)
 {
-    std::default_random_engine DRE(time(0));
+    std::default_random_engine DRE(static_cast<unsigned>(time(0)));
     std::uniform_int_distribution<int> UID(0, 61);
     while (Times--)
     {

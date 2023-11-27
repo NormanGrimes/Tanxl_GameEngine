@@ -2,22 +2,22 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
-OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight)
+OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
-	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight) };
+	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight) :_HeightInt(0), _StateInfor(), _WidthInt(0),
-_renderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr),
-_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0) {}
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight,bool Window_Adjust) :_HeightInt(0), _StateInfor(), _WidthInt(0),
+_renderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
+_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0), _State_Cubes(0) {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
 	return this->_Version;
 }
 
-void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
+void OpenGL_Draw::init(GameStateBase* State)
 {
 	//示例提供四个按键操作事件 （单例模式于其他地方定义）
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
@@ -26,6 +26,19 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.17", NULL, NULL);
+
+	if (_Main_Window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return;
+	}
+
+	if(_Window_Adjust_Enable)
+		glfwSetFramebufferSizeCallback(_Main_Window, TanxlOD::framebuffer_size_callback);
+	else
+		glfwSetWindowSizeLimits(_Main_Window, 800, 800, 800, 800);
+
 	glfwMakeContextCurrent(_Main_Window);
 	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
@@ -63,31 +76,33 @@ void OpenGL_Draw::init(GLFWwindow* window, GameStateBase* State)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	glProgramUniform1i(this->_renderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_renderingProgram, 5, this->_WidthInt);//SWidth
 
-	//int Length = (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6;
-	//glProgramUniform1i(this->_renderingProgram, 9, Length);
-	//std::cout << Length << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
+	this->_State_Cubes = (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) * 6;
+	glProgramUniform1i(this->_renderingProgram, 9, this->_State_Cubes);
+	//std::cout << this->_State_Cubes << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
 	glProgramUniform1i(this->_renderingProgram, 8, this->_PreLoads);//PreLoads
 
-    Append_Texture(TanxlOD::TexGrass_02_200X200);       //1 00
-	Append_Texture(TanxlOD::TexGrass_Snowy_01_200X200); //2 01
-	Append_Texture(TanxlOD::TexGrass_Snowy_02_200X200); //3 02
-	Append_Texture(TanxlOD::TexOcean_01_200X200);       //4 03
+    Append_Texture(TanxlOD::TexGrass_02_200x200);       //1 00
+	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); //2 01
+	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); //3 02
+	Append_Texture(TanxlOD::TexOcean_01_200x200);       //4 03
 	Append_Texture(TanxlOD::TexWood_01_32x32);          //5 04
 	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//6 05
 	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
 	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
 
-	std::cout << "___" << State->Get_StateHeight() << "___" << State->Get_StateWidth() << "___" << this->_PreLoads << std::endl;
+	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
-	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6 + 30);
+	glDrawArrays(GL_TRIANGLES, 0, (this->_HeightInt + _PreLoads) * (this->_WidthInt + _PreLoads) * 6 + 30);
 
 	Set_Trigger_Range(true, 0.6f, 0.6f);
 
-	int Min{ State->Get_StateHeight() > State->Get_StateWidth() ? State->Get_StateWidth() : State->Get_StateHeight() };
+	int Min{ this->_HeightInt > this->_WidthInt ? this->_WidthInt : this->_HeightInt };
 	State->Get_Move_Distance()._LocX = 2.0f / Min * (Min - 1);//ORIGIN ((2.0f / Min) * 2) * ((Min - 1) / 2.0f)
 	State->Get_Move_Distance()._LocY = -(2.0f / Min * (Min - 1));
 
@@ -265,7 +280,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	if (First_Time)
 	{
 		First_Time = false;
-		init(_Main_Window, State);
+		init(State);
 	}
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
@@ -339,9 +354,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				else
 				{
 					State->Get_Screen_Distance()._LocX = Res_SCDX;
-					//State->Get_Screen_Distance()._LocY = Res_SCDY;
 					State->Get_Move_Distance()._LocX = Res_SMDX;
-					//State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_LEFT = true;
 				}
@@ -376,9 +389,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				else
 				{
 					State->Get_Screen_Distance()._LocX = Res_SCDX;
-					//State->Get_Screen_Distance()._LocY = Res_SCDY;
 					State->Get_Move_Distance()._LocX = Res_SMDX;
-					//State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_RIGH = true;
 				}
@@ -412,9 +423,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				}
 				else
 				{
-					//State->Get_Screen_Distance()._LocX = Res_SCDX;
 					State->Get_Screen_Distance()._LocY = Res_SCDY;
-					//State->Get_Move_Distance()._LocX = Res_SMDX;
 					State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_ABOV = true;
@@ -449,9 +458,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				}
 				else
 				{
-					//State->Get_Screen_Distance()._LocX = Res_SCDX;
 					State->Get_Screen_Distance()._LocY = Res_SCDY;
-					//State->Get_Move_Distance()._LocX = Res_SMDX;
 					State->Get_Move_Distance()._LocY = Res_SMDY;
 					Press_Flg = false;
 					MOV_BELO = true;
@@ -666,4 +673,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glfwTerminate();
 		exit(EXIT_SUCCESS);
 	}
+}
+
+void TanxlOD::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }

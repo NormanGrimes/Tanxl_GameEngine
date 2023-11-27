@@ -1,6 +1,11 @@
 ﻿//_VERSION_0_9_ UPDATE LOG
 // LAST_UPDATE 2023-03-13 18:01
 // 不再限制到达边缘后与边缘水平的移动
+// 优化初始化函数内的重复调用
+// 增加OpenGL窗口初始化错误检测
+// 初始化接口入参调整
+// 增加修改窗口尺寸后自动调整窗口内容的回调函数
+// 构造函数增加可选是否开启自动调整窗口功能
 
 #pragma once
 
@@ -16,18 +21,21 @@
 
 namespace TanxlOD
 {
-	static const char* TexForestDDPAT_01_200X200		{ "Texture/TANXL_FOREST_DDPAT_200X200.jpg"		};
-	static const char* TexGrass_01_200X200				{ "Texture/TANXL_GRASS_01_200X200.jpg"			};
-	static const char* TexGrass_02_200X200				{ "Texture/TANXL_GRASS_02_200X200.jpg"			};
-	static const char* TexGrass_Snowy_01_200X200		{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg"	};
-	static const char* TexGrass_Snowy_02_200X200		{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg"	};
-	static const char* TexOcean_01_200X200				{ "Texture/TANXL_OCEAN_01_200X200.jpg"			};
+	static const char* TexForestDDPAT_01_200x200		{ "Texture/TANXL_FOREST_DDPAT_200X200.jpg"		};
+	static const char* TexGrass_01_200x200				{ "Texture/TANXL_GRASS_01_200X200.jpg"			};
+	static const char* TexGrass_02_200x200				{ "Texture/TANXL_GRASS_02_200X200.jpg"			};
+	static const char* TexGrass_Snowy_01_200x200		{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg"	};
+	static const char* TexGrass_Snowy_02_200x200		{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg"	};
+	static const char* TexOcean_01_200x200				{ "Texture/TANXL_OCEAN_01_200X200.jpg"			};
 	static const char* TexHealth_01_8x8					{ "Texture/YANG_HEALTH_01_8X8.png"				};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_32x32				{ "Texture/YANG_PRINCESS_01_32X32.png"			};
 	static const char* TexWood_01_32x32					{ "Texture/YANG_WOOD_01_32X32.png"				};
 	static const char* TexWood_02_32x32					{ "Texture/YANG_WOOD_02_32X32.png"				};
+	static const char* TexBunnyGirl_01_32x32            { "Texture/YANG_BUNNYGIRL_01_32X32.png"         };
+
+	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 	static float textureCoordinates[] =
 	{
@@ -281,11 +289,11 @@ namespace TanxlOD
 class OpenGL_Draw
 {
 public:
-	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800);
+	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800, bool Window_Adjust = true);
 
 	const std::string Get_Version();
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
-	void init(GLFWwindow* window, GameStateBase* State);
+	void init(GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
 	//绘制主循环 在此之后的一切操作都会被忽略
 	void Render_Once(GameStateBase* State);
@@ -302,7 +310,7 @@ public:
 	void ReLoadState(GameStateBase* State);
 	GLFWwindow* Get_Window()const;
 private:
-	OpenGL_Draw(int ScreenWidth, int ScreenHeight);
+	OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust);
 
 	GLint _StateInfor[300];
 
@@ -310,6 +318,8 @@ private:
 	bool _Clear_Function;
 	bool _Is_State_Changed;
 	bool _Trigger_Mode{ false };
+	//仅在初始化时可控制窗口是否可调整大小
+	bool _Window_Adjust_Enable;
 	//标记是否启用地图随移动而移动的功能
 	bool _Is_Trigger_Enable{ false };
 
@@ -341,6 +351,8 @@ private:
 	int _HeightInt;
 	//记录地图场景的基本矩形列数
 	int _WidthInt;
+	//记录地图场景的基本矩形个数
+	int _State_Cubes;
 	//窗口的宽度
 	int _ScreenWidth;
 	//窗口的高度
