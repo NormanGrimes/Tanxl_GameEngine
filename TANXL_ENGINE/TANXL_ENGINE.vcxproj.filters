@@ -57,6 +57,9 @@
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_LocationBase.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -99,10 +102,13 @@
     <None Include="fragShader.glsl">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="vertShader.glsl">
+    <None Include="Tanxl_State_01_VertShader.glsl">
       <Filter>资源文件</Filter>
     </None>
     <None Include="public\steam\lib\win64\steam_api64.dll" />
+    <None Include="Tanxl_Player_01_VertShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TANXL_ENGINE.rc">

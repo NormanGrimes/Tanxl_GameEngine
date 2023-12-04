@@ -22,6 +22,8 @@
 // 地图生成功能修复中心以外会编译错误的问题
 // 多个定位接口性能优化
 // 增加扩展版本的地图单元获取功能
+// 扩展地图定位功能增加异常处理
+// 坐标结构体转移到坐标模块中
 
 #pragma once
 
@@ -31,6 +33,7 @@
 #include <iostream>
 #include "Tanxl_GameEvent.h"
 #include "Tanxl_DataBase.h"
+#include "Tanxl_LocationBase.h"
 
 enum EMove_State_EventId
 {
@@ -89,13 +92,6 @@ struct Move_State
 	int _Move_PX;
 	int _Move_NY;
 	int _Move_PY;
-};
-
-struct SLocation
-{
-	SLocation(float LocX, float LocY);
-	float _LocX;
-	float _LocY;
 };
 
 //StateUnit CLASS

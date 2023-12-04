@@ -1,4 +1,13 @@
-﻿#pragma once
+﻿
+//████████╗  █████╗   ███╗      ██╗ ██╗    ██╗ ██╗
+//╚══██╔══╝██╔══██╗ ████╗    ██║ ╚██╗██╔╝ ██║
+//      ██║      ███████║ ██╔██╗  ██║   ╚███╔╝   ██║
+//      ██║      ██╔══██║ ██║╚██╗██║   ██╔██╗   ██║
+//      ██║      ██║    ██║ ██║  ╚████║ ██╔╝  ██╗ ███████╗
+//      ╚═╝      ╚═╝    ╚═╝ ╚═╝    ╚═══╝ ╚═╝    ╚═╝ ╚══════╝
+
+
+#pragma once
 
 #include "Tanxl_Engine_Manager.h"
 
@@ -35,7 +44,7 @@ int main()
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 
-	TGE.Engine_Save_Infinite_State(true, 16, 4, 4);
+	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -50,7 +59,7 @@ int main()
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
-	TGE.Engine_State_Set_Display(5, 5, 4);
+	TGE.Engine_State_Set_Display(7, 7, 0);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 

@@ -198,6 +198,7 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     <ClInclude Include="Tanxl_GameObject.h" />
     <ClInclude Include="Tanxl_GameState.h" />
     <ClInclude Include="Tanxl_InsertAction.h" />
+    <ClInclude Include="Tanxl_LocationBase.h" />
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
     <ClInclude Include="Tanxl_OpenGL_Render.h" />
     <ClInclude Include="Tanxl_RandomBase.h" />
@@ -217,7 +218,8 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <None Include="fragShader.glsl" />
     <None Include="public\steam\lib\win64\steam_api64.dll" />
-    <None Include="vertShader.glsl" />
+    <None Include="Tanxl_Player_01_VertShader.glsl" />
+    <None Include="Tanxl_State_01_VertShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />

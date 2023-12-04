@@ -27,6 +27,8 @@ const std::string GameStateBase::Get_Version()
 
 std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 {
+	if (State_Id == "NULL")
+		return "NULL";
 	if (this->Get_Engine_File())
 		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
 		{
@@ -450,14 +452,14 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		break;
 	}
 
-	std::cout << "X :" << static_cast<int>((this->_Distance_Move._LocX + MoveX) * (this->_GameState_Width / 2.0f)) << "___"
-		<< "Y :" << static_cast<int>((this->_Distance_Move._LocY + MoveY) * (this->_GameState_Height / 2.0f)) + 1 << std::endl;
+	std::cout << "X :" << static_cast<int>((this->_Distance_Move._Location_X + MoveX) * (this->_GameState_Width / 2.0f)) << "___"
+		<< "Y :" << static_cast<int>((this->_Distance_Move._Location_Y + MoveY) * (this->_GameState_Height / 2.0f)) + 1 << std::endl;
 
-	this->_Exac_LocationX = static_cast<int>((this->_Distance_Move._LocX + MoveX) * (this->_GameState_Width / 2.0f));
-	this->_Exac_LocationY = static_cast<int>((this->_Distance_Move._LocY + MoveY) * (this->_GameState_Height / 2.0f)) + 1;
-	if (this->_Distance_Move._LocX + MoveX < 0)
+	this->_Exac_LocationX = static_cast<int>((this->_Distance_Move._Location_X + MoveX) * (this->_GameState_Width / 2.0f));
+	this->_Exac_LocationY = static_cast<int>((this->_Distance_Move._Location_Y + MoveY) * (this->_GameState_Height / 2.0f)) + 1;
+	if (this->_Distance_Move._Location_X + MoveX < 0)
 		--this->_Exac_LocationX;
-	if (this->_Distance_Move._LocY + MoveY < 0)
+	if (this->_Distance_Move._Location_Y + MoveY < 0)
 		--this->_Exac_LocationY;
 	this->_Exac_LocationY = -this->_Exac_LocationY;
 }
@@ -518,8 +520,8 @@ void StateUnit::Set_State_Id(int State_Id)
 
 void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
-	this->_Distance_Screen_Mid._LocX = CurrentX;
-	this->_Distance_Screen_Mid._LocY = CurrentY;
+	this->_Distance_Screen_Mid._Location_X = CurrentX;
+	this->_Distance_Screen_Mid._Location_Y = CurrentY;
 }
 
 unsigned GameStateBase::Get_DataHeight()const
@@ -648,7 +650,3 @@ std::vector<StateUnit*>* GameStateBase::Get_GameState()
 //Move_State
 
 Move_State::Move_State(int NX, int PX, int NY, int PY) :_Move_NX(NY), _Move_NY(NY), _Move_PX(PX), _Move_PY(PY) {}
-
-//SLocation
-
-SLocation::SLocation(float LocX, float LocY) :_LocX(LocX), _LocY(LocY) {}
