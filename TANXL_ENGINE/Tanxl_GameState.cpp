@@ -452,8 +452,8 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		break;
 	}
 
-	std::cout << "X :" << static_cast<int>((this->_Distance_Move._Location_X + MoveX) * (this->_GameState_Width / 2.0f)) << "___"
-		<< "Y :" << static_cast<int>((this->_Distance_Move._Location_Y + MoveY) * (this->_GameState_Height / 2.0f)) + 1 << std::endl;
+	std::cout << "X :" << (this->_Distance_Move._Location_X + MoveX) * (this->_GameState_Width / 2.0f) << "___"
+		<< "Y :" << (this->_Distance_Move._Location_Y + MoveY) * (this->_GameState_Height / 2.0f) + 1.0f << std::endl;
 
 	this->_Exac_LocationX = static_cast<int>((this->_Distance_Move._Location_X + MoveX) * (this->_GameState_Width / 2.0f));
 	this->_Exac_LocationY = static_cast<int>((this->_Distance_Move._Location_Y + MoveY) * (this->_GameState_Height / 2.0f)) + 1;

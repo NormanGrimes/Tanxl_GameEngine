@@ -6,6 +6,7 @@
 // 增加指定主移动方块的纹理
 // 调用新增的两个纹理
 // 变量名称调整
+// 整理输入纹理顺序
 
 
 #version 430
@@ -51,21 +52,43 @@ layout (binding = 31) uniform sampler2D Tex_31;
 
 void main(void)
 {	
-	if	    (Cube == 1)
+	switch(Cube)
+	{
+	case 0:
 		color = texture(Tex_00, tc);
-	else if (Cube == 2)
+		break;
+	case 1:
 		color = texture(Tex_01, tc);
-	else if (Cube == 3)
+		break;
+	case 2:
 		color = texture(Tex_02, tc);
-	else if (Cube == 0)
+		break;
+	case 3:
 		color = texture(Tex_03, tc);
-	else if (Cube == 4)
-		color = texture(Tex_06, tc);
-	else if (Cube == 5)
-		color = texture(Tex_07, tc);
-
-	else if (Cube == -1)
+		break;
+	case 4:
+		color = texture(Tex_04, tc);
+		break;
+	case 5:
 		color = texture(Tex_05, tc);
-	else
+		break;
+	case 6:
+		color = texture(Tex_06, tc);
+		break;
+	case 7:
+		color = texture(Tex_07, tc);
+		break;
+	case 8:
+		color = texture(Tex_08, tc);
+		break;
+	case 9:
+		color = texture(Tex_09, tc);
+		break;
+	case 10:
+		color = texture(Tex_10, tc);
+		break;
+	default:
 		color = vs_color;
+		break;
+	}
 }

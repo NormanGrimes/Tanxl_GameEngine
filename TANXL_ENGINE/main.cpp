@@ -44,7 +44,7 @@ int main()
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 
-	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
+	//TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -53,17 +53,17 @@ int main()
 	bool CurrStatus = false;
 	bool Appended = false;
 
-	Key_Unit* KU = new Key_Unit(GLFW_KEY_E, &CurrStatus);
+	Key_Unit* KU = new Key_Unit(GLFW_KEY_E, 3, false);
 
 	IEB->RegistEvent(KU);
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
-	TGE.Engine_State_Set_Display(7, 7, 0);
+	TGE.Engine_State_Set_Display(5, 5, 4);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 
-	GSB->Set_SquareState(5);
+	//GSB->Set_SquareState(5);
 
 	std::vector<std::string> KeyUnitNames;
 	while (1)
@@ -74,9 +74,8 @@ int main()
 		if (Timer == 50)
 		{
 			Timer = 0;
-			if (KU->MoveToX == true)
+			if (KU->MoveToY == true)
 			{
-				KU->MoveToX = false;
 				if (Appended == false)
 				{
 					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_UP, false, true, 0.01));
@@ -101,7 +100,10 @@ int main()
 
 					Appended = true;
 				}
-				else
+			}
+			else
+			{
+				if (Appended == true)
 				{
 					Appended = false;
 					std::cout << "Removing All Temp KeyEvent" << std::endl;

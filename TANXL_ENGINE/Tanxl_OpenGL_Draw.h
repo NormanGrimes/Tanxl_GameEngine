@@ -456,9 +456,9 @@ public:
 private:
 	OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust);
 
-	GLint _StateInfor[300];
+	GLint _StateInfor[400];//20X20
 
-	bool _Advanced_Mode{ false };
+	bool _Advanced_Mode{ true };
 	bool _Clear_Function;
 	bool _Is_State_Changed;
 	bool _Trigger_Mode{ false };
@@ -481,9 +481,9 @@ private:
 	//记录地图场景Y轴移动距离
 	float _State_MoveY;
 	//记录自动调整状态的X轴移动距离
-	float _Auto_AdjustX{ 0.0f };
+	//float _Auto_AdjustX{ 0.0f };
 	//记录自动调整状态的Y轴移动距离
-	float _Auto_AdjustY{ 0.0f };
+	//float _Auto_AdjustY{ 0.0f };
 	//记录手动移动状态的Y轴移动距离
 	float _Move_AdjustX{ 0.0f };
 	//记录手动移动状态的Y轴移动距离

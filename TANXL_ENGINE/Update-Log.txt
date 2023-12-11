@@ -1,3 +1,14 @@
+TEnGinE Version-0.1 Build-86 TURBO 2023-03-20 14:00 UPDATE_LOG
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+坐标模块将受限移动功能改为独立的类。坐标模块定义全局变量替代绘
+制模块的自动调整记录成员。坐标模块增加计算并返回坐标的功能。地
+图顶点着色器优化减少高度与宽度的计算量。玩家顶点着色器游戏界面
+增加自定义坐标功能。片段着色器整理输入纹理顺序。输入模块调整按
+键操作的结构体与初始化函数。输入模块输入操作函数增加更稳定的按
+下检测。坐标模块增加单例模式的坐标基类。主函数增加新版本按键功
+能测试。地图顶点着色器修改最大地图尺寸为四百。玩家顶点着色器可
+通过同一变量决定显示的生命值图标数量。
+
 TEnGinE Version-0.1 Build-85 2023-03-17 09:28 UPDATE_LOG
 ////////////////////////////////////////////////////////
 顶点着色器更改为地图顶点着色器并移除未使用变量。从地图顶
@@ -407,11 +418,22 @@ TEnGinE Version-0.1 Build-35 2022-09-06 21:52 UPDATE_LOG
 地图绘制部分的总地图尺寸采用自动获取方式。游戏State模块修
 改原地图尺寸属性为显示属性，增加总地图尺寸的获取与设置功
 能。
+--------------------------------------------------------
+The total map size of the drawing portion is taken 
+automatically. The Game State module modifies the 
+original map size property as a display attribute, and 
+adds the function of obtaining and setting the total 
+map size.
 
 TEnGinE Version-0.1 Build-34 2022-09-04 22:54 UPDATE_LOG
 ////////////////////////////////////////////////////////
 地图绘制部分增加多个自动获取当前地图设置的功能。添加第二
 个测试地图。整理Render模块为引擎核心层内容。
+--------------------------------------------------------
+The Drawing section adds several functions to 
+automatically get the current map settings. Add a 
+second test map. Organize the Render module as the 
+core layer content of the engine.
 
 TEnGinE Version-0.1 Build-33 2022-08-26 21:32 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -419,16 +441,36 @@ TEnGinE Version-0.1 Build-33 2022-08-26 21:32 UPDATE_LOG
 法与不合法的添加物品代码。存储模块默认数据函数修改以支持
 最新添加方式。绘制模块移除源文件中定义的全局TDB变量。绘制
 模块坐标数据加入类型转换。存储模块移除预定义存储序号枚举。
+--------------------------------------------------------
+The enclosure uses an eight-digit hexadecimal value as 
+the article serial number. The enclosure unifies zero 
+legal and illegal added item codes. The enclosure 
+default data functions are modified to support the 
+latest additions. The drawing module removes the global 
+TDB variables defined in the source file. Draw module 
+coordinate data join type conversion. The enclosure 
+removes the predefined storage sequence number 
+enumeration.
 
 TEnGinE Version-0.1 Build-32 2022-08-18 22:13 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块主绘制循环现在支持无限世界展示。顶点着色器移除了
 StateMove对可移动点的影响。Main中移除地图移动范围的限制。
+--------------------------------------------------------
+The drawing module main drawing loop now supports 
+infinite world display. The vertex shader removes 
+StateMove's effect on movable points. In Main, remove 
+restrictions on the extent of movement of the map.
 
 TEnGinE Version-0.1 Build-31 2022-08-15 22:42 UPDATE_LOG
 ////////////////////////////////////////////////////////
 顶点着色器渲染地图额外的一圈内容用于预加载。绘制模块增加
 对地图额外一圈载入的相关操作。
+--------------------------------------------------------
+The vertex shader renders an extra circle of content in 
+the map for preloading. The drawing module adds 
+operations related to loading an additional circle of 
+the map.
 
 TEnGinE Version-0.1 Build-30 2022-08-11 20:29 UPDATE_LOG
 ////////////////////////////////////////////////////////

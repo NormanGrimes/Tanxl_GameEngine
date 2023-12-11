@@ -2,7 +2,7 @@
 
 #include "Tanxl_InsertAction.h"
 
-Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0)
+Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0), SaveLen(0)
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	this->Unit_Name = UIB->GenerateAutoSeed();
@@ -12,7 +12,7 @@ Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.
 }
 
 Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
-	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0)
+	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0), SaveLen(0)
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	if (UNAM == "")
@@ -24,8 +24,8 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 #endif
 }
 
-Key_Unit::Key_Unit(int GLKEY, bool* CustomX, bool* CustomY, std::string UNAM) :
-	GLFW_KEY(GLKEY), MoveToX(CustomX), MoveToY(CustomY), MoveLen(0.0f), Unit_Type(1)
+Key_Unit::Key_Unit(int GLKEY, double Move_Length, bool Enable_Double, std::string UNAM) :
+	GLFW_KEY(GLKEY), MoveLen(Move_Length), MoveToX(Enable_Double), MoveToY(false), Unit_Type(1), SaveLen(0)
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	if (UNAM == "")
@@ -69,8 +69,12 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 			_Is_Key_Pressed = true;
 			if (this->_KeyEventS.at(i)->Unit_Type == 1)
 			{
-				this->_KeyEventS.at(i)->MoveToX = this->_KeyEventS.at(i)->MoveToX ? false : true;
-				this->_KeyEventS.at(i)->MoveToY = this->_KeyEventS.at(i)->MoveToY ? false : true;
+				this->_KeyEventS.at(i)->SaveLen++;
+				if (this->_KeyEventS.at(i)->SaveLen > this->_KeyEventS.at(i)->MoveLen)
+				{
+					this->_KeyEventS.at(i)->MoveToY = !this->_KeyEventS.at(i)->MoveToY;
+					this->_KeyEventS.at(i)->SaveLen = 0;
+				}
 				continue;
 			}
 			if (this->_KeyEventS.at(i)->MoveToY)
@@ -86,6 +90,9 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 				this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
 			}
 		}
+		else
+			if (this->_KeyEventS.at(i)->Unit_Type == 1)
+				this->_KeyEventS.at(i)->SaveLen = 0;
 	}
 	AutoCheck(State->Get_Screen_Distance()._Location_X, State->Get_Screen_Distance()._Location_Y, State->Get_Move_Distance()._Location_X, State->Get_Move_Distance()._Location_Y);
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
