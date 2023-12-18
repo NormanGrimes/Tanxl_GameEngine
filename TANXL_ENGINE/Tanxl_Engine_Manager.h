@@ -24,7 +24,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 # pragma warning (disable:4819)
 
-#define _STEAM_ALPHA_TEST_EDITION_ 1
+#define _STEAM_ALPHA_TEST_EDITION_ 0
 
 #include "Tanxl_Console_List.h"
 #include "Tanxl_DataBase.h"

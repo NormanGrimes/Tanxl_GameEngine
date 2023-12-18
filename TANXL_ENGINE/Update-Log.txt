@@ -1,3 +1,11 @@
+TEnGinE Version-0.1 Build-87 2023-03-22 16:04 UPDATE_LOG
+////////////////////////////////////////////////////////
+坐标模块基础坐标结构体增加名称成员。坐标模块修正限制坐标
+类的错误成员设置。坐标模块基类增加添加坐标记录功能。绘制
+模块移除记录地图方块数的变量。绘制模块修复初始化接口中一
+个可能导致问题的部分。绘制模块增加简化版本的坐标数据获取
+功能。坐标模块坐标基类增加调整指定坐标的功能。
+
 TEnGinE Version-0.1 Build-86 TURBO 2023-03-20 14:00 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 坐标模块将受限移动功能改为独立的类。坐标模块定义全局变量替代绘
@@ -385,6 +393,13 @@ TEnGinE Version-0.1 Build-40 2022-09-21 22:38 UPDATE_LOG
 修复最后一段调节会导致循环偏移的问题。修复开启自动载入后
 没有因输入操作而重置的问题。修复State模块下的最后一段调节
 的判断条件错误问题。改进打印提示内容。
+--------------------------------------------------------
+Fixed an issue where the last adjustment would cause 
+the loop to drift. Fixed an issue where autoload was 
+not reset due to input operations after autoload was 
+turned on. Fixed the error of judgment condition in the 
+last paragraph adjustment under the State module. 
+Improved print prompt content.
 
 TEnGinE Version-0.1 Build-39 2022-09-20 22:38 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -392,6 +407,15 @@ State模块增加一个布尔值用于标记是否在自动调整场景。绘制模
 块中根据上一个布尔值对场景加载进行反向加载。对自动调整的
 调整间隔进行优化。输入模块提供用于标记是否执行了按键操作
 的布尔值。最后一段精确调整测试。
+--------------------------------------------------------
+The State module adds a Boolean value to mark whether 
+the scene is automatically adjusting. The scene load is 
+reversed in the drawing module based on the previous 
+Boolean value. Optimize the adjustment interval for 
+automatic adjustments. The input module provides a 
+Boolean value that marks whether a key press was 
+performed. The last paragraph precisely adjusts the 
+test.
 
 TEnGinE Version-0.1 Build-38 2022-09-15 21:05 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -400,11 +424,27 @@ TEnGinE Version-0.1 Build-38 2022-09-15 21:05 UPDATE_LOG
 块修复重新载入地图功能无符号数与有符号数比较可能导致的问
 题。绘制模块自动移动背景功能修改入参并加入对多处坐标的修
 改。
+--------------------------------------------------------
+The distance traveled by a single is set to a 
+double-precision floating-point number. The Random 
+Number module adds the ability to generate random IDs 
+from seeds. Vertex shaders officially add perspective 
+movement. The drawing module fixes an issue that may be 
+caused by comparing unsigned and signed numbers in the 
+reload map function. The drawing module automatically 
+moves the background function, modifies the input 
+parameters, and adds modifications to multiple 
+coordinates.
 
 TEnGinE Version-0.1 Build-37 2022-09-10 14:54 UPDATE_LOG
 ////////////////////////////////////////////////////////
 修复计算坐标部分负浮点数化为整数有偏移的问题。启用移动受
 限功能。启用自动移动测试。
+--------------------------------------------------------
+Fixed the issue that the negative floating-point number 
+of the calculated coordinates was offset to an integer. 
+Enable the Mobility Restricted feature. Enable 
+automatic mobile testing.
 
 TEnGinE Version-0.1 Build-36 2022-09-07 23:00 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -412,6 +452,14 @@ TEnGinE Version-0.1 Build-36 2022-09-07 23:00 UPDATE_LOG
 标精确性。绘制模块增加私有变量PreLoad用于自定义预加载环形
 区域数量。修改顶点着色器以对应可自定义设置预加载。修复预
 加载内容非环状扩展的问题。
+--------------------------------------------------------
+The half-side length of the drawing module is obtained 
+automatically using the function. Improve the accuracy 
+of reloading coordinates. The drawing module adds the 
+private variable PreLoad to customize the number of 
+preloaded ring areas. Modify the vertex shader to 
+correspond to customizable preloading. Fixed an issue 
+where preloaded content was non-ring extensions.
 
 TEnGinE Version-0.1 Build-35 2022-09-06 21:52 UPDATE_LOG
 ////////////////////////////////////////////////////////

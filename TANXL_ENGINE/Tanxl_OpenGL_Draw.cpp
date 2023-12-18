@@ -11,7 +11,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _StateInfor(), _WidthInt(0),
 _State_RenderingProgram(0), _Adjst_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
 _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0),
-_State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0), _State_Cubes(0) {}
+_State_MoveX(0.0f), _State_MoveY(0.0f), _First_Adjust(0) {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -35,7 +35,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 		return;
 	}
 
-	if(_Window_Adjust_Enable)
+	if (_Window_Adjust_Enable)
 		glfwSetFramebufferSizeCallback(_Main_Window, TanxlOD::framebuffer_size_callback);
 	else
 		glfwSetWindowSizeLimits(_Main_Window, 800, 800, 800, 800);
@@ -64,7 +64,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_Current_Move_Height = 0;
 	this->_Current_Move_Width = 0;
-	
+
 	State->Set_Move_State(0, this->_WidthInt - 1 + this->_PreLoads, 0, this->_HeightInt - 1 + this->_PreLoads);
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "fragShader.glsl");
@@ -79,22 +79,20 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+	glUseProgram(this->_Adjst_RenderingProgram);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 2 + 3);//SWidth
 
+	glUseProgram(this->_State_RenderingProgram);
 	glProgramUniform1i(this->_State_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
-
-	this->_State_Cubes = (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) * 6;
-	glProgramUniform1i(this->_State_RenderingProgram, 9, this->_State_Cubes);
-	//std::cout << this->_State_Cubes << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
-
+	glProgramUniform1i(this->_State_RenderingProgram, 9, (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) * 6);
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
-    Append_Texture(TanxlOD::TexGrass_02_200x200);       //1 00
+	Append_Texture(TanxlOD::TexGrass_02_200x200);       //1 00
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); //2 01
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); //3 02
 	Append_Texture(TanxlOD::TexOcean_01_200x200);       //4 03
@@ -211,7 +209,7 @@ void OpenGL_Draw::Append_Texture(const char* Texture)
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
 
-	if(_Advanced_Mode)
+	if (_Advanced_Mode)
 		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
 	else
 		glBufferData(GL_ARRAY_BUFFER, 0, 0, GL_STATIC_DRAW);
@@ -240,7 +238,7 @@ EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
 		{
 			if (Value == MoveToPH)
 				Value = MoveToPWPH;
-			else if(Value == MoveToNH)
+			else if (Value == MoveToNH)
 				Value = MoveToPWNH;
 			else
 				Value = MoveToPW;
