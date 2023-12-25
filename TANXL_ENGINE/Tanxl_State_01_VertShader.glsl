@@ -24,7 +24,6 @@ layout (location = 6) uniform float StateMoveX;
 layout (location = 7) uniform float StateMoveY;
 
 layout (location = 8) uniform int PreLoads;
-layout (location = 9) uniform int BeginPos;
 
 uniform int State[400];
 

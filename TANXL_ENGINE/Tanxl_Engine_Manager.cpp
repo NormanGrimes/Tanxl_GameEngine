@@ -18,7 +18,7 @@ Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 		!this->Tanxl_Engine_RandomBase)
 	{
 		std::cout << "Fail to start Engine !" << std::endl;
-		delete this;
+		this->_Engine_Status = 1;
 	}
 
 #if _STEAM_ALPHA_TEST_EDITION_
@@ -34,6 +34,11 @@ Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 		std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
 	}
 #endif
+}
+
+unsigned Tanxl_Engine::Check_Engine_Status()
+{
+	return this->_Engine_Status;//0 正常运行 1 初始化失败
 }
 
 void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)

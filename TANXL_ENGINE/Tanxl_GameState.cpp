@@ -223,12 +223,12 @@ Move_State GameStateBase::Get_Move_State()
 
 SLocation& GameStateBase::Get_Screen_Distance()
 {
-	return this->_Distance_Screen_Mid;
+	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Screen_Mid);
 }
 
 SLocation& GameStateBase::Get_Move_Distance()
 {
-	return this->_Distance_Move;
+	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move);
 }
 
 float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length)
@@ -428,6 +428,8 @@ void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
 
 void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 {
+	static SLocation* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
+
 	switch (Check)
 	{
 	case CHECK_EDGE_CURR:
@@ -452,24 +454,27 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		break;
 	}
 
-	std::cout << "X :" << (this->_Distance_Move._Location_X + MoveX) * (this->_GameState_Width / 2.0f) << "___"
-		<< "Y :" << (this->_Distance_Move._Location_Y + MoveY) * (this->_GameState_Height / 2.0f) + 1.0f << std::endl;
+	std::cout << "X :" << (Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f) << "___"
+		<< "Y :" << (Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f) + 1.0f << std::endl;
 
-	this->_Exac_LocationX = static_cast<int>((this->_Distance_Move._Location_X + MoveX) * (this->_GameState_Width / 2.0f));
-	this->_Exac_LocationY = static_cast<int>((this->_Distance_Move._Location_Y + MoveY) * (this->_GameState_Height / 2.0f)) + 1;
-	if (this->_Distance_Move._Location_X + MoveX < 0)
+	this->_Exac_LocationX = static_cast<int>((Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f));
+	this->_Exac_LocationY = static_cast<int>((Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f)) + 1;
+	if (Distance->_Location_X + MoveX < 0)
 		--this->_Exac_LocationX;
-	if (this->_Distance_Move._Location_Y + MoveY < 0)
+	if (Distance->_Location_Y + MoveY < 0)
 		--this->_Exac_LocationY;
 	this->_Exac_LocationY = -this->_Exac_LocationY;
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :
-	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f),
-	_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)),
-	_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(Height),
-	_Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), _Adjust_Enable(false),
-	_Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false) {}
+	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f), _Compile_Success(false),
+	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1),
+	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
+{
+	LocationBase* LCB{ &LocationBase::GetLocationBase() };
+	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
+	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
+}
 
 GameStateBase::~GameStateBase()
 {
@@ -520,8 +525,9 @@ void StateUnit::Set_State_Id(int State_Id)
 
 void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
-	this->_Distance_Screen_Mid._Location_X = CurrentX;
-	this->_Distance_Screen_Mid._Location_Y = CurrentY;
+	static SLocation* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
+	Distance->_Location_X = CurrentX;
+	Distance->_Location_Y = CurrentY;
 }
 
 unsigned GameStateBase::Get_DataHeight()const
@@ -588,9 +594,13 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
-_Distance_Screen_Mid(SLocation(0.0f, 0.0f)), _Distance_Move(SLocation(0.0f, 0.0f)), _Compile_Success(false),
-_CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), _Adjust_Frame(1),
-_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false) {}
+_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false),
+_Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
+{
+	LocationBase* LCB{ &LocationBase::GetLocationBase() };
+	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
+	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
+}
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
@@ -630,6 +640,11 @@ int GameStateBase::Get_LocationX()
 int GameStateBase::Get_LocationY()
 {
 	return this->_Exac_LocationY;
+}
+
+int GameStateBase::Get_Distance_Screen_Id()
+{
+	return this->_Distance_Screen_Mid;
 }
 
 int GameStateBase::Get_StateHeight()const

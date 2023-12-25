@@ -35,7 +35,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 		return;
 	}
 
-	if (_Window_Adjust_Enable)
+	if(_Window_Adjust_Enable)
 		glfwSetFramebufferSizeCallback(_Main_Window, TanxlOD::framebuffer_size_callback);
 	else
 		glfwSetWindowSizeLimits(_Main_Window, 800, 800, 800, 800);
@@ -54,8 +54,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_HeightInt = State->Get_StateHeight();
 	this->_WidthInt = State->Get_StateWidth();
 
-	Auto_Adjust_Location.Set_Location(0.0f, 0.0f);
-
 	this->_Move_AdjustX = 0.0f;
 	this->_Move_AdjustY = 0.0f;
 
@@ -64,7 +62,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_Current_Move_Height = 0;
 	this->_Current_Move_Width = 0;
-
+	
 	State->Set_Move_State(0, this->_WidthInt - 1 + this->_PreLoads, 0, this->_HeightInt - 1 + this->_PreLoads);
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "fragShader.glsl");
@@ -92,7 +90,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 9, (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) * 6);
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
-	Append_Texture(TanxlOD::TexGrass_02_200x200);       //1 00
+    Append_Texture(TanxlOD::TexGrass_02_200x200);       //1 00
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); //2 01
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); //3 02
 	Append_Texture(TanxlOD::TexOcean_01_200x200);       //4 03
@@ -209,7 +207,7 @@ void OpenGL_Draw::Append_Texture(const char* Texture)
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
 
-	if (_Advanced_Mode)
+	if(_Advanced_Mode)
 		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
 	else
 		glBufferData(GL_ARRAY_BUFFER, 0, 0, GL_STATIC_DRAW);
@@ -238,7 +236,7 @@ EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(float Height, float Width)
 		{
 			if (Value == MoveToPH)
 				Value = MoveToPWPH;
-			else if (Value == MoveToNH)
+			else if(Value == MoveToNH)
 				Value = MoveToPWNH;
 			else
 				Value = MoveToPW;
@@ -292,6 +290,10 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
 	GameStateBase* GSB{ &GameStateBase::Get_StateBase() };
+	LocationBase* LCB{ &LocationBase::GetLocationBase() };
+
+	static int Auto_Loc = LCB->New_Location_set("Auto_Adjust_Location"); //记录自动调整状态的移动距离
+	static int Dist_Mid = State->Get_Distance_Screen_Id();
 
 	if (!glfwWindowShouldClose(_Main_Window))
 	{
@@ -310,27 +312,27 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		int NCUH{ static_cast<int>(_Move_AdjustY / _Each_Height) };
 		int NCUW{ static_cast<int>(_Move_AdjustX / _Each_Width) };
 
-		static int ACUH{ static_cast<int>(Auto_Adjust_Location.Get_Calculated_Location(MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
-		static int ACUW{ static_cast<int>(Auto_Adjust_Location.Get_Calculated_Location(MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
+		static int ACUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
+		static int ACUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
 
-		static int ANCUH{ static_cast<int>(Auto_Adjust_Location.Get_Calculated_Location(MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
-		static int ANCUW{ static_cast<int>(Auto_Adjust_Location.Get_Calculated_Location(MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
+		static int ANCUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
+		static int ANCUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
 
 		int TOCUH{ static_cast<int>((static_cast<double>(_Move_AdjustY) * 2) / _Each_Height) };
 		int TOCUW{ static_cast<int>((static_cast<double>(_Move_AdjustX) * 2) / _Each_Width) };
 
 		if (State->Get_Adjust_Flag())
 		{
-			ANCUH = static_cast<int>(Auto_Adjust_Location.Get_Calculated_Location(MARKING_DIV, static_cast<float>(_Each_Height), 0));
-			ANCUW = static_cast<int>(Auto_Adjust_Location.Get_Calculated_Location(MARKING_DIV, static_cast<float>(_Each_Width), 1));
+			ANCUH = static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0));
+			ANCUW = static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1));
 		}
 
 		static int Wait_Frame{ 0 };
 		bool Press_Flg{ false };
 
 		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
-		float Res_SCDX = State->Get_Screen_Distance()._Location_X;
-		float Res_SCDY = State->Get_Screen_Distance()._Location_Y;
+		float Res_SCDX = LCB->Get_LocationX(Dist_Mid);
+		float Res_SCDY = LCB->Get_LocationY(Dist_Mid);
 		float Res_SMDX = State->Get_Move_Distance()._Location_X;
 		float Res_SMDY = State->Get_Move_Distance()._Location_Y;
 
@@ -492,13 +494,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		//GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
-		double Current_Height{ (static_cast<double>(State->Get_Screen_Distance()._Location_Y) * 2 + 1) / (_Each_Height) };
-		double Current_Width{ (static_cast<double>(State->Get_Screen_Distance()._Location_X) * 2 + 1) / (_Each_Width) };
+		double Current_Height{ (static_cast<double>(LCB->Get_LocationY(Dist_Mid)) * 2 + 1) / (_Each_Height) };
+		double Current_Width{ (static_cast<double>(LCB->Get_LocationX(Dist_Mid)) * 2 + 1) / (_Each_Width) };
 
 		if (State->Get_Adjust_Flag())
 		{
-			Temp_MoveY = State->Set_ExacHeight(Current_Height, State->Get_Screen_Distance()._Location_Y, _State_MoveY, Auto_Adjust_Location.Get_Current_Location()._Location_Y);
-			Temp_MoveX = State->Set_ExacWidth(Current_Width, State->Get_Screen_Distance()._Location_X, _State_MoveX, Auto_Adjust_Location.Get_Current_Location()._Location_X);
+			Temp_MoveY = State->Set_ExacHeight(Current_Height, LCB->Get_LocationY(Dist_Mid), _State_MoveY, LCB->Get_LocationY(Auto_Loc));
+			Temp_MoveX = State->Set_ExacWidth(Current_Width, LCB->Get_LocationX(Dist_Mid), _State_MoveX, LCB->Get_LocationX(Auto_Loc));
 			Wait_Frame = 0;
 
 			if (ANCUH != ACUH)
@@ -619,11 +621,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 
 		//std::cout << State->Get_Screen_Distance()._LocX + Temp_MoveX << "__" << State->Get_Screen_Distance()._LocY + Temp_MoveY << std::endl;
-		glProgramUniform1f(_State_RenderingProgram, 2, State->Get_Screen_Distance()._Location_X + Temp_MoveX);//Current_Move_LocationX
-		glProgramUniform1f(_State_RenderingProgram, 3, State->Get_Screen_Distance()._Location_Y + Temp_MoveY);//
+		glProgramUniform1f(_State_RenderingProgram, 2, LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
+		glProgramUniform1f(_State_RenderingProgram, 3, LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//
 
-		glProgramUniform1f(_Adjst_RenderingProgram, 2, State->Get_Screen_Distance()._Location_X + Temp_MoveX);//Current_Move_LocationX
-		glProgramUniform1f(_Adjst_RenderingProgram, 3, State->Get_Screen_Distance()._Location_Y + Temp_MoveY);//
+		glProgramUniform1f(_Adjst_RenderingProgram, 2, LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
+		glProgramUniform1f(_Adjst_RenderingProgram, 3, LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//
 
 		if (_Is_State_Changed)
 		{
@@ -638,7 +640,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			if (_Trigger_Mode)
 				Moves = Auto_Update_Trigger(IEB->Get_Reach_Edge());//TODO
 			else
-				Moves = Auto_Update_Trigger(State->Get_Screen_Distance()._Location_Y, State->Get_Screen_Distance()._Location_X);
+				Moves = Auto_Update_Trigger(LCB->Get_LocationY(Dist_Mid), LCB->Get_LocationX(Dist_Mid));
 
 			if ((Moves & MoveToNH) == MoveToNH)
 			{

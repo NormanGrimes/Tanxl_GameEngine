@@ -24,6 +24,7 @@
 // 增加扩展版本的地图单元获取功能
 // 扩展地图定位功能增加异常处理
 // 坐标结构体转移到坐标模块中
+// 记录移动距离的成员移入坐标基类管理
 
 #pragma once
 
@@ -152,6 +153,7 @@ public:
 	bool Get_Engine_File();
 	int Get_LocationX();
 	int Get_LocationY();
+	int Get_Distance_Screen_Id();
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length);//可选功能 对2D棋盘上的物品微调位置
 	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, float& Auto_Adjust_Length);
 	unsigned Get_DataHeight()const;
@@ -225,9 +227,9 @@ private:
 	//_MState用于记录当前加载地图区域
 	Move_State _MState;
 	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
-	SLocation _Distance_Screen_Mid;
+	int _Distance_Screen_Mid = -1;
 	//_Distance_Move用于记录当前相对于原点的移动距离
-	SLocation _Distance_Move;
+	int _Distance_Move = -1;
 	std::vector<StateUnit*> _GameState;
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;

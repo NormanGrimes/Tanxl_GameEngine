@@ -17,6 +17,9 @@ int main()
 
 	Tanxl_Engine TGE;
 
+	if (TGE.Check_Engine_Status())
+		return -1;
+
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 
 	UIB->Suffle_UniData(1);
@@ -68,57 +71,51 @@ int main()
 	std::vector<std::string> KeyUnitNames;
 	while (1)
 	{
-		static int Timer = 0;
-		Timer++;
 		TGE.Engine_Draw_State_Adjust(0);
-		if (Timer == 50)
+		if (KU->MoveToY == true)
 		{
-			Timer = 0;
-			if (KU->MoveToY == true)
+			if (Appended == false)
 			{
-				if (Appended == false)
-				{
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_UP, false, true, 0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_W, false, true, 0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_UP, false, true, 0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_W, false, true, 0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_LEFT, true, false, -0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_A, true, false, -0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_LEFT, true, false, -0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_A, true, false, -0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_RIGHT, true, false, 0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_D, true, false, 0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_RIGHT, true, false, 0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_D, true, false, 0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_DOWN, false, true, -0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-					KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_S, false, true, -0.01));
-					std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_DOWN, false, true, -0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
+				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_S, false, true, -0.01));
+				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
 
-					Appended = true;
-				}
+				Appended = true;
 			}
-			else
+		}
+		else
+		{
+			if (Appended == true)
 			{
-				if (Appended == true)
-				{
-					Appended = false;
-					std::cout << "Removing All Temp KeyEvent" << std::endl;
+				Appended = false;
+				std::cout << "Removing All Temp KeyEvent" << std::endl;
 
-					for (int i{ 0 }; i < KeyUnitNames.size(); i++)
-					{
-						std::cout << "DELETE NAME :" << KeyUnitNames.at(i) << std::endl;
-						if (IEB->RemoveEvent(KeyUnitNames.at(i)))
-							std::cout << "Successfully REMOVE :" << i << std::endl;
-						else
-							std::cout << "Delete Fail !" << std::endl;
-					}
-					KeyUnitNames.erase(KeyUnitNames.begin(), KeyUnitNames.end());
-					KeyUnitNames.clear();
+				for (int i{ 0 }; i < KeyUnitNames.size(); i++)
+				{
+					std::cout << "DELETE NAME :" << KeyUnitNames.at(i) << std::endl;
+					if (IEB->RemoveEvent(KeyUnitNames.at(i)))
+						std::cout << "Successfully REMOVE :" << i << std::endl;
+					else
+						std::cout << "Delete Fail !" << std::endl;
 				}
+				KeyUnitNames.erase(KeyUnitNames.begin(), KeyUnitNames.end());
+				KeyUnitNames.clear();
 			}
 		}
 	}

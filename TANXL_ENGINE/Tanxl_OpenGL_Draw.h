@@ -8,6 +8,7 @@
 // 构造函数增加可选是否开启自动调整窗口功能
 // 移除记录地图方块数的变量
 // 修复初始化接口中一个可能导致问题的部分
+// 将坐标由临时定义的坐标实例改为坐标基类控制
 
 #pragma once
 
@@ -482,10 +483,6 @@ private:
 	float _State_MoveX;
 	//记录地图场景Y轴移动距离
 	float _State_MoveY;
-	//记录自动调整状态的X轴移动距离
-	//float _Auto_AdjustX{ 0.0f };
-	//记录自动调整状态的Y轴移动距离
-	//float _Auto_AdjustY{ 0.0f };
 	//记录手动移动状态的Y轴移动距离
 	float _Move_AdjustX{ 0.0f };
 	//记录手动移动状态的Y轴移动距离

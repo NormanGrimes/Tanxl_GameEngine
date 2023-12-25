@@ -15,6 +15,7 @@
 // 2023/03/13 启用对STEAM_API的支持
 // 2023/03/14 增加宏控制STEAM_API的启用
 // 2023/03/20 扩展地图接口增加地图数据尺寸设置
+// 2023/03/24 增加引擎状态与引擎状态获取函数
 
 #pragma once
 
@@ -42,6 +43,9 @@ class Tanxl_Engine
 public:
 	//引擎初始化构造函数
 	Tanxl_Engine();
+
+	//获取当前引擎状态
+	unsigned Check_Engine_Status();
 
 	//设置当前显示窗口中的XY轴矩阵数量 Width宽度 Height高度
 	void Engine_State_Set_Display(int Width, int Height, int PreLoads);
@@ -78,6 +82,8 @@ private:
 	OpenGL_Draw* Tanxl_Engine_OpenGL_Draw;
 	InsertEventBase* Tanxl_Engine_InsertBase;
 	RandomBase* Tanxl_Engine_RandomBase;
+
+	unsigned _Engine_Status = 0;
 
 	const std::string __ENGINE_VERSION__ = "0.2";
 };
