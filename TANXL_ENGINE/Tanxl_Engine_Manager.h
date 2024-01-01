@@ -16,6 +16,7 @@
 // 2023/03/14 增加宏控制STEAM_API的启用
 // 2023/03/20 扩展地图接口增加地图数据尺寸设置
 // 2023/03/24 增加引擎状态与引擎状态获取函数
+// 2023/03/28 增加坐标基类的支持
 
 #pragma once
 
@@ -34,6 +35,7 @@
 #include "Tanxl_OpenGL_Draw.h"
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_RandomBase.h"
+#include "Tanxl_LocationBase.h"
 
 #include "public/steam/steam_api.h"
 #include "public/steam/isteamapps.h"
@@ -82,6 +84,7 @@ private:
 	OpenGL_Draw* Tanxl_Engine_OpenGL_Draw;
 	InsertEventBase* Tanxl_Engine_InsertBase;
 	RandomBase* Tanxl_Engine_RandomBase;
+	LocationBase* Tanxl_Engine_LocationBase;
 
 	unsigned _Engine_Status = 0;
 

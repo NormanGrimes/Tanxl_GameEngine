@@ -28,19 +28,19 @@ int main()
 
 	//Get Instance
 
-	GameStateBase* GSB{ &GameStateBase::Get_StateBase(1, 1) };
+	GameStateBase* GSB{ &GameStateBase::GetStateBase(1, 1) };
 
 	TGE.Engine_State_Compile_Units(10, 10,
-		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-1,a-3,a-1,a-2,a-0,a-0,a-2,a-1,a-3,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
 		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-2,a-0,a-0,a-2,a-1,a-0,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-1,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-2,a-0,a-0,a-0,a-0,a-0,a-0,a-2,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-2,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-1,a-2,"/*a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"*/);
+		"a-1,a-3,a-1,a-2,a-0,a-0,a-2,a-1,a-3,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
+		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
+		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"/*a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"*/);
 
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
@@ -56,7 +56,7 @@ int main()
 	bool CurrStatus = false;
 	bool Appended = false;
 
-	Key_Unit* KU = new Key_Unit(GLFW_KEY_E, 3, false);
+	Key_Unit* KU = new Key_Unit(GLFW_KEY_E);
 
 	IEB->RegistEvent(KU);
 

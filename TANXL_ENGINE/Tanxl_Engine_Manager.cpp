@@ -3,10 +3,11 @@
 Tanxl_Engine::Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE),
 Tanxl_Engine_DataBase(new TANXL_DataBase()),
 Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
-Tanxl_Engine_GameState(&GameStateBase::Get_StateBase(5, 5)),
+Tanxl_Engine_GameState(&GameStateBase::GetStateBase(5, 5)),
 Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
 Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
-Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
+Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase()),
+Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 {
 	
 	if (!this->Tanxl_Engine_Console_List ||
@@ -15,9 +16,10 @@ Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase())
 		!this->Tanxl_Engine_GameState    ||
 		!this->Tanxl_Engine_OpenGL_Draw  ||
 		!this->Tanxl_Engine_InsertBase   ||
-		!this->Tanxl_Engine_RandomBase)
+		!this->Tanxl_Engine_RandomBase   ||
+		!this->Tanxl_Engine_LocationBase)
 	{
-		std::cout << "Fail to start Engine !" << std::endl;
+		std::cout << "Fail to fully start Engine !" << std::endl;
 		this->_Engine_Status = 1;
 	}
 
@@ -51,7 +53,7 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
 	{
 		ReservWidth = Width;
 		ReservHeight = Height;
-		this->Tanxl_Engine_GameState->Get_StateBase(Width, Height);
+		this->Tanxl_Engine_GameState->GetStateBase(Width, Height);
 		this->Tanxl_Engine_GameState->Set_Display_State(Width, Height);
 	}
 }
@@ -161,7 +163,7 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, unsigned State
 
 void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)
 {
-	this->Tanxl_Engine_OpenGL_Draw->Render_Once(&this->Tanxl_Engine_GameState->Get_StateBase());
+	this->Tanxl_Engine_OpenGL_Draw->Render_Once(&this->Tanxl_Engine_GameState->GetStateBase());
 	int Temp_Preload = this->Tanxl_Engine_OpenGL_Draw->Get_PreLoad() + PreLoad_Adjust;
 	this->Tanxl_Engine_OpenGL_Draw->Set_PreLoad(Temp_Preload < 0 ? 0 : Temp_Preload);
 }

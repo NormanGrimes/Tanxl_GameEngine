@@ -121,7 +121,7 @@ public:
 	StateUnit* Get_StateUnit(int Pos);
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
-	static GameStateBase& Get_StateBase(int Width = 0, int Height = 0);
+	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
 	Move_State Get_Move_State();
 	SLocation& Get_Screen_Distance();
 	SLocation& Get_Move_Distance();
@@ -154,6 +154,7 @@ public:
 	int Get_LocationX();
 	int Get_LocationY();
 	int Get_Distance_Screen_Id();
+	int Get_Distance_Move_Id();
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length);//可选功能 对2D棋盘上的物品微调位置
 	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, float& Auto_Adjust_Length);
 	unsigned Get_DataHeight()const;
@@ -227,9 +228,9 @@ private:
 	//_MState用于记录当前加载地图区域
 	Move_State _MState;
 	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
-	int _Distance_Screen_Mid = -1;
+	int _Distance_Screen_Mid;
 	//_Distance_Move用于记录当前相对于原点的移动距离
-	int _Distance_Move = -1;
+	int _Distance_Move;
 	std::vector<StateUnit*> _GameState;
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;

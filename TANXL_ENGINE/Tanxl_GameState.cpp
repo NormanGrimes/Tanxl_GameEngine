@@ -210,7 +210,7 @@ void GameStateBase::Set_SquareState(int State_Id)
 	}
 }
 
-GameStateBase& GameStateBase::Get_StateBase(int Display_Width, int Display_Height)
+GameStateBase& GameStateBase::GetStateBase(int Display_Width, int Display_Height)
 {
 	static GameStateBase GameState(Display_Width, Display_Height);
 	return GameState;
@@ -454,15 +454,16 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		break;
 	}
 
-	std::cout << "X :" << (Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f) << "___"
-		<< "Y :" << (Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f) + 1.0f << std::endl;
+	//static float Each_Height = 2.0f / this->Get_StateHeight();
+	//static float Each_Width = 2.0f / this->Get_StateWidth();
 
-	this->_Exac_LocationX = static_cast<int>((Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f));
-	this->_Exac_LocationY = static_cast<int>((Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f)) + 1;
-	if (Distance->_Location_X + MoveX < 0)
-		--this->_Exac_LocationX;
-	if (Distance->_Location_Y + MoveY < 0)
-		--this->_Exac_LocationY;
+	this->_Exac_LocationX = static_cast<int>((Distance->_Location_X + MoveX/* + Each_Width*/) * (this->_GameState_Width / 2.0f));
+	this->_Exac_LocationY = static_cast<int>((Distance->_Location_Y + MoveY/* - Each_Height*/) * (this->_GameState_Height / 2.0f));
+
+	if (Distance->_Location_X + MoveX > 0.0f)
+		++this->_Exac_LocationX;
+	if (Distance->_Location_Y + MoveY > 0.0f)
+		++this->_Exac_LocationY;
 	this->_Exac_LocationY = -this->_Exac_LocationY;
 }
 
@@ -645,6 +646,11 @@ int GameStateBase::Get_LocationY()
 int GameStateBase::Get_Distance_Screen_Id()
 {
 	return this->_Distance_Screen_Mid;
+}
+
+int GameStateBase::Get_Distance_Move_Id()
+{
+	return this->_Distance_Move;
 }
 
 int GameStateBase::Get_StateHeight()const

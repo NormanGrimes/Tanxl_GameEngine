@@ -10,6 +10,8 @@
 // 增加自动检查接口的控制台输出宏
 // 调整按键操作的结构体与初始化函数
 // 输入操作函数增加更稳定的按下检测
+// 增加按键功能长按的延迟时间
+// 简少按键功能需要的参数
 
 #pragma once
 
@@ -36,7 +38,7 @@ struct Key_Unit
 {
 	Key_Unit();
 	Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM = "");
-	Key_Unit(int GLKEY, double Move_Length, bool Enable_Double, std::string UNAM = "");
+	Key_Unit(int GLKEY, std::string UNAM = "");
 
 	//用于标记当前按键的类型
 	short Unit_Type;

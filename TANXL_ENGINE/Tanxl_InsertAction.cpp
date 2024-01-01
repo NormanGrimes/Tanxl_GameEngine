@@ -24,8 +24,8 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 #endif
 }
 
-Key_Unit::Key_Unit(int GLKEY, double Move_Length, bool Enable_Double, std::string UNAM) :
-	GLFW_KEY(GLKEY), MoveLen(Move_Length), MoveToX(Enable_Double), MoveToY(false), Unit_Type(1), SaveLen(0)
+Key_Unit::Key_Unit(int GLKEY, std::string UNAM) :
+	GLFW_KEY(GLKEY), MoveLen(3), MoveToX(false), MoveToY(false), Unit_Type(1), SaveLen(0)
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	if (UNAM == "")
@@ -73,7 +73,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 				if (this->_KeyEventS.at(i)->SaveLen > this->_KeyEventS.at(i)->MoveLen)
 				{
 					this->_KeyEventS.at(i)->MoveToY = !this->_KeyEventS.at(i)->MoveToY;
-					this->_KeyEventS.at(i)->SaveLen = 0;
+					this->_KeyEventS.at(i)->SaveLen = -25;
 				}
 				continue;
 			}

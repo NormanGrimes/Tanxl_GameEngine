@@ -9,11 +9,23 @@
 // 移除记录地图方块数的变量
 // 修复初始化接口中一个可能导致问题的部分
 // 将坐标由临时定义的坐标实例改为坐标基类控制
+// 手动移动和地图移动距离改为坐标基类控制
+// 增加更稳定的地图移动范围限制功能
+// 增加控制台输出控制宏
+// 增加不可移动方块的功能测试
 
 #pragma once
 
 #ifndef _TANXL_OPENGL_DRAW_
 #define _TANXL_OPENGL_DRAW_
+
+#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
+
+#if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
+
+#define _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_   1
+
+#endif
 
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
@@ -479,14 +491,6 @@ private:
 	double _Each_Height{ 0 };
 	//记录地图场景基本矩形的宽度值
 	double _Each_Width{ 0 };
-	//记录地图场景X轴移动距离
-	float _State_MoveX;
-	//记录地图场景Y轴移动距离
-	float _State_MoveY;
-	//记录手动移动状态的Y轴移动距离
-	float _Move_AdjustX{ 0.0f };
-	//记录手动移动状态的Y轴移动距离
-	float _Move_AdjustY{ 0.0f };
 	//触发地图移动事件时的最低高度方向移动距离
 	float _Trigger_Height{ 1.0f };
 	//触发地图移动事件时的最低宽度方向移动距离

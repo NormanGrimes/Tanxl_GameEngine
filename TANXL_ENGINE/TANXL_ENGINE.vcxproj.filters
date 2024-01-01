@@ -58,7 +58,7 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_LocationBase.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +90,9 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_RandomBase.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Taxnl_LocationBase.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>

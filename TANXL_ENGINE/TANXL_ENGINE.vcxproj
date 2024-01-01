@@ -214,6 +214,7 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Render.cpp" />
     <ClCompile Include="Tanxl_RandomBase.cpp" />
+    <ClCompile Include="Taxnl_LocationBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragShader.glsl" />
