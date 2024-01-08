@@ -138,7 +138,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)
 				if (State->Get_GameState()->size() == 0)
 					return;
 
-				_StateInfor[i] = State->Get_StateUnit(STATE_ORIGIN_MIDD, x % State->Get_GameState()->size())->Get_State_Id();//3/20 STATE_EXTEND_MIDD
+				_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState()->size())->Get_State_Id();//3/20 STATE_EXTEND_MIDD
 			}
 
 			Move_NX++;
@@ -353,19 +353,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		std::cout << "Limit " << State_Data_Width << " -- " << State_Data_Height << std::endl;
 #endif
 
-		/*if (((LCB->Get_LocationX(Exac_Mov) < 0) && IEB->Get_Margin_X() < 0) ||
-			((LCB->Get_LocationX(Exac_Mov) > State_Data_Width) && IEB->Get_Margin_X() > 0))
-		{
-			State->Get_Screen_Distance()._Location_X = Res_SCDX;
-			State->Get_Move_Distance()._Location_X = Res_SMDX;
-		}
-		if (((LCB->Get_LocationY(Exac_Mov) > 0) && (IEB->Get_Margin_Y() > 0)) ||
-			((LCB->Get_LocationY(Exac_Mov) < -State_Data_Height) && (IEB->Get_Margin_Y() < 0)))
-		{
-			State->Get_Screen_Distance()._Location_Y = Res_SCDY;
-			State->Get_Move_Distance()._Location_Y = Res_SMDY;
-		}*/
-
 		//std::cout << State->Get_LocationX() << " -- " << State->Get_LocationY() << std::endl;
 
 		if (IEB->Get_Margin_X() < 0)
@@ -374,28 +361,29 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			{
 				State->Get_Screen_Distance()._Location_X = Res_SCDX;
 				State->Get_Move_Distance()._Location_X = Res_SMDX;
+				std::cout << "RES :" << Res_SCDX << "__" << Res_SMDX << std::endl;
 			}
 			else
 			{
-				State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
-				int Current_LX = State->Get_LocationX();
-				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_LEFT);
-				if (Current_LX != State->Get_LocationX())
+				for (int i = 0; i < 2; ++i)
 				{
+					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_LEFT);
+
 					if (State->Get_LocationX() >= 0)
 					{
 						int X = State->Get_LocationX();
 						int Y = State->Get_LocationY();
 						if (X < 0)
 							X = 0;
-						if (X > static_cast<int>(State->Get_DataWidth()))
+						else if (X > static_cast<int>(State->Get_DataWidth()))
 							X = State->Get_DataWidth();
 						if (Y < 0)
 							Y = 0;
-						if (Y > static_cast<int>(State->Get_DataHeight()))
+						else if (Y > static_cast<int>(State->Get_DataHeight()))
 							Y = State->Get_DataHeight();
-						std::cout << "STATUS A :" << State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() == 3)
+						std::cout << "STATUS A :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
 						{
 							State->Get_Screen_Distance()._Location_X = Res_SCDX;
 							State->Get_Move_Distance()._Location_X = Res_SMDX;
@@ -412,29 +400,29 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			{
 				State->Get_Screen_Distance()._Location_X = Res_SCDX;
 				State->Get_Move_Distance()._Location_X = Res_SMDX;
+				std::cout << "RES :" << Res_SCDX << "__" << Res_SMDX << std::endl;
 			}
 			else
 			{
-				State->Update_Move(0.0f, 0.0f, CHECK_EDGE_RIGH);
-				int Current_LX = State->Get_LocationX();
-				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_RIGH);
-				if (Current_LX != State->Get_LocationX())
+				for (int i = 0; i < 2; ++i)
 				{
-					std::cout << static_cast<int>(State->Get_DataWidth()) << std::endl;
-					if (State->Get_LocationX() < static_cast<int>(State->Get_DataWidth()))
+					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_RIGH);
+
+					if (State->Get_LocationX() <= static_cast<int>(State->Get_DataWidth()))
 					{
 						int X = State->Get_LocationX();
 						int Y = State->Get_LocationY();
 						if (X < 0)
 							X = 0;
-						if (X > static_cast<int>(State->Get_DataWidth()))
+						else if (X > static_cast<int>(State->Get_DataWidth()))
 							X = State->Get_DataWidth();
 						if (Y < 0)
 							Y = 0;
-						if (Y > static_cast<int>(State->Get_DataHeight()))
+						else if (Y > static_cast<int>(State->Get_DataHeight()))
 							Y = State->Get_DataHeight();
-						std::cout << "STATUS A :" << State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() == 3)
+						std::cout << "STATUS B :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
 						{
 							State->Get_Screen_Distance()._Location_X = Res_SCDX;
 							State->Get_Move_Distance()._Location_X = Res_SMDX;
@@ -451,29 +439,29 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			{
 				State->Get_Screen_Distance()._Location_Y = Res_SCDY;
 				State->Get_Move_Distance()._Location_Y = Res_SMDY;
+				std::cout << "RES :" << Res_SCDY << "__" << Res_SMDY << std::endl;
 			}
 			else
 			{
-				State->Update_Move(0.0f, 0.0f, CHECK_EDGE_ABOV);
-				int Current_LX = State->Get_LocationY();
-				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
-				if (Current_LX != State->Get_LocationY())
+				for (int i = 0; i < 2; ++i)
 				{
-					std::cout << static_cast<int>(State->Get_DataHeight()) << std::endl;
+					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
+
 					if (State->Get_LocationY() >= 0)
 					{
 						int X = State->Get_LocationX();
 						int Y = State->Get_LocationY();
 						if (X < 0)
 							X = 0;
-						if (X > static_cast<int>(State->Get_DataWidth()))
+						else if (X > static_cast<int>(State->Get_DataWidth()))
 							X = State->Get_DataWidth();
 						if (Y < 0)
 							Y = 0;
-						if (Y > static_cast<int>(State->Get_DataHeight()))
+						else if (Y > static_cast<int>(State->Get_DataHeight()))
 							Y = State->Get_DataHeight();
-						std::cout << "STATUS A :" << State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() == 3)
+						std::cout << "STATUS C :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
 						{
 							State->Get_Screen_Distance()._Location_Y = Res_SCDY;
 							State->Get_Move_Distance()._Location_Y = Res_SMDY;
@@ -490,29 +478,29 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			{
 				State->Get_Screen_Distance()._Location_Y = Res_SCDY;
 				State->Get_Move_Distance()._Location_Y = Res_SMDY;
+				std::cout << "RES :" << Res_SCDY << "__" << Res_SMDY << std::endl;
 			}
 			else
 			{
-				State->Update_Move(0.0f, 0.0f, CHECK_EDGE_BELO);
-				int Current_LX = State->Get_LocationY();
-				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
-				if (Current_LX != State->Get_LocationY())
+				for (int i = 0; i < 2; ++i)
 				{
-					std::cout << static_cast<int>(State->Get_DataHeight()) << std::endl;
-					if (State->Get_LocationY() < static_cast<int>(State->Get_DataHeight()))
+					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
+
+					if (State->Get_LocationY() <= static_cast<int>(State->Get_DataHeight()))
 					{
 						int X = State->Get_LocationX();
 						int Y = State->Get_LocationY();
 						if (X < 0)
 							X = 0;
-						if (X > static_cast<int>(State->Get_DataWidth()))
+						else if (X > static_cast<int>(State->Get_DataWidth()))
 							X = State->Get_DataWidth();
 						if (Y < 0)
 							Y = 0;
-						if (Y > static_cast<int>(State->Get_DataHeight()))
+						else if (Y > static_cast<int>(State->Get_DataHeight()))
 							Y = State->Get_DataHeight();
-						std::cout << "STATUS A :" << State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(Y * State->Get_DataWidth() + X)->Get_State_Id() == 3)
+						std::cout << "STATUS D :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
 						{
 							State->Get_Screen_Distance()._Location_Y = Res_SCDY;
 							State->Get_Move_Distance()._Location_Y = Res_SMDY;

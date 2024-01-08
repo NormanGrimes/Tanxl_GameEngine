@@ -47,7 +47,7 @@ int main()
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 	std::cout << UIB->Generate_State(10, 10) << std::endl;
 
-	//TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
+	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
@@ -66,7 +66,7 @@ int main()
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 
-	//GSB->Set_SquareState(5);
+	GSB->Set_SquareState(4);
 
 	std::vector<std::string> KeyUnitNames;
 	while (1)

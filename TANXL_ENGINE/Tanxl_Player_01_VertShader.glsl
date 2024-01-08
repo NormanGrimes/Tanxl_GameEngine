@@ -3,6 +3,7 @@
 // 从顶点着色器中独立出此功能
 // 游戏界面增加自定义坐标功能
 // 可通过同一变量决定显示的生命值图标数量
+// 缩小玩家方块尺寸
 
 #version 430
 
@@ -41,37 +42,37 @@ void main(void)
 
 	if      (gl_VertexID == 0) //MainMoveBlock 0.2F
 	{
-		gl_Position = vec4(  Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
+		gl_Position = vec4(  Width / 3 + Current_Move_LocationX, -Height / 3 + Current_Move_LocationY, 0.2f, 1.0f); 
 		vs_color = vec4(0.9f, 0.8f, 1.0f, 1.0f);
 		Cube = 5;
 	}
 	else if (gl_VertexID == 1)
 	{
-		gl_Position = vec4( -Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
+		gl_Position = vec4( -Width / 3 + Current_Move_LocationX, -Height / 3 + Current_Move_LocationY, 0.2f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 		Cube = 5;
 	}
 	else if (gl_VertexID == 2)
 	{
-		gl_Position = vec4(  Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
+		gl_Position = vec4(  Width / 3 + Current_Move_LocationX,  Height / 3 + Current_Move_LocationY, 0.2f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 		Cube = 5;
 	}
 	else if (gl_VertexID == 3)
 	{
-		gl_Position = vec4( -Width / 2 + Current_Move_LocationX, -Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
+		gl_Position = vec4( -Width / 3 + Current_Move_LocationX, -Height / 3 + Current_Move_LocationY, 0.2f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 		Cube = 5;
 	}
 	else if (gl_VertexID == 4)
 	{
-		gl_Position = vec4( -Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
+		gl_Position = vec4( -Width / 3 + Current_Move_LocationX,  Height / 3 + Current_Move_LocationY, 0.2f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 		Cube = 5;
 	}
 	else if (gl_VertexID == 5)
 	{
-		gl_Position = vec4(  Width / 2 + Current_Move_LocationX,  Height / 2 + Current_Move_LocationY, 0.2f, 1.0f); 
+		gl_Position = vec4(  Width / 3 + Current_Move_LocationX,  Height / 3 + Current_Move_LocationY, 0.2f, 1.0f); 
 		vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 		Cube = 5;
 	}

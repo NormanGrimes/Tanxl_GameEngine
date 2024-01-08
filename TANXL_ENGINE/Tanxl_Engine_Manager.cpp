@@ -117,7 +117,7 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, unsigned State
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10));
 	}
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_LOCALF, "TANXL_STATE_DATA", "Data_Chain_File");
-	this->Tanxl_Engine_GameState->Set_DataAll_State(Width * 10, Height * 10);
+	this->Tanxl_Engine_GameState->Set_DataAll_State(10, 10);
 	remove("Data_Chain_File.usd");
 
 	if (Build_Connect)

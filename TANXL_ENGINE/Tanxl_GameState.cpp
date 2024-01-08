@@ -204,6 +204,8 @@ void GameStateBase::Set_SquareState(int State_Id)
 				this->_GameState_Id._RIGH_ABOV = Link->_Data->_Data_Units.at(8)->_Id;
 				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
 				this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Id;
+
+				this->Set_DataAll_State(10, 10);
 				return;
 			}
 		}
@@ -430,40 +432,53 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 {
 	static SLocation* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
 
+	if ((this->_Half_State_Width == 0.0f) || (this->_Half_State_Height == 0.0f))
+		this->Set_Display_State(this->_GameState_Width, this->_GameState_Height);
+
+	static float State_Above_Below{ this->_Half_State_Width * 2 / 3 };
+
 	switch (Check)
 	{
 	case CHECK_EDGE_CURR:
-		MoveX = 0.0f;
-		MoveY = 0.0f;
+		MoveX += 0.0f;
+		MoveY += 0.0f;
 		break;
 	case CHECK_EDGE_LEFT:
-		MoveX -= this->_Half_State_Width;
-		MoveY = 0.0f;
+		MoveX -= this->_Half_State_Width * 2 / 3;
+		MoveY += State_Above_Below;
+		State_Above_Below = -State_Above_Below;
 		break;
 	case CHECK_EDGE_RIGH:
-		MoveX += this->_Half_State_Width;
-		MoveY = 0.0f;
+		MoveX += this->_Half_State_Width * 2 / 3;
+		MoveY += State_Above_Below;
+		State_Above_Below = -State_Above_Below;
 		break;
 	case CHECK_EDGE_BELO:
-		MoveX = 0.0f;
-		MoveY -= this->_Half_State_Height;
+		MoveX += State_Above_Below;
+		MoveY -= this->_Half_State_Height * 2 / 3;
+		State_Above_Below = -State_Above_Below;
 		break;
 	case CHECK_EDGE_ABOV:
-		MoveX = 0.0f;
-		MoveY += this->_Half_State_Height;
+		MoveX += State_Above_Below;
+		MoveY += this->_Half_State_Height * 2 / 3;
+		State_Above_Below = -State_Above_Below;
 		break;
 	}
 
-	//static float Each_Height = 2.0f / this->Get_StateHeight();
-	//static float Each_Width = 2.0f / this->Get_StateWidth();
+	float Temp_LocationX = (Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f);
+	float Temp_LocationY = (Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f);
 
-	this->_Exac_LocationX = static_cast<int>((Distance->_Location_X + MoveX/* + Each_Width*/) * (this->_GameState_Width / 2.0f));
-	this->_Exac_LocationY = static_cast<int>((Distance->_Location_Y + MoveY/* - Each_Height*/) * (this->_GameState_Height / 2.0f));
+	Temp_LocationX = static_cast<int>(Temp_LocationX + 0.5f) > static_cast<int>(Temp_LocationX) ? Temp_LocationX + 0.5f : Temp_LocationX;
+	Temp_LocationY = static_cast<int>(Temp_LocationY - 0.5f) < static_cast<int>(Temp_LocationY) ? Temp_LocationY - 0.5f : Temp_LocationY;
 
-	if (Distance->_Location_X + MoveX > 0.0f)
-		++this->_Exac_LocationX;
+	this->_Exac_LocationX = static_cast<int>(Temp_LocationX);
+	this->_Exac_LocationY = static_cast<int>(Temp_LocationY);
+
+	if (Distance->_Location_X + MoveX < 0.0f)
+		--this->_Exac_LocationX;
 	if (Distance->_Location_Y + MoveY > 0.0f)
 		++this->_Exac_LocationY;
+
 	this->_Exac_LocationY = -this->_Exac_LocationY;
 }
 
