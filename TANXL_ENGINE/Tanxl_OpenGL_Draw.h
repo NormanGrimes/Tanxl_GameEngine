@@ -14,6 +14,9 @@
 // 增加控制台输出控制宏
 // 增加不可移动方块的功能测试
 // 正式上线不可移动区块功能
+// 边缘检测功能改为独立函数
+// 手动坐标更新功能改为独立函数
+// 四个记录上一次移动坐标的变量移入私有成员
 
 #pragma once
 
@@ -463,6 +466,8 @@ public:
 	void Set_Trigger_Mode(bool Mode);
 	void Set_Trigger_Range(bool Enable, float Height, float Width);
 	void Append_Texture(const char* Texture);
+	void HitEdge_Check(GameStateBase* State, bool& PressFlg);
+	void Update_Current();
 	int Get_PreLoad();
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
@@ -496,6 +501,14 @@ private:
 	float _Trigger_Height{ 1.0f };
 	//触发地图移动事件时的最低宽度方向移动距离
 	float _Trigger_Width{ 1.0f };
+	float _Location_Distance_MidX{ 0.0f };
+	float _Location_Distance_MidY{ 0.0f };
+	float _Location_Move_DistanceX{ 0.0f };
+	float _Location_Move_DistanceY{ 0.0f };
+	//记录移动导致的新坐标高度值
+	int _New_Current_Height{ 0 };
+	//记录移动导致的新坐标宽度值
+	int _New_Current_Width{ 0 };
 	//记录地图场景的基本矩形行数
 	int _HeightInt;
 	//记录地图场景的基本矩形列数

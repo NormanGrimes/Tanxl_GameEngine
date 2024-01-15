@@ -70,7 +70,8 @@ void GameStateBase::Set_DataAll_State(unsigned Width, unsigned Height)
 void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 {
 	std::string Text_Reader{};
-	int Status_Id{}, State_Move{};
+	int Status_Id{};
+	bool State_Move{};
 	std::vector<StateUnit*>* Target{ nullptr };
 	switch (Extend)
 	{
@@ -139,10 +140,12 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 		}
 		else if (Infor.at(i) == '-')
 		{
-			State_Move = 0;//std::stoi(Text_Reader);
+			if(Text_Reader == "a")
+				State_Move = true;
+			else
+				State_Move = false;
 			Text_Reader = "";
 			Status_Id = 0;
-			State_Move = 0;
 		}
 	}
 	_Compile_Success = true;

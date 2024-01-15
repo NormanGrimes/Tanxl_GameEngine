@@ -17,6 +17,7 @@
 // 2023/03/20 扩展地图接口增加地图数据尺寸设置
 // 2023/03/24 增加引擎状态与引擎状态获取函数
 // 2023/03/28 增加坐标基类的支持
+// 2023/04/03 增加更新移动与获取输入函数
 
 #pragma once
 
@@ -72,6 +73,9 @@ public:
 
 	//提供基本的绘制功能与预加载数据的调整功能 PreLoad_Adjust为预加载调整值
 	void Engine_Draw_State_Adjust(int PreLoad_Adjust);
+
+	//提供更新绘制部分的手动移动距离值 以及输入按键检测
+	void Engine_Insert_State_Update();
 
 	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
 	std::string Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length);

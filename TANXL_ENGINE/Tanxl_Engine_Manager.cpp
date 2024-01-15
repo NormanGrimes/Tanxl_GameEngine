@@ -168,6 +168,14 @@ void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)
 	this->Tanxl_Engine_OpenGL_Draw->Set_PreLoad(Temp_Preload < 0 ? 0 : Temp_Preload);
 }
 
+void Tanxl_Engine::Engine_Insert_State_Update()
+{
+	if (this->Tanxl_Engine_OpenGL_Draw->Get_Window() == nullptr)
+		return;
+	this->Tanxl_Engine_OpenGL_Draw->Update_Current();
+	//this->Tanxl_Engine_InsertBase->GetInsert(this->Tanxl_Engine_OpenGL_Draw->Get_Window(), this->Tanxl_Engine_GameState);
+}
+
 std::string Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)
 {
 	Key_Unit* KEYU{ new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length) };

@@ -109,7 +109,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	ReLoadState(State);
 }
 
-void OpenGL_Draw::ReLoadState(GameStateBase* State)
+void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 
@@ -215,6 +215,182 @@ void OpenGL_Draw::Append_Texture(const char* Texture)
 	Id++;
 }
 
+void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
+{
+	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
+	LocationBase* LCB{ &LocationBase::GetLocationBase() };
+
+	static double State_Data_Width = State->Get_DataWidth() * this->_Each_Width;
+	static double State_Data_Height = State->Get_DataHeight() * this->_Each_Height;
+
+	static int Dist_Mid = State->Get_Distance_Screen_Id();
+	static int Exac_Mov = State->Get_Distance_Move_Id();
+
+	if (IEB->Get_Margin_X() < 0)
+	{
+		if ((LCB->Get_LocationX(Exac_Mov) < 0))
+		{
+			State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+			State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+			std::cout << "RES :" << this->_Location_Distance_MidX << "__" << this->_Location_Move_DistanceX << std::endl;
+		}
+		else
+		{
+			for (int i = 0; i < 2; ++i)
+			{
+				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_LEFT);
+
+				if (State->Get_LocationX() >= 0)
+				{
+					int X = State->Get_LocationX();
+					int Y = State->Get_LocationY();
+					if (X < 0)
+						X = 0;
+					else if (X > static_cast<int>(State->Get_DataWidth()))
+						X = State->Get_DataWidth();
+					if (Y < 0)
+						Y = 0;
+					else if (Y > static_cast<int>(State->Get_DataHeight()))
+						Y = State->Get_DataHeight();
+					std::cout << "STATUS A :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					{
+						State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+						Press_Flg = false;
+					}
+				}
+			}
+		}
+	}
+
+	if (IEB->Get_Margin_X() > 0)
+	{
+		if ((LCB->Get_LocationX(Exac_Mov) > State_Data_Width))
+		{
+			State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+			State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+			std::cout << "RES :" << this->_Location_Distance_MidX << "__" << this->_Location_Move_DistanceX << std::endl;
+		}
+		else
+		{
+			for (int i = 0; i < 2; ++i)
+			{
+				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_RIGH);
+
+				if (State->Get_LocationX() <= static_cast<int>(State->Get_DataWidth()))
+				{
+					int X = State->Get_LocationX();
+					int Y = State->Get_LocationY();
+					if (X < 0)
+						X = 0;
+					else if (X > static_cast<int>(State->Get_DataWidth()))
+						X = State->Get_DataWidth();
+					if (Y < 0)
+						Y = 0;
+					else if (Y > static_cast<int>(State->Get_DataHeight()))
+						Y = State->Get_DataHeight();
+					std::cout << "STATUS B :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					{
+						State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+						Press_Flg = false;
+					}
+				}
+			}
+		}
+	}
+
+	if (IEB->Get_Margin_Y() > 0)
+	{
+		if ((LCB->Get_LocationY(Exac_Mov) > 0))
+		{
+			State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+			State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+			std::cout << "RES :" << this->_Location_Distance_MidY << "__" << this->_Location_Move_DistanceY << std::endl;
+		}
+		else
+		{
+			for (int i = 0; i < 2; ++i)
+			{
+				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
+
+				if (State->Get_LocationY() >= 0)
+				{
+					int X = State->Get_LocationX();
+					int Y = State->Get_LocationY();
+					if (X < 0)
+						X = 0;
+					else if (X > static_cast<int>(State->Get_DataWidth()))
+						X = State->Get_DataWidth();
+					if (Y < 0)
+						Y = 0;
+					else if (Y > static_cast<int>(State->Get_DataHeight()))
+						Y = State->Get_DataHeight();
+					std::cout << "STATUS C :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					{
+						State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+						Press_Flg = false;
+					}
+				}
+			}
+		}
+	}
+
+	if (IEB->Get_Margin_Y() < 0)
+	{
+		if (LCB->Get_LocationY(Exac_Mov) < -State_Data_Height)
+		{
+			State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+			State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+			std::cout << "RES :" << this->_Location_Distance_MidY << "__" << this->_Location_Move_DistanceY << std::endl;
+		}
+		else
+		{
+			for (int i = 0; i < 2; ++i)
+			{
+				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
+
+				if (State->Get_LocationY() <= static_cast<int>(State->Get_DataHeight()))
+				{
+					int X = State->Get_LocationX();
+					int Y = State->Get_LocationY();
+					if (X < 0)
+						X = 0;
+					else if (X > static_cast<int>(State->Get_DataWidth()))
+						X = State->Get_DataWidth();
+					if (Y < 0)
+						Y = 0;
+					else if (Y > static_cast<int>(State->Get_DataHeight()))
+						Y = State->Get_DataHeight();
+					std::cout << "STATUS D :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
+						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
+					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					{
+						State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+						Press_Flg = false;
+					}
+				}
+			}
+		}
+	}
+}
+
+void OpenGL_Draw::Update_Current()
+{
+	LocationBase* LCB{ &LocationBase::GetLocationBase() };
+	static int Move_Loc{ LCB->New_Location_set("Move_Adjust_Location") }; //记录手动移动状态的移动距离
+	this->_New_Current_Height = static_cast<int>(LCB->Get_LocationY(Move_Loc) / _Each_Height);
+	this->_New_Current_Width = static_cast<int>(LCB->Get_LocationX(Move_Loc) / _Each_Width);
+}
+
 int OpenGL_Draw::Get_PreLoad()
 {
 	return this->_PreLoads;
@@ -285,9 +461,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		init(State);
 	}
 
-	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
-	GameStateBase* GSB{ &GameStateBase::GetStateBase() };
-	LocationBase* LCB{ &LocationBase::GetLocationBase() };
+	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
+	static LocationBase* LCB{ &LocationBase::GetLocationBase() };
 
 	static int Auto_Loc = LCB->New_Location_set("Auto_Adjust_Location"); //记录自动调整状态的移动距离
 	static int Move_Loc = LCB->New_Location_set("Move_Adjust_Location"); //记录手动移动状态的移动距离
@@ -317,17 +492,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
 
-		int NCUH{ static_cast<int>(LCB->Get_LocationY(Move_Loc) / _Each_Height) };
-		int NCUW{ static_cast<int>(LCB->Get_LocationX(Move_Loc) / _Each_Width) };
-
 		static int ACUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
 		static int ACUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
 
 		static int ANCUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
 		static int ANCUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
-
-		int TOCUH{ static_cast<int>((static_cast<double>(LCB->Get_LocationY(Move_Loc)) * 2) / _Each_Height) };
-		int TOCUW{ static_cast<int>((static_cast<double>(LCB->Get_LocationX(Move_Loc)) * 2) / _Each_Width) };
 
 		if (State->Get_Adjust_Flag())
 		{
@@ -338,178 +507,23 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		static int Wait_Frame{ 0 };
 		bool Press_Flg{ false };
 
-		//std::cout << "FLAG ----------------------------B"<< State->Get_Adjust_Flag() << std::endl;
-		float Res_SCDX = LCB->Get_LocationX(Dist_Mid);
-		float Res_SCDY = LCB->Get_LocationY(Dist_Mid);
-		float Res_SMDX = State->Get_Move_Distance()._Location_X;
+		this->_Location_Distance_MidX = LCB->Get_LocationX(Dist_Mid);
+		this->_Location_Distance_MidY = LCB->Get_LocationY(Dist_Mid);
+		this->_Location_Move_DistanceX = State->Get_Move_Distance()._Location_X;
+		this->_Location_Move_DistanceY = State->Get_Move_Distance()._Location_Y;
+
+		//float Res_SCDX = LCB->Get_LocationX(Dist_Mid);
+		//float Res_SCDY = LCB->Get_LocationY(Dist_Mid);
+		//float Res_SMDX = State->Get_Move_Distance()._Location_X;
 		float Res_SMDY = State->Get_Move_Distance()._Location_Y;
 
 		IEB->GetInsert(_Main_Window, State);//获取输入
-
-		static double State_Data_Width = State->Get_DataWidth() * this->_Each_Width;
-		static double State_Data_Height = State->Get_DataHeight() * this->_Each_Height;
 
 #if _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_
 		std::cout << "Limit " << State_Data_Width << " -- " << State_Data_Height << std::endl;
 #endif
 
-		//std::cout << State->Get_LocationX() << " -- " << State->Get_LocationY() << std::endl;
-
-		if (IEB->Get_Margin_X() < 0)
-		{
-			if ((LCB->Get_LocationX(Exac_Mov) < 0))
-			{
-				State->Get_Screen_Distance()._Location_X = Res_SCDX;
-				State->Get_Move_Distance()._Location_X = Res_SMDX;
-				std::cout << "RES :" << Res_SCDX << "__" << Res_SMDX << std::endl;
-			}
-			else
-			{
-				for (int i = 0; i < 2; ++i)
-				{
-					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_LEFT);
-
-					if (State->Get_LocationX() >= 0)
-					{
-						int X = State->Get_LocationX();
-						int Y = State->Get_LocationY();
-						if (X < 0)
-							X = 0;
-						else if (X > static_cast<int>(State->Get_DataWidth()))
-							X = State->Get_DataWidth();
-						if (Y < 0)
-							Y = 0;
-						else if (Y > static_cast<int>(State->Get_DataHeight()))
-							Y = State->Get_DataHeight();
-						std::cout << "STATUS A :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
-						{
-							State->Get_Screen_Distance()._Location_X = Res_SCDX;
-							State->Get_Move_Distance()._Location_X = Res_SMDX;
-							Press_Flg = false;
-						}
-					}
-				}
-			}
-		}
-
-		if (IEB->Get_Margin_X() > 0)
-		{
-			if ((LCB->Get_LocationX(Exac_Mov) > State_Data_Width))
-			{
-				State->Get_Screen_Distance()._Location_X = Res_SCDX;
-				State->Get_Move_Distance()._Location_X = Res_SMDX;
-				std::cout << "RES :" << Res_SCDX << "__" << Res_SMDX << std::endl;
-			}
-			else
-			{
-				for (int i = 0; i < 2; ++i)
-				{
-					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_RIGH);
-
-					if (State->Get_LocationX() <= static_cast<int>(State->Get_DataWidth()))
-					{
-						int X = State->Get_LocationX();
-						int Y = State->Get_LocationY();
-						if (X < 0)
-							X = 0;
-						else if (X > static_cast<int>(State->Get_DataWidth()))
-							X = State->Get_DataWidth();
-						if (Y < 0)
-							Y = 0;
-						else if (Y > static_cast<int>(State->Get_DataHeight()))
-							Y = State->Get_DataHeight();
-						std::cout << "STATUS B :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
-						{
-							State->Get_Screen_Distance()._Location_X = Res_SCDX;
-							State->Get_Move_Distance()._Location_X = Res_SMDX;
-							Press_Flg = false;
-						}
-					}
-				}
-			}
-		}
-
-		if (IEB->Get_Margin_Y() > 0)
-		{
-			if ((LCB->Get_LocationY(Exac_Mov) > 0))
-			{
-				State->Get_Screen_Distance()._Location_Y = Res_SCDY;
-				State->Get_Move_Distance()._Location_Y = Res_SMDY;
-				std::cout << "RES :" << Res_SCDY << "__" << Res_SMDY << std::endl;
-			}
-			else
-			{
-				for (int i = 0; i < 2; ++i)
-				{
-					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
-
-					if (State->Get_LocationY() >= 0)
-					{
-						int X = State->Get_LocationX();
-						int Y = State->Get_LocationY();
-						if (X < 0)
-							X = 0;
-						else if (X > static_cast<int>(State->Get_DataWidth()))
-							X = State->Get_DataWidth();
-						if (Y < 0)
-							Y = 0;
-						else if (Y > static_cast<int>(State->Get_DataHeight()))
-							Y = State->Get_DataHeight();
-						std::cout << "STATUS C :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
-						{
-							State->Get_Screen_Distance()._Location_Y = Res_SCDY;
-							State->Get_Move_Distance()._Location_Y = Res_SMDY;
-							Press_Flg = false;
-						}
-					}
-				}
-			}
-		}
-
-		if (IEB->Get_Margin_Y() < 0)
-		{
-			if (LCB->Get_LocationY(Exac_Mov) < -State_Data_Height)
-			{
-				State->Get_Screen_Distance()._Location_Y = Res_SCDY;
-				State->Get_Move_Distance()._Location_Y = Res_SMDY;
-				std::cout << "RES :" << Res_SCDY << "__" << Res_SMDY << std::endl;
-			}
-			else
-			{
-				for (int i = 0; i < 2; ++i)
-				{
-					State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
-
-					if (State->Get_LocationY() <= static_cast<int>(State->Get_DataHeight()))
-					{
-						int X = State->Get_LocationX();
-						int Y = State->Get_LocationY();
-						if (X < 0)
-							X = 0;
-						else if (X > static_cast<int>(State->Get_DataWidth()))
-							X = State->Get_DataWidth();
-						if (Y < 0)
-							Y = 0;
-						else if (Y > static_cast<int>(State->Get_DataHeight()))
-							Y = State->Get_DataHeight();
-						std::cout << "STATUS D :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-							State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-						if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
-						{
-							State->Get_Screen_Distance()._Location_Y = Res_SCDY;
-							State->Get_Move_Distance()._Location_Y = Res_SMDY;
-							Press_Flg = false;
-						}
-					}
-				}
-			}
-		}
+		HitEdge_Check(State, Press_Flg);
 
 		if (IEB->Get_Key_Pressed())
 		{
@@ -525,8 +539,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			else
 				State->Set_Adjust_Flag(true);
 		}
-
-		//GSB->Set_CurrentLoc(MoveX, MoveY);//更新地图中心点/当前移动物品坐标
 
 		double Current_Height{ (static_cast<double>(LCB->Get_LocationY(Dist_Mid)) * 2 + 1) / (_Each_Height) };
 		double Current_Width{ (static_cast<double>(LCB->Get_LocationX(Dist_Mid)) * 2 + 1) / (_Each_Width) };
@@ -599,23 +611,23 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			else
 				Wait_Frame++;
 
-			if (NCUH != _Current_Move_Height)
+			if (_New_Current_Height != _Current_Move_Height)
 			{
-				std::cout << "NCUH __ " << NCUH << " CUH __ " << _Current_Move_Height << std::endl;
-				int TempVal{ NCUH };
+				std::cout << "NCUH __ " << _New_Current_Height << " CUH __ " << _Current_Move_Height << std::endl;
+				int TempVal{ _New_Current_Height };
 				std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
-				if (NCUH > _Current_Move_Height)
+				if (_New_Current_Height > _Current_Move_Height)
 				{
-					while (NCUH-- > _Current_Move_Height)
+					while (_New_Current_Height-- > _Current_Move_Height)
 					{
 						//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 						State->Set_Move_State(MoveToNH);
 						LCB->Get_LocationY(Stat_Loc) -= static_cast<float>(_Each_Height);
 					}
 				}
-				else if (NCUH < _Current_Move_Height)
+				else if (_New_Current_Height < _Current_Move_Height)
 				{
-					while (NCUH++ < _Current_Move_Height)
+					while (_New_Current_Height++ < _Current_Move_Height)
 					{
 						//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
 						State->Set_Move_State(MoveToPH);
@@ -626,23 +638,23 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				_Is_State_Changed = true;
 			}
 
-			if (NCUW != _Current_Move_Width)
+			if (_New_Current_Width != _Current_Move_Width)
 			{
-				std::cout << "NCUW __ " << NCUW << " CUW __ " << _Current_Move_Width << std::endl;
-				int TempVal{ NCUW };
+				std::cout << "NCUW __ " << _New_Current_Width << " CUW __ " << _Current_Move_Width << std::endl;
+				int TempVal{ _New_Current_Width };
 				std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
-				if (NCUW > _Current_Move_Width)
+				if (_New_Current_Width > _Current_Move_Width)
 				{
-					while (NCUW-- > _Current_Move_Width)
+					while (_New_Current_Width-- > _Current_Move_Width)
 					{
 						//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
 						State->Set_Move_State(MoveToPW);
 						LCB->Get_LocationX(Stat_Loc) -= static_cast<float>(_Each_Width);
 					}
 				}
-				else if (NCUW < _Current_Move_Width)
+				else if (_New_Current_Width < _Current_Move_Width)
 				{
-					while (NCUW++ < _Current_Move_Width)
+					while (_New_Current_Width++ < _Current_Move_Width)
 					{
 						//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
 						State->Set_Move_State(MoveToNW);

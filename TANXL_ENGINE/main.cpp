@@ -20,12 +20,6 @@ int main()
 	if (TGE.Check_Engine_Status())
 		return -1;
 
-	RandomBase* UIB{ &RandomBase::GetRandomBase() };
-
-	UIB->Suffle_UniData(1);
-
-	std::cout << UIB->GenerateAutoSeed() << std::endl;
-
 	//Get Instance
 
 	GameStateBase* GSB{ &GameStateBase::GetStateBase(1, 1) };
@@ -42,18 +36,12 @@ int main()
 		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"/*a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"*/);
 
-	std::cout << UIB->Generate_State(10, 10) << std::endl;
-	std::cout << UIB->Generate_State(10, 10) << std::endl;
-	std::cout << UIB->Generate_State(10, 10) << std::endl;
-	std::cout << UIB->Generate_State(10, 10) << std::endl;
-
 	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
 	TGE.Engine_Save_Source_Infor("Tanxl Engine VersionMes");
 
-	bool CurrStatus = false;
 	bool Appended = false;
 
 	Key_Unit* KU = new Key_Unit(GLFW_KEY_E);
@@ -71,6 +59,7 @@ int main()
 	std::vector<std::string> KeyUnitNames;
 	while (1)
 	{
+		TGE.Engine_Insert_State_Update();
 		TGE.Engine_Draw_State_Adjust(0);
 		if (KU->MoveToY == true)
 		{

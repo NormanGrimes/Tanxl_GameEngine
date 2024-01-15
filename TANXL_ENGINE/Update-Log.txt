@@ -1,3 +1,11 @@
+TEnGinE Version-0.1 Build-91 2023-04-03 09:13 UPDATE_LOG
+////////////////////////////////////////////////////////
+绘制模块边缘检测功能改为独立函数。绘制模块手动移动坐标更
+新功能改为独立函数。引擎管理模块增加更新移动与获取输入函
+数。绘制模块四个记录上一次移动坐标的变量移入私有成员。地
+图模块编译地图单元函数修复单元初始化类型错误的问题。地图
+模块编译地图单元函数开放地图单元是否可移动的编辑。
+
 TEnGinE Version-0.1 Build-90 2023-03-30 09:16 UPDATE_LOG
 ////////////////////////////////////////////////////////
 玩家顶点着色器缩小玩家方块尺寸。地图模块更新移动接口改为
@@ -385,17 +393,39 @@ TEnGinE Version-0.1 Build-45 2022-10-10 22:05 UPDATE_LOG
 数据容器的接口。State模块修复Set_Display_State中的重复添
 加地图单元的问题。State模块地图数据改用特定接口获取。引
 擎管理模块更新地图数据编译接口，增加InsertBase的支持。
+--------------------------------------------------------
+The drawing module fixes a loading logic error. The 
+State module adds an interface for cleaning map data 
+containers. The State module fixes the problem of 
+repeatedly adding map units in the Set_Display_State. 
+The map data of the State module is obtained using a 
+specific interface instead. The engine management 
+module updates the map data compilation interface and 
+adds support for InsertBase.
 
 TEnGinE Version-0.1 Build-44 2022-10-04 21:16 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块优化减少主绘制循环的代码量。State模块移除一个微调
 接口不必要的入参。引擎管理模块加入两个State模块接口。绘制
 模块优化ReLoadState冗余判断。
+--------------------------------------------------------
+Drawing module optimizations reduce the amount of code 
+for the main draw loop. The State module removes 
+unnecessary input parameters from a fine-tuning 
+interface. The engine management module joins two State 
+module interfaces. The drawing module optimizes the 
+ReLoadState redundancy judgment.
 
 TEnGinE Version-0.1 Build-43 2022-09-26 23:22 UPDATE_LOG
 ////////////////////////////////////////////////////////
 State模块加入可以控制自动调整频率的功能。增加引擎功能管理
 模块，后续将在其中整理各模块需要手动修改的功能。
+--------------------------------------------------------
+The State module adds a function that can control 
+automatic frequency adjustment. Add the engine function 
+management module, where the functions that need to be 
+manually modified by each module will be sorted out 
+later.
 
 TEnGinE Version-0.1 Build-42 TURBO 2022-09-24 00:00 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -405,12 +435,33 @@ TURBO版本整理代码并优化总体效率，以后将定期发布此类型更新。存储
 行效率提升。绘制模块地图载入的距离阈值修改为原来的两倍。绘制模
 块调整代码使地图载入效果更加稳定。State模块微调最后一段优化浮点
 数误差问题使之更加稳定。
+--------------------------------------------------------------
+The TURBO version cleans up the code and optimizes overall 
+efficiency, and updates of this type will be released 
+regularly in the future. The enclosure removes five 
+unnecessary internal interface inline settings. The storage 
+module fixes the error that the 32-bit Get Status function 
+uses the 20-bit operation. The storage module sets the item 
+function execution efficiency to improve efficiency. The 
+distance threshold for drawing module maps has been revised 
+to double the original. The drawing module adjustment code 
+makes the map loading more stable. The State module 
+fine-tunes the last paragraph to optimize the floating-point 
+error problem to make it more stable.
 
 TEnGinE Version-0.1 Build-41 2022-09-22 22:07 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块简化重新加载地图接口。State模块调整微调坐标函数的
 接口增加两个传参。输入模块输入函数接口调整增加两个传参。
 绘制模块修复大量问题正式完成地图自动载入功能。
+--------------------------------------------------------
+The drawing module simplifies the reloading map 
+interface. The State module adjusts the interface of 
+fine-tuning coordinate functions and adds two 
+parameters. The input function interface of the input 
+module is adjusted to add two parameters. The drawing 
+module fixes a large number of problems and officially 
+completes the automatic loading of maps.
 
 TEnGinE Version-0.1 Build-40 2022-09-21 22:38 UPDATE_LOG
 ////////////////////////////////////////////////////////
