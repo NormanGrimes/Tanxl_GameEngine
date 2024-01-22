@@ -7,6 +7,7 @@
 // 指针初始化nullptr取代NULL
 // 移除未使用的私有成员
 // 代码整理优化
+// 修改选项成员为无符号数
 
 #pragma once
 
@@ -61,13 +62,13 @@ public:
 private:
 	void Display(int Depth = 0, unsigned Def_Col = FONT_COLOR_WHITE | BACK_COLOR_RED, unsigned Real_Sel = FONT_COLOR_WHITE | BACK_COLOR_PURPLE);
 
-	bool Insert_Action(int* Action_Num, bool* Action_Bol, size_t List_Size);
+	bool Insert_Action(unsigned* Action_Num, bool* Action_Bol, size_t List_Size);
 
 	CONSOLE* Locate(int Target = 0);
 
 	std::string _Name;
 
-	int _Selector;
+	unsigned _Selector;
 	int _Page;
 	bool _Is_Selected;
 	bool _Is_Funcwork;

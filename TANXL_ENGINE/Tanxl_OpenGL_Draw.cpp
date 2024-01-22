@@ -74,14 +74,14 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glUseProgram(this->_Adjst_RenderingProgram);
+	this->_Health_Count = 10;
+
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 2 + 3);//SWidth
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Health_Count);//SWidth
 
-	glUseProgram(this->_State_RenderingProgram);
 	glProgramUniform1i(this->_State_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 9, (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) * 6);
@@ -98,13 +98,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
-	glDrawArrays(GL_TRIANGLES, 0, (this->_HeightInt + _PreLoads) * (this->_WidthInt + _PreLoads) * 6 + 30);
-
 	Set_Trigger_Range(true, 0.6f, 0.6f);
 
-	int Min{ this->_HeightInt > this->_WidthInt ? this->_WidthInt : this->_HeightInt };
-	State->Get_Move_Distance()._Location_X = 2.0f / Min * (Min - 1);
-	State->Get_Move_Distance()._Location_Y = -(2.0f / Min * (Min - 1));
+	float Half_Width{ (this->_WidthInt - 1) / 2.0f };
+	float Half_Height{ (this->_HeightInt - 1) / 2.0f };
+
+	State->Get_Move_Distance()._Location_X = (2.0f / this->_WidthInt) * Half_Width + (1.0f / this->_WidthInt) * (this->_PreLoads);
+	State->Get_Move_Distance()._Location_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (this->_PreLoads);
 
 	ReLoadState(State);
 }
@@ -137,8 +137,10 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 				int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
 				if (State->Get_GameState()->size() == 0)
 					return;
-
-				_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState()->size())->Get_State_Id();//3/20 STATE_EXTEND_MIDD
+				if(State->Get_Extend_State())
+					_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState()->size())->Get_State_Id();
+				else
+					_StateInfor[i] = State->Get_StateUnit(STATE_ORIGIN_MIDD, x % State->Get_GameState()->size())->Get_State_Id();
 			}
 
 			Move_NX++;
@@ -252,13 +254,29 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
-					std::cout << "STATUS A :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					if (State->Get_Extend_State())
 					{
-						State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
-						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
-						Press_Flg = false;
+						int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS A :" << X << "_" << Y << "_" <<
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+							State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+							Press_Flg = false;
+						}
+					}
+					else
+					{
+						int State_Id{ State->Get_StateUnit(STATE_ORIGIN_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS A :" << X << "_" << Y << "_" << 
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+							State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+							Press_Flg = false;
+						}
 					}
 				}
 			}
@@ -291,13 +309,29 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
-					std::cout << "STATUS B :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					if (State->Get_Extend_State())
 					{
-						State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
-						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
-						Press_Flg = false;
+						int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS B :" << X << "_" << Y << "_" <<
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+							State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+							Press_Flg = false;
+						}
+					}
+					else
+					{
+						int State_Id{ State->Get_StateUnit(STATE_ORIGIN_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS B :" << X << "_" << Y << "_" <<
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+							State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+							Press_Flg = false;
+						}
 					}
 				}
 			}
@@ -330,13 +364,29 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
-					std::cout << "STATUS C :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					if (State->Get_Extend_State())
 					{
-						State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
-						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
-						Press_Flg = false;
+						int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS C :" << X << "_" << Y << "_" <<
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+							State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+							Press_Flg = false;
+						}
+					}
+					else
+					{
+						int State_Id{ State->Get_StateUnit(STATE_ORIGIN_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS C :" << X << "_" << Y << "_" << 
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+							State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+							Press_Flg = false;
+						}
 					}
 				}
 			}
@@ -369,13 +419,29 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
-					std::cout << "STATUS D :" << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - 1 << "_" <<
-						State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() << std::endl;
-					if (State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() == 3)
+					if (State->Get_Extend_State())
 					{
-						State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
-						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
-						Press_Flg = false;
+						int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS D :" << X << "_" << Y << "_" << 
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+							State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+							Press_Flg = false;
+						}
+					}
+					else
+					{
+						int State_Id{ State->Get_StateUnit(STATE_ORIGIN_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+						std::cout << "STATUS D :" << X << "_" << Y << "_" << 
+							Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
+						if (State_Id == 3)
+						{
+							State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+							State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+							Press_Flg = false;
+						}
 					}
 				}
 			}
@@ -445,7 +511,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6);
 
 	glUseProgram(_Adjst_RenderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, 30);
+	glDrawArrays(GL_TRIANGLES, 0, this->_Health_Count * 6);
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
@@ -471,11 +537,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	static int Exac_Mov = State->Get_Distance_Move_Id();
 
 #if _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_
-	std::cout << "Auto_Loc " << LCB->Get_LocationX(Auto_Loc) << " -- " << LCB->Get_LocationY(Auto_Loc) << std::endl;
-	std::cout << "Move_Loc " << LCB->Get_LocationX(Move_Loc) << " -- " << LCB->Get_LocationY(Move_Loc) << std::endl;
-	std::cout << "Dist_Mid " << LCB->Get_LocationX(Dist_Mid) << " -- " << LCB->Get_LocationY(Dist_Mid) << std::endl;
+	//std::cout << "Auto_Loc " << LCB->Get_LocationX(Auto_Loc) << " -- " << LCB->Get_LocationY(Auto_Loc) << std::endl;
+	//std::cout << "Move_Loc " << LCB->Get_LocationX(Move_Loc) << " -- " << LCB->Get_LocationY(Move_Loc) << std::endl;
+	//std::cout << "Dist_Mid " << LCB->Get_LocationX(Dist_Mid) << " -- " << LCB->Get_LocationY(Dist_Mid) << std::endl;
 	std::cout << "Exac_Mov " << LCB->Get_LocationX(Exac_Mov) << " -- " << LCB->Get_LocationY(Exac_Mov) << std::endl;// MAJOR
-	std::cout << "Stat_Loc " << LCB->Get_LocationX(Stat_Loc) << " -- " << LCB->Get_LocationY(Stat_Loc) << std::endl << std::endl << std::endl;
+	//std::cout << "Stat_Loc " << LCB->Get_LocationX(Stat_Loc) << " -- " << LCB->Get_LocationY(Stat_Loc) << std::endl << std::endl << std::endl;
 #endif
 	
 	if (!glfwWindowShouldClose(_Main_Window))
@@ -515,12 +581,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		//float Res_SCDX = LCB->Get_LocationX(Dist_Mid);
 		//float Res_SCDY = LCB->Get_LocationY(Dist_Mid);
 		//float Res_SMDX = State->Get_Move_Distance()._Location_X;
-		float Res_SMDY = State->Get_Move_Distance()._Location_Y;
+		//float Res_SMDY = State->Get_Move_Distance()._Location_Y;
 
 		IEB->GetInsert(_Main_Window, State);//获取输入
 
 #if _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_
-		std::cout << "Limit " << State_Data_Width << " -- " << State_Data_Height << std::endl;
+		std::cout << "Limit " << State->Get_DataWidth() * this->_Each_Width << " -- "
+			<< State->Get_DataHeight() * this->_Each_Height << std::endl;
 #endif
 
 		HitEdge_Check(State, Press_Flg);

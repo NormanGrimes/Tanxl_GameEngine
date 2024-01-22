@@ -77,6 +77,7 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 	{
 	case STATE_ORIGIN_MIDD:
 		Target = &this->_GameState;
+		this->_Extend_State_Enable = false;
 		break;
 	case STATE_EXTEND_MIDD:
 		delete this->_GameState_Extend._MIDD;
@@ -207,7 +208,7 @@ void GameStateBase::Set_SquareState(int State_Id)
 				this->_GameState_Id._RIGH_ABOV = Link->_Data->_Data_Units.at(8)->_Id;
 				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
 				this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Id;
-
+				this->_Extend_State_Enable = true;
 				this->Set_DataAll_State(10, 10);
 				return;
 			}
@@ -377,6 +378,11 @@ void GameStateBase::Set_Adjust_Frequency(int Frame)
 	this->_Adjust_Frame = Frame;
 }
 
+void GameStateBase::Set_Extend_State_Enable(bool Enable)
+{
+	this->_Extend_State_Enable = Enable;
+}
+
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
 {
 	static std::vector<bool> MAB{};
@@ -488,7 +494,7 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f), _Compile_Success(false),
 	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1),
-	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
+	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false), _Extend_State_Enable(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
@@ -614,7 +620,7 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
 _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false),
-_Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
+_Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false), _Extend_State_Enable(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
@@ -626,6 +632,11 @@ GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 bool GameStateBase::Get_Compile_Status()
 {
 	return this->_Compile_Success;
+}
+
+bool GameStateBase::Get_Extend_State()
+{
+	return this->_Extend_State_Enable;
 }
 
 void GameStateBase::Set_Adjust_Flag(bool Adjust_Flag)

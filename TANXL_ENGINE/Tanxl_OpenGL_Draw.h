@@ -17,13 +17,17 @@
 // 边缘检测功能改为独立函数
 // 手动坐标更新功能改为独立函数
 // 四个记录上一次移动坐标的变量移入私有成员
+// 支持旧式与扩展地图的载入与移动切换
+// 修复初始坐标计算错误拟合的问题
+// 增加生命值显示计数成员替换原固定值
+// 移除初始化部分不必要的调用
 
 #pragma once
 
 #ifndef _TANXL_OPENGL_DRAW_
 #define _TANXL_OPENGL_DRAW_
 
-#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 1
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
@@ -525,6 +529,8 @@ private:
 	int _Current_Move_Height{ 0 };
 	//记录手动移动指定的当前Y轴基本矩形
 	int _Current_Move_Width{ 0 };
+	//记录需要绘制的生命值纹理 前两个为角色纹理
+	int _Health_Count{ 5 };
 	//当前此模块的版本号
 	const std::string _Version{ "0.9" };
 	GLFWwindow* _Main_Window;

@@ -4,6 +4,7 @@
 // 游戏界面增加自定义坐标功能
 // 可通过同一变量决定显示的生命值图标数量
 // 缩小玩家方块尺寸
+// 支持指定数量生命值纹理换行
 
 #version 430
 
@@ -114,43 +115,48 @@ void main(void)
 		Cube = 7;
 	}
 
-	for(int i = 2; i < Health_Length; i++)
+	for(int i = 2, j = 2; i < Health_Length; i++, j++)
 	{
+		float LineSpace = (i - 1) / 4 * 0.1f;
+
 		if (gl_VertexID == i * 6 + 0)
 		{
-			gl_Position = vec4(  Width / 16 + Begin_Location_X + 0.1f * (i - 1), -Height / 16 + Begin_Location_Y, 0.1f, 1.0f); 
+			gl_Position = vec4(  Width / 16 + Begin_Location_X + 0.1f * (j - 1), -Height / 16 + Begin_Location_Y - LineSpace, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 6;
 		}
 		else if (gl_VertexID == i * 6 + 1)
 		{
-			gl_Position = vec4( -Width / 16 + Begin_Location_X + 0.1f * (i - 1), -Height / 16 + Begin_Location_Y, 0.1f, 1.0f); 
+			gl_Position = vec4( -Width / 16 + Begin_Location_X + 0.1f * (j - 1), -Height / 16 + Begin_Location_Y - LineSpace, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 6;
 		}
 		else if (gl_VertexID == i * 6 + 2)
 		{
-			gl_Position = vec4(  Width / 16 + Begin_Location_X + 0.1f * (i - 1),  Height / 16 + Begin_Location_Y, 0.1f, 1.0f); 
+			gl_Position = vec4(  Width / 16 + Begin_Location_X + 0.1f * (j - 1),  Height / 16 + Begin_Location_Y - LineSpace, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 6;
 		}
 		else if (gl_VertexID == i * 6 + 3)
 		{
-			gl_Position = vec4( -Width / 16 + Begin_Location_X + 0.1f * (i - 1), -Height / 16 + Begin_Location_Y, 0.1f, 1.0f); 
+			gl_Position = vec4( -Width / 16 + Begin_Location_X + 0.1f * (j - 1), -Height / 16 + Begin_Location_Y - LineSpace, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 6;
 		}
 		else if (gl_VertexID == i * 6 + 4)
 		{
-			gl_Position = vec4( -Width / 16 + Begin_Location_X + 0.1f * (i - 1),  Height / 16 + Begin_Location_Y, 0.1f, 1.0f); 
+			gl_Position = vec4( -Width / 16 + Begin_Location_X + 0.1f * (j - 1),  Height / 16 + Begin_Location_Y - LineSpace, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 6;
 		}
 		else if (gl_VertexID == i * 6 + 5)
 		{
-			gl_Position = vec4(  Width / 16 + Begin_Location_X + 0.1f * (i - 1),  Height / 16 + Begin_Location_Y, 0.1f, 1.0f); 
+			gl_Position = vec4(  Width / 16 + Begin_Location_X + 0.1f * (j - 1),  Height / 16 + Begin_Location_Y - LineSpace, 0.1f, 1.0f); 
 			vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			Cube = 6;
 		}
+
+		if(i % 4 == 0)
+			j -= 4;
 	}
 }

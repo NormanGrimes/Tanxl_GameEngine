@@ -12,7 +12,7 @@
 #include "Tanxl_Engine_Manager.h"
 
 int main()
-{
+{	
 	//Data Function Test
 
 	Tanxl_Engine TGE;
@@ -50,17 +50,18 @@ int main()
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
-	TGE.Engine_State_Set_Display(5, 5, 4);
+	TGE.Engine_State_Set_Display(4, 4, 4);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
-
-	GSB->Set_SquareState(4);
+	
+	//GSB->Set_SquareState(4);
 
 	std::vector<std::string> KeyUnitNames;
 	while (1)
 	{
 		TGE.Engine_Insert_State_Update();
 		TGE.Engine_Draw_State_Adjust(0);
+
 		if (KU->MoveToY == true)
 		{
 			if (Appended == false)

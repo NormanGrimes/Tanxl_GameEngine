@@ -6,6 +6,7 @@
 // 设置扩展地图接口增加地图尺寸设置
 // 编译地图单元函数修复单元初始化类型错误的问题
 // 编译地图单元函数开放地图单元是否可移动的编辑
+// 增加私有成员标记是否启用扩展世界
 
 #pragma once
 
@@ -126,10 +127,12 @@ public:
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
 	void Set_Adjust_Frequency(int Frame);
+	void Set_Extend_State_Enable(bool Enable);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Reload_State(float& CurrentX, float& CurrentY);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	bool Get_Compile_Status();
+	bool Get_Extend_State();
 	bool Get_Adjust_Flag();
 	bool Get_Adjust_While_Move();
 	bool Get_Engine_File();
@@ -207,6 +210,8 @@ private:
 	bool _Is_Adjusting;
 	//_Compile_Success用于标记输入的地图数据是否编译成功
 	bool _Compile_Success;
+	//_Extend_State_Enable用以标记是否启用了扩展世界功能
+	bool _Extend_State_Enable;
 	//_MState用于记录当前加载地图区域
 	Move_State _MState;
 	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
