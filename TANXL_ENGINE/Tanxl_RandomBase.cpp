@@ -102,3 +102,8 @@ void RandomBase::Suffle_UniData(int Times)
         }
     }
 }
+
+const std::string RandomBase::Get_Version()
+{
+    return this->_Version;
+}

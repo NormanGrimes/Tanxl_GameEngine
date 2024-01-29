@@ -119,6 +119,11 @@ void LocationBase::Set_Location(int Pos, float LocationX, float LocationY)
 	this->_LocationS.at(Pos)->Set_Location(LocationX, LocationY);
 }
 
+const std::string LocationBase::Get_Version()
+{
+	return this->_Version;
+}
+
 LocationBase::LocationBase() :_LocationS(0) {}
 
 LocationBase::~LocationBase() {}

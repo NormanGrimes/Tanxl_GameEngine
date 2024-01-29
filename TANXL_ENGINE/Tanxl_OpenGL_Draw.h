@@ -21,6 +21,10 @@
 // 修复初始坐标计算错误拟合的问题
 // 增加生命值显示计数成员替换原固定值
 // 移除初始化部分不必要的调用
+// 增加生命值相关设置功能
+// 增加移动更新功能的控制台输出控制宏
+// 修复手动输入不会更新地图的问题
+// 修复自动调整过于灵敏的问题
 
 #pragma once
 
@@ -31,7 +35,8 @@
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
-#define _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_   1
+#define _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_   0
+#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      1
 
 #endif
 
@@ -469,6 +474,7 @@ public:
 	void Set_Clear(bool Clear);
 	void Set_Trigger_Mode(bool Mode);
 	void Set_Trigger_Range(bool Enable, float Height, float Width);
+	void Set_Health(int Health_Count, float Health_Margin = 0.1f);
 	void Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State, bool& PressFlg);
 	void Update_Current();
@@ -531,6 +537,8 @@ private:
 	int _Current_Move_Width{ 0 };
 	//记录需要绘制的生命值纹理 前两个为角色纹理
 	int _Health_Count{ 5 };
+	//记录需要绘制的生命值纹理之间的距离
+	float _Health_Image_Margin{ 0.1f };
 	//当前此模块的版本号
 	const std::string _Version{ "0.9" };
 	GLFWwindow* _Main_Window;

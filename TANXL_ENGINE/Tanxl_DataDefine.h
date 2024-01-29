@@ -5,6 +5,7 @@
 // 增加地图块数据的预定义
 // 增加更多预定义数据
 // 修改数据标签接口对应存储模块改动
+// 增加坐标模块的支持
 
 #pragma once
 
@@ -57,6 +58,7 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int Data = 0xFF)
 	// |  05  | TANXL_OPENGL_DRAW     |
 	// |  06  | TANXL_ENGINE_MANAGER  |
 	// |  07  | TANXL_RANDOMBASE      |
+	// |  08  | TANXL_LOCATIONBASE    |
 	// |------|-----------------------|
 
 	if ((Type == 0) && (Exac == 0))
@@ -79,6 +81,8 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int Data = 0xFF)
 			return "TANXL_ENGINE_MANAGER";
 		case 7:
 			return "TANXL_RANDOMBASE";
+		case 8:
+			return "TANXL_LOCATIONBASE";
 		default:
 			break;
 		}

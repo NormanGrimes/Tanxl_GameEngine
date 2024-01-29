@@ -12,6 +12,7 @@
 // 坐标基类增加调整指定坐标的功能
 // 坐标基类增加设置指定坐标的功能
 // 整理进入核心层
+// 增加版本信息功能
 
 #pragma once
 
@@ -92,6 +93,8 @@ public:
 
 	void Set_Location(int Pos, float LocationX = 0.0f, float LocationY = 0.0f);
 
+	const std::string Get_Version();
+
 private: 
 	LocationBase();
 	~LocationBase();
@@ -99,6 +102,8 @@ private:
 	LocationBase& operator=(const LocationBase&);
 
 	std::vector<Location*> _LocationS;
+
+	const std::string _Version{ "0.1" };
 };
 
 #endif

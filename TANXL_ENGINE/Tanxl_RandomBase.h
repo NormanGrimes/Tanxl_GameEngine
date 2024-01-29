@@ -5,6 +5,7 @@
 // 增加生成随机地图区块的功能
 // 随机数接口代码简化
 // 随机功能改用标准库实现
+// 增加版本信息功能
 
 #pragma once
 
@@ -39,6 +40,9 @@ public:
     //刷新随机字库
     void Suffle_UniData(int Times);
 
+    //获取版本信息
+    const std::string Get_Version();
+
 private:
 
     std::string UniData[62] = {
@@ -54,6 +58,8 @@ private:
     ~RandomBase();
     RandomBase(const RandomBase&);
     RandomBase& operator=(const RandomBase&);
+
+    const std::string _Version{ "0.3" };
 };
 
 #endif

@@ -80,7 +80,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Health_Count);//SWidth
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, this->_Health_Count);//Health Init
+	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 
 	glProgramUniform1i(this->_State_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
@@ -198,6 +199,12 @@ void OpenGL_Draw::Set_Trigger_Range(bool Enable, float Height, float Width)
 	this->_Is_Trigger_Enable = Enable;
 	this->_Trigger_Height = Height;
 	this->_Trigger_Width = Width;
+}
+
+void OpenGL_Draw::Set_Health(int Health_Count, float Health_Margin)
+{
+	this->_Health_Count = Health_Count;
+	this->_Health_Image_Margin = Health_Margin;
 }
 
 void OpenGL_Draw::Append_Texture(const char* Texture)
@@ -451,10 +458,10 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 
 void OpenGL_Draw::Update_Current()
 {
-	LocationBase* LCB{ &LocationBase::GetLocationBase() };
-	static int Move_Loc{ LCB->New_Location_set("Move_Adjust_Location") }; //记录手动移动状态的移动距离
-	this->_New_Current_Height = static_cast<int>(LCB->Get_LocationY(Move_Loc) / _Each_Height);
-	this->_New_Current_Width = static_cast<int>(LCB->Get_LocationX(Move_Loc) / _Each_Width);
+	static LocationBase* LCB{ &LocationBase::GetLocationBase() };
+	static GameStateBase* GSB{ &GameStateBase::GetStateBase() };
+	this->_New_Current_Height = -static_cast<int>((LCB->Get_LocationY(GSB->Get_Distance_Move_Id()) + 2.0f) / _Each_Height);
+	this->_New_Current_Width = -static_cast<int>((LCB->Get_LocationX(GSB->Get_Distance_Move_Id()) - 2.0f) / _Each_Width);
 }
 
 int OpenGL_Draw::Get_PreLoad()
@@ -537,11 +544,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	static int Exac_Mov = State->Get_Distance_Move_Id();
 
 #if _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_
-	//std::cout << "Auto_Loc " << LCB->Get_LocationX(Auto_Loc) << " -- " << LCB->Get_LocationY(Auto_Loc) << std::endl;
-	//std::cout << "Move_Loc " << LCB->Get_LocationX(Move_Loc) << " -- " << LCB->Get_LocationY(Move_Loc) << std::endl;
-	//std::cout << "Dist_Mid " << LCB->Get_LocationX(Dist_Mid) << " -- " << LCB->Get_LocationY(Dist_Mid) << std::endl;
+	std::cout << "Auto_Loc " << LCB->Get_LocationX(Auto_Loc) << " -- " << LCB->Get_LocationY(Auto_Loc) << std::endl;
+	std::cout << "Move_Loc " << LCB->Get_LocationX(Move_Loc) << " -- " << LCB->Get_LocationY(Move_Loc) << std::endl;
+	std::cout << "Dist_Mid " << LCB->Get_LocationX(Dist_Mid) << " -- " << LCB->Get_LocationY(Dist_Mid) << std::endl;
 	std::cout << "Exac_Mov " << LCB->Get_LocationX(Exac_Mov) << " -- " << LCB->Get_LocationY(Exac_Mov) << std::endl;// MAJOR
-	//std::cout << "Stat_Loc " << LCB->Get_LocationX(Stat_Loc) << " -- " << LCB->Get_LocationY(Stat_Loc) << std::endl << std::endl << std::endl;
+	std::cout << "Stat_Loc " << LCB->Get_LocationX(Stat_Loc) << " -- " << LCB->Get_LocationY(Stat_Loc) << std::endl << std::endl << std::endl;
 #endif
 	
 	if (!glfwWindowShouldClose(_Main_Window))
@@ -561,13 +568,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		static int ACUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
 		static int ACUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
 
-		static int ANCUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
-		static int ANCUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
+		static int ANCUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height) * 2 + 1, 0)) };
+		static int ANCUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width) * 2 + 1, 1)) };
 
 		if (State->Get_Adjust_Flag())
 		{
-			ANCUH = static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0));
-			ANCUW = static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1));
+			ANCUH = static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height) * 2 + 1, 0));
+			ANCUW = static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width) * 2 + 1, 1));
 		}
 
 		static int Wait_Frame{ 0 };
@@ -578,12 +585,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		this->_Location_Move_DistanceX = State->Get_Move_Distance()._Location_X;
 		this->_Location_Move_DistanceY = State->Get_Move_Distance()._Location_Y;
 
-		//float Res_SCDX = LCB->Get_LocationX(Dist_Mid);
-		//float Res_SCDY = LCB->Get_LocationY(Dist_Mid);
-		//float Res_SMDX = State->Get_Move_Distance()._Location_X;
-		//float Res_SMDY = State->Get_Move_Distance()._Location_Y;
-
 		IEB->GetInsert(_Main_Window, State);//获取输入
+
+		Update_Current();
 
 #if _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_
 		std::cout << "Limit " << State->Get_DataWidth() * this->_Each_Width << " -- "
@@ -610,7 +614,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		double Current_Height{ (static_cast<double>(LCB->Get_LocationY(Dist_Mid)) * 2 + 1) / (_Each_Height) };
 		double Current_Width{ (static_cast<double>(LCB->Get_LocationX(Dist_Mid)) * 2 + 1) / (_Each_Width) };
 
-		if (State->Get_Adjust_Flag())
+		if (State->Get_Adjust_Flag())//Auto Adjust Part
 		{
 			Temp_MoveY = State->Set_ExacHeight(Current_Height, LCB->Get_LocationY(Dist_Mid), LCB->Get_LocationY(Stat_Loc), LCB->Get_LocationY(Auto_Loc));
 			Temp_MoveX = State->Set_ExacWidth(Current_Width, LCB->Get_LocationX(Dist_Mid), LCB->Get_LocationX(Stat_Loc), LCB->Get_LocationX(Auto_Loc));
@@ -625,6 +629,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				{
 					while (ANCUH++ < ACUH)
 					{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+						std::cout << "Auto Adjust_Flag() __HP---" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToPH);
 						LCB->Get_LocationY(Stat_Loc) += static_cast<float>(_Each_Height);
 					}
@@ -633,6 +640,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				{
 					while (ANCUH-- > ACUH)
 					{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+						std::cout << "Auto Adjust_Flag() __HN---" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToNH);
 						LCB->Get_LocationY(Stat_Loc) -= static_cast<float>(_Each_Height);
 					}
@@ -650,6 +660,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				{
 					while (ANCUW++ < ACUW)
 					{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+						std::cout << "Auto Adjust_Flag() __WP---" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToNW);
 						LCB->Get_LocationX(Stat_Loc) += static_cast<float>(_Each_Width);
 					}
@@ -658,6 +671,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				{
 					while (ANCUW-- > ACUW)
 					{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+						std::cout << "Auto Adjust_Flag() __WN---" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToPW);
 						LCB->Get_LocationX(Stat_Loc) -= static_cast<float>(_Each_Width);
 					}
@@ -667,7 +683,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			}
 		}
 
-		if (!State->Get_Adjust_Flag() || State->Get_Adjust_While_Move())
+		if (!State->Get_Adjust_Flag() || State->Get_Adjust_While_Move())//Move Adjust Part
 		{
 			//std::cout << "Counts First_Adjust __" << First_Adjust << std::endl;
 			if (Wait_Frame == _First_Adjust)
@@ -680,14 +696,20 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 			if (_New_Current_Height != _Current_Move_Height)
 			{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 				std::cout << "NCUH __ " << _New_Current_Height << " CUH __ " << _Current_Move_Height << std::endl;
+#endif
 				int TempVal{ _New_Current_Height };
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 				std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
+#endif
 				if (_New_Current_Height > _Current_Move_Height)
 				{
 					while (_New_Current_Height-- > _Current_Move_Height)
 					{
-						//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+						std::cout << "Adjust_Flag() __HN---" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToNH);
 						LCB->Get_LocationY(Stat_Loc) -= static_cast<float>(_Each_Height);
 					}
@@ -696,7 +718,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				{
 					while (_New_Current_Height++ < _Current_Move_Height)
 					{
-						//std::cout << "Adjust_Flag() __P___" << State->Get_Adjust_Flag() << std::endl;
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+						std::cout << "Adjust_Flag() __HP___" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToPH);
 						LCB->Get_LocationY(Stat_Loc) += static_cast<float>(_Each_Height);
 					}
@@ -707,14 +731,20 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 			if (_New_Current_Width != _Current_Move_Width)
 			{
+#if _TANXL_OPENGLDRAW_START_VEADJUST_OUTPUT_
 				std::cout << "NCUW __ " << _New_Current_Width << " CUW __ " << _Current_Move_Width << std::endl;
+#endif
 				int TempVal{ _New_Current_Width };
+#if _TANXL_OPENGLDRAW_START_VEADJUST_OUTPUT_
 				std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
+#endif
 				if (_New_Current_Width > _Current_Move_Width)
 				{
 					while (_New_Current_Width-- > _Current_Move_Width)
 					{
-						//std::cout << "Adjust_Flag() __P---" << State->Get_Adjust_Flag() << std::endl;
+#if _TANXL_OPENGLDRAW_START_VEADJUST_OUTPUT_
+						std::cout << "Adjust_Flag() __WN---" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToPW);
 						LCB->Get_LocationX(Stat_Loc) -= static_cast<float>(_Each_Width);
 					}
@@ -723,7 +753,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				{
 					while (_New_Current_Width++ < _Current_Move_Width)
 					{
-						//std::cout << "Adjust_Flag() __N---" << State->Get_Adjust_Flag() << std::endl;
+#if _TANXL_OPENGLDRAW_START_VEADJUST_OUTPUT_
+						std::cout << "Adjust_Flag() __WP---" << State->Get_Adjust_Flag() << std::endl;
+#endif
 						State->Set_Move_State(MoveToNW);
 						LCB->Get_LocationX(Stat_Loc) += static_cast<float>(_Each_Width);
 					}
@@ -733,7 +765,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			}
 		}
 
-		//std::cout << State->Get_Screen_Distance()._LocX + Temp_MoveX << "__" << State->Get_Screen_Distance()._LocY + Temp_MoveY << std::endl;
 		glProgramUniform1f(_State_RenderingProgram, 2, LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
 		glProgramUniform1f(_State_RenderingProgram, 3, LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//
 
@@ -746,7 +777,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			_Is_State_Changed = false;
 		}
 
-		if (Press_Flg)
+		if (Press_Flg)//Edge Check
 		{
 			int Moves{};
 			_Trigger_Mode = true;
@@ -760,6 +791,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				std::cout << "FLAG ----------------------------A" << std::endl;
 				LCB->Get_LocationY(Stat_Loc) += 0.01f;
 				LCB->Get_LocationY(Move_Loc) += 0.01f;
+				//LCB->Get_LocationX(Auto_Loc) += 0.01f;
 				State->Get_Move_Distance()._Location_Y -= 0.01f;
 			}
 			if ((Moves & MoveToPH) == MoveToPH)
@@ -767,6 +799,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				std::cout << "FLAG ----------------------------B" << std::endl;
 				LCB->Get_LocationY(Stat_Loc) -= 0.01f;
 				LCB->Get_LocationY(Move_Loc) -= 0.01f;
+				//LCB->Get_LocationX(Auto_Loc) -= 0.01f;
 				State->Get_Move_Distance()._Location_Y += 0.01f;
 			}
 			if ((Moves & MoveToNW) == MoveToNW)
@@ -774,6 +807,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				std::cout << "FLAG ----------------------------C" << std::endl;
 				LCB->Get_LocationX(Stat_Loc) += 0.01f;
 				LCB->Get_LocationX(Move_Loc) += 0.01f;
+				//LCB->Get_LocationX(Auto_Loc) += 0.01f;
 				State->Get_Move_Distance()._Location_X -= 0.01f;
 			}
 			if ((Moves & MoveToPW) == MoveToPW)
@@ -781,6 +815,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				std::cout << "FLAG ----------------------------D" << std::endl;
 				LCB->Get_LocationX(Stat_Loc) -= 0.01f;
 				LCB->Get_LocationX(Move_Loc) -= 0.01f;
+				//LCB->Get_LocationX(Auto_Loc) -= 0.01f;
 				State->Get_Move_Distance()._Location_X += 0.01f;
 			}
 		}
