@@ -49,7 +49,7 @@ Location_Limited::Location_Limited(std::string Location_Name) :Location(Location
 
 unsigned Location_Limited::Check_Range()
 {
-	unsigned Range_Status{ 0xF };
+	unsigned Range_Status{ 0x0 };
 	if (this->Get_Current_Location()._Location_X > 0)
 		if (this->Get_Current_Location()._Location_X > this->Get_Current_Location()._Location_X)
 			Range_Status |= SIGNAL_RIGH;

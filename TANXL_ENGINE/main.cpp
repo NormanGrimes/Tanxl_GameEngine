@@ -59,7 +59,7 @@ int main()
 	std::vector<std::string> KeyUnitNames;
 	while (1)
 	{
-		TGE.Engine_Insert_State_Update();
+		//TGE.Engine_Insert_State_Update();
 		TGE.Engine_Draw_State_Adjust(0);
 
 		if (KU->MoveToY == true)

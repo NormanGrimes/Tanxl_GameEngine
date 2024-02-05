@@ -7,6 +7,14 @@
 // 编译地图单元函数修复单元初始化类型错误的问题
 // 编译地图单元函数开放地图单元是否可移动的编辑
 // 增加私有成员标记是否启用扩展世界
+// 清除显示容器的功能支持扩展地图
+// 获取地图数据功能支持扩展地图
+// 获取地图数据长度功能支持扩展地图
+// 获取地图单元与是否可移动功能支持扩展地图
+// 编译事件功能支持扩展地图
+// 扩展地图枚举增加一个特殊状态
+// 编译地图单元功能代码优化
+// 初始化同时对扩展地图初始化
 
 #pragma once
 
@@ -56,17 +64,17 @@ enum ECheck_Edge
 
 enum EState_Extend
 {
-	STATE_ORIGIN_MIDD,
+	STATE_EXTEND_SPEC      = 0,
 
-	STATE_EXTEND_MIDD,
-	STATE_EXTEND_LEFT,
-	STATE_EXTEND_RIGH,
-	STATE_EXTEND_ABOV,
-	STATE_EXTEND_BELO,
-	STATE_EXTEND_LEFT_ABOV,
-	STATE_EXTEND_LEFT_BELO,
-	STATE_EXTEND_RIGH_ABOV,
-	STATE_EXTEND_RIGH_BELO
+	STATE_EXTEND_MIDD      = 1,
+	STATE_EXTEND_LEFT      = 2,
+	STATE_EXTEND_RIGH      = 3,
+	STATE_EXTEND_ABOV      = 4,
+	STATE_EXTEND_BELO	   = 5,
+	STATE_EXTEND_LEFT_ABOV = 6,
+	STATE_EXTEND_LEFT_BELO = 7,
+	STATE_EXTEND_RIGH_ABOV = 8,
+	STATE_EXTEND_RIGH_BELO = 9
 };
 
 struct Move_State
@@ -100,28 +108,28 @@ class GameStateBase
 {
 public:
 	
-	size_t Get_StateSize();
-	StateUnit* Get_StateUnit(int Pos);
+	size_t Get_StateSize(EState_Extend State_Id = STATE_EXTEND_MIDD);
+	StateUnit* Get_StateUnit(int Pos, EState_Extend State_Id = STATE_EXTEND_MIDD);
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
 	Move_State Get_Move_State();
 	SLocation& Get_Screen_Distance();
 	SLocation& Get_Move_Distance();
-	std::vector<StateUnit*>* Get_GameState();
-	std::vector<bool>* Get_GameState_MoveAble();
+	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
+	std::vector<bool>* Get_GameState_MoveAble(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
-	void Clear_Display_Vector();
+	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(int Event_Id);
 	void Set_Display_State(int Width, int Height);
 	void Set_DataAll_State(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
 	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
-	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_ORIGIN_MIDD);
+	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
-	void CompileStateEvent(std::string Infor);
+	void CompileStateEvent(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 	void Set_SquareState(int State_Id);
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
@@ -218,7 +226,6 @@ private:
 	int _Distance_Screen_Mid;
 	//_Distance_Move用于记录当前相对于原点的移动距离
 	int _Distance_Move;
-	std::vector<StateUnit*> _GameState;
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
 	const std::string _Version{ "0.9" };

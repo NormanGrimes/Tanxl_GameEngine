@@ -1,3 +1,15 @@
+TEnGinE Version-0.1 Build-94 TURBO 2023-04-13 11:56 UPDATE_LOG
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+引擎管理模块增加随机与坐标基类的版本信息。数据定义模块移除未使
+用变量并调整数据顺序。坐标模块修复边缘检测功能错误的问题。地图
+模块清除显示容器的功能支持扩展地图。地图模块获取地图数据功能支
+持扩展地图。地图模块获取地图数据长度功能支持扩展地图。地图模块
+获取地图单元与是否可移动功能支持扩展地图。地图模块编译事件功能
+支持扩展地图。绘制模块移除所有非扩展地图内容。地图模块扩展地图
+枚举增加一个特殊状态。地图模块编译地图单元功能代码优化。地图模
+块初始化同时对扩展地图初始化。绘制模块新增更新上次移动后坐标的
+接口。
+
 TEnGinE Version-0.1 Build-93 2023-04-10 16:05 UPDATE_LOG
 ////////////////////////////////////////////////////////
 玩家顶点着色器支持自定义生命值的图片间距。绘制模块增加生
@@ -378,12 +390,29 @@ TEnGinE Version-0.1 Build-50 2022-11-27 14:28 UPDATE_LOG
 功能。State模块提供开关自动调整坐标的接口。绘制模块提供用
 于开关在移动中启用调整的接口。绘制模块修改为单例模式。引
 擎模块提供移动综合功能设置。
+--------------------------------------------------------
+The Display interface of the console module is changed 
+to private. The console module input interface provides 
+an exit function. The State module provides an 
+interface for switches to automatically adjust 
+coordinates. The drawing module provides an interface 
+for toggling and off to enable adjustments on the move. 
+The drawing module is modified to singleton mode. The 
+engine module provides mobile comprehensive function 
+settings.
 
 TEnGinE Version-0.1 Build-49 2022-11-17 00:31 UPDATE_LOG
 ////////////////////////////////////////////////////////
 控制台显示模块Display接口去掉不必要的颜色清除功能。顶点着
 色器移除未使用的变量。绘制模块优化减少重新载入功能调用次
 数。修复采用非矩形地图会导致移动跳跃的问题。
+--------------------------------------------------------
+The console display module Display interface removes 
+unnecessary color clearance functions. Vertex shaders 
+remove unused variables. Draw module optimizations 
+reduce the number of reload function calls. Fixed an 
+issue where taking a non-rectangular map would cause 
+movement jumps.
 
 TEnGinE Version-0.1 Build-48 TURBO 2022-11-12 10:25 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -393,17 +422,43 @@ State模块调整地图结构体的接口判断改进。数据模块修改一个私有变量
 的按键构造函数。绘制模块将绘制循环改为一次绘制，并在外部增加循
 环。修改按键事件容器为指针容器。输入模块根据不同类型的按键增加
 不同添加方式。加入一个不稳定的特殊测试按键。
+--------------------------------------------------------------
+The State module adjusts the interface judgment of the map 
+structure and improves it. The data module modifies a private 
+variable name to fit the meaning. The input module provides 
+the ability to remove recently registered keys. Four move 
+actions change to predefined actions. The input module 
+provides the function of special buttons. Remove the 
+parameterless key constructor. The draw module changes the 
+draw loop to one draw and adds the loop externally. Modify 
+the key event container to a pointer container. The input 
+module can be added in different ways according to different 
+types of buttons. Add an unstable special test button.
 
 TEnGinE Version-0.1 Build-47 2022-11-07 22:56 UPDATE_LOG
 ////////////////////////////////////////////////////////
 移除绘制阶段重新载入地图的额外判断。引擎管理模块增加控制
 移动最大距离的接口。随机数模块增加生成储存数据条目功能。
+--------------------------------------------------------
+Remove the extra judgment of reloading the map during 
+the drawing phase. The engine management module adds 
+interfaces to control the maximum distance traveled. 
+The random number module adds the function of 
+generating and storing data entries.
 
 TEnGinE Version-0.1 Build-46 2022-10-25 23:55 UPDATE_LOG
 ////////////////////////////////////////////////////////
 State模块修复自动调整功能的通用性问题。修改引擎管理模块编
 译地图功能的接口。绘制模块等待帧加入类成员用于自定义其值。
 修复绘制模块默认坐标为固定值的问题。
+--------------------------------------------------------
+The State module fixes the issue of the versatility of 
+the auto-tuning function. Modify the interface of the 
+engine management module to compile map functions. The 
+drawing module waits for the frame to join the class 
+member for customizing its value. Fixed the issue that 
+the default coordinates of the drawing module were 
+fixed values.
 
 TEnGinE Version-0.1 Build-45 2022-10-10 22:05 UPDATE_LOG
 ////////////////////////////////////////////////////////

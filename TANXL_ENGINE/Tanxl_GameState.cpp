@@ -46,11 +46,69 @@ std::string GameStateBase::Get_State_Id(int Location)
 	return "NULL";
 }
 
-void GameStateBase::Clear_Display_Vector()
+void GameStateBase::Clear_Display_Vector(EState_Extend Clear_Id)
 {
-	for (int i{ 0 }; i < _GameState.size(); ++i)
-		delete _GameState.at(i);
-	_GameState.clear();
+	if (Clear_Id == STATE_EXTEND_SPEC)
+	{
+		if (this->_GameState_Extend._MIDD)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._MIDD);
+		if (this->_GameState_Extend._LEFT)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT);
+		if (this->_GameState_Extend._RIGH)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH);
+		if (this->_GameState_Extend._ABOV)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._ABOV);
+		if (this->_GameState_Extend._BELO)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._BELO);
+		if (this->_GameState_Extend._LEFT_ABOV)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV);
+		if (this->_GameState_Extend._LEFT_BELO)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO);
+		if (this->_GameState_Extend._RIGH_ABOV)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV);
+		if (this->_GameState_Extend._RIGH_BELO)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_BELO);
+		return;
+	}
+	switch (Clear_Id)
+	{
+	case STATE_EXTEND_MIDD:
+		if (this->_GameState_Extend._MIDD)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._MIDD);
+		return;
+	case STATE_EXTEND_LEFT:
+		if (this->_GameState_Extend._LEFT)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT);
+		return;
+	case STATE_EXTEND_RIGH:
+		if (this->_GameState_Extend._RIGH)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH);
+		return;
+	case STATE_EXTEND_ABOV:
+		if (this->_GameState_Extend._ABOV)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._ABOV);
+		return;
+	case STATE_EXTEND_BELO:
+		if (this->_GameState_Extend._BELO)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._BELO);
+		return;
+	case STATE_EXTEND_LEFT_ABOV:
+		if (this->_GameState_Extend._LEFT_ABOV)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV);
+		return;
+	case STATE_EXTEND_LEFT_BELO:
+		if (this->_GameState_Extend._LEFT_BELO)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO);
+		return;
+	case STATE_EXTEND_RIGH_ABOV:
+		if (this->_GameState_Extend._RIGH_ABOV)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV);
+		return;
+	case STATE_EXTEND_RIGH_BELO:
+		if (this->_GameState_Extend._RIGH_BELO)
+			std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_BELO);
+		return;
+	}
 }
 
 void GameStateBase::Set_Display_State(int Width, int Height)
@@ -72,68 +130,16 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 	std::string Text_Reader{};
 	int Status_Id{};
 	bool State_Move{};
-	std::vector<StateUnit*>* Target{ nullptr };
-	switch (Extend)
-	{
-	case STATE_ORIGIN_MIDD:
-		Target = &this->_GameState;
-		this->_Extend_State_Enable = false;
-		break;
-	case STATE_EXTEND_MIDD:
-		delete this->_GameState_Extend._MIDD;
-		this->_GameState_Extend._MIDD = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._MIDD;
-		break;
-	case STATE_EXTEND_LEFT:
-		delete this->_GameState_Extend._LEFT;
-		this->_GameState_Extend._LEFT = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._LEFT;
-		break;
-	case STATE_EXTEND_RIGH:
-		delete this->_GameState_Extend._RIGH;
-		this->_GameState_Extend._RIGH = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._RIGH;
-		break;
-	case STATE_EXTEND_ABOV:
-		delete this->_GameState_Extend._ABOV;
-		this->_GameState_Extend._ABOV = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._ABOV;
-		break;
-	case STATE_EXTEND_BELO:
-		delete this->_GameState_Extend._BELO;
-		this->_GameState_Extend._BELO = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._BELO;
-		break;
-	case STATE_EXTEND_LEFT_ABOV:
-		delete this->_GameState_Extend._LEFT_ABOV;
-		this->_GameState_Extend._LEFT_ABOV = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._LEFT_ABOV;
-		break;
-	case STATE_EXTEND_LEFT_BELO:
-		delete this->_GameState_Extend._LEFT_BELO;
-		this->_GameState_Extend._LEFT_BELO = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._LEFT_BELO;
-		break;
-	case STATE_EXTEND_RIGH_ABOV:
-		delete this->_GameState_Extend._RIGH_ABOV;
-		this->_GameState_Extend._RIGH_ABOV = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._RIGH_ABOV;
-		break;
-	case STATE_EXTEND_RIGH_BELO:
-		delete this->_GameState_Extend._RIGH_BELO;
-		this->_GameState_Extend._RIGH_BELO = new std::vector<StateUnit*>;
-		Target = this->_GameState_Extend._RIGH_BELO;
-		break;
-	}
+	
+	this->Clear_Display_Vector(Extend);
+	std::vector<StateUnit*>* Target{ this->Get_GameState(Extend) };
 
 	if (Infor == "NULL")
 		return;
 
 	for (int i{ 0 }; i < Infor.size(); ++i)
 	{
-		if ((Infor.at(i) != ',') && (Infor.at(i) != '-'))
-			Text_Reader += Infor.at(i);
-		else if (Infor.at(i) == ',')
+		if (Infor.at(i) == ',')
 		{
 			Status_Id = std::stoi(Text_Reader);
 			Target->push_back(new StateUnit(nullptr, Status_Id, State_Move));
@@ -141,21 +147,26 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 		}
 		else if (Infor.at(i) == '-')
 		{
-			if(Text_Reader == "a")
+			if (Text_Reader == "a")
 				State_Move = true;
 			else
 				State_Move = false;
 			Text_Reader = "";
 			Status_Id = 0;
 		}
+		else
+			Text_Reader += Infor.at(i);
 	}
 	_Compile_Success = true;
 }
 
-void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, C = 2.
+void GameStateBase::CompileStateEvent(std::string Infor, EState_Extend Extend)//Sample  A = 0, B = 1, C = 2.
 {
 	std::string Text_Reader{};
 	int Status_Int{};
+
+	std::vector<StateUnit*>* Target{ this->Get_GameState(Extend) };
+
 	for (int i{ 0 }, SetCount{ 0 }; i < Infor.size(); ++i)
 	{
 		if ((Infor.at(i) != ',') && (Infor.at(i) != '='))
@@ -172,7 +183,7 @@ void GameStateBase::CompileStateEvent(std::string Infor)//Sample  A = 0, B = 1, 
 		}
 		else
 		{
-			this->_GameState.at(SetCount++)->SetEvent(Text_Reader, Status_Int);
+			Target->at(SetCount++)->SetEvent(Text_Reader, Status_Int);
 			if (Infor.at(i) == '.')
 				return;
 			Text_Reader = "";
@@ -383,10 +394,11 @@ void GameStateBase::Set_Extend_State_Enable(bool Enable)
 	this->_Extend_State_Enable = Enable;
 }
 
-std::vector<bool>* GameStateBase::Get_GameState_MoveAble()
+std::vector<bool>* GameStateBase::Get_GameState_MoveAble(EState_Extend State_Id)
 {
 	static std::vector<bool> MAB{};
-	for (const auto& State : _GameState)
+	std::vector<StateUnit*>* GameState{ this->Get_GameState(State_Id) };
+	for (const auto& State : *GameState)
 	{
 		if (State->GetMoveAble())
 			MAB.push_back(true);
@@ -492,18 +504,28 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :
-	_GameState_Width(Height), _GameState_Height(Width), _GameState(NULL), _GameState_Adjust(0.0f), _Compile_Success(false),
+	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false),
 	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1),
 	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false), _Extend_State_Enable(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
 	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
+
+	this->_GameState_Extend._MIDD = new std::vector<StateUnit*>;
+	this->_GameState_Extend._LEFT = new std::vector<StateUnit*>;
+	this->_GameState_Extend._RIGH = new std::vector<StateUnit*>;
+	this->_GameState_Extend._ABOV = new std::vector<StateUnit*>;
+	this->_GameState_Extend._BELO = new std::vector<StateUnit*>;
+	this->_GameState_Extend._LEFT_ABOV = new std::vector<StateUnit*>;
+	this->_GameState_Extend._LEFT_BELO = new std::vector<StateUnit*>;
+	this->_GameState_Extend._RIGH_ABOV = new std::vector<StateUnit*>;
+	this->_GameState_Extend._RIGH_BELO = new std::vector<StateUnit*>;
 }
 
 GameStateBase::~GameStateBase()
 {
-	std::vector<StateUnit*>().swap(this->_GameState);
+	Clear_Display_Vector(STATE_EXTEND_SPEC);
 }
 
 //unimportant Stuff (GET/SET)
@@ -580,22 +602,62 @@ void GameStateBase::Set_Enable_Adjust(bool Enable)
 	this->_Adjust_Enable = Enable;
 }
 
-size_t GameStateBase::Get_StateSize()
+size_t GameStateBase::Get_StateSize(EState_Extend State_Id)
 {
-	return _GameState.size();
+	switch (State_Id)
+	{
+	case STATE_EXTEND_MIDD:
+		return this->_GameState_Extend._MIDD->size();
+	case STATE_EXTEND_LEFT:
+		return this->_GameState_Extend._LEFT->size();
+	case STATE_EXTEND_RIGH:
+		return this->_GameState_Extend._RIGH->size();
+	case STATE_EXTEND_ABOV:
+		return this->_GameState_Extend._ABOV->size();
+	case STATE_EXTEND_BELO:
+		return this->_GameState_Extend._BELO->size();
+	case STATE_EXTEND_LEFT_ABOV:
+		return this->_GameState_Extend._LEFT_ABOV->size();
+	case STATE_EXTEND_LEFT_BELO:
+		return this->_GameState_Extend._LEFT_BELO->size();
+	case STATE_EXTEND_RIGH_ABOV:
+		return this->_GameState_Extend._RIGH_ABOV->size();
+	case STATE_EXTEND_RIGH_BELO:
+		return this->_GameState_Extend._RIGH_BELO->size();
+	}
+	return 0;
 }
 
-StateUnit* GameStateBase::Get_StateUnit(int Pos)
+StateUnit* GameStateBase::Get_StateUnit(int Pos, EState_Extend State_Id)
 {
-	return this->_GameState.at(Pos);
+	switch (State_Id)
+	{
+	case STATE_EXTEND_MIDD:
+		return this->_GameState_Extend._MIDD->at(Pos);
+	case STATE_EXTEND_LEFT:
+		return this->_GameState_Extend._LEFT->at(Pos);
+	case STATE_EXTEND_RIGH:
+		return this->_GameState_Extend._RIGH->at(Pos);
+	case STATE_EXTEND_ABOV:
+		return this->_GameState_Extend._ABOV->at(Pos);
+	case STATE_EXTEND_BELO:
+		return this->_GameState_Extend._BELO->at(Pos);
+	case STATE_EXTEND_LEFT_ABOV:
+		return this->_GameState_Extend._LEFT_ABOV->at(Pos);
+	case STATE_EXTEND_LEFT_BELO:
+		return this->_GameState_Extend._LEFT_BELO->at(Pos);
+	case STATE_EXTEND_RIGH_ABOV:
+		return this->_GameState_Extend._RIGH_ABOV->at(Pos);
+	case STATE_EXTEND_RIGH_BELO:
+		return this->_GameState_Extend._RIGH_BELO->at(Pos);
+	}
+	return nullptr;
 }
 
 StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 {
 	switch (State)
 	{
-	case STATE_ORIGIN_MIDD:
-		return this->_GameState.at(Pos);
 	case STATE_EXTEND_MIDD:
 		return this->_GameState_Extend._MIDD->at(Pos);
 	case STATE_EXTEND_LEFT:
@@ -625,6 +687,16 @@ _Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0),
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
 	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
+
+	this->_GameState_Extend._MIDD = new std::vector<StateUnit*>;
+	this->_GameState_Extend._LEFT = new std::vector<StateUnit*>;
+	this->_GameState_Extend._RIGH = new std::vector<StateUnit*>;
+	this->_GameState_Extend._ABOV = new std::vector<StateUnit*>;
+	this->_GameState_Extend._BELO = new std::vector<StateUnit*>;
+	this->_GameState_Extend._LEFT_ABOV = new std::vector<StateUnit*>;
+	this->_GameState_Extend._LEFT_BELO = new std::vector<StateUnit*>;
+	this->_GameState_Extend._RIGH_ABOV = new std::vector<StateUnit*>;
+	this->_GameState_Extend._RIGH_BELO = new std::vector<StateUnit*>;
 }
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
@@ -692,9 +764,30 @@ int GameStateBase::Get_StateWidth()const
 	return this->_GameState_Width;
 }
 
-std::vector<StateUnit*>* GameStateBase::Get_GameState()
+std::vector<StateUnit*>* GameStateBase::Get_GameState(EState_Extend State_Id)
 {
-	return &this->_GameState;
+	switch (State_Id)
+	{
+	case STATE_EXTEND_MIDD:
+		return this->_GameState_Extend._MIDD;
+	case STATE_EXTEND_LEFT:
+		return this->_GameState_Extend._LEFT;
+	case STATE_EXTEND_RIGH:
+		return this->_GameState_Extend._RIGH;
+	case STATE_EXTEND_ABOV:
+		return this->_GameState_Extend._ABOV;
+	case STATE_EXTEND_BELO:
+		return this->_GameState_Extend._BELO;
+	case STATE_EXTEND_LEFT_ABOV:
+		return this->_GameState_Extend._LEFT_ABOV;
+	case STATE_EXTEND_LEFT_BELO:
+		return this->_GameState_Extend._LEFT_BELO;
+	case STATE_EXTEND_RIGH_ABOV:
+		return this->_GameState_Extend._RIGH_ABOV;
+	case STATE_EXTEND_RIGH_BELO:
+		return this->_GameState_Extend._RIGH_BELO;
+	}
+	return nullptr;
 }
 
 //Move_State

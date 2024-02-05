@@ -6,18 +6,13 @@
 // 增加更多预定义数据
 // 修改数据标签接口对应存储模块改动
 // 增加坐标模块的支持
-
+// 移除未使用变量并调整数据顺序
 #pragma once
 
 #ifndef _TANXL_DATADEFINE_
 #define _TANXL_DATADEFINE_
 
 #include <string>
-
-const int TANXL_TYPE_MAXIMUM = 1;
-const int TANXL_EXAC_MAXIMUM = 0;
-
-const int TANXL_DATA_LENGTH[TANXL_TYPE_MAXIMUM + 1][TANXL_EXAC_MAXIMUM + 1]{ {1}, {2} };
 
 static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int Data = 0xFF)
 {
@@ -52,8 +47,8 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int Data = 0xFF)
 	// |------|-----------------------|
 	// |  00  | TANXL_CONSOLE_LIST    |
 	// |  01  | TANXL_DATABASE        |
-	// |  02  | TANXL_GAMEEVENT       |
-	// |  03  | TANXL_GAMESTATE       |
+	// |  02  | TANXL_GAME_EVENT      |
+	// |  03  | TANXL_GAME_STATE      |
 	// |  04  | TANXL_INSERTACTION    |
 	// |  05  | TANXL_OPENGL_DRAW     |
 	// |  06  | TANXL_ENGINE_MANAGER  |
@@ -70,19 +65,19 @@ static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int Data = 0xFF)
 		case 1:
 			return "TANXL_DATABASE";
 		case 2:
-			return "TANXL_GAMEEVENT";
+			return "TANXL_GAME_EVENT";
 		case 3:
-			return "TANXL_GAMESTATE";
+			return "TANXL_GAME_STATE";
 		case 4:
 			return "TANXL_INSERTACTION";
 		case 5:
 			return "TANXL_OPENGL_DRAW";
 		case 6:
-			return "TANXL_ENGINE_MANAGER";
-		case 7:
 			return "TANXL_RANDOMBASE";
-		case 8:
+		case 7:
 			return "TANXL_LOCATIONBASE";
+		case 8:
+			return "TANXL_ENGINE_MANAGER";
 		default:
 			break;
 		}

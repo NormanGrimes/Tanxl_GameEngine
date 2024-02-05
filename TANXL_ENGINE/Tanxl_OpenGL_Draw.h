@@ -1,30 +1,7 @@
-﻿//_VERSION_0_9_ UPDATE LOG
-// LAST_UPDATE 2023-03-13 18:01
-// 不再限制到达边缘后与边缘水平的移动
-// 优化初始化函数内的重复调用
-// 增加OpenGL窗口初始化错误检测
-// 初始化接口入参调整
-// 增加修改窗口尺寸后自动调整窗口内容的回调函数
-// 构造函数增加可选是否开启自动调整窗口功能
-// 移除记录地图方块数的变量
-// 修复初始化接口中一个可能导致问题的部分
-// 将坐标由临时定义的坐标实例改为坐标基类控制
-// 手动移动和地图移动距离改为坐标基类控制
-// 增加更稳定的地图移动范围限制功能
-// 增加控制台输出控制宏
-// 增加不可移动方块的功能测试
-// 正式上线不可移动区块功能
-// 边缘检测功能改为独立函数
-// 手动坐标更新功能改为独立函数
-// 四个记录上一次移动坐标的变量移入私有成员
-// 支持旧式与扩展地图的载入与移动切换
-// 修复初始坐标计算错误拟合的问题
-// 增加生命值显示计数成员替换原固定值
-// 移除初始化部分不必要的调用
-// 增加生命值相关设置功能
-// 增加移动更新功能的控制台输出控制宏
-// 修复手动输入不会更新地图的问题
-// 修复自动调整过于灵敏的问题
+﻿//_VERSION_1_0_ UPDATE LOG
+// LAST_UPDATE 2023-04-14 16:17
+// 移除所有非扩展地图内容
+// 新增更新上次移动后坐标的接口
 
 #pragma once
 
@@ -478,6 +455,7 @@ public:
 	void Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State, bool& PressFlg);
 	void Update_Current();
+	void Update_Last_Location(GameStateBase* State);
 	int Get_PreLoad();
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
@@ -540,7 +518,7 @@ private:
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
 	//当前此模块的版本号
-	const std::string _Version{ "0.9" };
+	const std::string _Version{ "1.0" };
 	GLFWwindow* _Main_Window;
 };
 
