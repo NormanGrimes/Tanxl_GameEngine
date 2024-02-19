@@ -24,7 +24,7 @@ int main()
 
 	GameStateBase* GSB{ &GameStateBase::GetStateBase(1, 1) };
 
-	TGE.Engine_State_Compile_Units(10, 10,
+	/*TGE.Engine_State_Compile_Units(10, 10,
 		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
 		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
@@ -34,7 +34,7 @@ int main()
 		"a-1,a-3,a-1,a-2,a-0,a-0,a-2,a-1,a-3,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
 		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
 		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"/*a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"*/);
+		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");*/
 
 	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
 
@@ -50,17 +50,28 @@ int main()
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
-	TGE.Engine_State_Set_Display(4, 4, 4);
+	TGE.Engine_State_Set_Display(4, 4, 5);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 	
-	//GSB->Set_SquareState(4);
+	GSB->Set_StartState(4,
+		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"
+		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"
+		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"
+		"a-1,a-3,a-1,a-2,a-0,a-0,a-2,a-1,a-3,a-1,"
+		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"
+		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"
+		"a-1,a-3,a-1,a-2,a-0,a-0,a-2,a-1,a-3,a-1,"
+		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"
+		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"
+		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,");
 
 	std::vector<std::string> KeyUnitNames;
 	while (1)
 	{
-		//TGE.Engine_Insert_State_Update();
-		TGE.Engine_Draw_State_Adjust(0);
+		TGE.Engine_Insert_State_Update();//Key Insert
+
+		TGE.Engine_Draw_State_Adjust(0);//Draw Once
 
 		if (KU->MoveToY == true)
 		{

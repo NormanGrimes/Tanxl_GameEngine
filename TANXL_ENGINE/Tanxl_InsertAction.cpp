@@ -60,6 +60,8 @@ void InsertEventBase::RemoveEvent()
 
 void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
+	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
+	OPD->Update_Last_Location(State);
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
 	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)

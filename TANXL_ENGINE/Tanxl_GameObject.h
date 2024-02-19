@@ -5,6 +5,8 @@
 // 增加组件结构体
 // 针对for循环的简易效率更新
 // 范围循环测试
+// 移除游戏组件结构体
+// 生命值组件增加最大生命值设定
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -17,29 +19,33 @@
 class Health_Componment
 {
 public:
-	Health_Componment(int Life_Cnt, bool Unable_Damage = false) :_Life_Count(Life_Cnt), _Unable_Damage(Unable_Damage) {};
+	Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage = false) :
+		_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage) {};
 
 	void RestoreHealth(int RestVal)
 	{
 		if (RestVal < 0 || this->_Unable_Damage)
 			return;
-		_Life_Count += RestVal;
+		_Current_Health += RestVal;
+		if (_Current_Health > _Maximum_Health)
+			_Current_Health = _Maximum_Health;
 	}
 
 	void TakeDamage(int TakeVal)
 	{
 		if (TakeVal < 0 || this->_Unable_Damage)
 			return;
-		_Life_Count -= TakeVal;
+		_Current_Health -= TakeVal;
 	}
 
 	int Check_Health()
 	{
-		return _Life_Count;
+		return _Current_Health;
 	}
 
 private:
-	int _Life_Count;
+	int _Maximum_Health;
+	int _Current_Health;
 	bool _Unable_Damage;
 };
 
@@ -56,13 +62,6 @@ private:
 	std::string ComponmentName;
 };
 
-//游戏物品结构
-struct GameObjectContent
-{
-	Health_Componment _Health_COM;
-	std::vector<ComponmentBase*> _CMB;
-};
-
 //游戏物品类
 
 class GameObjectBase
@@ -71,27 +70,28 @@ class GameObjectBase
 	bool RemoveComponment(std::string Name);
 	void FinishComponment();
 private:
-	GameObjectContent _GOC;
+	Health_Componment* _Health_COM;
+	std::vector<ComponmentBase*> _Object_Content;
 };
 
 bool GameObjectBase::AppendComponment(ComponmentBase* CM)
 {
-	for (auto Componment : _GOC._CMB)//根据名称添加
+	for (auto Componment : this->_Object_Content)//根据名称添加
 	{
 		if (Componment->GetName() == CM->GetName())
 			return false;//出现同名组件——添加失败
 	}
-	_GOC._CMB.push_back(CM);
+	this->_Object_Content.push_back(CM);
 	return true;
 }
 
 bool GameObjectBase::RemoveComponment(std::string Name)
 {
-	for (std::vector<ComponmentBase*>::iterator IOCB{ _GOC._CMB.begin() }; IOCB != _GOC._CMB.end(); ++IOCB)//根据名称删除
+	for (std::vector<ComponmentBase*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
 	{
 		if ((*IOCB)->GetName() == Name)
 		{
-			_GOC._CMB.erase(IOCB);
+			_Object_Content.erase(IOCB);
 			return true;
 		}
 	}
@@ -100,8 +100,8 @@ bool GameObjectBase::RemoveComponment(std::string Name)
 
 void GameObjectBase::FinishComponment()
 {
-	for (int i = 0; i < _GOC._CMB.size(); ++i)
-		_GOC._CMB.at(i)->Special();
+	for (int i{ 0 }; i < this->_Object_Content.size(); ++i)
+		this->_Object_Content.at(i)->Special();
 }
 
 #endif

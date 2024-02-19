@@ -191,7 +191,7 @@ void GameStateBase::CompileStateEvent(std::string Infor, EState_Extend Extend)//
 	}
 }
 
-void GameStateBase::Set_SquareState(int State_Id)
+void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 {
 	if (this->Get_Engine_File())
 	{
@@ -201,6 +201,8 @@ void GameStateBase::Set_SquareState(int State_Id)
 			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
 			{
+				if (Cover_String != "NULL")
+					Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
 				this->CompileStateUnits(Link->_Data->_Data_Units.at(1)->_Data, STATE_EXTEND_MIDD);
 				this->_GameState_Id._MIDD = Link->_Data->_Data_Units.at(0)->_Id;
 				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(2)->_Data), STATE_EXTEND_LEFT);
@@ -414,32 +416,27 @@ void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
 	this->_MState._Move_PX = PX;
 	this->_MState._Move_NY = NY;
 	this->_MState._Move_PY = PY;
-
-	int Line_Width{ this->_MState._Move_PX - this->_MState._Move_NX };
-	int Coum_Width{ this->_MState._Move_PX - this->_MState._Move_PY };
-
-	//TODO
 }
 
-void GameStateBase::Set_Move_State(int Event_Id)
+void GameStateBase::Set_Move_State(int Event_Id, int Multi_Set)
 {
 	switch (Event_Id)
 	{
 	case MoveToNW:
-		this->_MState._Move_NX++;
-		this->_MState._Move_PX++;
+		this->_MState._Move_NX += Multi_Set;
+		this->_MState._Move_PX += Multi_Set;
 		break;
 	case MoveToPW:
-		this->_MState._Move_NX--;
-		this->_MState._Move_PX--;
+		this->_MState._Move_NX -= Multi_Set;
+		this->_MState._Move_PX -= Multi_Set;
 		break;
 	case MoveToNH:
-		this->_MState._Move_NY++;
-		this->_MState._Move_PY++;
+		this->_MState._Move_NY += Multi_Set;
+		this->_MState._Move_PY += Multi_Set;
 		break;
 	case MoveToPH:
-		this->_MState._Move_NY--;
-		this->_MState._Move_PY--;
+		this->_MState._Move_NY -= Multi_Set;
+		this->_MState._Move_PY -= Multi_Set;
 		break;
 	}
 }

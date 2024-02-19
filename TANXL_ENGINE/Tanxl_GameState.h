@@ -15,6 +15,8 @@
 // 扩展地图枚举增加一个特殊状态
 // 编译地图单元功能代码优化
 // 初始化同时对扩展地图初始化
+// 预载起始区域的接口增加覆盖初始地图的选项
+// 设置移动矩阵接口增加多倍调整
 
 #pragma once
 
@@ -122,7 +124,7 @@ public:
 	std::string Get_State_Id(int Location);
 	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
 	void Set_Move_State(int NX, int PX, int NY, int PY);
-	void Set_Move_State(int Event_Id);
+	void Set_Move_State(int Event_Id, int Multi_Set = 1);
 	void Set_Display_State(int Width, int Height);
 	void Set_DataAll_State(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
@@ -130,7 +132,7 @@ public:
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
-	void Set_SquareState(int State_Id);
+	void Set_StartState(int State_Id, std::string Cover_String = "NULL");
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);

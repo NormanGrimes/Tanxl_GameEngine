@@ -10,7 +10,7 @@
 // 2023/02/22 输出系统信息后删除未整理文件
 // 2023/03/01 无限世界接口生成增加一个区块
 // 2023/03/01 无限世界接口增加构建连接选项
-// 2023/03/08 修复构建连接因借口变动导致的问题
+// 2023/03/08 修复构建连接因接口变动导致的问题
 // 2023/03/10 无限世界接口增加自定义数据的支持
 // 2023/03/13 启用对STEAM_API的支持
 // 2023/03/14 增加宏控制STEAM_API的启用
@@ -19,6 +19,7 @@
 // 2023/03/28 增加坐标基类的支持
 // 2023/04/03 增加更新移动与获取输入函数
 // 2023/04/14 增加随机与坐标基类的版本信息
+// 2023/04/17 修改编译地图数据接口的入参
 
 #pragma once
 
@@ -54,8 +55,8 @@ public:
 	//设置当前显示窗口中的XY轴矩阵数量 Width宽度 Height高度
 	void Engine_State_Set_Display(int Width, int Height, int PreLoads);
 
-	//根据一串合理的字符串对地图进行生成 Width预设宽度 Height预设高度 Infor地图数据
-	void Engine_State_Compile_Units(int Width, int Height, std::string Infor);
+	//根据一串合理的字符串对地图进行生成 Width预设宽度 Height预设高度 Infor地图数据 Extend指定编译的目标区块
+	void Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 
 	//设置是否启用输入移动限制 Eanble启用/关闭自动移动限制 启用后不需要设置后续内容 Max_Height最大移动高度(绝对值) Max_Widtd最大移动宽度(绝对值)
 	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Widtd = 0.0f);

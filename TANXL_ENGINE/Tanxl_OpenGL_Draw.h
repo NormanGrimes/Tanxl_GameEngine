@@ -2,18 +2,22 @@
 // LAST_UPDATE 2023-04-14 16:17
 // 移除所有非扩展地图内容
 // 新增更新上次移动后坐标的接口
+// 输入操作从绘制循环中分离
+// 增加并调整控制台输出宏
 
 #pragma once
 
 #ifndef _TANXL_OPENGL_DRAW_
 #define _TANXL_OPENGL_DRAW_
 
-#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 1
+#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
-#define _TANXL_DATABASE_OPENGLDRAW_REALTIME_LOCATION_   0
+#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     1
 #define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      1
+#define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   1
+#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      1
 
 #endif
 
@@ -447,7 +451,7 @@ public:
 	//绘制主循环 在此之后的一切操作都会被忽略
 	void Render_Once(GameStateBase* State);
 	void Set_PreLoad(int PreLoads);
-	void Set_WaitFra(int First_Adjust);
+	void Set_WaitFrame(int First_Adjust);
 	void Set_Clear(bool Clear);
 	void Set_Trigger_Mode(bool Mode);
 	void Set_Trigger_Range(bool Enable, float Height, float Width);

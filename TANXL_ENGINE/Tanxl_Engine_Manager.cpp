@@ -58,9 +58,9 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
 	}
 }
 
-void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string Infor)
+void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend)
 {
-	this->Tanxl_Engine_GameState->CompileStateUnits(Infor);
+	this->Tanxl_Engine_GameState->CompileStateUnits(Infor, Extend);
 	this->Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);
 }
 
