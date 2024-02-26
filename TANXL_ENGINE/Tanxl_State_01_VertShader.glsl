@@ -9,6 +9,7 @@
 // 移除未使用变量
 // 优化减少高度与宽度的计算量
 // 修改最大地图尺寸为20X20
+// 修复预载功能只载入了一半内容的问题
 
 #version 430
 
@@ -25,7 +26,7 @@ layout (location = 7) uniform float StateMoveY;
 
 layout (location = 8) uniform int PreLoads;
 
-uniform int State[400];
+layout (location = 9) uniform int State[400];
 
 out vec4 vs_color;
 out vec2 tc;
@@ -40,7 +41,7 @@ void main(void)
 
 	int counts = 0;
 	int VertexId = 0;
-	int State_Datas = (SHeight + PreLoads) * (SWidth + PreLoads) ;
+	int State_Datas = (SHeight + PreLoads * 2) * (SWidth + PreLoads * 2) ;
 
 	float WidthMove  = -(SWidth + PreLoads - 1) * Width;
 	float HeightMove = (SHeight + PreLoads - 1) * Height;
@@ -200,7 +201,7 @@ void main(void)
 
 		WidthMove += (Width * 2);
 		counts++;
-		if(counts == SWidth + PreLoads)
+		if(counts == SWidth + PreLoads * 2)
 		{
 			counts = 0;
 			WidthMove = -(SWidth + PreLoads - 1) * Width;

@@ -1,3 +1,11 @@
+TEnGinE Version-0.1 Build-96 2023-04-19 16:13 UPDATE_LOG
+////////////////////////////////////////////////////////
+片段着色器完整支持所有编号的纹理。地图模块移动地图结构体
+更名用于更多情况。绘制模块重新加载地图功能优化减少每次需
+要的判断。绘制模块顶点绘制数的预载值翻倍。地图顶点着色器
+修复预载功能只载入了一半内容的问题。绘制模块增加预载初始
+移动距离的变量与设置功能。
+
 TEnGinE Version-0.1 Build-95 2023-04-17 11:56 UPDATE_LOG
 ////////////////////////////////////////////////////////
 输入模块更新上次移动后坐标功能合并到输入功能。绘制模块输
@@ -363,6 +371,17 @@ TEnGinE Version-0.1 Build-55 2022-12-29 16:06 UPDATE_LOG
 NAME的问题。绘制模块的移动坐标归入State模块管理。顶点着色
 器调整移动物品坐标的名称。绘制模块设置启用移动中调整的功
 能归入State模块。
+--------------------------------------------------------
+The input module provides functionality for markers to 
+move to the edge of the map. The main function adds the 
+ID to delete the move operation test. The input module 
+fixes the problem that the NAME is not initialized 
+correctly when the key unit is initialized. The 
+movement coordinates of the drawing module are managed 
+by the State module. The vertex shader adjusts the name 
+of the coordinates of the moving item. The ability to 
+draw module settings to enable on-the-move adjustments 
+is grouped under the State module.
 
 TEnGinE Version-0.1 Build-54 TURBO 2022-12-28 10:33 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -373,12 +392,33 @@ State模块修订部分变量名称。绘制模块修复重新加载功能可能导致多段
 次调用都会修改种子的生成函数。绘制模块修复地图绘制展示错误区块
 的问题。顶点着色器增加第四种状态颜色。绘制模块修复在移动时调整
 开启时移动操作不会触发重新载入的问题。
+--------------------------------------------------------------
+The State module revises part of the variable name. The draw 
+module fixes an issue where the reload feature may cause 
+multi-segment moves to only count one piece of load. Enter 
+the variable name of the module adjustment section. The input 
+module fixes an issue where the movement of input action 
+items is inconsistent with the offset of the map. The key 
+unit structure adds a name member. The input module adds the 
+function of deleting the input button of the specified name. 
+The random module adds a generating function that modifies 
+the seed with each call. The drawing module fixes the 
+problem of incorrectly displaying the map area. The vertex 
+shader adds a fourth state color. The draw module fixes an 
+issue where the move operation does not trigger a reload when 
+adjusting on move.
 
 TEnGinE Version-0.1 Build-53 2022-12-27 00:07 UPDATE_LOG
 ////////////////////////////////////////////////////////
 引擎管理模块与其余剩下的模块修改头文件包含方式。数据模块
 为匿名结构体成员增加初始化。为避免歧义修改绘制模块设置调
 整的函数名称。
+--------------------------------------------------------
+The engine management module and the remaining modules 
+modify how header files are included. The data module 
+adds initialization for anonymous struct members. To 
+avoid ambiguity, modify the function name of the 
+drawing module setting adjustment.
 
 TEnGinE Version-0.1 Build-52 2022-12-09 22:12 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -386,12 +426,30 @@ TEnGinE Version-0.1 Build-52 2022-12-09 22:12 UPDATE_LOG
 立出Event模块。为所有核心模块重新修订重复包含检查。绘制模
 块半边长计算移动改为边长计算移动。输入模块获取输入接口移
 除默认参数且需要传入非空变量。
+--------------------------------------------------------
+The enclosure Reset_Chain interface now requires an 
+incoming address. Separate the Event module from the 
+State module. Duplicate include checks for all core 
+module revisions. The drawing module changes the 
+half-length calculation movement to the edge length 
+calculation movement. The input module gets the input 
+interface, removes the default parameters, and needs 
+to pass in non-empty variables.
 
 TEnGinE Version-0.1 Build-51 2022-12-03 19:22 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块将自动调整的记录变量移入类成员并修改名称。绘制模
 块绘制循环中的隐式转型改为显式转型。输入模块输入操作中的
 隐式转型改为显式转型。代码编码改为UTF-8带符号。
+--------------------------------------------------------
+The drawing module moves the automatically adjusted 
+record variables into the class members and modifies 
+the names. The implicit transition in the drawing 
+module drawing loop is changed to an explicit 
+transition. The implicit transition in the input 
+module's input operation is changed to an explicit 
+transition. The code encoding was changed to UTF-8 
+signed.
 
 TEnGinE Version-0.1 Build-50 2022-11-27 14:28 UPDATE_LOG
 ////////////////////////////////////////////////////////

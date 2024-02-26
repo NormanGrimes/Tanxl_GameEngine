@@ -235,7 +235,7 @@ GameStateBase& GameStateBase::GetStateBase(int Display_Width, int Display_Height
 	return GameState;
 }
 
-Move_State GameStateBase::Get_Move_State()
+Square_State GameStateBase::Get_Square_State()
 {
 	return this->_MState;
 }
@@ -787,6 +787,6 @@ std::vector<StateUnit*>* GameStateBase::Get_GameState(EState_Extend State_Id)
 	return nullptr;
 }
 
-//Move_State
+//Square_State
 
-Move_State::Move_State(int NX, int PX, int NY, int PY) :_Move_NX(NY), _Move_NY(NY), _Move_PX(PX), _Move_PY(PY) {}
+Square_State::Square_State(int NX, int PX, int NY, int PY) :_Move_NX(NY), _Move_NY(NY), _Move_PX(PX), _Move_PY(PY) {}

@@ -4,6 +4,9 @@
 // 新增更新上次移动后坐标的接口
 // 输入操作从绘制循环中分离
 // 增加并调整控制台输出宏
+// 重新加载地图功能优化减少判断
+// 顶点绘制数的预载值翻倍
+// 增加预载初始移动距离的变量与设置功能
 
 #pragma once
 
@@ -456,6 +459,7 @@ public:
 	void Set_Trigger_Mode(bool Mode);
 	void Set_Trigger_Range(bool Enable, float Height, float Width);
 	void Set_Health(int Health_Count, float Health_Margin = 0.1f);
+	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State, bool& PressFlg);
 	void Update_Current();
@@ -519,6 +523,10 @@ private:
 	int _Current_Move_Width{ 0 };
 	//记录需要绘制的生命值纹理 前两个为角色纹理
 	int _Health_Count{ 5 };
+	//记录在地图初始化时 玩家方块的X轴初始移动距离
+	int _Pre_MoveX{ 4 };
+	//记录在地图初始化时 玩家方块的X轴初始移动距离
+	int _Pre_MoveY{ 4 };
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
 	//当前此模块的版本号

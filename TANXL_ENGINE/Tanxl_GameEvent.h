@@ -28,9 +28,11 @@ private:
 class GameEventBase
 {
 public:
-	//注册游戏事件 如果仅定义事件而不注册则不会产生任何效果
+	//获取此模块的版本信息
 	const std::string Get_Version();
+	//注册游戏事件 如果仅定义事件而不注册则不会产生任何效果
 	void RegistEvent(GameEvent* Event);
+	//获取游戏事件基类
 	static GameEventBase& GetEventBase();
 	GameEvent* GetGameEvent(std::string EventName);
 	//搜索游戏事件 查看是否已添加相关名称的游戏事件

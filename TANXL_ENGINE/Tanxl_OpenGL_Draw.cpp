@@ -85,7 +85,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	glProgramUniform1i(this->_State_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
-	glProgramUniform1i(this->_State_RenderingProgram, 9, (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) * 6);
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
     Append_Texture(TanxlOD::TexGrass_02_200x200);       //1 00
@@ -107,6 +106,12 @@ void OpenGL_Draw::init(GameStateBase* State)
 	State->Get_Move_Distance()._Location_X = (2.0f / this->_WidthInt) * Half_Width + (1.0f / this->_WidthInt) * (this->_PreLoads);
 	State->Get_Move_Distance()._Location_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (this->_PreLoads);
 
+	State->Set_Move_State(
+		State->Get_Square_State()._Move_NX - this->_PreLoads + _Pre_MoveX,
+		State->Get_Square_State()._Move_PX + _Pre_MoveX,
+		State->Get_Square_State()._Move_NY - this->_PreLoads + _Pre_MoveY,
+		State->Get_Square_State()._Move_PY + _Pre_MoveY);
+
 	ReLoadState(State);
 }
 
@@ -114,38 +119,42 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 
-	int Move_NX{ State->Get_Move_State()._Move_NX };
-	int Move_PX{ State->Get_Move_State()._Move_PX };
-	int Move_NY{ State->Get_Move_State()._Move_NY };
-	int Move_PY{ State->Get_Move_State()._Move_PY };
+	int Move_NX{ State->Get_Square_State()._Move_NX };
+	int Move_PX{ State->Get_Square_State()._Move_PX };
+	int Move_NY{ State->Get_Square_State()._Move_NY };
+	int Move_PY{ State->Get_Square_State()._Move_PY };
 
-	int State_Length{ (this->_HeightInt + this->_PreLoads) * (this->_WidthInt + this->_PreLoads) + 1 };
+	int State_Length{ (this->_HeightInt + this->_PreLoads * 2) * (this->_WidthInt + this->_PreLoads * 2) + 1 };
 
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
 	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
 
 	if (State->Get_Compile_Status())
 	{
+		if (State->Get_GameState()->size() == 0)
+			return;
+
 		for (int i{ 0 }; i < State_Length; ++i)
 		{
 			if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth()) || //现阶段Data宽度不可能导致转换溢出
 				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()))
 			{
 				_StateInfor[i] = 3;
+				std::cout << "3 ";
 			}
 			else
 			{
 				int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
-				if (State->Get_GameState()->size() == 0)
-					return;
 
 				_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id();
+				std::cout << _StateInfor[i] <<" ";
 			}
 
 			Move_NX++;
 			if (Move_NX > Move_PX)//抵达尽头 重新获取初值
 			{
-				Move_NX = State->Get_Move_State()._Move_NX;
+				std::cout << std::endl;
+				Move_NX = State->Get_Square_State()._Move_NX;
 				Move_NY++;
 			}
 		}
@@ -164,6 +173,10 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		std::string Tag{ "State[" + std::to_string(i) + "]" };
 		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
 		glProgramUniform1i(_State_RenderingProgram, StatePos, _StateInfor[i]);
+
+		std::cout << _StateInfor[i] << " ";
+		if(i % (this->_WidthInt + this->_PreLoads * 2) == 0)
+			std::cout << std::endl;
 	}
 }
 
@@ -203,6 +216,12 @@ void OpenGL_Draw::Set_Health(int Health_Count, float Health_Margin)
 {
 	this->_Health_Count = Health_Count;
 	this->_Health_Image_Margin = Health_Margin;
+}
+
+void OpenGL_Draw::Set_PreMove(int PreMoveX, int PreMoveY)
+{
+	this->_Pre_MoveX = PreMoveX;
+	this->_Pre_MoveY = PreMoveY;
 }
 
 void OpenGL_Draw::Append_Texture(const char* Texture)
@@ -475,7 +494,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 
 	glUseProgram(_State_RenderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads) * (State->Get_StateWidth() + _PreLoads) * 6);
+	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
 	glUseProgram(_Adjst_RenderingProgram);
 	glDrawArrays(GL_TRIANGLES, 0, this->_Health_Count * 6);

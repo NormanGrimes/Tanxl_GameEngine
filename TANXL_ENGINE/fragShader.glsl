@@ -7,6 +7,7 @@
 // 调用新增的两个纹理
 // 变量名称调整
 // 整理输入纹理顺序
+// 完整支持所有编号的纹理
 
 
 #version 430
@@ -86,6 +87,69 @@ void main(void)
 		break;
 	case 10:
 		color = texture(Tex_10, tc);
+		break;
+	case 11:
+		color = texture(Tex_11, tc);
+		break;
+	case 12:
+		color = texture(Tex_12, tc);
+		break;
+	case 13:
+		color = texture(Tex_13, tc);
+		break;
+	case 14:
+		color = texture(Tex_14, tc);
+		break;
+	case 15:
+		color = texture(Tex_15, tc);
+		break;
+	case 16:
+		color = texture(Tex_16, tc);
+		break;
+	case 17:
+		color = texture(Tex_17, tc);
+		break;
+	case 18:
+		color = texture(Tex_18, tc);
+		break;
+	case 19:
+		color = texture(Tex_19, tc);
+		break;
+	case 20:
+		color = texture(Tex_20, tc);
+		break;
+	case 21:
+		color = texture(Tex_21, tc);
+		break;
+	case 22:
+		color = texture(Tex_22, tc);
+		break;
+	case 23:
+		color = texture(Tex_23, tc);
+		break;
+	case 24:
+		color = texture(Tex_24, tc);
+		break;
+	case 25:
+		color = texture(Tex_25, tc);
+		break;
+	case 26:
+		color = texture(Tex_26, tc);
+		break;
+	case 27:
+		color = texture(Tex_27, tc);
+		break;
+	case 28:
+		color = texture(Tex_28, tc);
+		break;
+	case 29:
+		color = texture(Tex_29, tc);
+		break;
+	case 30:
+		color = texture(Tex_30, tc);
+		break;
+	case 31:
+		color = texture(Tex_31, tc);
 		break;
 	default:
 		color = vs_color;

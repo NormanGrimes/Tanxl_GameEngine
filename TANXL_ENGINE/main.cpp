@@ -24,23 +24,11 @@ int main()
 
 	GameStateBase* GSB{ &GameStateBase::GetStateBase(1, 1) };
 
-	/*TGE.Engine_State_Compile_Units(10, 10,
-		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-1,a-3,a-1,a-2,a-0,a-0,a-2,a-1,a-3,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-1,a-0,a-1,a-0,a-2,a-2,a-0,a-1,a-0,a-1,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-3,a-1,a-2,a-0,a-0,a-2,a-1,a-3,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,"
-		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"//a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,"
-		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"//a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,a-0,a-1,");*/
-
 	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
-	TGE.Engine_Save_Source_Infor("Tanxl Engine VersionMes");
+	TGE.Engine_Save_Source_Infor("Tanxl Engine SystemInfor");
 
 	bool Appended = false;
 
@@ -50,7 +38,7 @@ int main()
 
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
-	TGE.Engine_State_Set_Display(4, 4, 5);
+	TGE.Engine_State_Set_Display(4, 4, 4);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 	

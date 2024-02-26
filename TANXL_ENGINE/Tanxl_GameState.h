@@ -17,6 +17,7 @@
 // 初始化同时对扩展地图初始化
 // 预载起始区域的接口增加覆盖初始地图的选项
 // 设置移动矩阵接口增加多倍调整
+// 移动地图结构体更名用于更多情况
 
 #pragma once
 
@@ -79,9 +80,9 @@ enum EState_Extend
 	STATE_EXTEND_RIGH_BELO = 9
 };
 
-struct Move_State
+struct Square_State
 {
-	Move_State(int NX = 0, int PX = 0, int NY = 0, int PY = 0);
+	Square_State(int NX = 0, int PX = 0, int NY = 0, int PY = 0);
 	int _Move_NX;
 	int _Move_PX;
 	int _Move_NY;
@@ -115,7 +116,7 @@ public:
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
-	Move_State Get_Move_State();
+	Square_State Get_Square_State();
 	SLocation& Get_Screen_Distance();
 	SLocation& Get_Move_Distance();
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
@@ -200,7 +201,9 @@ private:
 	unsigned _Data_Height;
 	float _Half_State_Width{ 0.0f };
 	float _Half_State_Height{ 0.0f };
+	// _Exac_LocationX 玩家方块经过计算后的实际X坐标
 	int _Exac_LocationX;
+	// _Exac_LocationY 玩家方块经过计算后的实际Y坐标
 	int _Exac_LocationY;
 	//_Adjust_Frame 用于控制当前每多少帧进行一次坐标控制
 	int _Adjust_Frame;
@@ -215,7 +218,7 @@ private:
 	//_Adjust_Enable用于标记是否启用了自动调整
 	bool _Adjust_Enable;
 	//_Adjust_Enable用于标记是否启用了移动中自动调整
-	bool _Adjust_While_Move = false;
+	bool _Adjust_While_Move{ false };
 	//_Is_Adjusting用于标记是否正处于调整坐标中
 	bool _Is_Adjusting;
 	//_Compile_Success用于标记输入的地图数据是否编译成功
@@ -223,7 +226,7 @@ private:
 	//_Extend_State_Enable用以标记是否启用了扩展世界功能
 	bool _Extend_State_Enable;
 	//_MState用于记录当前加载地图区域
-	Move_State _MState;
+	Square_State _MState;
 	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
 	int _Distance_Screen_Mid;
 	//_Distance_Move用于记录当前相对于原点的移动距离
