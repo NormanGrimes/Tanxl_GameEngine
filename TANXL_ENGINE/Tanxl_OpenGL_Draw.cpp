@@ -22,6 +22,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 {
 	//示例提供四个按键操作事件 （单例模式于其他地方定义）
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
+	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -59,8 +60,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_Current_Move_Height = 0;
 	this->_Current_Move_Width = 0;
-	
-	State->Set_Move_State(0, this->_WidthInt - 1 + this->_PreLoads, 0, this->_HeightInt - 1 + this->_PreLoads);
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "fragShader.glsl");
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Player_01_VertShader.glsl", "fragShader.glsl");
@@ -107,10 +106,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 	State->Get_Move_Distance()._Location_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (this->_PreLoads);
 
 	State->Set_Move_State(
-		State->Get_Square_State()._Move_NX - this->_PreLoads + _Pre_MoveX,
-		State->Get_Square_State()._Move_PX + _Pre_MoveX,
-		State->Get_Square_State()._Move_NY - this->_PreLoads + _Pre_MoveY,
-		State->Get_Square_State()._Move_PY + _Pre_MoveY);
+		0 - this->_PreLoads + _Pre_MoveX,
+		this->_WidthInt - 1 + this->_PreLoads + _Pre_MoveX,
+		0 - this->_PreLoads + _Pre_MoveY,
+		this->_HeightInt - 1 + this->_PreLoads + _Pre_MoveY);
+
+	LCB->Get_LocationX(State->Get_Distance_Move_Id()) += static_cast<float>((_Pre_MoveX - 4) * this->_Each_Width);
+	LCB->Get_LocationY(State->Get_Distance_Move_Id()) -= static_cast<float>((_Pre_MoveY - 4) * this->_Each_Height);
 
 	ReLoadState(State);
 }
@@ -136,18 +138,25 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 
 		for (int i{ 0 }; i < State_Length; ++i)
 		{
-			if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth()) || //现阶段Data宽度不可能导致转换溢出
-				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()))
+			if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth() * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
+				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight() * 2 + 1))
 			{
 				_StateInfor[i] = 3;
 				std::cout << "3 ";
 			}
 			else
 			{
-				int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
-
-				_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id();
-				std::cout << _StateInfor[i] <<" ";
+				if (static_cast<unsigned>(Move_NX) > State->Get_DataWidth())
+				{
+					int x = Move_NX - State->Get_DataWidth() + Move_NY * (State->Get_DataWidth() + 1) - 1;
+					_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_StateSize(STATE_EXTEND_RIGH))->Get_State_Id();
+				}
+				else
+				{
+					int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
+					_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id();
+				}
+					std::cout << _StateInfor[i] << " ";
 			}
 
 			Move_NX++;
@@ -246,8 +255,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 
-	static double State_Data_Width = State->Get_DataWidth() * this->_Each_Width;
-	static double State_Data_Height = State->Get_DataHeight() * this->_Each_Height;
+	static double State_Data_Width = State->Get_DataWidth() * this->_Each_Width * 2;
+	static double State_Data_Height = State->Get_DataHeight() * this->_Each_Height * 2;
 
 	static int Dist_Mid = State->Get_Distance_Screen_Id();
 	static int Exac_Mov = State->Get_Distance_Move_Id();
@@ -272,8 +281,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 					int Y = State->Get_LocationY();
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth()))
-						X = State->Get_DataWidth();
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
+						X = State->Get_DataWidth() * 2;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
@@ -315,8 +324,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 					int Y = State->Get_LocationY();
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth()))
-						X = State->Get_DataWidth();
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
+						X = State->Get_DataWidth() * 2;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
@@ -358,8 +367,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 					int Y = State->Get_LocationY();
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth()))
-						X = State->Get_DataWidth();
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
+						X = State->Get_DataWidth() * 2;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
@@ -401,8 +410,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 					int Y = State->Get_LocationY();
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth()))
-						X = State->Get_DataWidth();
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
+						X = State->Get_DataWidth() * 2;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
@@ -504,9 +513,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
 	static bool First_Time{ true };
 
-	float Temp_MoveX{ 0.0f };
-	float Temp_MoveY{ 0.0f };
-
 	if (First_Time)
 	{
 		First_Time = false;
@@ -532,17 +538,15 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	
 	if (!glfwWindowShouldClose(_Main_Window))
 	{
-		glClearDepth(1.0f);
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		float Temp_MoveX{ 0.0f };
+		float Temp_MoveY{ 0.0f };
+
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo[0]);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glEnableVertexAttribArray(1);
-
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL);
 
 		static int ACUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
 		static int ACUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };

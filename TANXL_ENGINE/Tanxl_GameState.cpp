@@ -726,7 +726,7 @@ bool GameStateBase::Get_Adjust_While_Move()
 bool GameStateBase::Get_Engine_File()
 {
 	if (!this->_Is_Data_Set)
-		if (!this->_Data_Base.Get_LocalData("Tanxl Engine VersionMes"))
+		if (!this->_Data_Base.Get_LocalData("Tanxl Engine SystemInfor"))
 			return false;
 	return true;
 }
