@@ -6,6 +6,9 @@
 // 随机数接口代码简化
 // 随机功能改用标准库实现
 // 增加版本信息功能
+// 增加纯数字版本字库
+// 增加刷新纯数字字库的功能
+// 增加随机数生成功能
 
 #pragma once
 
@@ -34,11 +37,17 @@ public:
     //根据内部提供的种子生成一组序列号 可用于短时间大量生成 重启后若不调用Suffle_UniData刷新字典再调用会出现重复序列号
     std::string GenerateAutoSeed();
 
+    //根据输入的种子生成一组数字
+    int GenerateNum(int seed);
+
     //随机生成一个介于Start与End之间的数字
-    int Random(int Start, int End);
+    int RandomAutoSeed(int Start, int End);
 
     //刷新随机字库
     void Suffle_UniData(int Times);
+
+    //刷新数字字库
+    void Suffle_NumData(int Times);
 
     //获取版本信息
     const std::string Get_Version();
@@ -53,6 +62,9 @@ private:
     {"E"}, {"F"}, {"G"}, {"H"}, {"I"}, {"J"}, {"K"}, {"L"}, {"M"}, {"N"},
     {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"},
     {"Y"}, {"Z"} };
+
+    int NumData[10] =
+    { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
     RandomBase();
     ~RandomBase();

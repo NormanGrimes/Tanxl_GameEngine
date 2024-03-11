@@ -21,7 +21,6 @@ const std::string OpenGL_Draw::Get_Version()
 void OpenGL_Draw::init(GameStateBase* State)
 {
 	//示例提供四个按键操作事件 （单例模式于其他地方定义）
-	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
@@ -119,8 +118,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 {
-	RandomBase* UIB{ &RandomBase::GetRandomBase() };
-
 	int Move_NX{ State->Get_Square_State()._Move_NX };
 	int Move_PX{ State->Get_Square_State()._Move_PX };
 	int Move_NY{ State->Get_Square_State()._Move_NY };
@@ -139,7 +136,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		for (int i{ 0 }; i < State_Length; ++i)
 		{
 			if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth() * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
-				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight() * 2 + 1))
+				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()))
 			{
 				_StateInfor[i] = 3;
 				std::cout << "3 ";
@@ -156,13 +153,13 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 					int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
 					_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id();
 				}
-					std::cout << _StateInfor[i] << " ";
+				//std::cout << _StateInfor[i] << " ";
 			}
 
 			Move_NX++;
 			if (Move_NX > Move_PX)//抵达尽头 重新获取初值
 			{
-				std::cout << std::endl;
+				//std::cout << std::endl;
 				Move_NX = State->Get_Square_State()._Move_NX;
 				Move_NY++;
 			}
@@ -170,9 +167,10 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 	}
 	else
 	{
-		for (int i{ 0 }; i < State_Length; ++i)
+		RandomBase* UIB{ &RandomBase::GetRandomBase() };
+		for (int i{0}; i < State_Length; ++i)
 		{
-			_StateInfor[i] = UIB->Random(0, 3);
+			_StateInfor[i] = UIB->RandomAutoSeed(0, 3);
 			std::cout << _StateInfor[i];
 		}
 	}
@@ -255,8 +253,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 
-	static double State_Data_Width = State->Get_DataWidth() * this->_Each_Width * 2;
-	static double State_Data_Height = State->Get_DataHeight() * this->_Each_Height * 2;
+	static double State_Data_Width = State->Get_DataWidth() * this->_Each_Width * 2 + this->_Each_Width;
+	static double State_Data_Height = State->Get_DataHeight() * this->_Each_Height;
 
 	static int Dist_Mid = State->Get_Distance_Screen_Id();
 	static int Exac_Mov = State->Get_Distance_Move_Id();
@@ -277,18 +275,29 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 
 				if (State->Get_LocationX() >= 0)
 				{
-					int X = State->Get_LocationX();
-					int Y = State->Get_LocationY();
+					int X{ State->Get_LocationX() };
+					int Y{ State->Get_LocationY() };
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
-						X = State->Get_DataWidth() * 2;
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2 + 1))
+						X = State->Get_DataWidth() * 2 + 1;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
 
-					int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+					int State_Id;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1 << std::endl;
+					else
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X << std::endl;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						State_Id = State->Get_StateUnit(STATE_EXTEND_RIGH, Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1)->Get_State_Id();
+					else
+						State_Id = State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id();
+
 #if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
 					std::cout << "STATUS A :" << X << "_" << Y << "_" <<
 						Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
@@ -318,20 +327,31 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 			{
 				State->Update_Move(IEB->Get_Margin_X(), IEB->Get_Margin_Y(), CHECK_EDGE_RIGH);
 
-				if (State->Get_LocationX() <= static_cast<int>(State->Get_DataWidth()))
+				if (State->Get_LocationX() <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
 				{
-					int X = State->Get_LocationX();
-					int Y = State->Get_LocationY();
+					int X{ State->Get_LocationX() };
+					int Y{ State->Get_LocationY() };
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
-						X = State->Get_DataWidth() * 2;
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2 + 1))
+						X = State->Get_DataWidth() * 2 + 1;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
 
-					int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+					int State_Id;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1 << std::endl;
+					else
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X << std::endl;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						State_Id = State->Get_StateUnit(STATE_EXTEND_RIGH, Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1)->Get_State_Id();
+					else
+						State_Id = State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id();
+
 #if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
 					std::cout << "STATUS B :" << X << "_" << Y << "_" <<
 						Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
@@ -363,18 +383,29 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 
 				if (State->Get_LocationY() >= 0)
 				{
-					int X = State->Get_LocationX();
-					int Y = State->Get_LocationY();
+					int X{ State->Get_LocationX() };
+					int Y{ State->Get_LocationY() };
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
-						X = State->Get_DataWidth() * 2;
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2 + 1))
+						X = State->Get_DataWidth() * 2 + 1;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
 
-					int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+					int State_Id;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1 << std::endl;
+					else
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X << std::endl;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						State_Id = State->Get_StateUnit(STATE_EXTEND_RIGH, Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1)->Get_State_Id();
+					else
+						State_Id = State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id();
+
 #if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
 					std::cout << "STATUS C :" << X << "_" << Y << "_" <<
 						Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;
@@ -406,18 +437,29 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State, bool& Press_Flg)
 
 				if (State->Get_LocationY() <= static_cast<int>(State->Get_DataHeight()))
 				{
-					int X = State->Get_LocationX();
-					int Y = State->Get_LocationY();
+					int X{ State->Get_LocationX() };
+					int Y{ State->Get_LocationY() };
 					if (X < 0)
 						X = 0;
-					else if (X > static_cast<int>(State->Get_DataWidth() * 2))
-						X = State->Get_DataWidth() * 2;
+					else if (X > static_cast<int>(State->Get_DataWidth() * 2 + 1))
+						X = State->Get_DataWidth() * 2 + 1;
 					if (Y < 0)
 						Y = 0;
 					else if (Y > static_cast<int>(State->Get_DataHeight()))
 						Y = State->Get_DataHeight();
 
-					int State_Id{ State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id() };
+					int State_Id;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1 << std::endl;
+					else
+						std::cout << X << "_" << Y << "_" << Y * (State->Get_DataWidth() + 1) + X << std::endl;
+
+					if (X > static_cast<int>(State->Get_DataWidth()))
+						State_Id = State->Get_StateUnit(STATE_EXTEND_RIGH, Y * (State->Get_DataWidth() + 1) + X - State->Get_DataWidth() - 1)->Get_State_Id();
+					else
+						State_Id = State->Get_StateUnit(STATE_EXTEND_MIDD, Y * (State->Get_DataWidth() + 1) + X)->Get_State_Id();
+
 #if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
 					std::cout << "STATUS D :" << X << "_" << Y << "_" <<
 						Y * (State->Get_DataWidth() + 1) + X - 1 << "_" << State_Id << std::endl;

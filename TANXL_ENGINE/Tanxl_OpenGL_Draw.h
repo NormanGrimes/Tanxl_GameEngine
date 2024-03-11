@@ -12,6 +12,8 @@
 // 删除绘制循环中的重复初始化部分
 // 加入扩展地图右方向地图绘制测试
 // 开放右扩展区域的移动
+// 右扩展区域的碰撞功能已就绪
+// 修复有关右边扩展区域的坐标数据与计算错误问题
 
 #pragma once
 
@@ -22,9 +24,9 @@
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
-#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     1
-#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      1
-#define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   1
+#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
+#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
+#define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      1
 
 #endif
@@ -467,6 +469,7 @@ public:
 	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State, bool& PressFlg);
+	//Update_Current 更新地图加载区块
 	void Update_Current();
 	void Update_Last_Location(GameStateBase* State);
 	int Get_PreLoad();

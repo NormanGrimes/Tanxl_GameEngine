@@ -114,9 +114,9 @@ private:
 	//_Max_float_Width 代表当前主控制物品在X轴的最大移动距离
 	float _Max_float_Width;
 	//_Key_Press_Length 记录一个按键事件确认按下需要的帧数
-	double _Key_Press_Length = 10;
+	double _Key_Press_Length{ 10 };
 	//_Key_Extra_Press 记录一个按键事件重复执行按下操作需要的帧数
-	double _Key_Extra_Press = 20;
+	double _Key_Extra_Press{ 20 };
 	//_Version 用于记录当前程序（输入模块-InserAction）的版本信息
 	const std::string _Version{ "0.8" };
 	//单例实现私有构造函数

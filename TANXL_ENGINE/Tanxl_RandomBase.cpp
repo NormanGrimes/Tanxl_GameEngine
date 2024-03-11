@@ -37,12 +37,13 @@ std::string RandomBase::Generate(int seed)
 {
     std::string Data{ "" };
     std::default_random_engine DRE(seed);
-    std::uniform_int_distribution<int> UID(0, 61);
-    for (int i{ 0 }; i < 15; ++i)
+    std::uniform_int_distribution<int> UID(0, 6/*61*/);
+    for (int i{ 0 }; i < 1/*15*/; ++i)
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        Data += UniData[UID(DRE)];
+        //Data += UniData[UID(DRE)];
+        Data += NumData[UID(DRE)];
     }
     return Data;
 }
@@ -77,7 +78,15 @@ std::string RandomBase::GenerateAutoSeed()
     return Data;
 }
 
-int RandomBase::Random(int Start, int End)
+int RandomBase::GenerateNum(int seed)
+{
+    std::string Data{};
+    std::default_random_engine DRE(seed++);
+    std::uniform_int_distribution<int> UID(0, 9);
+    return NumData[UID(DRE)];
+}
+
+int RandomBase::RandomAutoSeed(int Start, int End)
 {
     if (End <= Start)
         return Start;
@@ -99,6 +108,22 @@ void RandomBase::Suffle_UniData(int Times)
             int Exchange_Val{ UID(DRE)};
             UniData[i] = UniData[Exchange_Val];
             UniData[Exchange_Val] = Temp;
+        }
+    }
+}
+
+void RandomBase::Suffle_NumData(int Times)
+{
+    std::default_random_engine DRE(static_cast<unsigned>(time(0)));
+    std::uniform_int_distribution<int> UID(0, 9);
+    while (Times--)
+    {
+        for (int i{ 0 }; i < 10; ++i)
+        {
+            int Temp{ NumData[i] };
+            int Exchange_Val{ UID(DRE) };
+            NumData[i] = NumData[Exchange_Val];
+            NumData[Exchange_Val] = Temp;
         }
     }
 }

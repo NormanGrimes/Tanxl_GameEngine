@@ -597,8 +597,11 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigne
 {
 	static int Div{ static_cast<int>(Divide) };
 	static int Cur{ 0 };
-	if (Divide != 0)
+	if ((Divide != 0) && (Divide != Div))
+	{
+		Cur = 0;
 		Div = Divide;
+	}
 	static unsigned Exac{ 0x00 };
 	this->ResetInstance(true);
 	this->Set_Internal_Id((Type << 8) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
