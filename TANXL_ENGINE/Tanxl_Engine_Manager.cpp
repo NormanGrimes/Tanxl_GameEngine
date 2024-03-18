@@ -25,7 +25,10 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 
 #if _STEAM_ALPHA_TEST_EDITION_
 	if (SteamAPI_RestartAppIfNecessary(1929530))
+	{
 		std::cout << "Fail to init SteamAPI_RestartAppIfNecessary(1929530) !" << std::endl;
+		this->_Engine_Status = 2;
+	}
 	if (!SteamAPI_Init())
 		std::cout << "Fail to init Steam API !" << std::endl;
 	else
@@ -183,4 +186,53 @@ std::string Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Mov
 	Key_Unit* KEYU{ new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length) };
 	this->Tanxl_Engine_InsertBase->RegistEvent(KEYU);
 	return KEYU->Unit_Name;
+}
+
+void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
+{
+	bool All_Selected{ false };
+	if (Engine_Class == EENGINE_BASES::ENGINE_ALL_SELECTED)
+	{
+		Engine_Class = EENGINE_BASES::ENGINE_CONSOLE_LIST;
+		All_Selected = true;
+	}
+	switch (Engine_Class)
+	{
+	case EENGINE_BASES::ENGINE_CONSOLE_LIST:
+		delete this->Tanxl_Engine_Console_List;
+		this->Tanxl_Engine_Console_List = new CONSOLE();
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_DATABASE:
+		delete this->Tanxl_Engine_DataBase;
+		this->Tanxl_Engine_DataBase = new TANXL_DataBase();
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_GAMEEVENT:
+		this->Tanxl_Engine_GameEvent->Remove_GameEvent(-1);
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_GAMESTATE:
+		this->Tanxl_Engine_GameState->Clear_Display_Vector(STATE_EXTEND_SPEC);
+		remove("Tanxl Engine SystemInfor.sd");
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_OPENGL_DRAW:
+		this->Tanxl_Engine_OpenGL_Draw->Destroy_Window();
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_INSERTBASE:
+		for (int i{ 0 }; i < this->Tanxl_Engine_InsertBase->Get_KeyEvent_Size(); ++i)
+			this->Tanxl_Engine_InsertBase->RemoveEvent();
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_RANDOMBASE:
+		this->Tanxl_Engine_RandomBase->Reset_Default();
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_LOCATIONBASE:
+		this->Tanxl_Engine_LocationBase->Remove_LocationS(-1);
+		if (!All_Selected)
+			break;
+	}
 }

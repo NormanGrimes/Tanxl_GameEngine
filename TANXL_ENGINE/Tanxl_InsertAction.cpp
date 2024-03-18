@@ -58,6 +58,11 @@ void InsertEventBase::RemoveEvent()
 	_KeyEventS.pop_back();
 }
 
+size_t InsertEventBase::Get_KeyEvent_Size()
+{
+	return this->_KeyEventS.size();
+}
+
 void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
@@ -79,17 +84,20 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 				}
 				continue;
 			}
-			if (this->_KeyEventS.at(i)->MoveToY)
+			if (!OPD->Get_Adjust_Status())
 			{
-				State->Get_Screen_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-				State->Get_Move_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-				this->_Margin_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-			}
-			if (this->_KeyEventS.at(i)->MoveToX)
-			{
-				State->Get_Screen_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-				State->Get_Move_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-				this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				if (this->_KeyEventS.at(i)->MoveToY)
+				{
+					State->Get_Screen_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+					State->Get_Move_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+					this->_Margin_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				}
+				if (this->_KeyEventS.at(i)->MoveToX)
+				{
+					State->Get_Screen_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+					State->Get_Move_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+					this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+				}
 			}
 		}
 		else

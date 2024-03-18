@@ -1,3 +1,12 @@
+TEnGinE Version-0.1 Build-99 2023-04-27 18:01 UPDATE_LOG
+////////////////////////////////////////////////////////
+绘制模块增加关闭窗口功能。引擎管理模块增加引擎基类的名称
+枚举。事件模块增加事件移除功能。随机模块增加恢复到初始状
+态功能。输入模块增加获取输入事件个数的功能。坐标模块增加
+删除已记录的坐标功能。绘制模块增加暂停所有操作仅保留绘制
+的模式。输入模块在场景暂停模式中不响应移动操作。绘制模块
+地图载入循环改用更稳定的判断方式。
+
 TEnGinE Version-0.1 Build-98 2023-04-23 18:15 UPDATE_LOG
 ////////////////////////////////////////////////////////
 存储模块添加数据链功能增加切换链操作。随机模块增加纯数字
@@ -343,6 +352,15 @@ TEnGinE Version-0.1 Build-60 2023-01-12 14:46 UPDATE_LOG
 模块移除CheckInsert接口。控制台模块采用现有输入模块内容测
 试。OpenGL_Render模块简易效率更新，增加纹理获取功能。片段
 着色器与顶点着色器启动纹理测试。
+--------------------------------------------------------
+The enclosure data wrangling function can choose 
+whether to delete the original file after processing. 
+The input module removes the CheckInsert interface. The 
+console module is tested with the content of an 
+existing input module. OpenGL_Render simple efficiency 
+update of the module to add texture acquisition 
+function. Fragment shaders and vertex shaders initiate 
+texture testing.
 
 TEnGinE Version-0.1 Build-59 TURBO 2023-01-09 10:32 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -353,6 +371,21 @@ TEnGinE Version-0.1 Build-59 TURBO 2023-01-09 10:32 UPDATE_LOG
 获取某一按键是否按下的判断函数。存储模块预提供数据结构体的V4版
 本。绘制模块提供获取OpenGL窗口的函数。输入模块移除Max_Line私有
 变量。控制台模块输入功能调整为不稳定的OpenGL输入。
+--------------------------------------------------------------
+Function performance optimizations for enclosure setup 
+anonymous structs. Two special handling functions have been 
+added to the storage module file organization function. Added 
+the System Data Definition module. The engine management 
+module is organized into the core layer. Draw module 
+initialization interface efficiency optimization. The Vertex 
+shader modifies the edge length variable to be of type 
+Integer. The map module's interface to set the display extent 
+no longer cleans map data. The input module adds a judgment 
+function to obtain whether a key is pressed. The enclosure 
+pre-provides a V4 version of the data structure. The drawing 
+module provides functions for getting OpenGL windows. The 
+input module removes Max_Line private variable. The console 
+module input function is adjusted to an unstable OpenGL input.
 
 TEnGinE Version-0.1 Build-58 2023-01-06 08:46 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -363,6 +396,19 @@ TEnGinE Version-0.1 Build-58 2023-01-06 08:46 UPDATE_LOG
 数现在默认重置所有值到0xF。存储模块修正一些判断仍然以0合
 法为准的问题。存储模块设置私有结构体的功能去掉不必要的判
 断。
+--------------------------------------------------------
+Add version variables and get interfaces for all engine 
+modules. The AppendItem interface of the storage module 
+adds files to the usd format by default. The Engine 
+Management module adds the functionality of the engine 
+information store. The default ID of the enclosure 
+modifies the data structure to 0xF. Any addition to the 
+enclosure causes the private struct to reset. The 
+enclosure struct reset function now resets all values 
+to 0xF by default. The enclosure fixes some issues 
+where the judgment is still 0 legal. The ability of the 
+enclosure to set up a private structure removes 
+unnecessary judgment.
 
 TEnGinE Version-0.1 Build-57 2023-01-04 15:47 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -371,6 +417,17 @@ TEnGinE Version-0.1 Build-57 2023-01-04 15:47 UPDATE_LOG
 增加浮点数返回最后一步调节的差值。绘制模块将自动调整丢弃
 的值加入绘制。控制台模块Display_Once改为非阻塞式。开启第
 二段地图与控制台模块的测试。
+--------------------------------------------------------
+The drawing module CUW/CUH/Each_Height/Each_Width is 
+managed by the private member of the drawing module. 
+The State module revises part of the variable name. The 
+State module auto-tuning function increases the 
+floating-point number to return the difference of the 
+last adjustment. The drawing module will automatically 
+adjust the discarded value to join the draw. The 
+console module Display_Once changed to non-blocking. 
+Start the second section of the map and console module 
+test.
 
 TEnGinE Version-0.1 Build-56 2023-01-03 14:58 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -379,6 +436,16 @@ TEnGinE Version-0.1 Build-56 2023-01-03 14:58 UPDATE_LOG
 化。顶点着色器统一变量采用固定位置。绘制模块删除_Position
 采用固定位置获取统一变量。Move_Adjust归入绘制模块私有成员
 变量。绘制模块增加清屏设置函数。
+--------------------------------------------------------
+The Game Items module fixes an error where the iterator 
+is not initialized. The Game Item module adds fixed 
+health components and structures. Multiple modules for 
+easy efficiency optimization for the loop. Vertex 
+shader uniform variables take a fixed position. The 
+drawing module deletes _Position takes a fixed position 
+to get a uniform variable. Move_Adjust are classified 
+as drawing module private member variables. The drawing 
+module adds a clear screen setting function.
 
 TEnGinE Version-0.1 Build-55 2022-12-29 16:06 UPDATE_LOG
 ////////////////////////////////////////////////////////

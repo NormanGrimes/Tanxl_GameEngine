@@ -20,6 +20,7 @@
 // 2023/04/03 增加更新移动与获取输入函数
 // 2023/04/14 增加随机与坐标基类的版本信息
 // 2023/04/17 修改编译地图数据接口的入参
+// 2023/04/28 增加引擎基类的名称枚举
 
 #pragma once
 
@@ -29,7 +30,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 # pragma warning (disable:4819)
 
-#define _STEAM_ALPHA_TEST_EDITION_ 0
+//#define _STEAM_ALPHA_TEST_EDITION_ 1
 
 #include "Tanxl_Console_List.h"
 #include "Tanxl_DataBase.h"
@@ -42,6 +43,19 @@
 
 #include "public/steam/steam_api.h"
 #include "public/steam/isteamapps.h"
+
+enum class EENGINE_BASES
+{
+	ENGINE_ALL_SELECTED  = 0,
+	ENGINE_CONSOLE_LIST  = 1,
+	ENGINE_DATABASE      = 2,
+	ENGINE_GAMEEVENT     = 3,
+	ENGINE_GAMESTATE     = 4,
+	ENGINE_OPENGL_DRAW   = 5,
+	ENGINE_INSERTBASE    = 6,
+	ENGINE_RANDOMBASE    = 7,
+	ENGINE_LOCATIONBASE  = 8
+};
 
 class Tanxl_Engine
 {
@@ -81,6 +95,9 @@ public:
 
 	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
 	std::string Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length);
+
+	//重置指定的引擎基类 将该引擎基类的数据恢复到初始状态 Engine_Class用于指定需要选择重置的基类
+	void Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class);
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

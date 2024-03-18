@@ -14,6 +14,9 @@
 // 开放右扩展区域的移动
 // 右扩展区域的碰撞功能已就绪
 // 修复有关右边扩展区域的坐标数据与计算错误问题
+// 增加关闭窗口功能
+// 增加暂停所有操作仅保留绘制的模式
+// 地图载入循环改用更稳定的判断方式
 
 #pragma once
 
@@ -472,6 +475,9 @@ public:
 	//Update_Current 更新地图加载区块
 	void Update_Current();
 	void Update_Last_Location(GameStateBase* State);
+	void Destroy_Window();
+	void Enable_State_Adjust(bool Enable);
+	int Get_Adjust_Status();
 	int Get_PreLoad();
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
@@ -491,6 +497,7 @@ private:
 	bool _Window_Adjust_Enable;
 	//标记是否启用地图随移动而移动的功能
 	bool _Is_Trigger_Enable{ false };
+	bool _Is_Adjust_Enable{ true };
 
 	GLuint _State_RenderingProgram;
 	GLuint _Adjst_RenderingProgram;
@@ -509,6 +516,7 @@ private:
 	float _Location_Distance_MidY{ 0.0f };
 	float _Location_Move_DistanceX{ 0.0f };
 	float _Location_Move_DistanceY{ 0.0f };
+	int _Current_Status{ 0 };
 	//记录移动导致的新坐标高度值
 	int _New_Current_Height{ 0 };
 	//记录移动导致的新坐标宽度值

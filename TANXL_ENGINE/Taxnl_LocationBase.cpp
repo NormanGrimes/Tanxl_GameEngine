@@ -119,6 +119,20 @@ void LocationBase::Set_Location(int Pos, float LocationX, float LocationY)
 	this->_LocationS.at(Pos)->Set_Location(LocationX, LocationY);
 }
 
+void LocationBase::Remove_LocationS(int Location_Id)
+{
+	if (Location_Id < 0)
+		std::vector<Location*>().swap(this->_LocationS);
+	else
+	{
+		if (Location_Id < this->_LocationS.size())
+		{
+			delete this->_LocationS.at(Location_Id);
+			this->_LocationS.erase(this->_LocationS.begin() + Location_Id);
+		}
+	}
+}
+
 const std::string LocationBase::Get_Version()
 {
 	return this->_Version;

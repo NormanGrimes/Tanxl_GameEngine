@@ -13,6 +13,8 @@
 // 增加按键功能长按的延迟时间
 // 减少按键功能需要的参数
 // 更新上次移动后坐标功能合并到输入功能
+// 增加获取输入事件个数的功能
+// 在场景暂停模式中不响应移动操作
 
 #pragma once
 
@@ -78,6 +80,7 @@ public:
 	void RegistEvent(Key_Unit* KU);
 	//移除最近一个添加的按键功能
 	void RemoveEvent();
+	size_t Get_KeyEvent_Size();
 	//获取输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图
 	void GetInsert(GLFWwindow* window, GameStateBase* State);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）

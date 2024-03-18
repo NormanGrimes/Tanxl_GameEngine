@@ -34,6 +34,20 @@ bool GameEventBase::Search_GameEvent(std::string EventName)
 	return false;
 }
 
+void GameEventBase::Remove_GameEvent(int Event_Id)
+{
+	if (Event_Id < 0)
+		std::vector<GameEvent*>().swap(this->_GameEvents);
+	else
+	{
+		if (Event_Id < this->_GameEvents.size())
+		{
+			delete this->_GameEvents.at(Event_Id);
+			this->_GameEvents.erase(this->_GameEvents.begin() + Event_Id);
+		}
+	}
+}
+
 GameEventBase& GameEventBase::GetEventBase()
 {
 	static GameEventBase* EventBase{ new GameEventBase };

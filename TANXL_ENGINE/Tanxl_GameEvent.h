@@ -4,6 +4,7 @@
 // 增加版本变量与获取接口
 // 析构函数优化清理内存中的遗留数据
 // 新增搜索已注册游戏事件功能
+// 增加事件移除功能
 
 #pragma once
 
@@ -37,6 +38,7 @@ public:
 	GameEvent* GetGameEvent(std::string EventName);
 	//搜索游戏事件 查看是否已添加相关名称的游戏事件
 	bool Search_GameEvent(std::string EventName);
+	void Remove_GameEvent(int Event_Id);
 private:
 	GameEventBase();
 	~GameEventBase();

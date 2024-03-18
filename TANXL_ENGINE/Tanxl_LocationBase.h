@@ -14,6 +14,7 @@
 // 整理进入核心层
 // 增加版本信息功能
 // 修复边缘检测功能错误的问题
+// 增加删除已记录的坐标功能
 
 #pragma once
 
@@ -93,6 +94,8 @@ public:
 	float Adjust_Location(int Pos, ECALCUL_MARKING Marking, float Adjust, bool Is_LocX);
 
 	void Set_Location(int Pos, float LocationX = 0.0f, float LocationY = 0.0f);
+
+	void Remove_LocationS(int Location_Id);// 警告: 在非重置基类的情况下不推荐使用
 
 	const std::string Get_Version();
 

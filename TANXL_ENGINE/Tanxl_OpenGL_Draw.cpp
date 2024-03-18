@@ -135,8 +135,23 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 
 		for (int i{ 0 }; i < State_Length; ++i)
 		{
-			if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth() * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
-				(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()))
+			/*std::cout << (static_cast<unsigned>(Move_NX) > State->Get_DataWidth() * 2 + 1) << "__"
+				<< (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()) << "--------";
+			std::cout << (Move_NX > static_cast<int>(State->Get_DataWidth()) * 2 + 1) << "__"
+				<< (Move_NY > static_cast<int>(State->Get_DataHeight())) << std::endl;
+
+			std::cout << static_cast<unsigned>(Move_NX) << "--------" << State->Get_DataWidth() * 2 + 1 << "__" <<
+				static_cast<unsigned>(Move_NY) << "--------" << State->Get_DataHeight() << std::endl;
+
+			std::cout << Move_NX << "--------" << static_cast<int>(State->Get_DataWidth()) * 2 + 1 << "__" <<
+				Move_NY << "--------" << static_cast<int>(State->Get_DataHeight()) << std::endl << std::endl;
+
+			std::cout << Move_NX << "_" << Move_NY << "_" << Move_PX << "_" << Move_PY << std::endl;*/
+
+			//if ((Move_PX < 0) || (static_cast<unsigned>(Move_NX) > State->Get_DataWidth() * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
+			//	(Move_PY < 0) || (static_cast<unsigned>(Move_NY) > State->Get_DataHeight()))
+			if ((Move_NX < 0) || (Move_NX > static_cast<int>(State->Get_DataWidth()) * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
+				(Move_NY < 0) || (Move_NY > static_cast<int>(State->Get_DataHeight())))
 			{
 				_StateInfor[i] = 3;
 				std::cout << "3 ";
@@ -494,6 +509,23 @@ void OpenGL_Draw::Update_Last_Location(GameStateBase* State)
 	this->_Location_Move_DistanceY = State->Get_Move_Distance()._Location_Y;
 }
 
+void OpenGL_Draw::Destroy_Window()
+{
+	glfwDestroyWindow(_Main_Window);
+	glfwTerminate();
+	exit(EXIT_SUCCESS);
+}
+
+void OpenGL_Draw::Enable_State_Adjust(bool Enable)
+{
+	this->_Is_Adjust_Enable = Enable;
+}
+
+int OpenGL_Draw::Get_Adjust_Status()
+{
+	return this->_Current_Status;
+}
+
 int OpenGL_Draw::Get_PreLoad()
 {
 	return this->_PreLoads;
@@ -555,14 +587,18 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
 	static bool First_Time{ true };
 
+	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
+	static LocationBase* LCB{ &LocationBase::GetLocationBase() };
+
+	static Key_Unit* OpenGL_Stop_Key{ new Key_Unit(GLFW_KEY_F) };
+
 	if (First_Time)
 	{
 		First_Time = false;
 		init(State);
-	}
 
-	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
-	static LocationBase* LCB{ &LocationBase::GetLocationBase() };
+		IEB->RegistEvent(OpenGL_Stop_Key);
+	}
 
 	static int Auto_Loc = LCB->New_Location_set("Auto_Adjust_Location"); //记录自动调整状态的移动距离
 	static int Move_Loc = LCB->New_Location_set("Move_Adjust_Location"); //记录手动移动状态的移动距离
@@ -582,6 +618,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	{
 		float Temp_MoveX{ 0.0f };
 		float Temp_MoveY{ 0.0f };
+		_Current_Status = 0;
 
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -589,6 +626,16 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glEnableVertexAttribArray(1);
+
+		if (OpenGL_Stop_Key->MoveToY == true || this->_Is_Adjust_Enable == false)
+		{
+			std::cout << "ENABLE" << std::endl;
+			display(_Main_Window, glfwGetTime(), State);
+			glfwSwapBuffers(_Main_Window);
+			glfwPollEvents();
+			_Current_Status = 1;
+			return;
+		}
 
 		static int ACUH{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Height), 0)) };
 		static int ACUW{ static_cast<int>(LCB->Adjust_Location(Auto_Loc, MARKING_DIV, static_cast<float>(_Each_Width), 1)) };
@@ -817,7 +864,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 				LCB->Get_LocationY(Stat_Loc) += 0.01f;
 				LCB->Get_LocationY(Move_Loc) += 0.01f;
-				//LCB->Get_LocationX(Auto_Loc) += 0.01f;
 				State->Get_Move_Distance()._Location_Y -= 0.01f;
 			}
 			if ((Moves & MoveToPH) == MoveToPH)
@@ -827,7 +873,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 				LCB->Get_LocationY(Stat_Loc) -= 0.01f;
 				LCB->Get_LocationY(Move_Loc) -= 0.01f;
-				//LCB->Get_LocationX(Auto_Loc) -= 0.01f;
 				State->Get_Move_Distance()._Location_Y += 0.01f;
 			}
 			if ((Moves & MoveToNW) == MoveToNW)
@@ -837,7 +882,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 				LCB->Get_LocationX(Stat_Loc) += 0.01f;
 				LCB->Get_LocationX(Move_Loc) += 0.01f;
-				//LCB->Get_LocationX(Auto_Loc) += 0.01f;
 				State->Get_Move_Distance()._Location_X -= 0.01f;
 			}
 			if ((Moves & MoveToPW) == MoveToPW)
@@ -847,7 +891,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 				LCB->Get_LocationX(Stat_Loc) -= 0.01f;
 				LCB->Get_LocationX(Move_Loc) -= 0.01f;
-				//LCB->Get_LocationX(Auto_Loc) -= 0.01f;
 				State->Get_Move_Distance()._Location_X += 0.01f;
 			}
 		}
@@ -860,11 +903,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glfwPollEvents();
 	}
 	else
-	{
-		glfwDestroyWindow(_Main_Window);
-		glfwTerminate();
-		exit(EXIT_SUCCESS);
-	}
+		Destroy_Window();
 }
 
 void TanxlOD::framebuffer_size_callback(GLFWwindow* window, int width, int height)

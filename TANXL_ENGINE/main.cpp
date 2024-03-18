@@ -16,9 +16,13 @@ int main()
 	//Data Function Test
 
 	Tanxl_Engine TGE;
+	OpenGL_Draw* OD{ &OpenGL_Draw::GetOpenGLBase() };
 
 	if (TGE.Check_Engine_Status())
+	{
+		OD->Destroy_Window();
 		return -1;
+	}
 
 	//Get Instance
 

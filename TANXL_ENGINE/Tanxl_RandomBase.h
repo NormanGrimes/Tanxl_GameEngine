@@ -9,6 +9,7 @@
 // 增加纯数字版本字库
 // 增加刷新纯数字字库的功能
 // 增加随机数生成功能
+// 增加恢复到初始状态功能
 
 #pragma once
 
@@ -48,6 +49,9 @@ public:
 
     //刷新数字字库
     void Suffle_NumData(int Times);
+
+    //恢复到初始状态
+    void Reset_Default();
 
     //获取版本信息
     const std::string Get_Version();
