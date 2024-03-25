@@ -131,11 +131,12 @@ public:
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...
 	//↓修改OTH1 OTH2 OTH3的时候直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
 	void Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data);
-	//↓删除某一节点与其下所有内容
+	//↓删除某一节点与其下所有内容 Type Exac分别用于定位节点的对应级别
 	void Remove_Link(int Type, int Exac);
 	//↓输出当前内存中的链表的所有内容 支持输出结构中的完整内容 当前内存为空时会抛出错误
 	void Print_Data();
-	//↓向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置 To_File为true时会向文件输出 否则存储到内存中 File_Name指定文件名称 不需要添加后缀 Keep_Instance可在为true时 完成添加后不清理Instance数据
+	//↓向本地文件中(.usd)添加Item物品 此函数会导致Item单例重置 File_Name指定文件名称 不需要添加后缀 Delete_After为true时会在完成添加后清理结构体
+	//↓Mode包括添加信息到内存APPENDTO_MEMO 添加信息到本地文件APPENDTO_FILE 和两边同时添加APPENDTO_BOTH
 	void AppendItem(EAppendItem_Mode Mode, std::string File_Name = "Tanxl_Data", bool Delete_After = false);
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除

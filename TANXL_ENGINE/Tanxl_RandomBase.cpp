@@ -50,7 +50,8 @@ std::string RandomBase::Generate(int seed)
 
 std::string RandomBase::Generate_State(unsigned Width, unsigned Height)
 {
-    std::default_random_engine DRE(static_cast<unsigned>(time(0)));
+    static unsigned seed{ static_cast<unsigned>(time(0)) };
+    std::default_random_engine DRE(seed++);
     std::uniform_int_distribution<int> UID(0, 3);
     this->Suffle_UniData(1);
     std::string ReturnVal{ "" };
@@ -65,7 +66,7 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height)
 
 std::string RandomBase::GenerateAutoSeed()
 {
-    static unsigned int seed{ 0 };
+    static unsigned seed{ static_cast<unsigned>(time(0)) };
     std::string Data{};
     std::default_random_engine DRE(seed++);
     std::uniform_int_distribution<int> UID(0, 61);

@@ -17,6 +17,11 @@
 // 增加关闭窗口功能
 // 增加暂停所有操作仅保留绘制的模式
 // 地图载入循环改用更稳定的判断方式
+// 增加打印控制宏
+// 优化扩展地图信息查找流程
+// 增加下方扩展区域的绘制及其碰撞
+// 增加单一地图方块编号获取功能
+// 移除方向移动判断中另一轴的输入更新
 
 #pragma once
 
@@ -28,9 +33,10 @@
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
 #define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
-#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
+#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      1
 #define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   0
-#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      1
+#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
+#define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
 
 #endif
 
@@ -449,6 +455,8 @@ namespace TanxlOD
 		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 	};
 }
 
@@ -475,14 +483,19 @@ public:
 	//Update_Current 更新地图加载区块
 	void Update_Current();
 	void Update_Last_Location(GameStateBase* State);
+	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
 	int Get_Adjust_Status();
+	//获取预载的数值
 	int Get_PreLoad();
+	//单一地图方块编号获取功能
+	int Get_State_Id(int LocationX, int LocationY, GameStateBase& State);
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
+	//获取OpenGL窗口
 	GLFWwindow* Get_Window()const;
 private:
 	OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust);
