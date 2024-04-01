@@ -1,6 +1,7 @@
 #include "Tanxl_Engine_Manager.h"
 
-Tanxl_Engine::Tanxl_Engine() :Tanxl_Engine_Console_List(new CONSOLE),
+Tanxl_Engine::Tanxl_Engine() :_Engine_Status(0),
+Tanxl_Engine_Console_List(new CONSOLE),
 Tanxl_Engine_DataBase(new TANXL_DataBase()),
 Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 Tanxl_Engine_GameState(&GameStateBase::GetStateBase(5, 5)),
@@ -9,19 +10,26 @@ Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
 Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase()),
 Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 {
-	
-	if (!this->Tanxl_Engine_Console_List ||
-		!this->Tanxl_Engine_DataBase     ||
-		!this->Tanxl_Engine_GameEvent    ||
-		!this->Tanxl_Engine_GameState    ||
-		!this->Tanxl_Engine_OpenGL_Draw  ||
-		!this->Tanxl_Engine_InsertBase   ||
-		!this->Tanxl_Engine_RandomBase   ||
-		!this->Tanxl_Engine_LocationBase)
-	{
+
+	if (!this->Tanxl_Engine_Console_List)
+		this->_Engine_Status = 0x1;
+	else if (!this->Tanxl_Engine_DataBase)
+		this->_Engine_Status = 0x2;
+	else if (!this->Tanxl_Engine_GameEvent)
+		this->_Engine_Status = 0x3;
+	else if (!this->Tanxl_Engine_GameState)
+		this->_Engine_Status = 0x4;
+	else if (!this->Tanxl_Engine_OpenGL_Draw)
+		this->_Engine_Status = 0x5;
+	else if (!this->Tanxl_Engine_InsertBase)
+		this->_Engine_Status = 0x6;
+	else if (!this->Tanxl_Engine_RandomBase)
+		this->_Engine_Status = 0x7;
+	else if (!this->Tanxl_Engine_LocationBase)
+		this->_Engine_Status = 0x8;
+
+	if(this->_Engine_Status)
 		std::cout << "Fail to fully start Engine !" << std::endl;
-		this->_Engine_Status = 1;
-	}
 
 #if _STEAM_ALPHA_TEST_EDITION_
 	if (SteamAPI_RestartAppIfNecessary(1929530))
@@ -41,9 +49,16 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 #endif
 }
 
-unsigned Tanxl_Engine::Check_Engine_Status()
+unsigned Tanxl_Engine::Engine_Check_Engine_Status()
 {
-	return this->_Engine_Status;//0 正常运行 1 初始化失败
+	if (this->_Engine_Status == 1)
+	{
+		this->Tanxl_Engine_OpenGL_Draw->Destroy_Window();
+		delete this;
+		exit(1);
+	}
+	else
+		return this->_Engine_Status;//0 正常运行 1 初始化失败
 }
 
 void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
@@ -115,6 +130,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 
 void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, unsigned State_Size, int Width, int Height)
 {
+	this->_Engine_Status |= 0x100;
 	for (int i{ 0 }; i < static_cast<int>(State_Size); ++i)//16x16
 	{
 		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
@@ -235,4 +251,17 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	}
+}
+
+void Tanxl_Engine::Engine_State_Set_Begin(int State_Id, bool Cover_State, std::string State_Infor)
+{
+	if (this->_Engine_Status != 0x100)
+	{
+		std::cout << "当前未开启扩展世界功能";
+		return;
+	}
+	if (Cover_State)
+		this->Tanxl_Engine_GameState->Set_StartState(State_Id, State_Infor);
+	else
+		this->Tanxl_Engine_GameState->Set_StartState(State_Id);
 }

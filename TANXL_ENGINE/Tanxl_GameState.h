@@ -19,6 +19,8 @@
 // 设置移动矩阵接口增加多倍调整
 // 移动地图结构体更名用于更多情况
 // 修复本地文件获取功能未更新名称的问题
+// 更新移动功能增加对符号变换部分的支持
+// 微调位置功能去掉自动调整参数
 
 #pragma once
 
@@ -152,8 +154,8 @@ public:
 	int Get_LocationY();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
-	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length);//可选功能 对2D棋盘上的物品微调位置
-	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, float& Auto_Adjust_Length);
+	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX);
 	unsigned Get_DataHeight()const;
 	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值

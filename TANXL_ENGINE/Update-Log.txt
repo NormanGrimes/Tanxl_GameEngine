@@ -1,3 +1,15 @@
+TEnGinE Version-0.2 Build-02 TURBO 2023-05-06 15:56 UPDATE_LOG
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+绘制模块增加右下方扩展区域的绘制及其碰撞。绘制模块增加正上方扩
+展区域的绘制及其碰撞。地图模块更新移动功能增加对符号变换部分的
+支持。整理各模块注释。引擎管理模块引擎状态检查功能在初始化未完
+全时自动析构。引擎管理模块引擎初始化失败时返回出错组件信息。引
+擎管理模块增加扩展世界设置起始区域的功能。绘制模块增加右上方扩
+展区域的绘制及其碰撞。绘制模块增加左下方正左方和左上方扩展区域
+的绘制及其碰撞。绘制模块移除自动调整中调整绘制区域的功能。绘制
+模块移除自动调整的坐标记录并调整部分变量名称。地图模块微调位置
+功能去掉自动调整参数。
+
 TEnGinE Version-0.2 Build-01 2023-05-04 09:19 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块增加打印控制宏。随机模块修复短时间内生成的地图信
@@ -318,6 +330,18 @@ TEnGinE Version-0.1 Build-65 2023-01-31 14:03 UPDATE_LOG
 尾部/OTH的值。输入模块的输入操作的执行步骤延迟到完整检测
 之后。绘制模块_vbo收入私有成员。地图模块默认初始化绘制频
 率为每帧一次。存储模块增加第四版私有结构体的设置函数。
+--------------------------------------------------------
+Added version-related features of the engine management 
+module. The enclosure add-item feature is optional and 
+does not clean up data after adding. The module fixes 
+that the tail/OTH values in the data collation function 
+are not changed. The execution of the input operation 
+for the input module is delayed until after the full 
+instrumentation. Draw modules _vbo income private 
+members. The map module initializes the drawing 
+frequency by default once per frame. The enclosure adds 
+setting functions for the fourth version of the private 
+struct.
 
 TEnGinE Version-0.1 Build-64 2023-01-30 09:26 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -327,6 +351,19 @@ TEnGinE Version-0.1 Build-64 2023-01-30 09:26 UPDATE_LOG
 处理机制。绘制模块纹理变量收为私有成员。启用C++11范围循环
 测试代替部分for循环。存储模块私有成员中加入第四代数据结构
 体。存储模块默认数据功能现在可设置输出数量。
+--------------------------------------------------------
+The drawing module adds a new array of normal and 
+inverted left and right square textures. The input 
+module fixes an issue with the wrong edge above the 
+edge marker. The drawing module increases the index 
+constant of the map file. Pointer initialization uses 
+nullptr instead of NULL. The enclosure adds an 
+exception handling mechanism for STOE. Draw module 
+texture variables are private members. Enable C++11 
+range loop testing instead of partial for loops. The 
+fourth-generation data structure is added to the 
+enclosure private member. The enclosure default data 
+feature now sets the number of outputs.
 
 TEnGinE Version-0.1 Build-63 2023-01-29 10:46 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -336,6 +373,19 @@ TEnGinE Version-0.1 Build-63 2023-01-29 10:46 UPDATE_LOG
 移动事件Id生成方式切换的功能并对引擎管理模块相应修改。存
 储模块移除零/满合法的设定。存储模块为五个额外的特殊功能限
 定名称空间。
+--------------------------------------------------------
+The marker for whether the input module has reached the 
+edge is changed to the short type and the get function 
+is changed to thread-safe. The input module fixes an 
+issue where edge markers do not mark less than symbols. 
+The drawing module adds the ability to generate a 
+movement event ID based on the position of the input 
+edge. The drawing module adds the function of switching 
+the generation mode of mobile event IDs and modifies 
+the engine management module accordingly. The enclosure 
+removes the zero/full legal setting. The enclosure 
+qualifies the namespace for five additional special 
+functions.
 
 TEnGinE Version-0.1 Build-62 2023-01-18 10:02 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -345,6 +395,18 @@ TEnGinE Version-0.1 Build-62 2023-01-18 10:02 UPDATE_LOG
 数据定义模块为所有switch增加默认的break。存储模块修复设置
 存储结构体的OTH3位以及按位异或错误的问题。存储模块默认数
 据量减少。
+--------------------------------------------------------
+The map module moves the state enumeration with five 
+additional cases. The drawing module adds the ability 
+for the map background to move with the movement 
+operation. The engine management module adds the 
+ability to move maps with mobile operations. The input 
+module adds macros to control the opening and closing 
+of console output. The data definition module adds a 
+default break for all switches. The enclosure fixes the 
+issue of setting the OTH3 bit of the storage structure 
+and bitwise XOR error. The enclosure defaults to 
+reduced data volume.
 
 TEnGinE Version-0.1 Build-61 2023-01-16 17:39 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -353,6 +415,17 @@ TEnGinE Version-0.1 Build-61 2023-01-16 17:39 UPDATE_LOG
 制模块代码删除部分冗余。控制台模块回退输入操作方面改动。
 SOIL2库加入Release版本避免与标准库冲突。各模块版本更新修
 订版本编号。
+--------------------------------------------------------
+The texture feature has been debugged and implemented. 
+Vertex shader fixes an issue where Cube variables are 
+not properly passed into fragment shaders. The drawing 
+module removes the default parameters of the 
+constructor. Draw module code to remove some 
+redundancy. Changes in the console module to roll back 
+input operations. The SOIL2 library is added to the 
+Release version to avoid conflicts with the standard 
+library. Update revision number for each module version.
+
 
 TEnGinE Version-0.1 Build-60 2023-01-12 14:46 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -1091,99 +1164,99 @@ new functions that can be used to fine-tune the
 position of items on a 2D board. The Utils module 
 removes three functions that are currently useless.
 
-TEnGinE Version-0.1 Build-9 2022-05-10 01:16 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-09 2022-05-10 01:16 UPDATE_LOG
+////////////////////////////////////////////////////////
 绘制模块已解决深度测试难题，现在支持多层次绘制。GLSL文件
 名称简化。物品基类提供删除组件功能。
--------------------------------------------------------
+--------------------------------------------------------
 The Draw module has solved depth testing and now 
 supports multi-level drawing. GLSL file name 
 simplification. The item base class provides the 
 ability to delete components.
 
-TEnGinE Version-0.1 Build-8 2022-05-08 23:03 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-08 2022-05-08 23:03 UPDATE_LOG
+////////////////////////////////////////////////////////
 整合GameEvent类至GameState类中。考虑代码简洁性，移除初始
 化模块。游戏物品类功能性更新，提供组件添加功能。移除绘制
 模块中明显重复的头文件包含。在绘制模块中加入字母输入。
--------------------------------------------------------
-Integrate the GameEvent class into the GameState 
-class. For code brevity, remove the initialization 
-module. Functional updates for game items, providing 
-component additions. Remove clearly duplicate header 
-file inclusions in the drawing module. Add letter 
-input to the drawing module.
+--------------------------------------------------------
+Integrate the GameEvent class into the GameState class. 
+For code brevity, remove the initialization module. 
+Functional updates for game items, providing component 
+additions. Remove clearly duplicate header file 
+inclusions in the drawing module. Add letter input to 
+the drawing module.
 
-TEnGinE Version-0.1 Build-7 2022-05-04 22:10 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-07 2022-05-04 22:10 UPDATE_LOG
+////////////////////////////////////////////////////////
 新增初始化模块，用以对所有基类进行初始化。InsertAction模
 块新增四个操作范例，并整理至引擎核心。游戏物品类内容更新
 。修改VertShader并初始化版本为0.1。
--------------------------------------------------------
+--------------------------------------------------------
 Added an initialization module to initialize all base 
 classes. The InsertAction module adds four new 
 operation examples and organizes them into the engine 
 core. Game item content updates. Modify VertShader and 
 initialize the version to 0.1.
 
-TEnGinE Version-0.1 Build-6 2022-05-02 22:34 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-06 2022-05-02 22:34 UPDATE_LOG
+////////////////////////////////////////////////////////
 InsertAction类进行完整的重写，并已证实其功能可用。添加游
 戏物品类，用于在游戏中加入新的对象。添加物品组件类，用于
 给游戏物品添加特别的功能。
--------------------------------------------------------
-The InsertAction class is completely overridden and 
-has proven that its functionality is available. Add 
-game item classes to add new objects to your game. Add 
-item component classes to add special functionality to 
-game items.
+--------------------------------------------------------
+The InsertAction class is completely overridden and has 
+proven that its functionality is available. Add game 
+item classes to add new objects to your game. Add item 
+component classes to add special functionality to game 
+items.
 
-TEnGinE Version-0.1 Build-5 2022-05-01 00:42 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-05 2022-05-01 00:42 UPDATE_LOG
+////////////////////////////////////////////////////////
 修复SOIL2库缺失PDB文件的问题。Utils模块移除两个目前使用
 不到的函数。从目前确认加入引擎的四个类中移除初始宏定义。
--------------------------------------------------------
+--------------------------------------------------------
 Fixed the issue that the SOIL2 library was missing PDB 
 files. The Utils module removes two functions that are 
-not currently used. Remove the initial macro 
-definition from the four classes currently confirmed 
-for joining the engine.
+not currently used. Remove the initial macro definition 
+from the four classes currently confirmed for joining 
+the engine.
 
-TEnGinE Version-0.1 Build-4 2022-04-29 23:48 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-04 2022-04-29 23:48 UPDATE_LOG
+////////////////////////////////////////////////////////
 修复UniqueID单例返回值类型错误的问题。修复UniqueID随机数
 不随机的问题。Tanxl_OpneGL_Draw类加入包含检查，并取消对
 名称空间std的using。移除Utils.cpp中对于Utils.h的重复包含
 ，并为Utils.h加入包含检查。
--------------------------------------------------------
+--------------------------------------------------------
 Fixed the issue that the UniqueID singleton return 
 value type is incorrect. Fixed the issue that UniqueID 
-random numbers were not random. Tanxl_OpneGL_Draw 
-class adds an inclusion check and unuses the namespace 
-std. Remove duplicate inclusions of Utils.h from the 
-Utils .cpp and add an include check to Utils.h.
+random numbers were not random. Tanxl_OpneGL_Draw class 
+adds an inclusion check and unuses the namespace std. 
+Remove duplicate inclusions of Utils.h from the 
+Utils.cpp and add an include check to Utils.h.
 
-TEnGinE Version-0.1 Build-3 2022-04-28 22:11 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-03 2022-04-28 22:11 UPDATE_LOG
+////////////////////////////////////////////////////////
 增加一个UniqueID头文件，用于给任意游戏资产生成独一无二的
 ID。修复InsertAction头文件中复制构造函数的未初始化错误。
 GLSL文件调整图形单元的颜色，显示每个独立方块更加直观。
--------------------------------------------------------
+--------------------------------------------------------
 Add a UniqueID header file to generate unique IDs for 
 any game asset. Fixed the uninitialized error of the 
 copy constructor in the InsertAction header file. GLSL 
 files adjust the color of the graphics unit to display 
 each individual square more intuitively.
 
-TEnGinE Version-0.1 Build-2 2022-04-27 22:36 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-02 2022-04-27 22:36 UPDATE_LOG
+////////////////////////////////////////////////////////
 增加运行环境的配置，为每个模块添加版本号。
--------------------------------------------------------
+--------------------------------------------------------
 Increase the configuration of the runtime environment 
 and add the version number for each module.
 
-TEnGinE Version-0.1 Build-1 2022-04-26 21:47 UPDATE_LOG
-///////////////////////////////////////////////////////
+TEnGinE Version-0.1 Build-01 2022-04-26 21:47 UPDATE_LOG
+////////////////////////////////////////////////////////
 整理初始内容，引擎立项。
--------------------------------------------------------
+--------------------------------------------------------
 Organize the initial content and set up the engine.

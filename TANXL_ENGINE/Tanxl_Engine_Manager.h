@@ -21,6 +21,9 @@
 // 2023/04/14 增加随机与坐标基类的版本信息
 // 2023/04/17 修改编译地图数据接口的入参
 // 2023/04/28 增加引擎基类的名称枚举
+// 2023/05/09 引擎状态检查功能在初始化未完全时自动析构
+// 2023/05/09 引擎初始化失败时返回出错组件信息
+// 2023/05/09 增加扩展世界设置起始区域的功能
 
 #pragma once
 
@@ -64,7 +67,7 @@ public:
 	Tanxl_Engine();
 
 	//获取当前引擎状态
-	unsigned Check_Engine_Status();
+	unsigned Engine_Check_Engine_Status();
 
 	//设置当前显示窗口中的XY轴矩阵数量 Width宽度 Height高度
 	void Engine_State_Set_Display(int Width, int Height, int PreLoads);
@@ -99,6 +102,9 @@ public:
 	//重置指定的引擎基类 将该引擎基类的数据恢复到初始状态 Engine_Class用于指定需要选择重置的基类
 	void Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class);
 
+	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Cover_State用于标记是否使用State_Infor的信息覆盖指定ID下的信息
+	void Engine_State_Set_Begin(int State_Id, bool Cover_State, std::string State_Infor);
+
 private:
 	CONSOLE* Tanxl_Engine_Console_List;
 	TANXL_DataBase* Tanxl_Engine_DataBase;
@@ -109,7 +115,18 @@ private:
 	RandomBase* Tanxl_Engine_RandomBase;
 	LocationBase* Tanxl_Engine_LocationBase;
 
-	unsigned _Engine_Status = 0;
+	unsigned _Engine_Status;
+	//Status :
+	// 0x001 引擎组件控制台列表初始化失败
+	// 0x002 引擎组件数据库初始化失败
+	// 0x003 引擎组件游戏事件初始化失败
+	// 0x004 引擎组件游戏地图初始化失败
+	// 0x005 引擎组件绘制模块初始化失败
+	// 0x006 引擎组件输入模块初始化失败
+	// 0x007 引擎组件随机模块初始化失败
+	// 0x008 引擎组件坐标模块初始化失败
+	// 0x000 未启用扩展世界功能
+	// 0x100 已启用扩展世界功能
 
 	const std::string __ENGINE_VERSION__ = "0.2";
 };

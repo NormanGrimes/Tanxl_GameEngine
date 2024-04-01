@@ -81,7 +81,8 @@ public:
 	//移除最近一个添加的按键功能
 	void RemoveEvent();
 	size_t Get_KeyEvent_Size();
-	//获取输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图
+	//获取输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图 支持非移动按钮功能
+	//获取到输入后不会立刻执行移动操作 仅记录移动距离 通过地图模块的更新移动功能执行移动操作
 	void GetInsert(GLFWwindow* window, GameStateBase* State);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
@@ -95,8 +96,11 @@ public:
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
 private:
+	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘
 	void AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);
+	//_KeyEventS 所有已注册输入事件的容器
 	std::vector<Key_Unit*> _KeyEventS;
+	//_PTB 未使用 最初目的用于记录所有区域的是否可移动到状态
 	std::vector<bool>* _PTB;
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离
 	float _Max_float;
@@ -122,7 +126,8 @@ private:
 	double _Key_Extra_Press{ 20 };
 	//_Version 用于记录当前程序（输入模块-InserAction）的版本信息
 	const std::string _Version{ "0.8" };
-	//单例实现私有构造函数
+
+	//单例实现部分
 	InsertEventBase();
 	~InsertEventBase();
 	InsertEventBase(const InsertEventBase&);

@@ -250,7 +250,7 @@ SLocation& GameStateBase::Get_Move_Distance()
 	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move);
 }
 
-float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, float& Auto_Adjust_Length)
+float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& State_MoveY)
 {
 	static int EHCountS{ 0 };
 	static int EHCountL{ 0 };
@@ -268,13 +268,11 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "A MoveState  _" << MoveState << std::endl;
 				State_MoveY += Temp_Move;
-				Auto_Adjust_Length += Temp_Move;
 				MoveState = 0;
 				std::cout << " MoveState  _" << MoveState << std::endl;
 			}
 			else
 			{
-				Auto_Adjust_Length += _GameState_Adjust;
 				MoveState += _GameState_Adjust;
 				State_MoveY += _GameState_Adjust;
 			}
@@ -292,7 +290,6 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 		{
 			if (MoveState > _GameState_Adjust)
 			{
-				Auto_Adjust_Length -= _GameState_Adjust;
 				MoveState -= _GameState_Adjust;
 				State_MoveY -= _GameState_Adjust;
 			}
@@ -302,7 +299,6 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "B MoveState  _" << MoveState << std::endl;
 				State_MoveY -= Temp_Move;
-				Auto_Adjust_Length -= Temp_Move;
 				Temp_Move = -Temp_Move;
 				MoveState = 0;
 				std::cout << " MoveState  _" << MoveState << std::endl;
@@ -316,7 +312,7 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 	return Temp_Move;
 }
 
-float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, float& Auto_Adjust_Length)
+float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& State_MoveX)
 {
 	static int EWCountS{ 0 };
 	static int EWCountL{ 0 };
@@ -336,13 +332,11 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "A MoveState  _" << MoveState << std::endl;
 				State_MoveX += Temp_Move;
-				Auto_Adjust_Length += Temp_Move;
 				MoveState = 0;
 				std::cout << " MoveState  _" << MoveState << std::endl;
 			}
 			else
 			{
-				Auto_Adjust_Length += _GameState_Adjust;
 				MoveState += _GameState_Adjust;
 				State_MoveX += _GameState_Adjust;
 			}
@@ -360,7 +354,6 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 		{
 			if (MoveState > _GameState_Adjust)
 			{
-				Auto_Adjust_Length -= _GameState_Adjust;
 				MoveState -= _GameState_Adjust;
 				State_MoveX -= _GameState_Adjust;
 			}
@@ -372,7 +365,6 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "B MoveState  _" << MoveState << std::endl;
 				State_MoveX -= Temp_Move;
-				Auto_Adjust_Length -= Temp_Move;
 				Temp_Move = -Temp_Move;
 				MoveState = 0;
 				std::cout << " MoveState  _" << MoveState << std::endl;
@@ -486,18 +478,24 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 	float Temp_LocationX = (Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f);
 	float Temp_LocationY = (Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f);
 
+	std::cout << Temp_LocationX << "____" << Temp_LocationY << std::endl;
+
 	Temp_LocationX = static_cast<int>(Temp_LocationX + 0.5f) > static_cast<int>(Temp_LocationX) ? Temp_LocationX + 0.5f : Temp_LocationX;
 	Temp_LocationY = static_cast<int>(Temp_LocationY - 0.5f) < static_cast<int>(Temp_LocationY) ? Temp_LocationY - 0.5f : Temp_LocationY;
 
 	this->_Exac_LocationX = static_cast<int>(Temp_LocationX);
 	this->_Exac_LocationY = static_cast<int>(Temp_LocationY);
 
-	if (Distance->_Location_X + MoveX < 0.0f)
+	if (Distance->_Location_X + MoveX < -0.24f)
 		--this->_Exac_LocationX;
-	if (Distance->_Location_Y + MoveY > 0.0f)
+	if (Distance->_Location_Y + MoveY > 0.24f)
 		++this->_Exac_LocationY;
 
 	this->_Exac_LocationY = -this->_Exac_LocationY;
+
+	std::cout << Temp_LocationX << "____" << Temp_LocationY << std::endl;
+
+	std::cout << this->_Exac_LocationX << "____" << this->_Exac_LocationY << std::endl;
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :

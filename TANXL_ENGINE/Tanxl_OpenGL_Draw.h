@@ -1,39 +1,26 @@
-﻿//_VERSION_1_0_ UPDATE LOG
-// LAST_UPDATE 2023-04-14 16:17
-// 移除所有非扩展地图内容
-// 新增更新上次移动后坐标的接口
-// 输入操作从绘制循环中分离
-// 增加并调整控制台输出宏
-// 重新加载地图功能优化减少判断
-// 顶点绘制数的预载值翻倍
-// 增加预载初始移动距离的变量与设置功能
-// 校准预载移动距离对应的碰撞距离
-// 初始化部分优化地图矩阵设置次数
-// 删除绘制循环中的重复初始化部分
-// 加入扩展地图右方向地图绘制测试
-// 开放右扩展区域的移动
-// 右扩展区域的碰撞功能已就绪
-// 修复有关右边扩展区域的坐标数据与计算错误问题
-// 增加关闭窗口功能
-// 增加暂停所有操作仅保留绘制的模式
-// 地图载入循环改用更稳定的判断方式
-// 增加打印控制宏
-// 优化扩展地图信息查找流程
-// 增加下方扩展区域的绘制及其碰撞
-// 增加单一地图方块编号获取功能
+﻿//_VERSION_1_1_ UPDATE LOG
+// LAST_UPDATE 2023-05-09 10:36
 // 移除方向移动判断中另一轴的输入更新
+// 增加右下方扩展区域的绘制及其碰撞
+// 增加正上方扩展区域的绘制及其碰撞
+// 增加右上方扩展区域的绘制及其碰撞
+// 增加左下方扩展区域的绘制及其碰撞
+// 增加正左方扩展区域的绘制及其碰撞
+// 增加左上方扩展区域的绘制及其碰撞
+// 移除自动调整中调整绘制区域的功能
+// 移除自动调整的坐标记录并调整部分变量名称
 
 #pragma once
 
 #ifndef _TANXL_OPENGL_DRAW_
 #define _TANXL_OPENGL_DRAW_
 
-#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 1
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
 #define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
-#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      1
+#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
 #define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
 #define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
@@ -545,7 +532,7 @@ private:
 	//记载额外加载的地图环数量
 	int _PreLoads;
 	//绘制模块自动调整等待帧
-	int _First_Adjust;
+	int _Wait_Frame;
 	//记录手动移动指定的当前X轴基本矩形
 	int _Current_Move_Height{ 0 };
 	//记录手动移动指定的当前Y轴基本矩形
@@ -559,7 +546,7 @@ private:
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
 	//当前此模块的版本号
-	const std::string _Version{ "1.0" };
+	const std::string _Version{ "1.1" };
 	GLFWwindow* _Main_Window;
 };
 

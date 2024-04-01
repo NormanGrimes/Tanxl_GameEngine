@@ -16,17 +16,9 @@ int main()
 	//Data Function Test
 
 	Tanxl_Engine TGE;
-	OpenGL_Draw* OD{ &OpenGL_Draw::GetOpenGLBase() };
 
-	if (TGE.Check_Engine_Status())
-	{
-		OD->Destroy_Window();
-		return -1;
-	}
-
+	TGE.Engine_Check_Engine_Status();
 	//Get Instance
-
-	GameStateBase* GSB{ &GameStateBase::GetStateBase(1, 1) };
 
 	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
 
@@ -46,7 +38,7 @@ int main()
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 	
-	GSB->Set_StartState(4,
+	TGE.Engine_State_Set_Begin(4, true,
 		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"
 		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"
 		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"

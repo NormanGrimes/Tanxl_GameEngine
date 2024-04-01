@@ -107,11 +107,12 @@ private:
 	const std::string _Version{ "2.1" };
 	std::vector<Id_Link*>* _Id_Links;
 	int _Current_Location;
-	bool _Is_Instance_Data;//用来判断Item_Instance中是否有数据
+	//用来判断_Internal_Data中是否有数据
+	bool _Is_Instance_Data;
 	//借由Id_Link_Locate函数对不同深度的Data_Chain定位
 	Data_Unit* Data_Link_Locate(int Type, int Exac, int Depth);
 	void Replace_Link(int OldType, int OldExac, int OldDepth, int Id, std::string Data);//转移Data_Chain到另一个Id_Chain下
-	//↓添加内部数据结构的内容到内存里的Vector中 V4
+	//↓添加内部数据结构的内容到内存里的Vector中
 	void Append_Link(Id_Link& New_Id);
 	//↓重置Item结构的内容
 	void ResetInstance(bool Delete = false);
