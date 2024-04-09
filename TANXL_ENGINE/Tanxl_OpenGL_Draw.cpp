@@ -5,13 +5,15 @@
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
 	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
+	if (OGD->_ScreenWidth != ScreenWidth && OGD->_ScreenHeight != ScreenHeight)
+		OGD->Set_DisplaySize(ScreenWidth, ScreenHeight);
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _StateInfor(),
-_WidthInt(0), _State_RenderingProgram(0), _Adjst_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth),
-_ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true),
-_Is_State_Changed(false), _PreLoads(0), _Wait_Frame(0) {}
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0),_WidthInt(0),
+_State_RenderingProgram(0), _Adjst_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth),_ScreenHeight(ScreenHeight),
+_Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true),_Is_State_Changed(false), _PreLoads(0),
+_Wait_Frame(0), _Translation(){}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -62,6 +64,19 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "fragShader.glsl");
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Player_01_VertShader.glsl", "fragShader.glsl");
+
+	float BeginHeight{ (this->_HeightInt + this->_PreLoads - 1) * (1.0f / this->_HeightInt) };
+	for (int Height{ 0 }; Height < (this->_Each_Height + this->_PreLoads * 2); ++Height)
+	{
+		float BeginWidth{ -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt) };
+		for (int Width{ 0 }; Width < (this->_Each_Width + this->_PreLoads * 2); ++Width)
+		{
+			this->_Translation[Height * this->_WidthInt + Width].x = BeginWidth;
+			this->_Translation[Height * this->_WidthInt + Width].y = BeginHeight;
+		}
+		BeginHeight -= ((1.0f / this->_HeightInt) * 2);
+		BeginWidth += ((1.0f / this->_WidthInt) * 2);
+	}
 
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
@@ -138,7 +153,8 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 			if ((Move_NX < -static_cast<int>(State->Get_DataWidth())) || (Move_NX > static_cast<int>(State->Get_DataWidth()) * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
 				(Move_NY < -static_cast<int>(State->Get_DataHeight())) || (Move_NY > static_cast<int>(State->Get_DataHeight()) * 2 + 1))
 			{
-				_StateInfor[i] = 3;
+				//_StateInfor[i] = 3;
+				this->_Translation[i].z = 3.0f;
 			}
 			else
 			{
@@ -146,61 +162,106 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 				{
 					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
 					{
-						int x = Move_NX - State->Get_DataWidth() - 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % State->Get_StateSize(STATE_EXTEND_RIGH_BELO))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_RIGH_BELO) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX - State->Get_DataWidth() - 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % State->Get_StateSize(STATE_EXTEND_RIGH_BELO))->Get_State_Id());
+						}
 					}
 					else if (Move_NY >= 0)
 					{
-						int x = Move_NX - State->Get_DataWidth() - 1 + Move_NY * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_StateSize(STATE_EXTEND_RIGH))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_RIGH) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX - State->Get_DataWidth() - 1 + Move_NY * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_StateSize(STATE_EXTEND_RIGH))->Get_State_Id());
+						}
 					}
 					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
 					{
-						int x = Move_NX - State->Get_DataWidth() - 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % State->Get_StateSize(STATE_EXTEND_RIGH_ABOV))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_RIGH_ABOV) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX - State->Get_DataWidth() - 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % State->Get_StateSize(STATE_EXTEND_RIGH_ABOV))->Get_State_Id());
+						}
 					}
 					else
-						_StateInfor[i] = 3;
+						this->_Translation[i].z = 3.0f;
 				}
 				else if (Move_NX >= 0)//MID AREA
 				{
 					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
 					{
-						int x = Move_NX + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_BELO, x % State->Get_StateSize(STATE_EXTEND_BELO))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_BELO) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_BELO, x % State->Get_StateSize(STATE_EXTEND_BELO))->Get_State_Id());
+						}
 					}
 					else if (Move_NY >= 0)
 					{
-						int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_MIDD) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX + Move_NY * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id());
+						}
 					}
 					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
 					{
-						int x = Move_NX + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_ABOV, x % State->Get_StateSize(STATE_EXTEND_ABOV))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_ABOV) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_ABOV, x % State->Get_StateSize(STATE_EXTEND_ABOV))->Get_State_Id());
+						}
 					}
 					else
-						_StateInfor[i] = 3;
+						this->_Translation[i].z = 3.0f;
 				}
 				else if (Move_NX >= -static_cast<int>(State->Get_DataWidth()))//LEFT AREA
 				{
 					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
 					{
-						int x = Move_NX + State->Get_DataWidth() + 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % State->Get_StateSize(STATE_EXTEND_BELO))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_LEFT_BELO) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX + State->Get_DataWidth() + 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % State->Get_StateSize(STATE_EXTEND_BELO))->Get_State_Id());
+						}
 					}
 					else if (Move_NY >= 0)
 					{
-						int x = Move_NX + State->Get_DataWidth() + 1 + Move_NY * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_LEFT, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_LEFT) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX + State->Get_DataWidth() + 1 + Move_NY * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_LEFT, x % State->Get_StateSize(STATE_EXTEND_MIDD))->Get_State_Id());
+						}
 					}
 					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
 					{
-						int x = Move_NX + State->Get_DataWidth() + 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1);
-						_StateInfor[i] = State->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % State->Get_StateSize(STATE_EXTEND_ABOV))->Get_State_Id();
+						if (State->Get_StateSize(STATE_EXTEND_LEFT_ABOV) == 0)
+							this->_Translation[i].z = 3.0f;
+						else
+						{
+							int x = Move_NX + State->Get_DataWidth() + 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1);
+							this->_Translation[i].z = static_cast<float>(State->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % State->Get_StateSize(STATE_EXTEND_ABOV))->Get_State_Id());
+						}
 					}
 					else
-						_StateInfor[i] = 3;
+						this->_Translation[i].z = 3.0f;
 				}
 			}
 
@@ -218,8 +279,8 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		RandomBase* UIB{ &RandomBase::GetRandomBase() };
 		for (int i{0}; i < State_Length; ++i)
 		{
-			_StateInfor[i] = UIB->RandomAutoSeed(0, 3);
-			std::cout << _StateInfor[i];
+			this->_Translation[i].z = static_cast<float>(UIB->RandomAutoSeed(0, 3));
+			std::cout << static_cast<float>(this->_Translation[i].z);
 		}
 	}
 	GLuint StatePos;
@@ -227,9 +288,9 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 	{
 		std::string Tag{ "State[" + std::to_string(i) + "]" };
 		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
-		glProgramUniform1i(_State_RenderingProgram, StatePos, _StateInfor[i]);
+		glProgramUniform3fv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_Translation[i]));
 
-		std::cout << _StateInfor[i] << " ";
+		std::cout << this->_Translation[i].z << " ";
 		if(i % (this->_WidthInt + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
 	}
@@ -277,6 +338,13 @@ void OpenGL_Draw::Set_PreMove(int PreMoveX, int PreMoveY)
 {
 	this->_Pre_MoveX = PreMoveX;
 	this->_Pre_MoveY = PreMoveY;
+}
+
+void OpenGL_Draw::Set_DisplaySize(int WindowWidth, int WindowHeight)
+{
+	this->_ScreenHeight = WindowHeight;
+	this->_ScreenWidth = WindowWidth;
+	glViewport(0, 0, this->_ScreenWidth, this->_ScreenHeight);
 }
 
 void OpenGL_Draw::Append_Texture(const char* Texture)
@@ -519,82 +587,126 @@ int OpenGL_Draw::Get_State_Id(int LocationX, int LocationY, GameStateBase& State
 	{
 		if (LocationY > static_cast<int>(State.Get_DataHeight()))
 		{
+			if (State.Get_StateSize(STATE_EXTEND_RIGH_BELO) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "RIGH BELO AREA" << LocationX << "_" << LocationY << "_"
-				<< (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1 << std::endl;
+				std::cout << "RIGH BELO AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1 << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_RIGH_BELO, (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_RIGH_BELO, (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1)->Get_State_Id();
+			}
 		}
 		else if (LocationY >= 0)
 		{
+			if (State.Get_StateSize(STATE_EXTEND_RIGH) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "RIGH AREA" << LocationX << "_" << LocationY << "_"
-				<< LocationY * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1 << std::endl;
+				std::cout << "RIGH AREA" << LocationX << "_" << LocationY << "_"
+					<< LocationY * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1 << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_RIGH, LocationY * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1)->Get_State_Id();
-
+				State_Id = State.Get_StateUnit(STATE_EXTEND_RIGH, LocationY * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1)->Get_State_Id();
+			}
 		}
 		else if (LocationY >= -static_cast<int>(State.Get_DataHeight()))
 		{
+			if (State.Get_StateSize(STATE_EXTEND_RIGH_ABOV) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "RIGH ABOV AREA" << LocationX << "_" << LocationY << "_"
-				<< (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX << std::endl;
+				std::cout << "RIGH ABOV AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_RIGH_ABOV, (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_RIGH_ABOV, (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX - State.Get_DataWidth() - 1)->Get_State_Id();
+			}
 		}
 	}
 	else if (LocationX >= 0)
 	{
 		if (LocationY > static_cast<int>(State.Get_DataHeight()))
 		{
+			if (State.Get_StateSize(STATE_EXTEND_BELO) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "BELO AREA" << LocationX << "_" << LocationY << "_"
-				<< (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX << std::endl;
+				std::cout << "BELO AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_BELO, (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_BELO, (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX)->Get_State_Id();
+			}
 		}
 		else if (LocationY >= 0)
 		{
+			if (State.Get_StateSize(STATE_EXTEND_MIDD) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "MIDD AREA" << LocationX << "_" << LocationY << "_"
-				<< LocationY * (State.Get_DataWidth() + 1) + LocationX << std::endl;
+				std::cout << "MIDD AREA" << LocationX << "_" << LocationY << "_"
+					<< LocationY * (State.Get_DataWidth() + 1) + LocationX << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_MIDD, LocationY * (State.Get_DataWidth() + 1) + LocationX)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_MIDD, LocationY * (State.Get_DataWidth() + 1) + LocationX)->Get_State_Id();
+			}
 		}
 		else if (LocationY >= -static_cast<int>(State.Get_DataHeight()))
 		{
+			if (State.Get_StateSize(STATE_EXTEND_ABOV) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "ABOV AREA" << LocationX << "_" << LocationY << "_"
-				<< (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX << std::endl;
+				std::cout << "ABOV AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_ABOV, (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_ABOV, (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX)->Get_State_Id();
+			}
 		}
 	}
 	else if (LocationX >= -static_cast<int>(State.Get_DataWidth()))
 	{
 		if (LocationY > static_cast<int>(State.Get_DataHeight()))
 		{
+			if (State.Get_StateSize(STATE_EXTEND_LEFT_BELO) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "LEFT BELO AREA" << LocationX << "_" << LocationY << "_"
-				<< (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1 << std::endl;
+				std::cout << "LEFT BELO AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1 << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_LEFT_BELO, (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_LEFT_BELO, (LocationY - State.Get_DataHeight() - 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1)->Get_State_Id();
+			}
 		}
 		else if (LocationY >= 0)
 		{
+			if (State.Get_StateSize(STATE_EXTEND_LEFT) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "LEFT AREA" << LocationX << "_" << LocationY << "_"
-				<< LocationY * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1 << std::endl;
+				std::cout << "LEFT AREA" << LocationX << "_" << LocationY << "_"
+					<< LocationY * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1 << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_LEFT, LocationY * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_LEFT, LocationY * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1)->Get_State_Id();
+			}
 		}
 		else if (LocationY >= -static_cast<int>(State.Get_DataHeight()))
 		{
+			if (State.Get_StateSize(STATE_EXTEND_LEFT_ABOV) == 0)
+				State_Id = 3;
+			else
+			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
-			std::cout << "LEFT ABOV AREA" << LocationX << "_" << LocationY << "_"
-				<< (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1 << std::endl;
+				std::cout << "LEFT ABOV AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1 << std::endl;
 #endif
-			State_Id = State.Get_StateUnit(STATE_EXTEND_LEFT_ABOV, (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1)->Get_State_Id();
+				State_Id = State.Get_StateUnit(STATE_EXTEND_LEFT_ABOV, (LocationY + State.Get_DataHeight() + 1) * (State.Get_DataWidth() + 1) + LocationX + State.Get_DataWidth() + 1)->Get_State_Id();
+			}
 		}
 	}
 	return State_Id;
@@ -654,16 +766,14 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
-	static bool First_Time{ true };
-
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
 	static LocationBase* LCB{ &LocationBase::GetLocationBase() };
 
 	static Key_Unit* OpenGL_Stop_Key{ new Key_Unit(GLFW_KEY_F) };
 
-	if (First_Time)
+	if (this->_Is_Init_Need)
 	{
-		First_Time = false;
+		this->_Is_Init_Need = false;
 		init(State);
 
 		IEB->RegistEvent(OpenGL_Stop_Key);

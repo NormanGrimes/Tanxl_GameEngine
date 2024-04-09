@@ -20,7 +20,7 @@ int main()
 	TGE.Engine_Check_Engine_Status();
 	//Get Instance
 
-	TGE.Engine_Save_Infinite_State(true, 9, 3, 3);
+	TGE.Engine_Save_Infinite_State(true, 16, 4, 4);
 
 	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 

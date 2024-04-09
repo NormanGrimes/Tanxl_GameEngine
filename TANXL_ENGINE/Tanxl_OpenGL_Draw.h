@@ -9,6 +9,11 @@
 // 增加左上方扩展区域的绘制及其碰撞
 // 移除自动调整中调整绘制区域的功能
 // 移除自动调整的坐标记录并调整部分变量名称
+// 移除旧的统一变量数组改为三维向量数组
+// 三维向量预加入实例化相关设置
+// 增加设置显示区域的功能
+// 单例获取功能修复多次获取无法调整尺寸的问题
+// 修复扩展地图读取到空区块错误的问题
 
 #pragma once
 
@@ -51,6 +56,12 @@ namespace TanxlOD
 	static const char* TexBunnyGirl_01_32x32            { "Texture/YANG_BUNNYGIRL_01_32X32.png"         };
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+	static float textureCoordinatesTiny[] =
+	{
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+	};
 
 	static float textureCoordinates[] =
 	{
@@ -465,6 +476,7 @@ public:
 	void Set_Trigger_Range(bool Enable, float Height, float Width);
 	void Set_Health(int Health_Count, float Health_Margin = 0.1f);
 	void Set_PreMove(int PreMoveX, int PreMoveY);
+	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State, bool& PressFlg);
 	//Update_Current 更新地图加载区块
@@ -487,8 +499,6 @@ public:
 private:
 	OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust);
 
-	GLint _StateInfor[400];//20X20
-
 	bool _Advanced_Mode{ true };
 	bool _Clear_Function;
 	bool _Is_State_Changed;
@@ -498,6 +508,7 @@ private:
 	//标记是否启用地图随移动而移动的功能
 	bool _Is_Trigger_Enable{ false };
 	bool _Is_Adjust_Enable{ true };
+	bool _Is_Init_Need{ true };
 
 	GLuint _State_RenderingProgram;
 	GLuint _Adjst_RenderingProgram;
@@ -548,6 +559,8 @@ private:
 	//当前此模块的版本号
 	const std::string _Version{ "1.1" };
 	GLFWwindow* _Main_Window;
+	//用于实例化绘制的偏移量
+	glm::vec3 _Translation[400];
 };
 
 #endif

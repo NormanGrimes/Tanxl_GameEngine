@@ -21,6 +21,7 @@
 // 修复本地文件获取功能未更新名称的问题
 // 更新移动功能增加对符号变换部分的支持
 // 微调位置功能去掉自动调整参数
+// 移除一个参数相似的地图单元获取函数
 
 #pragma once
 
@@ -115,7 +116,6 @@ class GameStateBase
 public:
 	
 	size_t Get_StateSize(EState_Extend State_Id = STATE_EXTEND_MIDD);
-	StateUnit* Get_StateUnit(int Pos, EState_Extend State_Id = STATE_EXTEND_MIDD);
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);

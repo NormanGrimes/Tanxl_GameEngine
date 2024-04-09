@@ -623,32 +623,6 @@ size_t GameStateBase::Get_StateSize(EState_Extend State_Id)
 	return 0;
 }
 
-StateUnit* GameStateBase::Get_StateUnit(int Pos, EState_Extend State_Id)
-{
-	switch (State_Id)
-	{
-	case STATE_EXTEND_MIDD:
-		return this->_GameState_Extend._MIDD->at(Pos);
-	case STATE_EXTEND_LEFT:
-		return this->_GameState_Extend._LEFT->at(Pos);
-	case STATE_EXTEND_RIGH:
-		return this->_GameState_Extend._RIGH->at(Pos);
-	case STATE_EXTEND_ABOV:
-		return this->_GameState_Extend._ABOV->at(Pos);
-	case STATE_EXTEND_BELO:
-		return this->_GameState_Extend._BELO->at(Pos);
-	case STATE_EXTEND_LEFT_ABOV:
-		return this->_GameState_Extend._LEFT_ABOV->at(Pos);
-	case STATE_EXTEND_LEFT_BELO:
-		return this->_GameState_Extend._LEFT_BELO->at(Pos);
-	case STATE_EXTEND_RIGH_ABOV:
-		return this->_GameState_Extend._RIGH_ABOV->at(Pos);
-	case STATE_EXTEND_RIGH_BELO:
-		return this->_GameState_Extend._RIGH_BELO->at(Pos);
-	}
-	return nullptr;
-}
-
 StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 {
 	switch (State)

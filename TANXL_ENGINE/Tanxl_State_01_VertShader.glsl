@@ -10,6 +10,7 @@
 // 优化减少高度与宽度的计算量
 // 修改最大地图尺寸为20X20
 // 修复预载功能只载入了一半内容的问题
+// 适配统一变量相关改动
 
 #version 430
 
@@ -26,7 +27,7 @@ layout (location = 7) uniform float StateMoveY;
 
 layout (location = 8) uniform int PreLoads;
 
-layout (location = 9) uniform int State[400];
+layout (location = 9) uniform vec3 State[400];
 
 out vec4 vs_color;
 out vec2 tc;
@@ -52,17 +53,17 @@ void main(void)
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX, 
 							    -Height + HeightMove + StateMoveY, 0.3f, 1.0f);
-			if(State[VertexId] == 0)
+			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 0.8f, 0.1f, 1.0f);
 				Cube = 0;
 			}
-			else if(State[VertexId] == 1)
+			else if(State[VertexId].z == 1.0f)
 			{
 				vs_color = vec4(0.1f, 0.8f, 1.0f, 1.0f);
 				Cube = 1;
 			}
-			else if(State[VertexId] == 2)
+			else if(State[VertexId].z == 2.0f)
 			{
 				vs_color = vec4(1.0f, 0.8f, 0.4f, 1.0f);
 				Cube = 2;
@@ -77,17 +78,17 @@ void main(void)
 		{ 
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, 0.3f, 1.0f); 
-			if(State[VertexId] == 0)
+			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 				Cube = 0;
 			}
-			else if(State[VertexId] == 1)
+			else if(State[VertexId].z == 1.0f)
 			{
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 				Cube = 1;
 			}
-			else if(State[VertexId] == 2)
+			else if(State[VertexId].z == 2.0f)
 			{
 				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 				Cube = 2;
@@ -102,17 +103,17 @@ void main(void)
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, 0.3f, 1.0f);
-			if(State[VertexId] == 0)
+			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 				Cube = 0;
 			}
-			else if(State[VertexId] == 1)
+			else if(State[VertexId].z == 1.0f)
 			{
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 				Cube = 1;
 			}
-			else if(State[VertexId] == 2)
+			else if(State[VertexId].z == 2.0f)
 			{
 				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 				Cube = 2;
@@ -127,17 +128,17 @@ void main(void)
 		{ 
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, 0.3f, 1.0f); 
-			if(State[VertexId] == 0)
+			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 				Cube = 0;
 			}
-			else if(State[VertexId] == 1)
+			else if(State[VertexId].z == 1.0f)
 			{
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 				Cube = 1;
 			}
-			else if(State[VertexId] == 2)
+			else if(State[VertexId].z == 2.0f)
 			{
 				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 				Cube = 2;
@@ -152,17 +153,17 @@ void main(void)
 		{
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                    Height + HeightMove + StateMoveY, 0.3f, 1.0f);
-			if(State[VertexId] == 0)
+			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 				Cube = 0;
 			}
-			else if(State[VertexId] == 1)
+			else if(State[VertexId].z == 1.0f)
 			{
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 				Cube = 1;
 			}
-			else if(State[VertexId] == 2)
+			else if(State[VertexId].z == 2.0f)
 			{
 				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 				Cube = 2;
@@ -177,17 +178,17 @@ void main(void)
 		{
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, 0.3f, 1.0f);
-			if(State[VertexId] == 0)
+			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
 				Cube = 0;
 			}
-			else if(State[VertexId] == 1)
+			else if(State[VertexId].z == 1.0f)
 			{
 				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
 				Cube = 1;
 			}
-			else if(State[VertexId] == 2)
+			else if(State[VertexId].z == 2.0f)
 			{
 				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
 				Cube = 2;
