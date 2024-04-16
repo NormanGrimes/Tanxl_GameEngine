@@ -14,6 +14,10 @@
 // 增加设置显示区域的功能
 // 单例获取功能修复多次获取无法调整尺寸的问题
 // 修复扩展地图读取到空区块错误的问题
+// 边缘碰撞检测接口性能优化
+// 边缘碰撞检测接口不再修改按键状态属性
+// 推动屏幕移动部分不再需要按键按下
+// 优化去掉按键按下的标记
 
 #pragma once
 
@@ -478,7 +482,7 @@ public:
 	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Append_Texture(const char* Texture);
-	void HitEdge_Check(GameStateBase* State, bool& PressFlg);
+	void HitEdge_Check(GameStateBase* State);
 	//Update_Current 更新地图加载区块
 	void Update_Current();
 	void Update_Last_Location(GameStateBase* State);

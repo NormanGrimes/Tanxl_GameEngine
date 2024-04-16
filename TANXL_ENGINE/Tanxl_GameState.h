@@ -22,6 +22,8 @@
 // 更新移动功能增加对符号变换部分的支持
 // 微调位置功能去掉自动调整参数
 // 移除一个参数相似的地图单元获取函数
+// 增加按指定方向重新载入扩展地图的接口
+// 增加通过序列号定位数据的接口
 
 #pragma once
 
@@ -117,6 +119,7 @@ public:
 	
 	size_t Get_StateSize(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
+	Id_Link* Locate_Link(std::string Link_Name);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
 	Square_State Get_Square_State();
@@ -143,7 +146,7 @@ public:
 	void Set_Adjust_Frequency(int Frame);
 	void Set_Extend_State_Enable(bool Enable);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
-	void Reload_State(float& CurrentX, float& CurrentY);
+	void Reload_State(EState_Extend Extend_Dire);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	bool Get_Compile_Status();
 	bool Get_Extend_State();

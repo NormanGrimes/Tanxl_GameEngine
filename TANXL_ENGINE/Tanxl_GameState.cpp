@@ -433,9 +433,130 @@ void GameStateBase::Set_Move_State(int Event_Id, int Multi_Set)
 	}
 }
 
-void GameStateBase::Reload_State(float& CurrentX, float& CurrentY)
+void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 {
+	switch (Extend_Dire)
+	{
+	case STATE_EXTEND_ABOV:
+	{
+		delete this->_GameState_Extend._LEFT_BELO;
+		this->_GameState_Id._LEFT_BELO = this->_GameState_Id._LEFT;
+		this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._LEFT;
+		delete this->_GameState_Extend._BELO;
+		this->_GameState_Id._BELO = this->_GameState_Id._MIDD;
+		this->_GameState_Extend._BELO = this->_GameState_Extend._MIDD;
+		delete this->_GameState_Extend._RIGH_BELO;
+		this->_GameState_Id._RIGH_BELO = this->_GameState_Id._RIGH;
+		this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._RIGH;
 
+		this->_GameState_Id._LEFT = this->_GameState_Id._LEFT_ABOV;
+		this->_GameState_Extend._LEFT = this->_GameState_Extend._LEFT_ABOV;
+		this->_GameState_Id._MIDD = this->_GameState_Id._ABOV;
+		this->_GameState_Extend._MIDD = this->_GameState_Extend._ABOV;
+		this->_GameState_Id._RIGH = this->_GameState_Id._RIGH_ABOV;
+		this->_GameState_Extend._RIGH = this->_GameState_Extend._RIGH_ABOV;
+
+		Id_Link* Link{ this->Locate_Link(this->_GameState_Id._MIDD) };
+
+		this->_GameState_Id._LEFT_ABOV = Link->_Data->_Data_Units.at(6)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(6)->_Data, STATE_EXTEND_LEFT_ABOV);
+		this->_GameState_Id._ABOV = Link->_Data->_Data_Units.at(4)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(4)->_Data, STATE_EXTEND_ABOV);
+		this->_GameState_Id._RIGH_ABOV = Link->_Data->_Data_Units.at(8)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(8)->_Data, STATE_EXTEND_RIGH_ABOV);
+
+		break;
+	}
+	case STATE_EXTEND_BELO:
+	{
+		delete this->_GameState_Extend._LEFT_ABOV;
+		this->_GameState_Id._LEFT_ABOV = this->_GameState_Id._LEFT;
+		this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._LEFT;
+		delete this->_GameState_Extend._ABOV;
+		this->_GameState_Id._ABOV = this->_GameState_Id._MIDD;
+		this->_GameState_Extend._ABOV = this->_GameState_Extend._MIDD;
+		delete this->_GameState_Extend._RIGH_ABOV;
+		this->_GameState_Id._RIGH_ABOV = this->_GameState_Id._RIGH;
+		this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._RIGH;
+
+		this->_GameState_Id._LEFT = this->_GameState_Id._LEFT_BELO;
+		this->_GameState_Extend._LEFT = this->_GameState_Extend._LEFT_BELO;
+		this->_GameState_Id._MIDD = this->_GameState_Id._BELO;
+		this->_GameState_Extend._MIDD = this->_GameState_Extend._BELO;
+		this->_GameState_Id._RIGH = this->_GameState_Id._RIGH_BELO;
+		this->_GameState_Extend._RIGH = this->_GameState_Extend._RIGH_BELO;
+
+		Id_Link* Link{ this->Locate_Link(this->_GameState_Id._MIDD) };
+
+		this->_GameState_Id._LEFT_BELO = Link->_Data->_Data_Units.at(7)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(7)->_Data, STATE_EXTEND_LEFT_BELO);
+		this->_GameState_Id._BELO = Link->_Data->_Data_Units.at(5)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(5)->_Data, STATE_EXTEND_BELO);
+		this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(9)->_Data, STATE_EXTEND_RIGH_BELO);
+
+		break;
+	}
+	case STATE_EXTEND_LEFT:
+	{
+		delete this->_GameState_Extend._RIGH_ABOV;
+		this->_GameState_Id._RIGH_ABOV = this->_GameState_Id._ABOV;
+		this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._ABOV;
+		delete this->_GameState_Extend._RIGH;
+		this->_GameState_Id._RIGH = this->_GameState_Id._MIDD;
+		this->_GameState_Extend._RIGH = this->_GameState_Extend._MIDD;
+		delete this->_GameState_Extend._RIGH_BELO;
+		this->_GameState_Id._RIGH_BELO = this->_GameState_Id._BELO;
+		this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._BELO;
+
+		this->_GameState_Id._ABOV = this->_GameState_Id._LEFT_ABOV;
+		this->_GameState_Extend._ABOV = this->_GameState_Extend._LEFT_ABOV;
+		this->_GameState_Id._MIDD = this->_GameState_Id._LEFT;
+		this->_GameState_Extend._MIDD = this->_GameState_Extend._LEFT;
+		this->_GameState_Id._BELO = this->_GameState_Id._LEFT_BELO;
+		this->_GameState_Extend._BELO = this->_GameState_Extend._LEFT_BELO;
+
+		Id_Link* Link{ this->Locate_Link(this->_GameState_Id._MIDD) };
+
+		this->_GameState_Id._LEFT_ABOV = Link->_Data->_Data_Units.at(6)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(6)->_Data, STATE_EXTEND_LEFT_ABOV);
+		this->_GameState_Id._LEFT = Link->_Data->_Data_Units.at(2)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(2)->_Data, STATE_EXTEND_LEFT);
+		this->_GameState_Id._LEFT_BELO = Link->_Data->_Data_Units.at(7)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(7)->_Data, STATE_EXTEND_LEFT_BELO);
+
+		break;
+	}
+	case STATE_EXTEND_RIGH:
+	{
+		delete this->_GameState_Extend._LEFT_ABOV;
+		this->_GameState_Id._LEFT_ABOV = this->_GameState_Id._ABOV;
+		this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._ABOV;
+		delete this->_GameState_Extend._LEFT;
+		this->_GameState_Id._LEFT = this->_GameState_Id._MIDD;
+		this->_GameState_Extend._LEFT = this->_GameState_Extend._MIDD;
+		delete this->_GameState_Extend._LEFT_BELO;
+		this->_GameState_Id._LEFT_BELO = this->_GameState_Id._BELO;
+		this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._BELO;
+
+		this->_GameState_Id._ABOV = this->_GameState_Id._RIGH_ABOV;
+		this->_GameState_Extend._ABOV = this->_GameState_Extend._RIGH_ABOV;
+		this->_GameState_Id._MIDD = this->_GameState_Id._RIGH;
+		this->_GameState_Extend._MIDD = this->_GameState_Extend._RIGH;
+		this->_GameState_Id._BELO = this->_GameState_Id._RIGH_BELO;
+		this->_GameState_Extend._BELO = this->_GameState_Extend._RIGH_BELO;
+
+		Id_Link* Link{ this->Locate_Link(this->_GameState_Id._MIDD) };
+		this->_GameState_Id._RIGH_ABOV = Link->_Data->_Data_Units.at(8)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(8)->_Data, STATE_EXTEND_RIGH_ABOV);
+		this->_GameState_Id._RIGH = Link->_Data->_Data_Units.at(3)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(3)->_Data, STATE_EXTEND_RIGH);
+		this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Id;
+		this->CompileStateUnits(Link->_Data->_Data_Units.at(9)->_Data, STATE_EXTEND_RIGH_BELO);
+
+		break;
+	}
+	}
 }
 
 void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
@@ -645,6 +766,17 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 		return this->_GameState_Extend._RIGH_ABOV->at(Pos);
 	case STATE_EXTEND_RIGH_BELO:
 		return this->_GameState_Extend._RIGH_BELO->at(Pos);
+	}
+	return nullptr;
+}
+
+Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
+{
+	for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+	{
+		Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
+		if (Link->_Data->_Data_Units.at(0)->_Data == Link_Name)
+			return Link;
 	}
 	return nullptr;
 }

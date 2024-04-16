@@ -255,7 +255,7 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 
 void Tanxl_Engine::Engine_State_Set_Begin(int State_Id, bool Cover_State, std::string State_Infor)
 {
-	if (this->_Engine_Status != 0x100)
+	if (((this->_Engine_Status & 0x100) == 0x0))
 	{
 		std::cout << "当前未开启扩展世界功能";
 		return;

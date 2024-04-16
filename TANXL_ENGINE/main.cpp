@@ -38,7 +38,7 @@ int main()
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 	
-	TGE.Engine_State_Set_Begin(4, true,
+	TGE.Engine_State_Set_Begin(5, true,
 		"a-2,a-1,a-3,a-1,a-1,a-1,a-1,a-3,a-1,a-2,"
 		"a-1,a-2,a-0,a-3,a-0,a-0,a-3,a-0,a-2,a-1,"
 		"a-3,a-0,a-2,a-1,a-1,a-1,a-1,a-2,a-0,a-3,"

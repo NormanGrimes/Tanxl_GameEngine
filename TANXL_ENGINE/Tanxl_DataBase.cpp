@@ -35,7 +35,7 @@ void Data_Link::Append_Data(Data_Link* Data, bool Replace)
 		return;
 	if (Replace)
 		std::vector<Data_Unit*>().swap(this->_Data_Units);
-	int TempVal = static_cast<int>(Data->_Data_Units.size());
+	int TempVal{ static_cast<int>(Data->_Data_Units.size()) };
 	for (int i{ 0 }; i < TempVal; ++i)//防止自己给自己添加造成无限循环
 		this->_Data_Units.push_back(Data->_Data_Units.at(i));
 }
