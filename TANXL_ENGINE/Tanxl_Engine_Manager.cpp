@@ -49,16 +49,15 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 #endif
 }
 
-unsigned Tanxl_Engine::Engine_Check_Engine_Status()
+unsigned Tanxl_Engine::Engine_Check_Engine_Status(bool ShutDown)
 {
-	if (this->_Engine_Status == 1)
+	if (((this->_Engine_Status & 0xFFF) != 0) && ShutDown)
 	{
 		this->Tanxl_Engine_OpenGL_Draw->Destroy_Window();
 		delete this;
 		exit(1);
 	}
-	else
-		return this->_Engine_Status;//0 正常运行 1 初始化失败
+	return this->_Engine_Status;//0 正常运行 1 初始化失败
 }
 
 void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
@@ -89,12 +88,10 @@ void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, floa
 	{
 		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateHeight()));
 		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateWidth()));
+		return;
 	}
-	else
-	{
-		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Max_Height);
-		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Max_Widtd);
-	}
+	this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Max_Height);
+	this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Max_Widtd);
 }
 
 void Tanxl_Engine::Engine_Insert_Satate_MoveWith(bool Enable, bool Mode, float Compare_Height, float Compare_Width)

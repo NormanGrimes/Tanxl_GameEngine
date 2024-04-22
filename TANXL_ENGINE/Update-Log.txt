@@ -1,3 +1,11 @@
+TEnGinE Version-0.2 Build-05 2023-05-24 16:58 UPDATE_LOG
+////////////////////////////////////////////////////////
+引擎管理模块检测引擎状态功能可选是否关闭程序。绘制模块边
+缘移动部分整理为函数。绘制模块将坐标基类收入私有成员。绘
+制模块边缘移动部分增加碰撞检测。绘制模块代码优化。地图顶
+点着色器方块由固定编号改为获取当前编号。地图模块坐标微调
+功能代码优化并加入输出控制宏。新增一个泥土纹理。
+
 TEnGinE Version-0.2 Build-04 2023-05-17 14:24 UPDATE_LOG
 ////////////////////////////////////////////////////////
 引擎管理模块优化引擎状态判断部分。地图模块增加按指定方向
@@ -300,6 +308,21 @@ TEnGinE Version-0.1 Build-70 2023-02-13 10:15 UPDATE_LOG
 四版数据整理功能。存储模块修复数据打印功能空指针未处理的
 问题。存储模块修复输出重载的输出顺序错误的问题。存储模块
 修复SIMPLE_SET未析构丢弃内容的问题。
+--------------------------------------------------------
+The enclosure adds the fourth edition replacement item 
+feature. Remove the color test texture. The enclosure 
+removes the Composite Item Level interface. The 
+enclosure removes the internal anonymity structure of 
+the third version. The enclosure adds the fourth 
+edition specified acquisition function. Enclosure 
+removal to get item level function. The enclosure adds 
+the ability to specify the fourth version settings. The 
+enclosure adds the fourth edition data collation 
+function. The enclosure fixes an issue where the null 
+pointer for the data printing function is not handled. 
+The enclosure fixes an issue where the output is 
+overloaded in the wrong order. The enclosure fixes an 
+issue where dropped content is not destroyed SIMPLE_SET.
 
 TEnGinE Version-0.1 Build-69 TURBO 2023-02-08 09:20 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -312,6 +335,25 @@ TEnGinE Version-0.1 Build-69 TURBO 2023-02-08 09:20 UPDATE_LOG
 关功能。存储模块增加第四版数据转移功能。存储模块增加第四版数据
 定位功能。存储模块增加第四版数据删除功能。存储模块临时禁用部分
 功能。增加一个海洋纹理。
+--------------------------------------------------------------
+Organize the UniqueID module into a random module and add the 
+engine core layer. Removes the random module's ability to 
+generate storage unit data. The enclosure adds data printing 
+capabilities for version 4. Enclosure modification operator 
+overloading is only supported for version 4. Enclosure 
+removal 0xFF setting for a non-selectable state. The 
+enclosure adds the private addition functionality of the 
+fourth edition. The engine management module modifies the 
+process of storing information for the fourth version of the 
+enclosure. The storage module adds the fourth version of the 
+local file acquisition data function. The enclosure removes 
+the cleanup linked list private interface. The enclosure 
+removes all three generations of data structures and related 
+functions. The enclosure adds the fourth edition data 
+transfer function. The enclosure adds the fourth version of 
+the data location function. The enclosure adds the fourth 
+version data deletion function. The enclosure temporarily 
+disables some features. Add an ocean texture.
 
 TEnGinE Version-0.1 Build-68 2023-02-07 11:18 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -321,6 +363,20 @@ TEnGinE Version-0.1 Build-68 2023-02-07 11:18 UPDATE_LOG
 功能枚举。存储模块增加第四版的数据结构清理功能。片段着色
 器支持的纹理数量提升到上限值。存储模块增加第四版的序号结
 构定位功能。
+--------------------------------------------------------
+The engine management module optimizes the flow of 
+setting up display functions. The engine management 
+module adds the steps of module initialization failure 
+destruction. The internal private structure of the 
+enclosure is marked with the serial number and whether 
+the data is added or not. The storage module adds the 
+data addition function of the fourth version and the 
+corresponding function enumeration. The enclosure adds 
+the fourth edition of data structure cleanup. The 
+number of textures supported by the fragment shader is 
+increased to the upper limit. The enclosure adds the 
+fourth version of the serial number structure 
+positioning function.
 
 TEnGinE Version-0.1 Build-67 2023-02-03 15:12 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -329,6 +385,18 @@ TEnGinE Version-0.1 Build-67 2023-02-03 15:12 UPDATE_LOG
 中。存储模块数据数据结构增加取代式添加方式。存储模块增加
 内部私有结构体的数据设置功能与对应枚举。输入模块自动调整
 功能入参形式修改。初始数据添加测试项优化。
+--------------------------------------------------------
+The Data Definition module adds predefined definition 
+of the tile data. The Paint module adds a simplified 
+texture addition interface. The texture array of the 
+drawing module is moved to the drawing module 
+subsidiary namespace. Enclosure data data structure 
+adds a supersedent add-on method. The enclosure adds 
+the data setting function and corresponding enumeration 
+of the internal private structure. The input module 
+automatically adjusts the function and modifies the 
+parameter form. Initial data adds test item 
+optimization.
 
 TEnGinE Version-0.1 Build-66 2023-02-02 09:56 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -338,6 +406,20 @@ TEnGinE Version-0.1 Build-66 2023-02-02 09:56 UPDATE_LOG
 自动检查接口取消地图移动并优化为不返回值。随机模块新增对
 初始数据进行打乱的功能。存储模块为数据数据结构增加一种数
 据添加方式。存储模块增加第四版的序号数据结构。
+--------------------------------------------------------
+The input module fixes an issue where the last 
+operation execution of an input operation had an error. 
+Multi-texture support has been added to fragment 
+shaders. The input module automatically checks the 
+interface to remove two unused input parameters. The 
+input module gets the input function and removes the 
+four unwanted input parameters. The input module 
+automatically checks the interface to cancel the map 
+movement and is optimized to not return a value. The 
+random module adds the function of shuffling the 
+initial data. The enclosure adds a way to add data to 
+the data data structure. The enclosure adds the fourth 
+edition sequence number data structure.
 
 TEnGinE Version-0.1 Build-65 2023-01-31 14:03 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -441,7 +523,6 @@ redundancy. Changes in the console module to roll back
 input operations. The SOIL2 library is added to the 
 Release version to avoid conflicts with the standard 
 library. Update revision number for each module version.
-
 
 TEnGinE Version-0.1 Build-60 2023-01-12 14:46 UPDATE_LOG
 ////////////////////////////////////////////////////////

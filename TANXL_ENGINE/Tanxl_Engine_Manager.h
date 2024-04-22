@@ -25,6 +25,7 @@
 // 2023/05/09 引擎初始化失败时返回出错组件信息
 // 2023/05/09 增加扩展世界设置起始区域的功能
 // 2023/05/24 优化引擎状态判断部分
+// 2023/05/25 检测引擎状态功能可选是否关闭程序
 
 #pragma once
 
@@ -34,7 +35,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 # pragma warning (disable:4819)
 
-//#define _STEAM_ALPHA_TEST_EDITION_ 1
+#define _STEAM_ALPHA_TEST_EDITION_ 0
 
 #include "Tanxl_Console_List.h"
 #include "Tanxl_DataBase.h"
@@ -68,7 +69,7 @@ public:
 	Tanxl_Engine();
 
 	//获取当前引擎状态
-	unsigned Engine_Check_Engine_Status();
+	unsigned Engine_Check_Engine_Status(bool ShutDown = false);
 
 	//设置当前显示窗口中的XY轴矩阵数量 Width宽度 Height高度
 	void Engine_State_Set_Display(int Width, int Height, int PreLoads);

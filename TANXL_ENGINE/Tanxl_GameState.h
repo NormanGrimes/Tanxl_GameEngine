@@ -24,11 +24,20 @@
 // 移除一个参数相似的地图单元获取函数
 // 增加按指定方向重新载入扩展地图的接口
 // 增加通过序列号定位数据的接口
+// 坐标微调功能代码优化并加入输出控制宏
 
 #pragma once
 
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
+
+#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 1
+
+#if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
+
+#define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     1
+
+#endif
 
 #include <iostream>
 #include <iomanip>

@@ -256,7 +256,7 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 	static int EHCountL{ 0 };
 	if (_Adjust_Enable == false)
 		return 0.0f;
-	float Temp_Move{ 0.0f };
+	float Temp_Move{};
 	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
 	{
 		EHCountS++;
@@ -265,11 +265,12 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 			if (MoveState < 0 && MoveState + _GameState_Adjust > 0)
 			{
 				Temp_Move = MoveState;
+#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
 				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "A MoveState  _" << MoveState << std::endl;
+#endif
 				State_MoveY += Temp_Move;
 				MoveState = 0;
-				std::cout << " MoveState  _" << MoveState << std::endl;
 			}
 			else
 			{
@@ -295,13 +296,14 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 			}
 			else if (MoveState - _GameState_Adjust < 0)
 			{
-				float Temp_Move = MoveState;
+				Temp_Move = MoveState;
+#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
 				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "B MoveState  _" << MoveState << std::endl;
+#endif
 				State_MoveY -= Temp_Move;
 				Temp_Move = -Temp_Move;
 				MoveState = 0;
-				std::cout << " MoveState  _" << MoveState << std::endl;
 			}
 			EHCountL = 0;
 			this->_Is_Adjusting = true;
@@ -318,7 +320,7 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 	static int EWCountL{ 0 };
 	if (_Adjust_Enable == false)
 		return 0.0f;
-	float Temp_Move{ 0.0f };
+	float Temp_Move{};
 	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
 	{
 		EWCountS++;
@@ -329,11 +331,12 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 				Temp_Move = MoveState;
 				while (Temp_Move > 2.5)
 					Temp_Move -= 2.5;
+#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
 				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "A MoveState  _" << MoveState << std::endl;
+#endif
 				State_MoveX += Temp_Move;
 				MoveState = 0;
-				std::cout << " MoveState  _" << MoveState << std::endl;
 			}
 			else
 			{
@@ -359,15 +362,16 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 			}
 			else if (MoveState < _GameState_Adjust)
 			{
-				float Temp_Move = MoveState;
+				Temp_Move = MoveState;
 				while (Temp_Move > 2.5)
 					Temp_Move -= 2.5;
+#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
 				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
 				std::cout << "B MoveState  _" << MoveState << std::endl;
+#endif
 				State_MoveX -= Temp_Move;
 				Temp_Move = -Temp_Move;
 				MoveState = 0;
-				std::cout << " MoveState  _" << MoveState << std::endl;
 			}
 			EWCountL = 0;
 			this->_Is_Adjusting = true;

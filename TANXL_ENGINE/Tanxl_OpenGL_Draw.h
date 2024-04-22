@@ -18,6 +18,9 @@
 // 边缘碰撞检测接口不再修改按键状态属性
 // 推动屏幕移动部分不再需要按键按下
 // 优化去掉按键按下的标记
+// 边缘移动部分整理为函数
+// 坐标基类收入私有成员
+// 边缘移动部分增加碰撞检测
 
 #pragma once
 
@@ -46,6 +49,7 @@
 namespace TanxlOD
 {
 	static const char* TexForestDDPAT_01_200x200		{ "Texture/TANXL_FOREST_DDPAT_200X200.jpg"		};
+	static const char* TexDirt_01_200x200               { "Texture/TANXL_DIRT_01_200X200.jpg"           };
 	static const char* TexGrass_01_200x200				{ "Texture/TANXL_GRASS_01_200X200.jpg"			};
 	static const char* TexGrass_02_200x200				{ "Texture/TANXL_GRASS_02_200X200.jpg"			};
 	static const char* TexGrass_Snowy_01_200x200		{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg"	};
@@ -489,6 +493,7 @@ public:
 	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
+	void StateMove_Edge_Set(GameStateBase* State, int Dist_Mid, int Stat_Loc, int Move_Loc);
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
@@ -563,6 +568,7 @@ private:
 	//当前此模块的版本号
 	const std::string _Version{ "1.1" };
 	GLFWwindow* _Main_Window;
+	LocationBase* _LCB;
 	//用于实例化绘制的偏移量
 	glm::vec3 _Translation[400];
 };
