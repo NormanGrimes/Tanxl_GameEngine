@@ -12,8 +12,15 @@
 // 修复预载功能只载入了一半内容的问题
 // 适配统一变量相关改动
 // 方块由固定编号改为获取当前编号
+// 增加宏控制备用颜色的启用
+// 预加入实例化相关代码
 
 #version 430
+
+//deaflut color : Enable when texture is not exist
+#define VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR 0
+
+#define VERTSHADER_STATE_01_INSTANCED_VERSION   0
 
 layout (location = 1) in vec2 texCoord;
 
@@ -45,16 +52,28 @@ void main(void)
 	int VertexId = 0;
 	int State_Datas = (SHeight + PreLoads * 2) * (SWidth + PreLoads * 2) ;
 
+	vec2 OffSet = State[State_Datas].xy;
+
 	float WidthMove  = -(SWidth + PreLoads - 1) * Width;
 	float HeightMove = (SHeight + PreLoads - 1) * Height;
 
 	for(VertexId = 0; VertexId < State_Datas; ++VertexId)//MAP LAYER 0.3F
 	{
+#if VERTSHADER_STATE_01_INSTANCED_VERSION
+		gl_Position = vec4(OffSet[0], OffSet[1], 0.3f, 1.0f);
+		Cube = int(State[VertexId].z);
+		if(Cube == 3)
+			Cube = 8;
+		vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
+#endif
+
+#if !VERTSHADER_STATE_01_INSTANCED_VERSION
 		if      (gl_VertexID == VertexId * 6 + 0) 
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX, 
 							    -Height + HeightMove + StateMoveY, 0.3f, 1.0f);
 			Cube = int(State[VertexId].z);
+#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 0.8f, 0.1f, 1.0f);
@@ -71,12 +90,14 @@ void main(void)
 			{
 				vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
 			}
+#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 1) 
 		{ 
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, 0.3f, 1.0f); 
 			Cube = int(State[VertexId].z);
+#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
@@ -93,12 +114,14 @@ void main(void)
 			{
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 			}
+#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 2) 
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, 0.3f, 1.0f);
 			Cube = int(State[VertexId].z);
+#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
@@ -115,12 +138,14 @@ void main(void)
 			{
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 			}
+#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 3) 
 		{ 
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, 0.3f, 1.0f); 
 			Cube = int(State[VertexId].z);
+#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
@@ -137,12 +162,14 @@ void main(void)
 			{
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 			}
+#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 4) 
 		{
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                    Height + HeightMove + StateMoveY, 0.3f, 1.0f);
 			Cube = int(State[VertexId].z);
+#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
@@ -159,12 +186,14 @@ void main(void)
 			{
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 			}
+#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 5) 
 		{
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, 0.3f, 1.0f);
 			Cube = int(State[VertexId].z);
+#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(State[VertexId].z == 0.0f)
 			{
 				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
@@ -181,6 +210,7 @@ void main(void)
 			{
 				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
 			}
+#endif
 		}
 
 		WidthMove += (Width * 2);
@@ -192,4 +222,7 @@ void main(void)
 			HeightMove -= (Height * 2);
 		}
 	}
+	if(Cube == 4)
+			Cube = 8;
+#endif
 }

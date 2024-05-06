@@ -68,11 +68,12 @@ void OpenGL_Draw::init(GameStateBase* State)
 		float BeginWidth{ -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt) };
 		for (int Width{ 0 }; Width < (this->_Each_Width + this->_PreLoads * 2); ++Width)
 		{
+			BeginWidth += ((1.0f / this->_WidthInt) * 2);
 			this->_Translation[Height * this->_WidthInt + Width].x = BeginWidth;
 			this->_Translation[Height * this->_WidthInt + Width].y = BeginHeight;
 		}
 		BeginHeight -= ((1.0f / this->_HeightInt) * 2);
-		BeginWidth += ((1.0f / this->_WidthInt) * 2);
+		BeginWidth = -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt);
 	}
 
 	glGenVertexArrays(1, _vao);
@@ -105,6 +106,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//6 05
 	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
 	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
+	Append_Texture(TanxlOD::TexDirt_01_200x200);        //9 08
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
@@ -275,7 +277,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		RandomBase* UIB{ &RandomBase::GetRandomBase() };
 		for (int i{0}; i < State_Length; ++i)
 		{
-			this->_Translation[i].z = static_cast<float>(UIB->RandomAutoSeed(0, 3));
+			this->_Translation[i].z = static_cast<float>(UIB->RandomAutoSeed(0, 4));
 			std::cout << static_cast<float>(this->_Translation[i].z);
 		}
 	}

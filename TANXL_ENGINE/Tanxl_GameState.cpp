@@ -260,6 +260,7 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
 	{
 		EHCountS++;
+		EHCountL = 0;
 		if (EHCountS == this->_Adjust_Frame)
 		{
 			if (MoveState < 0 && MoveState + _GameState_Adjust > 0)
@@ -281,12 +282,10 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 			this->_Is_Adjusting = true;
 		}
 	}
-	else
-		EHCountS = 0;
-
-	if ((float)Current > ((float)this->Get_StateHeight()) / 2)
+	else if ((float)Current > ((float)this->Get_StateHeight()) / 2)
 	{
 		EHCountL++;
+		EHCountS = 0;
 		if (EHCountL == this->_Adjust_Frame)
 		{
 			if (MoveState > _GameState_Adjust)
@@ -310,7 +309,10 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 		}
 	}
 	else
+	{
+		EHCountS = 0;
 		EHCountL = 0;
+	}
 	return Temp_Move;
 }
 
@@ -324,6 +326,7 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
 	{
 		EWCountS++;
+		EWCountL = 0;
 		if (EWCountS == this->_Adjust_Frame)
 		{
 			if (-MoveState < 0 && _GameState_Adjust + -MoveState>0)
@@ -347,12 +350,10 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 			this->_Is_Adjusting = true;
 		}
 	}
-	else
-		EWCountS = 0;
-
-	if ((float)Current > ((float)this->Get_StateWidth()) / 2)
+	else if ((float)Current > ((float)this->Get_StateWidth()) / 2)
 	{
 		EWCountL++;
+		EWCountS = 0;
 		if (EWCountL == this->_Adjust_Frame)
 		{
 			if (MoveState > _GameState_Adjust)
@@ -378,7 +379,10 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 		}
 	}
 	else
+	{
+		EWCountS = 0;
 		EWCountL = 0;
+	}
 	return Temp_Move;
 }
 
