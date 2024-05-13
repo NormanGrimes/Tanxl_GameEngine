@@ -26,6 +26,10 @@
 // 增加通过序列号定位数据的接口
 // 坐标微调功能代码优化并加入输出控制宏
 // 坐标微调功能效率优化
+// 地图单元的移动目标属性改为移动状态属性
+// 新增设置地图单元编译中设定移动策略的功能
+// 地图单元编译功能中固定的判断逻辑改为动态的
+// 新增地图编译策略数组
 
 #pragma once
 
@@ -105,19 +109,27 @@ struct Square_State
 	int _Move_PY;
 };
 
+struct State_Policy
+{
+	State_Policy(std::string Name, int State_Status)
+		:_Name(Name), _State_Status(State_Status) {}
+	std::string _Name;
+	int _State_Status;
+};
+
 //StateUnit CLASS
 
 class StateUnit
 {
 public:
-	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, bool MoveTarget = true);
+	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, int Move_Status = 0);
 	void SetEvent(std::string GameEventName, int State_Id = -1);
-	bool GetMoveAble();
+	int Get_Move_Status();
 	int Get_State_Id();
 	void Set_State_Id(int State_Id);
 private:
 	GameEvent* _GameEvents;
-	bool _Is_Move_Target;
+	int _Move_Status;
 	int _State_Id;
 };
 
@@ -156,6 +168,7 @@ public:
 	void Set_Adjust_Frequency(int Frame);
 	void Set_Extend_State_Enable(bool Enable);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
+	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Reload_State(EState_Extend Extend_Dire);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	bool Get_Compile_Status();
@@ -249,6 +262,7 @@ private:
 	int _Distance_Move;
 	//用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
+	std::vector<State_Policy*> _Policy;
 	const std::string _Version{ "0.9" };
 };
 

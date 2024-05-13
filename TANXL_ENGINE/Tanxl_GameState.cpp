@@ -6,8 +6,8 @@
 
 //StateUnit
 
-StateUnit::StateUnit(GameEvent* GE, int State_Id, bool MoveTarget)
-	:_Is_Move_Target(MoveTarget), _GameEvents(GE), _State_Id(State_Id) {}
+StateUnit::StateUnit(GameEvent* GE, int State_Id, int Move_Status)
+	:_Move_Status(Move_Status), _GameEvents(GE), _State_Id(State_Id) {}
 
 void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 {
@@ -129,7 +129,7 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 {
 	std::string Text_Reader{};
 	int Status_Id{};
-	bool State_Move{};
+	int State_Status{};
 	
 	this->Clear_Display_Vector(Extend);
 	std::vector<StateUnit*>* Target{ this->Get_GameState(Extend) };
@@ -142,15 +142,24 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 		if (Infor.at(i) == ',')
 		{
 			Status_Id = std::stoi(Text_Reader);
-			Target->push_back(new StateUnit(nullptr, Status_Id, State_Move));
+			Target->push_back(new StateUnit(nullptr, Status_Id, State_Status));
 			Text_Reader = "";
 		}
 		else if (Infor.at(i) == '-')
 		{
-			if (Text_Reader == "a")
-				State_Move = true;
-			else
-				State_Move = false;
+			State_Status = 0;
+
+			if (this->_Policy.size() != 0)
+			{
+				for (int i{}; i < this->_Policy.size(); i++)
+				{
+					if (this->_Policy.at(i)->_Name == Text_Reader)
+					{
+						State_Status = this->_Policy.at(i)->_State_Status;
+						break;
+					}
+				}
+			}
 			Text_Reader = "";
 			Status_Id = 0;
 		}
@@ -402,7 +411,7 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble(EState_Extend State_Id)
 	std::vector<StateUnit*>* GameState{ this->Get_GameState(State_Id) };
 	for (const auto& State : *GameState)
 	{
-		if (State->GetMoveAble())
+		if (State->Get_Move_Status())
 			MAB.push_back(true);
 		else
 			MAB.push_back(false);
@@ -677,9 +686,9 @@ GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
 
 //StateUnit
 
-bool StateUnit::GetMoveAble()
+int StateUnit::Get_Move_Status()
 {
-	return this->_Is_Move_Target;
+	return this->_Move_Status;
 }
 
 int StateUnit::Get_State_Id()
@@ -699,6 +708,11 @@ void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 	static SLocation* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
 	Distance->_Location_X = CurrentX;
 	Distance->_Location_Y = CurrentY;
+}
+
+void GameStateBase::Set_Compile_Policy(std::string State_Name, int Set_To_Status)
+{
+	this->_Policy.push_back(new State_Policy(State_Name, Set_To_Status));
 }
 
 unsigned GameStateBase::Get_DataHeight()const

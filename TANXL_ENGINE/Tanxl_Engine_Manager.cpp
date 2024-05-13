@@ -47,12 +47,17 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 		std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
 	}
 #endif
+
+
+	this->Tanxl_Engine_GameState->Set_Compile_Policy("a", 1);
 }
 
 unsigned Tanxl_Engine::Engine_Check_Engine_Status(bool ShutDown)
 {
 	if (((this->_Engine_Status & 0xFFF) != 0) && ShutDown)
 	{
+		std::cout << "Fault detected ! Fault Id :" << _Engine_Status << std::endl;
+		system("pause");
 		this->Tanxl_Engine_OpenGL_Draw->Destroy_Window();
 		delete this;
 		exit(1);

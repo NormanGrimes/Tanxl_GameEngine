@@ -23,6 +23,7 @@
 // 边缘移动部分增加碰撞检测
 // 修改实例化数组初始内容
 // 地图上增加新纹理的绘制
+// 地图载入功能增加对地图单元信息的设置
 
 #pragma once
 
@@ -500,7 +501,7 @@ public:
 	//获取预载的数值
 	int Get_PreLoad();
 	//单一地图方块编号获取功能
-	int Get_State_Id(int LocationX, int LocationY, GameStateBase& State);
+	int Get_State(int LocationX, int LocationY, GameStateBase& State);
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//用于第一次或重新加载整个地图场景
@@ -572,7 +573,8 @@ private:
 	GLFWwindow* _Main_Window;
 	LocationBase* _LCB;
 	//用于实例化绘制的偏移量
-	glm::vec3 _Translation[400];
+	glm::vec2 _Translation[400];
+	glm::ivec2 _StateInfor[400];
 };
 
 #endif

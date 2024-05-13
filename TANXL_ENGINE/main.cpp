@@ -13,12 +13,9 @@
 
 int main()
 {	
-	//Data Function Test
-
 	Tanxl_Engine TGE;
 
 	TGE.Engine_Check_Engine_Status();
-	//Get Instance
 
 	TGE.Engine_Save_Infinite_State(true, 16, 4, 4);
 
