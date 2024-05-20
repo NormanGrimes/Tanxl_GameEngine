@@ -1,3 +1,11 @@
+TEnGinE Version-0.2 Build-08 2023-06-12 17:40 UPDATE_LOG
+////////////////////////////////////////////////////////
+绘制模块地图方块编号获取功能改为地图单元获取功能。绘制模
+块地图碰撞增加对未定义单元的碰撞。地图顶点着色器修复实例
+化绘制启用导致编译错误的问题。绘制模块地图碰撞不再根据方
+块序号而是根据额外的可自定义变量判断。随机模块增加对新版
+随机地图的支持。绘制模块重新载入地图部分优化减少判断。
+
 TEnGinE Version-0.2 Build-07 2023-06-05 18:18 UPDATE_LOG
 ////////////////////////////////////////////////////////
 地图模块地图单元的移动目标属性改为移动状态属性。引擎管理
@@ -276,6 +284,18 @@ TEnGinE Version-0.1 Build-75 2023-02-20 09:19 UPDATE_LOG
 入模块自动检查功能增加移动距离的精确计算。增加二号海洋纹
 理。输入模块控制台信息输出宏细化。移除主函数的数据存储功
 能检测。绘制模块初始化时计算当前真实坐标。
+--------------------------------------------------------
+The English update has been partially added. The map 
+module adds variables to record the total distance 
+traveled in each direction. The input module 
+push-button input function adds support for total 
+distance traveled calculation. The automatic check 
+function of the input module increases the accurate 
+calculation of the distance traveled. Added Ocean No. 2 
+texture. Input module console information output macro 
+refinement. Removes data storage capability detection 
+for the main function. The current true coordinates are 
+calculated when the drawing module is initialized.
 
 TEnGinE Version-0.1 Build-74 2023-02-17 10:33 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -286,6 +306,21 @@ TEnGinE Version-0.1 Build-74 2023-02-17 10:33 UPDATE_LOG
 块增加获取预加载值的接口。引擎管理模块增加绘制窗口与调整
 预载功能。绘制模块修复初始化时移动范围矩阵宽度与高度写反
 的问题。
+--------------------------------------------------------
+The input module registration event function is 
+simplified. The map module adds a map pointer to the 
+enumeration. The enclosure removes the random test data 
+feature. The engine management module adds a simplified 
+version of the input button to add the registration 
+function. The engine management module infinite world 
+generation interface adds data collation by default. 
+The engine management module settings display window 
+interface to increase the preload settings. The drawing 
+module adds an interface to get preloaded values. The 
+engine management module adds drawing windows and 
+adjusting preload functions. The drawing module fixes 
+the problem that the width and height of the movement 
+range matrix are inverted during initialization.
 
 TEnGinE Version-0.1 Build-73 2023-02-16 13:53 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -294,6 +329,17 @@ TEnGinE Version-0.1 Build-73 2023-02-16 13:53 UPDATE_LOG
 地数据接口的内存清理步骤优化。事件模块析构函数优化清理内
 存中的遗留数据。存储模块数据整理功能将联合整理设为默认并
 取代旧式整理。地图模块析构函数优化。
+--------------------------------------------------------
+The random number interface code of the random module 
+is simplified. The enclosure resumes the ability to 
+reset specified data. The module variable name is 
+modified for the latest version. The memory cleanup 
+step optimization for the enclosure gets the local data 
+interface. The event module destructor optimizes 
+cleaning up legacy data in memory. The enclosure data 
+wrangling feature sets federated grooming as the 
+default and replaces legacy grooming. Map module 
+destructor optimization.
 
 TEnGinE Version-0.1 Build-72 2023-02-15 10:01 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -303,6 +349,19 @@ TEnGinE Version-0.1 Build-72 2023-02-15 10:01 UPDATE_LOG
 生成随机地图区块的功能。随机模块纳入引擎管理模块。引擎管
 理模块增加随机地图数据生成功能。预定义模块修改数据标签接
 口对应存储模块改动。启动时自动生成一组随机地图数据。
+--------------------------------------------------------
+Several minor enclosure bug fixes. The enclosure is 
+optimized for the memory section. Predefined modules 
+add more predefined data. The enclosure adds a 
+simplified data addition interface. The random number 
+interface of the random module increases randomness. 
+The Random module adds the ability to generate random 
+map blocks. Random modules are incorporated into the 
+engine management module. The engine management module 
+adds the function of random map data generation. The 
+predefined module modifies the data label interface 
+corresponding to the enclosure change. Automatically 
+generate a random set of map data at startup.
 
 TEnGinE Version-0.1 Build-71 2023-02-14 11:33 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -314,6 +373,22 @@ TEnGinE Version-0.1 Build-71 2023-02-14 11:33 UPDATE_LOG
 存中数据是否为空的标记。存储模块对多处细节改进及小问题修
 复。存储模块改进本地文件读取功能。此版本为非稳定版本，部
 分功能已屏蔽。
+--------------------------------------------------------
+The enclosure anonymous struct reset function 
+optionally destroys what its pointer refers to. The 
+enclosure fixes an issue where the supersedence 
+function of anonymous structs fails when the pointer 
+itself is empty. The enclosure add-item function can 
+optionally select whether to delete after the addition 
+is completed. Functions in enclosures that add ordinal 
+structs no longer require input data structs. The 
+enclosure fixes an issue where adding data to the data 
+structure could cause an infinite loop. The enclosure 
+removes the tag for whether the data in memory is 
+empty. The enclosure has many detailed improvements and 
+minor bug fixes. The enclosure improves local file 
+reads. This version is unstable and some features have 
+been blocked.
 
 TEnGinE Version-0.1 Build-70 2023-02-13 10:15 UPDATE_LOG
 ////////////////////////////////////////////////////////

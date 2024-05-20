@@ -15,6 +15,7 @@
 // 增加宏控制备用颜色的启用
 // 预加入实例化相关代码
 // 地图纹理编号从坐标向量中移动到新向量
+// 修复实例化绘制启用导致编译错误的问题
 
 #version 430
 
@@ -59,17 +60,17 @@ void main(void)
 	float WidthMove  = -(SWidth + PreLoads - 1) * Width;
 	float HeightMove = (SHeight + PreLoads - 1) * Height;
 
-	for(VertexId = 0; VertexId < State_Datas; ++VertexId)//MAP LAYER 0.3F
-	{
 #if VERTSHADER_STATE_01_INSTANCED_VERSION
-		gl_Position = vec4(OffSet[0], OffSet[1], 0.3f, 1.0f);
-		Cube = int(Infor[VertexId].x);
-		if(Cube == 4)
-			Cube = 8;
-		vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
+	gl_Position = vec4(OffSet[0], OffSet[1], 0.3f, 1.0f);
+	Cube = int(Infor[VertexId].x);
+	if(Cube == 4)
+		Cube = 8;
+	vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
 #endif
 
 #if !VERTSHADER_STATE_01_INSTANCED_VERSION
+	for(VertexId = 0; VertexId < State_Datas; ++VertexId)//MAP LAYER 0.3F
+	{
 		if      (gl_VertexID == VertexId * 6 + 0) 
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX, 

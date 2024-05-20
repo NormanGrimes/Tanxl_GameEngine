@@ -24,6 +24,10 @@
 // 修改实例化数组初始内容
 // 地图上增加新纹理的绘制
 // 地图载入功能增加对地图单元信息的设置
+// 地图方块编号获取功能改为地图单元获取功能
+// 地图碰撞增加对未定义单元的碰撞
+// 地图碰撞不再根据方块序号而是根据额外的可自定义变量判断
+// 重新载入地图部分优化减少判断
 
 #pragma once
 
@@ -500,8 +504,8 @@ public:
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
-	//单一地图方块编号获取功能
-	int Get_State(int LocationX, int LocationY, GameStateBase& State);
+	//地图单元获取功能
+	StateUnit* Get_State(int LocationX, int LocationY, GameStateBase& State);
 	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//用于第一次或重新加载整个地图场景

@@ -57,8 +57,12 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height)
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
     {
-        ReturnVal += "a-";
-        ReturnVal += std::to_string(UID(DRE));
+        int StateVal = UID(DRE);
+        if(StateVal == 3)
+            ReturnVal += "a-";
+        else
+            ReturnVal += "b-";
+        ReturnVal += std::to_string(StateVal);
         ReturnVal += ",";
     }
     return ReturnVal;
