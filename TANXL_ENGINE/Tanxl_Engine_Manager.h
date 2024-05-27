@@ -27,6 +27,7 @@
 // 2023/05/24 优化引擎状态判断部分
 // 2023/05/25 检测引擎状态功能可选是否关闭程序
 // 2023/06/12 检测引擎状态功能增加信息显示
+// 2023/06/15 增加连续调整多个按键单元的移动距离的接口
 
 #pragma once
 
@@ -72,11 +73,18 @@ public:
 	//获取当前引擎状态
 	unsigned Engine_Check_Engine_Status(bool ShutDown = false);
 
+	//State Part
+
 	//设置当前显示窗口中的XY轴矩阵数量 Width宽度 Height高度
 	void Engine_State_Set_Display(int Width, int Height, int PreLoads);
 
 	//根据一串合理的字符串对地图进行生成 Width预设宽度 Height预设高度 Infor地图数据 Extend指定编译的目标区块
 	void Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
+
+	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Cover_State用于标记是否使用State_Infor的信息覆盖指定ID下的信息
+	void Engine_State_Set_Begin(int State_Id, bool Cover_State, std::string State_Infor);
+
+	//Insert Part
 
 	//设置是否启用输入移动限制 Eanble启用/关闭自动移动限制 启用后不需要设置后续内容 Max_Height最大移动高度(绝对值) Max_Widtd最大移动宽度(绝对值)
 	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Widtd = 0.0f);
@@ -84,8 +92,16 @@ public:
 	//设置是否启用移动到达地图边缘化地图随着移动操作而移动 Enable启用/关闭此功能 Mode为true时根据程序中输入操作自动获取 为false时需要设置Compaer_Height/Width为触发的比较值
 	void Engine_Insert_Satate_MoveWith(bool Enable, bool Mode, float Compare_Height = 0.0f, float Compare_Width = 1.0f);
 
-	//Enable_Adjust设置是否启用自动调整 Adjust_Value为单次调整的距离 Enable_While_Move为是否启用移动中调整 后两项需要第一项启动才会生效
-	void Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move);
+	//提供更新绘制部分的手动移动距离值 以及输入按键检测
+	void Engine_Insert_State_Update();
+
+	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
+	std::string Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length);
+
+	//连续调整多个按键单元的移动距离 Start为其在已注册事件容器中的起始位置 End为其结束位置 Adjust_Value为调整的大小 会根据被调整值的正负情况进行对应的调整
+	void Engine_Insert_Adjust_Speed(int Start, int End, double Adjust_Value);
+
+	//Data Part
 
 	//向指定文件名称中输出当前系统的综合信息 FileName为输出的目标文件名称 调用此函数后目标文件会被重置
 	void Engine_Save_Source_Infor(std::string FileName = "Tanxl Engine VersionMe");
@@ -93,20 +109,16 @@ public:
 	//选定是否开启游戏世界无限扩展的功能 执行后会自动生成TANXL_STATE_DATA文件并存放256: 16X16个地图单元数据 Build_Connect为true时会额外构建各区块的连接ID
 	void Engine_Save_Infinite_State(bool Build_Connect = true, unsigned State_Size = 0xFF, int Width = 16, int Height = 16);
 
+	//Other
+
+	//Enable_Adjust设置是否启用自动调整 Adjust_Value为单次调整的距离 Enable_While_Move为是否启用移动中调整 后两项需要第一项启动才会生效
+	void Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move);
+
 	//提供基本的绘制功能与预加载数据的调整功能 PreLoad_Adjust为预加载调整值
 	void Engine_Draw_State_Adjust(int PreLoad_Adjust);
 
-	//提供更新绘制部分的手动移动距离值 以及输入按键检测
-	void Engine_Insert_State_Update();
-
-	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
-	std::string Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length);
-
 	//重置指定的引擎基类 将该引擎基类的数据恢复到初始状态 Engine_Class用于指定需要选择重置的基类
 	void Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class);
-
-	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Cover_State用于标记是否使用State_Infor的信息覆盖指定ID下的信息
-	void Engine_State_Set_Begin(int State_Id, bool Cover_State, std::string State_Infor);
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

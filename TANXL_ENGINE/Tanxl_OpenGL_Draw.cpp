@@ -102,11 +102,10 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); //2 01
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); //3 02
 	Append_Texture(TanxlOD::TexOcean_01_200x200);       //4 03
-	Append_Texture(TanxlOD::TexWood_01_32x32);          //5 04
-	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//6 05
-	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
-	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
-	Append_Texture(TanxlOD::TexDirt_01_200x200);        //9 08
+	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//5 04
+	Append_Texture(TanxlOD::TexHealth_01_32x32);        //6 05
+	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //7 06
+	Append_Texture(TanxlOD::TexDirt_01_200x200);        //8 07
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
@@ -635,6 +634,12 @@ void OpenGL_Draw::StateMove_Edge_Set(GameStateBase* State, int Dist_Mid, int Sta
 			State->Get_Move_Distance()._Location_X -= 0.01f;
 		}
 	}
+}
+
+void OpenGL_Draw::Move_State(GameStateBase* State, EMove_State_EventId Direction)
+{
+	State->Set_Move_State(Direction);
+	this->_Is_State_Changed = true;
 }
 
 StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& State)

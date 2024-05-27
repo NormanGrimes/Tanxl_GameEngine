@@ -138,6 +138,31 @@ void InsertEventBase::Set_StateRange(bool Enable)
 	this->_Is_State_Range = Enable;
 }
 
+void InsertEventBase::Set_MultiSpeed(int Start, int End, double Adjust_Value)
+{
+	if (Start < 0)
+		Start = 0;
+	if (End > this->_KeyEventS.size())
+		End = static_cast<int>(this->_KeyEventS.size());
+	if (End < Start)
+		return;
+
+	while (Start < End)
+	{
+		std::cout << "X1" << this->_KeyEventS.at(Start)->MoveLen << std::endl;
+		std::cout << "X1" << this->_KeyEventS.at(Start)->MoveLen + Adjust_Value << std::endl;
+		std::cout << "X1" << this->_KeyEventS.at(Start)->MoveLen - Adjust_Value << std::endl;
+		if (this->_KeyEventS.at(Start)->MoveLen > 0.0f)
+			this->_KeyEventS.at(Start)->MoveLen += Adjust_Value;
+		else if (this->_KeyEventS.at(Start)->MoveLen < 0.0f)
+			this->_KeyEventS.at(Start)->MoveLen -= Adjust_Value;
+		Start++;
+		std::cout << "X2" << this->_KeyEventS.at(Start)->MoveLen << std::endl;
+		std::cout << "X2" << this->_KeyEventS.at(Start)->MoveLen + Adjust_Value << std::endl;
+		std::cout << "X2" << this->_KeyEventS.at(Start)->MoveLen - Adjust_Value << std::endl << std::endl;
+	}
+}
+
 float InsertEventBase::Get_Margin_X()
 {
 	return this->_Margin_X;

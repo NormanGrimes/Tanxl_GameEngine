@@ -427,7 +427,7 @@ void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
 	this->_MState._Move_PY = PY;
 }
 
-void GameStateBase::Set_Move_State(int Event_Id, int Multi_Set)
+void GameStateBase::Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set)
 {
 	switch (Event_Id)
 	{
@@ -446,6 +446,34 @@ void GameStateBase::Set_Move_State(int Event_Id, int Multi_Set)
 	case MoveToPH:
 		this->_MState._Move_NY -= Multi_Set;
 		this->_MState._Move_PY -= Multi_Set;
+		break;
+
+	case MoveToNWNH:
+		this->_MState._Move_NX += Multi_Set;
+		this->_MState._Move_PX += Multi_Set;
+		this->_MState._Move_NY += Multi_Set;
+		this->_MState._Move_PY += Multi_Set;
+		break;
+
+	case MoveToNWPH:
+		this->_MState._Move_NX += Multi_Set;
+		this->_MState._Move_PX += Multi_Set;
+		this->_MState._Move_NY -= Multi_Set;
+		this->_MState._Move_PY -= Multi_Set;
+		break;
+
+	case MoveToPWNH:
+		this->_MState._Move_NX -= Multi_Set;
+		this->_MState._Move_PX -= Multi_Set;
+		this->_MState._Move_NY += Multi_Set;
+		this->_MState._Move_PY += Multi_Set;
+		break;
+
+	case MoveToPWPH:
+		this->_MState._Move_NX -= Multi_Set;
+		this->_MState._Move_PX -= Multi_Set;
+		this->_MState._Move_NY += Multi_Set;
+		this->_MState._Move_PY += Multi_Set;
 		break;
 	}
 }

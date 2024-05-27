@@ -267,3 +267,8 @@ void Tanxl_Engine::Engine_State_Set_Begin(int State_Id, bool Cover_State, std::s
 	else
 		this->Tanxl_Engine_GameState->Set_StartState(State_Id);
 }
+
+void Tanxl_Engine::Engine_Insert_Adjust_Speed(int Start, int End, double Adjust_Value)
+{
+	this->Tanxl_Engine_InsertBase->Set_MultiSpeed(Start, End, Adjust_Value);
+}

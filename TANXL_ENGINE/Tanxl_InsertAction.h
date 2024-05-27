@@ -15,6 +15,7 @@
 // 更新上次移动后坐标功能合并到输入功能
 // 增加获取输入事件个数的功能
 // 在场景暂停模式中不响应移动操作
+// 增加同时设置多个按键移动距离的接口
 
 #pragma once
 
@@ -95,6 +96,8 @@ public:
 	void Get_MoveData(std::vector<bool>* PVB);
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
+	//同时设置多个按键控制的移动距离
+	void Set_MultiSpeed(int Start, int End, double Adjust_Value);
 private:
 	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘
 	void AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);

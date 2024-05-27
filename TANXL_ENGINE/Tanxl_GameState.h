@@ -1,5 +1,6 @@
 ﻿//_VERSION_1_0_ UPDATE LOG
 // LAST_UPDATE 2023-06-12 17:42
+// 设置移动矩阵接口调整并支持斜向移动
 
 #pragma once
 
@@ -123,7 +124,7 @@ public:
 	std::string Get_State_Id(int Location);
 	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
 	void Set_Move_State(int NX, int PX, int NY, int PY);
-	void Set_Move_State(int Event_Id, int Multi_Set = 1);
+	void Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set = 1);
 	void Set_Display_State(int Width, int Height);
 	void Set_DataAll_State(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);

@@ -47,8 +47,6 @@ int main()
 		"b-1,b-2,b-0,a-3,b-0,b-0,a-3,b-0,b-2,b-1,"
 		"b-2,b-1,a-3,b-1,b-1,b-1,b-1,a-3,b-1,b-2,");
 
-	std::vector<std::string> KeyUnitNames;
-
 	while (1)
 	{
 		TGE.Engine_Insert_State_Update();//Key Insert
@@ -59,26 +57,7 @@ int main()
 		{
 			if (Appended == false)
 			{
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_UP, false, true, 0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_W, false, true, 0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_LEFT, true, false, -0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_A, true, false, -0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_RIGHT, true, false, 0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_D, true, false, 0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_DOWN, false, true, -0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-				KeyUnitNames.push_back(TGE.Engine_Insert_Regist_Move(GLFW_KEY_S, false, true, -0.01));
-				std::cout << "APPEND NAME :" << KeyUnitNames.back() << std::endl;
-
+				TGE.Engine_Insert_Adjust_Speed(0, 8, 0.01);
 				Appended = true;
 			}
 		}
@@ -87,18 +66,7 @@ int main()
 			if (Appended == true)
 			{
 				Appended = false;
-				std::cout << "Removing All Temp KeyEvent" << std::endl;
-
-				for (int i{ 0 }; i < KeyUnitNames.size(); i++)
-				{
-					std::cout << "DELETE NAME :" << KeyUnitNames.at(i) << std::endl;
-					if (IEB->RemoveEvent(KeyUnitNames.at(i)))
-						std::cout << "Successfully REMOVE :" << i << std::endl;
-					else
-						std::cout << "Delete Fail !" << std::endl;
-				}
-				KeyUnitNames.erase(KeyUnitNames.begin(), KeyUnitNames.end());
-				KeyUnitNames.clear();
+				TGE.Engine_Insert_Adjust_Speed(0, 8, -0.01);
 			}
 		}
 	}

@@ -28,6 +28,7 @@
 // 地图碰撞增加对未定义单元的碰撞
 // 地图碰撞不再根据方块序号而是根据额外的可自定义变量判断
 // 重新载入地图部分优化减少判断
+// 新增整体移动背景地图一格的功能
 
 #pragma once
 
@@ -55,20 +56,15 @@
 
 namespace TanxlOD
 {
-	static const char* TexForestDDPAT_01_200x200		{ "Texture/TANXL_FOREST_DDPAT_200X200.jpg"		};
 	static const char* TexDirt_01_200x200               { "Texture/TANXL_DIRT_01_200X200.jpg"           };
 	static const char* TexGrass_01_200x200				{ "Texture/TANXL_GRASS_01_200X200.jpg"			};
 	static const char* TexGrass_02_200x200				{ "Texture/TANXL_GRASS_02_200X200.jpg"			};
 	static const char* TexGrass_Snowy_01_200x200		{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg"	};
 	static const char* TexGrass_Snowy_02_200x200		{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg"	};
 	static const char* TexOcean_01_200x200				{ "Texture/TANXL_OCEAN_01_200X200.jpg"			};
-	static const char* TexHealth_01_8x8					{ "Texture/YANG_HEALTH_01_8X8.png"				};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_32x32				{ "Texture/YANG_PRINCESS_01_32X32.png"			};
-	static const char* TexWood_01_32x32					{ "Texture/YANG_WOOD_01_32X32.png"				};
-	static const char* TexWood_02_32x32					{ "Texture/YANG_WOOD_02_32X32.png"				};
-	static const char* TexBunnyGirl_01_32x32            { "Texture/YANG_BUNNYGIRL_01_32X32.png"         };
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -501,6 +497,7 @@ public:
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
 	void StateMove_Edge_Set(GameStateBase* State, int Dist_Mid, int Stat_Loc, int Move_Loc);
+	void Move_State(GameStateBase* State, EMove_State_EventId Direction);
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
