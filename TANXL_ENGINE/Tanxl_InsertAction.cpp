@@ -149,17 +149,11 @@ void InsertEventBase::Set_MultiSpeed(int Start, int End, double Adjust_Value)
 
 	while (Start < End)
 	{
-		std::cout << "X1" << this->_KeyEventS.at(Start)->MoveLen << std::endl;
-		std::cout << "X1" << this->_KeyEventS.at(Start)->MoveLen + Adjust_Value << std::endl;
-		std::cout << "X1" << this->_KeyEventS.at(Start)->MoveLen - Adjust_Value << std::endl;
 		if (this->_KeyEventS.at(Start)->MoveLen > 0.0f)
 			this->_KeyEventS.at(Start)->MoveLen += Adjust_Value;
 		else if (this->_KeyEventS.at(Start)->MoveLen < 0.0f)
 			this->_KeyEventS.at(Start)->MoveLen -= Adjust_Value;
 		Start++;
-		std::cout << "X2" << this->_KeyEventS.at(Start)->MoveLen << std::endl;
-		std::cout << "X2" << this->_KeyEventS.at(Start)->MoveLen + Adjust_Value << std::endl;
-		std::cout << "X2" << this->_KeyEventS.at(Start)->MoveLen - Adjust_Value << std::endl << std::endl;
 	}
 }
 

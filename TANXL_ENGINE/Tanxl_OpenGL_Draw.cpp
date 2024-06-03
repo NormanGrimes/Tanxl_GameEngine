@@ -102,10 +102,10 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); //2 01
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); //3 02
 	Append_Texture(TanxlOD::TexOcean_01_200x200);       //4 03
-	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//5 04
-	Append_Texture(TanxlOD::TexHealth_01_32x32);        //6 05
-	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //7 06
-	Append_Texture(TanxlOD::TexDirt_01_200x200);        //8 07
+	Append_Texture(TanxlOD::TexDirt_01_200x200);        //5 04
+	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//6 05
+	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
+	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
@@ -351,10 +351,7 @@ void OpenGL_Draw::Append_Texture(const char* Texture)
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
 
-	if(_Advanced_Mode)
-		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
-	else
-		glBufferData(GL_ARRAY_BUFFER, 0, 0, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
 
 	glActiveTexture(GL_TEXTURE0 + Id);
 
@@ -372,6 +369,10 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 
 	static int Dist_Mid{ State->Get_Distance_Screen_Id() };
 	static int Exac_Mov{ State->Get_Distance_Move_Id() };
+
+	static int TestLimit = 1;
+	int Test = 10;
+	float Marg = 5.0f;//this->_Each_Width * 10;
 
 	if (IEB->Get_Margin_X() < 0)
 	{
@@ -400,6 +401,34 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
 						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 						std::cout << "Return" << std::endl;
+					}
+					else if ((X > 10) && TestLimit)
+					{
+						TestLimit = 0;
+						State->Get_Move_Distance()._Location_X -= Marg;
+						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
+
+						Update_Current();
+						this->_Current_Move_Height = this->_New_Current_Height;
+						this->_Current_Move_Width = this->_New_Current_Width;
+
+						State->Reload_State(STATE_EXTEND_RIGH);
+						for (int i = 0; i < Test; i++)
+							this->Move_State(State, MoveToPW);
+						this->_Is_State_Changed = true;
+					}
+					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
+					{
+						if (_Health_Count <= 2)
+						{
+							_Health_Count = 2;
+							std::cout << "YOU DIE" << std::endl;
+						}
+						else
+						{
+							this->Set_Health(--_Health_Count);
+							this->Get_State(X, Y, *State)->Set_State_Id(1);
+						}
 					}
 				}
 			}
@@ -434,6 +463,34 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 						std::cout << "Return" << std::endl;
 					}
+					else if ((X > 10) && TestLimit)
+					{
+						TestLimit = 0;
+						State->Get_Move_Distance()._Location_X -= Marg;
+						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
+
+						Update_Current();
+						this->_Current_Move_Height = this->_New_Current_Height;
+						this->_Current_Move_Width = this->_New_Current_Width;
+
+						State->Reload_State(STATE_EXTEND_RIGH);
+						for (int i = 0; i < Test; i++)
+							this->Move_State(State, MoveToPW);
+						this->_Is_State_Changed = true;
+					}
+					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
+					{
+						if (_Health_Count <= 2)
+						{
+							_Health_Count = 2;
+							std::cout << "YOU DIE" << std::endl;
+						}
+						else
+						{
+							this->Set_Health(--_Health_Count);
+							this->Get_State(X, Y, *State)->Set_State_Id(1);
+						}
+					}
 				}
 			}
 		}
@@ -467,6 +524,34 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
 						std::cout << "Return" << std::endl;
 					}
+					else if ((X > 10) && TestLimit)
+					{
+						TestLimit = 0;
+						State->Get_Move_Distance()._Location_X -= Marg;
+						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
+
+						Update_Current();
+						this->_Current_Move_Height = this->_New_Current_Height;
+						this->_Current_Move_Width = this->_New_Current_Width;
+
+						State->Reload_State(STATE_EXTEND_RIGH);
+						for (int i = 0; i < Test; i++)
+							this->Move_State(State, MoveToPW);
+						this->_Is_State_Changed = true;
+					}
+					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
+					{
+						if (_Health_Count <= 2)
+						{
+							_Health_Count = 2;
+							std::cout << "YOU DIE" << std::endl;
+						}
+						else
+						{
+							this->Set_Health(--_Health_Count);
+							this->Get_State(X, Y, *State)->Set_State_Id(1);
+						}
+					}
 				}
 			}
 		}
@@ -499,6 +584,34 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
 						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
 						std::cout << "Return" << std::endl;
+					}
+					else if ((X > 10) && TestLimit)
+					{
+						TestLimit = 0;
+						State->Get_Move_Distance()._Location_X -= Marg;
+						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
+
+						Update_Current();
+						this->_Current_Move_Height = this->_New_Current_Height;
+						this->_Current_Move_Width = this->_New_Current_Width;
+
+						State->Reload_State(STATE_EXTEND_RIGH);
+						for (int i = 0; i < 10; i++)
+							this->Move_State(State, MoveToPW);
+						this->_Is_State_Changed = true;
+					}
+					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
+					{
+						if (_Health_Count <= 2)
+						{
+							_Health_Count = 2;
+							std::cout << "YOU DIE" << std::endl;
+						}
+						else
+						{
+							this->Set_Health(--_Health_Count);
+							this->Get_State(X, Y, *State)->Set_State_Id(1);
+						}
 					}
 				}
 			}

@@ -29,6 +29,10 @@
 // 地图碰撞不再根据方块序号而是根据额外的可自定义变量判断
 // 重新载入地图部分优化减少判断
 // 新增整体移动背景地图一格的功能
+// 纹理重新排序
+// 增加地图环境碰撞伤害测试
+// 移除绘制的低画质模式
+// 右侧区域开启多段扩展地图测试
 
 #pragma once
 
@@ -512,7 +516,6 @@ public:
 private:
 	OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust);
 
-	bool _Advanced_Mode{ true };
 	bool _Clear_Function;
 	bool _Is_State_Changed;
 	bool _Trigger_Mode{ false };

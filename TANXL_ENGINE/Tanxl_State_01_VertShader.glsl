@@ -63,8 +63,6 @@ void main(void)
 #if VERTSHADER_STATE_01_INSTANCED_VERSION
 	gl_Position = vec4(OffSet[0], OffSet[1], 0.3f, 1.0f);
 	Cube = int(Infor[VertexId].x);
-	if(Cube == 4)
-		Cube = 7;
 	vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
 #endif
 
@@ -225,7 +223,5 @@ void main(void)
 			HeightMove -= (Height * 2);
 		}
 	}
-	if(Cube == 4)
-		Cube = 7;
 #endif
 }

@@ -57,8 +57,8 @@ int main()
 		{
 			if (Appended == false)
 			{
-				TGE.Engine_Insert_Adjust_Speed(0, 8, 0.01);
 				Appended = true;
+				TGE.Engine_Insert_Adjust_Speed(0, 8, 0.01);
 			}
 		}
 		else

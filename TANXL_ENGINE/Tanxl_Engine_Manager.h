@@ -39,6 +39,8 @@
 
 #define _STEAM_ALPHA_TEST_EDITION_ 0
 
+// mainCRTStartup
+
 #include "Tanxl_Console_List.h"
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
