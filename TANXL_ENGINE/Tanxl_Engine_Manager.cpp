@@ -130,10 +130,11 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	remove((FileName + ".usd").c_str());
 }
 
-void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, unsigned State_Size, int Width, int Height)
+void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int Height)
 {
 	this->_Engine_Status |= 0x100;
-	for (int i{ 0 }; i < static_cast<int>(State_Size); ++i)//16x16
+	int State_Size{ Width * Height };
+	for (int i{ 0 }; i < State_Size; ++i)//16x16
 	{
 		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);
@@ -199,11 +200,15 @@ void Tanxl_Engine::Engine_Insert_State_Update()
 	this->Tanxl_Engine_OpenGL_Draw->Update_Current();//更新地图加载区块
 }
 
-std::string Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)
+Key_Unit* Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)
 {
-	Key_Unit* KEYU{ new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length) };
+	Key_Unit* KEYU;
+	if ((Width_Move == false) && (Height_Move == false))
+		KEYU = new Key_Unit(GLFW_KEY);
+	else
+		KEYU = new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length);
 	this->Tanxl_Engine_InsertBase->RegistEvent(KEYU);
-	return KEYU->Unit_Name;
+	return KEYU;
 }
 
 void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)

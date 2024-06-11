@@ -138,8 +138,10 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 
 	int State_Length{ (this->_HeightInt + this->_PreLoads * 2) * (this->_WidthInt + this->_PreLoads * 2) + 1 };
 
+#if _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
 	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
+#endif
 
 	if (State->Get_Compile_Status())
 	{
@@ -370,9 +372,13 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 	static int Dist_Mid{ State->Get_Distance_Screen_Id() };
 	static int Exac_Mov{ State->Get_Distance_Move_Id() };
 
-	static int TestLimit = 1;
-	int Test = 10;
-	float Marg = 5.0f;//this->_Each_Width * 10;
+	//static int TestLimit = 1;
+
+	int State_Width{ static_cast<int>(State->Get_DataWidth()) + 1 };
+	int State_Height{ static_cast<int>(State->Get_DataHeight()) + 1 };
+
+	float Marg_Width{ static_cast<float>(this->_Each_Width * 10) };
+	float Marg_Height{ static_cast<float>(this->_Each_Height * 10) };
 
 	if (IEB->Get_Margin_X() < 0)
 	{
@@ -402,19 +408,20 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 						std::cout << "Return" << std::endl;
 					}
-					else if ((X > 10) && TestLimit)
+					else if ((X < 0)/* && TestLimit*/)
 					{
-						TestLimit = 0;
-						State->Get_Move_Distance()._Location_X -= Marg;
+						//TestLimit = 0;
+						State->Get_Move_Distance()._Location_X += Marg_Width;
 						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
 
 						Update_Current();
 						this->_Current_Move_Height = this->_New_Current_Height;
 						this->_Current_Move_Width = this->_New_Current_Width;
 
-						State->Reload_State(STATE_EXTEND_RIGH);
-						for (int i = 0; i < Test; i++)
-							this->Move_State(State, MoveToPW);
+						State->Reload_State(STATE_EXTEND_LEFT);
+						for (int i{ 0 }; i < State_Width; i++)
+							this->Move_State(State, MoveToNW);
+						//this->_LCB->Get_LocationX(this->_LCB->New_Location_set("State_Move_Location")) -= static_cast<float>(_Each_Width * 10);
 						this->_Is_State_Changed = true;
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
@@ -447,7 +454,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		else
 		{
-			for (int i = 0; i < 2; ++i)
+			for (int i{ 0 }; i < 2; ++i)
 			{
 				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_RIGH);
 
@@ -463,19 +470,20 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 						std::cout << "Return" << std::endl;
 					}
-					else if ((X > 10) && TestLimit)
+					else if ((X > 10)/* && TestLimit*/)
 					{
-						TestLimit = 0;
-						State->Get_Move_Distance()._Location_X -= Marg;
-						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
+						//TestLimit = 0;
+						State->Get_Move_Distance()._Location_X -= Marg_Width;
+						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_RIGH);//Edge的检测方向并不重要 仅用于获取当前坐标
 
 						Update_Current();
 						this->_Current_Move_Height = this->_New_Current_Height;
 						this->_Current_Move_Width = this->_New_Current_Width;
 
 						State->Reload_State(STATE_EXTEND_RIGH);
-						for (int i = 0; i < Test; i++)
+						for (int i{ 0 }; i < State_Width; i++)
 							this->Move_State(State, MoveToPW);
+						//this->_LCB->Get_LocationX(this->_LCB->New_Location_set("State_Move_Location")) += static_cast<float>(_Each_Width * 10);
 						this->_Is_State_Changed = true;
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
@@ -508,7 +516,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		else
 		{
-			for (int i = 0; i < 2; ++i)
+			for (int i{ 0 }; i < 2; ++i)
 			{
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
 
@@ -524,19 +532,20 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
 						std::cout << "Return" << std::endl;
 					}
-					else if ((X > 10) && TestLimit)
+					else if ((Y < 0)/* && TestLimit*/)
 					{
-						TestLimit = 0;
-						State->Get_Move_Distance()._Location_X -= Marg;
-						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
+						//TestLimit = 0;
+						State->Get_Move_Distance()._Location_Y -= Marg_Height;
+						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_ABOV);
 
 						Update_Current();
 						this->_Current_Move_Height = this->_New_Current_Height;
 						this->_Current_Move_Width = this->_New_Current_Width;
 
-						State->Reload_State(STATE_EXTEND_RIGH);
-						for (int i = 0; i < Test; i++)
-							this->Move_State(State, MoveToPW);
+						State->Reload_State(STATE_EXTEND_ABOV);
+						for (int i{ 0 }; i < State_Height; i++)
+							this->Move_State(State, MoveToNH);
+						//this->_LCB->Get_LocationY(this->_LCB->New_Location_set("State_Move_Location")) -= static_cast<float>(_Each_Height * 10);
 						this->_Is_State_Changed = true;
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
@@ -569,7 +578,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		else
 		{
-			for (int i = 0; i < 2; ++i)
+			for (int i{ 0 }; i < 2; ++i)
 			{
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
 
@@ -585,19 +594,20 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
 						std::cout << "Return" << std::endl;
 					}
-					else if ((X > 10) && TestLimit)
+					else if ((Y > 10)/* && TestLimit*/)
 					{
-						TestLimit = 0;
-						State->Get_Move_Distance()._Location_X -= Marg;
-						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
+						//TestLimit = 0;
+						State->Get_Move_Distance()._Location_Y += Marg_Height;
+						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_BELO);
 
 						Update_Current();
 						this->_Current_Move_Height = this->_New_Current_Height;
 						this->_Current_Move_Width = this->_New_Current_Width;
 
-						State->Reload_State(STATE_EXTEND_RIGH);
-						for (int i = 0; i < 10; i++)
-							this->Move_State(State, MoveToPW);
+						State->Reload_State(STATE_EXTEND_BELO);
+						for (int i{ 0 }; i < State_Height; i++)
+							this->Move_State(State, MoveToPH);
+						//this->_LCB->Get_LocationY(this->_LCB->New_Location_set("State_Move_Location")) += static_cast<float>(_Each_Height * 10);
 						this->_Is_State_Changed = true;
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)

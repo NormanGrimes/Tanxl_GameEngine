@@ -33,6 +33,9 @@
 // 增加地图环境碰撞伤害测试
 // 移除绘制的低画质模式
 // 右侧区域开启多段扩展地图测试
+// 开启四个方向的多段扩展地图测试
+// 扩展地图部分改用通用变量代替原数据
+// 增加宏控制重新载入地图的坐标输出
 
 #pragma once
 
@@ -48,6 +51,7 @@
 #define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
 #define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
+#define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   0
 
 #endif
 
@@ -56,6 +60,7 @@
 #include "Tanxl_InsertAction.h"
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_RandomBase.h"
+#include "Tanxl_GameObject.h"
 #include <math.h>
 
 namespace TanxlOD

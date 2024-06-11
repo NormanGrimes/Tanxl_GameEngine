@@ -48,6 +48,18 @@ void GameEventBase::Remove_GameEvent(int Event_Id)
 	}
 }
 
+void GameEventBase::Remove_GameEvent(std::string EventName)
+{
+	for (int i{ 0 }; i < this->_GameEvents.size(); ++i)
+	{
+		if (this->_GameEvents.at(i)->GetEventName() == EventName)
+		{
+			delete this->_GameEvents.at(i);
+			this->_GameEvents.erase(this->_GameEvents.begin() + i);
+		}
+	}
+}
+
 GameEventBase& GameEventBase::GetEventBase()
 {
 	static GameEventBase* EventBase{ new GameEventBase };

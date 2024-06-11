@@ -28,6 +28,9 @@
 // 2023/05/25 检测引擎状态功能可选是否关闭程序
 // 2023/06/12 检测引擎状态功能增加信息显示
 // 2023/06/15 增加连续调整多个按键单元的移动距离的接口
+// 2023/06/27 无限扩展世界功能移除世界尺寸参数
+// 2023/06/27 注册按键功能返回按键指针并增加默认参数
+// 2023/06/27 注册按键功能增加非移动按钮注册功能
 
 #pragma once
 
@@ -43,6 +46,8 @@
 
 #include "Tanxl_Console_List.h"
 #include "Tanxl_DataBase.h"
+#include "Tanxl_GameEvent.h"
+#include "Tanxl_GameObject.h"
 #include "Tanxl_GameState.h"
 #include "Tanxl_InsertAction.h"
 #include "Tanxl_OpenGL_Draw.h"
@@ -98,7 +103,7 @@ public:
 	void Engine_Insert_State_Update();
 
 	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
-	std::string Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length);
+	Key_Unit* Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move = false, bool Height_Move = false, double Move_Length = 3);
 
 	//连续调整多个按键单元的移动距离 Start为其在已注册事件容器中的起始位置 End为其结束位置 Adjust_Value为调整的大小 会根据被调整值的正负情况进行对应的调整
 	void Engine_Insert_Adjust_Speed(int Start, int End, double Adjust_Value);
@@ -109,7 +114,7 @@ public:
 	void Engine_Save_Source_Infor(std::string FileName = "Tanxl Engine VersionMe");
 
 	//选定是否开启游戏世界无限扩展的功能 执行后会自动生成TANXL_STATE_DATA文件并存放256: 16X16个地图单元数据 Build_Connect为true时会额外构建各区块的连接ID
-	void Engine_Save_Infinite_State(bool Build_Connect = true, unsigned State_Size = 0xFF, int Width = 16, int Height = 16);
+	void Engine_Save_Infinite_State(bool Build_Connect = true, int Width = 16, int Height = 16);
 
 	//Other
 

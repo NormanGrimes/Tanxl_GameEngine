@@ -17,25 +17,20 @@ int main()
 
 	TGE.Engine_Check_Engine_Status();
 
-	TGE.Engine_Save_Infinite_State(true, 16, 4, 4);
-
-	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
+	TGE.Engine_Save_Infinite_State(true, 5, 5);
 
 	TGE.Engine_Save_Source_Infor("Tanxl Engine SystemInfor");
 
 	bool Appended = false;
 
-	Key_Unit* KU = new Key_Unit(GLFW_KEY_E);
-
-	IEB->RegistEvent(KU);
-
+	Key_Unit* KU = TGE.Engine_Insert_Regist_Move(GLFW_KEY_E);//new Key_Unit(GLFW_KEY_E);
 	std::cout << "KU NAME :" << KU->Unit_Name << std::endl;
 
 	TGE.Engine_State_Set_Display(4, 4, 4);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
 	
-	TGE.Engine_State_Set_Begin(5, true,
+	TGE.Engine_State_Set_Begin(12, true,
 		"b-2,b-1,a-3,b-1,b-1,b-1,b-1,a-3,b-1,b-2,"
 		"b-1,b-2,b-0,a-3,b-0,b-0,a-3,b-0,b-2,b-1,"
 		"a-3,b-0,b-2,b-1,b-1,b-1,b-1,b-2,b-0,a-3,"
