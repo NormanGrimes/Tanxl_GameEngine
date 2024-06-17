@@ -19,6 +19,12 @@ void Health_Componment::TakeDamage(int TakeVal)
 	_Current_Health -= TakeVal;
 }
 
+void Health_Componment::Set_Health(int Current_Health, int Max_Health)
+{
+	this->_Current_Health = Current_Health;
+	this->_Maximum_Health = Max_Health;
+}
+
 int Health_Componment::Check_Health()
 {
 	return _Current_Health;
@@ -30,6 +36,9 @@ std::string ComponmentBase::GetName()
 {
 	return this->ComponmentName;
 }
+
+GameObjectBase::GameObjectBase(int Max_Health, int Current_Health)
+	:Health_Componment(Max_Health, Current_Health) {}
 
 const std::string GameObjectBase::Get_Version()
 {

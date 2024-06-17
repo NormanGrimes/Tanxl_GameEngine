@@ -2,6 +2,9 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
+unsigned int quadVAO, quadVBO;
+unsigned int instanceVBO;
+
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
 	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
@@ -13,7 +16,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0),
 _State_RenderingProgram(0), _Adjst_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
 _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0),
-_Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()), _Trigger_Mode(true), _StateInfor() {}
+_Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()), _Trigger_Mode(true), _StateInfor(), _Main_Character(new GameObjectBase(10, 10)) {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -69,8 +72,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 		for (int Width{ 0 }; Width < (this->_Each_Width + this->_PreLoads * 2); ++Width)
 		{
 			BeginWidth += ((1.0f / this->_WidthInt) * 2);
-			this->_Translation[Height * this->_WidthInt + Width].x = BeginWidth;
-			this->_Translation[Height * this->_WidthInt + Width].y = BeginHeight;
+			this->_Translation[Height * this->_WidthInt + Width].x = 0;// BeginWidth;
+			this->_Translation[Height * this->_WidthInt + Width].y = 0;// BeginHeight;
 		}
 		BeginHeight -= ((1.0f / this->_HeightInt) * 2);
 		BeginWidth = -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt);
@@ -85,13 +88,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	this->_Health_Count = 10;
-
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, this->_Health_Count);//Health Init
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, _Main_Character->Check_Health());//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 
 	glProgramUniform1i(this->_State_RenderingProgram, 4, this->_HeightInt);//SHeight
@@ -328,12 +329,6 @@ void OpenGL_Draw::Set_Trigger_Range(bool Enable, float Height, float Width)
 	this->_Trigger_Width = Width;
 }
 
-void OpenGL_Draw::Set_Health(int Health_Count, float Health_Margin)
-{
-	this->_Health_Count = Health_Count;
-	this->_Health_Image_Margin = Health_Margin;
-}
-
 void OpenGL_Draw::Set_PreMove(int PreMoveX, int PreMoveY)
 {
 	this->_Pre_MoveX = PreMoveX;
@@ -426,14 +421,14 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
 					{
-						if (_Health_Count <= 2)
+						if (_Main_Character->Check_Health() <= 2)
 						{
-							_Health_Count = 2;
+							_Main_Character->Set_Health(2, 10);
 							std::cout << "YOU DIE" << std::endl;
 						}
 						else
 						{
-							this->Set_Health(--_Health_Count);
+							_Main_Character->TakeDamage(1);
 							this->Get_State(X, Y, *State)->Set_State_Id(1);
 						}
 					}
@@ -488,14 +483,14 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
 					{
-						if (_Health_Count <= 2)
+						if (_Main_Character->Check_Health() <= 2)
 						{
-							_Health_Count = 2;
+							_Main_Character->Set_Health(2, 10);
 							std::cout << "YOU DIE" << std::endl;
 						}
 						else
 						{
-							this->Set_Health(--_Health_Count);
+							_Main_Character->TakeDamage(1);
 							this->Get_State(X, Y, *State)->Set_State_Id(1);
 						}
 					}
@@ -550,14 +545,14 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
 					{
-						if (_Health_Count <= 2)
+						if (_Main_Character->Check_Health() <= 2)
 						{
-							_Health_Count = 2;
+							_Main_Character->Set_Health(2, 10);
 							std::cout << "YOU DIE" << std::endl;
 						}
 						else
 						{
-							this->Set_Health(--_Health_Count);
+							_Main_Character->TakeDamage(1);
 							this->Get_State(X, Y, *State)->Set_State_Id(1);
 						}
 					}
@@ -612,14 +607,14 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					}
 					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
 					{
-						if (_Health_Count <= 2)
+						if (_Main_Character->Check_Health() <= 2)
 						{
-							_Health_Count = 2;
+							_Main_Character->Set_Health(2, 10);
 							std::cout << "YOU DIE" << std::endl;
 						}
 						else
 						{
-							this->Set_Health(--_Health_Count);
+							_Main_Character->TakeDamage(1);
 							this->Get_State(X, Y, *State)->Set_State_Id(1);
 						}
 					}
@@ -927,8 +922,11 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	glUseProgram(_State_RenderingProgram);
 	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
+	//glUseProgram(_State_RenderingProgram);
+	//glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400);
+
 	glUseProgram(_Adjst_RenderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, this->_Health_Count * 6);
+	glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)

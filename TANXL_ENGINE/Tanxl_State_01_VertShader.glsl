@@ -55,15 +55,14 @@ void main(void)
 	int VertexId = 0;
 	int State_Datas = (SHeight + PreLoads * 2) * (SWidth + PreLoads * 2) ;
 
-	vec2 OffSet = State[State_Datas].xy;
-
 	float WidthMove  = -(SWidth + PreLoads - 1) * Width;
 	float HeightMove = (SHeight + PreLoads - 1) * Height;
 
 #if VERTSHADER_STATE_01_INSTANCED_VERSION
-	gl_Position = vec4(OffSet[0], OffSet[1], 0.3f, 1.0f);
+	vec2 offSets = State[gl_InstanceID];
+	gl_Position = vec4(offSets, 0.3f, 1.0f);
 	Cube = int(Infor[VertexId].x);
-	vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
+	vs_color = vec4(0.9f, 0.6f, 0.9f, 1.0f);
 #endif
 
 #if !VERTSHADER_STATE_01_INSTANCED_VERSION

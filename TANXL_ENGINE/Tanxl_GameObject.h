@@ -7,6 +7,9 @@
 // 范围循环测试
 // 移除游戏组件结构体
 // 生命值组件增加最大生命值设定
+// 游戏物品类增加包含生命值组件的构造函数
+// 生命值组件增加生命值设置功能
+// 移除游戏物品类的生命值组件成员改为公有继承生命值组件
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -24,6 +27,8 @@ public:
 	void RestoreHealth(int RestVal);
 
 	void TakeDamage(int TakeVal);
+
+	void Set_Health(int Current_Health, int Max_Health = 10);
 
 	int Check_Health();
 
@@ -45,15 +50,17 @@ private:
 
 //游戏物品类
 
-class GameObjectBase
+class GameObjectBase : public Health_Componment
 {
+public:
+	GameObjectBase(int Max_Health, int Current_Health);
+
 	const std::string Get_Version();
 
 	bool AppendComponment(ComponmentBase* CM);
 	bool RemoveComponment(std::string Name);
 	void FinishComponment();
 private:
-	Health_Componment* _Health_COM;
 	std::vector<ComponmentBase*> _Object_Content;
 
 	const std::string _Version{ "0.4" };

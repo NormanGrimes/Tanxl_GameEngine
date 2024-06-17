@@ -36,6 +36,7 @@
 // 开启四个方向的多段扩展地图测试
 // 扩展地图部分改用通用变量代替原数据
 // 增加宏控制重新载入地图的坐标输出
+// 生命值变量以及相关设置函数使用游戏物品对象替代
 
 #pragma once
 
@@ -494,7 +495,6 @@ public:
 	void Set_Clear(bool Clear);
 	void Set_Trigger_Mode(bool Mode);
 	void Set_Trigger_Range(bool Enable, float Height, float Width);
-	void Set_Health(int Health_Count, float Health_Margin = 0.1f);
 	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Append_Texture(const char* Texture);
@@ -569,14 +569,14 @@ private:
 	int _Current_Move_Height{ 0 };
 	//记录手动移动指定的当前Y轴基本矩形
 	int _Current_Move_Width{ 0 };
-	//记录需要绘制的生命值纹理 前两个为角色纹理
-	int _Health_Count{ 5 };
 	//记录在地图初始化时 玩家方块的X轴初始移动距离
 	int _Pre_MoveX{ 3 };
 	//记录在地图初始化时 玩家方块的X轴初始移动距离
 	int _Pre_MoveY{ 3 };
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
+	//主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值
+	GameObjectBase* _Main_Character;
 	//当前此模块的版本号
 	const std::string _Version{ "1.1" };
 	GLFWwindow* _Main_Window;

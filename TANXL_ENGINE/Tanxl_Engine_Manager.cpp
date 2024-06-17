@@ -123,7 +123,8 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
 	Data->Append_Data(6, "VERSION " + this->Tanxl_Engine_RandomBase->Get_Version());
 	Data->Append_Data(7, "VERSION " + this->Tanxl_Engine_LocationBase->Get_Version());
-	Data->Append_Data(8, "VERSION " + this->__ENGINE_VERSION__);
+	Data->Append_Data(8, "VERSION 0.4");
+	Data->Append_Data(9, "VERSION " + this->__ENGINE_VERSION__);
 	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
 	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
