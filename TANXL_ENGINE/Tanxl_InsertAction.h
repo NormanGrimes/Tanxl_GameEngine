@@ -16,6 +16,7 @@
 // 增加获取输入事件个数的功能
 // 在场景暂停模式中不响应移动操作
 // 增加同时设置多个按键移动距离的接口
+// 按键单元结构增加获取按键状态接口
 
 #pragma once
 
@@ -45,13 +46,15 @@ struct Key_Unit
 	Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM = "");
 	Key_Unit(int GLKEY, std::string UNAM = "");
 
+	bool Get_KeyStatus();
+
 	//用于标记当前按键的类型
 	short Unit_Type;
 	//用于记录触发事件需要的按键
 	int   GLFW_KEY;
 	//用于标记此按键是否会导致向X轴方向移动
 	bool  MoveToX;
-	//用于标记此按键是否会导致向Y轴方向移动
+	//用于标记此按键是否会导致向Y轴方向移动 同时在按键模式下为按键的TRUE\FALSE两个状态 每次按下按键都会切换状态
 	bool  MoveToY;
 	//用于记录按键操作可能导致的移动距离
 	double MoveLen;

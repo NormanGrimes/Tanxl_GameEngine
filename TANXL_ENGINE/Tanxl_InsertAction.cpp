@@ -37,6 +37,11 @@ Key_Unit::Key_Unit(int GLKEY, std::string UNAM) :
 #endif
 }
 
+bool Key_Unit::Get_KeyStatus()
+{
+	return this->MoveToY;
+}
+
 InsertEventBase& InsertEventBase::GetInsertBase()
 {
 	static InsertEventBase* IEB = new InsertEventBase;

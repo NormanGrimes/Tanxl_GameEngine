@@ -5,6 +5,8 @@
 // 修复重新载入地图功能未能成功删除无用数据的问题
 // 修复重新载入地图功能使用了错误数据编译与设置的问题
 // 修复重新载入地图功能的指针相关错误
+// 增加地图区块数据设置功能
+// 增加变量记录地图的区块数并添加设置函数
 
 #pragma once
 
@@ -137,6 +139,8 @@ public:
 	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateEvent(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 	void Set_StartState(int State_Id, std::string Cover_String = "NULL");
+	void Set_State(int State_Id, std::string Cover_String);
+	void Set_State_Counts(int Width, int Height);
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
@@ -203,6 +207,8 @@ private:
 	TANXL_DataBase _Data_Base{};
 	unsigned _Data_Width;
 	unsigned _Data_Height;
+	int _State_WidthS;
+	int _State_HeightS;
 	float _Half_State_Width{ 0.0f };
 	float _Half_State_Height{ 0.0f };
 	// _Exac_LocationX 玩家方块经过计算后的实际X坐标

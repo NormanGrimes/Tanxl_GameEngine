@@ -143,6 +143,7 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 	}
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_LOCALF, "TANXL_STATE_DATA", "Data_Chain_File");
 	this->Tanxl_Engine_GameState->Set_DataAll_State(10, 10);
+	this->Tanxl_Engine_GameState->Set_State_Counts(Width, Height);
 	remove("Data_Chain_File.usd");
 
 	if (Build_Connect)
@@ -261,17 +262,22 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 	}
 }
 
-void Tanxl_Engine::Engine_State_Set_Begin(int State_Id, bool Cover_State, std::string State_Infor)
+void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Cover_State, bool Is_Begin, std::string State_Infor)
 {
 	if (((this->_Engine_Status & 0x100) == 0x0))
 	{
 		std::cout << "当前未开启扩展世界功能";
 		return;
 	}
-	if (Cover_State)
-		this->Tanxl_Engine_GameState->Set_StartState(State_Id, State_Infor);
+	if (Is_Begin)
+	{
+		if (Cover_State)
+			this->Tanxl_Engine_GameState->Set_StartState(State_Id, State_Infor);
+		else
+			this->Tanxl_Engine_GameState->Set_StartState(State_Id);
+	}
 	else
-		this->Tanxl_Engine_GameState->Set_StartState(State_Id);
+		this->Tanxl_Engine_GameState->Set_State(State_Id, State_Infor);
 }
 
 void Tanxl_Engine::Engine_Insert_Adjust_Speed(int Start, int End, double Adjust_Value)

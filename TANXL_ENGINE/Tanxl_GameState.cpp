@@ -238,6 +238,29 @@ void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 	}
 }
 
+void GameStateBase::Set_State(int State_Id, std::string Cover_String)
+{
+	if (this->Get_Engine_File())
+	{
+		std::string Data_Name{ this->Get_State_Id(State_Id) };
+		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+		{
+			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
+			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
+			{
+				Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
+				return;
+			}
+		}
+	}
+}
+
+void GameStateBase::Set_State_Counts(int Width, int Height)
+{
+	this->_State_WidthS = Width;
+	this->_State_HeightS = Height;
+}
+
 GameStateBase& GameStateBase::GetStateBase(int Display_Width, int Display_Height)
 {
 	static GameStateBase GameState(Display_Width, Display_Height);

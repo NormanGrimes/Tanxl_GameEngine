@@ -32,6 +32,8 @@
 // 2023/06/27 注册按键功能返回按键指针并增加默认参数
 // 2023/06/27 注册按键功能增加非移动按钮注册功能
 // 2023/06/30 信息输出功能增加游戏物品版本号输出
+// 2023/07/03 设置地图起始区域的功能支持对其他区域进行修改
+// 2023/07/03 无限世界设置功能中增加地图区块数量设置
 
 #pragma once
 
@@ -90,7 +92,7 @@ public:
 	void Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 
 	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Cover_State用于标记是否使用State_Infor的信息覆盖指定ID下的信息
-	void Engine_State_Set_Begin(int State_Id, bool Cover_State, std::string State_Infor);
+	void Engine_State_Set_Data(int State_Id, bool Cover_State, bool Is_Begin, std::string State_Infor);
 
 	//Insert Part
 

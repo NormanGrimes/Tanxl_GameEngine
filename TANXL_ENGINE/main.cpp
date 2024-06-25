@@ -29,8 +29,8 @@ int main()
 	TGE.Engine_State_Set_Display(4, 4, 4);
 	TGE.Engine_Insert_State_Limit(true);
 	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
-	
-	TGE.Engine_State_Set_Begin(12, true,
+
+	TGE.Engine_State_Set_Data(24, true, true,
 		"b-2,b-1,a-3,b-1,b-1,b-1,b-1,a-3,b-1,b-2,"
 		"b-1,b-2,b-0,a-3,b-0,b-0,a-3,b-0,b-2,b-1,"
 		"a-3,b-0,b-2,b-1,b-1,b-1,b-1,b-2,b-0,a-3,"
@@ -42,13 +42,15 @@ int main()
 		"b-1,b-2,b-0,a-3,b-0,b-0,a-3,b-0,b-2,b-1,"
 		"b-2,b-1,a-3,b-1,b-1,b-1,b-1,a-3,b-1,b-2,");
 
+
+
 	while (1)
 	{
 		TGE.Engine_Insert_State_Update();//Key Insert
 
 		TGE.Engine_Draw_State_Adjust(0);//Draw Once
 
-		if (KU->MoveToY == true)
+		if (KU->Get_KeyStatus() == true)
 		{
 			if (Appended == false)
 			{

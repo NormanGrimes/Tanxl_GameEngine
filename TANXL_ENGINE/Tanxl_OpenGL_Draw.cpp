@@ -396,6 +396,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					int X{ State->Get_LocationX() };
 					int Y{ State->Get_LocationY() };
 
+					std::cout << "X " << X << "Y " << Y << std::endl;
+
 					if ((this->Get_State(X, Y, *State) == nullptr) || 
 						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
 					{
@@ -409,9 +411,13 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_X += Marg_Width;
 						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
 
+						int Temp_Height = this->_New_Current_Height;
+						int Temp_Width = this->_New_Current_Width;
+
 						Update_Current();
-						this->_Current_Move_Height = this->_New_Current_Height;
-						this->_Current_Move_Width = this->_New_Current_Width;
+
+						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
+						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width - 1);
 
 						State->Reload_State(STATE_EXTEND_LEFT);
 						for (int i{ 0 }; i < State_Width; i++)
@@ -458,6 +464,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					int X{ State->Get_LocationX() };
 					int Y{ State->Get_LocationY() };
 
+					std::cout << "X " << X << "Y " << Y << std::endl;
+
 					if ((this->Get_State(X, Y, *State) == nullptr) ||
 						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
 					{
@@ -471,9 +479,13 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_X -= Marg_Width;
 						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_RIGH);//Edge的检测方向并不重要 仅用于获取当前坐标
 
+						int Temp_Height = this->_New_Current_Height;
+						int Temp_Width = this->_New_Current_Width;
+
 						Update_Current();
-						this->_Current_Move_Height = this->_New_Current_Height;
-						this->_Current_Move_Width = this->_New_Current_Width;
+
+						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
+						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width + 1);
 
 						State->Reload_State(STATE_EXTEND_RIGH);
 						for (int i{ 0 }; i < State_Width; i++)
@@ -520,6 +532,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					int X{ State->Get_LocationX() };
 					int Y{ State->Get_LocationY() };
 
+					std::cout << "X " << X << "Y " << Y << std::endl;
+
 					if ((this->Get_State(X, Y, *State) == nullptr) ||
 						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
 					{
@@ -533,9 +547,13 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_Y -= Marg_Height;
 						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_ABOV);
 
+						int Temp_Height = this->_New_Current_Height;
+						int Temp_Width = this->_New_Current_Width;
+
 						Update_Current();
-						this->_Current_Move_Height = this->_New_Current_Height;
-						this->_Current_Move_Width = this->_New_Current_Width;
+
+						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height - 1);
+						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
 
 						State->Reload_State(STATE_EXTEND_ABOV);
 						for (int i{ 0 }; i < State_Height; i++)
@@ -582,6 +600,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					int X{ State->Get_LocationX() };
 					int Y{ State->Get_LocationY() };
 
+					std::cout << "X " << X << "Y " << Y << std::endl;
+
 					if ((this->Get_State(X, Y, *State) == nullptr) ||
 						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
 					{
@@ -595,9 +615,13 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 						State->Get_Move_Distance()._Location_Y += Marg_Height;
 						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_BELO);
 
+						int Temp_Height = this->_New_Current_Height;
+						int Temp_Width = this->_New_Current_Width;
+
 						Update_Current();
-						this->_Current_Move_Height = this->_New_Current_Height;
-						this->_Current_Move_Width = this->_New_Current_Width;
+
+						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height + 1);
+						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
 
 						State->Reload_State(STATE_EXTEND_BELO);
 						for (int i{ 0 }; i < State_Height; i++)
