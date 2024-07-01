@@ -37,13 +37,12 @@ std::string RandomBase::Generate(int seed)
 {
     std::string Data{ "" };
     std::default_random_engine DRE(seed);
-    std::uniform_int_distribution<int> UID(0, 6/*61*/);
-    for (int i{ 0 }; i < 1/*15*/; ++i)
+    std::uniform_int_distribution<int> UID(0, 61);
+    for (int i{ 0 }; i < 15; ++i)
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        //Data += UniData[UID(DRE)];
-        Data += NumData[UID(DRE)];
+        Data += UniData[UID(DRE)];
     }
     return Data;
 }

@@ -38,6 +38,9 @@
 // 增加宏控制重新载入地图的坐标输出
 // 生命值变量以及相关设置函数使用游戏物品对象替代
 // 修复长距离移动会导致绘制黑边的问题
+// 移动地图接口可设置移动次数
+// 优化受伤方块的碰撞逻辑
+// 修复横向移动时仍会出现黑边的问题
 
 #pragma once
 
@@ -483,7 +486,7 @@ namespace TanxlOD
 class OpenGL_Draw
 {
 public:
-	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800, bool Window_Adjust = true);
+	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 200, int ScreenHeight = 200, bool Window_Adjust = true);
 
 	const std::string Get_Version();
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
@@ -507,7 +510,8 @@ public:
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
 	void StateMove_Edge_Set(GameStateBase* State, int Dist_Mid, int Stat_Loc, int Move_Loc);
-	void Move_State(GameStateBase* State, EMove_State_EventId Direction);
+	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
+	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();

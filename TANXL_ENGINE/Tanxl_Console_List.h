@@ -19,7 +19,6 @@
 #include <conio.h>
 #include <iomanip>
 #include "Tanxl_InsertAction.h"
-#include "Tanxl_OpenGL_Draw.h"
 
 enum EFont_Color
 {

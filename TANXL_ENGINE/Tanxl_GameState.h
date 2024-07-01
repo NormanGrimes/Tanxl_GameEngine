@@ -7,6 +7,9 @@
 // 修复重新载入地图功能的指针相关错误
 // 增加地图区块数据设置功能
 // 增加变量记录地图的区块数并添加设置函数
+// 增加宏控制更新移动部分的输出
+// 更新移动部分修复只采用宽度值计算的问题
+// 多个遍历函数支持超过两百五十六个区块
 
 #pragma once
 
@@ -18,6 +21,7 @@
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     1
+#define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
 
 #endif
 
@@ -170,7 +174,7 @@ public:
 private:
 	std::string Locate_Extend_State(std::string State_Id);
 	struct State_Extend
-	{		
+	{
 		std::vector<StateUnit*>* _MIDD{ nullptr };
 
 		std::vector<StateUnit*>* _LEFT{ nullptr };
@@ -207,8 +211,8 @@ private:
 	TANXL_DataBase _Data_Base{};
 	unsigned _Data_Width;
 	unsigned _Data_Height;
-	int _State_WidthS;
-	int _State_HeightS;
+	int _State_WidthS{ 0 };
+	int _State_HeightS{ 0 };
 	float _Half_State_Width{ 0.0f };
 	float _Half_State_Height{ 0.0f };
 	// _Exac_LocationX 玩家方块经过计算后的实际X坐标

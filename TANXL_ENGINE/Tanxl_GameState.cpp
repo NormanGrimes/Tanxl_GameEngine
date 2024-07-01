@@ -205,7 +205,7 @@ void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 	if (this->Get_Engine_File())
 	{
 		std::string Data_Name{ this->Get_State_Id(State_Id) };
-		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+		for (int i{ 0 }; i <= this->_State_WidthS * this->_State_HeightS; ++i)
 		{
 			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
@@ -243,7 +243,7 @@ void GameStateBase::Set_State(int State_Id, std::string Cover_String)
 	if (this->Get_Engine_File())
 	{
 		std::string Data_Name{ this->Get_State_Id(State_Id) };
-		for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+		for (int i{ 0 }; i <= this->_State_WidthS * this->_State_HeightS; ++i)
 		{
 			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
@@ -655,7 +655,8 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 	if ((this->_Half_State_Width == 0.0f) || (this->_Half_State_Height == 0.0f))
 		this->Set_Display_State(this->_GameState_Width, this->_GameState_Height);
 
-	static float State_Above_Below{ this->_Half_State_Width * 2 / 3 };
+	static float State_Above_Below_Width{ this->_Half_State_Width * 2 / 3 };
+	static float State_Above_Below_Height{ this->_Half_State_Height * 2 / 3 };
 
 	switch (Check)
 	{
@@ -665,30 +666,32 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		break;
 	case CHECK_EDGE_LEFT:
 		MoveX -= this->_Half_State_Width * 2 / 3;
-		MoveY += State_Above_Below;
-		State_Above_Below = -State_Above_Below;
+		MoveY += State_Above_Below_Height;
+		State_Above_Below_Height = -State_Above_Below_Height;
 		break;
 	case CHECK_EDGE_RIGH:
 		MoveX += this->_Half_State_Width * 2 / 3;
-		MoveY += State_Above_Below;
-		State_Above_Below = -State_Above_Below;
+		MoveY += State_Above_Below_Height;
+		State_Above_Below_Height = -State_Above_Below_Height;
 		break;
 	case CHECK_EDGE_BELO:
-		MoveX += State_Above_Below;
+		MoveX += State_Above_Below_Width;
 		MoveY -= this->_Half_State_Height * 2 / 3;
-		State_Above_Below = -State_Above_Below;
+		State_Above_Below_Width = -State_Above_Below_Width;
 		break;
 	case CHECK_EDGE_ABOV:
-		MoveX += State_Above_Below;
+		MoveX += State_Above_Below_Width;
 		MoveY += this->_Half_State_Height * 2 / 3;
-		State_Above_Below = -State_Above_Below;
+		State_Above_Below_Width = -State_Above_Below_Width;
 		break;
 	}
 
 	float Temp_LocationX = (Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f);
 	float Temp_LocationY = (Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f);
 
-	//std::cout << Temp_LocationX << "____" << Temp_LocationY << std::endl;
+#if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
+	std::cout <<"Before Adjust :" << Temp_LocationX << "____" << Temp_LocationY << std::endl;
+#endif
 
 	Temp_LocationX = static_cast<int>(Temp_LocationX + 0.5f) > static_cast<int>(Temp_LocationX) ? Temp_LocationX + 0.5f : Temp_LocationX;
 	Temp_LocationY = static_cast<int>(Temp_LocationY - 0.5f) < static_cast<int>(Temp_LocationY) ? Temp_LocationY - 0.5f : Temp_LocationY;
@@ -703,9 +706,10 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 
 	this->_Exac_LocationY = -this->_Exac_LocationY;
 
-	//std::cout << Temp_LocationX << "____" << Temp_LocationY << std::endl;
-
-	//std::cout << this->_Exac_LocationX << "____" << this->_Exac_LocationY << std::endl;
+#if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
+	std::cout <<"After :"<< Temp_LocationX << "____" << Temp_LocationY << std::endl;
+	std::cout << this->_Exac_LocationX << "____" << this->_Exac_LocationY << std::endl;
+#endif
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :
@@ -866,7 +870,7 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 
 Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 {
-	for (int i{ 0 }; i <= static_cast<int>(0xFF); ++i)
+	for (int i{ 0 }; i <= this->_State_WidthS * this->_State_HeightS; ++i)
 	{
 		Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 		if (Link->_Data->_Data_Units.at(0)->_Data == Link_Name)
