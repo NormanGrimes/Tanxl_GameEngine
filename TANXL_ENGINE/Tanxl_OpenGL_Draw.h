@@ -41,6 +41,7 @@
 // 移动地图接口可设置移动次数
 // 优化受伤方块的碰撞逻辑
 // 修复横向移动时仍会出现黑边的问题
+// 新增地图方块检测功能替换大量重复代码
 
 #pragma once
 
@@ -51,7 +52,7 @@
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
-#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
+#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     1
 #define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
 #define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
@@ -486,13 +487,13 @@ namespace TanxlOD
 class OpenGL_Draw
 {
 public:
-	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 200, int ScreenHeight = 200, bool Window_Adjust = true);
+	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800, bool Window_Adjust = true);
 
 	const std::string Get_Version();
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
 	void init(GameStateBase* State);
 	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
-	//绘制主循环 在此之后的一切操作都会被忽略
+	//进行一次游戏画面绘制
 	void Render_Once(GameStateBase* State);
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFrame(int First_Adjust);
@@ -510,6 +511,7 @@ public:
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
 	void StateMove_Edge_Set(GameStateBase* State, int Dist_Mid, int Stat_Loc, int Move_Loc);
+	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
 	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
 	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
 	int Get_Adjust_Status();

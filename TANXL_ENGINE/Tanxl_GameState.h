@@ -136,7 +136,7 @@ public:
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set = 1);
 	void Set_Display_State(int Width, int Height);
-	void Set_DataAll_State(unsigned Width, unsigned Height);
+	void Set_Data_Length(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
 	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);

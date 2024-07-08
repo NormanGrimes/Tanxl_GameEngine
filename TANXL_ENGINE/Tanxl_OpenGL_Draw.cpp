@@ -265,7 +265,6 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 			Move_NX++;
 			if (Move_NX > Move_PX)//抵达尽头 重新获取初值
 			{
-				//std::cout << std::endl;
 				Move_NX = State->Get_Square_State()._Move_NX;
 				Move_NY++;
 			}
@@ -393,57 +392,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_LEFT);
 
 				if (State->Get_LocationX() >= -static_cast<int>(State->Get_DataWidth()) - 1)
-				{
-					int X{ State->Get_LocationX() };
-					int Y{ State->Get_LocationY() };
-
-					if ((this->Get_State(X, Y, *State) == nullptr) || 
-						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
-					{
-						State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
-						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
-						std::cout << "Return" << std::endl;
-					}
-					else if (X < 0)
-					{
-						State->Get_Move_Distance()._Location_X += Marg_Width;
-						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_LEFT);
-
-						int Temp_Height = this->_New_Current_Height;
-						int Temp_Width = this->_New_Current_Width;
-
-						Update_Current();
-
-						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
-						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width + 1);
-
-						State->Reload_State(STATE_EXTEND_LEFT);
-						this->Move_State(State, MoveToNW, State_Width);
-
-						this->_Is_State_Changed = true;
-					}
-					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
-					{
-						if (i == 0)
-							State_Check = 1;
-						else
-						{
-							if (State_Check == 1)
-							{
-								if (_Main_Character->Check_Health() <= 2)
-								{
-									_Main_Character->Set_Health(2, 10);
-									std::cout << "YOU DIE" << std::endl;
-								}
-								else
-								{
-									_Main_Character->TakeDamage(1);
-									this->Get_State(X, Y, *State)->Set_State_Id(1);
-								}
-							}
-						}
-					}
-				}
+					State_Check_Block(State, CHECK_EDGE_LEFT);
 			}
 		}
 	}
@@ -466,57 +415,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_RIGH);
 
 				if (State->Get_LocationX() <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
-				{
-					int X{ State->Get_LocationX() };
-					int Y{ State->Get_LocationY() };
-
-					if ((this->Get_State(X, Y, *State) == nullptr) ||
-						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
-					{
-						State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
-						State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
-						std::cout << "Return" << std::endl;
-					}
-					else if (X > 10)
-					{
-						State->Get_Move_Distance()._Location_X -= Marg_Width;
-						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_RIGH);//Edge的检测方向并不重要 仅用于获取当前坐标
-
-						int Temp_Height = this->_New_Current_Height;
-						int Temp_Width = this->_New_Current_Width;
-
-						Update_Current();
-
-						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
-						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width - 1);
-
-						State->Reload_State(STATE_EXTEND_RIGH);
-						this->Move_State(State, MoveToPW, State_Width);
-
-						this->_Is_State_Changed = true;
-					}
-					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
-					{
-						if (i == 0)
-							State_Check = 1;
-						else
-						{
-							if (State_Check == 1)
-							{
-								if (_Main_Character->Check_Health() <= 2)
-								{
-									_Main_Character->Set_Health(2, 10);
-									std::cout << "YOU DIE" << std::endl;
-								}
-								else
-								{
-									_Main_Character->TakeDamage(1);
-									this->Get_State(X, Y, *State)->Set_State_Id(1);
-								}
-							}
-						}
-					}
-				}
+					State_Check_Block(State, CHECK_EDGE_RIGH);
 			}
 		}
 	}
@@ -539,57 +438,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
 
 				if (State->Get_LocationY() >= -static_cast<int>(State->Get_DataHeight()) - 1)
-				{
-					int X{ State->Get_LocationX() };
-					int Y{ State->Get_LocationY() };
-
-					if ((this->Get_State(X, Y, *State) == nullptr) ||
-						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
-					{
-						State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
-						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
-						std::cout << "Return" << std::endl;
-					}
-					else if (Y < 0)
-					{
-						State->Get_Move_Distance()._Location_Y -= Marg_Height;
-						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_ABOV);
-
-						int Temp_Height = this->_New_Current_Height;
-						int Temp_Width = this->_New_Current_Width;
-
-						Update_Current();
-
-						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height - 1);
-						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
-
-						State->Reload_State(STATE_EXTEND_ABOV);
-						this->Move_State(State, MoveToNH, State_Height);
-
-						this->_Is_State_Changed = true;
-					}
-					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
-					{
-						if (i == 0)
-							State_Check = 1;
-						else
-						{
-							if (State_Check == 1)
-							{
-								if (_Main_Character->Check_Health() <= 2)
-								{
-									_Main_Character->Set_Health(2, 10);
-									std::cout << "YOU DIE" << std::endl;
-								}
-								else
-								{
-									_Main_Character->TakeDamage(1);
-									this->Get_State(X, Y, *State)->Set_State_Id(1);
-								}
-							}
-						}
-					}
-				}
+					State_Check_Block(State, CHECK_EDGE_ABOV);
 			}
 		}
 	}
@@ -612,57 +461,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
 
 				if (State->Get_LocationY() <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
-				{
-					int X{ State->Get_LocationX() };
-					int Y{ State->Get_LocationY() };
-
-					if ((this->Get_State(X, Y, *State) == nullptr) ||
-						(this->Get_State(X, Y, *State)->Get_Move_Status() == 1))
-					{
-						State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
-						State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
-						std::cout << "Return" << std::endl;
-					}
-					else if (Y > 10)
-					{
-						State->Get_Move_Distance()._Location_Y += Marg_Height;
-						State->Update_Move(0.0f, 0.0f, CHECK_EDGE_BELO);
-
-						int Temp_Height = this->_New_Current_Height;
-						int Temp_Width = this->_New_Current_Width;
-
-						Update_Current();
-
-						this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height + 1);
-						this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
-
-						State->Reload_State(STATE_EXTEND_BELO);
-						this->Move_State(State, MoveToPH, State_Height);
-
-						this->_Is_State_Changed = true;
-					}
-					else if (this->Get_State(X, Y, *State)->Get_State_Id() == 4)
-					{
-						if (i == 0)
-							State_Check = 1;
-						else
-						{
-							if (State_Check == 1)
-							{
-								if (_Main_Character->Check_Health() <= 2)
-								{
-									_Main_Character->Set_Health(2, 10);
-									std::cout << "YOU DIE" << std::endl;
-								}
-								else
-								{
-									_Main_Character->TakeDamage(1);
-									this->Get_State(X, Y, *State)->Set_State_Id(1);
-								}
-							}
-						}
-					}
-				}
+					State_Check_Block(State, CHECK_EDGE_BELO);
 			}
 		}
 	}
@@ -795,6 +594,139 @@ void OpenGL_Draw::StateMove_Edge_Set(GameStateBase* State, int Dist_Mid, int Sta
 			this->_LCB->Get_LocationX(Move_Loc) += 0.01f;
 			State->Get_Move_Distance()._Location_X -= 0.01f;
 		}
+	}
+}
+
+void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction)
+{
+	static int Status{ 0 };
+	float Marg_Width{ static_cast<float>(this->_Each_Width * 10) };
+	float Marg_Height{ static_cast<float>(this->_Each_Height * 10) };
+
+	int State_Width{ static_cast<int>(State->Get_DataWidth()) + 1 };
+	int State_Height{ static_cast<int>(State->Get_DataHeight()) + 1 };
+
+	bool Resut{ false };
+
+	switch (Check_Direction)
+	{
+	case CHECK_EDGE_LEFT:
+		if (State->Get_LocationX() < 0)
+			Resut = true;
+		break;
+	case CHECK_EDGE_RIGH:
+		if (State->Get_LocationX() > 10)
+			Resut = true;
+		break;
+	case CHECK_EDGE_BELO:
+		if (State->Get_LocationY() > 10)
+			Resut = true;
+		break;
+	case CHECK_EDGE_ABOV:
+		if (State->Get_LocationY() < 0)
+			Resut = true;
+		break;
+	}
+
+	if ((this->Get_State(State->Get_LocationX(), State->Get_LocationY(), *State) == nullptr) ||
+		(this->Get_State(State->Get_LocationX(), State->Get_LocationY(), *State)->Get_Move_Status() == 1))
+	{
+		Status = 0;
+
+		switch (Check_Direction)
+		{
+		case CHECK_EDGE_LEFT:
+		case CHECK_EDGE_RIGH:
+			State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+			State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+			break;
+		case CHECK_EDGE_BELO:
+		case CHECK_EDGE_ABOV:
+			State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+			State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+			break;
+		}
+		std::cout << "Return" << std::endl;
+	}
+	else if (Resut)
+	{
+		Status = 0;
+		switch (Check_Direction)
+		{
+		case CHECK_EDGE_LEFT:
+			State->Get_Move_Distance()._Location_X += Marg_Width;
+			break;
+		case CHECK_EDGE_RIGH:
+			State->Get_Move_Distance()._Location_X -= Marg_Width;
+			break;
+		case CHECK_EDGE_BELO:
+			State->Get_Move_Distance()._Location_Y += Marg_Height;
+			break;
+		case CHECK_EDGE_ABOV:
+			State->Get_Move_Distance()._Location_Y -= Marg_Height;
+			break;
+		}
+		
+		State->Update_Move(0.0f, 0.0f, Check_Direction);
+
+		int Temp_Height = this->_New_Current_Height;
+		int Temp_Width = this->_New_Current_Width;
+
+		Update_Current();
+
+		switch (Check_Direction)
+		{
+		case CHECK_EDGE_LEFT:
+			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
+			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width + 1);
+
+			State->Reload_State(STATE_EXTEND_LEFT);
+			this->Move_State(State, MoveToNW, State_Width);
+			break;
+		case CHECK_EDGE_RIGH:
+			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
+			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width - 1);
+
+			State->Reload_State(STATE_EXTEND_RIGH);
+			this->Move_State(State, MoveToPW, State_Width);
+			break;
+		case CHECK_EDGE_BELO:
+			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height + 1);
+			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
+
+			State->Reload_State(STATE_EXTEND_BELO);
+			this->Move_State(State, MoveToPH, State_Height);
+			break;
+		case CHECK_EDGE_ABOV:
+			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height - 1);
+			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
+
+			State->Reload_State(STATE_EXTEND_ABOV);
+			this->Move_State(State, MoveToNH, State_Height);
+			break;
+		}
+		this->_Is_State_Changed = true;
+	}
+	else if (this->Get_State(State->Get_LocationX(), State->Get_LocationY(), *State)->Get_State_Id() == 4)
+	{
+		if (Status == 0)
+			Status = 4;
+		else if (Status == 4)
+		{
+			Status = 0;
+			if (_Main_Character->Check_Health() <= 2)
+			{
+				_Main_Character->Set_Health(2, 10);
+				std::cout << "YOU DIE" << std::endl;
+			}
+			else
+			{
+				_Main_Character->TakeDamage(1);
+				this->Get_State(State->Get_LocationX(), State->Get_LocationY(), *State)->Set_State_Id(1);
+			}
+		}
+		else
+			Status = 0;
 	}
 }
 

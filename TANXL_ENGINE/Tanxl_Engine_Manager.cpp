@@ -35,32 +35,47 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 	if (SteamAPI_RestartAppIfNecessary(1929530))
 	{
 		std::cout << "Fail to init SteamAPI_RestartAppIfNecessary(1929530) !" << std::endl;
-		this->_Engine_Status = 2;
-	}
-	if (!SteamAPI_Init())
-		std::cout << "Fail to init Steam API !" << std::endl;
-	else
-	{
-		std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
-		std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
-		std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
-		std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
+		this->_Engine_Status = 0x9;
+
+		if (!SteamAPI_Init())
+		{
+			this->_Engine_Status = 0xA;
+			std::cout << "Fail to init Steam API !" << std::endl;
+		}
+		else
+		{
+			std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
+			std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
+			std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
+			std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
+
+			/*SteamInventoryResult_t Result{ 0 };
+
+			std::vector<SteamItemDef_t> newItems;
+			newItems.push_back(Tanxl_Pormise_LIMITED_DROP_ITEM);
+
+			SteamInventory()->GetAllItems(&Result);
+			std::cout << "STEAM Inventory Item Result :" << Result << std::endl;
+			SteamInventory()->TriggerItemDrop(NULL, *newItems.data());
+			std::cout << "STEAM Inventory Drop Result :" << Result << std::endl;
+			SteamInventory()->DestroyResult(Result);*/
+
+			//SteamInventory()->GenerateItems(NULL, newItems.data(), NULL, (uint32)newItems.size());//only for test
+		}
 	}
 #endif
-
 
 	this->Tanxl_Engine_GameState->Set_Compile_Policy("a", 1);
 }
 
 unsigned Tanxl_Engine::Engine_Check_Engine_Status(bool ShutDown)
 {
-	if (((this->_Engine_Status & 0xFFF) != 0) && ShutDown)
+	if (((this->_Engine_Status & 0xFF) != 0) && ShutDown)
 	{
-		std::cout << "Fault detected ! Fault Id :" << _Engine_Status << std::endl;
+		std::cout << "Fault detected ! Fault Id :" << (_Engine_Status & 0xFF) << std::endl;
 		system("pause");
 		this->Tanxl_Engine_OpenGL_Draw->Destroy_Window();
-		delete this;
-		exit(1);
+		exit(_Engine_Status & 0xFF);
 	}
 	return this->_Engine_Status;//0 正常运行 1 初始化失败
 }
@@ -83,7 +98,7 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
 void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend)
 {
 	this->Tanxl_Engine_GameState->CompileStateUnits(Infor, Extend);
-	this->Tanxl_Engine_GameState->Set_DataAll_State(Width, Height);
+	this->Tanxl_Engine_GameState->Set_State_Counts(Width, Height);
 }
 
 void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, float Max_Widtd)
@@ -135,14 +150,13 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 {
 	this->_Engine_Status |= 0x100;
 	int State_Size{ Width * Height };
-	for (int i{ 0 }; i < State_Size; ++i)//16x16
+	for (int i{ 0 }; i < State_Size; ++i)
 	{
 		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10));
 	}
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_LOCALF, "TANXL_STATE_DATA", "Data_Chain_File");
-	this->Tanxl_Engine_GameState->Set_DataAll_State(10, 10);
 	this->Tanxl_Engine_GameState->Set_State_Counts(Width, Height);
 	remove("Data_Chain_File.usd");
 

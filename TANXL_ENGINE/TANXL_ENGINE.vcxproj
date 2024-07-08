@@ -72,23 +72,31 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>..\GRAPHIC\include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>..\GRAPHIC\src\glad;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>..\GRAPHIC\include;$(ExternalIncludePath);..\GRAPHIC\include\SoLoud</ExternalIncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>..\GRAPHIC\include;\public\steam;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>..\GRAPHIC\src\glad;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>..\GRAPHIC\include;\public\steam;$(ExternalIncludePath);..\GRAPHIC\include\SoLoud</ExternalIncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>..\GRAPHIC\include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>..\GRAPHIC\src\glad;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>..\GRAPHIC\include;$(ExternalIncludePath);..\GRAPHIC\include\SoLoud</ExternalIncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExternalIncludePath>..\GRAPHIC\include;\public\steam;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>..\GRAPHIC\src\glad;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>..\GRAPHIC\include;\public\steam;$(ExternalIncludePath);..\GRAPHIC\include\SoLoud</ExternalIncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -206,6 +214,7 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
     <ClInclude Include="Tanxl_OpenGL_Render.h" />
     <ClInclude Include="Tanxl_RandomBase.h" />
+    <ClInclude Include="Tanxl_SteamService.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

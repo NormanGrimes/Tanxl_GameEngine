@@ -119,7 +119,7 @@ void GameStateBase::Set_Display_State(int Width, int Height)
 	this->_Half_State_Height = 1.0f / Height;
 }
 
-void GameStateBase::Set_DataAll_State(unsigned Width, unsigned Height)
+void GameStateBase::Set_Data_Length(unsigned Width, unsigned Height)
 {
 	this->_Data_Width = Width - 1;
 	this->_Data_Height = Height - 1;
@@ -231,7 +231,7 @@ void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 				this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
 				this->_GameState_Id._RIGH_BELO = Link->_Data->_Data_Units.at(9)->_Data;
 				this->_Extend_State_Enable = true;
-				this->Set_DataAll_State(10, 10);
+				this->Set_Data_Length(10, 10);
 				return;
 			}
 		}
