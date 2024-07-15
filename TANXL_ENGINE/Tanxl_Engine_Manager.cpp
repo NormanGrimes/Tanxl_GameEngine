@@ -49,7 +49,7 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 			std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
 			std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
 
-			/*SteamInventoryResult_t Result{ 0 };
+			/*SteamInventoryResult_t Result{0};
 
 			std::vector<SteamItemDef_t> newItems;
 			newItems.push_back(Tanxl_Pormise_LIMITED_DROP_ITEM);

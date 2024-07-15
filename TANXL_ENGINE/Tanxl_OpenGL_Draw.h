@@ -42,6 +42,7 @@
 // 优化受伤方块的碰撞逻辑
 // 修复横向移动时仍会出现黑边的问题
 // 新增地图方块检测功能替换大量重复代码
+// 增加起始界面的纹理与绘制
 
 #pragma once
 
@@ -52,7 +53,7 @@
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
-#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     1
+#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
 #define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
 #define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
@@ -80,6 +81,7 @@ namespace TanxlOD
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_32x32				{ "Texture/YANG_PRINCESS_01_32X32.png"			};
+	static const char* TexStartMenu_01_1024x1024        { "Texture/STARTMENU_01_1024x1024.jpg"          };
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -540,6 +542,7 @@ private:
 
 	GLuint _State_RenderingProgram;
 	GLuint _Adjst_RenderingProgram;
+	GLuint _Start_RenderingProgram;
 	GLuint _vao[1];
 	GLuint _vbo[32];
 
@@ -584,6 +587,8 @@ private:
 	float _Health_Image_Margin{ 0.1f };
 	//主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值
 	GameObjectBase* _Main_Character;
+	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
+	int _Draw_Status{ 0 };
 	//当前此模块的版本号
 	const std::string _Version{ "1.1" };
 	GLFWwindow* _Main_Window;

@@ -1,3 +1,11 @@
+TEnGinE Version-0.2 Build-16 2023-07-11 17:23 UPDATE_LOG
+////////////////////////////////////////////////////////
+音频库irrKlang已配置就绪。输入模块初始化阶段不再默认初始
+化移动按键。输入模块提供接口初始化八个默认移动按键。地图
+与玩家顶点着色器增加宏控制该层下所有顶点的距离。新增游戏
+首页界面顶点着色器。增加起始界面的纹理与绘制。地图顶点着
+色器修复纹理绘制方向横向相反的问题。
+
 TEnGinE Version-0.2 Build-15 2023-07-07 10:47 UPDATE_LOG
 ////////////////////////////////////////////////////////
 支持STEAM最新的157SDK。新增STEAM服务模块，初始提供库存查
@@ -254,6 +262,16 @@ TEnGinE Version-0.1 Build-85 2023-03-17 09:28 UPDATE_LOG
 能增加异常处理。引擎管理模块扩展地图接口增加地图数据尺寸
 设置。新增坐标控制模块。地图模块坐标结构体转移到坐标模块
 中。
+--------------------------------------------------------
+The vertex shader changes to the map vertex shader and 
+removes unused variables. Separate player and interface 
+shaders from map vertex shaders. The map module extends 
+the map positioning function and adds exception 
+handling. The engine management module extends the map 
+interface and increases the map data size settings. 
+Added coordinate control module. The map module 
+coordinate structure is transferred to the coordinate 
+module.
 
 TEnGinE Version-0.1 Build-84 2023-03-15 10:04 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -262,6 +280,17 @@ TEnGinE Version-0.1 Build-84 2023-03-15 10:04 UPDATE_LOG
 加修改窗口尺寸后自动调整窗口内容的回调函数。绘制模块构造
 函数增加可选是否开启自动调整窗口功能。片段着色器变量名称
 调整。
+--------------------------------------------------------
+The drawing module optimizes repeated calls within 
+initialization functions. The drawing module adds 
+OpenGL window initialization error detection. Draw 
+module initialization interface input parameter 
+adjustment. The drawing module adds a callback function 
+to automatically adjust the window content after 
+modifying the window size. The drawing module 
+constructor adds the optional whether to enable the 
+auto-adjust window function. Fragment shader variable 
+name adjustment.
 
 TEnGinE Version-0.1 Build-83 2023-03-13 15:03 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -271,6 +300,21 @@ TEnGinE Version-0.1 Build-83 2023-03-13 15:03 UPDATE_LOG
 多个定位接口性能优化。引擎管理模块增加宏控制SteamAPI的启
 用。地图模块增加扩展版本的地图单元获取功能。随机模块随机
 功能改用标准库实现。启用随机生成地图测试。
+--------------------------------------------------------
+The engine management module enables support for 
+SteamAPI. The enclosure adds a macro of control 
+exception output information. The drawing module no 
+longer restricts the movement with the edge level after 
+reaching the edge. The map module, Map Generation, 
+fixes an issue outside of the center where compilation 
+errors occur. The map module optimizes the performance 
+of multiple positioning interfaces. The engine 
+management module adds macros to control the enablement 
+of SteamAPI. The Map module adds an extended version 
+of the map unit acquisition capability. The random 
+module random function is implemented using the 
+standard library instead. Enable the Randomly Generated 
+Map test.
 
 TEnGinE Version-0.1 Build-82 2023-03-10 08:56 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -279,6 +323,16 @@ TEnGinE Version-0.1 Build-82 2023-03-10 08:56 UPDATE_LOG
 块值。片段着色器调用新增的图片纹理。新增多个图片纹理。顶
 点着色器地图其他绘制方块移动到地图绘制之后。绘制模块重新
 加载地图功能性能优化。
+--------------------------------------------------------
+The infinite world interface of the engine management 
+module adds support for custom data. Vertex shaders add 
+a new layer of game interface display. The vertex 
+shader increment variable is used to hold the 
+calculated block value. The fragment shader invokes the 
+newly added image texture. Added multiple image 
+textures. Vertex shader map other draw blocks move 
+after the map is drawn. The drawing module reloads the 
+map feature performance optimization.
 
 TEnGinE Version-0.1 Build-81 2023-03-09 14:48 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -287,6 +341,17 @@ TEnGinE Version-0.1 Build-81 2023-03-09 14:48 UPDATE_LOG
 中获取到了地图数据。地图模块增加获取引擎文件接口。地图模
 块修复地图单元编译功能确实扩展地图中心的问题。地图模块地
 图生成功能入参修改为序号。
+--------------------------------------------------------
+The map interface of the map module adds settings for 
+the map size. The map module adds an interface for 
+obtaining the properties of the specified numbered 
+block. The map module adds a private variable to mark 
+whether the map data is obtained from the file. The map 
+module adds an interface for obtaining engine files. 
+The map module fixes an issue where map unit 
+compilation does extend the map center. In the map 
+module, the input parameter of the map generation 
+function is changed to the serial number.
 
 TEnGinE Version-0.1 Build-80 2023-03-08 09:36 UPDATE_LOG
 ////////////////////////////////////////////////////////

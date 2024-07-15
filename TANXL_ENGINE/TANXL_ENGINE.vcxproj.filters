@@ -118,6 +118,9 @@
     <None Include="Tanxl_Player_01_VertShader.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="Tanxl_State_02_VertShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TANXL_ENGINE.rc">

@@ -160,7 +160,7 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
       <Version>
       </Version>
       <RegisterOutput>false</RegisterOutput>
@@ -170,7 +170,10 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"
-xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
+xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\irrKlang.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\ikpFlac.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,7 +191,7 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <Version>
@@ -197,7 +200,10 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y /d "..\GRAPHIC\glew32.dll" "$(OutDir)"
-xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
+xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\irrKlang.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\ikpFlac.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -235,6 +241,7 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
     <None Include="public\steam\lib\win64\steam_api64.dll" />
     <None Include="Tanxl_Player_01_VertShader.glsl" />
     <None Include="Tanxl_State_01_VertShader.glsl" />
+    <None Include="Tanxl_State_02_VertShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />

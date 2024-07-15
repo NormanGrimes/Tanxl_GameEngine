@@ -14,7 +14,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 }
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0),
-_State_RenderingProgram(0), _Adjst_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
+_State_RenderingProgram(0), _Adjst_RenderingProgram(0), _Start_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
 _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0),
 _Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()), _Trigger_Mode(true), _StateInfor(), _Main_Character(new GameObjectBase(10, 10)) {}
 
@@ -28,7 +28,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.00.00.19", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B16", NULL, NULL);
 
 	if (_Main_Window == NULL)
 	{
@@ -64,6 +64,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "fragShader.glsl");
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Player_01_VertShader.glsl", "fragShader.glsl");
+	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_02_VertShader.glsl", "fragShader.glsl");
 
 	float BeginHeight{ (this->_HeightInt + this->_PreLoads - 1) * (1.0f / this->_HeightInt) };
 	for (int Height{ 0 }; Height < (this->_Each_Height + this->_PreLoads * 2); ++Height)
@@ -107,6 +108,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//6 05
 	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
 	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
+	Append_Texture(TanxlOD::TexStartMenu_01_1024x1024); //9 08
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
@@ -896,14 +898,22 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Clear_Function = false;
 	}
 
-	glUseProgram(_State_RenderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+	if (_Draw_Status == 0)
+	{
+		glUseProgram(_Start_RenderingProgram);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+	else
+	{
+		glUseProgram(_State_RenderingProgram);
+		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
-	//glUseProgram(_State_RenderingProgram);
-	//glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400);
+		//glUseProgram(_State_RenderingProgram);
+		//glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400);
 
-	glUseProgram(_Adjst_RenderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
+		glUseProgram(_Adjst_RenderingProgram);
+		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
+	}
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
@@ -918,6 +928,26 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		init(State);
 
 		IEB->RegistEvent(OpenGL_Stop_Key);
+	}
+
+	if (_Draw_Status == 0)
+	{
+		for (int i{ 32 }; i < 96; ++i)
+		{
+			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
+			{
+				_Draw_Status = 1;
+				IEB->Init_Default_Key();
+			}
+		}
+		for (int i{ 256 }; i < 348; ++i)
+		{
+			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
+			{
+				_Draw_Status = 1;
+				IEB->Init_Default_Key();
+			}
+		}
 	}
 
 	static int Move_Loc{ this->_LCB->New_Location_set("Move_Adjust_Location") }; //记录手动移动状态的移动距离
