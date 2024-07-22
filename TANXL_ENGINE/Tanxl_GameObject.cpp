@@ -30,22 +30,27 @@ int Health_Componment::Check_Health()
 	return _Current_Health;
 }
 
-ComponmentBase::ComponmentBase(std::string Name) :ComponmentName(Name) {}
+Componment::Componment(std::string Name) :_Name(Name), _Is_Specil_Enable(false) {}
 
-std::string ComponmentBase::GetName()
+std::string Componment::GetName()
 {
-	return this->ComponmentName;
+	return this->_Name;
 }
 
-GameObjectBase::GameObjectBase(int Max_Health, int Current_Health)
+void Componment::Set_Special_Status(bool Enable)
+{
+	this->_Is_Specil_Enable = Enable;
+}
+
+bool Componment::Get_Special_Status()
+{
+	return this->_Is_Specil_Enable;
+}
+
+GameObject::GameObject(int Max_Health, int Current_Health)
 	:Health_Componment(Max_Health, Current_Health) {}
 
-const std::string GameObjectBase::Get_Version()
-{
-	return this->_Version;
-}
-
-bool GameObjectBase::AppendComponment(ComponmentBase* CM)
+bool GameObject::AppendComponment(Componment* CM)
 {
 	for (auto Componment : this->_Object_Content)//根据名称添加
 	{
@@ -56,9 +61,9 @@ bool GameObjectBase::AppendComponment(ComponmentBase* CM)
 	return true;
 }
 
-bool GameObjectBase::RemoveComponment(std::string Name)
+bool GameObject::RemoveComponment(std::string Name)
 {
-	for (std::vector<ComponmentBase*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
+	for (std::vector<Componment*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
 	{
 		if ((*IOCB)->GetName() == Name)
 		{
@@ -69,8 +74,27 @@ bool GameObjectBase::RemoveComponment(std::string Name)
 	return false;
 }
 
-void GameObjectBase::FinishComponment()
+void GameObject::FinishComponment()
 {
 	for (int i{ 0 }; i < this->_Object_Content.size(); ++i)
 		this->_Object_Content.at(i)->Special();
 }
+
+GameObjectBase& GameObjectBase::GetObjectBase()
+{
+	static GameObjectBase* ObjectBase{ new GameObjectBase };
+	return *ObjectBase;
+}
+
+const std::string GameObjectBase::Get_Version()
+{
+	return this->_Version;
+}
+
+GameObjectBase::GameObjectBase() {}
+
+GameObjectBase::~GameObjectBase() {}
+
+GameObjectBase::GameObjectBase(const GameObjectBase&) {}
+
+GameObjectBase& GameObjectBase::operator=(const GameObjectBase&) { return *this; }

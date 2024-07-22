@@ -16,7 +16,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0),
 _State_RenderingProgram(0), _Adjst_RenderingProgram(0), _Start_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
 _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0),
-_Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()), _Trigger_Mode(true), _StateInfor(), _Main_Character(new GameObjectBase(10, 10)) {}
+_Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()), _Trigger_Mode(true), _StateInfor(), _Main_Character(new GameObject(10, 10)) {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -95,6 +95,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, _Main_Character->Check_Health());//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
 	glProgramUniform1i(this->_State_RenderingProgram, 4, this->_HeightInt);//SHeight
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
@@ -397,6 +398,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					State_Check_Block(State, CHECK_EDGE_LEFT);
 			}
 		}
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 	}
 
 	if (IEB->Get_Margin_X() > 0)
@@ -420,6 +422,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					State_Check_Block(State, CHECK_EDGE_RIGH);
 			}
 		}
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 1);//Insert Status
 	}
 
 	if (IEB->Get_Margin_Y() > 0)

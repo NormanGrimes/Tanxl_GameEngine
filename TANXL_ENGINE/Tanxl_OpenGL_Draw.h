@@ -586,7 +586,7 @@ private:
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
 	//主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值
-	GameObjectBase* _Main_Character;
+	GameObject* _Main_Character;
 	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
 	int _Draw_Status{ 0 };
 	//当前此模块的版本号

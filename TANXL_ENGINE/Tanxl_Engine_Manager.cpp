@@ -8,7 +8,8 @@ Tanxl_Engine_GameState(&GameStateBase::GetStateBase(5, 5)),
 Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
 Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
 Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase()),
-Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
+Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase()),
+Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase())
 {
 
 	if (!this->Tanxl_Engine_Console_List)
@@ -27,6 +28,8 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase())
 		this->_Engine_Status = 0x7;
 	else if (!this->Tanxl_Engine_LocationBase)
 		this->_Engine_Status = 0x8;
+	else if (!this->Tanxl_Engine_ObjectBase)
+		this->_Engine_Status = 0x9;
 
 	if(this->_Engine_Status)
 		std::cout << "Fail to fully start Engine !" << std::endl;
@@ -138,7 +141,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
 	Data->Append_Data(6, "VERSION " + this->Tanxl_Engine_RandomBase->Get_Version());
 	Data->Append_Data(7, "VERSION " + this->Tanxl_Engine_LocationBase->Get_Version());
-	Data->Append_Data(8, "VERSION 0.4");
+	Data->Append_Data(8, "VERSION " + this->Tanxl_Engine_ObjectBase->Get_Version());
 	Data->Append_Data(9, "VERSION " + this->__ENGINE_VERSION__);
 	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
 	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
@@ -271,6 +274,9 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 			break;
 	case EENGINE_BASES::ENGINE_LOCATIONBASE:
 		this->Tanxl_Engine_LocationBase->Remove_LocationS(-1);
+		if (!All_Selected)
+			break;
+	case EENGINE_BASES::ENGINE_OBJECTBASE:
 		if (!All_Selected)
 			break;
 	}

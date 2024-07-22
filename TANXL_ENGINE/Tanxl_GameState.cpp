@@ -431,6 +431,8 @@ void GameStateBase::Set_Extend_State_Enable(bool Enable)
 std::vector<bool>* GameStateBase::Get_GameState_MoveAble(EState_Extend State_Id)
 {
 	static std::vector<bool> MAB{};
+	if (MAB.size() != 0)
+		std::vector<bool>().swap(MAB);
 	std::vector<StateUnit*>* GameState{ this->Get_GameState(State_Id) };
 	for (const auto& State : *GameState)
 	{

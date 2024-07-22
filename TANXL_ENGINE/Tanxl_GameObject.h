@@ -10,6 +10,8 @@
 // 游戏物品类增加包含生命值组件的构造函数
 // 生命值组件增加生命值设置功能
 // 移除游戏物品类的生命值组件成员改为公有继承生命值组件
+// 新增物品基类原基类改为游戏物品类
+// 增加物品组件的状态与设置和获取函数
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -19,6 +21,7 @@
 #include <string>
 
 //组件类
+
 class Health_Componment
 {
 public:
@@ -38,32 +41,50 @@ private:
 	bool _Unable_Damage;
 };
 
-class ComponmentBase
+class Componment
 {
 public:
-	ComponmentBase(std::string Name);
+	Componment(std::string Name);
 	std::string GetName();
 	virtual void Special() = 0;
+	void Set_Special_Status(bool Enable);
+	bool Get_Special_Status();
 private:
-	std::string ComponmentName;
+	std::string _Name;
+	bool _Is_Specil_Enable;
 };
 
 //游戏物品类
 
-class GameObjectBase : public Health_Componment
+class GameObject : public Health_Componment
 {
 public:
-	GameObjectBase(int Max_Health, int Current_Health);
+	GameObject(int Max_Health, int Current_Health);
 
-	const std::string Get_Version();
-
-	bool AppendComponment(ComponmentBase* CM);
+	bool AppendComponment(Componment* CM);
 	bool RemoveComponment(std::string Name);
 	void FinishComponment();
 private:
-	std::vector<ComponmentBase*> _Object_Content;
+	std::vector<Componment*> _Object_Content;
+};
 
+//GameObjectBase
+
+class GameObjectBase
+{
+public:
+	static GameObjectBase& GetObjectBase();
+
+	const std::string Get_Version();
+
+private:
 	const std::string _Version{ "0.4" };
+
+	GameObjectBase();
+	~GameObjectBase();
+	GameObjectBase(const GameObjectBase&);
+	GameObjectBase& operator=(const GameObjectBase&);
+
 };
 
 #endif

@@ -35,6 +35,7 @@
 // 2023/07/03 设置地图起始区域的功能支持对其他区域进行修改
 // 2023/07/03 无限世界设置功能中增加地图区块数量设置
 // 2023/07/07 错误检测部分增加新的情况并优化代码
+// 2023/07/13 增加对物品模块的支持
 
 #pragma once
 
@@ -73,7 +74,8 @@ enum class EENGINE_BASES
 	ENGINE_OPENGL_DRAW   = 5,
 	ENGINE_INSERTBASE    = 6,
 	ENGINE_RANDOMBASE    = 7,
-	ENGINE_LOCATIONBASE  = 8
+	ENGINE_LOCATIONBASE  = 8,
+	ENGINE_OBJECTBASE    = 9
 };
 
 class Tanxl_Engine
@@ -141,6 +143,7 @@ private:
 	InsertEventBase* Tanxl_Engine_InsertBase;
 	RandomBase* Tanxl_Engine_RandomBase;
 	LocationBase* Tanxl_Engine_LocationBase;
+	GameObjectBase* Tanxl_Engine_ObjectBase;
 
 	unsigned _Engine_Status;
 	//Status :
@@ -152,6 +155,7 @@ private:
 	// 0x006 引擎组件输入模块初始化失败
 	// 0x007 引擎组件随机模块初始化失败
 	// 0x008 引擎组件坐标模块初始化失败
+	// 0x009 引擎组件物品模块初始化失败
 	// 0x009 STEAM启动检测失败
 	// 0x00A STEAM API初始化失败
 	// 0x000 未启用扩展世界功能
