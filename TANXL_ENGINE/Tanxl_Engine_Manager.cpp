@@ -9,9 +9,9 @@ Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
 Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
 Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase()),
 Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase()),
-Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase())
+Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase()),
+Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase())
 {
-
 	if (!this->Tanxl_Engine_Console_List)
 		this->_Engine_Status = 0x1;
 	else if (!this->Tanxl_Engine_DataBase)
@@ -33,40 +33,6 @@ Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase())
 
 	if(this->_Engine_Status)
 		std::cout << "Fail to fully start Engine !" << std::endl;
-
-#if _STEAM_ALPHA_TEST_EDITION_
-	if (SteamAPI_RestartAppIfNecessary(1929530))
-	{
-		std::cout << "Fail to init SteamAPI_RestartAppIfNecessary(1929530) !" << std::endl;
-		this->_Engine_Status = 0x9;
-
-		if (!SteamAPI_Init())
-		{
-			this->_Engine_Status = 0xA;
-			std::cout << "Fail to init Steam API !" << std::endl;
-		}
-		else
-		{
-			std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
-			std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
-			std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
-			std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
-
-			/*SteamInventoryResult_t Result{0};
-
-			std::vector<SteamItemDef_t> newItems;
-			newItems.push_back(Tanxl_Pormise_LIMITED_DROP_ITEM);
-
-			SteamInventory()->GetAllItems(&Result);
-			std::cout << "STEAM Inventory Item Result :" << Result << std::endl;
-			SteamInventory()->TriggerItemDrop(NULL, *newItems.data());
-			std::cout << "STEAM Inventory Drop Result :" << Result << std::endl;
-			SteamInventory()->DestroyResult(Result);*/
-
-			//SteamInventory()->GenerateItems(NULL, newItems.data(), NULL, (uint32)newItems.size());//only for test
-		}
-	}
-#endif
 
 	this->Tanxl_Engine_GameState->Set_Compile_Policy("a", 1);
 }
@@ -280,6 +246,12 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	}
+}
+
+void Tanxl_Engine::Engine_Invent_Update_Drop()
+{
+	this->Tanxl_Engine_Inventory->RefreshFromServer();
+	this->Tanxl_Engine_Inventory->CheckForItemDrops();
 }
 
 void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Cover_State, bool Is_Begin, std::string State_Infor)

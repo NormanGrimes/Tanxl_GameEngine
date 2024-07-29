@@ -36,6 +36,7 @@
 // 2023/07/03 无限世界设置功能中增加地图区块数量设置
 // 2023/07/07 错误检测部分增加新的情况并优化代码
 // 2023/07/13 增加对物品模块的支持
+// 2023/07/14 增加对STEAM服务模块的支持
 
 #pragma once
 
@@ -44,8 +45,6 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 # pragma warning (disable:4819)
-
-#define _STEAM_ALPHA_TEST_EDITION_ 0
 
 // mainCRTStartup
 
@@ -60,9 +59,6 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_LocationBase.h"
 #include "Tanxl_SteamService.h"
-
-#include "public/steam/steam_api.h"
-#include "public/steam/isteamapps.h"
 
 enum class EENGINE_BASES
 {
@@ -133,6 +129,9 @@ public:
 
 	//重置指定的引擎基类 将该引擎基类的数据恢复到初始状态 Engine_Class用于指定需要选择重置的基类
 	void Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class);
+	
+	//用于更新STEAM库存并同时检测是否满足掉落条件
+	void Engine_Invent_Update_Drop();
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;
@@ -144,6 +143,7 @@ private:
 	RandomBase* Tanxl_Engine_RandomBase;
 	LocationBase* Tanxl_Engine_LocationBase;
 	GameObjectBase* Tanxl_Engine_ObjectBase;
+	Tanxl_Inventory* Tanxl_Engine_Inventory;
 
 	unsigned _Engine_Status;
 	//Status :
@@ -156,8 +156,8 @@ private:
 	// 0x007 引擎组件随机模块初始化失败
 	// 0x008 引擎组件坐标模块初始化失败
 	// 0x009 引擎组件物品模块初始化失败
-	// 0x009 STEAM启动检测失败
-	// 0x00A STEAM API初始化失败
+	// 0x00A STEAM启动检测失败
+	// 0x00B STEAM API初始化失败
 	// 0x000 未启用扩展世界功能
 	// 0x100 已启用扩展世界功能
 

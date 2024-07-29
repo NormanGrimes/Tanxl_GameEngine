@@ -44,19 +44,21 @@ int main()
 		"b-1,b-2,b-0,a-3,b-0,b-0,a-3,b-0,b-2,b-1,"
 		"b-2,b-1,a-3,b-1,b-1,b-1,b-1,a-3,b-1,b-2,");
 
-	//Tanxl_Inventory TI;
-
-	//TI.RefreshFromServer();
-
 	while (1)
 	{
-		
 		static bool Appended{ false };
+		static int DropCnt{ 0 };
+
+		DropCnt++;
+		if (DropCnt > 5000)
+		{
+			DropCnt = 0;
+			TGE.Engine_Invent_Update_Drop();
+		}
+
 		TGE.Engine_Insert_State_Update();//Key Insert
 
 		TGE.Engine_Draw_State_Adjust(0);//Draw Once
-
-		//TI.CheckForItemDrops();
 
 		if (KU->Get_KeyStatus())
 		{

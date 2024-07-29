@@ -202,10 +202,14 @@ void GameStateBase::CompileStateEvent(std::string Infor, EState_Extend Extend)//
 
 void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 {
+	if (State_Id < 0)
+		State_Id = 0;
+	else if (State_Id >= this->Get_State_Size())
+		State_Id = this->Get_State_Size() - 1;
 	if (this->Get_Engine_File())
 	{
 		std::string Data_Name{ this->Get_State_Id(State_Id) };
-		for (int i{ 0 }; i <= this->_State_WidthS * this->_State_HeightS; ++i)
+		for (int i{ 0 }; i < (this->_State_WidthS * this->_State_HeightS); ++i)
 		{
 			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
@@ -243,7 +247,7 @@ void GameStateBase::Set_State(int State_Id, std::string Cover_String)
 	if (this->Get_Engine_File())
 	{
 		std::string Data_Name{ this->Get_State_Id(State_Id) };
-		for (int i{ 0 }; i <= this->_State_WidthS * this->_State_HeightS; ++i)
+		for (int i{ 0 }; i < (this->_State_WidthS * this->_State_HeightS); ++i)
 		{
 			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
@@ -818,28 +822,28 @@ void GameStateBase::Set_Enable_Adjust(bool Enable)
 	this->_Adjust_Enable = Enable;
 }
 
-size_t GameStateBase::Get_StateSize(EState_Extend State_Id)
+bool GameStateBase::Is_State_Exist(EState_Extend State_Id)
 {
 	switch (State_Id)
 	{
 	case STATE_EXTEND_MIDD:
-		return this->_GameState_Extend._MIDD->size();
+		return (this->_GameState_Extend._MIDD->size() != 0);
 	case STATE_EXTEND_LEFT:
-		return this->_GameState_Extend._LEFT->size();
+		return (this->_GameState_Extend._LEFT->size() != 0);
 	case STATE_EXTEND_RIGH:
-		return this->_GameState_Extend._RIGH->size();
+		return (this->_GameState_Extend._RIGH->size() != 0);
 	case STATE_EXTEND_ABOV:
-		return this->_GameState_Extend._ABOV->size();
+		return (this->_GameState_Extend._ABOV->size() != 0);
 	case STATE_EXTEND_BELO:
-		return this->_GameState_Extend._BELO->size();
+		return (this->_GameState_Extend._BELO->size() != 0);
 	case STATE_EXTEND_LEFT_ABOV:
-		return this->_GameState_Extend._LEFT_ABOV->size();
+		return (this->_GameState_Extend._LEFT_ABOV->size() != 0);
 	case STATE_EXTEND_LEFT_BELO:
-		return this->_GameState_Extend._LEFT_BELO->size();
+		return (this->_GameState_Extend._LEFT_BELO->size() != 0);
 	case STATE_EXTEND_RIGH_ABOV:
-		return this->_GameState_Extend._RIGH_ABOV->size();
+		return (this->_GameState_Extend._RIGH_ABOV->size() != 0);
 	case STATE_EXTEND_RIGH_BELO:
-		return this->_GameState_Extend._RIGH_BELO->size();
+		return (this->_GameState_Extend._RIGH_BELO->size() != 0);
 	}
 	return 0;
 }
@@ -872,7 +876,7 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 
 Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 {
-	for (int i{ 0 }; i <= this->_State_WidthS * this->_State_HeightS; ++i)
+	for (int i{ 0 }; i < (this->_State_WidthS * this->_State_HeightS); ++i)
 	{
 		Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 		if (Link->_Data->_Data_Units.at(0)->_Data == Link_Name)
@@ -953,6 +957,11 @@ int GameStateBase::Get_Distance_Screen_Id()
 int GameStateBase::Get_Distance_Move_Id()
 {
 	return this->_Distance_Move;
+}
+
+int GameStateBase::Get_State_Size()
+{
+	return this->_State_WidthS * this->_State_HeightS;
 }
 
 int GameStateBase::Get_StateHeight()const

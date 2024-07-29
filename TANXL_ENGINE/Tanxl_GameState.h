@@ -11,6 +11,9 @@
 // 更新移动部分修复只采用宽度值计算的问题
 // 多个遍历函数支持超过两百五十六个区块
 // 修复获取所有单元是否可移动接口未清理上次数据的问题
+// 增加地图总区块个数获取接口
+// 设置起始区域的功能增加地图序号的检查
+// 获取扩展区域尺寸的接口改为获取扩展区域是否存在
 
 #pragma once
 
@@ -121,7 +124,6 @@ class GameStateBase
 {
 public:
 	
-	size_t Get_StateSize(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	Id_Link* Locate_Link(std::string Link_Name);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
@@ -155,6 +157,7 @@ public:
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Reload_State(EState_Extend Extend_Dire);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
+	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Extend_State();
 	bool Get_Adjust_Flag();
@@ -164,6 +167,7 @@ public:
 	int Get_LocationY();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
+	int Get_State_Size();
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY);//可选功能 对2D棋盘上的物品微调位置
 	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX);
 	unsigned Get_DataHeight()const;
@@ -212,7 +216,9 @@ private:
 	TANXL_DataBase _Data_Base{};
 	unsigned _Data_Width;
 	unsigned _Data_Height;
+	// _State_WidthS 地图区块在横向的个数
 	int _State_WidthS{ 0 };
+	// _State_HeightS 地图区块在纵向的个数
 	int _State_HeightS{ 0 };
 	float _Half_State_Width{ 0.0f };
 	float _Half_State_Height{ 0.0f };

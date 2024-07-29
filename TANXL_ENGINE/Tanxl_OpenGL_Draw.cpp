@@ -168,30 +168,30 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 				{
 					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
 					{
-						if (State->Get_StateSize(STATE_EXTEND_RIGH_BELO) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
 						{
 							unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % State->Get_StateSize(STATE_EXTEND_RIGH_BELO)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % State->Get_GameState(STATE_EXTEND_RIGH_BELO)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
 					}
 					else if (Move_NY >= 0)
 					{
-						if (State->Get_StateSize(STATE_EXTEND_RIGH) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_RIGH))
 						{
 							unsigned x{ Move_NX - State->Get_DataWidth() - 1 + Move_NY * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_StateSize(STATE_EXTEND_RIGH)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_GameState(STATE_EXTEND_RIGH)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
 					}
 					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
 					{
-						if (State->Get_StateSize(STATE_EXTEND_RIGH_ABOV) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
 						{
 							unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % State->Get_StateSize(STATE_EXTEND_RIGH_ABOV)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % State->Get_GameState(STATE_EXTEND_RIGH_ABOV)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
@@ -201,30 +201,30 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 				{
 					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
 					{
-						if (State->Get_StateSize(STATE_EXTEND_BELO) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_BELO))
 						{
 							unsigned x{ Move_NX + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_BELO, x % State->Get_StateSize(STATE_EXTEND_BELO)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
 					}
 					else if (Move_NY >= 0)
 					{
-						if (State->Get_StateSize(STATE_EXTEND_MIDD) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_MIDD))
 						{
 							unsigned x{ Move_NX + Move_NY * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_StateSize(STATE_EXTEND_MIDD)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
 					}
 					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
 					{
-						if (State->Get_StateSize(STATE_EXTEND_ABOV) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_ABOV))
 						{
 							unsigned x{ Move_NX + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_ABOV, x % State->Get_StateSize(STATE_EXTEND_ABOV)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
@@ -234,30 +234,30 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 				{
 					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
 					{
-						if (State->Get_StateSize(STATE_EXTEND_LEFT_BELO) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_LEFT_BELO))
 						{
 							unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % State->Get_StateSize(STATE_EXTEND_BELO)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
 					}
 					else if (Move_NY >= 0)
 					{
-						if (State->Get_StateSize(STATE_EXTEND_LEFT) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_LEFT))
 						{
 							unsigned x{ Move_NX + State->Get_DataWidth() + 1 + Move_NY * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT, x % State->Get_StateSize(STATE_EXTEND_MIDD)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
 					}
 					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
 					{
-						if (State->Get_StateSize(STATE_EXTEND_LEFT_ABOV) != 0)
+						if (State->Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
 						{
 							unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % State->Get_StateSize(STATE_EXTEND_ABOV)) };
+							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
 							this->_StateInfor[i].x = Unit->Get_State_Id();
 							this->_StateInfor[i].y = Unit->Get_Move_Status();
 						}
@@ -749,7 +749,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 	{
 		if (LocationY > static_cast<int>(State.Get_DataHeight()))
 		{
-			if (State.Get_StateSize(STATE_EXTEND_RIGH_BELO) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_RIGH_BELO))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "RIGH BELO AREA" << LocationX << "_" << LocationY << "_"
@@ -760,7 +760,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 		}
 		else if (LocationY >= 0)
 		{
-			if (State.Get_StateSize(STATE_EXTEND_RIGH) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_RIGH))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "RIGH AREA" << LocationX << "_" << LocationY << "_"
@@ -771,7 +771,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 		}
 		else if (LocationY >= -static_cast<int>(State.Get_DataHeight()))
 		{
-			if (State.Get_StateSize(STATE_EXTEND_RIGH_ABOV) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "RIGH ABOV AREA" << LocationX << "_" << LocationY << "_"
@@ -785,7 +785,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 	{
 		if (LocationY > static_cast<int>(State.Get_DataHeight()))
 		{
-			if (State.Get_StateSize(STATE_EXTEND_BELO) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_BELO))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "BELO AREA" << LocationX << "_" << LocationY << "_"
@@ -796,7 +796,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 		}
 		else if (LocationY >= 0)
 		{
-			if (State.Get_StateSize(STATE_EXTEND_MIDD) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_MIDD))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "MIDD AREA" << LocationX << "_" << LocationY << "_"
@@ -807,7 +807,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 		}
 		else if (LocationY >= -static_cast<int>(State.Get_DataHeight()))
 		{
-			if (State.Get_StateSize(STATE_EXTEND_ABOV) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_ABOV))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "ABOV AREA" << LocationX << "_" << LocationY << "_"
@@ -821,7 +821,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 	{
 		if (LocationY > static_cast<int>(State.Get_DataHeight()))
 		{
-			if (State.Get_StateSize(STATE_EXTEND_LEFT_BELO) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_LEFT_BELO))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "LEFT BELO AREA" << LocationX << "_" << LocationY << "_"
@@ -832,7 +832,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 		}
 		else if (LocationY >= 0)
 		{
-			if (State.Get_StateSize(STATE_EXTEND_LEFT) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_LEFT))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "LEFT AREA" << LocationX << "_" << LocationY << "_"
@@ -843,7 +843,7 @@ StateUnit* OpenGL_Draw::Get_State(int LocationX, int LocationY, GameStateBase& S
 		}
 		else if (LocationY >= -static_cast<int>(State.Get_DataHeight()))
 		{
-			if (State.Get_StateSize(STATE_EXTEND_LEFT_ABOV) != 0)
+			if (State.Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
 			{
 #if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
 				std::cout << "LEFT ABOV AREA" << LocationX << "_" << LocationY << "_"
