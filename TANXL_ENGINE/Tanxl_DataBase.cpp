@@ -514,11 +514,11 @@ void TANXL_DataBase::Remove_Link(int Type, int Exac)
 
 Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 {
-	int Left{ 0 }, Value{ Type * 16 + Exac },
+	int Left{ 0 }, Value{ (Type << 8) + Exac },
 		Right{ static_cast<int>(this->_Id_Links->size()) - 1 >= 0 ? static_cast<int>(this->_Id_Links->size()) - 1 : 0 };
 	if (Left == Right)
 	{
-		if (Value == this->_Id_Links->at(0)->_Type * 16 + this->_Id_Links->at(0)->_Exac)
+		if (Value == (this->_Id_Links->at(0)->_Type << 8) + this->_Id_Links->at(0)->_Exac)
 		{
 			this->_Current_Location = 0;
 			return this->_Id_Links->at(0);
@@ -530,9 +530,8 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 	{
 		while (Left != Right)
 		{
-			//std::cout << "LEFT :" << Left << "RIGHT :" << Right << std::endl;
 			int Mid{ (Left + Right) / 2 };
-			int Mid_Value{ this->_Id_Links->at(Mid)->_Type * 16 + this->_Id_Links->at(Mid)->_Exac };
+			int Mid_Value{ (this->_Id_Links->at(Mid)->_Type << 8) + this->_Id_Links->at(Mid)->_Exac };
 			if (Mid_Value == Value)
 			{
 				this->_Current_Location = Mid;
@@ -549,12 +548,12 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 			}
 			if (Left + 1 == Right)
 			{
-				if (this->_Id_Links->at(Right)->_Type * 16 + this->_Id_Links->at(Right)->_Exac == Value)
+				if ((this->_Id_Links->at(Right)->_Type << 8) + this->_Id_Links->at(Right)->_Exac == Value)
 				{
 					this->_Current_Location = Right;
 					return this->_Id_Links->at(Right);
 				}
-				else if(this->_Id_Links->at(Left)->_Type * 16 + this->_Id_Links->at(Left)->_Exac == Value)
+				else if ((this->_Id_Links->at(Left)->_Type << 8) + this->_Id_Links->at(Left)->_Exac == Value)
 				{
 					this->_Current_Location = Left;
 					return this->_Id_Links->at(Left);

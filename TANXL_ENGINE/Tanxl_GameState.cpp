@@ -30,7 +30,7 @@ std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 	if (State_Id == "NULL")
 		return "NULL";
 	if (this->Get_Engine_File())
-		for (int i{ 0 }; i <= static_cast<int>((this->_Data_Height + 1) * (this->_Data_Width + 1)); ++i)
+		for (int i{ 0 }; i <= this->_State_WidthS * this->_State_HeightS; ++i)
 		{
 			Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, i) };
 			if (Link->_Data->_Data_Units.at(0)->_Data == State_Id)

@@ -18,7 +18,6 @@
 #include <vector>
 #include <conio.h>
 #include <iomanip>
-#include "Tanxl_InsertAction.h"
 
 enum EFont_Color
 {
@@ -67,8 +66,11 @@ private:
 
 	std::string _Name;
 
+	// _Selector 用于记录当前列表指向的选项序号
 	unsigned _Selector;
+	// _Page 用于记录当前指定的页面序号
 	int _Page;
+	// _Is_Selected 用于记录当前是否已选定此选项
 	bool _Is_Selected;
 	bool _Is_Funcwork;
 

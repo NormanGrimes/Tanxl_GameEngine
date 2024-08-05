@@ -14,6 +14,7 @@
 // 增加地图总区块个数获取接口
 // 设置起始区域的功能增加地图序号的检查
 // 获取扩展区域尺寸的接口改为获取扩展区域是否存在
+// 修复地图数据定位功能使用了的错误范围的问题
 
 #pragma once
 
@@ -170,7 +171,9 @@ public:
 	int Get_State_Size();
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY);//可选功能 对2D棋盘上的物品微调位置
 	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX);
+	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数
 	unsigned Get_DataHeight()const;
+	//↓Get_DataWidth : 获取单个地图区块横向包含的单元个数
 	unsigned Get_DataWidth()const;
 	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
 	int Get_StateHeight()const;
@@ -214,7 +217,9 @@ private:
 	GameStateBase(const GameStateBase&);
 	GameStateBase& operator=(const GameStateBase&);
 	TANXL_DataBase _Data_Base{};
+	// _Data_Width 单个地图区块横向包含的单元个数
 	unsigned _Data_Width;
+	// _Data_Height 单个地图区块纵向包含的单元个数
 	unsigned _Data_Height;
 	// _State_WidthS 地图区块在横向的个数
 	int _State_WidthS{ 0 };

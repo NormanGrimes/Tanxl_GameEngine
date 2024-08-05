@@ -43,6 +43,9 @@
 // 修复横向移动时仍会出现黑边的问题
 // 新增地图方块检测功能替换大量重复代码
 // 增加起始界面的纹理与绘制
+// 地图碰撞接口代码简化
+// 增加时钟延时函数
+// 重新载入地图功能代码优化
 
 #pragma once
 
@@ -69,6 +72,7 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameObject.h"
 #include <math.h>
+#include <time.h>
 
 namespace TanxlOD
 {
@@ -81,7 +85,7 @@ namespace TanxlOD
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_32x32				{ "Texture/YANG_PRINCESS_01_32X32.png"			};
-	static const char* TexStartMenu_01_1024x1024        { "Texture/STARTMENU_01_1024x1024.jpg"          };
+	static const char* TexStartMenu_01_1024x1024        { "Texture/ENG/STARTMENU_01_1024x1024.png"      };
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 

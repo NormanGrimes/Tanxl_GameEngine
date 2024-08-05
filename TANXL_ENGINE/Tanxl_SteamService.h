@@ -49,16 +49,14 @@ public:
 
 private:
 
-	Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid)
+	Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false)
 	{
-		_SteamInventoryInit_Status = false;
 		if (SteamAPI_RestartAppIfNecessary(1929530))
 		{
 			std::cout << "Fail to init SteamAPI_RestartAppIfNecessary(1929530) !" << std::endl;
 
 			if (!SteamAPI_Init())
 			{
-				
 				std::cout << "Fail to init Steam API !" << std::endl;
 			}
 			else
@@ -72,8 +70,9 @@ private:
 			}
 		}
 	}
+
 	~Tanxl_Inventory() {};
-	Tanxl_Inventory(const Tanxl_Inventory&) :_PlaytimeRequestResult(k_SteamInventoryResultInvalid) {}
+	Tanxl_Inventory(const Tanxl_Inventory&) :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false){}
 	Tanxl_Inventory& operator=(const Tanxl_Inventory&) { return *this; }
 
 	const std::string _Version{ "0.1" };

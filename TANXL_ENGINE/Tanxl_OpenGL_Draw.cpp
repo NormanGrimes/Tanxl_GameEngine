@@ -5,6 +5,13 @@
 unsigned int quadVAO, quadVBO;
 unsigned int instanceVBO;
 
+void delay(int misec)
+{
+	clock_t start = clock();
+	clock_t lay = (clock_t)misec;
+	while ((clock() - start) < lay);
+}
+
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
 	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
@@ -154,14 +161,11 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 
 		for (int i{ 0 }; i < State_Length; ++i)
 		{
-			if ((Move_NX < -static_cast<int>(State->Get_DataWidth())) || (Move_NX > static_cast<int>(State->Get_DataWidth()) * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
-				(Move_NY < -static_cast<int>(State->Get_DataHeight())) || (Move_NY > static_cast<int>(State->Get_DataHeight()) * 2 + 1))
+			this->_StateInfor[i].x = 3;
+
+			if ((Move_NX >= -static_cast<int>(State->Get_DataWidth())) || (Move_NX <= static_cast<int>(State->Get_DataWidth()) * 2 + 1) || //现阶段Data宽度不可能导致转换溢出
+				(Move_NY >= -static_cast<int>(State->Get_DataHeight())) || (Move_NY <= static_cast<int>(State->Get_DataHeight()) * 2 + 1))
 			{
-				this->_StateInfor[i].x = 3;
-			}
-			else
-			{
-				this->_StateInfor[i].x = 3;
 				this->_StateInfor[i].y = 1;
 
 				if (Move_NX > static_cast<int>(State->Get_DataWidth()))//RIGH AREA
@@ -276,7 +280,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 	else
 	{
 		RandomBase* UIB{ &RandomBase::GetRandomBase() };
-		for (int i{0}; i < State_Length; ++i)
+		for (int i{ 0 }; i < State_Length; ++i)
 		{
 			this->_StateInfor[i].x = UIB->RandomAutoSeed(0, 4);
 			std::cout << this->_StateInfor[i].x;
@@ -682,29 +686,29 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 		switch (Check_Direction)
 		{
 		case CHECK_EDGE_LEFT:
-			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
-			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width + 1);
+			this->_Current_Move_Height -= (Temp_Height - this->_New_Current_Height);
+			this->_Current_Move_Width -= (Temp_Width - this->_New_Current_Width + 1);
 
 			State->Reload_State(STATE_EXTEND_LEFT);
 			this->Move_State(State, MoveToNW, State_Width);
 			break;
 		case CHECK_EDGE_RIGH:
-			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height);
-			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width - 1);
+			this->_Current_Move_Height -= (Temp_Height - this->_New_Current_Height);
+			this->_Current_Move_Width -= (Temp_Width - this->_New_Current_Width - 1);
 
 			State->Reload_State(STATE_EXTEND_RIGH);
 			this->Move_State(State, MoveToPW, State_Width);
 			break;
 		case CHECK_EDGE_BELO:
-			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height + 1);
-			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
+			this->_Current_Move_Height -= (Temp_Height - this->_New_Current_Height + 1);
+			this->_Current_Move_Width -= (Temp_Width - this->_New_Current_Width);
 
 			State->Reload_State(STATE_EXTEND_BELO);
 			this->Move_State(State, MoveToPH, State_Height);
 			break;
 		case CHECK_EDGE_ABOV:
-			this->_Current_Move_Height += -(Temp_Height - this->_New_Current_Height - 1);
-			this->_Current_Move_Width += -(Temp_Width - this->_New_Current_Width);
+			this->_Current_Move_Height -= (Temp_Height - this->_New_Current_Height - 1);
+			this->_Current_Move_Width -= (Temp_Width - this->_New_Current_Width);
 
 			State->Reload_State(STATE_EXTEND_ABOV);
 			this->Move_State(State, MoveToNH, State_Height);
@@ -722,7 +726,6 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 			if (_Main_Character->Check_Health() <= 2)
 			{
 				_Main_Character->Set_Health(2, 10);
-				std::cout << "YOU DIE" << std::endl;
 			}
 			else
 			{
@@ -901,10 +904,26 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Clear_Function = false;
 	}
 
-	if (_Draw_Status == 0)
+	if ((_Draw_Status == 0) || (_Draw_Status == 2) || (_Draw_Status == 3) || (_Draw_Status == 4))
 	{
 		glUseProgram(_Start_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		static clock_t start;
+
+		if (_Draw_Status == 3)
+		{
+			start = clock();
+			_Draw_Status = 4;
+			this->_Main_Character->Set_Health(10);
+		}
+
+		if (_Draw_Status == 4)
+		{
+			clock_t current = clock();
+			if (current - start > 500)
+				_Draw_Status = 2;
+		}
 	}
 	else
 	{
@@ -951,6 +970,20 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 				IEB->Init_Default_Key();
 			}
 		}
+	}
+	else if (_Draw_Status == 2)
+	{
+		for (int i{ 32 }; i < 96; ++i)
+			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
+				_Draw_Status = 1;
+		for (int i{ 256 }; i < 348; ++i)
+			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
+				_Draw_Status = 1;
+	}
+
+	if (this->_Main_Character->Check_Health() == 2)
+	{
+		_Draw_Status = 3;
 	}
 
 	static int Move_Loc{ this->_LCB->New_Location_set("Move_Adjust_Location") }; //记录手动移动状态的移动距离
