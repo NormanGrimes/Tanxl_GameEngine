@@ -21,7 +21,7 @@
 
 #version 430
 
-#define STATE_01_LAYER 0.3f
+#define STATE_01_LAYER 0.4f
 //deaflut color : Enable when texture is not exist
 #define VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR 0
 

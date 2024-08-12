@@ -10,12 +10,9 @@
 #pragma once
 
 #include "Tanxl_Engine_Manager.h"
-#include <irrKlang/irrKlang.h>
 
 int main()
 {	
-	irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
-
 	Tanxl_Engine TGE;
 	//检测引擎状态 是否有异常产生
 	TGE.Engine_Check_Engine_Status();

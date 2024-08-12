@@ -13,7 +13,7 @@
 
 #version 430
 
-#define PLAYER_01_LAYER 0.2f
+#define PLAYER_01_LAYER 0.3f
 
 layout (location = 1) in vec2 texCoord;
 

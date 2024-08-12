@@ -63,6 +63,9 @@
     <ClInclude Include="Tanxl_SteamService.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_SoundBase.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -108,7 +111,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragShader.glsl">
+    <None Include="Tanxl_Game_01_FragShader.glsl">
       <Filter>资源文件</Filter>
     </None>
     <None Include="Tanxl_State_01_VertShader.glsl">
@@ -121,13 +124,16 @@
     <None Include="Tanxl_State_02_VertShader.glsl">
       <Filter>资源文件</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="TANXL_ENGINE.rc">
+    <None Include="Tanxl_State_03_VertShader.glsl">
       <Filter>资源文件</Filter>
-    </ResourceCompile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="public\steam\lib\win64\steam_api64.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TANXL_ENGINE.rc">
+      <Filter>源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

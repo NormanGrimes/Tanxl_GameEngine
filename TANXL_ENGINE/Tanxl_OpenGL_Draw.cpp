@@ -20,7 +20,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0),
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _Midle_RenderingProgram(0),
 _State_RenderingProgram(0), _Adjst_RenderingProgram(0), _Start_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
 _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0),
 _Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()), _Trigger_Mode(true), _StateInfor(), _Main_Character(new GameObject(10, 10)) {}
@@ -69,9 +69,10 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Current_Move_Height = 0;
 	this->_Current_Move_Width = 0;
 
-	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "fragShader.glsl");
-	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Player_01_VertShader.glsl", "fragShader.glsl");
-	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_02_VertShader.glsl", "fragShader.glsl");
+	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
+	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Player_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
+	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_02_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
+	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_03_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 
 	float BeginHeight{ (this->_HeightInt + this->_PreLoads - 1) * (1.0f / this->_HeightInt) };
 	for (int Height{ 0 }; Height < (this->_Each_Height + this->_PreLoads * 2); ++Height)
@@ -108,15 +109,15 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
-    Append_Texture(TanxlOD::TexGrass_02_200x200);       //1 00
-	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); //2 01
-	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); //3 02
-	Append_Texture(TanxlOD::TexOcean_01_200x200);       //4 03
-	Append_Texture(TanxlOD::TexDirt_01_200x200);        //5 04
-	Append_Texture(TanxlOD::TexPrincess_01_32x32);		//6 05
-	Append_Texture(TanxlOD::TexHealth_01_32x32);        //7 06
-	Append_Texture(TanxlOD::TexPrincess_01_9x11);       //8 07
-	Append_Texture(TanxlOD::TexStartMenu_01_1024x1024); //9 08
+    Append_Texture(TanxlOD::TexGrass_02_200x200);       // 1 00
+	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); // 2 01
+	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); // 3 02
+	Append_Texture(TanxlOD::TexOcean_01_200x200);       // 4 03
+	Append_Texture(TanxlOD::TexDirt_01_200x200);        // 5 04
+	Append_Texture(TanxlOD::TexPrincess_01_32x32);		// 6 05
+	Append_Texture(TanxlOD::TexHealth_01_32x32);        // 7 06
+	Append_Texture(TanxlOD::TexPrincess_01_9x11);       // 8 07
+	Append_Texture(TanxlOD::TexStartMenu_01_1024x1024); // 9 08
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
@@ -898,35 +899,115 @@ EMove_State_EventId OpenGL_Draw::Auto_Update_Trigger(short Edge)
 
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
+	SoundBase* SB{ &SoundBase::GetSoundBase() };
 	if (_Clear_Function)
 	{
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		this->_Clear_Function = false;
 	}
 
-	if ((_Draw_Status == 0) || (_Draw_Status == 2) || (_Draw_Status == 3) || (_Draw_Status == 4))
+	std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
+
+	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
+		this->_Middle_Frame = 0;
 		glUseProgram(_Start_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		static clock_t start;
-
-		if (_Draw_Status == 3)
+	}
+	else if (_Draw_Status == 5)
+	{
+		static int x = 0;
+		x++;
+		if (x > 2)
 		{
-			start = clock();
-			_Draw_Status = 4;
-			this->_Main_Character->Set_Health(10);
+			x = 0;
+			if (this->_Middle_Frame == 0)
+			{
+				SB->Play_Sound("music/Game_Start.wav");
+			}
+			this->_Middle_Frame++;
 		}
 
-		if (_Draw_Status == 4)
+		if (this->_Middle_Frame > 200)
 		{
-			clock_t current = clock();
-			if (current - start > 500)
-				_Draw_Status = 2;
+			this->_Draw_Status = 1;
 		}
+
+		if (this->_Middle_Frame > 100)
+		{
+			glUseProgram(_State_RenderingProgram);
+			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+
+			glUseProgram(_Adjst_RenderingProgram);
+			glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
+		}
+		else
+		{
+			glUseProgram(_Start_RenderingProgram);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+
+		std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
+		glProgramUniform1i(this->_Midle_RenderingProgram, 2, this->_Middle_Frame);//PreLoads
+
+		if (this->_Middle_Frame > 200)
+		{
+			this->_Middle_Frame = 0;
+		}
+
+		glUseProgram(_Midle_RenderingProgram);
+		glDrawArrays(GL_TRIANGLES, 0, 6 * 16);
+	}
+	else if (_Draw_Status == 6)
+	{
+		static int x = 0;
+		x++;
+		if (x > 2)
+		{
+			x = 0;
+			this->_Middle_Frame++;
+		}
+
+		if (this->_Middle_Frame > 200)
+		{
+			this->_Draw_Status = 2;
+		}
+
+		if (this->_Middle_Frame > 100)
+		{
+			glUseProgram(_Start_RenderingProgram);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+		else
+		{
+			glUseProgram(_State_RenderingProgram);
+			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+
+			glUseProgram(_Adjst_RenderingProgram);
+			glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
+		}
+
+		std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
+		glProgramUniform1i(this->_Midle_RenderingProgram, 2, this->_Middle_Frame);//PreLoads
+
+		if (this->_Middle_Frame > 200)
+		{
+			this->_Middle_Frame = 0;
+		}
+
+		glUseProgram(_Midle_RenderingProgram);
+		glDrawArrays(GL_TRIANGLES, 0, 6 * 16);
 	}
 	else
 	{
+		if (_Draw_Status == 3)
+		{
+			_Draw_Status = 6;
+			SB->Play_Sound("music/Game_Over.wav");
+			this->_Main_Character->Set_Health(10);
+		}
+
+		this->_Middle_Frame = 0;
 		glUseProgram(_State_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
@@ -958,7 +1039,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		{
 			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
 			{
-				_Draw_Status = 1;
+				_Draw_Status = 5;
 				IEB->Init_Default_Key();
 			}
 		}
@@ -966,7 +1047,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		{
 			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
 			{
-				_Draw_Status = 1;
+				_Draw_Status = 5;
 				IEB->Init_Default_Key();
 			}
 		}
@@ -975,10 +1056,10 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	{
 		for (int i{ 32 }; i < 96; ++i)
 			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-				_Draw_Status = 1;
+				_Draw_Status = 5;
 		for (int i{ 256 }; i < 348; ++i)
 			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-				_Draw_Status = 1;
+				_Draw_Status = 5;
 	}
 
 	if (this->_Main_Character->Check_Health() == 2)

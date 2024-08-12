@@ -46,6 +46,10 @@
 // 地图碰撞接口代码简化
 // 增加时钟延时函数
 // 重新载入地图功能代码优化
+// 增加中间页面的绘制
+// 增加切换页面时的音效
+// 增加死亡页面的中间页面
+// 增加死亡时的音效
 
 #pragma once
 
@@ -71,6 +75,7 @@
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameObject.h"
+#include "Tanxl_SoundBase.h"
 #include <math.h>
 #include <time.h>
 
@@ -544,6 +549,7 @@ private:
 	bool _Is_Adjust_Enable{ true };
 	bool _Is_Init_Need{ true };
 
+	GLuint _Midle_RenderingProgram;
 	GLuint _State_RenderingProgram;
 	GLuint _Adjst_RenderingProgram;
 	GLuint _Start_RenderingProgram;
@@ -593,6 +599,7 @@ private:
 	GameObject* _Main_Character;
 	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
 	int _Draw_Status{ 0 };
+	int _Middle_Frame{ 0 };
 	//当前此模块的版本号
 	const std::string _Version{ "1.1" };
 	GLFWwindow* _Main_Window;

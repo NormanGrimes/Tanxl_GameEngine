@@ -157,14 +157,15 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
       <Version>
       </Version>
       <RegisterOutput>false</RegisterOutput>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
@@ -185,13 +186,14 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <Version>
       </Version>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
@@ -218,6 +220,7 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
     <ClInclude Include="Tanxl_OpenGL_Render.h" />
     <ClInclude Include="Tanxl_RandomBase.h" />
+    <ClInclude Include="Tanxl_SoundBase.h" />
     <ClInclude Include="Tanxl_SteamService.h" />
   </ItemGroup>
   <ItemGroup>
@@ -235,11 +238,12 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
     <ClCompile Include="Taxnl_LocationBase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragShader.glsl" />
+    <None Include="Tanxl_Game_01_FragShader.glsl" />
     <None Include="public\steam\lib\win64\steam_api64.dll" />
     <None Include="Tanxl_Player_01_VertShader.glsl" />
     <None Include="Tanxl_State_01_VertShader.glsl" />
     <None Include="Tanxl_State_02_VertShader.glsl" />
+    <None Include="Tanxl_State_03_VertShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />
