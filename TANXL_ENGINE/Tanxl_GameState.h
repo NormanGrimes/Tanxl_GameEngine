@@ -15,6 +15,9 @@
 // 设置起始区域的功能增加地图序号的检查
 // 获取扩展区域尺寸的接口改为获取扩展区域是否存在
 // 修复地图数据定位功能使用了的错误范围的问题
+// 从绘制模块移入获取上次移动触发的边沿的功能
+// 从绘制模块移入指定坐标获取地图单元功能
+// 从绘制模块移入触发地图移动事件的设置与执行功能
 
 #pragma once
 
@@ -126,6 +129,8 @@ class GameStateBase
 public:
 	
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
+	//↓Get_State : 指定坐标获取地图单元
+	StateUnit* Get_State(int LocationX, int LocationY);
 	Id_Link* Locate_Link(std::string Link_Name);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
@@ -158,6 +163,8 @@ public:
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Reload_State(EState_Extend Extend_Dire);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
+	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0);
+	void Set_Trigger_Mode(bool Mode);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Extend_State();
@@ -169,6 +176,8 @@ public:
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
 	int Get_State_Size();
+	// 获取上次移动触发的边沿
+	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY);//可选功能 对2D棋盘上的物品微调位置
 	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX);
 	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数
@@ -251,6 +260,8 @@ private:
 	bool _Compile_Success;
 	//_Extend_State_Enable用以标记是否启用了扩展世界功能
 	bool _Extend_State_Enable;
+	//_Trigger_Mode用以标记是否启用了移动到地图边缘触发地图跟随移动的功能
+	bool _Trigger_Mode{ false };
 	//_MState用于记录当前加载地图区域
 	Square_State _MState;
 	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0

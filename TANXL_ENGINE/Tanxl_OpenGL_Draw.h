@@ -1,55 +1,8 @@
-﻿//_VERSION_1_1_ UPDATE LOG
-// LAST_UPDATE 2023-05-09 10:36
-// 移除方向移动判断中另一轴的输入更新
-// 增加右下方扩展区域的绘制及其碰撞
-// 增加正上方扩展区域的绘制及其碰撞
-// 增加右上方扩展区域的绘制及其碰撞
-// 增加左下方扩展区域的绘制及其碰撞
-// 增加正左方扩展区域的绘制及其碰撞
-// 增加左上方扩展区域的绘制及其碰撞
-// 移除自动调整中调整绘制区域的功能
-// 移除自动调整的坐标记录并调整部分变量名称
-// 移除旧的统一变量数组改为三维向量数组
-// 三维向量预加入实例化相关设置
-// 增加设置显示区域的功能
-// 单例获取功能修复多次获取无法调整尺寸的问题
-// 修复扩展地图读取到空区块错误的问题
-// 边缘碰撞检测接口性能优化
-// 边缘碰撞检测接口不再修改按键状态属性
-// 推动屏幕移动部分不再需要按键按下
-// 优化去掉按键按下的标记
-// 边缘移动部分整理为函数
-// 坐标基类收入私有成员
-// 边缘移动部分增加碰撞检测
-// 修改实例化数组初始内容
-// 地图上增加新纹理的绘制
-// 地图载入功能增加对地图单元信息的设置
-// 地图方块编号获取功能改为地图单元获取功能
-// 地图碰撞增加对未定义单元的碰撞
-// 地图碰撞不再根据方块序号而是根据额外的可自定义变量判断
-// 重新载入地图部分优化减少判断
-// 新增整体移动背景地图一格的功能
-// 纹理重新排序
-// 增加地图环境碰撞伤害测试
-// 移除绘制的低画质模式
-// 右侧区域开启多段扩展地图测试
-// 开启四个方向的多段扩展地图测试
-// 扩展地图部分改用通用变量代替原数据
-// 增加宏控制重新载入地图的坐标输出
-// 生命值变量以及相关设置函数使用游戏物品对象替代
-// 修复长距离移动会导致绘制黑边的问题
-// 移动地图接口可设置移动次数
-// 优化受伤方块的碰撞逻辑
-// 修复横向移动时仍会出现黑边的问题
-// 新增地图方块检测功能替换大量重复代码
-// 增加起始界面的纹理与绘制
-// 地图碰撞接口代码简化
-// 增加时钟延时函数
-// 重新载入地图功能代码优化
-// 增加中间页面的绘制
-// 增加切换页面时的音效
-// 增加死亡页面的中间页面
-// 增加死亡时的音效
+﻿//_VERSION_1_2_ UPDATE LOG
+// LAST_UPDATE 2023-07-27 08:59
+// 移动触发地图移动功能优化并可设定触发范围
+// 增加获取触发地图移动事件时的方向移动距离占总距离的比率的接口
+// 增加变量控制中间页面帧个数
 
 #pragma once
 
@@ -509,10 +462,10 @@ public:
 	void Set_PreLoad(int PreLoads);
 	void Set_WaitFrame(int First_Adjust);
 	void Set_Clear(bool Clear);
-	void Set_Trigger_Mode(bool Mode);
-	void Set_Trigger_Range(bool Enable, float Height, float Width);
+	void Set_Trigger_Range(float Ratio);
 	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
+	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State);
 	//Update_Current 更新地图加载区块
@@ -521,17 +474,14 @@ public:
 	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
-	void StateMove_Edge_Set(GameStateBase* State, int Dist_Mid, int Stat_Loc, int Move_Loc);
 	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
 	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
 	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
-	//地图单元获取功能
-	StateUnit* Get_State(int LocationX, int LocationY, GameStateBase& State);
-	EMove_State_EventId Auto_Update_Trigger(float Height, float Width);
-	EMove_State_EventId Auto_Update_Trigger(short Edge);
+	//获取移动触发地图移动的距离与半地图距离的比值
+	float Get_Trigger_Ratio();
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
 	//获取OpenGL窗口
@@ -544,8 +494,6 @@ private:
 	bool _Trigger_Mode{ false };
 	//仅在初始化时可控制窗口是否可调整大小
 	bool _Window_Adjust_Enable;
-	//标记是否启用地图随移动而移动的功能
-	bool _Is_Trigger_Enable{ false };
 	bool _Is_Adjust_Enable{ true };
 	bool _Is_Init_Need{ true };
 
@@ -560,10 +508,8 @@ private:
 	double _Each_Height{ 0 };
 	//记录地图场景基本矩形的宽度值
 	double _Each_Width{ 0 };
-	//触发地图移动事件时的最低高度方向移动距离
-	float _Trigger_Height{ 1.0f };
-	//触发地图移动事件时的最低宽度方向移动距离
-	float _Trigger_Width{ 1.0f };
+	//触发地图移动事件时的方向移动距离占总距离的比率
+	float _Trigger_Ratio{ 1.0f };
 	float _Location_Distance_MidX{ 0.0f };
 	float _Location_Distance_MidY{ 0.0f };
 	float _Location_Move_DistanceX{ 0.0f };
@@ -599,9 +545,12 @@ private:
 	GameObject* _Main_Character;
 	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
 	int _Draw_Status{ 0 };
+	//当前的中间页面编号
 	int _Middle_Frame{ 0 };
+	//最大的中间页面编号
+	int _Max_Middle_Frame{ 0 };
 	//当前此模块的版本号
-	const std::string _Version{ "1.1" };
+	const std::string _Version{ "1.2" };
 	GLFWwindow* _Main_Window;
 	LocationBase* _LCB;
 	//用于实例化绘制的偏移量

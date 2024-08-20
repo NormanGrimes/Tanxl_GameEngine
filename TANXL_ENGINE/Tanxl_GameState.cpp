@@ -718,6 +718,101 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 #endif
 }
 
+void GameStateBase::StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_Loc, short Edge)//Reach Screen Edge : Then push screen to move
+{
+	LocationBase* LCB{ &LocationBase::GetLocationBase() };
+
+	int Moves{};
+	if (_Trigger_Mode)
+		Moves = this->Auto_Update_Trigger(Edge);
+
+	if ((Moves & MoveToNH) == MoveToNH)
+	{
+#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+		std::cout << "FLAG ----------------------------Y+" << std::endl;
+#endif
+		LCB->Get_LocationY(Stat_Loc) += 0.01f;
+		LCB->Get_LocationY(Move_Loc) += 0.01f;
+		this->Get_Move_Distance()._Location_Y -= 0.01f;
+
+		int X{ this->Get_LocationX() };
+		int Y{ this->Get_LocationY() };
+
+		if ((this->Get_State(X, Y) == nullptr) ||
+			(this->Get_State(X, Y)->Get_Move_Status() == 1))
+		{
+			LCB->Get_LocationY(Stat_Loc) -= 0.01f;
+			LCB->Get_LocationY(Move_Loc) -= 0.01f;
+			this->Get_Move_Distance()._Location_Y += 0.01f;
+		}
+	}
+	if ((Moves & MoveToPH) == MoveToPH)
+	{
+#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+		std::cout << "FLAG ----------------------------Y-" << std::endl;
+#endif
+		LCB->Get_LocationY(Stat_Loc) -= 0.01f;
+		LCB->Get_LocationY(Move_Loc) -= 0.01f;
+		this->Get_Move_Distance()._Location_Y += 0.01f;
+
+		int X{ this->Get_LocationX() };
+		int Y{ this->Get_LocationY() };
+
+		if ((this->Get_State(X, Y) == nullptr) ||
+			(this->Get_State(X, Y)->Get_Move_Status() == 1))
+		{
+			LCB->Get_LocationY(Stat_Loc) += 0.01f;
+			LCB->Get_LocationY(Move_Loc) += 0.01f;
+			this->Get_Move_Distance()._Location_Y -= 0.01f;
+		}
+	}
+	if ((Moves & MoveToNW) == MoveToNW)
+	{
+#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+		std::cout << "FLAG ----------------------------X+" << std::endl;
+#endif
+		LCB->Get_LocationX(Stat_Loc) += 0.01f;
+		LCB->Get_LocationX(Move_Loc) += 0.01f;
+		this->Get_Move_Distance()._Location_X -= 0.01f;
+
+		int X{ this->Get_LocationX() };
+		int Y{ this->Get_LocationY() };
+
+		if ((this->Get_State(X, Y) == nullptr) ||
+			(this->Get_State(X, Y)->Get_Move_Status() == 1))
+		{
+			LCB->Get_LocationX(Stat_Loc) -= 0.01f;
+			LCB->Get_LocationX(Move_Loc) -= 0.01f;
+			this->Get_Move_Distance()._Location_X += 0.01f;
+		}
+	}
+	if ((Moves & MoveToPW) == MoveToPW)
+	{
+#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+		std::cout << "FLAG ----------------------------X-" << std::endl;
+#endif
+		LCB->Get_LocationX(Stat_Loc) -= 0.01f;
+		LCB->Get_LocationX(Move_Loc) -= 0.01f;
+		this->Get_Move_Distance()._Location_X += 0.01f;
+
+		int X{ this->Get_LocationX() };
+		int Y{ this->Get_LocationY() };
+
+		if ((this->Get_State(X, Y) == nullptr) ||
+			(this->Get_State(X, Y)->Get_Move_Status() == 1))
+		{
+			LCB->Get_LocationX(Stat_Loc) += 0.01f;
+			LCB->Get_LocationX(Move_Loc) += 0.01f;
+			this->Get_Move_Distance()._Location_X -= 0.01f;
+		}
+	}
+}
+
+void GameStateBase::Set_Trigger_Mode(bool Mode)
+{
+	this->_Trigger_Mode = Mode;
+}
+
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false),
 	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1),
@@ -874,6 +969,120 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 	return nullptr;
 }
 
+StateUnit* GameStateBase::Get_State(int LocationX, int LocationY)
+{
+	StateUnit* Unit{ nullptr };
+	if (LocationX > static_cast<int>(this->Get_DataWidth()))
+	{
+		if (LocationY > static_cast<int>(this->Get_DataHeight()))
+		{
+			if (this->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "RIGH BELO AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY - Get_DataHeight() - 1) * (Get_DataWidth() + 1) + LocationX - Get_DataWidth() - 1 << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_RIGH_BELO, (LocationY - Get_DataHeight() - 1) * (Get_DataWidth() + 1) + LocationX - Get_DataWidth() - 1);
+			}
+		}
+		else if (LocationY >= 0)
+		{
+			if (Is_State_Exist(STATE_EXTEND_RIGH))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "RIGH AREA" << LocationX << "_" << LocationY << "_"
+					<< LocationY * (Get_DataWidth() + 1) + LocationX - Get_DataWidth() - 1 << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_RIGH, LocationY * (Get_DataWidth() + 1) + LocationX - Get_DataWidth() - 1);
+			}
+		}
+		else if (LocationY >= -static_cast<int>(Get_DataHeight()))
+		{
+			if (Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "RIGH ABOV AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY + Get_DataHeight() + 1) * (Get_DataWidth() + 1) + LocationX << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_RIGH_ABOV, (LocationY + Get_DataHeight() + 1) * (Get_DataWidth() + 1) + LocationX - Get_DataWidth() - 1);
+			}
+		}
+	}
+	else if (LocationX >= 0)
+	{
+		if (LocationY > static_cast<int>(Get_DataHeight()))
+		{
+			if (Is_State_Exist(STATE_EXTEND_BELO))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "BELO AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY - Get_DataHeight() - 1) * (Get_DataWidth() + 1) + LocationX << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_BELO, (LocationY - Get_DataHeight() - 1) * (Get_DataWidth() + 1) + LocationX);
+			}
+		}
+		else if (LocationY >= 0)
+		{
+			if (Is_State_Exist(STATE_EXTEND_MIDD))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "MIDD AREA" << LocationX << "_" << LocationY << "_"
+					<< LocationY * (Get_DataWidth() + 1) + LocationX << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_MIDD, LocationY * (Get_DataWidth() + 1) + LocationX);
+			}
+		}
+		else if (LocationY >= -static_cast<int>(Get_DataHeight()))
+		{
+			if (Is_State_Exist(STATE_EXTEND_ABOV))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "ABOV AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY + Get_DataHeight() + 1) * (Get_DataWidth() + 1) + LocationX << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_ABOV, (LocationY + Get_DataHeight() + 1) * (Get_DataWidth() + 1) + LocationX);
+			}
+		}
+	}
+	else if (LocationX >= -static_cast<int>(Get_DataWidth()))
+	{
+		if (LocationY > static_cast<int>(Get_DataHeight()))
+		{
+			if (Is_State_Exist(STATE_EXTEND_LEFT_BELO))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "LEFT BELO AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY - Get_DataHeight() - 1) * (Get_DataWidth() + 1) + LocationX + Get_DataWidth() + 1 << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_LEFT_BELO, (LocationY - Get_DataHeight() - 1) * (Get_DataWidth() + 1) + LocationX + Get_DataWidth() + 1);
+			}
+		}
+		else if (LocationY >= 0)
+		{
+			if (Is_State_Exist(STATE_EXTEND_LEFT))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "LEFT AREA" << LocationX << "_" << LocationY << "_"
+					<< LocationY * (Get_DataWidth() + 1) + LocationX + Get_DataWidth() + 1 << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_LEFT, LocationY * (Get_DataWidth() + 1) + LocationX + Get_DataWidth() + 1);
+			}
+		}
+		else if (LocationY >= -static_cast<int>(Get_DataHeight()))
+		{
+			if (Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
+			{
+#if _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_
+				std::cout << "LEFT ABOV AREA" << LocationX << "_" << LocationY << "_"
+					<< (LocationY + Get_DataHeight() + 1) * (Get_DataWidth() + 1) + LocationX + Get_DataWidth() + 1 << std::endl;
+#endif
+				Unit = Get_StateUnit(STATE_EXTEND_LEFT_ABOV, (LocationY + Get_DataHeight() + 1) * (Get_DataWidth() + 1) + LocationX + Get_DataWidth() + 1);
+			}
+		}
+	}
+	return Unit;
+}
+
 Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 {
 	for (int i{ 0 }; i < (this->_State_WidthS * this->_State_HeightS); ++i)
@@ -972,6 +1181,11 @@ int GameStateBase::Get_StateHeight()const
 int GameStateBase::Get_StateWidth()const
 {
 	return this->_GameState_Width;
+}
+
+EMove_State_EventId GameStateBase::Auto_Update_Trigger(short Edge)
+{
+	return static_cast<EMove_State_EventId>(Edge);
 }
 
 std::vector<StateUnit*>* GameStateBase::Get_GameState(EState_Extend State_Id)

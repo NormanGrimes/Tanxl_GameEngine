@@ -37,6 +37,7 @@
 // 2023/07/07 错误检测部分增加新的情况并优化代码
 // 2023/07/13 增加对物品模块的支持
 // 2023/07/14 增加对STEAM服务模块的支持
+// 2023/07/27 地图边缘移动设置的入参减少
 
 #pragma once
 
@@ -99,8 +100,8 @@ public:
 	//设置是否启用输入移动限制 Eanble启用/关闭自动移动限制 启用后不需要设置后续内容 Max_Height最大移动高度(绝对值) Max_Widtd最大移动宽度(绝对值)
 	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Widtd = 0.0f);
 
-	//设置是否启用移动到达地图边缘化地图随着移动操作而移动 Enable启用/关闭此功能 Mode为true时根据程序中输入操作自动获取 为false时需要设置Compaer_Height/Width为触发的比较值
-	void Engine_Insert_Satate_MoveWith(bool Enable, bool Mode, float Compare_Height = 0.0f, float Compare_Width = 1.0f);
+	//设置是否启用移动到达地图边缘时地图随着移动操作而移动 Enable启用/关闭此功能 Mode为true时根据程序中输入操作自动获取 为false时需要设置Compaer_Height/Width为触发的比较值
+	void Engine_Insert_State_MoveWith(bool Enable, float Compare_Ratio = 1.0f);
 
 	//提供更新绘制部分的手动移动距离值 以及输入按键检测
 	void Engine_Insert_State_Update();

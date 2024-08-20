@@ -223,6 +223,14 @@ void InsertEventBase::Init_Default_Key()
 	this->RegistEvent(MOVE_DOWN);
 }
 
+void InsertEventBase::Update_Move_Max()
+{
+	OpenGL_Draw* OD{ &OpenGL_Draw::GetOpenGLBase() };
+	this->_Max_float *= OD->Get_Trigger_Ratio();
+	this->_Max_float_Height *= OD->Get_Trigger_Ratio();
+	this->_Max_float_Width *= OD->Get_Trigger_Ratio();
+}
+
 float InsertEventBase::Get_Margin_X()
 {
 	return this->_Margin_X;

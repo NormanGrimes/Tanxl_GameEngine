@@ -1,5 +1,6 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2023-07-24 09:34
+// 根据中间帧个数动态绘制
 
 #version 430
 
@@ -7,6 +8,7 @@
 
 layout (location = 1) in vec2 texCoord;
 layout (location = 2) uniform int Draw_Status;
+layout (location = 3) uniform int Max_Status;
 
 out vec4 vs_color;
 out vec2 tc;
@@ -19,13 +21,13 @@ void main(void)
 
 	float Status_0 = 0.0f;
 
-	if(Draw_Status <= 100)
+	if(Draw_Status <= Max_Status / 2)
 	{
-		Status_0 = Draw_Status * 0.01f;
+		Status_0 = Draw_Status * (2.0f / Max_Status);
 	}
 	else
 	{
-		Status_0 = 1.0f - (Draw_Status - 100) * 0.01f;
+		Status_0 = 1.0f - (Draw_Status - 100) * (2.0f / Max_Status);
 	}
 
 	int counts = 0;

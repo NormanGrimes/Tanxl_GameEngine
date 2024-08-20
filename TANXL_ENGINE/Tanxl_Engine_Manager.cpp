@@ -83,10 +83,11 @@ void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, floa
 	this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Max_Widtd);
 }
 
-void Tanxl_Engine::Engine_Insert_Satate_MoveWith(bool Enable, bool Mode, float Compare_Height, float Compare_Width)
+void Tanxl_Engine::Engine_Insert_State_MoveWith(bool Enable, float Compare_Ratio)
 {
-	this->Tanxl_Engine_OpenGL_Draw->Set_Trigger_Mode(Mode);
-	this->Tanxl_Engine_OpenGL_Draw->Set_Trigger_Range(Enable, Compare_Height, Compare_Width);
+	this->Tanxl_Engine_GameState->Set_Trigger_Mode(Enable);
+	this->Tanxl_Engine_OpenGL_Draw->Set_Trigger_Range(Compare_Ratio);
+	this->Tanxl_Engine_InsertBase->Update_Move_Max();
 }
 
 void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move)

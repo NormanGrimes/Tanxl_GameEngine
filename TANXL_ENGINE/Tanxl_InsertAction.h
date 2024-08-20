@@ -19,6 +19,7 @@
 // 按键单元结构增加获取按键状态接口
 // 初始化阶段不再默认初始化移动按键
 // 提供接口初始化八个默认移动按键
+// 增加更新最大移动距离的接口
 
 #pragma once
 
@@ -105,6 +106,7 @@ public:
 	void Set_MultiSpeed(int Start, int End, double Adjust_Value);
 	// 初始化默认提供的八个移动按键
 	void Init_Default_Key();
+	void Update_Move_Max();
 private:
 	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘
 	void AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);
