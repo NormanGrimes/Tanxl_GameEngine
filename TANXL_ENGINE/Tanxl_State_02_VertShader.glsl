@@ -16,7 +16,7 @@ void main(void)
 {
 	tc = texCoord;
 
-	Cube = 8;
+	Cube = 10;
 
 	for(int VertexId = 0; VertexId < 1; ++VertexId)
 	{

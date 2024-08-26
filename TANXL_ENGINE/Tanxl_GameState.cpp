@@ -169,37 +169,6 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 	_Compile_Success = true;
 }
 
-void GameStateBase::CompileStateEvent(std::string Infor, EState_Extend Extend)//Sample  A = 0, B = 1, C = 2.
-{
-	std::string Text_Reader{};
-	int Status_Int{};
-
-	std::vector<StateUnit*>* Target{ this->Get_GameState(Extend) };
-
-	for (int i{ 0 }, SetCount{ 0 }; i < Infor.size(); ++i)
-	{
-		if ((Infor.at(i) != ',') && (Infor.at(i) != '='))
-			Text_Reader += Infor.at(i);
-		else if (Infor.at(i) == '=')//读取等号后的数字ID值
-		{
-			std::string Status_Reader{};
-			while (Infor.at(i) != ',')
-			{
-				if ((Infor.at(i) != ' ') && ((Infor.at(i) >= '0') && (Infor.at(i) <= '9')))
-					Status_Reader += Infor.at(i);
-			}
-			Status_Int = std::stoi(Status_Reader);
-		}
-		else
-		{
-			Target->at(SetCount++)->SetEvent(Text_Reader, Status_Int);
-			if (Infor.at(i) == '.')
-				return;
-			Text_Reader = "";
-		}
-	}
-}
-
 void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 {
 	if (State_Id < 0)
@@ -1171,6 +1140,16 @@ int GameStateBase::Get_Distance_Move_Id()
 int GameStateBase::Get_State_Size()
 {
 	return this->_State_WidthS * this->_State_HeightS;
+}
+
+int GameStateBase::Get_State_Width()
+{
+	return this->_State_WidthS;
+}
+
+int GameStateBase::Get_State_Height()
+{
+	return this->_State_HeightS;
 }
 
 int GameStateBase::Get_StateHeight()const

@@ -9,7 +9,6 @@
 // 整理输入纹理顺序
 // 完整支持所有编号的纹理
 
-
 #version 430
 
 in vec4 vs_color;

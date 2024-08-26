@@ -4,7 +4,7 @@
 
 std::string OpenGL_Render::readShaderFile(const char* filePath)
 {
-	std::string content;
+	std::string content{};
 	std::ifstream fileStream(filePath, std::ios::in);
 	std::string line{ "" };
 	while (!fileStream.eof()) {
@@ -45,7 +45,7 @@ void OpenGL_Render::printProgramLog(int prog)
 
 GLuint OpenGL_Render::prepareShader(int shaderTYPE, const char* shaderPath)
 {
-	GLint shaderCompiled;
+	GLint shaderCompiled{};
 	std::string shaderStr{ readShaderFile(shaderPath) };
 	const char* shaderSrc{ shaderStr.c_str() };
 	GLuint shaderRef{ glCreateShader(shaderTYPE) };
@@ -68,7 +68,7 @@ GLuint OpenGL_Render::prepareShader(int shaderTYPE, const char* shaderPath)
 
 int OpenGL_Render::finalizeShaderProgram(GLuint sprogram)
 {
-	GLint linked;
+	GLint linked{};
 	glLinkProgram(sprogram);
 	checkOpenGLError();
 	glGetProgramiv(sprogram, GL_LINK_STATUS, &linked);
@@ -112,7 +112,7 @@ GLuint OpenGL_Render::loadTexture(const char *texImagePath)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	if (glewIsSupported("GL_EXT_texture_filter_anisotroPIL")) {
-		GLfloat anisoset = 0.0f;
+		GLfloat anisoset{ 0.0f };
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &anisoset);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisoset);
 	}

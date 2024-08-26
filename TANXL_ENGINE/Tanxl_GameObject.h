@@ -51,7 +51,7 @@ public:
 	bool Get_Special_Status();
 private:
 	std::string _Name;
-	bool _Is_Specil_Enable;
+	bool _Is_Special_Enable;
 };
 
 //游戏物品类

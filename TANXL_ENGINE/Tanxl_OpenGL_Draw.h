@@ -3,6 +3,7 @@
 // 移动触发地图移动功能优化并可设定触发范围
 // 增加获取触发地图移动事件时的方向移动距离占总距离的比率的接口
 // 增加变量控制中间页面帧个数
+// 从地图区块检测中独立出地图单元事件检测功能
 
 #pragma once
 
@@ -42,7 +43,9 @@ namespace TanxlOD
 	static const char* TexOcean_01_200x200				{ "Texture/TANXL_OCEAN_01_200X200.jpg"			};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
-	static const char* TexPrincess_01_32x32				{ "Texture/YANG_PRINCESS_01_32X32.png"			};
+	static const char* TexPrincess_01_256x256			{ "Texture/YANG_PRINCESS_01_256X256.png"		};
+	static const char* TexPrincess_02_256x256			{ "Texture/YANG_PRINCESS_02_256X256.png"		};
+	static const char* TexPrincess_03_256x256			{ "Texture/YANG_PRINCESS_03_256X256.png"		};
 	static const char* TexStartMenu_01_1024x1024        { "Texture/ENG/STARTMENU_01_1024x1024.png"      };
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -474,6 +477,7 @@ public:
 	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
+	void State_Check_Event(GameStateBase* State);
 	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
 	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
 	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);

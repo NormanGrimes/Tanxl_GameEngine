@@ -30,7 +30,7 @@ int Health_Componment::Check_Health()
 	return _Current_Health;
 }
 
-Componment::Componment(std::string Name) :_Name(Name), _Is_Specil_Enable(false) {}
+Componment::Componment(std::string Name) :_Name(Name), _Is_Special_Enable(false) {}
 
 std::string Componment::GetName()
 {
@@ -39,12 +39,12 @@ std::string Componment::GetName()
 
 void Componment::Set_Special_Status(bool Enable)
 {
-	this->_Is_Specil_Enable = Enable;
+	this->_Is_Special_Enable = Enable;
 }
 
 bool Componment::Get_Special_Status()
 {
-	return this->_Is_Specil_Enable;
+	return this->_Is_Special_Enable;
 }
 
 GameObject::GameObject(int Max_Health, int Current_Health)

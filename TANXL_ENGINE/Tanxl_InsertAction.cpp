@@ -321,9 +321,7 @@ _Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Ran
 
 InsertEventBase::~InsertEventBase()
 {
-	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
-		delete & this->_KeyEventS.at(i);
-	this->_KeyEventS.clear();
+	std::vector<Key_Unit*>().swap(this->_KeyEventS);
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :

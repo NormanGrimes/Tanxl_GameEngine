@@ -18,6 +18,8 @@
 // 从绘制模块移入获取上次移动触发的边沿的功能
 // 从绘制模块移入指定坐标获取地图单元功能
 // 从绘制模块移入触发地图移动事件的设置与执行功能
+// 移除地图事件编译接口功能合并到地图单元编译接口
+// 增加地图横向与纵向区块个数获取接口
 
 #pragma once
 
@@ -149,8 +151,6 @@ public:
 	void Set_Adjust_Flag(bool Adjust_Flag);
 	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
-	//↓CompileStateEvent : 使用一个字符串来完成整个地图状态的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
-	void CompileStateEvent(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 	void Set_StartState(int State_Id, std::string Cover_String = "NULL");
 	void Set_State(int State_Id, std::string Cover_String);
 	void Set_State_Counts(int Width, int Height);
@@ -176,6 +176,8 @@ public:
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
 	int Get_State_Size();
+	int Get_State_Width();
+	int Get_State_Height();
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY);//可选功能 对2D棋盘上的物品微调位置
