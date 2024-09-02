@@ -4,6 +4,10 @@
 // 增加获取触发地图移动事件时的方向移动距离占总距离的比率的接口
 // 增加变量控制中间页面帧个数
 // 从地图区块检测中独立出地图单元事件检测功能
+// 地图单元事件检测功能增加空指针判断
+// 重新载入地图功能移除早期判断设定
+// 触发地图单元事件后立即重绘地图
+// 增加接口检测是否有按键按下
 
 #pragma once
 
@@ -46,6 +50,7 @@ namespace TanxlOD
 	static const char* TexPrincess_01_256x256			{ "Texture/YANG_PRINCESS_01_256X256.png"		};
 	static const char* TexPrincess_02_256x256			{ "Texture/YANG_PRINCESS_02_256X256.png"		};
 	static const char* TexPrincess_03_256x256			{ "Texture/YANG_PRINCESS_03_256X256.png"		};
+	static const char* TexPrincess_04_256x256			{ "Texture/YANG_PRINCESS_04_256X256.png"		};
 	static const char* TexStartMenu_01_1024x1024        { "Texture/ENG/STARTMENU_01_1024x1024.png"      };
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -481,13 +486,15 @@ public:
 	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
 	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
 	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
+	//用于第一次或重新加载整个地图场景
+	void ReLoadState(GameStateBase* State);
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
 	//获取移动触发地图移动的距离与半地图距离的比值
 	float Get_Trigger_Ratio();
-	//用于第一次或重新加载整个地图场景
-	void ReLoadState(GameStateBase* State);
+	//检测是否有按键按下
+	bool Check_Key_Press();
 	//获取OpenGL窗口
 	GLFWwindow* Get_Window()const;
 private:

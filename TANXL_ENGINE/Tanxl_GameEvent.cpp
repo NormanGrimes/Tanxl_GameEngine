@@ -4,7 +4,7 @@
 
 //GameEvent
 
-GameEvent::GameEvent(std::string Name) :_EventName(Name) {}
+GameEvent::GameEvent(std::string Name, GameObject* Obejct) :_EventName(Name), _GameObejct(Obejct) {}
 
 //GameEventBase
 

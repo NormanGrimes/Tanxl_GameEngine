@@ -17,6 +17,8 @@ void Health_Componment::TakeDamage(int TakeVal)
 	if (TakeVal < 0 || this->_Unable_Damage)
 		return;
 	_Current_Health -= TakeVal;
+	if (_Current_Health < 0)
+		_Current_Health = 0;
 }
 
 void Health_Componment::Set_Health(int Current_Health, int Max_Health)

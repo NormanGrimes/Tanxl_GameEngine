@@ -6,6 +6,7 @@
 // 新增搜索已注册游戏事件功能
 // 增加事件移除功能
 // 增加重载版本事件移除功能
+// 游戏事件结构增加游戏物品指针成员
 
 #pragma once
 
@@ -14,15 +15,17 @@
 
 #include<vector>
 #include<string>
+#include "Tanxl_GameObject.h"
 
 class GameEvent
 {
 public:
-	GameEvent(std::string Name = "");
+	GameEvent(std::string Name = "", GameObject* Obejct = nullptr);
 	std::string GetEventName();
 	virtual void EventAction() = 0;
 private:
 	std::string _EventName;
+	GameObject* _GameObejct;
 };
 
 //GameEventBase

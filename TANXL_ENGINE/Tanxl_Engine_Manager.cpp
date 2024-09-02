@@ -42,7 +42,6 @@ unsigned Tanxl_Engine::Engine_Check_Engine_Status(bool ShutDown)
 	if (((this->_Engine_Status & 0xFF) != 0) && ShutDown)
 	{
 		std::cout << "Fault detected ! Fault Id :" << (_Engine_Status & 0xFF) << std::endl;
-		system("pause");
 		this->Tanxl_Engine_OpenGL_Draw->Destroy_Window();
 		exit(_Engine_Status & 0xFF);
 	}

@@ -44,7 +44,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 		return;
 	}
 
-	if(_Window_Adjust_Enable)
+	if (_Window_Adjust_Enable)
 		glfwSetFramebufferSizeCallback(_Main_Window, TanxlOD::framebuffer_size_callback);
 	else
 		glfwSetWindowSizeLimits(_Main_Window, 800, 800, 800, 800);
@@ -109,7 +109,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
-    Append_Texture(TanxlOD::TexGrass_02_200x200);       // 1 00
+	Append_Texture(TanxlOD::TexGrass_02_200x200);       // 1 00
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); // 2 01
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); // 3 02
 	Append_Texture(TanxlOD::TexOcean_01_200x200);       // 4 03
@@ -117,13 +117,12 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexPrincess_01_256x256);	// 6 05
 	Append_Texture(TanxlOD::TexPrincess_02_256x256);	// 6 05
 	Append_Texture(TanxlOD::TexPrincess_03_256x256);	// 6 05
+	Append_Texture(TanxlOD::TexPrincess_04_256x256);	// 6 05
 	Append_Texture(TanxlOD::TexHealth_01_32x32);        // 7 06
 	Append_Texture(TanxlOD::TexPrincess_01_9x11);       // 8 07
 	Append_Texture(TanxlOD::TexStartMenu_01_1024x1024); // 9 08
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
-
-	//Set_Trigger_Range(true, 0.6f, 0.6f);
 
 	float Half_Width{ (this->_WidthInt - 1) / 2.0f };
 	float Half_Height{ (this->_HeightInt - 1) / 2.0f };
@@ -167,109 +166,104 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		for (int i{ 0 }; i < State_Length; ++i)
 		{
 			this->_StateInfor[i].x = 3;
+			this->_StateInfor[i].y = 1;
 
-			if ((Move_NX >= -static_cast<int>(State->Get_DataWidth())) || (Move_NX <= static_cast<int>(State->Get_DataWidth()) * 2 + 1) ||
-				(Move_NY >= -static_cast<int>(State->Get_DataHeight())) || (Move_NY <= static_cast<int>(State->Get_DataHeight()) * 2 + 1))
+			if (Move_NX > static_cast<int>(State->Get_DataWidth()))//RIGH AREA
 			{
-				this->_StateInfor[i].y = 1;
-
-				if (Move_NX > static_cast<int>(State->Get_DataWidth()))//RIGH AREA
+				if (Move_NY > static_cast<int>(State->Get_DataHeight()))
 				{
-					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
+					if (State->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
 					{
-						if (State->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
-						{
-							unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % State->Get_GameState(STATE_EXTEND_RIGH_BELO)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
-					}
-					else if (Move_NY >= 0)
-					{
-						if (State->Is_State_Exist(STATE_EXTEND_RIGH))
-						{
-							unsigned x{ Move_NX - State->Get_DataWidth() - 1 + Move_NY * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_GameState(STATE_EXTEND_RIGH)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
-					}
-					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
-					{
-						if (State->Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
-						{
-							unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % State->Get_GameState(STATE_EXTEND_RIGH_ABOV)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
+						unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % State->Get_GameState(STATE_EXTEND_RIGH_BELO)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
 					}
 				}
-				else if (Move_NX >= 0)//MID AREA
+				else if (Move_NY >= 0)
 				{
-					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
+					if (State->Is_State_Exist(STATE_EXTEND_RIGH))
 					{
-						if (State->Is_State_Exist(STATE_EXTEND_BELO))
-						{
-							unsigned x{ Move_NX + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
-					}
-					else if (Move_NY >= 0)
-					{
-						if (State->Is_State_Exist(STATE_EXTEND_MIDD))
-						{
-							unsigned x{ Move_NX + Move_NY * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
-					}
-					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
-					{
-						if (State->Is_State_Exist(STATE_EXTEND_ABOV))
-						{
-							unsigned x{ Move_NX + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
+						unsigned x{ Move_NX - State->Get_DataWidth() - 1 + Move_NY * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_GameState(STATE_EXTEND_RIGH)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
 					}
 				}
-				else if (Move_NX >= -static_cast<int>(State->Get_DataWidth()))//LEFT AREA
+				else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
 				{
-					if (Move_NY > static_cast<int>(State->Get_DataHeight()))
+					if (State->Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
 					{
-						if (State->Is_State_Exist(STATE_EXTEND_LEFT_BELO))
-						{
-							unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
+						unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % State->Get_GameState(STATE_EXTEND_RIGH_ABOV)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
 					}
-					else if (Move_NY >= 0)
+				}
+			}
+			else if (Move_NX >= 0)//MID AREA
+			{
+				if (Move_NY > static_cast<int>(State->Get_DataHeight()))
+				{
+					if (State->Is_State_Exist(STATE_EXTEND_BELO))
 					{
-						if (State->Is_State_Exist(STATE_EXTEND_LEFT))
-						{
-							unsigned x{ Move_NX + State->Get_DataWidth() + 1 + Move_NY * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
+						unsigned x{ Move_NX + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
 					}
-					else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
+				}
+				else if (Move_NY >= 0)
+				{
+					if (State->Is_State_Exist(STATE_EXTEND_MIDD))
 					{
-						if (State->Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
-						{
-							unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
-							StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
-							this->_StateInfor[i].x = Unit->Get_State_Id();
-							this->_StateInfor[i].y = Unit->Get_Move_Status();
-						}
+						unsigned x{ Move_NX + Move_NY * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
+					}
+				}
+				else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
+				{
+					if (State->Is_State_Exist(STATE_EXTEND_ABOV))
+					{
+						unsigned x{ Move_NX + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
+					}
+				}
+			}
+			else if (Move_NX >= -static_cast<int>(State->Get_DataWidth()))//LEFT AREA
+			{
+				if (Move_NY > static_cast<int>(State->Get_DataHeight()))
+				{
+					if (State->Is_State_Exist(STATE_EXTEND_LEFT_BELO))
+					{
+						unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
+					}
+				}
+				else if (Move_NY >= 0)
+				{
+					if (State->Is_State_Exist(STATE_EXTEND_LEFT))
+					{
+						unsigned x{ Move_NX + State->Get_DataWidth() + 1 + Move_NY * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
+					}
+				}
+				else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
+				{
+					if (State->Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
+					{
+						unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
+						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
+						this->_StateInfor[i].x = Unit->Get_State_Id();
+						this->_StateInfor[i].y = Unit->Get_Move_Status();
 					}
 				}
 			}
@@ -303,7 +297,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
 
 		std::cout << this->_StateInfor[i].x << " ";
-		if(i % (this->_WidthInt + this->_PreLoads * 2) == 0)
+		if (i % (this->_WidthInt + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
 	}
 }
@@ -375,8 +369,6 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 
 	static int Dist_Mid{ State->Get_Distance_Screen_Id() };
 	static int Exac_Mov{ State->Get_Distance_Move_Id() };
-
-	//static int TestLimit = 1;
 
 	int State_Width{ static_cast<int>(State->Get_DataWidth()) + 1 };
 	int State_Height{ static_cast<int>(State->Get_DataHeight()) + 1 };
@@ -588,7 +580,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 			State->Get_Move_Distance()._Location_Y -= Marg_Height;
 			break;
 		}
-		
+
 		State->Update_Move(0.0f, 0.0f, Check_Direction);
 
 		int Temp_Height = this->_New_Current_Height;
@@ -633,7 +625,11 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 
 void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 {
-	if (State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_State_Id() == 4)
+	StateUnit* CheckUnit{ State->Get_State(State->Get_LocationX(), State->Get_LocationY()) };
+	if (!CheckUnit)
+		return;
+
+	if (CheckUnit->Get_State_Id() == 4)
 	{
 		if (_Main_Character->Check_Health() <= 2)
 		{
@@ -642,7 +638,8 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 		else
 		{
 			_Main_Character->TakeDamage(1);
-			State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Set_State_Id(1);
+			CheckUnit->Set_State_Id(1);
+			ReLoadState(State);
 		}
 	}
 }
@@ -659,9 +656,20 @@ float OpenGL_Draw::Get_Trigger_Ratio()
 	return this->_Trigger_Ratio;
 }
 
+bool OpenGL_Draw::Check_Key_Press()
+{
+	for (int i{ 32 }; i < 96; ++i)
+		if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
+			return true;
+	for (int i{ 256 }; i < 348; ++i)
+		if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
+			return true;
+	return false;
+}
+
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
-	SoundBase* SB{ &SoundBase::GetSoundBase() };
+	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	if (_Clear_Function)
 	{
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -713,7 +721,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 
 		glUseProgram(_Midle_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6 * 16);
+		glDrawArrays(GL_TRIANGLES, 0, 6 * 25);
 	}
 	else if (_Draw_Status == 6)
 	{
@@ -748,7 +756,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 
 		glUseProgram(_Midle_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6 * 16);
+		glDrawArrays(GL_TRIANGLES, 0, 6 * 25);
 	}
 	else
 	{
@@ -787,31 +795,16 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 	if (_Draw_Status == 0)
 	{
-		for (int i{ 32 }; i < 96; ++i)
+		if (Check_Key_Press())
 		{
-			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-			{
-				_Draw_Status = 5;
-				IEB->Init_Default_Key();
-			}
-		}
-		for (int i{ 256 }; i < 348; ++i)
-		{
-			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-			{
-				_Draw_Status = 5;
-				IEB->Init_Default_Key();
-			}
+			IEB->Init_Default_Key();
+			_Draw_Status = 5;
 		}
 	}
 	else if (_Draw_Status == 2)
 	{
-		for (int i{ 32 }; i < 96; ++i)
-			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-				_Draw_Status = 5;
-		for (int i{ 256 }; i < 348; ++i)
-			if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-				_Draw_Status = 5;
+		if (Check_Key_Press())
+			_Draw_Status = 5;
 	}
 
 	if (this->_Main_Character->Check_Health() == 2)
@@ -862,6 +855,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 
 		HitEdge_Check(State);
+
 		State_Check_Event(State);
 
 		if (!State->Get_Adjust_While_Move())
