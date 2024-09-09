@@ -38,6 +38,8 @@
 // 2023/07/13 增加对物品模块的支持
 // 2023/07/14 增加对STEAM服务模块的支持
 // 2023/07/27 地图边缘移动设置的入参减少
+// 2023/08/04 增加私有成员存储引擎信息文件的名称
+// 2023/08/04 引擎信息文件生成功能改为可多次调用
 
 #pragma once
 
@@ -146,7 +148,6 @@ private:
 	GameObjectBase* Tanxl_Engine_ObjectBase;
 	Tanxl_Inventory* Tanxl_Engine_Inventory;
 
-	unsigned _Engine_Status;
 	//Status :
 	// 0x001 引擎组件控制台列表初始化失败
 	// 0x002 引擎组件数据库初始化失败
@@ -161,6 +162,9 @@ private:
 	// 0x00B STEAM API初始化失败
 	// 0x000 未启用扩展世界功能
 	// 0x100 已启用扩展世界功能
+	unsigned _Engine_Status;
+
+	std::string _Engine_InforFile_Name = "";
 
 	const std::string __ENGINE_VERSION__ = "0.2";
 };

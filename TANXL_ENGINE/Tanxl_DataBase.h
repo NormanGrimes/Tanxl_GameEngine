@@ -4,6 +4,8 @@
 // 结构体定义移入源文件
 // 增加控制异常输出信息的宏
 // 添加数据链功能增加切换链操作
+// 链式数据生成的数据目的位置改为内存
+// 添加链式数据功能增加根据序号切换链的功能
 
 #pragma once
 
@@ -142,7 +144,7 @@ public:
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
 	void SortDataBase(ESort_Mode Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
-	//↓添加数据链 TDB指定添加的目标 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元 Type指定输入到的Type编号
+	//↓添加数据链 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元 Type指定输入到的Type编号
 	void Append_DataChain(std::string Data, unsigned Divide = 0, unsigned Type = 0x01);
 	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();

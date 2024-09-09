@@ -35,7 +35,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B21 TURBO", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B23", NULL, NULL);
 
 	if (_Main_Window == NULL)
 	{
@@ -367,14 +367,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 	static double State_Data_Width{ State->Get_DataWidth() * this->_Each_Width * 2 + this->_Each_Width };
 	static double State_Data_Height{ State->Get_DataHeight() * this->_Each_Height * 2 + this->_Each_Height };
 
-	static int Dist_Mid{ State->Get_Distance_Screen_Id() };
 	static int Exac_Mov{ State->Get_Distance_Move_Id() };
-
-	int State_Width{ static_cast<int>(State->Get_DataWidth()) + 1 };
-	int State_Height{ static_cast<int>(State->Get_DataHeight()) + 1 };
-
-	float Marg_Width{ static_cast<float>(this->_Each_Width * 10) };
-	float Marg_Height{ static_cast<float>(this->_Each_Height * 10) };
 
 	if (IEB->Get_Margin_X() < 0)
 	{
@@ -388,7 +381,6 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		else
 		{
-			int State_Check = 0;
 			for (int i{ 0 }; i < 2; ++i)
 			{
 				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_LEFT);
@@ -412,7 +404,6 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		else
 		{
-			int State_Check = 0;
 			for (int i{ 0 }; i < 2; ++i)
 			{
 				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_RIGH);
@@ -436,7 +427,6 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		else
 		{
-			int State_Check = 0;
 			for (int i{ 0 }; i < 2; ++i)
 			{
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
@@ -460,7 +450,6 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		else
 		{
-			int State_Check = 0;
 			for (int i{ 0 }; i < 2; ++i)
 			{
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
@@ -471,6 +460,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 3);//Insert Status
 	}
+	State_Check_Event(State);
 }
 
 void OpenGL_Draw::Update_Current()
@@ -513,7 +503,6 @@ int OpenGL_Draw::Get_PreLoad()
 
 void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction)
 {
-	static int Status{ 0 };
 	float Marg_Width{ static_cast<float>(this->_Each_Width * 10) };
 	float Marg_Height{ static_cast<float>(this->_Each_Height * 10) };
 
@@ -545,8 +534,6 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 	if ((State->Get_State(State->Get_LocationX(), State->Get_LocationY()) == nullptr) ||
 		(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Move_Status() == 1))
 	{
-		Status = 0;
-
 		switch (Check_Direction)
 		{
 		case CHECK_EDGE_LEFT:
@@ -564,7 +551,6 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 	}
 	else if (Reset)
 	{
-		Status = 0;
 		switch (Check_Direction)
 		{
 		case CHECK_EDGE_LEFT:
@@ -625,6 +611,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 
 void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 {
+	State->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
 	StateUnit* CheckUnit{ State->Get_State(State->Get_LocationX(), State->Get_LocationY()) };
 	if (!CheckUnit)
 		return;
@@ -855,8 +842,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 
 		HitEdge_Check(State);
-
-		State_Check_Event(State);
 
 		if (!State->Get_Adjust_While_Move())
 		{

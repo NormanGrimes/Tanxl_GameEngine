@@ -1,3 +1,13 @@
+TEnGinE Version-0.2 Build-24 2023-08-03 11:14 UPDATE_LOG
+////////////////////////////////////////////////////////
+地图模块修复每次操作都需要重新读内存的问题。绘制模块统一
+碰撞的检测范围并优化降低检测次数。绘制模块碰撞检测功能移
+除大量未使用变量。游戏地图增加额外的预定义区域。存储模块
+链式数据生成的数据目的位置改为内存。存储模块添加链式数据
+功能增加根据序号切换链的功能。地图模块增加大地图区块生成
+接口。引擎管理模块增加私有成员存储引擎信息文件的名称。引
+擎管理模块引擎信息文件生成功能改为可多次调用。
+
 TEnGinE Version-0.2 Build-23 2023-08-02 09:36 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块地图单元事件检测功能增加空指针判断。绘制模块重新
@@ -278,6 +288,17 @@ TEnGinE Version-0.1 Build-90 2023-03-30 09:16 UPDATE_LOG
 口修复地图尺寸可能未计算的问题。绘制模块正式上线不可移动
 区块功能。绘制模块调用自动生成的地图数据。地图模块设置扩
 展地图接口增加地图尺寸设置。
+--------------------------------------------------------
+The player vertex shader reduces the size of the player 
+block. The map module updates the mobile interface to 
+more accurate coordinate calculations and adds a vertex 
+calculation. The map module updates the mobile 
+interface to fix an issue where map dimensions may not 
+be calculated. The drawing module officially launched 
+the immovable block function. The drawing module 
+invokes the automatically generated map data. Map 
+module settingsExtend the map interface and add map 
+size settings.
 
 TEnGinE Version-0.1 Build-89 2023-03-28 09:25 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -286,6 +307,18 @@ TEnGinE Version-0.1 Build-89 2023-03-28 09:25 UPDATE_LOG
 增加按键功能长按的延迟时间。输入模块减少按键功能需要的参
 数。绘制模块增加更稳定的地图移动范围限制功能。绘制模块增
 加控制台输出控制宏。绘制模块增加不可移动方块的功能测试。
+--------------------------------------------------------
+The drawing module moves manually and the map movement 
+distance is changed to coordinate base class control. 
+The coordinate module is sorted into the core layer. 
+The engine management module adds support for 
+coordinate base classes. The input module increases the 
+delay time of long press of the key function. The input 
+module reduces the parameters required for key 
+functions. The drawing module adds a more stable map 
+movement range restriction function. The drawing module 
+adds console output control macros. The drawing module 
+adds functional testing of immovable blocks.
 
 TEnGinE Version-0.1 Build-88 2023-03-24 16:19 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -294,6 +327,17 @@ TEnGinE Version-0.1 Build-88 2023-03-24 16:19 UPDATE_LOG
 的成员移入坐标基类管理。引擎管理模块增加引擎状态与引擎状
 态获取函数。地图顶点着色器移除未使用变量。移除主函数的每
 隔五十帧检测一次特殊输入的操作。
+--------------------------------------------------------
+The drawing module changes coordinates from temporarily 
+defined coordinate instances to coordinate base class 
+control. The coordinate module coordinate base class 
+adds the ability to set specified coordinates. Members 
+of the map module that record the distance moved move 
+into the coordinate base class management. The engine 
+management module adds engine status and engine status 
+acquisition functions. Map vertex shaders remove unused 
+variables. Removes the main function's action of 
+detecting special input every fifty frames.
 
 TEnGinE Version-0.1 Build-87 2023-03-22 16:04 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -302,6 +346,19 @@ TEnGinE Version-0.1 Build-87 2023-03-22 16:04 UPDATE_LOG
 模块移除记录地图方块数的变量。绘制模块修复初始化接口中一
 个可能导致问题的部分。绘制模块增加简化版本的坐标数据获取
 功能。坐标模块坐标基类增加调整指定坐标的功能。
+--------------------------------------------------------
+The name member is added to the coordinate structure of 
+the coordinate module base. The Coordinates module 
+fixes incorrect member settings that restrict 
+coordinate classes. The coordinate module base class 
+adds the ability to add coordinate records. The drawing 
+module removes the variable that records the number of 
+squares in the map. The drawing module fixes a part of 
+the initialization interface that may be causing 
+problems. The drawing module adds a simplified version 
+of the coordinate data acquisition function. The 
+coordinate module coordinate base class adds the 
+ability to adjust specified coordinates.
 
 TEnGinE Version-0.1 Build-86 TURBO 2023-03-20 14:00 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -313,6 +370,24 @@ TEnGinE Version-0.1 Build-86 TURBO 2023-03-20 14:00 UPDATE_LOG
 下检测。坐标模块增加单例模式的坐标基类。主函数增加新版本按键功
 能测试。地图顶点着色器修改最大地图尺寸为四百。玩家顶点着色器可
 通过统一变量决定显示的生命值图标数量。
+--------------------------------------------------------------
+The coordinate module changes the restricted movement 
+functionality to a separate class. The Coordinates module 
+defines a global variable that overrides the AutoAdjust 
+Record member of the drawing module. The Coordinates module 
+adds the ability to calculate and return coordinates. Map 
+vertex shader optimizations reduce the amount of height and 
+width calculations. The Player Vertex Shader game interface 
+adds custom coordinates. The fragment shader collates the 
+input texture order. The input module adjusts the structure 
+and initialization function of the key operation. Input 
+module input operation functions add more stable press 
+detection. The coordinate module adds a coordinate base class 
+for singleton mode. The main function adds a new version of 
+the button function test. The map vertex shader modifies a 
+maximum map size of four hundred. The player vertex shader 
+determines the number of health icons displayed through a 
+uniform variable.
 
 TEnGinE Version-0.1 Build-85 2023-03-17 09:28 UPDATE_LOG
 ////////////////////////////////////////////////////////

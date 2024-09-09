@@ -20,6 +20,8 @@
 // 从绘制模块移入触发地图移动事件的设置与执行功能
 // 移除地图事件编译接口功能合并到地图单元编译接口
 // 增加地图横向与纵向区块个数获取接口
+// 修复每次操作都需要重新读内存的问题
+// 增加大地图区块生成接口
 
 #pragma once
 
@@ -40,6 +42,7 @@
 #include "Tanxl_GameEvent.h"
 #include "Tanxl_DataBase.h"
 #include "Tanxl_LocationBase.h"
+#include "Tanxl_RandomBase.h"
 
 enum EMove_State_EventId
 {
@@ -165,6 +168,7 @@ public:
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0);
 	void Set_Trigger_Mode(bool Mode);
+	void Generate_StateBlock();
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Extend_State();

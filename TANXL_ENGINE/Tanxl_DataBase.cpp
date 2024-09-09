@@ -601,12 +601,21 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigne
 		Cur = 0;
 		Div = Divide;
 	}
+
 	static unsigned Exac{ 0x00 };
+	static unsigned Last_Type{ Type };
+	if (Type != Last_Type)
+	{
+		Cur = 0;
+		Last_Type = Type;
+		Exac = 0x00;
+	}
+
 	this->ResetInstance(true);
-	this->Set_Internal_Id((Type << 8) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
+	this->Set_Internal_Id((Last_Type << 8) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
 	Data_Link* DL{ new Data_Link(Cur, Data) };
 	this->Set_Internal_Data(DL, SIMPLE_SET);
-	this->AppendItem(APPENDTO_FILE, "Data_Chain_File", true);
+	this->AppendItem(APPENDTO_MEMO);
 	Cur++;
 	if (Cur == Div)
 	{

@@ -782,6 +782,20 @@ void GameStateBase::Set_Trigger_Mode(bool Mode)
 	this->_Trigger_Mode = Mode;
 }
 
+void GameStateBase::Generate_StateBlock()
+{
+	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
+	static int State_Level{ 0x02 };
+	int State_Size{ this->_State_WidthS * this->_State_HeightS };
+	for (int i{ 0 }; i < State_Size; ++i)
+	{
+		TRB->Suffle_UniData(1);
+		this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, State_Level);
+		this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10));
+	}
+	State_Level++;
+}
+
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false),
 	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1),
@@ -1112,8 +1126,11 @@ bool GameStateBase::Get_Adjust_While_Move()
 bool GameStateBase::Get_Engine_File()
 {
 	if (!this->_Is_Data_Set)
+	{
+		this->_Is_Data_Set = true;
 		if (!this->_Data_Base.Get_LocalData("Tanxl Engine SystemInfor"))
 			return false;
+	}
 	return true;
 }
 
