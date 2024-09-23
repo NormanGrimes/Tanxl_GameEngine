@@ -29,7 +29,12 @@ void Health_Componment::Set_Health(int Current_Health, int Max_Health)
 
 int Health_Componment::Check_Health()
 {
-	return _Current_Health;
+	return this->_Current_Health;
+}
+
+int Health_Componment::Get_MaxHealth()
+{
+	return this->_Maximum_Health;
 }
 
 Componment::Componment(std::string Name) :_Name(Name), _Is_Special_Enable(false) {}

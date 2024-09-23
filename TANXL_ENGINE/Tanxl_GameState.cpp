@@ -830,6 +830,11 @@ std::string GameEvent::GetEventName()
 	return this->_EventName;
 }
 
+void GameEvent::Set_EventTarget(GameObject* Obejct)
+{
+	this->_GameObejct = Obejct;
+}
+
 //GameEventBase
 
 GameEventBase::GameEventBase() :_GameEvents(NULL) {}

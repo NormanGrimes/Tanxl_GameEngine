@@ -47,6 +47,7 @@ namespace TanxlOD
 	static const char* TexGrass_Snowy_01_200x200		{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg"	};
 	static const char* TexGrass_Snowy_02_200x200		{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg"	};
 	static const char* TexOcean_01_200x200				{ "Texture/TANXL_OCEAN_01_200X200.jpg"			};
+	static const char* TexCure_01_200x200				{ "Texture/TANXL_CURE_01_200X200.jpg"			};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_256x256			{ "Texture/YANG_PRINCESS_01_256X256.png"		};

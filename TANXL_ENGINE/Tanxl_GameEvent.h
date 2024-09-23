@@ -7,6 +7,7 @@
 // 增加事件移除功能
 // 增加重载版本事件移除功能
 // 游戏事件结构增加游戏物品指针成员
+// 增加指定事件目标的接口
 
 #pragma once
 
@@ -22,6 +23,7 @@ class GameEvent
 public:
 	GameEvent(std::string Name = "", GameObject* Obejct = nullptr);
 	std::string GetEventName();
+	void Set_EventTarget(GameObject* Obejct);
 	virtual void EventAction() = 0;
 private:
 	std::string _EventName;

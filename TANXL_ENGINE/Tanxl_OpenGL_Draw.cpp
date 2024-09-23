@@ -114,6 +114,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); // 3 02
 	Append_Texture(TanxlOD::TexOcean_01_200x200);       // 4 03
 	Append_Texture(TanxlOD::TexDirt_01_200x200);        // 5 04
+	Append_Texture(TanxlOD::TexCure_01_200x200);        // 6 05
 	Append_Texture(TanxlOD::TexPrincess_01_256x256);	// 6 05
 	Append_Texture(TanxlOD::TexPrincess_02_256x256);	// 6 05
 	Append_Texture(TanxlOD::TexPrincess_03_256x256);	// 6 05
@@ -629,6 +630,15 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			ReLoadState(State);
 		}
 	}
+	else if (CheckUnit->Get_State_Id() == 5)
+	{
+		if (_Main_Character->Check_Health() < _Main_Character->Get_MaxHealth())
+		{
+			_Main_Character->RestoreHealth(1);
+			CheckUnit->Set_State_Id(1);
+			ReLoadState(State);
+		}
+	}
 }
 
 void OpenGL_Draw::Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times)
@@ -675,7 +685,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	{
 		if (this->_Middle_Frame == 0)
 		{
-			SB->Play_Sound("music/Game_Start.wav");
+			SB->Play_Sound(SOUND_GAME_START);
 		}
 		this->_Middle_Frame++;
 
@@ -710,7 +720,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_Midle_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6 * 25);
 	}
-	else if (_Draw_Status == 6)
+	else if (_Draw_Status == 4)
 	{
 		this->_Middle_Frame++;
 
@@ -749,8 +759,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	{
 		if (_Draw_Status == 3)
 		{
-			_Draw_Status = 6;
-			SB->Play_Sound("music/Game_Over.wav");
+			_Draw_Status = 4;
+			SB->Play_Sound(SOUND_GAME_OVER);
 			this->_Main_Character->Set_Health(10);
 		}
 

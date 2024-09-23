@@ -13,6 +13,7 @@
 // 新增物品基类原基类改为游戏物品类
 // 增加物品组件的状态与设置和获取函数
 // 生命值组件增加伤害溢出判断
+// 生命值组件增加最大生命值获取接口
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -33,8 +34,10 @@ public:
 	void TakeDamage(int TakeVal);
 
 	void Set_Health(int Current_Health, int Max_Health = 10);
-
+	// 获取当前生命值
 	int Check_Health();
+	// 获取最大生命值
+	int Get_MaxHealth();
 
 private:
 	int _Maximum_Health;

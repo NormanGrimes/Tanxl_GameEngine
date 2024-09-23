@@ -98,7 +98,7 @@ void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Valu
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 {
-	if (this->_Engine_InforFile_Name == "")
+	if (this->_Engine_InforFile_Name != FileName)
 	{
 		this->Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");
 		Data_Link* Data{ new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version()) };
@@ -117,6 +117,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
 	this->_Engine_InforFile_Name = FileName;
 	remove((FileName + ".usd").c_str());
+	remove("TANXL_STATE_DATA.sd");
 }
 
 void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int Height)
