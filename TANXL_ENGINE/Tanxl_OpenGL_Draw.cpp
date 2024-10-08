@@ -35,7 +35,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B23", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B25", NULL, NULL);
 
 	if (_Main_Window == NULL)
 	{
@@ -109,19 +109,31 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
-	Append_Texture(TanxlOD::TexGrass_02_200x200);       // 1 00
-	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200); // 2 01
-	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200); // 3 02
-	Append_Texture(TanxlOD::TexOcean_01_200x200);       // 4 03
-	Append_Texture(TanxlOD::TexDirt_01_200x200);        // 5 04
-	Append_Texture(TanxlOD::TexCure_01_200x200);        // 6 05
-	Append_Texture(TanxlOD::TexPrincess_01_256x256);	// 6 05
-	Append_Texture(TanxlOD::TexPrincess_02_256x256);	// 6 05
-	Append_Texture(TanxlOD::TexPrincess_03_256x256);	// 6 05
-	Append_Texture(TanxlOD::TexPrincess_04_256x256);	// 6 05
-	Append_Texture(TanxlOD::TexHealth_01_32x32);        // 7 06
-	Append_Texture(TanxlOD::TexPrincess_01_9x11);       // 8 07
-	Append_Texture(TanxlOD::TexStartMenu_01_1024x1024); // 9 08
+	//State_Square Part 0~6  Adjust random range when number of textures change 
+	Append_Texture(TanxlOD::TexGrass_02_200x200);
+	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200);
+	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200);
+	Append_Texture(TanxlOD::TexOcean_01_200x200);
+	Append_Texture(TanxlOD::TexDirt_01_200x200);
+	Append_Texture(TanxlOD::TexCure_01_200x200);
+	Append_Texture(TanxlOD::TexGrass_01_200x200);
+
+	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
+	int Tex_02{ Append_Texture(TanxlOD::TexPrincess_02_256x256)		};
+	int Tex_03{ Append_Texture(TanxlOD::TexPrincess_03_256x256)		};
+	int Tex_04{ Append_Texture(TanxlOD::TexPrincess_04_256x256)		};
+	int Tex_05{ Append_Texture(TanxlOD::TexHealth_01_32x32)			};
+	int Tex_06{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
+	int Tex_07{ Append_Texture(TanxlOD::TexStartMenu_01_1024x1024)	};
+
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 13, Tex_03);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 14, Tex_04);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 15, Tex_05);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 16, Tex_06);
+
+	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
@@ -346,7 +358,7 @@ void OpenGL_Draw::Set_Max_Middle_Frame(int Max_Middle_Frame)
 	this->_Max_Middle_Frame = Max_Middle_Frame;
 }
 
-void OpenGL_Draw::Append_Texture(const char* Texture)
+int OpenGL_Draw::Append_Texture(const char* Texture)
 {
 	static unsigned Id{ 0 };
 
@@ -358,6 +370,8 @@ void OpenGL_Draw::Append_Texture(const char* Texture)
 
 	glBindTexture(GL_TEXTURE_2D, OpenGL_Render::loadTexture(Texture));
 	Id++;
+
+	return Id - 1;
 }
 
 void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
@@ -548,6 +562,50 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 			State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
 			break;
 		}
+
+		while (true)
+		{
+			State->Update_Move(0.0f, 0.0f, Check_Direction);
+			if ((State->Get_State(State->Get_LocationX(), State->Get_LocationY()) == nullptr) ||
+				(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Move_Status() == 1))
+			{
+				std::cout << "Adjusting" << std::endl;
+
+				switch (Check_Direction)
+				{
+				case CHECK_EDGE_LEFT:
+					this->_Location_Distance_MidX += 0.01f;
+					this->_Location_Move_DistanceX += 0.01f;
+
+					State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+					State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+					break;
+				case CHECK_EDGE_RIGH:
+					this->_Location_Distance_MidX -= 0.01f;
+					this->_Location_Move_DistanceX -= 0.01f;
+
+					State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
+					State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
+					break;
+				case CHECK_EDGE_BELO:
+					this->_Location_Distance_MidY += 0.01f;
+					this->_Location_Move_DistanceY += 0.01f;
+
+					State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+					State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+					break;
+				case CHECK_EDGE_ABOV:
+					this->_Location_Distance_MidY -= 0.01f;
+					this->_Location_Move_DistanceY -= 0.01f;
+
+					State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
+					State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
+					break;
+				}
+			}
+			else
+				break;
+		}
 		std::cout << "Return" << std::endl;
 	}
 	else if (Reset)
@@ -673,7 +731,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Clear_Function = false;
 	}
 
-	std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
+	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
 
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
@@ -708,7 +766,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 
-		std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
+		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
 		glProgramUniform1i(this->_Midle_RenderingProgram, 2, this->_Middle_Frame);
 		glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
 

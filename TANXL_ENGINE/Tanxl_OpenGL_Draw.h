@@ -10,19 +10,20 @@
 // 增加接口检测是否有按键按下
 // 统一碰撞的检测范围并优化降低检测次数
 // 碰撞检测功能移除大量未使用变量
+// 添加纹理功能增加纹理编号返回值
+// 修复移动距离过大导致嵌入方块无法移动的问题
 
 #pragma once
 
 #ifndef _TANXL_OPENGL_DRAW_
 #define _TANXL_OPENGL_DRAW_
 
-#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 1
+#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
 #define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
 #define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
-#define _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
 #define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   0
@@ -477,7 +478,7 @@ public:
 	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
-	void Append_Texture(const char* Texture);
+	int Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State);
 	//Update_Current 更新地图加载区块
 	void Update_Current();

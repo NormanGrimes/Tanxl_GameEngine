@@ -127,6 +127,7 @@ void GameStateBase::Set_Data_Length(unsigned Width, unsigned Height)
 
 void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 {
+	static GameEventBase* Event{ &GameEventBase::GetEventBase() };
 	std::string Text_Reader{};
 	int Status_Id{};
 	int State_Status{};
@@ -697,83 +698,39 @@ void GameStateBase::StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_Loc,
 
 	if ((Moves & MoveToNH) == MoveToNH)
 	{
-#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+#if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------Y+" << std::endl;
 #endif
 		LCB->Get_LocationY(Stat_Loc) += 0.01f;
 		LCB->Get_LocationY(Move_Loc) += 0.01f;
 		this->Get_Move_Distance()._Location_Y -= 0.01f;
-
-		int X{ this->Get_LocationX() };
-		int Y{ this->Get_LocationY() };
-
-		if ((this->Get_State(X, Y) == nullptr) ||
-			(this->Get_State(X, Y)->Get_Move_Status() == 1))
-		{
-			LCB->Get_LocationY(Stat_Loc) -= 0.01f;
-			LCB->Get_LocationY(Move_Loc) -= 0.01f;
-			this->Get_Move_Distance()._Location_Y += 0.01f;
-		}
 	}
 	if ((Moves & MoveToPH) == MoveToPH)
 	{
-#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+#if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------Y-" << std::endl;
 #endif
 		LCB->Get_LocationY(Stat_Loc) -= 0.01f;
 		LCB->Get_LocationY(Move_Loc) -= 0.01f;
 		this->Get_Move_Distance()._Location_Y += 0.01f;
-
-		int X{ this->Get_LocationX() };
-		int Y{ this->Get_LocationY() };
-
-		if ((this->Get_State(X, Y) == nullptr) ||
-			(this->Get_State(X, Y)->Get_Move_Status() == 1))
-		{
-			LCB->Get_LocationY(Stat_Loc) += 0.01f;
-			LCB->Get_LocationY(Move_Loc) += 0.01f;
-			this->Get_Move_Distance()._Location_Y -= 0.01f;
-		}
 	}
 	if ((Moves & MoveToNW) == MoveToNW)
 	{
-#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+#if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------X+" << std::endl;
 #endif
 		LCB->Get_LocationX(Stat_Loc) += 0.01f;
 		LCB->Get_LocationX(Move_Loc) += 0.01f;
 		this->Get_Move_Distance()._Location_X -= 0.01f;
-
-		int X{ this->Get_LocationX() };
-		int Y{ this->Get_LocationY() };
-
-		if ((this->Get_State(X, Y) == nullptr) ||
-			(this->Get_State(X, Y)->Get_Move_Status() == 1))
-		{
-			LCB->Get_LocationX(Stat_Loc) -= 0.01f;
-			LCB->Get_LocationX(Move_Loc) -= 0.01f;
-			this->Get_Move_Distance()._Location_X += 0.01f;
-		}
 	}
 	if ((Moves & MoveToPW) == MoveToPW)
 	{
-#if _TANXL_OPENGLDRAW_TRIGGER_LIMIT_CHECK_OUTPUT_
+#if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------X-" << std::endl;
 #endif
 		LCB->Get_LocationX(Stat_Loc) -= 0.01f;
 		LCB->Get_LocationX(Move_Loc) -= 0.01f;
 		this->Get_Move_Distance()._Location_X += 0.01f;
-
-		int X{ this->Get_LocationX() };
-		int Y{ this->Get_LocationY() };
-
-		if ((this->Get_State(X, Y) == nullptr) ||
-			(this->Get_State(X, Y)->Get_Move_Status() == 1))
-		{
-			LCB->Get_LocationX(Stat_Loc) += 0.01f;
-			LCB->Get_LocationX(Move_Loc) += 0.01f;
-			this->Get_Move_Distance()._Location_X -= 0.01f;
-		}
 	}
 }
 

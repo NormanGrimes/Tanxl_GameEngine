@@ -1,10 +1,30 @@
 #pragma once
 
 #include "Tanxl_GameEvent.h"
+#include "Tanxl_GameState.h"
 
 //GameEvent
 
 GameEvent::GameEvent(std::string Name, GameObject* Obejct) :_EventName(Name), _GameObejct(Obejct) {}
+
+//State_ChangeEvent
+
+State_ChangeEvent::State_ChangeEvent(std::string Name, int LocationX, int LocationY, std::string Cover_String) :
+	GameEvent(Name), _LocationX(LocationX), _LocationY(LocationY), _Cover_String(Cover_String) {};
+
+void State_ChangeEvent::EventAction()
+{
+	static GameStateBase* State{ &GameStateBase::GetStateBase() };
+	if ((State->Get_LocationX() == _LocationX) && (State->Get_LocationY() == _LocationY))
+	{
+		State->Set_State(_LocationY * State->Get_DataWidth() + _LocationX, _Cover_String);
+	}
+}
+
+void State_ChangeEvent::Set_CoverString(std::string Cover_String)
+{
+	this->_Cover_String = Cover_String;
+}
 
 //GameEventBase
 

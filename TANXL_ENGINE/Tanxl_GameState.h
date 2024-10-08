@@ -22,18 +22,20 @@
 // 增加地图横向与纵向区块个数获取接口
 // 修复每次操作都需要重新读内存的问题
 // 增加大地图区块生成接口
+// 简化地图随玩家移动功能的代码
 
 #pragma once
 
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
 
-#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 1
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
 #define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
+#define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  1
 
 #endif
 

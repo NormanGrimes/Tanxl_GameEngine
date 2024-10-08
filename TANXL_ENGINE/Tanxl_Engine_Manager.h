@@ -42,6 +42,7 @@
 // 2023/08/04 引擎信息文件生成功能改为可多次调用
 // 2023/08/08 修改引擎信息文件生成的判断条件
 // 2023/08/08 信息文件生成后清理地图数据文件
+// 2023/08/11 增加地图替换事件的注册功能
 
 #pragma once
 
@@ -137,6 +138,9 @@ public:
 	
 	//用于更新STEAM库存并同时检测是否满足掉落条件
 	void Engine_Invent_Update_Drop();
+
+	//用于注册移动指定区域触发的地图替换功能 Name为事件名称 LocationX/LocationY为替换的区域坐标 Cover_String为替换的地图数据
+	void Engine_Event_State_Regist(std::string Name, int LocationX, int LocationY, std::string Cover_String);
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

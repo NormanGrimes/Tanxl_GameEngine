@@ -258,6 +258,11 @@ void Tanxl_Engine::Engine_Invent_Update_Drop()
 	this->Tanxl_Engine_Inventory->CheckForItemDrops();
 }
 
+void Tanxl_Engine::Engine_Event_State_Regist(std::string Name, int LocationX, int LocationY, std::string Cover_String)
+{
+	this->Tanxl_Engine_GameEvent->RegistEvent(new State_ChangeEvent(Name, LocationX, LocationY, Cover_String));
+}
+
 void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Cover_State, bool Is_Begin, std::string State_Infor)
 {
 	if (((this->_Engine_Status & 0x100) == 0x0))

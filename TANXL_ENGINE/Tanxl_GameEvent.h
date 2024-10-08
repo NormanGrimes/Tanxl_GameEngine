@@ -8,6 +8,7 @@
 // 增加重载版本事件移除功能
 // 游戏事件结构增加游戏物品指针成员
 // 增加指定事件目标的接口
+// 新增一个示例游戏事件
 
 #pragma once
 
@@ -28,6 +29,21 @@ public:
 private:
 	std::string _EventName;
 	GameObject* _GameObejct;
+};
+
+class State_ChangeEvent : public GameEvent
+{
+public:
+	State_ChangeEvent(std::string Name, int LocationX, int LocationY, std::string Cover_String);
+
+	void EventAction();
+
+	void Set_CoverString(std::string Cover_String);
+
+private:
+	int _LocationX;
+	int _LocationY;
+	std::string _Cover_String;
 };
 
 //GameEventBase
