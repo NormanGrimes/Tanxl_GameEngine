@@ -45,6 +45,8 @@ Version 0.3 Build 31 TURBO 22 - 2024/07/10 18:25
 
 Version 0.3 Build 42 TURBO 23 - 2024/08/14 09:05
 
+Version 0.3 Build 52 TURBO 24 - 2024/09/24 10:07
+
 # Tanxl_GameEngine Version 0.2 Build 18 README
 This game is currently available on steam
 此游戏目前已在STEAM上可用
