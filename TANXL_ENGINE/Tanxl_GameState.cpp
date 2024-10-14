@@ -7,7 +7,7 @@
 //StateUnit
 
 StateUnit::StateUnit(GameEvent* GE, int State_Id, int Move_Status)
-	:_Move_Status(Move_Status), _GameEvents(GE), _State_Id(State_Id) {}
+	:_Extra_Status(Move_Status), _GameEvents(GE), _State_Id(State_Id) {}
 
 void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 {
@@ -148,9 +148,9 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 		}
 		else if (Infor.at(i) == '-')
 		{
-			State_Status = 0;
+			State_Status = std::stoi(Text_Reader);
 
-			if (this->_Policy.size() != 0)
+			/*if (this->_Policy.size() != 0)
 			{
 				for (int i{}; i < this->_Policy.size(); i++)
 				{
@@ -160,7 +160,7 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 						break;
 					}
 				}
-			}
+			}*/
 			Text_Reader = "";
 			Status_Id = 0;
 		}
@@ -410,7 +410,7 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble(EState_Extend State_Id)
 	std::vector<StateUnit*>* GameState{ this->Get_GameState(State_Id) };
 	for (const auto& State : *GameState)
 	{
-		if (State->Get_Move_Status())
+		if (State->Get_Extra_Status())
 			MAB.push_back(true);
 		else
 			MAB.push_back(false);
@@ -748,7 +748,7 @@ void GameStateBase::Generate_StateBlock()
 	{
 		TRB->Suffle_UniData(1);
 		this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, State_Level);
-		this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10));
+		this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true));
 	}
 	State_Level++;
 }
@@ -808,9 +808,9 @@ GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
 
 //StateUnit
 
-int StateUnit::Get_Move_Status()
+int StateUnit::Get_Extra_Status()
 {
-	return this->_Move_Status;
+	return this->_Extra_Status;
 }
 
 int StateUnit::Get_State_Id()
@@ -821,6 +821,11 @@ int StateUnit::Get_State_Id()
 void StateUnit::Set_State_Id(int State_Id)
 {
 	this->_State_Id = State_Id;
+}
+
+void StateUnit::Set_Status(int Extra_Status)
+{
+	this->_Extra_Status = Extra_Status;
 }
 
 //GameStateBase

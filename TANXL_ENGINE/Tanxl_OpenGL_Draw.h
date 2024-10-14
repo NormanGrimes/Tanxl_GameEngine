@@ -12,6 +12,9 @@
 // 碰撞检测功能移除大量未使用变量
 // 添加纹理功能增加纹理编号返回值
 // 修复移动距离过大导致嵌入方块无法移动的问题
+// 优化地图单元事件检测功能的速度
+// 私有名称空间中增加变量存储指定方块编号
+// 地图单元事件检测功能现在检测事件而不是方块编号
 
 #pragma once
 
@@ -56,6 +59,12 @@ namespace TanxlOD
 	static const char* TexPrincess_03_256x256			{ "Texture/YANG_PRINCESS_03_256X256.png"		};
 	static const char* TexPrincess_04_256x256			{ "Texture/YANG_PRINCESS_04_256X256.png"		};
 	static const char* TexStartMenu_01_1024x1024        { "Texture/ENG/STARTMENU_01_1024x1024.png"      };
+
+	static int Square_Id_0{};
+	static int Square_Id_1{};
+	static int Square_Id_2{};
+	static int Square_Id_3{};
+	static int Square_Id_4{};
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 

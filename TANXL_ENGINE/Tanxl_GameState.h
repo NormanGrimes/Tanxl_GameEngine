@@ -23,6 +23,7 @@
 // 修复每次操作都需要重新读内存的问题
 // 增加大地图区块生成接口
 // 简化地图随玩家移动功能的代码
+// 地图单元结构增加事件状态设置
 
 #pragma once
 
@@ -120,12 +121,13 @@ class StateUnit
 public:
 	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, int Move_Status = 0);
 	void SetEvent(std::string GameEventName, int State_Id = -1);
-	int Get_Move_Status();
+	int Get_Extra_Status();
 	int Get_State_Id();
 	void Set_State_Id(int State_Id);
+	void Set_Status(int Extra_Status);
 private:
 	GameEvent* _GameEvents;
-	int _Move_Status;
+	int _Extra_Status;
 	int _State_Id;
 };
 

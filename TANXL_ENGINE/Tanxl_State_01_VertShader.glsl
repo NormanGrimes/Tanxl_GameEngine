@@ -18,6 +18,7 @@
 // 修复实例化绘制启用导致编译错误的问题
 // 增加宏控制该层下所有顶点的距离
 // 修复纹理绘制方向横向相反的问题
+// 增加根据事件绘制不同纹理的设定
 
 #version 430
 
@@ -75,7 +76,14 @@ void main(void)
 		{ 
 			gl_Position = vec4( -Width + WidthMove + StateMoveX, 
 							    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
-			Cube = int(Infor[VertexId].x);
+
+			if		(int(Infor[VertexId].y) == 2)
+				Cube = 5;
+			else if	(int(Infor[VertexId].y) == 3)
+				Cube = 6;
+			else
+				Cube = int(Infor[VertexId].x);
+
 #if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(Infor[VertexId].x == 0)
 			{
@@ -99,7 +107,14 @@ void main(void)
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f); 
-			Cube = int(Infor[VertexId].x);
+
+			if		(int(Infor[VertexId].y) == 2)
+				Cube = 5;
+			else if	(int(Infor[VertexId].y) == 3)
+				Cube = 6;
+			else
+				Cube = int(Infor[VertexId].x);
+
 #if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(Infor[VertexId].x == 0)
 			{
@@ -123,7 +138,14 @@ void main(void)
 		{ 
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
-			Cube = int(Infor[VertexId].x);
+			
+			if		(int(Infor[VertexId].y) == 2)
+				Cube = 5;
+			else if	(int(Infor[VertexId].y) == 3)
+				Cube = 6;
+			else
+				Cube = int(Infor[VertexId].x);
+
 #if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(Infor[VertexId].x == 0)
 			{
@@ -147,7 +169,14 @@ void main(void)
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f); 
-			Cube = int(Infor[VertexId].x);
+			
+			if		(int(Infor[VertexId].y) == 2)
+				Cube = 5;
+			else if	(int(Infor[VertexId].y) == 3)
+				Cube = 6;
+			else
+				Cube = int(Infor[VertexId].x);
+
 #if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(Infor[VertexId].x == 0)
 			{
@@ -171,7 +200,14 @@ void main(void)
 		{
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
-			Cube = int(Infor[VertexId].x);
+			
+			if		(int(Infor[VertexId].y) == 2)
+				Cube = 5;
+			else if	(int(Infor[VertexId].y) == 3)
+				Cube = 6;
+			else
+				Cube = int(Infor[VertexId].x);
+
 #if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(Infor[VertexId].x == 0)
 			{
@@ -195,7 +231,14 @@ void main(void)
 		{
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
-			Cube = int(Infor[VertexId].x);
+			
+			if		(int(Infor[VertexId].y) == 2)
+				Cube = 5;
+			else if	(int(Infor[VertexId].y) == 3)
+				Cube = 6;
+			else
+				Cube = int(Infor[VertexId].x);
+
 #if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
 			if(Infor[VertexId].x == 0)
 			{

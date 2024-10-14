@@ -34,7 +34,10 @@ Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase())
 	if(this->_Engine_Status)
 		std::cout << "Fail to fully start Engine !" << std::endl;
 
-	this->Tanxl_Engine_GameState->Set_Compile_Policy("a", 1);
+	/*this->Tanxl_Engine_GameState->Set_Compile_Policy("a", 1);
+	this->Tanxl_Engine_GameState->Set_Compile_Policy("b", 0);
+	this->Tanxl_Engine_GameState->Set_Compile_Policy("c", 2);
+	this->Tanxl_Engine_GameState->Set_Compile_Policy("d", 3);*/
 }
 
 unsigned Tanxl_Engine::Engine_Check_Engine_Status(bool ShutDown)
@@ -128,7 +131,7 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 	{
 		this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
 		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2);
-		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10));
+		this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10, true));
 	}
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, "TANXL_STATE_DATA");
 	this->Tanxl_Engine_GameState->Set_State_Counts(Width, Height);

@@ -13,6 +13,8 @@
 // 修复短时间内生成的地图信息一样的问题
 // 地图生成功能修改参数
 // 增加对新版随机地图的支持
+// 随机地图事件参数改为数字
+// 随机世界生成功能可选随机事件生成
 
 #pragma once
 
@@ -36,7 +38,7 @@ public:
     std::string Generate(int seed);
 
     //随机生成一组地图数据 Width为数据宽度 Height为数据高度
-    std::string Generate_State(unsigned Width, unsigned Height);
+    std::string Generate_State(unsigned Width, unsigned Height, bool Random_Event = false);
 
     //根据内部提供的种子生成一组序列号 可用于短时间大量生成 重启后若不调用Suffle_UniData刷新字典再调用会出现重复序列号
     std::string GenerateAutoSeed();

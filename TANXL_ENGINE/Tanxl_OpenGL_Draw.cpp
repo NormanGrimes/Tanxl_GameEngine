@@ -2,9 +2,6 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
-unsigned int quadVAO, quadVBO;
-unsigned int instanceVBO;
-
 void delay(int misec)
 {
 	clock_t start = clock();
@@ -35,7 +32,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B25", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B27", NULL, NULL);
 
 	if (_Main_Window == NULL)
 	{
@@ -110,13 +107,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
 	//State_Square Part 0~6  Adjust random range when number of textures change 
+	Append_Texture(TanxlOD::TexGrass_01_200x200);
 	Append_Texture(TanxlOD::TexGrass_02_200x200);
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200);
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200);
 	Append_Texture(TanxlOD::TexOcean_01_200x200);
-	Append_Texture(TanxlOD::TexDirt_01_200x200);
-	Append_Texture(TanxlOD::TexCure_01_200x200);
-	Append_Texture(TanxlOD::TexGrass_01_200x200);
+	TanxlOD::Square_Id_0 = Append_Texture(TanxlOD::TexDirt_01_200x200);
+	TanxlOD::Square_Id_1 = Append_Texture(TanxlOD::TexCure_01_200x200);
 
 	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
 	int Tex_02{ Append_Texture(TanxlOD::TexPrincess_02_256x256)		};
@@ -190,7 +187,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % State->Get_GameState(STATE_EXTEND_RIGH_BELO)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 				else if (Move_NY >= 0)
@@ -200,7 +197,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX - State->Get_DataWidth() - 1 + Move_NY * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH, x % State->Get_GameState(STATE_EXTEND_RIGH)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 				else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
@@ -210,7 +207,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX - State->Get_DataWidth() - 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % State->Get_GameState(STATE_EXTEND_RIGH_ABOV)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 			}
@@ -223,7 +220,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 				else if (Move_NY >= 0)
@@ -233,7 +230,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX + Move_NY * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_MIDD, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 				else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
@@ -243,7 +240,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 			}
@@ -256,7 +253,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY - State->Get_DataHeight() - 1) * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % State->Get_GameState(STATE_EXTEND_BELO)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 				else if (Move_NY >= 0)
@@ -266,7 +263,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX + State->Get_DataWidth() + 1 + Move_NY * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT, x % State->Get_GameState(STATE_EXTEND_MIDD)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 				else if (Move_NY >= -static_cast<int>(State->Get_DataHeight()))
@@ -276,7 +273,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 						unsigned x{ Move_NX + State->Get_DataWidth() + 1 + (Move_NY + State->Get_DataHeight() + 1) * (State->Get_DataWidth() + 1) };
 						StateUnit* Unit{ State->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % State->Get_GameState(STATE_EXTEND_ABOV)->size()) };
 						this->_StateInfor[i].x = Unit->Get_State_Id();
-						this->_StateInfor[i].y = Unit->Get_Move_Status();
+						this->_StateInfor[i].y = Unit->Get_Extra_Status();
 					}
 				}
 			}
@@ -547,7 +544,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 	}
 
 	if ((State->Get_State(State->Get_LocationX(), State->Get_LocationY()) == nullptr) ||
-		(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Move_Status() == 1))
+		(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Extra_Status() == 1))
 	{
 		switch (Check_Direction)
 		{
@@ -567,7 +564,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 		{
 			State->Update_Move(0.0f, 0.0f, Check_Direction);
 			if ((State->Get_State(State->Get_LocationX(), State->Get_LocationY()) == nullptr) ||
-				(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Move_Status() == 1))
+				(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Extra_Status() == 1))
 			{
 				std::cout << "Adjusting" << std::endl;
 
@@ -674,8 +671,9 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 	StateUnit* CheckUnit{ State->Get_State(State->Get_LocationX(), State->Get_LocationY()) };
 	if (!CheckUnit)
 		return;
+	int Unit_State_Id{ CheckUnit->Get_Extra_Status()};
 
-	if (CheckUnit->Get_State_Id() == 4)
+	if (Unit_State_Id == 2)
 	{
 		if (_Main_Character->Check_Health() <= 2)
 		{
@@ -684,16 +682,16 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 		else
 		{
 			_Main_Character->TakeDamage(1);
-			CheckUnit->Set_State_Id(1);
+			CheckUnit->Set_Status(0);
 			ReLoadState(State);
 		}
 	}
-	else if (CheckUnit->Get_State_Id() == 5)
+	else if (Unit_State_Id == 3)
 	{
 		if (_Main_Character->Check_Health() < _Main_Character->Get_MaxHealth())
 		{
 			_Main_Character->RestoreHealth(1);
-			CheckUnit->Set_State_Id(1);
+			CheckUnit->Set_Status(0);
 			ReLoadState(State);
 		}
 	}
