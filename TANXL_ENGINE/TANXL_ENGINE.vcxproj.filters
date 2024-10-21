@@ -64,7 +64,7 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_SoundBase.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +102,9 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_GameObject.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanxl_SoundBase.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>

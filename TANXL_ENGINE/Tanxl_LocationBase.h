@@ -53,11 +53,11 @@ class Location
 {
 public:
 	Location(std::string Location_Name = "");
-
+	// 获取坐标结构体
 	inline SLocation& Get_Current_Location();
-
+	// 调整坐标的两个参数
 	inline void Adjust_Location(float Adjust_Height, float Adjust_Width);
-
+	// 设置坐标的两个参数
 	inline void Set_Location(float Set_Height, float Set_Width);
 
 	inline float Get_Calculated_Location(ECALCUL_MARKING Marking, float Value, bool begin);

@@ -32,7 +32,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B27", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B28", NULL, NULL);
 
 	if (_Main_Window == NULL)
 	{
@@ -107,13 +107,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
 
 	//State_Square Part 0~6  Adjust random range when number of textures change 
-	Append_Texture(TanxlOD::TexGrass_01_200x200);
-	Append_Texture(TanxlOD::TexGrass_02_200x200);
-	Append_Texture(TanxlOD::TexGrass_Snowy_01_200x200);
-	Append_Texture(TanxlOD::TexGrass_Snowy_02_200x200);
-	Append_Texture(TanxlOD::TexOcean_01_200x200);
-	TanxlOD::Square_Id_0 = Append_Texture(TanxlOD::TexDirt_01_200x200);
-	TanxlOD::Square_Id_1 = Append_Texture(TanxlOD::TexCure_01_200x200);
+	Append_Texture(TanxlOD::TexGrass_01_128x128);
+	Append_Texture(TanxlOD::TexGrass_02_128x128);
+	Append_Texture(TanxlOD::TexGrass_Snowy_01_128x128);
+	Append_Texture(TanxlOD::TexGrass_Snowy_02_128x128);
+	Append_Texture(TanxlOD::TexOcean_01_128x128);
+	TanxlOD::Square_Id_0 = Append_Texture(TanxlOD::TexDirt_01_128x128);
+	TanxlOD::Square_Id_1 = Append_Texture(TanxlOD::TexCure_01_128x128);
 
 	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
 	int Tex_02{ Append_Texture(TanxlOD::TexPrincess_02_256x256)		};
@@ -137,8 +137,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	float Half_Width{ (this->_WidthInt - 1) / 2.0f };
 	float Half_Height{ (this->_HeightInt - 1) / 2.0f };
 
-	State->Get_Move_Distance()._Location_X = (2.0f / this->_WidthInt) * Half_Width + (1.0f / this->_WidthInt) * (this->_PreLoads);
-	State->Get_Move_Distance()._Location_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (this->_PreLoads);
+	State->Get_Move_Distance()._Location_X = (2.0f / this->_WidthInt) * Half_Width + (1.0f / this->_WidthInt) * (8 - this->_PreLoads);
+	State->Get_Move_Distance()._Location_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (8 - this->_PreLoads);
 
 	State->Set_Move_State(
 		0 - this->_PreLoads + _Pre_MoveX,
@@ -571,29 +571,29 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 				switch (Check_Direction)
 				{
 				case CHECK_EDGE_LEFT:
-					this->_Location_Distance_MidX += 0.01f;
-					this->_Location_Move_DistanceX += 0.01f;
+					this->_Location_Distance_MidX += 0.005f;
+					this->_Location_Move_DistanceX += 0.005f;
 
 					State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
 					State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 					break;
 				case CHECK_EDGE_RIGH:
-					this->_Location_Distance_MidX -= 0.01f;
-					this->_Location_Move_DistanceX -= 0.01f;
+					this->_Location_Distance_MidX -= 0.005f;
+					this->_Location_Move_DistanceX -= 0.005f;
 
 					State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
 					State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 					break;
 				case CHECK_EDGE_BELO:
-					this->_Location_Distance_MidY += 0.01f;
-					this->_Location_Move_DistanceY += 0.01f;
+					this->_Location_Distance_MidY += 0.005f;
+					this->_Location_Move_DistanceY += 0.005f;
 
 					State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
 					State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
 					break;
 				case CHECK_EDGE_ABOV:
-					this->_Location_Distance_MidY -= 0.01f;
-					this->_Location_Move_DistanceY -= 0.01f;
+					this->_Location_Distance_MidY -= 0.005f;
+					this->_Location_Move_DistanceY -= 0.005f;
 
 					State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
 					State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;

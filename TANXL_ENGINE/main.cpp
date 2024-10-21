@@ -21,7 +21,7 @@ int main()
 	//生成引擎数据文件 "Tanxl Engine SystemInfor.sd"
 	TGE.Engine_Save_Source_Infor("Tanxl Engine SystemInfor");
 	//设置屏幕显示宽度和高度为4个地图单元长度 并设置显示区域外每个方向额外加载4个地图单元长度
-	TGE.Engine_State_Set_Display(4, 4, 4);
+	TGE.Engine_State_Set_Display(6, 6, 3);
 	//调用引擎接口注册一个事件按钮
 	Key_Unit* KU = TGE.Engine_Insert_Regist_Move(GLFW_KEY_E);
 	//禁止玩家控制的单元移动到屏幕显示区域以外
@@ -29,7 +29,7 @@ int main()
 	//启用移动到达指定范围后地图随玩家移动 设置距离为0.6倍某方向距离的长度
 	TGE.Engine_Insert_State_MoveWith(true, 0.6f);
 	//启动地图视角自动调整 将玩家单元调整到地图中心位置 每次调整距离为0.005并可在移动中调整
-	TGE.Engine_Adjust_Multi_Set(true, 0.005f, true);
+	TGE.Engine_Adjust_Multi_Set(true, 0.0025f, true);
 	//编辑四个区块的内容
 	TGE.Engine_State_Set_Data(0, true, false,
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,"

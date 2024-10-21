@@ -235,6 +235,7 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Render.cpp" />
     <ClCompile Include="Tanxl_RandomBase.cpp" />
+    <ClCompile Include="Tanxl_SoundBase.cpp" />
     <ClCompile Include="Taxnl_LocationBase.cpp" />
   </ItemGroup>
   <ItemGroup>

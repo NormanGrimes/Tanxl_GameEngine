@@ -1,3 +1,10 @@
+TEnGinE Version-0.2 Build-28 2023-08-15 11:07 UPDATE_LOG
+////////////////////////////////////////////////////////
+渲染模块增加不需要文件的准备着色器重载版本。显示的地图范
+围增大。绘制模块修复不同预载值可能导致显示错误的问题。移
+动与地图调节速度调整。音频模块整理进入引擎层。地图纹理尺
+寸规范化为128乘128。
+
 TEnGinE Version-0.2 Build-27 2023-08-14 15:49 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块优化地图单元事件检测功能的速度。绘制模块私有名称
@@ -268,6 +275,20 @@ TEnGinE Version-0.1 Build-95 2023-04-17 11:56 UPDATE_LOG
 盖初始地图。物品模块移除游戏组件结构体。物品模块生命值组
 件增加最大生命值设定。地图模块设置移动矩阵接口增加多倍调
 整。绘制模块增加并调整控制台输出宏。
+--------------------------------------------------------
+The input module updates the coordinates function after 
+the last move merged into the input function. The draw 
+module input operation is decoupled from the draw loop. 
+The engine management module modifies the input 
+parameters of the compiled map data interface. The map 
+module's interface that preloads the starting region 
+adds string input parameters that can be used to 
+override the initial map. The Item module removes the 
+game component structure. The Item Module Health 
+component increases the maximum health setting. Map 
+module settings mobile matrix interface increased 
+multi-fold adjustment. The drawing module adds and 
+adjusts the console output macro.
 
 TEnGinE Version-0.1 Build-94 TURBO 2023-04-13 11:56 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -280,6 +301,24 @@ TEnGinE Version-0.1 Build-94 TURBO 2023-04-13 11:56 UPDATE_LOG
 枚举增加一个特殊状态。地图模块编译地图单元功能代码优化。地图模
 块初始化同时对扩展地图初始化。绘制模块新增更新上次移动后坐标的
 接口。
+--------------------------------------------------------------
+The engine management module adds random and coordinate base 
+class version information. The data definition module removes 
+unused variables and adjusts the order of data. The 
+coordinate module fixes an issue where the edge detection 
+function is incorrect. The ability of the map module to clear 
+the display container supports extending the map. The map 
+module acquires map data capabilities and supports extending 
+maps. The map module gets map data length capabilities and 
+supports extending maps. The map module gets map units with 
+movable functionality to support extended maps. The map 
+module compilation event feature supports extending maps. 
+The Draw module removes all non-extended map content. The 
+map module extends map enumeration to add a special state. 
+Map module compiles map unit function code optimization. Map 
+module initialization also initializes extended maps. The 
+drawing module adds an interface to update coordinates since 
+the last move.
 
 TEnGinE Version-0.1 Build-93 2023-04-10 16:05 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -289,6 +328,18 @@ TEnGinE Version-0.1 Build-93 2023-04-10 16:05 UPDATE_LOG
 复自动调整过于灵敏的问题。玩家顶点着色器移除两个未使用变
 量。坐标模块与随机模块增加版本信息功能。数据定义模块增加
 坐标模块的支持。
+--------------------------------------------------------
+The player vertex shader supports custom health image 
+spacing. The drawing module adds the function of health 
+related settings. The drawing module adds console 
+output control macros with mobile update functionality. 
+The draw module fixes an issue where manual input does 
+not update the map. The drawing module fixes an issue 
+where the auto-tuning is too sensitive. The player 
+vertex shader removes two unused variables. The 
+coordinate module and the random module add version 
+information function. The Data Definition module adds 
+support for the Coordinate module.
 
 TEnGinE Version-0.1 Build-92 2023-04-04 09:32 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -298,6 +349,19 @@ TEnGinE Version-0.1 Build-92 2023-04-04 09:32 UPDATE_LOG
 着色器支持指定数量生命值纹理换行。绘制模块增加生命值显示
 计数成员替换原固定值。绘制模块移除初始化部分不必要的函数
 调用。
+--------------------------------------------------------
+The console module modifies the option member to an 
+unsigned number. The map module adds a private member 
+marker to enable extended worlds. The drawing module 
+supports loading and mobile switching of legacy and 
+extended maps. The plotting module fixes the problem 
+that the initial coordinate calculation is incorrectly 
+fitted. The player vertex shader supports a specified 
+number of health texture wraps. The plot module 
+increases the health value to show the count member 
+and replace the original fixed value. The drawing 
+module removes unnecessary function calls that 
+initialize some of the parts.
 
 TEnGinE Version-0.1 Build-91 2023-04-03 09:13 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -306,6 +370,18 @@ TEnGinE Version-0.1 Build-91 2023-04-03 09:13 UPDATE_LOG
 数。绘制模块四个记录上一次移动坐标的变量移入私有成员。地
 图模块编译地图单元函数修复单元初始化类型错误的问题。地图
 模块编译地图单元函数开放地图单元是否可移动的编辑。
+--------------------------------------------------------
+The drawing module edge detection function was changed 
+to a stand-alone function. The drawing module manually 
+moves the coordinate update function and changes it to 
+a stand-alone function. The engine management module 
+adds the update move and get input functions. The four 
+variables of the drawing module that record the last 
+move of coordinates are moved into private members. The 
+map module compiles the map unit function to fix the 
+problem that the unit initialization type is wrong. The 
+map module compiles the map unit function to open the 
+map unit for movable editing.
 
 TEnGinE Version-0.1 Build-90 2023-03-30 09:16 UPDATE_LOG
 ////////////////////////////////////////////////////////

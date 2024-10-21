@@ -66,6 +66,28 @@ GLuint OpenGL_Render::prepareShader(int shaderTYPE, const char* shaderPath)
 	return shaderRef;
 }
 
+GLuint OpenGL_Render::prepareShader(int shaderTYPE, std::string shaderStr)
+{
+	GLint shaderCompiled{};
+	const char* shaderSrc{ shaderStr.c_str() };
+	GLuint shaderRef{ glCreateShader(shaderTYPE) };
+	glShaderSource(shaderRef, 1, &shaderSrc, NULL);
+	glCompileShader(shaderRef);
+	checkOpenGLError();
+	glGetShaderiv(shaderRef, GL_COMPILE_STATUS, &shaderCompiled);
+	if (shaderCompiled != 1)
+	{
+		if (shaderTYPE == 35633) std::cout << "Vertex ";
+		if (shaderTYPE == 36488) std::cout << "Tess Control ";
+		if (shaderTYPE == 36487) std::cout << "Tess Eval ";
+		if (shaderTYPE == 36313) std::cout << "Geometry ";
+		if (shaderTYPE == 35632) std::cout << "Fragment ";
+		std::cout << "shader compilation error." << std::endl;
+		printShaderLog(shaderRef);
+	}
+	return shaderRef;
+}
+
 int OpenGL_Render::finalizeShaderProgram(GLuint sprogram)
 {
 	GLint linked{};
@@ -93,6 +115,17 @@ bool OpenGL_Render::checkOpenGLError()
 }
 
 GLuint OpenGL_Render::createShaderProgram(const char* vp, const char* fp)
+{
+	GLuint vShader{ prepareShader(GL_VERTEX_SHADER, vp) };
+	GLuint fShader{ prepareShader(GL_FRAGMENT_SHADER, fp) };
+	GLuint vfprogram{ glCreateProgram() };
+	glAttachShader(vfprogram, vShader);
+	glAttachShader(vfprogram, fShader);
+	finalizeShaderProgram(vfprogram);
+	return vfprogram;
+}
+
+GLuint OpenGL_Render::createShaderProgram(std::string vp, std::string fp)
 {
 	GLuint vShader{ prepareShader(GL_VERTEX_SHADER, vp) };
 	GLuint fShader{ prepareShader(GL_FRAGMENT_SHADER, fp) };

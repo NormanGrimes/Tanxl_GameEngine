@@ -15,6 +15,7 @@
 // 优化地图单元事件检测功能的速度
 // 私有名称空间中增加变量存储指定方块编号
 // 地图单元事件检测功能现在检测事件而不是方块编号
+// 修复不同预载值可能导致显示错误的问题
 
 #pragma once
 
@@ -45,13 +46,13 @@
 
 namespace TanxlOD
 {
-	static const char* TexDirt_01_200x200               { "Texture/TANXL_DIRT_01_200X200.jpg"           };
-	static const char* TexGrass_01_200x200				{ "Texture/TANXL_GRASS_01_200X200.jpg"			};
-	static const char* TexGrass_02_200x200				{ "Texture/TANXL_GRASS_02_200X200.jpg"			};
-	static const char* TexGrass_Snowy_01_200x200		{ "Texture/TANXL_GRASS_SNOWY_01_200X200.jpg"	};
-	static const char* TexGrass_Snowy_02_200x200		{ "Texture/TANXL_GRASS_SNOWY_02_200X200.jpg"	};
-	static const char* TexOcean_01_200x200				{ "Texture/TANXL_OCEAN_01_200X200.jpg"			};
-	static const char* TexCure_01_200x200				{ "Texture/TANXL_CURE_01_200X200.jpg"			};
+	static const char* TexDirt_01_128x128				{ "Texture/TANXL_DIRT_01_128X128.jpg"           };
+	static const char* TexGrass_01_128x128				{ "Texture/TANXL_GRASS_01_128X128.jpg"			};
+	static const char* TexGrass_02_128x128				{ "Texture/TANXL_GRASS_02_128X128.jpg"			};
+	static const char* TexGrass_Snowy_01_128x128		{ "Texture/TANXL_GRASS_SNOWY_01_128X128.jpg"	};
+	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.jpg"	};
+	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.jpg"			};
+	static const char* TexCure_01_128x128				{ "Texture/TANXL_CURE_01_128X128.jpg"			};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_256x256			{ "Texture/YANG_PRINCESS_01_256X256.png"		};
