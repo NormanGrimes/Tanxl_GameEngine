@@ -140,11 +140,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	State->Get_Move_Distance()._Location_X = (2.0f / this->_WidthInt) * Half_Width + (1.0f / this->_WidthInt) * (8 - this->_PreLoads);
 	State->Get_Move_Distance()._Location_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (8 - this->_PreLoads);
 
-	State->Set_Move_State(
-		0 - this->_PreLoads + _Pre_MoveX,
-		this->_WidthInt - 1 + this->_PreLoads + _Pre_MoveX,
-		0 - this->_PreLoads + _Pre_MoveY,
-		this->_HeightInt - 1 + this->_PreLoads + _Pre_MoveY);
+	State->Set_Move_State(_Pre_MoveX, _Pre_MoveY, this->_PreLoads);
 
 	this->_LCB->Get_LocationX(State->Get_Distance_Move_Id()) += static_cast<float>((_Pre_MoveX - 4) * this->_Each_Width);
 	this->_LCB->Get_LocationY(State->Get_Distance_Move_Id()) -= static_cast<float>((_Pre_MoveY - 4) * this->_Each_Height);
@@ -835,8 +831,9 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
-
 	static Key_Unit* OpenGL_Stop_Key{ new Key_Unit(GLFW_KEY_F) };
+
+	double LastTime{ glfwGetTime() };
 
 	if (this->_Is_Init_Need)
 	{

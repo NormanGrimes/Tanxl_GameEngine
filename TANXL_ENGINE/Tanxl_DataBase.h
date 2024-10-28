@@ -6,6 +6,7 @@
 // 添加数据链功能增加切换链操作
 // 链式数据生成的数据目的位置改为内存
 // 添加链式数据功能增加根据序号切换链的功能
+// 数据的两个编号由八位扩展到十六位
 
 #pragma once
 
@@ -100,7 +101,7 @@ class TANXL_DataBase
 private:
 	struct
 	{
-		unsigned int _Item_Status{ 0xFFFF };//Type 8位 Exac 8位
+		unsigned int _Item_Status{ 0xFFFFFFFF };//Type 16位 Exac 16位
 		std::string _Type_Name{ "" };
 		std::string _Exac_Name{ "" };
 		Data_Link* _Data{ nullptr };

@@ -2,6 +2,11 @@
 
 #include "Tanxl_InsertAction.h"
 
+void curse_poscallback(GLFWwindow* window, double x, double y)
+{
+	std::cout << "(pos:" << x << "," << y << ")" << std::endl;
+}
+
 Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0), SaveLen(0)
 {
 	RandomBase* UIB{ &RandomBase::GetRandomBase() };
@@ -44,7 +49,7 @@ bool Key_Unit::Get_KeyStatus()
 
 InsertEventBase& InsertEventBase::GetInsertBase()
 {
-	static InsertEventBase* IEB = new InsertEventBase;
+	static InsertEventBase* IEB{ new InsertEventBase };
 	return *IEB;
 }
 
@@ -70,7 +75,12 @@ size_t InsertEventBase::Get_KeyEvent_Size()
 
 void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
+	static double LastTime{ 0 };
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
+	double MoveScale{ glfwGetTime() - LastTime };
+	LastTime = glfwGetTime();
+
+	glfwSetCursorPosCallback(window, curse_poscallback);
 	OPD->Update_Last_Location(State);
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
@@ -93,15 +103,15 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 			{
 				if (this->_KeyEventS.at(i)->MoveToY)
 				{
-					State->Get_Screen_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-					State->Get_Move_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-					this->_Margin_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+					State->Get_Screen_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
+					State->Get_Move_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
+					this->_Margin_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
 				}
 				if (this->_KeyEventS.at(i)->MoveToX)
 				{
-					State->Get_Screen_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-					State->Get_Move_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
-					this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen);
+					State->Get_Screen_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
+					State->Get_Move_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
+					this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
 				}
 			}
 		}
@@ -175,9 +185,9 @@ void InsertEventBase::Init_Default_Key()
 	MOVE_UP.GLFW_KEY = GLFW_KEY_W;
 	this->RegistEvent(MOVE_UP);*/
 	// OR ↓
-	Key_Unit* MOVE_UP{ new Key_Unit(GLFW_KEY_UP, false, true, 0.005) };
+	Key_Unit* MOVE_UP{ new Key_Unit(GLFW_KEY_UP, false, true, 0.5) };
 	this->RegistEvent(MOVE_UP);
-	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.005);
+	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.5);
 	this->RegistEvent(MOVE_UP);
 
 	/*Key_Unit MOVE_LEFT;
@@ -189,9 +199,9 @@ void InsertEventBase::Init_Default_Key()
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_A;
 	this->RegistEvent(MOVE_LEFT);*/
 	// OR ↓
-	Key_Unit* MOVE_LEFT{ new Key_Unit(GLFW_KEY_LEFT, true, false, -0.005) };
+	Key_Unit* MOVE_LEFT{ new Key_Unit(GLFW_KEY_LEFT, true, false, -0.5) };
 	this->RegistEvent(MOVE_LEFT);
-	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.005);
+	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.5);
 	this->RegistEvent(MOVE_LEFT);
 
 	/*Key_Unit MOVE_RIGHT;
@@ -203,9 +213,9 @@ void InsertEventBase::Init_Default_Key()
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_D;
 	this->RegistEvent(MOVE_RIGHT);*/
 	// OR ↓
-	Key_Unit* MOVE_RIGHT{ new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.005) };
+	Key_Unit* MOVE_RIGHT{ new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.5) };
 	this->RegistEvent(MOVE_RIGHT);
-	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.005);
+	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.5);
 	this->RegistEvent(MOVE_RIGHT);
 
 	/*Key_Unit MOVE_DOWN;
@@ -217,9 +227,9 @@ void InsertEventBase::Init_Default_Key()
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
 	this->RegistEvent(MOVE_DOWN);*/
 	// OR ↓
-	Key_Unit* MOVE_DOWN{ new Key_Unit(GLFW_KEY_DOWN, false, true, -0.005) };
+	Key_Unit* MOVE_DOWN{ new Key_Unit(GLFW_KEY_DOWN, false, true, -0.5) };
 	this->RegistEvent(MOVE_DOWN);
-	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.005);
+	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.5);
 	this->RegistEvent(MOVE_DOWN);
 }
 

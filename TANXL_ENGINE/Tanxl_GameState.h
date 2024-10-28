@@ -24,6 +24,7 @@
 // 增加大地图区块生成接口
 // 简化地图随玩家移动功能的代码
 // 地图单元结构增加事件状态设置
+// 设置显示的矩阵的接口增加一个简化重载版本
 
 #pragma once
 
@@ -151,6 +152,8 @@ public:
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
 	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
+	//↓Set_Move_State : 设置在绘制时显示的矩阵区域
+	void Set_Move_State(int PreSetX, int PreSetY, int PreLoad);
 	void Set_Move_State(int NX, int PX, int NY, int PY);
 	void Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set = 1);
 	void Set_Display_State(int Width, int Height);

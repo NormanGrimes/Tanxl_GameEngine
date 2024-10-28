@@ -418,6 +418,14 @@ std::vector<bool>* GameStateBase::Get_GameState_MoveAble(EState_Extend State_Id)
 	return &MAB;
 }
 
+void GameStateBase::Set_Move_State(int PreSetX, int PreSetY, int PreLoad)
+{
+	this->_MState._Move_NX = 0 - PreLoad + PreSetX;
+	this->_MState._Move_PX = this->_GameState_Width - 1 + PreLoad + PreSetX;
+	this->_MState._Move_NY = 0 - PreLoad + PreSetY;
+	this->_MState._Move_PY = this->_GameState_Height - 1 + PreLoad + PreSetY;
+}
+
 void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
 {
 	this->_MState._Move_NX = NX;

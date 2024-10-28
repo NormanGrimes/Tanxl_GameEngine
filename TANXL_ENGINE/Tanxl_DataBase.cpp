@@ -149,8 +149,8 @@ namespace TanxlDB
 
 std::ostream& operator<<(std::ostream& out, TANXL_DataBase& s)
 {
-	out << "<Type_Status : " << s._Internal_Data._Type_Name << " / " << ((s._Internal_Data._Item_Status & 0xFF00) >> 8) << ">" << std::endl;
-	s.OstreamSpace(out, 1); out << "<Exac_Status : " << s._Internal_Data._Exac_Name << " / " << (s._Internal_Data._Item_Status & 0x00FF) << ">" << std::endl;
+	out << "<Type_Status : " << s._Internal_Data._Type_Name << " / " << ((s._Internal_Data._Item_Status & 0xFFFF0000) >> 16) << ">" << std::endl;
+	s.OstreamSpace(out, 1); out << "<Exac_Status : " << s._Internal_Data._Exac_Name << " / " << (s._Internal_Data._Item_Status & 0x0000FFFF) << ">" << std::endl;
 	s.OstreamSpace(out, 1, 1); out << "<TDBS_Item>" << std::endl;
 	for (int i{ 0 }; i < s._Internal_Data._Data->_Data_Units.size(); ++i)
 	{
@@ -177,7 +177,7 @@ inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After
 
 void TANXL_DataBase::ResetInstance(bool Delete)
 {
-	this->_Internal_Data._Item_Status = 0xFFFF;
+	this->_Internal_Data._Item_Status = 0xFFFFFFFF;
 	this->_Internal_Data._Type_Name = "";
 	this->_Internal_Data._Exac_Name = "";
 	if (Delete && (this->_Internal_Data._Data != nullptr))
@@ -233,8 +233,8 @@ void TANXL_DataBase::AppendItem(EAppendItem_Mode Mode, std::string File_Name, bo
 	if ((Mode == APPENDTO_MEMO) || (Mode == APPENDTO_BOTH))
 	{
 		Id_Link* IdLink{ new Id_Link(
-			(this->_Internal_Data._Item_Status & 0xff00) >> 8, this->_Internal_Data._Type_Name,
-			this->_Internal_Data._Item_Status & 0x00ff, this->_Internal_Data._Exac_Name,
+			(this->_Internal_Data._Item_Status & 0xFFFF0000) >> 16, this->_Internal_Data._Type_Name,
+			this->_Internal_Data._Item_Status & 0x0000FFFF, this->_Internal_Data._Exac_Name,
 			new Data_Link(this->_Internal_Data._Data)) };
 		if (IdLink)//判断是否申请空间成功//UNFINISH YET
 			Append_Link(*IdLink);
@@ -309,13 +309,13 @@ void TANXL_DataBase::Append_Link(Id_Link& New_Id)
 		this->_Id_Links->insert(this->_Id_Links->begin(), &New_Id);
 		return;
 	}
-	int Left{ 0 }, Value{ New_Id._Type * 16 * 16 + New_Id._Exac },
+	int Left{ 0 }, Value{ (New_Id._Type << 16) + New_Id._Exac },
 		Right{ static_cast<int>(this->_Id_Links->size()) - 1 <= 0 ? 0 : static_cast<int>(this->_Id_Links->size()) - 1 };
 	while (true)
 	{
 		int Mid{ (Left + Right) / 2 };
 		Id_Link* PIL{ this->_Id_Links->at(Mid) };
-		int PIL_Value{ PIL->_Type * 16 *16 + PIL->_Exac };
+		int PIL_Value{ (PIL->_Type << 16) + PIL->_Exac };
 		if (PIL_Value == Value)//Type B匹配时
 		{
 			PIL->_Data->Append_Data(New_Id._Data);
@@ -514,11 +514,11 @@ void TANXL_DataBase::Remove_Link(int Type, int Exac)
 
 Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 {
-	int Left{ 0 }, Value{ (Type << 8) + Exac },
+	int Left{ 0 }, Value{ (Type << 16) + Exac },
 		Right{ static_cast<int>(this->_Id_Links->size()) - 1 >= 0 ? static_cast<int>(this->_Id_Links->size()) - 1 : 0 };
 	if (Left == Right)
 	{
-		if (Value == (this->_Id_Links->at(0)->_Type << 8) + this->_Id_Links->at(0)->_Exac)
+		if (Value == (this->_Id_Links->at(0)->_Type << 16) + this->_Id_Links->at(0)->_Exac)
 		{
 			this->_Current_Location = 0;
 			return this->_Id_Links->at(0);
@@ -531,7 +531,7 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 		while (Left != Right)
 		{
 			int Mid{ (Left + Right) / 2 };
-			int Mid_Value{ (this->_Id_Links->at(Mid)->_Type << 8) + this->_Id_Links->at(Mid)->_Exac };
+			int Mid_Value{ (this->_Id_Links->at(Mid)->_Type << 16) + this->_Id_Links->at(Mid)->_Exac };
 			if (Mid_Value == Value)
 			{
 				this->_Current_Location = Mid;
@@ -548,12 +548,12 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 			}
 			if (Left + 1 == Right)
 			{
-				if ((this->_Id_Links->at(Right)->_Type << 8) + this->_Id_Links->at(Right)->_Exac == Value)
+				if ((this->_Id_Links->at(Right)->_Type << 16) + this->_Id_Links->at(Right)->_Exac == Value)
 				{
 					this->_Current_Location = Right;
 					return this->_Id_Links->at(Right);
 				}
-				else if ((this->_Id_Links->at(Left)->_Type << 8) + this->_Id_Links->at(Left)->_Exac == Value)
+				else if ((this->_Id_Links->at(Left)->_Type << 16) + this->_Id_Links->at(Left)->_Exac == Value)
 				{
 					this->_Current_Location = Left;
 					return this->_Id_Links->at(Left);
@@ -602,17 +602,17 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigne
 		Div = Divide;
 	}
 
-	static unsigned Exac{ 0x00 };
+	static unsigned Exac{ 0x0000 };
 	static unsigned Last_Type{ Type };
 	if (Type != Last_Type)
 	{
 		Cur = 0;
 		Last_Type = Type;
-		Exac = 0x00;
+		Exac = 0x0000;
 	}
 
 	this->ResetInstance(true);
-	this->Set_Internal_Id((Last_Type << 8) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
+	this->Set_Internal_Id((Last_Type << 16) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
 	Data_Link* DL{ new Data_Link(Cur, Data) };
 	this->Set_Internal_Data(DL, SIMPLE_SET);
 	this->AppendItem(APPENDTO_MEMO);
@@ -620,7 +620,7 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigne
 	if (Cur == Div)
 	{
 		Cur = 0;
-		Exac = (Exac == 0xFF ? 0x00 : (Exac + 1));
+		Exac = (Exac == 0xFFFF ? 0x0000 : (Exac + 1));
 	}
 }
 

@@ -21,6 +21,9 @@
 // 提供接口初始化八个默认移动按键
 // 增加更新最大移动距离的接口
 // 析构函数优化
+// 获取输入接口根据距上一帧的时间动态调整速度
+// 移动速度调整
+// 增加鼠标坐标的检测功能
 
 #pragma once
 
@@ -137,6 +140,10 @@ private:
 	double _Key_Press_Length{ 10 };
 	//_Key_Extra_Press 记录一个按键事件重复执行按下操作需要的帧数
 	double _Key_Extra_Press{ 20 };
+	//_Mouse_PosX 记录当前鼠标的X轴坐标
+	int _Mouse_PosX{ 0 };
+	//_Mouse_PosY 记录当前鼠标的Y轴坐标
+	int _Mouse_PosY{ 0 };
 	//_Version 用于记录当前程序（输入模块-InserAction）的版本信息
 	const std::string _Version{ "0.8" };
 
