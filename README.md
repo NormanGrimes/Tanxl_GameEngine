@@ -21,7 +21,7 @@
 
 [Version 0.2 Build 21 TURBO 11 - 2023/07/27 08:57](https://github.com/NormanGrimes/Tanxl_GameEngine/commit/e02e79bebd58f3d8ec21a3896072baee969952a8)
 
-Version 0.2 Build 30 TURBO 12 - 2023/08/22 11:41
+[Version 0.2 Build 30 TURBO 12 - 2023/08/22 11:41](https://github.com/NormanGrimes/Tanxl_GameEngine/commit/34618423237e965420dd21ced3d7ff98177926bc)
 
 Version 0.2 Build 42 TURBO 13 - 2023/10/07 09:38
 
@@ -46,6 +46,8 @@ Version 0.3 Build 31 TURBO 22 - 2024/07/10 18:25
 Version 0.3 Build 42 TURBO 23 - 2024/08/14 09:05
 
 Version 0.3 Build 52 TURBO 24 - 2024/09/24 10:07
+
+Version 0.3 Build 59 TURBO 25 - 2024/10/28 17:52
 
 # Tanxl_GameEngine Version 0.2 Build 18 README
 This game is currently available on steam
