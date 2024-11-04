@@ -75,7 +75,7 @@ size_t InsertEventBase::Get_KeyEvent_Size()
 
 void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
-	static double LastTime{ 0 };
+	static double LastTime{ glfwGetTime() };
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	double MoveScale{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
@@ -84,6 +84,12 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	OPD->Update_Last_Location(State);
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
+		std::cout << "Mouse 1 Press"<< std::endl;
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
+		std::cout << "Mouse 2 Press" << std::endl;
+
 	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
 		if (glfwGetKey(window, this->_KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)

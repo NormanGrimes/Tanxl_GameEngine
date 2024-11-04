@@ -7,6 +7,8 @@
 // 链式数据生成的数据目的位置改为内存
 // 添加链式数据功能增加根据序号切换链的功能
 // 数据的两个编号由八位扩展到十六位
+// 添加数据链功能增加指定位置添加功能
+// 临时新增接口用于遍历内部存储的数据
 
 #pragma once
 
@@ -122,6 +124,8 @@ private:
 	inline void OstreamSpace(std::ostream& os, int Before = 0, int After = 0);//根据级别输出空格 Before用于执行前对级别数值进行修改 After用于执行后
 public:
 	TANXL_DataBase();//构造函数
+	//↓用于直接获取内存中指定编号的数据
+	Id_Link* Id_Link_Search(int Level);
 	//↓时间复杂度为logN的Id_Link快速定位函数 Type Exac 指Id_Link的同名变量
 	Id_Link* Id_Link_Locate(int Type, int Exac);
 	//↓获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
@@ -146,7 +150,7 @@ public:
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
 	void SortDataBase(ESort_Mode Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
 	//↓添加数据链 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元 Type指定输入到的Type编号
-	void Append_DataChain(std::string Data, unsigned Divide = 0, unsigned Type = 0x01);
+	void Append_DataChain(std::string Data, unsigned Divide = 0, unsigned Type = 0x01, unsigned Exac = 0xFFFF);
 	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息

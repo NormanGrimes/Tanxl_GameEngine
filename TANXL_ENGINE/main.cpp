@@ -17,7 +17,7 @@ int main()
 	//检测引擎12状态 是否有异常产生
 	TGE.Engine_Check_Engine_Status();
 	//构造31x31个区块的(10x10)程序生成世界 并建立数据间的连接
-	TGE.Engine_Save_Infinite_State(true, 31, 31);
+	TGE.Engine_Save_Infinite_State(true, 31, 31 ,0 ,0);
 	//生成引擎数据文件 "Tanxl Engine SystemInfor.sd"
 	TGE.Engine_Save_Source_Infor("Tanxl Engine SystemInfor");
 	//设置屏幕显示宽度和高度为4个地图单元长度 并设置显示区域外每个方向额外加载4个地图单元长度
@@ -29,9 +29,9 @@ int main()
 	//启用移动到达指定范围后地图随玩家移动 设置距离为0.6倍某方向距离的长度
 	TGE.Engine_Insert_State_MoveWith(true, 0.6f);
 	//启动地图视角自动调整 将玩家单元调整到地图中心位置 每次调整距离为0.005并可在移动中调整
-	TGE.Engine_Adjust_Multi_Set(true, 0.0025f, true);
+	TGE.Engine_Adjust_Multi_Set(true, 0.29f, true);
 	//编辑四个区块的内容
-	TGE.Engine_State_Set_Data(224, true, false,
+	TGE.Engine_State_Set_Data(0x0000, true, false,
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
@@ -42,7 +42,7 @@ int main()
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,");
-	TGE.Engine_State_Set_Data(239, true, false,
+	TGE.Engine_State_Set_Data(0x001E, true, false,
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
@@ -53,7 +53,7 @@ int main()
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,");
-	TGE.Engine_State_Set_Data(689, true, false,
+	TGE.Engine_State_Set_Data(0x1E00, true, false,
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
@@ -64,7 +64,7 @@ int main()
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,");
-	TGE.Engine_State_Set_Data(704, true, false,
+	TGE.Engine_State_Set_Data(0x1E1E, true, false,
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
@@ -76,7 +76,7 @@ int main()
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,");
 	//设置起始区域为第480(从零开始计算)号区块 并覆盖此区块的数据
-	TGE.Engine_State_Set_Data(480, true, true,
+	TGE.Engine_State_Set_Data(0x0F0F, true, true,
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,"
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
@@ -109,7 +109,7 @@ int main()
 			if (Appended == false)
 			{
 				Appended = true;
-				TGE.Engine_Insert_Adjust_Speed(0, 8, 0.01);
+				TGE.Engine_Insert_Adjust_Speed(0, 8, 0.5);
 			}
 		}
 		else
@@ -117,7 +117,7 @@ int main()
 			if (Appended == true)
 			{
 				Appended = false;
-				TGE.Engine_Insert_Adjust_Speed(0, 8, -0.01);
+				TGE.Engine_Insert_Adjust_Speed(0, 8, -0.5);
 			}
 		}
 	}

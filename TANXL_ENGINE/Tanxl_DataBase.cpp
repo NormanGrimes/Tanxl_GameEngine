@@ -512,6 +512,11 @@ void TANXL_DataBase::Remove_Link(int Type, int Exac)
 	}
 }
 
+Id_Link* TANXL_DataBase::Id_Link_Search(int Level)
+{
+	return this->_Id_Links->at(Level);
+}
+
 Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 {
 	int Left{ 0 }, Value{ (Type << 16) + Exac },
@@ -541,6 +546,7 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 				Right = Mid;
 			else if (Mid_Value < Value)
 				Left = Mid;
+
 			if (Left == Right)
 			{
 				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
@@ -592,7 +598,7 @@ void TANXL_DataBase::Replace_Link(int OldType, int OldExac, int OldDepth, int Id
 		PIL->_Data->_Data_Units.erase(PIL->_Data->_Data_Units.begin() + PIL->_Data->_Data_Units.size() + OldDepth);
 }
 
-void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigned Type)
+void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigned Type, unsigned Exac)
 {
 	static int Div{ static_cast<int>(Divide) };
 	static int Cur{ 0 };
@@ -602,17 +608,20 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigne
 		Div = Divide;
 	}
 
-	static unsigned Exac{ 0x0000 };
+	static unsigned Chain_Exac{ 0x0000 };
 	static unsigned Last_Type{ Type };
 	if (Type != Last_Type)
 	{
 		Cur = 0;
 		Last_Type = Type;
-		Exac = 0x0000;
+		Chain_Exac = 0x0000;
 	}
 
+	if (Exac != 0xFFFF)
+		Chain_Exac = Exac;
+
 	this->ResetInstance(true);
-	this->Set_Internal_Id((Last_Type << 16) + Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
+	this->Set_Internal_Id((Last_Type << 16) + Chain_Exac, "CHAIN_DATA_TYPE", "CHAIN_DATA_EXAC");
 	Data_Link* DL{ new Data_Link(Cur, Data) };
 	this->Set_Internal_Data(DL, SIMPLE_SET);
 	this->AppendItem(APPENDTO_MEMO);
@@ -620,7 +629,7 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigne
 	if (Cur == Div)
 	{
 		Cur = 0;
-		Exac = (Exac == 0xFFFF ? 0x0000 : (Exac + 1));
+		Chain_Exac = (Chain_Exac == 0xFFFF ? 0x0000 : (Chain_Exac + 1));
 	}
 }
 

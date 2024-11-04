@@ -25,6 +25,11 @@
 // 简化地图随玩家移动功能的代码
 // 地图单元结构增加事件状态设置
 // 设置显示的矩阵的接口增加一个简化重载版本
+// 设置起始地图区块的接口优化区块定位
+// 部分区块定位功能改用存储模块的新接口
+// 移动到地图边缘后的调整接口增加帧数控制速度
+// 自动调整的移动距离根据帧数进行修改
+
 
 #pragma once
 
@@ -173,7 +178,7 @@ public:
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Reload_State(EState_Extend Extend_Dire);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
-	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0);
+	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock();
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
@@ -191,8 +196,8 @@ public:
 	int Get_State_Height();
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
-	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY);//可选功能 对2D棋盘上的物品微调位置
-	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX);
+	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, double Scale = 1.0);
 	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数
 	unsigned Get_DataHeight()const;
 	//↓Get_DataWidth : 获取单个地图区块横向包含的单元个数
