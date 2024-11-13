@@ -2,6 +2,31 @@
 
 #include "Tanxl_OpenGL_Draw.h"
 
+#include <Windows.h>
+
+GLuint TextFont;
+
+void PrintString(const char* s)
+{
+	glListBase(TextFont);
+	glCallLists(static_cast<GLsizei>(strlen(s)), GL_UNSIGNED_BYTE, s);
+}
+
+void DrawCoordinate()
+{
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glRasterPos2f(0.4f, 0.0f);
+	PrintString("X");
+
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glRasterPos2f(0.0f, 0.4f);
+	PrintString("Y");
+
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glRasterPos2f(0.0f, 0.0f);
+	PrintString("O");
+}
+
 void delay(int misec)
 {
 	clock_t start = clock();
@@ -32,8 +57,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B28", NULL, NULL);
-
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B30", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -41,19 +65,27 @@ void OpenGL_Draw::init(GameStateBase* State)
 		return;
 	}
 
+	glfwMakeContextCurrent(_Main_Window);
+
+	if (glewInit() != GLEW_OK)
+	{
+		std::cout << "Failed to initialize GLEW" << std::endl;
+		return;
+	}
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	TextFont = glGenLists(MAX_CHAR);
+	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
+
 	if (_Window_Adjust_Enable)
 		glfwSetFramebufferSizeCallback(_Main_Window, TanxlOD::framebuffer_size_callback);
 	else
 		glfwSetWindowSizeLimits(_Main_Window, 800, 800, 800, 800);
 
-	glfwMakeContextCurrent(_Main_Window);
-	if (glewInit() != GLEW_OK) { exit(EXIT_FAILURE); }
 	glfwSwapInterval(1);
 
 	glEnable(GL_DEPTH_TEST);
-
 	glDepthFunc(GL_LEQUAL);
-
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0f);
 
@@ -71,19 +103,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_02_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_03_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 
-	float BeginHeight{ (this->_HeightInt + this->_PreLoads - 1) * (1.0f / this->_HeightInt) };
-	for (int Height{ 0 }; Height < (this->_Each_Height + this->_PreLoads * 2); ++Height)
-	{
-		float BeginWidth{ -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt) };
-		for (int Width{ 0 }; Width < (this->_Each_Width + this->_PreLoads * 2); ++Width)
-		{
-			BeginWidth += ((1.0f / this->_WidthInt) * 2);
-			this->_Translation[Height * this->_WidthInt + Width].x = 0;// BeginWidth;
-			this->_Translation[Height * this->_WidthInt + Width].y = 0;// BeginHeight;
-		}
-		BeginHeight -= ((1.0f / this->_HeightInt) * 2);
-		BeginWidth = -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt);
-	}
+	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Test_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
@@ -91,6 +111,9 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	TextFont = glGenLists(MAX_CHAR);
+	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -301,6 +324,9 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		Tag = "Infor[" + std::to_string(i) + "]";
 		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
 		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
+
+		StatePos = glGetUniformLocation(_ITest_RenderingProgram, Tag.c_str());
+		glProgramUniform2iv(_ITest_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
 
 		std::cout << this->_StateInfor[i].x << " ";
 		if (i % (this->_WidthInt + this->_PreLoads * 2) == 0)
@@ -662,6 +688,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 
 void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 {
+	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	State->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
 	StateUnit* CheckUnit{ State->Get_State(State->Get_LocationX(), State->Get_LocationY()) };
 	if (!CheckUnit)
@@ -676,7 +703,9 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 		}
 		else
 		{
+			SB->Play_Sound(SOUND_EVENT_START);
 			_Main_Character->TakeDamage(1);
+			_Main_Character->Add_Money(1);
 			CheckUnit->Set_Status(0);
 			ReLoadState(State);
 		}
@@ -685,6 +714,7 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 	{
 		if (_Main_Character->Check_Health() < _Main_Character->Get_MaxHealth())
 		{
+			SB->Play_Sound(SOUND_EVENT_START);
 			_Main_Character->RestoreHealth(1);
 			CheckUnit->Set_Status(0);
 			ReLoadState(State);
@@ -723,6 +753,18 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		this->_Clear_Function = false;
 	}
+
+	/*glColor3f(1.0f, 0.0f, 0.0f);
+	glRasterPos2f(0.4f, 0.0f);
+	PrintString("X");
+
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glRasterPos2f(0.0f, 0.4f);
+	PrintString("Y");
+
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glRasterPos2f(0.0f, 0.0f);
+	PrintString("O");*/
 
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
 
@@ -825,10 +867,12 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 	}
+
+	std::cout << "Error Code :" << glGetError() << std::endl;
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
-{
+{ 
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
 	static Key_Unit* OpenGL_Stop_Key{ new Key_Unit(GLFW_KEY_F) };
 
@@ -873,6 +917,63 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	std::cout << "Dist_Mid " << this->_LCB->Get_LocationX(Dist_Mid) << " -- " << this->_LCB->Get_LocationY(Dist_Mid) << std::endl;
 	std::cout << "Exac_Mov " << this->_LCB->Get_LocationX(Exac_Mov) << " -- " << this->_LCB->Get_LocationY(Exac_Mov) << std::endl;// MAJOR
 	std::cout << "Stat_Loc " << this->_LCB->Get_LocationX(Stat_Loc) << " -- " << this->_LCB->Get_LocationY(Stat_Loc) << std::endl << std::endl << std::endl;
+#endif
+
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+	glm::vec2 translations[400];
+	int index = 0;
+	float offset = this->_Each_Height;
+
+	float BeginHeight{ (this->_HeightInt + this->_PreLoads - 1) * (1.0f / this->_HeightInt) };
+	for (int Height{ 0 }; Height < (this->_Each_Height + this->_PreLoads * 4); ++Height)
+	{
+		float BeginWidth{ -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt) };
+		for (int Width{ 0 }; Width < (this->_Each_Width + this->_PreLoads * 4); ++Width)
+		{
+			BeginWidth += ((1.0f / this->_WidthInt) * 2);
+			translations[Height * (this->_WidthInt + this->_PreLoads * 2) + Width].x = BeginWidth;
+			translations[Height * (this->_WidthInt + this->_PreLoads * 2) + Width].y = BeginHeight;
+		}
+		BeginHeight -= ((1.0f / this->_HeightInt) * 2);
+		BeginWidth = -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt);
+	}
+
+	unsigned int instanceVBO;
+	glGenBuffers(1, &instanceVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 400, &translations[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	float HalfW{ static_cast<float>(this->_Each_Width / 2) };
+	float HalfH{ static_cast<float>(this->_Each_Height / 2) };
+
+	float quadVertices[] = {
+		// positions     // colors
+		-HalfW,  HalfH,  1.0f, 0.0f, 0.0f,
+		 HalfW, -HalfH,  0.0f, 1.0f, 0.0f,
+		-HalfW, -HalfH,  0.0f, 0.0f, 1.0f,
+
+		-HalfW,  HalfH,  1.0f, 0.0f, 0.0f,
+		 HalfW, -HalfH,  0.0f, 1.0f, 0.0f,
+		 HalfW,  HalfH,  0.0f, 1.0f, 1.0f
+	};
+	unsigned int quadVAO, quadVBO;
+	glGenVertexArrays(1, &quadVAO);
+	glGenBuffers(1, &quadVBO);
+	glBindVertexArray(quadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+	// also set instance data
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 #endif
 
 	if (!glfwWindowShouldClose(_Main_Window))
@@ -920,23 +1021,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if (State->Get_Adjust_Flag())//Auto Adjust Part
 		{
-			/*float Temp_Dist_MidX = this->_LCB->Get_LocationX(Dist_Mid);
-			float Temp_Dist_MidY = this->_LCB->Get_LocationY(Dist_Mid);
-			float Temp_Dist_StaX = this->_LCB->Get_LocationX(Stat_Loc);
-			float Temp_Dist_StaY = this->_LCB->Get_LocationY(Stat_Loc);*/
-
 			Temp_MoveY = State->Set_ExacHeight(Current_Height, this->_LCB->Get_LocationY(Dist_Mid), this->_LCB->Get_LocationY(Stat_Loc), MoveScale);
 			Temp_MoveX = State->Set_ExacWidth(Current_Width, this->_LCB->Get_LocationX(Dist_Mid), this->_LCB->Get_LocationX(Stat_Loc), MoveScale);
-
-			/*Temp_Dist_MidX -= this->_LCB->Get_LocationX(Dist_Mid);
-			Temp_Dist_MidY -= this->_LCB->Get_LocationY(Dist_Mid);
-			Temp_Dist_StaX -= this->_LCB->Get_LocationX(Stat_Loc);
-			Temp_Dist_StaY -= this->_LCB->Get_LocationY(Stat_Loc);
-
-			this->_LCB->Get_LocationX(Dist_Mid) -= Temp_Dist_MidX * MoveScale;
-			this->_LCB->Get_LocationY(Dist_Mid) -= Temp_Dist_MidY * MoveScale;
-			this->_LCB->Get_LocationX(Stat_Loc) -= Temp_Dist_StaX * MoveScale;
-			this->_LCB->Get_LocationY(Stat_Loc) -= Temp_Dist_StaY * MoveScale;*/
 		}
 		if (!State->Get_Adjust_Flag() || State->Get_Adjust_While_Move())//Move Adjust Part
 		{
@@ -1036,12 +1122,24 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glProgramUniform1f(_State_RenderingProgram, 6, this->_LCB->Get_LocationX(Stat_Loc));//State_MoveX
 		glProgramUniform1f(_State_RenderingProgram, 7, this->_LCB->Get_LocationY(Stat_Loc));//State_MoveY
 
-		display(_Main_Window, glfwGetTime(), State);
-		glfwSwapBuffers(_Main_Window);
 		glfwPollEvents();
+
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+		glUseProgram(_ITest_RenderingProgram);
+		glBindVertexArray(quadVAO);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
+		glBindVertexArray(0);
+#else
+		display(_Main_Window, glfwGetTime(), State);
+#endif
+		glfwSwapBuffers(_Main_Window);
+		
 	}
 	else
+	{
+		glfwTerminate();
 		Destroy_Window();
+	}
 }
 
 void TanxlOD::framebuffer_size_callback(GLFWwindow* window, int width, int height)

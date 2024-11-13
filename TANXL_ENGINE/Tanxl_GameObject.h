@@ -14,6 +14,7 @@
 // 增加物品组件的状态与设置和获取函数
 // 生命值组件增加伤害溢出判断
 // 生命值组件增加最大生命值获取接口
+// 新增金币组件
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -45,6 +46,19 @@ private:
 	bool _Unable_Damage;
 };
 
+class Money_Componment
+{
+public:
+	Money_Componment(int Init_Money);
+
+	int Add_Money(int Money);
+
+	bool Pay_Money(int Price);
+
+private:
+	int _Current_Money;
+};
+
 class Componment
 {
 public:
@@ -64,11 +78,15 @@ class GameObject : public Health_Componment
 {
 public:
 	GameObject(int Max_Health, int Current_Health);
+	void Add_Money(int Money);
+	bool Pay_Money(int Price);
 
 	bool AppendComponment(Componment* CM);
 	bool RemoveComponment(std::string Name);
 	void FinishComponment();
 private:
+
+	Money_Componment _Money_Componment;
 	std::vector<Componment*> _Object_Content;
 };
 

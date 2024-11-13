@@ -564,6 +564,7 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 					this->_Current_Location = Left;
 					return this->_Id_Links->at(Left);
 				}
+				std::cout << "Value : " << Value << std::endl;
 				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
 				return nullptr;
 			}

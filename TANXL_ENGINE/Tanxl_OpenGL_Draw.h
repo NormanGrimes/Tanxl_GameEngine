@@ -17,6 +17,9 @@
 // 地图单元事件检测功能现在检测事件而不是方块编号
 // 修复不同预载值可能导致显示错误的问题
 // 修复地图边缘显示的方块不正确的问题
+// 加入文字显示的测试代码
+// 增加并用宏控制实例化测试代码
+// 增加踩到红色方块增加金币的设定
 
 #pragma once
 
@@ -24,6 +27,7 @@
 #define _TANXL_OPENGL_DRAW_
 
 #define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_  0
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
@@ -35,10 +39,12 @@
 
 #endif
 
+#define MAX_CHAR    128
+
+#include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
 #include "Tanxl_InsertAction.h"
-#include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameObject.h"
 #include "Tanxl_SoundBase.h"
@@ -527,6 +533,7 @@ private:
 	GLuint _State_RenderingProgram;
 	GLuint _Adjst_RenderingProgram;
 	GLuint _Start_RenderingProgram;
+	GLuint _ITest_RenderingProgram = 0;
 	GLuint _vao[1];
 	GLuint _vbo[32];
 

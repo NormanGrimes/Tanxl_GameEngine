@@ -186,13 +186,14 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <Version>
       </Version>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
@@ -244,6 +245,7 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
     <None Include="Tanxl_State_01_VertShader.glsl" />
     <None Include="Tanxl_State_02_VertShader.glsl" />
     <None Include="Tanxl_State_03_VertShader.glsl" />
+    <None Include="Tanxl_Test_01_VertShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />

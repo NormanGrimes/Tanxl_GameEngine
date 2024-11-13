@@ -13,14 +13,14 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <SOIL2\soil2.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+#include <glm\gtc\matrix_transform.hpp>
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <cmath>
 #include <vector>
-#include <glm\glm.hpp>
-#include <glm\gtc\type_ptr.hpp>
-#include <glm\gtc\matrix_transform.hpp>
 
 class OpenGL_Render
 {

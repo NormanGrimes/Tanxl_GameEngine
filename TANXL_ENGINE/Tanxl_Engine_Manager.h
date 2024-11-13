@@ -8,7 +8,7 @@
 #define _TANXL_ENGINE_MANAGER_
 
 #define _CRT_SECURE_NO_WARNINGS
-# pragma warning (disable:4819)
+#pragma warning (disable:4819)
 
 // mainCRTStartup
 

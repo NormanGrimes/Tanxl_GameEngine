@@ -7,6 +7,8 @@
 // 修改数据标签接口对应存储模块改动
 // 增加坐标模块的支持
 // 移除未使用变量并调整数据顺序
+// 适配存储模块的改动
+
 #pragma once
 
 #ifndef _TANXL_DATADEFINE_
@@ -14,9 +16,9 @@
 
 #include <string>
 
-static std::string DataTag(int Type = 0xFF, int Exac = 0xFF, int Data = 0xFF)
+static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFFFF)
 {
-	if (Data == 0xFF)
+	if (Data == 0xFFFF)
 	{
 		switch (Type)
 		{

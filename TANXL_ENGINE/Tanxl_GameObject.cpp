@@ -37,6 +37,24 @@ int Health_Componment::Get_MaxHealth()
 	return this->_Maximum_Health;
 }
 
+Money_Componment::Money_Componment(int Init_Money) :_Current_Money(Init_Money) {}
+
+int Money_Componment::Add_Money(int Money)
+{
+	this->_Current_Money += Money;
+	return this->_Current_Money;
+}
+
+bool Money_Componment::Pay_Money(int Price)
+{
+	if (this->_Current_Money > Price)
+	{
+		this->_Current_Money -= Price;
+		return true;
+	}
+	return false;
+}
+
 Componment::Componment(std::string Name) :_Name(Name), _Is_Special_Enable(false) {}
 
 std::string Componment::GetName()
@@ -55,7 +73,17 @@ bool Componment::Get_Special_Status()
 }
 
 GameObject::GameObject(int Max_Health, int Current_Health)
-	:Health_Componment(Max_Health, Current_Health) {}
+	:Health_Componment(Max_Health, Current_Health), _Money_Componment(Money_Componment(0)) {}
+
+void GameObject::Add_Money(int Money)
+{
+	this->_Money_Componment.Add_Money(Money);
+}
+
+bool GameObject::Pay_Money(int Price)
+{
+	return this->_Money_Componment.Pay_Money(Price);
+}
 
 bool GameObject::AppendComponment(Componment* CM)
 {
