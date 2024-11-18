@@ -20,6 +20,8 @@
 // 加入文字显示的测试代码
 // 增加并用宏控制实例化测试代码
 // 增加踩到红色方块增加金币的设定
+// 实例化测试代码加入简化版纹理数组的使用
+// 构造函数初始化变量减少
 
 #pragma once
 
@@ -529,11 +531,12 @@ private:
 	bool _Is_Adjust_Enable{ true };
 	bool _Is_Init_Need{ true };
 
-	GLuint _Midle_RenderingProgram;
-	GLuint _State_RenderingProgram;
-	GLuint _Adjst_RenderingProgram;
-	GLuint _Start_RenderingProgram;
-	GLuint _ITest_RenderingProgram = 0;
+	GLuint _Midle_RenderingProgram{ 0 };
+	GLuint _State_RenderingProgram{ 0 };
+	GLuint _Adjst_RenderingProgram{ 0 };
+	GLuint _Start_RenderingProgram{ 0 };
+	GLuint _ITest_RenderingProgram{ 0 };
+
 	GLuint _vao[1];
 	GLuint _vbo[32];
 

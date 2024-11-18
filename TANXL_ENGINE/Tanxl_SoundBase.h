@@ -3,6 +3,7 @@
 // 增加枚举重载版本的音频播放功能
 // 整理进入引擎层
 // 新增触发地图事件的音频
+// 新增恢复生命值和鼠标点击的音频
 
 #pragma once
 
@@ -14,9 +15,11 @@
 
 enum ESound_WAV
 {
-    SOUND_GAME_START  = 0,
-    SOUND_GAME_OVER   = 1,
-    SOUND_EVENT_START = 2
+    SOUND_GAME_START        = 0,
+    SOUND_GAME_OVER         = 1,
+    SOUND_EVENT_START       = 2,
+    SOUND_RESTORE_HEALTH    = 3,
+    SOUND_MOUSE_CLICK       = 4
 };
 
 class SoundBase
@@ -30,7 +33,13 @@ public:
 
 private:
     irrklang::ISoundEngine* _SoundEngine;
-    std::string Sound_Names[3]{ "music/Game_Start.wav", "music/Game_Over.wav","music/Game_Event_Start.wav" };
+
+    std::string Sound_Names[5]{ 
+        "music/Game_Start.wav", 
+        "music/Game_Over.wav",
+        "music/Game_Event_Start.wav",
+        "music/Game_Event_Restore_Health.wav" ,
+        "music/Game_Mouse_Click.wav"};
 
     SoundBase();
     ~SoundBase();

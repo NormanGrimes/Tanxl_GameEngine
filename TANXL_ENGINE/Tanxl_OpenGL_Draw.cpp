@@ -42,10 +42,10 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _Midle_RenderingProgram(0),
-_State_RenderingProgram(0), _Adjst_RenderingProgram(0), _Start_RenderingProgram(0), _vao(), _vbo(), _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight),
-_Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust), _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0),
-_Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), _Main_Character(new GameObject(10, 10)) {}
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(),
+_ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
+_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _Wait_Frame(0), _Translation(), _LCB(&LocationBase::GetLocationBase()),
+_StateInfor(), _Main_Character(new GameObject(10, 10)) {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -73,7 +73,9 @@ void OpenGL_Draw::init(GameStateBase* State)
 		return;
 	}
 
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	TextFont = glGenLists(MAX_CHAR);
 	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
 
@@ -102,15 +104,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Player_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_02_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_03_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
-
 	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Test_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 
 	glGenVertexArrays(1, _vao);
 	glBindVertexArray(_vao[0]);
 	glGenBuffers(1, _vbo);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	TextFont = glGenLists(MAX_CHAR);
 	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
@@ -325,9 +323,6 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
 		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
 
-		StatePos = glGetUniformLocation(_ITest_RenderingProgram, Tag.c_str());
-		glProgramUniform2iv(_ITest_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
-
 		std::cout << this->_StateInfor[i].x << " ";
 		if (i % (this->_WidthInt + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
@@ -383,7 +378,11 @@ int OpenGL_Draw::Append_Texture(const char* Texture)
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
 
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinatesTiny), TanxlOD::textureCoordinatesTiny, GL_STATIC_DRAW);
+#else
 	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
+#endif
 
 	glActiveTexture(GL_TEXTURE0 + Id);
 
@@ -714,7 +713,7 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 	{
 		if (_Main_Character->Check_Health() < _Main_Character->Get_MaxHealth())
 		{
-			SB->Play_Sound(SOUND_EVENT_START);
+			SB->Play_Sound(SOUND_RESTORE_HEALTH);
 			_Main_Character->RestoreHealth(1);
 			CheckUnit->Set_Status(0);
 			ReLoadState(State);
@@ -868,7 +867,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 	}
 
-	std::cout << "Error Code :" << glGetError() << std::endl;
+	//std::cout << "Error Code :" << glGetError() << std::endl;
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)

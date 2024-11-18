@@ -77,6 +77,9 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
 	static double LastTime{ glfwGetTime() };
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
+	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	static int LastMouseStatus_1{ GLFW_RELEASE };
+	static int LastMouseStatus_2{ GLFW_RELEASE };
 	double MoveScale{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
 
@@ -85,10 +88,28 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
-		std::cout << "Mouse 1 Press"<< std::endl;
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
-		std::cout << "Mouse 2 Press" << std::endl;
+	int Temp_Mouse_Status_1{ glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) };
+	int Temp_Mouse_Status_2{ glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) };
+
+	if (Temp_Mouse_Status_1 == GLFW_RELEASE)
+	{
+		if (LastMouseStatus_1 == GLFW_PRESS)
+		{
+			SB->Play_Sound(SOUND_MOUSE_CLICK);
+			std::cout << "Mouse 1 Press" << std::endl;
+		}
+	}
+	if (Temp_Mouse_Status_2 == GLFW_RELEASE)
+	{
+		if (LastMouseStatus_2 == GLFW_PRESS)
+		{
+			SB->Play_Sound(SOUND_MOUSE_CLICK);
+			std::cout << "Mouse 2 Press" << std::endl;
+		}
+	}
+
+	LastMouseStatus_1 = Temp_Mouse_Status_1;
+	LastMouseStatus_2 = Temp_Mouse_Status_2;
 
 	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
@@ -296,6 +317,7 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 
 	if (this->_Is_Max_Single)
 		this->_Max_float = this->_Max_float_Width;
+
 	if (Screen_MoveX > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 2;

@@ -55,6 +55,8 @@ bool Money_Componment::Pay_Money(int Price)
 	return false;
 }
 
+Attribute_COM::Attribute_COM() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(1) {};
+
 Componment::Componment(std::string Name) :_Name(Name), _Is_Special_Enable(false) {}
 
 std::string Componment::GetName()

@@ -15,6 +15,7 @@
 // 生命值组件增加伤害溢出判断
 // 生命值组件增加最大生命值获取接口
 // 新增金币组件
+// 新增记录人物攻击力防御力移动速度的属性组件
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -57,6 +58,17 @@ public:
 
 private:
 	int _Current_Money;
+};
+
+class Attribute_COM
+{
+public:
+	Attribute_COM();
+
+private:
+	int _Attack_Damage;
+	int _Defense_Armor;
+	int _Move_Speed;
 };
 
 class Componment
