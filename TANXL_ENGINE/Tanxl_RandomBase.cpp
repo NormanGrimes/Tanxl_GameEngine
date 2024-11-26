@@ -60,10 +60,7 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
         int StateVal = UID(DRE);
         if (StateVal == 4)//OCEAN BLOCK
             ReturnVal += "1-";
-        else
-            ReturnVal += "0-";
-
-        if (Random_Event)
+        else if (Random_Event)
         {
             if (StateVal == 5)
             {
@@ -75,7 +72,11 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
                 StateVal = SID(DRE);
                 ReturnVal += "3-";
             }
+            else
+                ReturnVal += "0-";
         }
+        else
+            ReturnVal += "0-";
 
         ReturnVal += std::to_string(StateVal);
         ReturnVal += ",";
@@ -122,7 +123,7 @@ void RandomBase::Suffle_UniData(int Times)
     std::uniform_int_distribution<int> UID(0, 61);
     while (Times--)
     {
-        for (int i{ 0 }; i < 62; ++i)
+        for (int i{ 0 }; i < 31; ++i)
         {
             std::string Temp{ UniData[i] };
             int Exchange_Val{ UID(DRE)};

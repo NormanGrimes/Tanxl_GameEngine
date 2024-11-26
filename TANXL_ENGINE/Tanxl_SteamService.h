@@ -4,6 +4,7 @@
 // 库存类改为单例模式
 // 库存类增加版本信息
 // 库存类增加初始化状态并根据状态执行功能
+// 增加库存物品类
 
 #pragma once
 
@@ -15,7 +16,8 @@
 
 enum ETanxl_Inventory_ItemDefId
 {
-	Tanxl_Pormise_LIMITED_DROP_ITEM = 1,
+	Tanxl_Pormise_LIMITED_DROP_ITEM		= 1,
+	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2
 };
 
 class Tanxl_Inventory
@@ -44,7 +46,7 @@ public:
 	{
 		if (!_SteamInventoryInit_Status)
 			return;
-		SteamInventory()->TriggerItemDrop(&_PlaytimeRequestResult, Tanxl_Pormise_LIMITED_DROP_ITEM);
+		SteamInventory()->TriggerItemDrop(&_PlaytimeRequestResult, Tanxl_Secret_Core_LIMITED_DROP_ITEM);
 	}
 
 private:
@@ -79,6 +81,17 @@ private:
 
 	SteamInventoryResult_t _PlaytimeRequestResult;
 	bool _SteamInventoryInit_Status;
+};
+
+class TanxlItem
+{
+public:
+	SteamItemInstanceID_t GetItemId() const { return _Details.m_itemId; }
+	SteamItemDef_t GetDefinition() const { return _Details.m_iDefinition; }
+	uint16 GetQuantity() const { return _Details.m_unQuantity; }
+private:
+	friend class Tanxl_Inventory;
+	SteamItemDetails_t _Details;
 };
 
 #endif

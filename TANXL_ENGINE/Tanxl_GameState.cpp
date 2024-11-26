@@ -167,7 +167,6 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 
 void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 {
-
 	if (this->Get_Engine_File())
 	{
 		Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, State_Id) };
@@ -1032,9 +1031,10 @@ StateUnit* GameStateBase::Get_State(int LocationX, int LocationY)
 
 Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 {
-	for (int i{ 0 }; i < (this->_State_WidthS * this->_State_HeightS); ++i)
+	for (int i{ 1 }; i < (this->_State_WidthS * this->_State_HeightS + 1); ++i)
 	{
 		Id_Link* Link{ this->_Data_Base.Id_Link_Search(i) };
+		std::cout << i << " : " << Link->_Data->_Data_Units.at(0)->_Data << std::endl;
 		if (Link->_Data->_Data_Units.at(0)->_Data == Link_Name)
 			return Link;
 	}

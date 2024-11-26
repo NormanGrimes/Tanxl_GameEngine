@@ -120,7 +120,6 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
 	this->_Engine_InforFile_Name = FileName;
 	remove((FileName + ".usd").c_str());
-	remove("TANXL_STATE_DATA.sd");
 }
 
 void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int Height, int Begin_PosX, int Begin_PosY)
@@ -136,13 +135,12 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 			this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10, true), 0, 1, TempVal);
 		}
 	}
-	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, "TANXL_STATE_DATA");
 	this->Tanxl_Engine_GameState->Set_State_Counts(Width, Height);
 
 	if (Build_Connect)
 	{
-		for (int i{ Begin_PosY }; i < Height; ++i)
-			for (int j{ Begin_PosX }; j < Width; ++j)
+		for (int i{ Begin_PosY }; i < Begin_PosY + Height; ++i)
+			for (int j{ Begin_PosX }; j < Begin_PosX + Width; ++j)
 			{
 				std::string LEFT_STR{ "NULL" }, LEFT_ABOV_STR{ "NULL" };
 				std::string RIGH_STR{ "NULL" }, LEFT_BELO_STR{ "NULL" };
@@ -151,20 +149,20 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 
 				if (j != Begin_PosX)
 					LEFT_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 256 + j - 1, 0)->_Data;
-				if (j != Width - 1)
+				if (j != Begin_PosX + Width - 1)
 					RIGH_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 256 + j + 1, 0)->_Data;
 				if (i != Begin_PosY)
 					ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 256 + j, 0)->_Data;
-				if (i != Height - 1)
+				if (i != Begin_PosY + Height - 1)
 					BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 256 + j, 0)->_Data;
 
 				if ((j != Begin_PosX) && (i != Begin_PosY))
 					LEFT_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 256 + j - 1, 0)->_Data;
-				if ((j != Begin_PosX) && (i != Height - 1))
+				if ((j != Begin_PosX) && (i != Begin_PosY + Height - 1))
 					LEFT_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 256 + j - 1, 0)->_Data;
-				if ((j != Width - 1) && (i != Begin_PosY))
+				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY))
 					RIGH_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 256 + j + 1, 0)->_Data;
-				if ((j != Width - 1) && (i != Height - 1))
+				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY + Height - 1))
 					RIGH_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 256 + j + 1, 0)->_Data;
 
 				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
@@ -269,7 +267,7 @@ void Tanxl_Engine::Engine_Event_State_Regist(std::string Name, int LocationX, in
 	this->Tanxl_Engine_GameEvent->RegistEvent(new State_ChangeEvent(Name, LocationX, LocationY, Cover_String));
 }
 
-void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Cover_State, bool Is_Begin, std::string State_Infor)
+void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Is_Begin, std::string State_Infor)
 {
 	if (((this->_Engine_Status & 0x100) == 0x0))
 	{
@@ -277,12 +275,7 @@ void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Cover_State, bool Is
 		return;
 	}
 	if (Is_Begin)
-	{
-		if (Cover_State)
-			this->Tanxl_Engine_GameState->Set_StartState(State_Id, State_Infor);
-		else
-			this->Tanxl_Engine_GameState->Set_StartState(State_Id);
-	}
+		this->Tanxl_Engine_GameState->Set_StartState(State_Id, State_Infor);
 	else
 		this->Tanxl_Engine_GameState->Set_State(State_Id, State_Infor);
 }

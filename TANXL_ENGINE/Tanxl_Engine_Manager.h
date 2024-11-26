@@ -1,6 +1,9 @@
 ﻿//_VERSION_0_3_ UPDATE LOG
 // LAST_UPDATE 2023-08-23 18:50
 // 2023/08/22 无限世界生成接口增加起始位置的设置功能
+// 2023/08/31 修复无限世界生成接口需要宽度大于偏置的错误
+// 2023/08/31 移除地图生成过程中的地图数据文件生成
+// 2023/08/31 简化地图数据设置接口的参数
 
 #pragma once
 
@@ -55,8 +58,8 @@ public:
 	//根据一串合理的字符串对地图进行生成 Width预设宽度 Height预设高度 Infor地图数据 Extend指定编译的目标区块
 	void Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 
-	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Cover_State用于标记是否使用State_Infor的信息覆盖指定ID下的信息
-	void Engine_State_Set_Data(int State_Id, bool Cover_State, bool Is_Begin, std::string State_Infor);
+	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Is_Begin用于记录是否为起始区块 使用State_Infor的信息覆盖指定ID下的信息
+	void Engine_State_Set_Data(int State_Id, bool Is_Begin, std::string State_Infor = "NULL");
 
 	//Insert Part
 
