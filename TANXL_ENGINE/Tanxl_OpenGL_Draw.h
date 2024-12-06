@@ -22,6 +22,7 @@
 // 增加踩到红色方块增加金币的设定
 // 实例化测试代码加入简化版纹理数组的使用
 // 构造函数初始化变量减少
+// 名称空间储存编号的变量改为储存多方块触发事件
 
 #pragma once
 
@@ -70,11 +71,7 @@ namespace TanxlOD
 	static const char* TexPrincess_04_256x256			{ "Texture/YANG_PRINCESS_04_256X256.png"		};
 	static const char* TexStartMenu_01_1024x1024        { "Texture/ENG/STARTMENU_01_1024x1024.png"      };
 
-	static int Square_Id_0{};
-	static int Square_Id_1{};
-	static int Square_Id_2{};
-	static int Square_Id_3{};
-	static int Square_Id_4{};
+	static StateEvent* EventSlot[16];
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 

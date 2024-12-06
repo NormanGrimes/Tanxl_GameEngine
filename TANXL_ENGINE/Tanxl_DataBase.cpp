@@ -458,7 +458,7 @@ Data_Unit* TANXL_DataBase::Get_Specified(int Type, int Exac, int Depth)
 {
 	if (Data_Unit * PDU{ Data_Link_Locate(Type, Exac, Depth) })
 		return PDU;
-	throw "Get_Specified() Failed ！ : 未能成功匹配相同值";
+	throw static_cast<std::string>("Get_Specified() Failed ！ : 未能成功匹配相同值");
 	return nullptr;
 }
 
@@ -528,7 +528,7 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 			this->_Current_Location = 0;
 			return this->_Id_Links->at(0);
 		}
-		throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
+		throw static_cast<std::string>("Id_Chain_Locate Failed ! : 未能成功匹配相同值");
 		return nullptr;
 	}
 	else
@@ -549,7 +549,7 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 
 			if (Left == Right)
 			{
-				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
+				throw static_cast<std::string>("Id_Chain_Locate Failed ! : 未能成功匹配相同值");
 				return nullptr;
 			}
 			if (Left + 1 == Right)
@@ -565,12 +565,12 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 					return this->_Id_Links->at(Left);
 				}
 				std::cout << "Value : " << Value << std::endl;
-				throw "Id_Chain_Locate Failed ! : 未能成功匹配相同值";
+				throw static_cast<std::string>("Id_Chain_Locate Failed ! : 未能成功匹配相同值");
 				return nullptr;
 			}
 		}
 	}
-	throw "Id_Chain_Locate Failed ! : 未知原因";
+	throw static_cast<std::string>("Id_Chain_Locate Failed ! : 未知原因");
 	return nullptr;
 }
 

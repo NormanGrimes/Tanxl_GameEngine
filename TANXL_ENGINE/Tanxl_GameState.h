@@ -31,6 +31,10 @@
 // 自动调整的移动距离根据帧数进行修改
 // 定位地图数据接口优化重复代码
 // 修复定位地图接口缺失最后一项的问题
+// 新增多地图方块触发事件类
+// 增加变量记录当前扩展世界中心的编号
+// 增加地图数据动态扩展功能测试
+// 新增一对多构建数据连接的接口
 
 
 #pragma once
@@ -116,10 +120,22 @@ struct Square_State
 
 struct State_Policy
 {
-	State_Policy(std::string Name, int State_Status)
-		:_Name(Name), _State_Status(State_Status) {}
+	State_Policy(std::string Name, int State_Status);
 	std::string _Name;
 	int _State_Status;
+};
+
+class StateEvent
+{
+public:
+	StateEvent(int State_Id, int Counts);
+	bool Check_State_Id(int State_Id);
+	bool Check_Event_Status();
+private:
+	int _State_Id;
+	int _Trigger_Counts;
+
+	bool _Event_Enable;
 };
 
 //StateUnit CLASS
@@ -183,6 +199,8 @@ public:
 	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock();
+	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
+	void Build_Connect(int State_Id);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Extend_State();
@@ -288,8 +306,10 @@ private:
 	int _Distance_Screen_Mid;
 	//_Distance_Move用于记录当前相对于原点的移动距离
 	int _Distance_Move;
-	//用于记录当前地图中心的地图单元
+	//_CurrentMid用于记录当前地图中心的地图单元
 	StateUnit* _CurrentMid;
+	//_Extend_Mid_Id记录当前扩展世界中心点的编号
+	int _Extend_Mid_Id;
 	std::vector<State_Policy*> _Policy;
 	const std::string _Version{ "1.0" };
 };

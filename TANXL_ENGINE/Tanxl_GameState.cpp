@@ -171,6 +171,7 @@ void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 	{
 		Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, State_Id) };
 		std::string Data_Name{ Link->_Data->_Data_Units.at(0)->_Data };
+		this->_Extend_Mid_Id = State_Id;
 
 		if (Cover_String != "NULL")
 			Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
@@ -475,10 +476,13 @@ void GameStateBase::Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set)
 
 void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 {
+	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
 	switch (Extend_Dire)
 	{
 	case STATE_EXTEND_ABOV:
 	{
+		this->_Extend_Mid_Id -= 256;
+
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO);
 		this->_GameState_Id._LEFT_BELO = this->_GameState_Id._LEFT;
 		this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._LEFT;
@@ -489,6 +493,54 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		this->_GameState_Id._RIGH_BELO = this->_GameState_Id._RIGH;
 		this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._RIGH;
 
+		int Temp_Exac{ this->_Extend_Mid_Id - 257 };
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac > 0)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id - 256;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac > 0)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id - 255;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac > 0)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
+		
 		this->_GameState_Id._LEFT = this->_GameState_Id._LEFT_ABOV;
 		this->_GameState_Extend._LEFT = this->_GameState_Extend._LEFT_ABOV;
 		this->_GameState_Id._MIDD = this->_GameState_Id._ABOV;
@@ -514,6 +566,8 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 	}
 	case STATE_EXTEND_BELO:
 	{
+		this->_Extend_Mid_Id += 256;
+
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV);
 		this->_GameState_Id._LEFT_ABOV = this->_GameState_Id._LEFT;
 		this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._LEFT;
@@ -523,6 +577,54 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV);
 		this->_GameState_Id._RIGH_ABOV = this->_GameState_Id._RIGH;
 		this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._RIGH;
+
+		int Temp_Exac{ this->_Extend_Mid_Id + 255 };
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac < 65536)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id + 256;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac < 65536)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id + 257;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac < 65536)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
 
 		this->_GameState_Id._LEFT = this->_GameState_Id._LEFT_BELO;
 		this->_GameState_Extend._LEFT = this->_GameState_Extend._LEFT_BELO;
@@ -549,6 +651,8 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 	}
 	case STATE_EXTEND_LEFT:
 	{
+		this->_Extend_Mid_Id -= 1;
+
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV);
 		this->_GameState_Id._RIGH_ABOV = this->_GameState_Id._ABOV;
 		this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._ABOV;
@@ -558,6 +662,54 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_BELO);
 		this->_GameState_Id._RIGH_BELO = this->_GameState_Id._BELO;
 		this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._BELO;
+
+		int Temp_Exac{ this->_Extend_Mid_Id - 257 };
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac > 0)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id - 1;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac > 0)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id + 255;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac < 65536)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+
+				Build_Connect(Temp_Exac);
+			}
+		}
 
 		this->_GameState_Id._ABOV = this->_GameState_Id._LEFT_ABOV;
 		this->_GameState_Extend._ABOV = this->_GameState_Extend._LEFT_ABOV;
@@ -584,6 +736,8 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 	}
 	case STATE_EXTEND_RIGH:
 	{
+		this->_Extend_Mid_Id += 1;
+
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV);
 		this->_GameState_Id._LEFT_ABOV = this->_GameState_Id._ABOV;
 		this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._ABOV;
@@ -593,6 +747,48 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO);
 		this->_GameState_Id._LEFT_BELO = this->_GameState_Id._BELO;
 		this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._BELO;
+
+		int Temp_Exac{ this->_Extend_Mid_Id - 255 };
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac > 0)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id + 1;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac < 65536)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+			}
+		}
+
+		Temp_Exac = this->_Extend_Mid_Id + 257;
+		try
+		{
+			this->_Data_Base.Id_Link_Locate(1, Temp_Exac);
+		}
+		catch (std::string)
+		{
+			if (Temp_Exac < 65536)
+			{
+				this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, Temp_Exac);
+				this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, Temp_Exac);
+			}
+		}
 
 		this->_GameState_Id._ABOV = this->_GameState_Id._RIGH_ABOV;
 		this->_GameState_Extend._ABOV = this->_GameState_Extend._RIGH_ABOV;
@@ -749,8 +945,96 @@ void GameStateBase::Generate_StateBlock()
 	State_Level++;
 }
 
+void GameStateBase::Build_Connect(int State_Id)
+{
+	Data_Unit* Build_Target{ this->_Data_Base.Get_Specified(1, State_Id, 0) };
+
+	std::string LEFT_STR{ "NULL" }/*2*/, LEFT_ABOV_STR{"NULL"}/*6*/;
+	std::string RIGH_STR{ "NULL" }/*3*/, LEFT_BELO_STR{"NULL"}/*7*/;
+	std::string ABOV_STR{ "NULL" }/*4*/, RIGH_ABOV_STR{"NULL"}/*8*/;
+	std::string BELO_STR{ "NULL" }/*5*/, RIGH_BELO_STR{"NULL"}/*9*/;
+
+	try{
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id - 1) };
+		Connect_Target->_Data->_Data_Units.at(3)->_Data = Build_Target->_Data;
+		LEFT_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}catch (std::string) {
+		LEFT_STR = "NULL";
+	}
+
+	try {
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id + 1) };
+		Connect_Target->_Data->_Data_Units.at(2)->_Data = Build_Target->_Data;
+		RIGH_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}catch (std::string) {
+		RIGH_STR = "NULL";
+	}
+
+	try {
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id - 256) };
+		Connect_Target->_Data->_Data_Units.at(5)->_Data = Build_Target->_Data;
+		ABOV_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}catch (std::string) {
+		ABOV_STR = "NULL";
+	}
+
+	try {
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id + 256) };
+		Connect_Target->_Data->_Data_Units.at(4)->_Data = Build_Target->_Data;
+		BELO_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}catch (std::string) {
+		BELO_STR = "NULL";
+	}
+
+	try {
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id - 257) };
+		Connect_Target->_Data->_Data_Units.at(7)->_Data = Build_Target->_Data;
+		LEFT_ABOV_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}
+	catch (std::string) {
+		LEFT_ABOV_STR = "NULL";
+	}
+
+	try {
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id + 255) };
+		Connect_Target->_Data->_Data_Units.at(6)->_Data = Build_Target->_Data;
+		LEFT_BELO_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}
+	catch (std::string) {
+		LEFT_BELO_STR = "NULL";
+	}
+
+	try {
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id - 255) };
+		Connect_Target->_Data->_Data_Units.at(9)->_Data = Build_Target->_Data;
+		RIGH_ABOV_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}
+	catch (std::string) {
+		RIGH_ABOV_STR = "NULL";
+	}
+
+	try {
+		Id_Link* Connect_Target{ this->_Data_Base.Id_Link_Locate(1, State_Id + 257) };
+		Connect_Target->_Data->_Data_Units.at(8)->_Data = Build_Target->_Data;
+		RIGH_BELO_STR = Connect_Target->_Data->_Data_Units.at(0)->_Data;
+	}
+	catch (std::string) {
+		RIGH_BELO_STR = "NULL";
+	}
+
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 4, ABOV_STR);
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 5, BELO_STR);
+
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 6, LEFT_ABOV_STR);
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
+	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
+}
+
 GameStateBase::GameStateBase(int Width, int Height) :
-	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false),
+	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
 	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1),
 	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false), _Extend_State_Enable(false)
 {
@@ -1034,14 +1318,14 @@ Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 	for (int i{ 1 }; i < (this->_State_WidthS * this->_State_HeightS + 1); ++i)
 	{
 		Id_Link* Link{ this->_Data_Base.Id_Link_Search(i) };
-		std::cout << i << " : " << Link->_Data->_Data_Units.at(0)->_Data << std::endl;
+		//std::cout << i << " : " << Link->_Data->_Data_Units.at(0)->_Data << std::endl;
 		if (Link->_Data->_Data_Units.at(0)->_Data == Link_Name)
 			return Link;
 	}
 	return nullptr;
 }
 
-GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0),
+GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0), _Extend_Mid_Id(0),
 _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false),
 _Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false), _Extend_State_Enable(false)
 {
@@ -1172,6 +1456,32 @@ std::vector<StateUnit*>* GameStateBase::Get_GameState(EState_Extend State_Id)
 		return this->_GameState_Extend._RIGH_BELO;
 	}
 	return nullptr;
+}
+
+State_Policy::State_Policy(std::string Name, int State_Status)
+	:_Name(Name), _State_Status(State_Status) {}
+
+StateEvent::StateEvent(int State_Id, int Counts)
+	:_State_Id(State_Id), _Trigger_Counts(Counts), _Event_Enable(false) {}
+
+bool StateEvent::Check_State_Id(int State_Id)
+{
+	if (this->_State_Id == State_Id)
+	{
+		this->_Trigger_Counts--;
+		if (this->_Trigger_Counts < 0)
+		{
+			this->_Trigger_Counts = 0;
+			this->_Event_Enable = true;
+		}
+		return true;
+	}
+	return false;
+}
+
+bool StateEvent::Check_Event_Status()
+{
+	return this->_Event_Enable;
 }
 
 //Square_State

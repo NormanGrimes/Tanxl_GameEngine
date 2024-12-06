@@ -133,8 +133,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_Snowy_01_128x128);
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_128x128);
 	Append_Texture(TanxlOD::TexOcean_01_128x128);
-	TanxlOD::Square_Id_0 = Append_Texture(TanxlOD::TexDirt_01_128x128);
-	TanxlOD::Square_Id_1 = Append_Texture(TanxlOD::TexCure_01_128x128);
+	Append_Texture(TanxlOD::TexDirt_01_128x128);
+	Append_Texture(TanxlOD::TexCure_01_128x128);
 
 	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
 	int Tex_02{ Append_Texture(TanxlOD::TexPrincess_02_256x256)		};

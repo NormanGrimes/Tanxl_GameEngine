@@ -97,6 +97,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		{
 			SB->Play_Sound(SOUND_MOUSE_CLICK);
 			std::cout << "Mouse 1 Press" << std::endl;
+			_Is_Key_Pressed = true;
 		}
 	}
 	if (Temp_Mouse_Status_2 == GLFW_RELEASE)
@@ -105,6 +106,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		{
 			SB->Play_Sound(SOUND_MOUSE_CLICK);
 			std::cout << "Mouse 2 Press" << std::endl;
+			_Is_Key_Pressed = true;
 		}
 	}
 
