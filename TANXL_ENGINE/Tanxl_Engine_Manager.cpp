@@ -135,6 +135,7 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 			this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10, true), 0, 1, TempVal);
 		}
 	}
+	this->Tanxl_Engine_GameState->Set_Data_Size(Width * Height);
 	this->Tanxl_Engine_GameState->Set_State_Counts(256, 256);
 
 	if (Build_Connect)

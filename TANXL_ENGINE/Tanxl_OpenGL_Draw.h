@@ -23,6 +23,9 @@
 // 实例化测试代码加入简化版纹理数组的使用
 // 构造函数初始化变量减少
 // 名称空间储存编号的变量改为储存多方块触发事件
+// 修复重新载入地图接口中可能导致除零的问题
+// 移除等待帧的相关功能
+// 重制二号草纹理图片
 
 #pragma once
 
@@ -58,7 +61,7 @@ namespace TanxlOD
 {
 	static const char* TexDirt_01_128x128				{ "Texture/TANXL_DIRT_01_128X128.jpg"           };
 	static const char* TexGrass_01_128x128				{ "Texture/TANXL_GRASS_01_128X128.jpg"			};
-	static const char* TexGrass_02_128x128				{ "Texture/TANXL_GRASS_02_128X128.jpg"			};
+	static const char* TexGrass_02_128x128				{ "Texture/TANXL_GRASS_02_128X128.png"			};
 	static const char* TexGrass_Snowy_01_128x128		{ "Texture/TANXL_GRASS_SNOWY_01_128X128.jpg"	};
 	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.jpg"	};
 	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.jpg"			};
@@ -488,7 +491,6 @@ public:
 	//进行一次游戏画面绘制
 	void Render_Once(GameStateBase* State);
 	void Set_PreLoad(int PreLoads);
-	void Set_WaitFrame(int First_Adjust);
 	void Set_Clear(bool Clear);
 	void Set_Trigger_Range(float Ratio);
 	void Set_PreMove(int PreMoveX, int PreMoveY);
@@ -562,8 +564,6 @@ private:
 	int _ScreenHeight;
 	//记载额外加载的地图环数量
 	int _PreLoads;
-	//绘制模块自动调整等待帧
-	int _Wait_Frame;
 	//记录手动移动指定的当前X轴基本矩形
 	int _Current_Move_Height{ 0 };
 	//记录手动移动指定的当前Y轴基本矩形

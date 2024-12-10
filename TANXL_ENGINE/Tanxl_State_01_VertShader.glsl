@@ -19,12 +19,11 @@
 // 增加宏控制该层下所有顶点的距离
 // 修复纹理绘制方向横向相反的问题
 // 增加根据事件绘制不同纹理的设定
+// 移除备用方块颜色功能
 
 #version 430
 
 #define STATE_01_LAYER 0.4f
-//deaflut color : Enable when texture is not exist
-#define VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR 0
 
 #define VERTSHADER_STATE_01_INSTANCED_VERSION   0
 
@@ -83,25 +82,6 @@ void main(void)
 				Cube = 6;
 			else
 				Cube = int(Infor[VertexId].x);
-
-#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
-			if(Infor[VertexId].x == 0)
-			{
-				vs_color = vec4(1.0f, 0.8f, 0.1f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 1)
-			{
-				vs_color = vec4(0.1f, 0.8f, 1.0f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 2)
-			{
-				vs_color = vec4(1.0f, 0.8f, 0.4f, 1.0f);
-			}
-			else
-			{
-				vs_color = vec4(0.9f, 0.7f, 0.9f, 1.0f);
-			}
-#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 1) 
 		{ 
@@ -114,25 +94,6 @@ void main(void)
 				Cube = 6;
 			else
 				Cube = int(Infor[VertexId].x);
-
-#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
-			if(Infor[VertexId].x == 0)
-			{
-				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 1)
-			{
-				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 2)
-			{
-				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
-			}
-			else
-			{
-				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
-			}
-#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 2) 
 		{ 
@@ -145,25 +106,6 @@ void main(void)
 				Cube = 6;
 			else
 				Cube = int(Infor[VertexId].x);
-
-#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
-			if(Infor[VertexId].x == 0)
-			{
-				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 1)
-			{
-				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 2)
-			{
-				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
-			}
-			else
-			{
-				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
-			}
-#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 3) 
 		{ 
@@ -176,25 +118,6 @@ void main(void)
 				Cube = 6;
 			else
 				Cube = int(Infor[VertexId].x);
-
-#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
-			if(Infor[VertexId].x == 0)
-			{
-				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 1)
-			{
-				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 2)
-			{
-				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
-			}
-			else
-			{
-				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
-			}
-#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 4) 
 		{
@@ -207,25 +130,6 @@ void main(void)
 				Cube = 6;
 			else
 				Cube = int(Infor[VertexId].x);
-
-#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
-			if(Infor[VertexId].x == 0)
-			{
-				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 1)
-			{
-				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 2)
-			{
-				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
-			}
-			else
-			{
-				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
-			}
-#endif
 		}
 		else if (gl_VertexID == VertexId * 6 + 5) 
 		{
@@ -238,25 +142,6 @@ void main(void)
 				Cube = 6;
 			else
 				Cube = int(Infor[VertexId].x);
-
-#if VERTSHADER_STATE_01_TEXTUR_BACKUP_COLOR
-			if(Infor[VertexId].x == 0)
-			{
-				vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 1)
-			{
-				vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
-			}
-			else if(Infor[VertexId].x == 2)
-			{
-				vs_color = vec4(1.0f, 0.4f, 0.4f, 1.0f);
-			}
-			else
-			{
-				vs_color = vec4(1.0f, 0.1f, 1.0f, 1.0f);
-			}
-#endif
 		}
 
 		WidthMove += (Width * 2);

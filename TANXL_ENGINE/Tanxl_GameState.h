@@ -35,6 +35,11 @@
 // 增加变量记录当前扩展世界中心的编号
 // 增加地图数据动态扩展功能测试
 // 新增一对多构建数据连接的接口
+// 修复构建连接功能与未连接数据连接溢出的问题
+// 增加生成一个地图块的重载版本
+// 构建连接功能中的目标指针改为更深层的数据单元容器
+// 增加记录数据长度的私有变量
+// 修复字符串定位数据功能可能导致溢出的问题
 
 
 #pragma once
@@ -48,7 +53,8 @@
 
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
 #define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
-#define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  1
+#define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
+#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
 
 #endif
 
@@ -194,11 +200,13 @@ public:
 	void Set_Extend_State_Enable(bool Enable);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
+	void Set_Data_Size(int Size);
 	void Reload_State(EState_Extend Extend_Dire);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock();
+	void Generate_StateBlock(int State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
 	void Build_Connect(int State_Id);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
@@ -310,6 +318,8 @@ private:
 	StateUnit* _CurrentMid;
 	//_Extend_Mid_Id记录当前扩展世界中心点的编号
 	int _Extend_Mid_Id;
+	//_Data_Size地图数据大小
+	int _Data_Size{ 0 };
 	std::vector<State_Policy*> _Policy;
 	const std::string _Version{ "1.0" };
 };
