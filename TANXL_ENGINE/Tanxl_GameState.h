@@ -40,6 +40,8 @@
 // 构建连接功能中的目标指针改为更深层的数据单元容器
 // 增加记录数据长度的私有变量
 // 修复字符串定位数据功能可能导致溢出的问题
+// 增加宏控制数据定位功能的输出
+// 构建连接功能优化减少最多三分之二的定位成本
 
 
 #pragma once
@@ -47,14 +49,15 @@
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
 
-#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 1
+#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 0
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
 #define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
 #define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
-#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
+#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        0
+#define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
 
 #endif
 

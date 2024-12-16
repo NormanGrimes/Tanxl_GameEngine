@@ -122,13 +122,6 @@ namespace TanxlDB
 		return "";
 	}
 
-	void Reset_Chain(TANXL_DataBase& TDB, int A, int B, int Nums)
-	{
-		TDB.Set_Specified(A, B, Nums, 3, -1, "NULL");
-		TDB.Set_Specified(A, B, Nums, 4, -1, "NULL");
-		TDB.Set_Specified(A, B, Nums, 5, -1, "NULL");
-	}
-
 	void Combine_File(std::string FileA, std::string FileB)
 	{
 		std::string Line{};
@@ -572,6 +565,21 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 	}
 	throw static_cast<std::string>("Id_Chain_Locate Failed ! : 未知原因");
 	return nullptr;
+}
+
+Id_Link* TANXL_DataBase::Get_Last_Located(int Check_Type, int Check_Exac, int OffSet)
+{
+	try
+	{
+		if ((this->_Id_Links->at(static_cast<size_t>(_Current_Location + OffSet))->_Type == Check_Type) &&
+			(this->_Id_Links->at(static_cast<size_t>(_Current_Location + OffSet))->_Exac == Check_Exac))
+			return this->_Id_Links->at(static_cast<size_t>(_Current_Location + OffSet));
+		return Id_Link_Locate(Check_Type, Check_Exac);
+	}
+	catch (std::out_of_range&)
+	{
+		throw static_cast<std::string>("Get_Last_Located Failed ! : 获取上一次定位数据偏置超出范围");
+	}
 }
 
 Data_Unit* TANXL_DataBase::Data_Link_Locate(int Type, int Exac, int Depth)

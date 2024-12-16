@@ -57,7 +57,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B34", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B35", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -351,9 +351,11 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
 		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
 
+#if _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_
 		std::cout << this->_StateInfor[i].x << " ";
 		if (i % (this->_WidthInt + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
+#endif
 	}
 }
 
@@ -860,7 +862,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 		}
 
-		std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
+		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
 		glProgramUniform1i(this->_Midle_RenderingProgram, 2, this->_Middle_Frame);
 		glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
 
@@ -1015,7 +1017,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if ((OpenGL_Stop_Key->MoveToY == true) || (this->_Is_Adjust_Enable == false))
 		{
-			std::cout << "ENABLE" << std::endl;
+			//std::cout << "ENABLE" << std::endl;
 			display(_Main_Window, glfwGetTime(), State);
 			glfwSwapBuffers(_Main_Window);
 			glfwPollEvents();

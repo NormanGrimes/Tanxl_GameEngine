@@ -113,6 +113,9 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	LastMouseStatus_1 = Temp_Mouse_Status_1;
 	LastMouseStatus_2 = Temp_Mouse_Status_2;
 
+	double Insert_Move_LengthX{ 0.0f };
+	double Insert_Move_LengthY{ 0.0f };
+
 	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
 		if (glfwGetKey(window, this->_KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
@@ -131,23 +134,23 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 			if (!OPD->Get_Adjust_Status())
 			{
 				if (this->_KeyEventS.at(i)->MoveToY)
-				{
-					State->Get_Screen_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
-					State->Get_Move_Distance()._Location_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
-					this->_Margin_Y += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
-				}
+					Insert_Move_LengthY += this->_KeyEventS.at(i)->MoveLen;
 				if (this->_KeyEventS.at(i)->MoveToX)
-				{
-					State->Get_Screen_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
-					State->Get_Move_Distance()._Location_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
-					this->_Margin_X += static_cast<float>(this->_KeyEventS.at(i)->MoveLen * MoveScale);
-				}
+					Insert_Move_LengthX += this->_KeyEventS.at(i)->MoveLen;
 			}
 		}
 		else
 			if (this->_KeyEventS.at(i)->Unit_Type == 1)
 				this->_KeyEventS.at(i)->SaveLen = 0;
 	}
+	State->Get_Screen_Distance()._Location_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
+	State->Get_Screen_Distance()._Location_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+	State->Get_Move_Distance()._Location_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
+	State->Get_Move_Distance()._Location_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+
+	this->_Margin_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
+	this->_Margin_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+
 	AutoCheck(State->Get_Screen_Distance()._Location_X, State->Get_Screen_Distance()._Location_Y, State->Get_Move_Distance()._Location_X, State->Get_Move_Distance()._Location_Y);
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
 	std::cout << "Move Distance X :" << State->Get_Move_Distance()._LocX << " -  Y :" << State->Get_Move_Distance()._LocY << std::endl;
@@ -207,7 +210,7 @@ void InsertEventBase::Init_Default_Key()
 
 	/*Key_Unit MOVE_UP;
 	MOVE_UP.GLFW_KEY = GLFW_KEY_UP;
-	MOVE_UP.MoveLen = 0.01;
+	MOVE_UP.MoveLen = 0.5;
 	MOVE_UP.MoveToY = true;
 	MOVE_UP.Unit_Type = 0;
 	this->RegistEvent(MOVE_UP);
@@ -221,7 +224,7 @@ void InsertEventBase::Init_Default_Key()
 
 	/*Key_Unit MOVE_LEFT;
 	MOVE_LEFT.GLFW_KEY = GLFW_KEY_LEFT;
-	MOVE_LEFT.MoveLen = -0.01;
+	MOVE_LEFT.MoveLen = -0.5;
 	MOVE_LEFT.MoveToX = true;
 	MOVE_LEFT.Unit_Type = 0;
 	this->RegistEvent(MOVE_LEFT);
@@ -235,7 +238,7 @@ void InsertEventBase::Init_Default_Key()
 
 	/*Key_Unit MOVE_RIGHT;
 	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_RIGHT;
-	MOVE_RIGHT.MoveLen = 0.01;
+	MOVE_RIGHT.MoveLen = 0.5;
 	MOVE_RIGHT.MoveToX = true;
 	MOVE_RIGHT.Unit_Type = 0;
 	this->RegistEvent(MOVE_RIGHT);
@@ -249,7 +252,7 @@ void InsertEventBase::Init_Default_Key()
 
 	/*Key_Unit MOVE_DOWN;
 	MOVE_DOWN.GLFW_KEY = GLFW_KEY_DOWN;
-	MOVE_DOWN.MoveLen = -0.01;
+	MOVE_DOWN.MoveLen = -0.5;
 	MOVE_DOWN.MoveToY = true;
 	MOVE_RIGHT.Unit_Type = 0;
 	this->RegistEvent(MOVE_DOWN);

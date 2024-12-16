@@ -10,6 +10,8 @@
 // 添加数据链功能增加指定位置添加功能
 // 临时新增接口用于遍历内部存储的数据
 // 部分定位接口抛出的异常转换为字符串
+// 增加获取上一次定位到的数据链附近的接口
+// 移除重置单一数据链功能
 
 #pragma once
 
@@ -129,13 +131,15 @@ public:
 	Id_Link* Id_Link_Search(int Level);
 	//↓时间复杂度为logN的Id_Link快速定位函数 Type Exac 指Id_Link的同名变量
 	Id_Link* Id_Link_Locate(int Type, int Exac);
+	//↓获取上一次定位到的数据链 Check_Type/Check_Exac 用于对比确认获取的数据 OffSet为上一次定位的偏移位置
+	Id_Link* Get_Last_Located(int Check_Type = 0, int Check_Exac = 0, int OffSet = 0);
 	//↓获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
 	bool Get_LocalData(std::string File_Name);
 	//↓编辑实例 0x1122 11代表Type位 22代表Exac位 Type_Name为Type字符串 Exac_Name为Exac字符串
 	void Set_Internal_Id(unsigned Status, std::string Type_Name, std::string Exac_Name);
 	//↓为当前内存中的匿名结构体通过 Set_Mode 的方式添加 Data_Link数据
 	void Set_Internal_Data(Data_Link* Data, ELinkSet_Mode Set_Mode);
-	//↓读取指定Type(A)_Exac(B)级别的物品 并载入到单例结构中 Depth表示该级别下的第几个物品(从0开始)
+	//↓读取指定Type(A)_Exac(B)级别的物品 Depth表示该级别下的第几个物品(从0开始)
 	Data_Unit* Get_Specified(int Type, int Exac, int Depth);
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...
 	//↓修改OTH1 OTH2 OTH3的时候直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
@@ -162,8 +166,6 @@ namespace TanxlDB
 	std::string Combine_Char(std::string data, int Start, int End);//拆分char数组获取指定内容，Start为开始位置End为结束位置(结束位置不保留)
 
 	std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//拆分单行内容获取信息
-
-	void Reset_Chain(TANXL_DataBase& TDB, int Type, int Exac, int Nums);//重置链表某一单元 Nums表示A,B level下的第几个(从0开始)
 
 	void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
 }

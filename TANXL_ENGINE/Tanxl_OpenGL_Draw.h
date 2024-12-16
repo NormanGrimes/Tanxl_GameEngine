@@ -26,6 +26,7 @@
 // 修复重新载入地图接口中可能导致除零的问题
 // 移除等待帧的相关功能
 // 重制二号草纹理图片
+// 增加宏控制重新载入的地图数据输出
 
 #pragma once
 
@@ -42,6 +43,7 @@
 #define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
 #define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   0
+#define _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_     0
 
 #endif
 
