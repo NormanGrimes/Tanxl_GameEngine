@@ -34,6 +34,39 @@ std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 	return "NULL";
 }
 
+std::string GameStateBase::Single_Connect(Data_Unit* Build_Target, EState_Current CurrentState, int State_Id, int OffSet)
+{
+	try {
+		std::vector<Data_Unit*>* Connect_Target;
+		if (OffSet == 0)
+			Connect_Target = &this->_Data_Base.Id_Link_Locate(1, State_Id)->_Data->_Data_Units;
+		else
+			Connect_Target = &this->_Data_Base.Get_Last_Located(1, State_Id, OffSet)->_Data->_Data_Units;
+#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
+		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
+#endif
+		if (Connect_Target->size() == 2)
+		{
+			Connect_Target->push_back(new Data_Unit(2, "NULL"));
+			Connect_Target->push_back(new Data_Unit(3, "NULL"));
+			Connect_Target->push_back(new Data_Unit(4, "NULL"));
+			Connect_Target->push_back(new Data_Unit(5, "NULL"));
+			Connect_Target->push_back(new Data_Unit(6, "NULL"));
+			Connect_Target->push_back(new Data_Unit(7, "NULL"));
+			Connect_Target->push_back(new Data_Unit(8, "NULL"));
+			Connect_Target->push_back(new Data_Unit(9, "NULL"));
+		}
+		Connect_Target->at(CurrentState)->_Data = Build_Target->_Data;
+		return Connect_Target->at(0)->_Data;
+	}
+	catch (std::string) {
+#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
+		std::cout << "Connect_Target : FAIL" << std::endl;
+#endif
+		return "NULL";
+	}
+}
+
 std::string GameStateBase::Get_State_Id(int Location)
 {
 	if (this->Get_Engine_File())
@@ -485,22 +518,25 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		this->_Extend_Mid_Id -= 256;
 
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO);
-		delete this->_GameState_Extend._LEFT_BELO;
+		//delete this->_GameState_Extend._LEFT_BELO;
 		this->_GameState_Id._LEFT_BELO = this->_GameState_Id._LEFT;
-		this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._LEFT;
+		//this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._LEFT;
+		this->_GameState_Extend._LEFT_BELO->assign(this->_GameState_Extend._LEFT->begin(), this->_GameState_Extend._LEFT->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._BELO);
-		delete this->_GameState_Extend._LEFT;
+		//delete this->_GameState_Extend._LEFT;
 		this->_GameState_Id._BELO = this->_GameState_Id._MIDD;
-		this->_GameState_Extend._BELO = this->_GameState_Extend._MIDD;
+		//this->_GameState_Extend._BELO = this->_GameState_Extend._MIDD;
+		this->_GameState_Extend._BELO->assign(this->_GameState_Extend._MIDD->begin(), this->_GameState_Extend._MIDD->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_BELO);
-		delete this->_GameState_Extend._RIGH_BELO;
+		//delete this->_GameState_Extend._RIGH_BELO;
 		this->_GameState_Id._RIGH_BELO = this->_GameState_Id._RIGH;
-		this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._RIGH;
+		//this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._RIGH;
+		this->_GameState_Extend._RIGH_BELO->assign(this->_GameState_Extend._RIGH->begin(), this->_GameState_Extend._RIGH->end());
 
 		Generate_StateBlock(this->_Extend_Mid_Id - 257);
 		Generate_StateBlock(this->_Extend_Mid_Id - 256);
 		Generate_StateBlock(this->_Extend_Mid_Id + 255);
-		
+
 		this->_GameState_Id._LEFT = this->_GameState_Id._LEFT_ABOV;
 		this->_GameState_Extend._LEFT = this->_GameState_Extend._LEFT_ABOV;
 		this->_GameState_Id._MIDD = this->_GameState_Id._ABOV;
@@ -532,17 +568,20 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		this->_Extend_Mid_Id += 256;
 
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV);
-		delete this->_GameState_Extend._LEFT_ABOV;
+		//delete this->_GameState_Extend._LEFT_ABOV;
 		this->_GameState_Id._LEFT_ABOV = this->_GameState_Id._LEFT;
-		this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._LEFT;
+		//this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._LEFT;
+		this->_GameState_Extend._LEFT_ABOV->assign(this->_GameState_Extend._LEFT->begin(), this->_GameState_Extend._LEFT->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._ABOV);
-		delete this->_GameState_Extend._ABOV;
+		//delete this->_GameState_Extend._ABOV;
 		this->_GameState_Id._ABOV = this->_GameState_Id._MIDD;
-		this->_GameState_Extend._ABOV = this->_GameState_Extend._MIDD;
+		//this->_GameState_Extend._ABOV = this->_GameState_Extend._MIDD;
+		this->_GameState_Extend._ABOV->assign(this->_GameState_Extend._MIDD->begin(), this->_GameState_Extend._MIDD->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV);
-		delete this->_GameState_Extend._RIGH_ABOV;
+		//delete this->_GameState_Extend._RIGH_ABOV;
 		this->_GameState_Id._RIGH_ABOV = this->_GameState_Id._RIGH;
-		this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._RIGH;
+		//this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._RIGH;
+		this->_GameState_Extend._RIGH_ABOV->assign(this->_GameState_Extend._RIGH->begin(), this->_GameState_Extend._RIGH->end());
 
 		Generate_StateBlock(this->_Extend_Mid_Id + 255);
 		Generate_StateBlock(this->_Extend_Mid_Id + 256);
@@ -579,17 +618,20 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		this->_Extend_Mid_Id -= 1;
 
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV);
-		delete this->_GameState_Extend._RIGH_ABOV;
+		//delete this->_GameState_Extend._RIGH_ABOV;
 		this->_GameState_Id._RIGH_ABOV = this->_GameState_Id._ABOV;
-		this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._ABOV;
+		//this->_GameState_Extend._RIGH_ABOV = this->_GameState_Extend._ABOV;
+		this->_GameState_Extend._RIGH_ABOV->assign(this->_GameState_Extend._ABOV->begin(), this->_GameState_Extend._ABOV->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH);
-		delete this->_GameState_Extend._RIGH;
+		//delete this->_GameState_Extend._RIGH;
 		this->_GameState_Id._RIGH = this->_GameState_Id._MIDD;
-		this->_GameState_Extend._RIGH = this->_GameState_Extend._MIDD;
+		//this->_GameState_Extend._RIGH = this->_GameState_Extend._MIDD;
+		this->_GameState_Extend._RIGH->assign(this->_GameState_Extend._MIDD->begin(), this->_GameState_Extend._MIDD->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_BELO);
-		delete this->_GameState_Extend._RIGH_BELO;
+		//delete this->_GameState_Extend._RIGH_BELO;
 		this->_GameState_Id._RIGH_BELO = this->_GameState_Id._BELO;
-		this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._BELO;
+		//this->_GameState_Extend._RIGH_BELO = this->_GameState_Extend._BELO;
+		this->_GameState_Extend._RIGH_BELO->assign(this->_GameState_Extend._BELO->begin(), this->_GameState_Extend._BELO->end());
 
 		Generate_StateBlock(this->_Extend_Mid_Id - 257);
 		Generate_StateBlock(this->_Extend_Mid_Id - 1);
@@ -626,17 +668,20 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		this->_Extend_Mid_Id += 1;
 
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV);
-		delete this->_GameState_Extend._LEFT_ABOV;
+		//delete this->_GameState_Extend._LEFT_ABOV;
 		this->_GameState_Id._LEFT_ABOV = this->_GameState_Id._ABOV;
-		this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._ABOV;
+		//this->_GameState_Extend._LEFT_ABOV = this->_GameState_Extend._ABOV;
+		this->_GameState_Extend._LEFT_ABOV->assign(this->_GameState_Extend._ABOV->begin(), this->_GameState_Extend._ABOV->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT);
-		delete this->_GameState_Extend._LEFT;
+		//delete this->_GameState_Extend._LEFT;
 		this->_GameState_Id._LEFT = this->_GameState_Id._MIDD;
-		this->_GameState_Extend._LEFT = this->_GameState_Extend._MIDD;
+		//this->_GameState_Extend._LEFT = this->_GameState_Extend._MIDD;
+		this->_GameState_Extend._LEFT->assign(this->_GameState_Extend._MIDD->begin(), this->_GameState_Extend._MIDD->end());
 		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO);
-		delete this->_GameState_Extend._LEFT_BELO;
+		//delete this->_GameState_Extend._LEFT_BELO;
 		this->_GameState_Id._LEFT_BELO = this->_GameState_Id._BELO;
-		this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._BELO;
+		//this->_GameState_Extend._LEFT_BELO = this->_GameState_Extend._BELO;
+		this->_GameState_Extend._LEFT_BELO->assign(this->_GameState_Extend._BELO->begin(), this->_GameState_Extend._BELO->end());
 
 		Generate_StateBlock(this->_Extend_Mid_Id - 255);
 		Generate_StateBlock(this->_Extend_Mid_Id + 1);
@@ -825,218 +870,14 @@ void GameStateBase::Build_Connect(int State_Id)
 {
 	Data_Unit* Build_Target{ this->_Data_Base.Get_Specified(1, State_Id, 0) };
 
-	std::string LEFT_STR{ "NULL" }/*2*/, LEFT_ABOV_STR{ "NULL" }/*6*/;
-	std::string RIGH_STR{ "NULL" }/*3*/, LEFT_BELO_STR{ "NULL" }/*7*/;
-	std::string ABOV_STR{ "NULL" }/*4*/, RIGH_ABOV_STR{ "NULL" }/*8*/;
-	std::string BELO_STR{ "NULL" }/*5*/, RIGH_BELO_STR{ "NULL" }/*9*/;
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Id_Link_Locate(1, State_Id - 1)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(3)->_Data = Build_Target->_Data;
-		LEFT_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		LEFT_STR = "NULL";
-	}
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Get_Last_Located(1, State_Id, 1)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(2)->_Data = Build_Target->_Data;
-		RIGH_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		RIGH_STR = "NULL";
-	}
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Id_Link_Locate(1, State_Id + 256)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(4)->_Data = Build_Target->_Data;
-		BELO_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		BELO_STR = "NULL";
-	}
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Get_Last_Located(1, State_Id + 256, -1)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(6)->_Data = Build_Target->_Data;
-		LEFT_BELO_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		LEFT_BELO_STR = "NULL";
-	}
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Get_Last_Located(1, State_Id + 256, 1)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(8)->_Data = Build_Target->_Data;
-		RIGH_BELO_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		RIGH_BELO_STR = "NULL";
-	}
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Id_Link_Locate(1, State_Id - 256)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(5)->_Data = Build_Target->_Data;
-		ABOV_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		ABOV_STR = "NULL";
-	}
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Get_Last_Located(1, State_Id - 256, -1)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(7)->_Data = Build_Target->_Data;
-		LEFT_ABOV_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		LEFT_ABOV_STR = "NULL";
-	}
-
-	try {
-		std::vector<Data_Unit*>* Connect_Target{ &this->_Data_Base.Get_Last_Located(1, State_Id - 256, 1)->_Data->_Data_Units };
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
-#endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-		}
-		Connect_Target->at(9)->_Data = Build_Target->_Data;
-		RIGH_ABOV_STR = Connect_Target->at(0)->_Data;
-	}
-	catch (std::string) {
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
-#endif
-		RIGH_ABOV_STR = "NULL";
-	}
+	std::string LEFT_STR	 { Single_Connect(Build_Target, STATE_LEFT,		 State_Id - 1)			}/*2*/;
+	std::string RIGH_STR	 { Single_Connect(Build_Target, STATE_RIGH,		 State_Id		, 1)	}/*3*/;
+	std::string BELO_STR	 { Single_Connect(Build_Target, STATE_BELO,		 State_Id + 256)		}/*5*/;
+	std::string LEFT_BELO_STR{ Single_Connect(Build_Target, STATE_LEFT_BELO, State_Id + 255	, -1)	}/*7*/;
+	std::string RIGH_BELO_STR{ Single_Connect(Build_Target, STATE_RIGH_BELO, State_Id + 257	, 1)	}/*9*/;
+	std::string ABOV_STR	 { Single_Connect(Build_Target, STATE_ABOV,		 State_Id - 256)		}/*4*/;
+	std::string LEFT_ABOV_STR{ Single_Connect(Build_Target, STATE_LEFT_ABOV, State_Id - 257	,-1)	}/*6*/;
+	std::string RIGH_ABOV_STR{ Single_Connect(Build_Target, STATE_RIGH_ABOV, State_Id - 255	,-1)	}/*8*/;
 
 	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
 	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
@@ -1401,7 +1242,7 @@ bool GameStateBase::Get_Engine_File()
 		this->_Is_Data_Set = true;
 		if (!this->_Data_Base.Get_LocalData("Tanxl Engine SystemInfor"))
 			return false;
-	}
+}
 	return true;
 }
 

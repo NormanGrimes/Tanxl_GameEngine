@@ -780,17 +780,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Clear_Function = false;
 	}
 
-	/*glColor3f(1.0f, 0.0f, 0.0f);
-	glRasterPos2f(0.4f, 0.0f);
-	PrintString("X");
-
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glRasterPos2f(0.0f, 0.4f);
-	PrintString("Y");
-
-	glColor3f(0.0f, 0.0f, 1.0f);
-	glRasterPos2f(0.0f, 0.0f);
-	PrintString("O");*/
+	DrawCoordinate();
 
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
 
@@ -893,7 +883,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 	}
-
 	//std::cout << "Error Code :" << glGetError() << std::endl;
 }
 

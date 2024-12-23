@@ -42,6 +42,10 @@
 // 修复字符串定位数据功能可能导致溢出的问题
 // 增加宏控制数据定位功能的输出
 // 构建连接功能优化减少最多三分之二的定位成本
+// 重新载入地图功能优化数据的移动方式
+// 增加构建单一连接接口
+// 修复构建连接接口中上次定位参数设置错误的问题
+// 简化构建连接接口代码
 
 
 #pragma once
@@ -116,6 +120,18 @@ enum EState_Extend
 	STATE_EXTEND_LEFT_BELO = 7,
 	STATE_EXTEND_RIGH_ABOV = 8,
 	STATE_EXTEND_RIGH_BELO = 9
+};
+
+enum EState_Current
+{
+	STATE_LEFT = 3,
+	STATE_RIGH = 2,
+	STATE_ABOV = 5,
+	STATE_BELO = 4,
+	STATE_LEFT_ABOV = 9,
+	STATE_LEFT_BELO = 8,
+	STATE_RIGH_ABOV = 7,
+	STATE_RIGH_BELO = 6
 };
 
 struct Square_State
@@ -239,6 +255,7 @@ public:
 	int Get_StateWidth()const;
 private:
 	std::string Locate_Extend_State(std::string State_Id);
+	std::string Single_Connect(Data_Unit* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
 	struct State_Extend
 	{
 		std::vector<StateUnit*>* _MIDD{ nullptr };

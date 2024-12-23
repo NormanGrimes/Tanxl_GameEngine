@@ -158,7 +158,7 @@ std::ostream& operator<<(std::ostream& out, TANXL_DataBase& s)
 }
 
 TANXL_DataBase::TANXL_DataBase() :
-	_Is_Instance_Data(false), _Id_Links(new std::vector<Id_Link*>),_Current_Location(0) {}
+	_Is_Instance_Data(false), _Id_Links(new std::vector<Id_Link*>), _Current_Location(0) {}
 
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
 {
@@ -345,7 +345,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 	if (in.is_open())
 	{
 		std::string Type_Data{}, Exac_Data{}, Data{};//需要使用时再定义
-		int  Type_Stat{}, Exac_Stat{}, Id{};
+		int Type_Stat{}, Exac_Stat{}, Id{};
 		Data_Link DTL;
 		std::string Line{};
 		while (std::getline(in, Line))
@@ -497,7 +497,7 @@ void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int 
 
 void TANXL_DataBase::Remove_Link(int Type, int Exac)
 {
-	if (Id_Link * PIL{Id_Link_Locate(Type, Exac)})
+	if (Id_Link * PIL{ Id_Link_Locate(Type, Exac) })
 	{
 		std::vector<Data_Unit*>().swap(PIL->_Data->_Data_Units);
 		delete PIL;
