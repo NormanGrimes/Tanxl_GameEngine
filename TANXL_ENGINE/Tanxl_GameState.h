@@ -46,6 +46,11 @@
 // 增加构建单一连接接口
 // 修复构建连接接口中上次定位参数设置错误的问题
 // 简化构建连接接口代码
+// 重新载入地图功能增加空指针检查
+// 测试降低动态地图一次生成的个数
+// 增加新版扩展地图结构体
+// 移除编号和数据的私有成员结构体
+// 优化重新载入地图的赋值流程
 
 
 #pragma once
@@ -71,6 +76,8 @@
 #include "Tanxl_DataBase.h"
 #include "Tanxl_LocationBase.h"
 #include "Tanxl_RandomBase.h"
+
+class StateUnit;
 
 enum EMove_State_EventId
 {
@@ -148,6 +155,13 @@ struct State_Policy
 	State_Policy(std::string Name, int State_Status);
 	std::string _Name;
 	int _State_Status;
+};
+
+struct SExtend_State
+{
+	SExtend_State(std::string Id, std::vector<StateUnit*>* Data);
+	std::string _Id{ "NULL" };
+	std::vector<StateUnit*>* _Data{ nullptr };
 };
 
 class StateEvent
@@ -255,36 +269,21 @@ public:
 	int Get_StateWidth()const;
 private:
 	std::string Locate_Extend_State(std::string State_Id);
-	std::string Single_Connect(Data_Unit* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
+	std::string Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
 	struct State_Extend
 	{
-		std::vector<StateUnit*>* _MIDD{ nullptr };
+		SExtend_State _MIDD{ SExtend_State("NULL",nullptr) };
 
-		std::vector<StateUnit*>* _LEFT{ nullptr };
-		std::vector<StateUnit*>* _RIGH{ nullptr };
-		std::vector<StateUnit*>* _ABOV{ nullptr };
-		std::vector<StateUnit*>* _BELO{ nullptr };
+		SExtend_State _LEFT{ SExtend_State("NULL",nullptr) };
+		SExtend_State _RIGH{ SExtend_State("NULL",nullptr) };
+		SExtend_State _ABOV{ SExtend_State("NULL",nullptr) };
+		SExtend_State _BELO{ SExtend_State("NULL",nullptr) };
 
-		std::vector<StateUnit*>* _LEFT_ABOV{ nullptr };
-		std::vector<StateUnit*>* _LEFT_BELO{ nullptr };
-		std::vector<StateUnit*>* _RIGH_ABOV{ nullptr };
-		std::vector<StateUnit*>* _RIGH_BELO{ nullptr };
+		SExtend_State _LEFT_ABOV{ SExtend_State("NULL",nullptr) };
+		SExtend_State _LEFT_BELO{ SExtend_State("NULL",nullptr) };
+		SExtend_State _RIGH_ABOV{ SExtend_State("NULL",nullptr) };
+		SExtend_State _RIGH_BELO{ SExtend_State("NULL",nullptr) };
 	}_GameState_Extend;
-
-	struct State_Extend_Id
-	{
-		std::string _MIDD{ "NULL" };
-
-		std::string _LEFT{ "NULL" };
-		std::string _RIGH{ "NULL" };
-		std::string _ABOV{ "NULL" };
-		std::string _BELO{ "NULL" };
-
-		std::string _LEFT_ABOV{ "NULL" };
-		std::string _LEFT_BELO{ "NULL" };
-		std::string _RIGH_ABOV{ "NULL" };
-		std::string _RIGH_BELO{ "NULL" };
-	}_GameState_Id;
 
 	//地图初始化默认构造函数 采用单例模式进行第一次初始化
 	GameStateBase(int Width = 0, int Height = 0);
