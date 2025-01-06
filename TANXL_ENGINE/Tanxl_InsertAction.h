@@ -27,6 +27,7 @@
 // 增加鼠标按键的检测功能
 // 优化鼠标按键按下的判断逻辑
 // 获取输入接口优化减少输入过程中的计算
+// 移除用于记录所有区域的是否可移动到状态的容器
 
 #pragma once
 
@@ -106,7 +107,6 @@ public:
 	void Set_MaxFloat_Height(float Max_float);
 	//设置当前操作可移动到的宽度方向最远距离 在使用后会导致Set_MaxFloat功能无效化 可在边长不规则情况下使用
 	void Set_MaxFloat_Width(float Max_float);
-	void Get_MoveData(std::vector<bool>* PVB);
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
 	//同时设置多个按键控制的移动距离
@@ -119,8 +119,6 @@ private:
 	void AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);
 	//_KeyEventS 所有已注册输入事件的容器
 	std::vector<Key_Unit*> _KeyEventS;
-	//_PTB 未使用 最初目的用于记录所有区域的是否可移动到状态
-	std::vector<bool>* _PTB;
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离
 	float _Max_float;
 	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘 0为未到达边缘 1为左边缘 2为右边缘 3为上边缘 4为下边缘

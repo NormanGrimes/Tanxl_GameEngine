@@ -175,11 +175,6 @@ void InsertEventBase::Set_MaxFloat_Width(float Max_float)
 	this->_Max_float_Width = Max_float;
 }
 
-void InsertEventBase::Get_MoveData(std::vector<bool>* PVB)
-{
-	this->_PTB = PVB;
-}
-
 void InsertEventBase::Set_StateRange(bool Enable)
 {
 	this->_Is_State_Range = Enable;
@@ -360,7 +355,7 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 //UnImportant 单例实现
 
 InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Max_float(1.0f), _PTB(nullptr), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
+_Max_float(1.0f), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -368,7 +363,7 @@ InsertEventBase::~InsertEventBase()
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _PTB(nullptr), _Is_Max_Single(false),
+	_KeyEventS(NULL), _Max_float(1.0f), _Is_Max_Single(false),
 	_Max_float_Height(1), _Max_float_Width(1), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)

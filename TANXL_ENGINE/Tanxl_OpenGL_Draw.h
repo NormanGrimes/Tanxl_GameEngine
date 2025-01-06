@@ -28,6 +28,7 @@
 // 重制二号草纹理图片
 // 增加宏控制重新载入的地图数据输出
 // 增加初始区块零的地图数据
+// 增加宏控制字体显示测试开关
 
 #pragma once
 
@@ -36,6 +37,7 @@
 
 #define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
 #define _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_  0
+#define _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_  0
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
@@ -552,7 +554,7 @@ private:
 	GLuint _Start_RenderingProgram{ 0 };
 	GLuint _ITest_RenderingProgram{ 0 };
 
-	GLuint _vao[1];
+	GLuint _vao[2];
 	GLuint _vbo[32];
 
 	//记录地图场景基本矩形的高度值

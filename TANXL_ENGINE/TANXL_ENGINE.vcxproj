@@ -106,14 +106,15 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Version>
       </Version>
       <RegisterOutput>false</RegisterOutput>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
@@ -131,13 +132,14 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <Version>
       </Version>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
@@ -155,14 +157,15 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
       <Version>
       </Version>
       <RegisterOutput>false</RegisterOutput>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
@@ -183,13 +186,14 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
-      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies);irrKlang.lib;freetype.lib</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
       <Version>
       </Version>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
@@ -199,7 +203,8 @@ xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
 xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"
 xcopy /y /d "..\GRAPHIC\irrKlang.dll" "$(OutDir)"
 xcopy /y /d "..\GRAPHIC\ikpFlac.dll" "$(OutDir)"
-xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
+xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

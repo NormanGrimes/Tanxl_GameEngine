@@ -55,8 +55,10 @@ const std::string OpenGL_Draw::Get_Version()
 void OpenGL_Draw::init(GameStateBase* State)
 {
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
+#if !_ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+#endif
 	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B38", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
@@ -76,7 +78,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 	TextFont = glGenLists(MAX_CHAR);
 	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
 
@@ -107,12 +109,14 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_03_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Test_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 
-	glGenVertexArrays(1, _vao);
+	glGenVertexArrays(2, _vao);
 	glBindVertexArray(_vao[0]);
 	glGenBuffers(1, _vbo);
 
 	TextFont = glGenLists(MAX_CHAR);
 	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
+
+	glBindVertexArray(_vao[1]);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -170,6 +174,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->Set_Max_Middle_Frame(200);
 
 	ReLoadState(State);
+	std::cout << "Error CodeE :" << glGetError() << std::endl;
 }
 
 void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
@@ -648,7 +653,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 			else
 				break;
 		}
-		std::cout << "Return" << std::endl;
+		//std::cout << "Return" << std::endl;
 	}
 	else if (Reset)
 	{
@@ -782,6 +787,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	DrawCoordinate();
 
+#if !_ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
 
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
@@ -883,7 +889,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 	}
-	//std::cout << "Error Code :" << glGetError() << std::endl;
+#endif
+	std::cout << "Error Code :" << glGetError() << std::endl;
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)

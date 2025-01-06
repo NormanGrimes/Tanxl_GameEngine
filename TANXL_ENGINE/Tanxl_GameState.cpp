@@ -531,7 +531,7 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 
 		Generate_StateBlock(this->_Extend_Mid_Id - 257);
 		Generate_StateBlock(this->_Extend_Mid_Id - 256);
-		Generate_StateBlock(this->_Extend_Mid_Id + 255);
+		Generate_StateBlock(this->_Extend_Mid_Id - 255);
 
 		this->_GameState_Extend._LEFT = this->_GameState_Extend._LEFT_ABOV;
 		this->_GameState_Extend._MIDD = this->_GameState_Extend._ABOV;

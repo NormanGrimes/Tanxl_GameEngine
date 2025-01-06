@@ -20,12 +20,11 @@
 // 修复纹理绘制方向横向相反的问题
 // 增加根据事件绘制不同纹理的设定
 // 移除备用方块颜色功能
+// 移除实例化测试相关功能
 
 #version 430
 
 #define STATE_01_LAYER 0.4f
-
-#define VERTSHADER_STATE_01_INSTANCED_VERSION   0
 
 layout (location = 1) in vec2 texCoord;
 
@@ -61,14 +60,6 @@ void main(void)
 	float WidthMove  = -(SWidth + PreLoads - 1) * Width;
 	float HeightMove = (SHeight + PreLoads - 1) * Height;
 
-#if VERTSHADER_STATE_01_INSTANCED_VERSION
-	vec2 offSets = State[gl_InstanceID];
-	gl_Position = vec4(offSets, STATE_01_LAYER, 1.0f);
-	Cube = int(Infor[VertexId].x);
-	vs_color = vec4(0.9f, 0.6f, 0.9f, 1.0f);
-#endif
-
-#if !VERTSHADER_STATE_01_INSTANCED_VERSION
 	for(VertexId = 0; VertexId < State_Datas; ++VertexId)//MAP LAYER 0.3f
 	{
 		if      (gl_VertexID == VertexId * 6 + 0) 
@@ -153,5 +144,4 @@ void main(void)
 			HeightMove -= (Height * 2);
 		}
 	}
-#endif
 }
