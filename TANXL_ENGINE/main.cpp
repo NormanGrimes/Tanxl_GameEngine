@@ -11,19 +11,8 @@
 
 #include "Tanxl_Engine_Manager.h"
 
-#include <ft2build.h>
-#include FT_FREETYPE_H  
-
 int main()
 {
-	FT_Library ft;
-	if (FT_Init_FreeType(&ft))
-		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-
-	FT_Face face;
-	if (FT_New_Face(ft, "fonts/arial.ttf", 0, &face))
-		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-
 	Tanxl_Engine TGE;
 	//检测引擎12状态 是否有异常产生
 	TGE.Engine_Check_Engine_Status();

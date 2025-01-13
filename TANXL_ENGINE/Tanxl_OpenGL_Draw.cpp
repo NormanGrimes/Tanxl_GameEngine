@@ -4,28 +4,7 @@
 
 #include <Windows.h>
 
-GLuint TextFont;
-
-void PrintString(const char* s)
-{
-	glListBase(TextFont);
-	glCallLists(static_cast<GLsizei>(strlen(s)), GL_UNSIGNED_BYTE, s);
-}
-
-void DrawCoordinate()
-{
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glRasterPos2f(0.4f, 0.0f);
-	PrintString("X");
-
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glRasterPos2f(0.0f, 0.4f);
-	PrintString("Y");
-
-	glColor3f(0.0f, 0.0f, 1.0f);
-	glRasterPos2f(0.0f, 0.0f);
-	PrintString("O");
-}
+std::map<GLchar, Character> Characters;
 
 void delay(int misec)
 {
@@ -42,7 +21,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(),
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(), _Font_vbo(),
 _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
 _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _Translation(), _LCB(&LocationBase::GetLocationBase()),
 _StateInfor(), _Main_Character(new GameObject(10, 10)) {}
@@ -79,9 +58,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	TextFont = glGenLists(MAX_CHAR);
-	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
-
 	if (_Window_Adjust_Enable)
 		glfwSetFramebufferSizeCallback(_Main_Window, TanxlOD::framebuffer_size_callback);
 	else
@@ -108,15 +84,30 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_02_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_03_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Test_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
+	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Fonts_01_VertShader.glsl", "Tanxl_Fonts_01_FragShader.glsl");
 
-	glGenVertexArrays(2, _vao);
+	const GLuint WIDTH = 800, HEIGHT = 800;
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
+	glUseProgram(this->_Fonts_RenderingProgram);
+	glUniformMatrix4fv(glGetUniformLocation(this->_Fonts_RenderingProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+	Init_Fonts();
+
+	glGenVertexArrays(1, &_vao[0]);
+	glGenBuffers(1, &_Font_vbo[0]);
 	glBindVertexArray(_vao[0]);
-	glGenBuffers(1, _vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, _Font_vbo[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
-	TextFont = glGenLists(MAX_CHAR);
-	wglUseFontBitmaps(wglGetCurrentDC(), 0, MAX_CHAR, TextFont);
+	glUseProgram(this->_State_RenderingProgram);
 
+	glGenVertexArrays(1, &_vao[1]);
 	glBindVertexArray(_vao[1]);
+	glGenBuffers(1, &_vbo[1]);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -157,6 +148,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 16, Tex_06);
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
+
+	glBindVertexArray(0);
 
 	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
 
@@ -362,6 +355,66 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 			std::cout << std::endl;
 #endif
 	}
+}
+
+void OpenGL_Draw::Init_Fonts()
+{
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft))
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+
+	FT_Face face;
+	if (FT_New_Face(ft, "Fonts/JosefinSans-SemiBoldItalic.ttf", 0, &face))
+		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+
+	// Set size to load glyphs as
+	FT_Set_Pixel_Sizes(face, 0, 48);
+
+	// Disable byte-alignment restriction
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	// Load first 128 characters of ASCII set
+	for (GLubyte c = 0; c < 128; c++)
+	{
+		// Load character glyph 
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		// Generate texture
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			face->glyph->bitmap.width,
+			face->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			face->glyph->bitmap.buffer
+		);
+		// Set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// Now store character for later use
+		Character character = {
+			texture,
+			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			face->glyph->advance.x
+		};
+		Characters.insert(std::pair<GLchar, Character>(c, character));
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// Destroy FreeType once we're finished
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
 }
 
 GLFWwindow* OpenGL_Draw::Get_Window()const
@@ -760,6 +813,48 @@ void OpenGL_Draw::Move_State(GameStateBase* State, EMove_State_EventId Direction
 	this->_Is_State_Changed = true;
 }
 
+void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+{
+	glUniform3f(glGetUniformLocation(_Fonts_RenderingProgram, "textColor"), color.x, color.y, color.z);
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(_vao[0]);
+
+	// Iterate through all characters
+	std::string::const_iterator c;
+	for (c = text.begin(); c != text.end(); c++)
+	{
+		Character ch = Characters[*c];
+
+		GLfloat xpos = x + ch.Bearing.x * scale;
+		GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+		GLfloat w = ch.Size.x * scale;
+		GLfloat h = ch.Size.y * scale;
+		// Update VBO for each character
+		GLfloat vertices[6][4] = {
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos,     ypos,       0.0, 1.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+			{ xpos + w, ypos + h,   1.0, 0.0 }
+		};
+		// Render glyph texture over quad
+		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+		// Update content of VBO memory
+		glBindBuffer(GL_ARRAY_BUFFER, _Font_vbo[0]);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// Render quad
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+		x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 float OpenGL_Draw::Get_Trigger_Ratio()
 {
 	return this->_Trigger_Ratio;
@@ -785,10 +880,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Clear_Function = false;
 	}
 
-	DrawCoordinate();
-
 #if !_ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
+
+	glBindVertexArray(_vao[1]);
 
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
@@ -889,6 +984,12 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 	}
+	glBindVertexArray(0);
+
+	glUseProgram(_Fonts_RenderingProgram);
+
+	RenderText("This is sample font text", 10.0f, 10.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+	RenderText("TANXL GAME ENGINE 2.40", 440.0f, 750.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 #endif
 	std::cout << "Error Code :" << glGetError() << std::endl;
 }

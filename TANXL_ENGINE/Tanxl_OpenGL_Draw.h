@@ -29,6 +29,8 @@
 // 增加宏控制重新载入的地图数据输出
 // 增加初始区块零的地图数据
 // 增加宏控制字体显示测试开关
+// 新增字体初始化函数以及字体相关的结构体
+// 移除之前使用的字体相关代码
 
 #pragma once
 
@@ -52,6 +54,11 @@
 
 #define MAX_CHAR    128
 
+#include <map>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
@@ -61,6 +68,14 @@
 #include "Tanxl_SoundBase.h"
 #include <math.h>
 #include <time.h>
+
+
+struct Character {
+	GLuint     TextureID;  // 字形纹理ID
+	glm::ivec2 Size;       // 字形大大小
+	glm::ivec2 Bearing;    // 字形基于基线和起点的位置
+	GLuint     Advance;    // 起点到下一个字形起点的距离
+};
 
 namespace TanxlOD
 {
@@ -526,8 +541,10 @@ public:
 	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
 	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
 	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
+	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
+	void Init_Fonts();
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
@@ -554,8 +571,11 @@ private:
 	GLuint _Start_RenderingProgram{ 0 };
 	GLuint _ITest_RenderingProgram{ 0 };
 
+	GLuint _Fonts_RenderingProgram{ 0 };
+
 	GLuint _vao[2];
 	GLuint _vbo[32];
+	GLuint _Font_vbo[32];
 
 	//记录地图场景基本矩形的高度值
 	double _Each_Height{ 0 };

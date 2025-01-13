@@ -20,8 +20,8 @@ inline void Location::Adjust_Location(float Adjust_Height, float Adjust_Width)
 
 inline void Location::Set_Location(float Set_Height, float Set_Width)
 {
-	this->_Internal_Location._Location_X += Set_Width;
-	this->_Internal_Location._Location_Y += Set_Height;
+	this->_Internal_Location._Location_X = Set_Width;
+	this->_Internal_Location._Location_Y = Set_Height;
 }
 
 inline float Location::Get_Calculated_Location(ECALCUL_MARKING Marking, float Value, bool begin)

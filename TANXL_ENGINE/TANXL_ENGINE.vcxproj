@@ -240,6 +240,8 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <ClCompile Include="Taxnl_LocationBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Tanxl_Fonts_01_FragShader.glsl" />
+    <None Include="Tanxl_Fonts_01_VertShader.glsl" />
     <None Include="Tanxl_Game_01_FragShader.glsl" />
     <None Include="public\steam\lib\win64\steam_api64.dll" />
     <None Include="Tanxl_Player_01_VertShader.glsl" />
