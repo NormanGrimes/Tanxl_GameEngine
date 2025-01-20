@@ -31,6 +31,11 @@
 // 增加宏控制字体显示测试开关
 // 新增字体初始化函数以及字体相关的结构体
 // 移除之前使用的字体相关代码
+// 增加新一级的顶点缓冲用于字体的绘制
+// 字体显示功能已正式安装
+// 字体变换矩阵使用动态的窗口数据计算
+// 新增游戏状态枚举
+// 增加死亡画面的文字显示与提示
 
 #pragma once
 
@@ -39,7 +44,7 @@
 
 #define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
 #define _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_  0
-#define _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_  0
+#define _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_  1
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
@@ -67,8 +72,6 @@
 #include "Tanxl_GameObject.h"
 #include "Tanxl_SoundBase.h"
 #include <math.h>
-#include <time.h>
-
 
 struct Character {
 	GLuint     TextureID;  // 字形纹理ID
@@ -511,6 +514,12 @@ namespace TanxlOD
 		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 	};
 }
+
+enum EGame_Status
+{
+	GAME_MENU,
+	GAME_ACTIVE
+};
 
 class OpenGL_Draw
 {

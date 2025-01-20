@@ -52,6 +52,8 @@
 // 移除编号和数据的私有成员结构体
 // 优化重新载入地图的赋值流程
 // 修复向上移动生成地图编号错误的问题
+// 移除获取地图方块是否可移动的表格的获取接口
+// 新版扩展地图结构体构造函数增加默认参数
 
 
 #pragma once
@@ -160,7 +162,7 @@ struct State_Policy
 
 struct SExtend_State
 {
-	SExtend_State(std::string Id, std::vector<StateUnit*>* Data);
+	SExtend_State(std::string Id = "NULL", std::vector<StateUnit*>* Data = nullptr);
 	std::string _Id{ "NULL" };
 	std::vector<StateUnit*>* _Data{ nullptr };
 };
@@ -211,7 +213,6 @@ public:
 	SLocation& Get_Screen_Distance();
 	SLocation& Get_Move_Distance();
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
-	std::vector<bool>* Get_GameState_MoveAble(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
 	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
@@ -273,17 +274,17 @@ private:
 	std::string Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
 	struct State_Extend
 	{
-		SExtend_State _MIDD{ SExtend_State("NULL",nullptr) };
+		SExtend_State _MIDD{ SExtend_State() };
 
-		SExtend_State _LEFT{ SExtend_State("NULL",nullptr) };
-		SExtend_State _RIGH{ SExtend_State("NULL",nullptr) };
-		SExtend_State _ABOV{ SExtend_State("NULL",nullptr) };
-		SExtend_State _BELO{ SExtend_State("NULL",nullptr) };
+		SExtend_State _LEFT{ SExtend_State() };
+		SExtend_State _RIGH{ SExtend_State() };
+		SExtend_State _ABOV{ SExtend_State() };
+		SExtend_State _BELO{ SExtend_State() };
 
-		SExtend_State _LEFT_ABOV{ SExtend_State("NULL",nullptr) };
-		SExtend_State _LEFT_BELO{ SExtend_State("NULL",nullptr) };
-		SExtend_State _RIGH_ABOV{ SExtend_State("NULL",nullptr) };
-		SExtend_State _RIGH_BELO{ SExtend_State("NULL",nullptr) };
+		SExtend_State _LEFT_ABOV{ SExtend_State() };
+		SExtend_State _LEFT_BELO{ SExtend_State() };
+		SExtend_State _RIGH_ABOV{ SExtend_State() };
+		SExtend_State _RIGH_BELO{ SExtend_State() };
 	}_GameState_Extend;
 
 	//地图初始化默认构造函数 采用单例模式进行第一次初始化

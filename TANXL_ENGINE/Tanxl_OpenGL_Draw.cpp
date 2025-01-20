@@ -34,10 +34,8 @@ const std::string OpenGL_Draw::Get_Version()
 void OpenGL_Draw::init(GameStateBase* State)
 {
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
-#if !_ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-#endif
 	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B38", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
@@ -86,8 +84,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Test_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Fonts_01_VertShader.glsl", "Tanxl_Fonts_01_FragShader.glsl");
 
-	const GLuint WIDTH = 800, HEIGHT = 800;
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
+#if _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
+	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_ScreenWidth), 0.0f, static_cast<GLfloat>(_ScreenHeight));
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(glGetUniformLocation(this->_Fonts_RenderingProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -102,13 +100,14 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+#endif
 
 	glUseProgram(this->_State_RenderingProgram);
 
 	glGenVertexArrays(1, &_vao[1]);
+	glGenBuffers(1, _vbo);
 	glBindVertexArray(_vao[1]);
-	glGenBuffers(1, &_vbo[1]);
-
+	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_HeightInt);//SHeight
@@ -467,12 +466,12 @@ int OpenGL_Draw::Append_Texture(const char* Texture)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
 #endif
 
-	glActiveTexture(GL_TEXTURE0 + Id);
+	glActiveTexture(GL_TEXTURE1 + Id);
 
 	glBindTexture(GL_TEXTURE_2D, OpenGL_Render::loadTexture(Texture));
 	Id++;
 
-	return Id - 1;
+	return Id;
 }
 
 void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
@@ -874,16 +873,16 @@ bool OpenGL_Draw::Check_Key_Press()
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	
+	glBindVertexArray(_vao[1]);
+
 	if (_Clear_Function)
 	{
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		this->_Clear_Function = false;
 	}
 
-#if !_ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
-
-	glBindVertexArray(_vao[1]);
 
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
@@ -932,8 +931,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 	else if (_Draw_Status == 4)
 	{
-		this->_Middle_Frame++;
-
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
 		{
 			this->_Draw_Status = 2;
@@ -964,6 +961,17 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		glUseProgram(_Midle_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6 * 25);
+
+#if _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
+		glBindVertexArray(_vao[0]);
+		glUseProgram(_Fonts_RenderingProgram);
+		RenderText("GAME OVER", 240.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
+		RenderText("Tips : Golden square can restore your health", 50.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+		this->_Middle_Frame++;
+		glBindVertexArray(0);
+
+		glBindVertexArray(_vao[1]);
+#endif
 	}
 	else
 	{
@@ -986,12 +994,17 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 	glBindVertexArray(0);
 
+#if _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
+	glBindVertexArray(_vao[0]);
+
 	glUseProgram(_Fonts_RenderingProgram);
 
-	RenderText("This is sample font text", 10.0f, 10.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-	RenderText("TANXL GAME ENGINE 2.40", 440.0f, 750.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+	RenderText("TANXL GAME VERSION 2.41", 10.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+
+	glBindVertexArray(0);
 #endif
-	std::cout << "Error Code :" << glGetError() << std::endl;
+
+	//std::cout << "Error Code :" << glGetError() << std::endl;
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
@@ -1010,6 +1023,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		IEB->RegistEvent(OpenGL_Stop_Key);
 	}
+
+	glBindVertexArray(_vao[1]);
 
 	if (_Draw_Status == 0)
 	{
@@ -1078,7 +1093,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		-HalfW,  HalfH,  1.0f, 0.0f, 0.0f,
 		 HalfW, -HalfH,  0.0f, 1.0f, 0.0f,
-		 HalfW,  HalfH,  0.0f, 1.0f, 1.0f
+		 HalfW,  HalfH,  1.0f, 1.0f, 1.0f
 	};
 	unsigned int quadVAO, quadVBO;
 	glGenVertexArrays(1, &quadVAO);
@@ -1111,6 +1126,10 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		glEnableVertexAttribArray(1);
+
+		glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_ScreenWidth), 0.0f, static_cast<GLfloat>(_ScreenHeight));
+		glUseProgram(this->_Fonts_RenderingProgram);
+		glUniformMatrix4fv(glGetUniformLocation(this->_Fonts_RenderingProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 		if ((OpenGL_Stop_Key->MoveToY == true) || (this->_Is_Adjust_Enable == false))
 		{
@@ -1250,7 +1269,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		display(_Main_Window, glfwGetTime(), State);
 #endif
 		glfwSwapBuffers(_Main_Window);
-		
+
+		glBindVertexArray(0);
 	}
 	else
 	{
