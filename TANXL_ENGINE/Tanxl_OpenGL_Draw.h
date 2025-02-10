@@ -36,6 +36,7 @@
 // 字体变换矩阵使用动态的窗口数据计算
 // 新增游戏状态枚举
 // 增加死亡画面的文字显示与提示
+// 移除字体测试启用关闭的宏
 
 #pragma once
 
@@ -44,7 +45,6 @@
 
 #define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
 #define _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_  0
-#define _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_  1
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
@@ -57,13 +57,11 @@
 
 #endif
 
-#define MAX_CHAR    128
-
-#include <map>
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include <map>
+#include <math.h>
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
@@ -71,7 +69,6 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameObject.h"
 #include "Tanxl_SoundBase.h"
-#include <math.h>
 
 struct Character {
 	GLuint     TextureID;  // 字形纹理ID

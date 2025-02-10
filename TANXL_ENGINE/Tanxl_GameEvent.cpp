@@ -15,7 +15,7 @@ State_ChangeEvent::State_ChangeEvent(std::string Name, int LocationX, int Locati
 void State_ChangeEvent::EventAction()
 {
 	static GameStateBase* State{ &GameStateBase::GetStateBase() };
-	if ((State->Get_LocationX() == _LocationX) && (State->Get_LocationY() == _LocationY))
+	if ((State->Get_Exac_LocationX() == _LocationX) && (State->Get_Exac_LocationY() == _LocationY))
 	{
 		State->Set_State(_LocationY * State->Get_DataWidth() + _LocationX, _Cover_String);
 	}

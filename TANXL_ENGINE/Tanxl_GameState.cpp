@@ -43,7 +43,13 @@ std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target,
 		else
 			Connect_Target = &this->_Data_Base.Get_Last_Located(1, State_Id, OffSet)->_Data->_Data_Units;
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target :" << Connect_Target->size() << std::endl;
+		std::cout << "Connect_Target Size :" << Connect_Target->size() << std::endl;
+
+		if (Connect_Target->size() == 16)
+		{
+			for (int i = 0; i < 15; ++i)
+				std::cout << Connect_Target->at(i)->_Id << " + " << Connect_Target->at(i)->_Data << std::endl;
+		}
 #endif
 		if (Connect_Target->size() == 2)
 		{
@@ -57,11 +63,57 @@ std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target,
 			Connect_Target->push_back(new Data_Unit(9, "NULL"));
 		}
 		Connect_Target->at(CurrentState)->_Data = Build_Target->at(0)->_Data;
+#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
+		std::cout << "Build_Target Id : " << Build_Target->at(0)->_Data << std::endl;
+#endif
+
+		EState_Current TempState{ CurrentState };
+		switch (CurrentState)
+		{
+		case STATE_LEFT:
+			TempState = STATE_RIGH;
+			break;
+		case STATE_RIGH:
+			TempState = STATE_LEFT;
+			break;
+		case STATE_ABOV:
+			TempState = STATE_BELO;
+			break;
+		case STATE_BELO:
+			TempState = STATE_ABOV;
+			break;
+		case STATE_LEFT_ABOV:
+			TempState = STATE_RIGH_BELO;
+			break;
+		case STATE_LEFT_BELO:
+			TempState = STATE_RIGH_ABOV;
+			break;
+		case STATE_RIGH_ABOV:
+			TempState = STATE_LEFT_BELO;
+			break;
+		case STATE_RIGH_BELO:
+			TempState = STATE_LEFT_ABOV;
+			break;
+		}
+
+		Build_Target->at(TempState)->_Data = Connect_Target->at(0)->_Data;
+#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
+		std::cout << "Connect_Target Id : " << Connect_Target->at(0)->_Data << std::endl;
+		std::cout << "Connect_Target : PASS" << std::endl;
+#endif
 		return Connect_Target->at(0)->_Data;
 	}
-	catch (std::string) {
+	catch (std::string)
+	{
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
 		std::cout << "Connect_Target : FAIL" << std::endl;
+#endif
+		return "NULL";
+	}
+	catch (std::out_of_range)
+	{
+#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
+		std::cout << "Connect_Target : OUT OF RANGE" << std::endl;
 #endif
 		return "NULL";
 	}
@@ -1171,11 +1223,6 @@ bool GameStateBase::Get_Compile_Status()
 	return this->_Compile_Success;
 }
 
-bool GameStateBase::Get_Extend_State()
-{
-	return this->_Extend_State_Enable;
-}
-
 void GameStateBase::Set_Adjust_Flag(bool Adjust_Flag)
 {
 	this->_Is_Adjusting = Adjust_Flag;
@@ -1186,7 +1233,7 @@ bool GameStateBase::Get_Adjust_Flag()
 	return this->_Is_Adjusting;
 }
 
-bool GameStateBase::Get_Adjust_While_Move()
+bool GameStateBase::Is_Adjust_While_Move()
 {
 	return this->_Adjust_While_Move;
 }
@@ -1202,12 +1249,12 @@ bool GameStateBase::Get_Engine_File()
 	return true;
 }
 
-int GameStateBase::Get_LocationX()
+int GameStateBase::Get_Exac_LocationX()
 {
 	return this->_Exac_LocationX;
 }
 
-int GameStateBase::Get_LocationY()
+int GameStateBase::Get_Exac_LocationY()
 {
 	return this->_Exac_LocationY;
 }
@@ -1220,11 +1267,6 @@ int GameStateBase::Get_Distance_Screen_Id()
 int GameStateBase::Get_Distance_Move_Id()
 {
 	return this->_Distance_Move;
-}
-
-int GameStateBase::Get_State_Size()
-{
-	return this->_State_WidthS * this->_State_HeightS;
 }
 
 int GameStateBase::Get_State_Width()

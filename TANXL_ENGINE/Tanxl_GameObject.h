@@ -16,6 +16,8 @@
 // 生命值组件增加最大生命值获取接口
 // 新增金币组件
 // 新增记录人物攻击力防御力移动速度的属性组件
+// 游戏物品构造函数增加是否可受到伤害的参数
+// 增加武器与护甲基础类
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -26,10 +28,10 @@
 
 //组件类
 
-class Health_Componment
+class Health_Base
 {
 public:
-	Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage = false);
+	Health_Base(int Maximum_Health, int Current_Health, bool Unable_Damage = false);
 
 	void RestoreHealth(int RestVal);
 
@@ -60,15 +62,35 @@ private:
 	int _Current_Money;
 };
 
-class Attribute_COM
+class Character_Data
 {
 public:
-	Attribute_COM();
+	Character_Data();
 
 private:
 	int _Attack_Damage;
 	int _Defense_Armor;
-	int _Move_Speed;
+	double _Move_Speed;
+};
+
+class Weapon
+{
+public:
+	Weapon(int Damage);
+
+	int Get_DamageVal();
+private:
+	int _Damage;
+};
+
+class Armor
+{
+public:
+	Armor(int Defense);
+
+	int Get_DefenseVal();
+private:
+	int _Defense;
 };
 
 class Componment
@@ -86,10 +108,10 @@ private:
 
 //游戏物品类
 
-class GameObject : public Health_Componment
+class GameObject : public Health_Base
 {
 public:
-	GameObject(int Max_Health, int Current_Health);
+	GameObject(int Max_Health, int Current_Health, bool Unable_Damage = false);
 	void Add_Money(int Money);
 	bool Pay_Money(int Price);
 

@@ -28,6 +28,7 @@
 // 优化鼠标按键按下的判断逻辑
 // 获取输入接口优化减少输入过程中的计算
 // 移除用于记录所有区域的是否可移动到状态的容器
+// 鼠标按键按下可切换提示内容
 
 #pragma once
 
@@ -50,6 +51,7 @@
 #include "Tanxl_OpenGL_Draw.h"
 #include "Tanxl_GameState.h"
 #include "Tanxl_RandomBase.h"
+#include "Tanxl_GameTips.h"
 
 struct Key_Unit
 {

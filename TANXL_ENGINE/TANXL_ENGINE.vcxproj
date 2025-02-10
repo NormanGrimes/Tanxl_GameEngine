@@ -160,7 +160,7 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies);irrKlang.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies);irrKlang.lib;freetype.lib</AdditionalDependencies>
       <Version>
       </Version>
       <RegisterOutput>false</RegisterOutput>
@@ -173,7 +173,8 @@ xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"</Command>
 xcopy /y /d "public\steam\lib\win64\steam_api64.dll" "$(OutDir)"
 xcopy /y /d "..\GRAPHIC\irrKlang.dll" "$(OutDir)"
 xcopy /y /d "..\GRAPHIC\ikpFlac.dll" "$(OutDir)"
-xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"</Command>
+xcopy /y /d "..\GRAPHIC\ikpMP3.dll" "$(OutDir)"
+xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -232,6 +233,7 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <ClCompile Include="Tanxl_GameEvent.cpp" />
     <ClCompile Include="Tanxl_GameObject.cpp" />
     <ClCompile Include="Tanxl_GameState.cpp" />
+    <ClCompile Include="Tanxl_GameTips.h" />
     <ClCompile Include="Tanxl_InsertAction.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Render.cpp" />
@@ -240,15 +242,15 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <ClCompile Include="Taxnl_LocationBase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tanxl_Fonts_01_FragShader.glsl" />
-    <None Include="Tanxl_Fonts_01_VertShader.glsl" />
-    <None Include="Tanxl_Game_01_FragShader.glsl" />
     <None Include="public\steam\lib\win64\steam_api64.dll" />
-    <None Include="Tanxl_Player_01_VertShader.glsl" />
-    <None Include="Tanxl_State_01_VertShader.glsl" />
-    <None Include="Tanxl_State_02_VertShader.glsl" />
-    <None Include="Tanxl_State_03_VertShader.glsl" />
-    <None Include="Tanxl_Test_01_VertShader.glsl" />
+    <None Include="Shader\Tanxl_Fonts_01_FragShader.glsl" />
+    <None Include="Shader\Tanxl_Fonts_01_VertShader.glsl" />
+    <None Include="Shader\Tanxl_Game_01_FragShader.glsl" />
+    <None Include="Shader\Tanxl_Player_01_VertShader.glsl" />
+    <None Include="Shader\Tanxl_State_01_VertShader.glsl" />
+    <None Include="Shader\Tanxl_State_02_VertShader.glsl" />
+    <None Include="Shader\Tanxl_State_03_VertShader.glsl" />
+    <None Include="Shader\Tanxl_Test_01_VertShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Update-Log.txt" />

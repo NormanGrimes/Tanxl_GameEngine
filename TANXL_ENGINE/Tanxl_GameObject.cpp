@@ -1,9 +1,9 @@
 #include "Tanxl_GameObject.h"
 
-Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage) :
+Health_Base::Health_Base(int Maximum_Health, int Current_Health, bool Unable_Damage) :
 	_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage) {};
 
-void Health_Componment::RestoreHealth(int RestVal)
+void Health_Base::RestoreHealth(int RestVal)
 {
 	if (RestVal < 0 || this->_Unable_Damage)
 		return;
@@ -12,7 +12,7 @@ void Health_Componment::RestoreHealth(int RestVal)
 		_Current_Health = _Maximum_Health;
 }
 
-void Health_Componment::TakeDamage(int TakeVal)
+void Health_Base::TakeDamage(int TakeVal)
 {
 	if (TakeVal < 0 || this->_Unable_Damage)
 		return;
@@ -21,18 +21,18 @@ void Health_Componment::TakeDamage(int TakeVal)
 		_Current_Health = 0;
 }
 
-void Health_Componment::Set_Health(int Current_Health, int Max_Health)
+void Health_Base::Set_Health(int Current_Health, int Max_Health)
 {
 	this->_Current_Health = Current_Health;
 	this->_Maximum_Health = Max_Health;
 }
 
-int Health_Componment::Check_Health()
+int Health_Base::Check_Health()
 {
 	return this->_Current_Health;
 }
 
-int Health_Componment::Get_MaxHealth()
+int Health_Base::Get_MaxHealth()
 {
 	return this->_Maximum_Health;
 }
@@ -55,7 +55,7 @@ bool Money_Componment::Pay_Money(int Price)
 	return false;
 }
 
-Attribute_COM::Attribute_COM() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(1) {};
+Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0) {};
 
 Componment::Componment(std::string Name) :_Name(Name), _Is_Special_Enable(false) {}
 
@@ -74,8 +74,8 @@ bool Componment::Get_Special_Status()
 	return this->_Is_Special_Enable;
 }
 
-GameObject::GameObject(int Max_Health, int Current_Health)
-	:Health_Componment(Max_Health, Current_Health), _Money_Componment(Money_Componment(0)) {}
+GameObject::GameObject(int Max_Health, int Current_Health, bool Unable_Damage)
+	:Health_Base(Max_Health, Current_Health, Unable_Damage), _Money_Componment(Money_Componment(0)) {}
 
 void GameObject::Add_Money(int Money)
 {
@@ -135,3 +135,17 @@ GameObjectBase::~GameObjectBase() {}
 GameObjectBase::GameObjectBase(const GameObjectBase&) {}
 
 GameObjectBase& GameObjectBase::operator=(const GameObjectBase&) { return *this; }
+
+Weapon::Weapon(int Damage) :_Damage(Damage) {}
+
+int Weapon::Get_DamageVal()
+{
+	return this->_Damage;
+}
+
+Armor::Armor(int Defense) :_Defense(Defense) {}
+
+int Armor::Get_DefenseVal()
+{
+	return this->_Defense;
+}

@@ -1,3 +1,13 @@
+TEnGinE Version-0.2 Build-42 TURBO 2023-10-07 09:38 UPDATE_LOG
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+增加Debug的x64环境配置。物品模块游戏物品构造函数增加是否可受到
+伤害的参数。增加游戏提示模块。着色器程序统一放到新建的着色器文
+件夹下。地图模块单一连接功能修复未能构建双向连接的问题。地图模
+块单一连接功能增加溢出的处理。绘制模块移除字体测试功能启用与关
+闭的宏。输入模块鼠标按键按下可切换提示内容。多处命名与数据类型
+修改。物品模块增加武器与护甲基础类。地图模块移除获取地图尺寸获
+取功能。地图模块移除获取扩展世界是否开启的功能。
+
 TEnGinE Version-0.2 Build-41 2023-09-26 14:54 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块字体显示功能已正式安装。绘制模块字体变换矩阵使用
@@ -353,6 +363,20 @@ TEnGinE Version-0.1 Build-99 2023-04-27 18:01 UPDATE_LOG
 删除已记录的坐标功能。绘制模块增加暂停所有操作仅保留绘制
 的模式。输入模块在场景暂停模式中不响应移动操作。绘制模块
 地图载入循环改用更稳定的判断方式。
+--------------------------------------------------------
+The drawing module adds the ability to close the 
+window. The engine management module adds the name 
+enumeration of engine base classes. The event module 
+adds event removal functionality. The random module 
+adds the ability to revert to the initial state. The 
+input module adds the function of obtaining the number 
+of input events. The coordinate module adds the 
+function of deleting recorded coordinates. The Draw 
+module adds a mode that pauses all operations and only 
+preserves drawing. The input module does not respond to 
+movement actions in scene pause mode. The drawing 
+module map loading loop uses a more stable judgment 
+method instead.
 
 TEnGinE Version-0.1 Build-98 2023-04-23 18:15 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -361,6 +385,18 @@ TEnGinE Version-0.1 Build-98 2023-04-23 18:15 UPDATE_LOG
 部分开放右区域导致的问题。随机模块增加随机数从零到九生成
 功能。绘制模块右扩展区域的碰撞功能已就绪。绘制模块修复有
 关右边扩展区域的坐标数据与计算错误问题。
+--------------------------------------------------------
+The enclosure adds a datalink function to increase the 
+switch chain operation. The random module adds a purely 
+digital version of the font library. The random module 
+adds the ability to refresh the pure numeric font. The 
+draw module fixes an issue caused by partially opening 
+the right area. The random module adds the function of 
+generating random numbers from zero to nine. 
+The collision function for drawing the right extended 
+area of the module is ready. The plotting module fixes 
+a problem with coordinate data and calculation errors 
+regarding the extended area on the right.
 
 TEnGinE Version-0.1 Build-97 2023-04-21 17:23 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -369,6 +405,17 @@ TEnGinE Version-0.1 Build-97 2023-04-21 17:23 UPDATE_LOG
 化部分。绘制模块加入扩展地图右方向地图绘制测试。地图模块
 修复本地文件获取功能未更新名称的问题。绘制模块开放右扩展
 区域的移动。
+--------------------------------------------------------
+Draw the collision distance corresponding to the 
+distance traveled by the calibration preload of the 
+module. The drawing module initialization section 
+optimizes the number of times the map matrix is set. 
+The drawing module removes the duplicate initialization 
+part of the drawing loop. The drawing module joins the 
+extended map right-facing mapping test. The map module 
+fixes an issue where the local file fetch function does 
+not update the name. Draw the movement of the module 
+open right extended area.
 
 TEnGinE Version-0.1 Build-96 2023-04-19 16:13 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -377,6 +424,17 @@ TEnGinE Version-0.1 Build-96 2023-04-19 16:13 UPDATE_LOG
 要的判断。绘制模块顶点绘制数的预载值翻倍。地图顶点着色器
 修复预载功能只载入了一半内容的问题。绘制模块增加预载初始
 移动距离的变量与设置功能。
+--------------------------------------------------------
+The fragment shader fully supports all numbered 
+textures. The map module moves the map structure to be 
+renamed for more situations. The drawing module reloads 
+the map function and optimizes the need for judgment 
+each time. The preload value for the number of vertex 
+draws of the drawing module is doubled. Map Vertex 
+Shader fixes an issue where the preload feature only 
+loads half of the content. The drawing module adds the 
+function of preloading variables and settings for the 
+initial moving distance.
 
 TEnGinE Version-0.1 Build-95 2023-04-17 11:56 UPDATE_LOG
 ////////////////////////////////////////////////////////

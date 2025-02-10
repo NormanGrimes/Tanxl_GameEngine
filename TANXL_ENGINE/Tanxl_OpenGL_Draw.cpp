@@ -6,6 +6,8 @@
 
 std::map<GLchar, Character> Characters;
 
+static GameTips* Tips{ &GameTips::GetTipsBase() };
+
 void delay(int misec)
 {
 	clock_t start = clock();
@@ -36,7 +38,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B38", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B42", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -77,14 +79,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Current_Move_Height = 0;
 	this->_Current_Move_Width = 0;
 
-	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
-	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Player_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
-	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_02_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
-	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_State_03_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
-	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Test_01_VertShader.glsl", "Tanxl_Game_01_FragShader.glsl");
-	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Tanxl_Fonts_01_VertShader.glsl", "Tanxl_Fonts_01_FragShader.glsl");
+	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Test_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
 
-#if _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_ScreenWidth), 0.0f, static_cast<GLfloat>(_ScreenHeight));
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(glGetUniformLocation(this->_Fonts_RenderingProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -100,7 +101,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-#endif
 
 	glUseProgram(this->_State_RenderingProgram);
 
@@ -500,7 +500,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_LEFT);
 
-				if (State->Get_LocationX() >= -static_cast<int>(State->Get_DataWidth()) - 1)
+				if (State->Get_Exac_LocationX() >= -static_cast<int>(State->Get_DataWidth()) - 1)
 					State_Check_Block(State, CHECK_EDGE_LEFT);
 			}
 		}
@@ -523,7 +523,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_RIGH);
 
-				if (State->Get_LocationX() <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
+				if (State->Get_Exac_LocationX() <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
 					State_Check_Block(State, CHECK_EDGE_RIGH);
 			}
 		}
@@ -546,7 +546,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
 
-				if (State->Get_LocationY() >= -static_cast<int>(State->Get_DataHeight()) - 1)
+				if (State->Get_Exac_LocationY() >= -static_cast<int>(State->Get_DataHeight()) - 1)
 					State_Check_Block(State, CHECK_EDGE_ABOV);
 			}
 		}
@@ -569,7 +569,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
 
-				if (State->Get_LocationY() <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
+				if (State->Get_Exac_LocationY() <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
 					State_Check_Block(State, CHECK_EDGE_BELO);
 			}
 		}
@@ -629,25 +629,25 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 	switch (Check_Direction)
 	{
 	case CHECK_EDGE_LEFT:
-		if (State->Get_LocationX() < 0)
+		if (State->Get_Exac_LocationX() < 0)
 			Reset = true;
 		break;
 	case CHECK_EDGE_RIGH:
-		if (State->Get_LocationX() > 10)
+		if (State->Get_Exac_LocationX() > 10)
 			Reset = true;
 		break;
 	case CHECK_EDGE_BELO:
-		if (State->Get_LocationY() > 10)
+		if (State->Get_Exac_LocationY() > 10)
 			Reset = true;
 		break;
 	case CHECK_EDGE_ABOV:
-		if (State->Get_LocationY() < 0)
+		if (State->Get_Exac_LocationY() < 0)
 			Reset = true;
 		break;
 	}
 
-	if ((State->Get_State(State->Get_LocationX(), State->Get_LocationY()) == nullptr) ||
-		(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Extra_Status() == 1))
+	if ((State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY()) == nullptr) ||
+		(State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY())->Get_Extra_Status() == 1))
 	{
 		switch (Check_Direction)
 		{
@@ -666,8 +666,8 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 		while (true)
 		{
 			State->Update_Move(0.0f, 0.0f, Check_Direction);
-			if ((State->Get_State(State->Get_LocationX(), State->Get_LocationY()) == nullptr) ||
-				(State->Get_State(State->Get_LocationX(), State->Get_LocationY())->Get_Extra_Status() == 1))
+			if ((State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY()) == nullptr) ||
+				(State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY())->Get_Extra_Status() == 1))
 			{
 				std::cout << "Adjusting" << std::endl;
 				switch (Check_Direction)
@@ -773,7 +773,7 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	State->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
-	StateUnit* CheckUnit{ State->Get_State(State->Get_LocationX(), State->Get_LocationY()) };
+	StateUnit* CheckUnit{ State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY()) };
 	if (!CheckUnit)
 		return;
 	int Unit_State_Id{ CheckUnit->Get_Extra_Status()};
@@ -889,6 +889,14 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Middle_Frame = 0;
 		glUseProgram(_Start_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		glBindVertexArray(_vao[0]);
+		glUseProgram(_Fonts_RenderingProgram);
+		RenderText(Tips->GetTips(), 30.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+		this->_Middle_Frame++;
+		glBindVertexArray(0);
+
+		glBindVertexArray(_vao[1]);
 	}
 	else if (_Draw_Status == 5)
 	{
@@ -962,16 +970,14 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_Midle_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6 * 25);
 
-#if _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 		glBindVertexArray(_vao[0]);
 		glUseProgram(_Fonts_RenderingProgram);
 		RenderText("GAME OVER", 240.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
-		RenderText("Tips : Golden square can restore your health", 50.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+		RenderText(Tips->GetTips(), 50.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
 		this->_Middle_Frame++;
 		glBindVertexArray(0);
 
 		glBindVertexArray(_vao[1]);
-#endif
 	}
 	else
 	{
@@ -994,15 +1000,13 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 	glBindVertexArray(0);
 
-#if _ENABLE_TANXL_OPENGLDRAW_FONTSHOW_TEST_
 	glBindVertexArray(_vao[0]);
 
 	glUseProgram(_Fonts_RenderingProgram);
 
-	RenderText("TANXL GAME VERSION 2.41", 10.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+	RenderText("TANXL GAME VERSION 2.42", 10.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
-#endif
 
 	//std::cout << "Error Code :" << glGetError() << std::endl;
 }
@@ -1150,7 +1154,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		HitEdge_Check(State);
 
-		if (!State->Get_Adjust_While_Move())
+		if (!State->Is_Adjust_While_Move())
 		{
 			if (IEB->Get_Key_Pressed())
 				State->Set_Adjust_Flag(false);
@@ -1166,7 +1170,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			Temp_MoveY = State->Set_ExacHeight(Current_Height, this->_LCB->Get_LocationY(Dist_Mid), this->_LCB->Get_LocationY(Stat_Loc), MoveScale);
 			Temp_MoveX = State->Set_ExacWidth(Current_Width, this->_LCB->Get_LocationX(Dist_Mid), this->_LCB->Get_LocationX(Stat_Loc), MoveScale);
 		}
-		if (!State->Get_Adjust_Flag() || State->Get_Adjust_While_Move())//Move Adjust Part
+		if (!State->Get_Adjust_Flag() || State->Is_Adjust_While_Move())//Move Adjust Part
 		{
 			State->Set_Adjust_Flag(true);
 

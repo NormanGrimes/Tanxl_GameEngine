@@ -78,6 +78,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	static double LastTime{ glfwGetTime() };
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	static int LastMouseStatus_1{ GLFW_RELEASE };
 	static int LastMouseStatus_2{ GLFW_RELEASE };
 	double MoveScale{ glfwGetTime() - LastTime };
@@ -97,6 +98,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		{
 			SB->Play_Sound(SOUND_MOUSE_CLICK);
 			std::cout << "Mouse 1 Press" << std::endl;
+			Tips->Update_Count();
 			_Is_Key_Pressed = true;
 		}
 	}
@@ -106,6 +108,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		{
 			SB->Play_Sound(SOUND_MOUSE_CLICK);
 			std::cout << "Mouse 2 Press" << std::endl;
+			Tips->Update_Count();
 			_Is_Key_Pressed = true;
 		}
 	}
@@ -203,57 +206,21 @@ void InsertEventBase::Init_Default_Key()
 {
 	//InsertKey Init //多次注册会导致多次移动
 
-	/*Key_Unit MOVE_UP;
-	MOVE_UP.GLFW_KEY = GLFW_KEY_UP;
-	MOVE_UP.MoveLen = 0.5;
-	MOVE_UP.MoveToY = true;
-	MOVE_UP.Unit_Type = 0;
-	this->RegistEvent(MOVE_UP);
-	MOVE_UP.GLFW_KEY = GLFW_KEY_W;
-	this->RegistEvent(MOVE_UP);*/
-	// OR ↓
 	Key_Unit* MOVE_UP{ new Key_Unit(GLFW_KEY_UP, false, true, 0.5) };
 	this->RegistEvent(MOVE_UP);
 	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.5);
 	this->RegistEvent(MOVE_UP);
 
-	/*Key_Unit MOVE_LEFT;
-	MOVE_LEFT.GLFW_KEY = GLFW_KEY_LEFT;
-	MOVE_LEFT.MoveLen = -0.5;
-	MOVE_LEFT.MoveToX = true;
-	MOVE_LEFT.Unit_Type = 0;
-	this->RegistEvent(MOVE_LEFT);
-	MOVE_LEFT.GLFW_KEY = GLFW_KEY_A;
-	this->RegistEvent(MOVE_LEFT);*/
-	// OR ↓
 	Key_Unit* MOVE_LEFT{ new Key_Unit(GLFW_KEY_LEFT, true, false, -0.5) };
 	this->RegistEvent(MOVE_LEFT);
 	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.5);
 	this->RegistEvent(MOVE_LEFT);
 
-	/*Key_Unit MOVE_RIGHT;
-	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_RIGHT;
-	MOVE_RIGHT.MoveLen = 0.5;
-	MOVE_RIGHT.MoveToX = true;
-	MOVE_RIGHT.Unit_Type = 0;
-	this->RegistEvent(MOVE_RIGHT);
-	MOVE_RIGHT.GLFW_KEY = GLFW_KEY_D;
-	this->RegistEvent(MOVE_RIGHT);*/
-	// OR ↓
 	Key_Unit* MOVE_RIGHT{ new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.5) };
 	this->RegistEvent(MOVE_RIGHT);
 	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.5);
 	this->RegistEvent(MOVE_RIGHT);
 
-	/*Key_Unit MOVE_DOWN;
-	MOVE_DOWN.GLFW_KEY = GLFW_KEY_DOWN;
-	MOVE_DOWN.MoveLen = -0.5;
-	MOVE_DOWN.MoveToY = true;
-	MOVE_RIGHT.Unit_Type = 0;
-	this->RegistEvent(MOVE_DOWN);
-	MOVE_DOWN.GLFW_KEY = GLFW_KEY_S;
-	this->RegistEvent(MOVE_DOWN);*/
-	// OR ↓
 	Key_Unit* MOVE_DOWN{ new Key_Unit(GLFW_KEY_DOWN, false, true, -0.5) };
 	this->RegistEvent(MOVE_DOWN);
 	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.5);

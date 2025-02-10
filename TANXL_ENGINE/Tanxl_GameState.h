@@ -1,74 +1,23 @@
-﻿//_VERSION_1_0_ UPDATE LOG
-// LAST_UPDATE 2023-06-12 17:42
-// 设置移动矩阵接口调整并支持斜向移动
-// 修复设置起始区域功能中为地图属性提供了错误值的问题
-// 修复重新载入地图功能未能成功删除无用数据的问题
-// 修复重新载入地图功能使用了错误数据编译与设置的问题
-// 修复重新载入地图功能的指针相关错误
-// 增加地图区块数据设置功能
-// 增加变量记录地图的区块数并添加设置函数
-// 增加宏控制更新移动部分的输出
-// 更新移动部分修复只采用宽度值计算的问题
-// 多个遍历函数支持超过两百五十六个区块
-// 修复获取所有单元是否可移动接口未清理上次数据的问题
-// 增加地图总区块个数获取接口
-// 设置起始区域的功能增加地图序号的检查
-// 获取扩展区域尺寸的接口改为获取扩展区域是否存在
-// 修复地图数据定位功能使用了的错误范围的问题
-// 从绘制模块移入获取上次移动触发的边沿的功能
-// 从绘制模块移入指定坐标获取地图单元功能
-// 从绘制模块移入触发地图移动事件的设置与执行功能
-// 移除地图事件编译接口功能合并到地图单元编译接口
-// 增加地图横向与纵向区块个数获取接口
-// 修复每次操作都需要重新读内存的问题
-// 增加大地图区块生成接口
-// 简化地图随玩家移动功能的代码
-// 地图单元结构增加事件状态设置
-// 设置显示的矩阵的接口增加一个简化重载版本
-// 设置起始地图区块的接口优化区块定位
-// 部分区块定位功能改用存储模块的新接口
-// 移动到地图边缘后的调整接口增加帧数控制速度
-// 自动调整的移动距离根据帧数进行修改
-// 定位地图数据接口优化重复代码
-// 修复定位地图接口缺失最后一项的问题
-// 新增多地图方块触发事件类
-// 增加变量记录当前扩展世界中心的编号
-// 增加地图数据动态扩展功能测试
-// 新增一对多构建数据连接的接口
-// 修复构建连接功能与未连接数据连接溢出的问题
-// 增加生成一个地图块的重载版本
-// 构建连接功能中的目标指针改为更深层的数据单元容器
-// 增加记录数据长度的私有变量
-// 修复字符串定位数据功能可能导致溢出的问题
-// 增加宏控制数据定位功能的输出
-// 构建连接功能优化减少最多三分之二的定位成本
-// 重新载入地图功能优化数据的移动方式
-// 增加构建单一连接接口
-// 修复构建连接接口中上次定位参数设置错误的问题
-// 简化构建连接接口代码
-// 重新载入地图功能增加空指针检查
-// 测试降低动态地图一次生成的个数
-// 增加新版扩展地图结构体
-// 移除编号和数据的私有成员结构体
-// 优化重新载入地图的赋值流程
-// 修复向上移动生成地图编号错误的问题
-// 移除获取地图方块是否可移动的表格的获取接口
-// 新版扩展地图结构体构造函数增加默认参数
-
+﻿//_VERSION_1_1_ UPDATE LOG
+// LAST_UPDATE 2023-10-08 14:46
+// 单一连接功能修复未能构建双向连接的问题
+// 单一连接功能增加溢出的处理
+// 移除获取地图尺寸获取功能
+// 移除获取扩展世界是否开启的功能
 
 #pragma once
 
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
 
-#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 1
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
 #define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
 #define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
-#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        0
+#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
 #define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
 
 #endif
@@ -246,15 +195,13 @@ public:
 	void Build_Connect(int State_Id);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
-	bool Get_Extend_State();
 	bool Get_Adjust_Flag();
-	bool Get_Adjust_While_Move();
+	bool Is_Adjust_While_Move();
 	bool Get_Engine_File();
-	int Get_LocationX();
-	int Get_LocationY();
+	int Get_Exac_LocationX();
+	int Get_Exac_LocationY();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
-	int Get_State_Size();
 	int Get_State_Width();
 	int Get_State_Height();
 	// 获取上次移动触发的边沿
@@ -342,7 +289,7 @@ private:
 	//_Data_Size地图数据大小
 	int _Data_Size{ 0 };
 	std::vector<State_Policy*> _Policy;
-	const std::string _Version{ "1.0" };
+	const std::string _Version{ "1.1" };
 };
 
 #endif

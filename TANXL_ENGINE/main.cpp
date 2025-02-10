@@ -11,6 +11,8 @@
 
 #include "Tanxl_Engine_Manager.h"
 
+#include "Tanxl_GameTips.h"
+
 int main()
 {
 	Tanxl_Engine TGE;
