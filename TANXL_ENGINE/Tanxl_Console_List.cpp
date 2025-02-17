@@ -46,6 +46,11 @@ void CONSOLE::Append_Item(std::string New_Item, unsigned Space, void (*FunC)(), 
 	}
 }
 
+void CONSOLE::Reset_Name(std::string Name)
+{
+	this->_Name = Name;
+}
+
 void CONSOLE::Display(int Depth, unsigned Def_Col, unsigned Real_Sel)
 {
 	Col();

@@ -12,6 +12,7 @@
 // 部分定位接口抛出的异常转换为字符串
 // 增加获取上一次定位到的数据链附近的接口
 // 移除重置单一数据链功能
+// 增加清除内存中所有数据的功能
 
 #pragma once
 
@@ -156,6 +157,8 @@ public:
 	void SortDataBase(ESort_Mode Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
 	//↓添加数据链 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元 Type指定输入到的Type编号
 	void Append_DataChain(std::string Data, unsigned Divide = 0, unsigned Type = 0x01, unsigned Exac = 0xFFFF);
+	//↓清理内存中所有的数据
+	void Clear_DataChain();
 	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息

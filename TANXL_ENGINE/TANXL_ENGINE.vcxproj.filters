@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tanxl_Console_List.h">
-      <Filter>头文件\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_DataBase.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
@@ -66,13 +63,16 @@
     <ClInclude Include="Tanxl_SoundBase.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_FontBase.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_Console_List.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Tanxl_Console_List.cpp">
-      <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_DataBase.cpp">
       <Filter>源文件\Engine</Filter>
@@ -109,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="Tanxl_GameTips.h">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanxl_Console_List.cpp">
+      <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

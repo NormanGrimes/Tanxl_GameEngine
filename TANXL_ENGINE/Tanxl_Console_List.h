@@ -8,6 +8,7 @@
 // 移除未使用的私有成员
 // 代码整理优化
 // 修改选项成员为无符号数
+// 增加重新设置选项名称的功能
 
 #pragma once
 
@@ -56,6 +57,8 @@ public:
 	void Display_Once();
 
 	void Append_Item(std::string New_Item, unsigned Space = 0x171109, void(*FunC)() = nullptr, int Depth = 0, int* Ids = nullptr);
+
+	void Reset_Name(std::string Name);
 
 private:
 	void Display(int Depth = 0, unsigned Def_Col = FONT_COLOR_WHITE | BACK_COLOR_RED, unsigned Real_Sel = FONT_COLOR_WHITE | BACK_COLOR_PURPLE);

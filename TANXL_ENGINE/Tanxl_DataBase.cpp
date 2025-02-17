@@ -642,6 +642,13 @@ void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigne
 	}
 }
 
+void TANXL_DataBase::Clear_DataChain()
+{
+	for (int i{ 0 }; i < this->_Id_Links->size(); ++i)
+		std::vector<Data_Unit*>().swap(this->_Id_Links->at(i)->_Data->_Data_Units);
+	std::vector<Id_Link*>().swap(*this->_Id_Links);
+}
+
 const std::string TANXL_DataBase::Get_Version()
 {
 	return this->_Version;

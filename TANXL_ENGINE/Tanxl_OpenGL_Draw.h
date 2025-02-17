@@ -37,6 +37,8 @@
 // 新增游戏状态枚举
 // 增加死亡画面的文字显示与提示
 // 移除字体测试启用关闭的宏
+// 修改实例化测试相关代码
+// 添加纹理功能增加内置偏置参数
 
 #pragma once
 
@@ -57,10 +59,6 @@
 
 #endif
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-#include <map>
 #include <math.h>
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_DataBase.h"
@@ -69,13 +67,7 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameObject.h"
 #include "Tanxl_SoundBase.h"
-
-struct Character {
-	GLuint     TextureID;  // 字形纹理ID
-	glm::ivec2 Size;       // 字形大大小
-	glm::ivec2 Bearing;    // 字形基于基线和起点的位置
-	GLuint     Advance;    // 起点到下一个字形起点的距离
-};
+#include "Tanxl_FontBase.h"
 
 namespace TanxlOD
 {
@@ -92,7 +84,7 @@ namespace TanxlOD
 	static const char* TexPrincess_02_256x256			{ "Texture/YANG_PRINCESS_02_256X256.png"		};
 	static const char* TexPrincess_03_256x256			{ "Texture/YANG_PRINCESS_03_256X256.png"		};
 	static const char* TexPrincess_04_256x256			{ "Texture/YANG_PRINCESS_04_256X256.png"		};
-	static const char* TexStartMenu_01_1024x1024        { "Texture/ENG/STARTMENU_01_1024x1024.png"      };
+	static const char* TexStartMenu_01_1024x1024        { "Texture/TANXL_MENU_01_1024X1024.png"			};
 
 	static StateEvent* EventSlot[16];
 
@@ -550,7 +542,6 @@ public:
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
-	void Init_Fonts();
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
@@ -579,9 +570,10 @@ private:
 
 	GLuint _Fonts_RenderingProgram{ 0 };
 
-	GLuint _vao[2];
+	GLuint _vao[3];
 	GLuint _vbo[32];
-	GLuint _Font_vbo[32];
+	GLuint _Font_vbo[5];
+	GLuint _Inst_vbo[32];
 
 	//记录地图场景基本矩形的高度值
 	double _Each_Height{ 0 };

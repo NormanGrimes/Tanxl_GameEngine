@@ -22,6 +22,7 @@
 // 移除备用方块颜色功能
 // 移除实例化测试相关功能
 // 修改游戏纹理起始位置
+// 额外预留四个纹理用于其他用途
 
 #version 430
 
@@ -69,11 +70,11 @@ void main(void)
 							    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 
 			if		(int(Infor[VertexId].y) == 2)
-				Cube = 6;
+				Cube = 10;
 			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 7;
+				Cube = 11;
 			else
-				Cube = int(Infor[VertexId].x) + 1;
+				Cube = int(Infor[VertexId].x) + 5;
 		}
 		else if (gl_VertexID == VertexId * 6 + 1) 
 		{ 
@@ -81,11 +82,11 @@ void main(void)
 			                    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f); 
 
 			if		(int(Infor[VertexId].y) == 2)
-				Cube = 6;
+				Cube = 10;
 			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 7;
+				Cube = 11;
 			else
-				Cube = int(Infor[VertexId].x) + 1;
+				Cube = int(Infor[VertexId].x) + 5;
 		}
 		else if (gl_VertexID == VertexId * 6 + 2) 
 		{ 
@@ -93,11 +94,11 @@ void main(void)
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 			
 			if		(int(Infor[VertexId].y) == 2)
-				Cube = 6;
+				Cube = 10;
 			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 7;
+				Cube = 11;
 			else
-				Cube = int(Infor[VertexId].x) + 1;
+				Cube = int(Infor[VertexId].x) + 5;
 		}
 		else if (gl_VertexID == VertexId * 6 + 3) 
 		{ 
@@ -105,11 +106,11 @@ void main(void)
 			                    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f); 
 			
 			if		(int(Infor[VertexId].y) == 2)
-				Cube = 6;
+				Cube = 10;
 			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 7;
+				Cube = 11;
 			else
-				Cube = int(Infor[VertexId].x) + 1;
+				Cube = int(Infor[VertexId].x) + 5;
 		}
 		else if (gl_VertexID == VertexId * 6 + 4) 
 		{
@@ -117,11 +118,11 @@ void main(void)
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 			
 			if		(int(Infor[VertexId].y) == 2)
-				Cube = 6;
+				Cube = 10;
 			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 7;
+				Cube = 11;
 			else
-				Cube = int(Infor[VertexId].x) + 1;
+				Cube = int(Infor[VertexId].x) + 5;
 		}
 		else if (gl_VertexID == VertexId * 6 + 5) 
 		{
@@ -129,11 +130,11 @@ void main(void)
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 			
 			if		(int(Infor[VertexId].y) == 2)
-				Cube = 6;
+				Cube = 10;
 			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 7;
+				Cube = 11;
 			else
-				Cube = int(Infor[VertexId].x) + 1;
+				Cube = int(Infor[VertexId].x) + 5;
 		}
 
 		WidthMove += (Width * 2);

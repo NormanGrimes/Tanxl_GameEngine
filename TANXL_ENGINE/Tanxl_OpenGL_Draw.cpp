@@ -4,9 +4,8 @@
 
 #include <Windows.h>
 
-std::map<GLchar, Character> Characters;
-
 static GameTips* Tips{ &GameTips::GetTipsBase() };
+static FontBase* Font{ &FontBase::GetFontBase() };
 
 void delay(int misec)
 {
@@ -23,7 +22,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(), _Font_vbo(),
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(), _Font_vbo(), _Inst_vbo(),
 _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
 _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _Translation(), _LCB(&LocationBase::GetLocationBase()),
 _StateInfor(), _Main_Character(new GameObject(10, 10)) {}
@@ -38,7 +37,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B42", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B43", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -90,7 +89,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(glGetUniformLocation(this->_Fonts_RenderingProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-	Init_Fonts();
+	//Init_Fonts();
+	Font->Init_Fonts("Fonts/JosefinSans-SemiBoldItalic.ttf");
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);
@@ -356,66 +356,6 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 	}
 }
 
-void OpenGL_Draw::Init_Fonts()
-{
-	FT_Library ft;
-	if (FT_Init_FreeType(&ft))
-		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-
-	FT_Face face;
-	if (FT_New_Face(ft, "Fonts/JosefinSans-SemiBoldItalic.ttf", 0, &face))
-		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-
-	// Set size to load glyphs as
-	FT_Set_Pixel_Sizes(face, 0, 48);
-
-	// Disable byte-alignment restriction
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	// Load first 128 characters of ASCII set
-	for (GLubyte c = 0; c < 128; c++)
-	{
-		// Load character glyph 
-		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-		{
-			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-			continue;
-		}
-		// Generate texture
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RED,
-			face->glyph->bitmap.width,
-			face->glyph->bitmap.rows,
-			0,
-			GL_RED,
-			GL_UNSIGNED_BYTE,
-			face->glyph->bitmap.buffer
-		);
-		// Set texture options
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// Now store character for later use
-		Character character = {
-			texture,
-			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-			face->glyph->advance.x
-		};
-		Characters.insert(std::pair<GLchar, Character>(c, character));
-	}
-	glBindTexture(GL_TEXTURE_2D, 0);
-	// Destroy FreeType once we're finished
-	FT_Done_Face(face);
-	FT_Done_FreeType(ft);
-}
-
 GLFWwindow* OpenGL_Draw::Get_Window()const
 {
 	return this->_Main_Window;
@@ -456,6 +396,7 @@ void OpenGL_Draw::Set_Max_Middle_Frame(int Max_Middle_Frame)
 
 int OpenGL_Draw::Append_Texture(const char* Texture)
 {
+	const int OffSet = 4;
 	static unsigned Id{ 0 };
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
@@ -466,12 +407,12 @@ int OpenGL_Draw::Append_Texture(const char* Texture)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
 #endif
 
-	glActiveTexture(GL_TEXTURE1 + Id);
+	glActiveTexture(GL_TEXTURE1 + Id + OffSet);
 
 	glBindTexture(GL_TEXTURE_2D, OpenGL_Render::loadTexture(Texture));
 	Id++;
 
-	return Id;
+	return Id + OffSet;
 }
 
 void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
@@ -822,7 +763,7 @@ void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat sca
 	std::string::const_iterator c;
 	for (c = text.begin(); c != text.end(); c++)
 	{
-		Character ch = Characters[*c];
+		Character ch = (Font->Get_Characters(0))[*c];// Characters[*c];
 
 		GLfloat xpos = x + ch.Bearing.x * scale;
 		GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
@@ -887,8 +828,17 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
 		this->_Middle_Frame = 0;
+
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+		glBindVertexArray(_vao[2]);
+		glUseProgram(_ITest_RenderingProgram);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
+		glBindVertexArray(0);
+		glBindVertexArray(_vao[1]);
+#else
 		glUseProgram(_Start_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+#endif
 
 		glBindVertexArray(_vao[0]);
 		glUseProgram(_Fonts_RenderingProgram);
@@ -921,8 +871,16 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 		else
 		{
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+			glBindVertexArray(_vao[2]);
+			glUseProgram(_ITest_RenderingProgram);
+			glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
+			glBindVertexArray(0);
+			glBindVertexArray(_vao[1]);
+#else
 			glUseProgram(_Start_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
+#endif
 		}
 
 		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
@@ -946,8 +904,16 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2)
 		{
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+			glBindVertexArray(_vao[2]);
+			glUseProgram(_ITest_RenderingProgram);
+			glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
+			glBindVertexArray(0);
+			glBindVertexArray(_vao[1]);
+#else
 			glUseProgram(_Start_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
+#endif
 		}
 		else
 		{
@@ -992,9 +958,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_State_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
-		//glUseProgram(_State_RenderingProgram);
-		//glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400);
-
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
 	}
@@ -1004,7 +967,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	glUseProgram(_Fonts_RenderingProgram);
 
-	RenderText("TANXL GAME VERSION 2.42", 10.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+	RenderText("TANXL GAME VERSION 2.43", 10.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
 
@@ -1062,7 +1025,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-	glm::vec2 translations[400];
+	glm::vec2 translations[400]{};
 	int index = 0;
 	float offset = this->_Each_Height;
 
@@ -1080,9 +1043,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		BeginWidth = -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt);
 	}
 
-	unsigned int instanceVBO;
-	glGenBuffers(1, &instanceVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+	glGenBuffers(1, &_Inst_vbo[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 400, &translations[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -1099,11 +1061,10 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		 HalfW, -HalfH,  0.0f, 1.0f, 0.0f,
 		 HalfW,  HalfH,  1.0f, 1.0f, 1.0f
 	};
-	unsigned int quadVAO, quadVBO;
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-	glBindVertexArray(quadVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glGenVertexArrays(1, &_vao[2]);
+	glGenBuffers(1, &_Inst_vbo[1]);
+	glBindVertexArray(_vao[2]);
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
@@ -1112,10 +1073,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
 	// also set instance data
 	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]); // this attribute comes from a different vertex buffer
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
+	glBindVertexArray(0);
+
+	glBindVertexArray(_vao[1]);
 #endif
 
 	if (!glfwWindowShouldClose(_Main_Window))
@@ -1264,14 +1228,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		glfwPollEvents();
 
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-		glUseProgram(_ITest_RenderingProgram);
-		glBindVertexArray(quadVAO);
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
-		glBindVertexArray(0);
-#else
 		display(_Main_Window, glfwGetTime(), State);
-#endif
+
 		glfwSwapBuffers(_Main_Window);
 
 		glBindVertexArray(0);
