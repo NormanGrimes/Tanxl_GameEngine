@@ -23,7 +23,7 @@ int main()
 	//生成引擎数据文件 "Tanxl Engine SystemInfor.sd"
 	TGE.Engine_Save_Source_Infor("Tanxl Engine SystemInfor");
 	//设置屏幕显示宽度和高度为4个地图单元长度 并设置显示区域外每个方向额外加载4个地图单元长度
-	TGE.Engine_State_Set_Display(6, 6, 3);
+	TGE.Engine_State_Set_Display(6, 5, 3);
 	//调用引擎接口注册一个事件按钮
 	Key_Unit* KU = TGE.Engine_Insert_Regist_Move(GLFW_KEY_E);
 	//禁止玩家控制的单元移动到屏幕显示区域以外

@@ -39,6 +39,11 @@
 // 移除字体测试启用关闭的宏
 // 修改实例化测试相关代码
 // 添加纹理功能增加内置偏置参数
+// 修复进入游戏音频播放失败的问题
+// 修改初始窗口尺寸
+// 修改地图纵向显示方块个数
+// 重制初始界面纹理
+// 统一不同帧率下的过渡页面执行时间
 
 #pragma once
 
@@ -513,7 +518,7 @@ enum EGame_Status
 class OpenGL_Draw
 {
 public:
-	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 800, int ScreenHeight = 800, bool Window_Adjust = true);
+	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 960, int ScreenHeight = 800, bool Window_Adjust = true);
 
 	const std::string Get_Version();
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
@@ -615,7 +620,7 @@ private:
 	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
 	int _Draw_Status{ 0 };
 	//当前的中间页面编号
-	int _Middle_Frame{ 0 };
+	double _Middle_Frame{ 0 };
 	//最大的中间页面编号
 	int _Max_Middle_Frame{ 0 };
 	//当前此模块的版本号

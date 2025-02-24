@@ -4,6 +4,8 @@
 // 2023/08/31 修复无限世界生成接口需要宽度大于偏置的错误
 // 2023/08/31 移除地图生成过程中的地图数据文件生成
 // 2023/08/31 简化地图数据设置接口的参数
+// 2023/10/12 引擎信息生成接口不再检查上次文件名称
+// 2023/10/12 增加匿名结构体存储上次无限世界设置参数
 
 #pragma once
 
@@ -132,6 +134,15 @@ private:
 	unsigned _Engine_Status;
 
 	std::string _Engine_InforFile_Name = "";
+
+	struct
+	{
+		bool _Is_State_Set = false;
+		int _Last_Range_Width;
+		int _Last_Range_Height;
+		int _Last_Begin_Width;
+		int _Last_Begin_Height;
+	}_Engine_Infinite_State_Set;
 
 	const std::string __ENGINE_VERSION__ = "0.3";
 };

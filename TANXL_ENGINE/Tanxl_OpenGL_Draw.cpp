@@ -60,7 +60,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (_Window_Adjust_Enable)
 		glfwSetFramebufferSizeCallback(_Main_Window, TanxlOD::framebuffer_size_callback);
 	else
-		glfwSetWindowSizeLimits(_Main_Window, 800, 800, 800, 800);
+		glfwSetWindowSizeLimits(_Main_Window, 960, 800, 960, 800);
 
 	glfwSwapInterval(1);
 
@@ -89,7 +89,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(glGetUniformLocation(this->_Fonts_RenderingProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-	//Init_Fonts();
 	Font->Init_Fonts("Fonts/JosefinSans-SemiBoldItalic.ttf");
 
 	glGenVertexArrays(1, &_vao[0]);
@@ -813,7 +812,10 @@ bool OpenGL_Draw::Check_Key_Press()
 
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
+	static double LastTime{ glfwGetTime() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	double DeltaTime{ glfwGetTime() - LastTime };
+	LastTime = glfwGetTime();
 	
 	glBindVertexArray(_vao[1]);
 
@@ -842,8 +844,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		glBindVertexArray(_vao[0]);
 		glUseProgram(_Fonts_RenderingProgram);
-		RenderText(Tips->GetTips(), 30.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
-		this->_Middle_Frame++;
+		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+		this->_Middle_Frame += DeltaTime * 100;
 		glBindVertexArray(0);
 
 		glBindVertexArray(_vao[1]);
@@ -854,14 +856,14 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			SB->Play_Sound(SOUND_GAME_START);
 		}
-		this->_Middle_Frame++;
+		this->_Middle_Frame += DeltaTime * 100;
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
 		{
 			this->_Draw_Status = 1;
 		}
 
-		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2)
+		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
@@ -884,7 +886,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 
 		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
-		glProgramUniform1i(this->_Midle_RenderingProgram, 2, this->_Middle_Frame);
+		glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
 		glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
@@ -893,7 +895,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 
 		glUseProgram(_Midle_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6 * 25);
+		glDrawArrays(GL_TRIANGLES, 0, 6 * 30);
 	}
 	else if (_Draw_Status == 4)
 	{
@@ -902,7 +904,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			this->_Draw_Status = 2;
 		}
 
-		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2)
+		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 			glBindVertexArray(_vao[2]);
@@ -925,22 +927,17 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 
 		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
-		glProgramUniform1i(this->_Midle_RenderingProgram, 2, this->_Middle_Frame);
+		glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
 		glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
 
-		if (this->_Middle_Frame > this->_Max_Middle_Frame)
-		{
-			this->_Middle_Frame = 0;
-		}
-
 		glUseProgram(_Midle_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6 * 25);
+		glDrawArrays(GL_TRIANGLES, 0, 6 * 30);
 
 		glBindVertexArray(_vao[0]);
 		glUseProgram(_Fonts_RenderingProgram);
-		RenderText("GAME OVER", 240.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
-		RenderText(Tips->GetTips(), 50.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
-		this->_Middle_Frame++;
+		RenderText("GAME OVER", 270.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
+		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+		this->_Middle_Frame += DeltaTime * 100;
 		glBindVertexArray(0);
 
 		glBindVertexArray(_vao[1]);
@@ -967,7 +964,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	glUseProgram(_Fonts_RenderingProgram);
 
-	RenderText("TANXL GAME VERSION 2.43", 10.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+	RenderText("TANXL GAME VERSION 2.43", 20.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
 
@@ -999,12 +996,16 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		{
 			IEB->Init_Default_Key();
 			_Draw_Status = 5;
+			this->_Middle_Frame = 0;
 		}
 	}
 	else if (_Draw_Status == 2)
 	{
 		if (Check_Key_Press())
+		{
 			_Draw_Status = 5;
+			this->_Middle_Frame = 0;
+		}
 	}
 
 	if (this->_Main_Character->Check_Health() == 2)

@@ -82,7 +82,7 @@ public:
 				texture,
 				glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
 				glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-				face->glyph->advance.x
+				static_cast<GLuint>(face->glyph->advance.x)
 			};
 			_Characters[_Internal_Font_Counts].insert(std::pair<GLchar, Character>(c, character));
 		}
