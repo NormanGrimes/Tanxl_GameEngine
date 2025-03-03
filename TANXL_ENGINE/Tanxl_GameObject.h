@@ -18,6 +18,8 @@
 // 新增记录人物攻击力防御力移动速度的属性组件
 // 游戏物品构造函数增加是否可受到伤害的参数
 // 增加武器与护甲基础类
+// 人物信息类增加各项数值的获取接口
+// 从绘制模块中移出玩家对象
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -66,6 +68,10 @@ class Character_Data
 {
 public:
 	Character_Data();
+
+	int Get_Attack_Damage();
+	int Get_Defense_Armor();
+	double Get_Move_Speed();
 
 private:
 	int _Attack_Damage;
@@ -123,6 +129,8 @@ private:
 	Money_Componment _Money_Componment;
 	std::vector<Componment*> _Object_Content;
 };
+
+static GameObject* _Main_Character = new GameObject(10, 10);
 
 //GameObjectBase
 

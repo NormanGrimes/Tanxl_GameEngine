@@ -4,6 +4,7 @@
 // 增加纹理获取功能
 // 增加不需要文件的准备着色器重载版本
 // 增加不需要文件的创建着色器重载版本
+// 改为继承自引擎基础类
 
 #pragma once
 
@@ -22,9 +23,12 @@
 #include <cmath>
 #include <vector>
 
-class OpenGL_Render
+#include "Tanxl_EngineBase.h"
+
+class OpenGL_Render : public Tanxl_ClassBase
 {
 public:
+	OpenGL_Render();
 	static std::string readShaderFile(const char* filePath);
 	static void printShaderLog(GLuint shader);
 	static void printProgramLog(int prog);
@@ -36,8 +40,6 @@ public:
 	static GLuint createShaderProgram(std::string vp, std::string fp);
 	static GLuint loadTexture(const char *texImagePath);
 	const std::string Get_Version();
-private:
-	const std::string _Version{ "0.3" };
 };
 
 #endif

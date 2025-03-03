@@ -55,7 +55,22 @@ bool Money_Componment::Pay_Money(int Price)
 	return false;
 }
 
-Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0) {};
+Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0) {}
+
+int Character_Data::Get_Attack_Damage()
+{
+	return this->_Attack_Damage;
+}
+
+int Character_Data::Get_Defense_Armor()
+{
+	return this->_Defense_Armor;
+}
+
+double Character_Data::Get_Move_Speed()
+{
+	return this->_Move_Speed;
+}
 
 Componment::Componment(std::string Name) :_Name(Name), _Is_Special_Enable(false) {}
 

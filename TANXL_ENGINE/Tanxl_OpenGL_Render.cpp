@@ -2,6 +2,8 @@
 
 #include "Tanxl_OpenGL_Render.h"
 
+OpenGL_Render::OpenGL_Render():Tanxl_ClassBase("0.3") {}
+
 std::string OpenGL_Render::readShaderFile(const char* filePath)
 {
 	std::string content{};
@@ -155,5 +157,5 @@ GLuint OpenGL_Render::loadTexture(const char *texImagePath)
 
 const std::string OpenGL_Render::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }

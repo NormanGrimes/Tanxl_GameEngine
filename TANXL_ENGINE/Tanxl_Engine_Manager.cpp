@@ -10,7 +10,8 @@ Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
 Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase()),
 Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase()),
 Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase()),
-Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase())
+Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase()),
+Tanxl_Engine_SoundBase(&SoundBase::GetSoundBase())
 {
 	if (!this->Tanxl_Engine_Console_List)
 		this->_Engine_Status = 0x1;
@@ -30,6 +31,8 @@ Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase())
 		this->_Engine_Status = 0x8;
 	else if (!this->Tanxl_Engine_ObjectBase)
 		this->_Engine_Status = 0x9;
+	else if (!this->Tanxl_Engine_SoundBase)
+		this->_Engine_Status = 0xA;
 
 	if(this->_Engine_Status)
 		std::cout << "Fail to fully start Engine !" << std::endl;
@@ -111,7 +114,8 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Data->Append_Data(6, "VERSION " + this->Tanxl_Engine_RandomBase->Get_Version());
 	Data->Append_Data(7, "VERSION " + this->Tanxl_Engine_LocationBase->Get_Version());
 	Data->Append_Data(8, "VERSION " + this->Tanxl_Engine_ObjectBase->Get_Version());
-	Data->Append_Data(9, "VERSION " + this->__ENGINE_VERSION__);
+	Data->Append_Data(9, "VERSION " + this->Tanxl_Engine_SoundBase->Get_Version());
+	Data->Append_Data(10, "VERSION " + this->__ENGINE_VERSION__);
 	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
 	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
 
@@ -181,6 +185,20 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
 			}
 	}
+}
+
+bool Tanxl_Engine::Engine_Save_Reset_Data()
+{
+	if (this->_Engine_Infinite_State_Set._Is_State_Set == false)
+		return false;
+	this->Tanxl_Engine_DataBase->Clear_DataChain();
+	this->Engine_Save_Infinite_State(true,
+		this->_Engine_Infinite_State_Set._Last_Range_Width,
+		this->_Engine_Infinite_State_Set._Last_Range_Height,
+		this->_Engine_Infinite_State_Set._Last_Begin_Width,
+		this->_Engine_Infinite_State_Set._Last_Begin_Height
+	);
+	this->Engine_Save_Source_Infor(this->_Engine_InforFile_Name);
 }
 
 void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)

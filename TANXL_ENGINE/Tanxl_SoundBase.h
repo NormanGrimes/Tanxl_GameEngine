@@ -5,6 +5,7 @@
 // 新增触发地图事件的音频
 // 新增恢复生命值和鼠标点击的音频
 // 新增系统调用音频
+// 增加版本信息功能
 
 #pragma once
 
@@ -33,6 +34,8 @@ public:
 
     void Play_Sound(ESound_WAV Sound_Name);
 
+    const std::string Get_Version();
+
 private:
     irrklang::ISoundEngine* _SoundEngine;
 
@@ -45,6 +48,8 @@ private:
         "music/Game_Mouse_Click.wav",
         "music/Game_System_Call.wav"
     };
+
+    const std::string _Version{ "0.1" };
 
     SoundBase();
     ~SoundBase();

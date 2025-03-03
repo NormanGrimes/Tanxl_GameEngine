@@ -82,6 +82,8 @@ static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFF
 		case 8:
 			return "TANXL_GAME_OBJECTBASE";
 		case 9:
+			return "TANXL_SOUNDBASE";
+		case 10:
 			return "TANXL_ENGINE_MANAGER";
 		default:
 			break;

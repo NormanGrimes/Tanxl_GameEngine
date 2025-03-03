@@ -18,6 +18,11 @@ void SoundBase::Play_Sound(ESound_WAV Sound_Name)
 	this->_SoundEngine->play2D(this->Sound_Names[Sound_Name].c_str());
 }
 
+const std::string SoundBase::Get_Version()
+{
+	return this->_Version;
+}
+
 SoundBase::SoundBase() :_SoundEngine(irrklang::createIrrKlangDevice()) {}
 SoundBase::~SoundBase() { this->_SoundEngine->drop(); }
 SoundBase::SoundBase(const SoundBase&) :_SoundEngine(irrklang::createIrrKlangDevice()) {};

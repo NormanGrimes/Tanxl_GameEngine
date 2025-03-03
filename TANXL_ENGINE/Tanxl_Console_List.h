@@ -9,6 +9,7 @@
 // 代码整理优化
 // 修改选项成员为无符号数
 // 增加重新设置选项名称的功能
+// 改为继承自引擎基础类
 
 #pragma once
 
@@ -19,6 +20,8 @@
 #include <vector>
 #include <conio.h>
 #include <iomanip>
+
+#include "Tanxl_EngineBase.h"
 
 enum EFont_Color
 {
@@ -47,7 +50,7 @@ enum EBack_Color
 //void Col是原Console_List的核心功能，使用了Linux控制台的指令
 void Col(unsigned ColN = NULL, bool Under_Line = false);//设置自定义行的背景颜色
 //物品类
-class CONSOLE
+class CONSOLE : public Tanxl_ClassBase
 {
 public:
 	explicit CONSOLE(std::string Name = "UNdefined", unsigned Space = 0x171109, void(*FunC)() = nullptr);
@@ -67,14 +70,15 @@ private:
 
 	CONSOLE* Locate(int Target = 0);
 
+	// _Name 选项当前显示的字符串
 	std::string _Name;
-
 	// _Selector 用于记录当前列表指向的选项序号
 	unsigned _Selector;
 	// _Page 用于记录当前指定的页面序号
 	int _Page;
 	// _Is_Selected 用于记录当前是否已选定此选项
 	bool _Is_Selected;
+	// _Is_Funcwork 记录该选项是否绑定了可执行的函数
 	bool _Is_Funcwork;
 
 	std::vector<CONSOLE> _SonList;
@@ -82,8 +86,6 @@ private:
 	void (*_Func)();
 
 	unsigned _SSpace;// { 0x171109 }选项和标题的空格数 AA-BB-CC AA左空格 BB右空格 CC页面物品限制数量
-	
-	const std::string _Version{ "1.8" };
 };
 
 #endif

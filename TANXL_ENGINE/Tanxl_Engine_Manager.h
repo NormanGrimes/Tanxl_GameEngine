@@ -6,6 +6,8 @@
 // 2023/08/31 简化地图数据设置接口的参数
 // 2023/10/12 引擎信息生成接口不再检查上次文件名称
 // 2023/10/12 增加匿名结构体存储上次无限世界设置参数
+// 2023/10/16 增加对音频模块的支持
+// 2023/10/17 增加用于重新生成地图数据与引擎信息的接口
 
 #pragma once
 
@@ -28,19 +30,21 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_LocationBase.h"
 #include "Tanxl_SteamService.h"
+#include "Tanxl_SoundBase.h"
 
 enum class EENGINE_BASES
 {
-	ENGINE_ALL_SELECTED  = 0,
-	ENGINE_CONSOLE_LIST  = 1,
-	ENGINE_DATABASE      = 2,
-	ENGINE_GAMEEVENT     = 3,
-	ENGINE_GAMESTATE     = 4,
-	ENGINE_OPENGL_DRAW   = 5,
-	ENGINE_INSERTBASE    = 6,
-	ENGINE_RANDOMBASE    = 7,
-	ENGINE_LOCATIONBASE  = 8,
-	ENGINE_OBJECTBASE    = 9
+	ENGINE_ALL_SELECTED  =  0,
+	ENGINE_CONSOLE_LIST  =  1,
+	ENGINE_DATABASE      =  2,
+	ENGINE_GAMEEVENT     =  3,
+	ENGINE_GAMESTATE     =  4,
+	ENGINE_OPENGL_DRAW   =  5,
+	ENGINE_INSERTBASE    =  6,
+	ENGINE_RANDOMBASE    =  7,
+	ENGINE_LOCATIONBASE  =  8,
+	ENGINE_OBJECTBASE    =  9,
+	ENGINE_SOUNDBASE     = 10
 };
 
 class Tanxl_Engine
@@ -88,6 +92,9 @@ public:
 	//选定是否开启游戏世界无限扩展的功能 执行后会自动生成TANXL_STATE_DATA文件并存放256: 16X16个地图单元数据 Build_Connect为true时会额外构建各区块的连接ID Begin_PosX/Y为地图起始左上角坐标
 	void Engine_Save_Infinite_State(bool Build_Connect = true, int Width = 16, int Height = 16, int Begin_PosX = 0, int Begin_PosY = 0);
 
+	//用于重新生成地图数据与引擎信息 仅在内存中已有数据时会生效 返回false时清理并生成失败
+	bool Engine_Save_Reset_Data();
+
 	//Other
 
 	//Enable_Adjust设置是否启用自动调整 Adjust_Value为单次调整的距离 Enable_While_Move为是否启用移动中调整 后两项需要第一项启动才会生效
@@ -116,6 +123,7 @@ private:
 	LocationBase* Tanxl_Engine_LocationBase;
 	GameObjectBase* Tanxl_Engine_ObjectBase;
 	Tanxl_Inventory* Tanxl_Engine_Inventory;
+	SoundBase* Tanxl_Engine_SoundBase;
 
 	//Status :
 	// 0x001 引擎组件控制台列表初始化失败
@@ -127,8 +135,7 @@ private:
 	// 0x007 引擎组件随机模块初始化失败
 	// 0x008 引擎组件坐标模块初始化失败
 	// 0x009 引擎组件物品模块初始化失败
-	// 0x00A STEAM启动检测失败
-	// 0x00B STEAM API初始化失败
+	// 0x00A 引擎组件音频模块初始化失败
 	// 0x000 未启用扩展世界功能
 	// 0x100 已启用扩展世界功能
 	unsigned _Engine_Status;
@@ -137,14 +144,14 @@ private:
 
 	struct
 	{
-		bool _Is_State_Set = false;
-		int _Last_Range_Width;
-		int _Last_Range_Height;
-		int _Last_Begin_Width;
-		int _Last_Begin_Height;
+		bool _Is_State_Set{ false };
+		int _Last_Range_Width{};
+		int _Last_Range_Height{};
+		int _Last_Begin_Width{};
+		int _Last_Begin_Height{};
 	}_Engine_Infinite_State_Set;
 
-	const std::string __ENGINE_VERSION__ = "0.3";
+	const std::string __ENGINE_VERSION__{ "0.3" };
 };
 
 #endif

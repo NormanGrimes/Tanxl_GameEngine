@@ -25,7 +25,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(), _Font_vbo(), _Inst_vbo(),
 _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
 _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _Translation(), _LCB(&LocationBase::GetLocationBase()),
-_StateInfor(), _Main_Character(new GameObject(10, 10)) {}
+_StateInfor() {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -948,7 +948,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			_Draw_Status = 4;
 			SB->Play_Sound(SOUND_GAME_OVER);
-			this->_Main_Character->Set_Health(10);
+			_Main_Character->Set_Health(10);
 		}
 
 		this->_Middle_Frame = 0;
@@ -1008,7 +1008,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 	}
 
-	if (this->_Main_Character->Check_Health() == 2)
+	if (_Main_Character->Check_Health() == 2)
 	{
 		_Draw_Status = 3;
 	}
