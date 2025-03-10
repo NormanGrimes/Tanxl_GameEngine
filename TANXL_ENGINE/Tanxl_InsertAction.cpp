@@ -78,43 +78,12 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	static double LastTime{ glfwGetTime() };
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
-	static GameTips* Tips{ &GameTips::GetTipsBase() };
-	static int LastMouseStatus_1{ GLFW_RELEASE };
-	static int LastMouseStatus_2{ GLFW_RELEASE };
 	double MoveScale{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
 
-	glfwSetCursorPosCallback(window, curse_poscallback);
 	OPD->Update_Last_Location(State);
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
-
-	int Temp_Mouse_Status_1{ glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) };
-	int Temp_Mouse_Status_2{ glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) };
-
-	if (Temp_Mouse_Status_1 == GLFW_RELEASE)
-	{
-		if (LastMouseStatus_1 == GLFW_PRESS)
-		{
-			SB->Play_Sound(SOUND_MOUSE_CLICK);
-			std::cout << "Mouse 1 Press" << std::endl;
-			Tips->Update_Count();
-			_Is_Key_Pressed = true;
-		}
-	}
-	if (Temp_Mouse_Status_2 == GLFW_RELEASE)
-	{
-		if (LastMouseStatus_2 == GLFW_PRESS)
-		{
-			SB->Play_Sound(SOUND_MOUSE_CLICK);
-			std::cout << "Mouse 2 Press" << std::endl;
-			Tips->Update_Count();
-			_Is_Key_Pressed = true;
-		}
-	}
-
-	LastMouseStatus_1 = Temp_Mouse_Status_1;
-	LastMouseStatus_2 = Temp_Mouse_Status_2;
 
 	double Insert_Move_LengthX{ 0.0f };
 	double Insert_Move_LengthY{ 0.0f };
@@ -158,6 +127,43 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
 	std::cout << "Move Distance X :" << State->Get_Move_Distance()._LocX << " -  Y :" << State->Get_Move_Distance()._LocY << std::endl;
 #endif
+}
+
+void InsertEventBase::GetMouseInput(GLFWwindow* window)
+{
+	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	static GameTips* Tips{ &GameTips::GetTipsBase() };
+	static int LastMouseStatus_1{ GLFW_RELEASE };
+	static int LastMouseStatus_2{ GLFW_RELEASE };
+
+	glfwSetCursorPosCallback(window, curse_poscallback);
+
+	int Temp_Mouse_Status_1{ glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) };
+	int Temp_Mouse_Status_2{ glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) };
+
+	if (Temp_Mouse_Status_1 == GLFW_RELEASE)
+	{
+		if (LastMouseStatus_1 == GLFW_PRESS)
+		{
+			SB->Play_Sound(SOUND_MOUSE_CLICK);
+			std::cout << "Mouse 1 Press" << std::endl;
+			Tips->Update_Count();
+			_Is_Key_Pressed = true;
+		}
+	}
+	if (Temp_Mouse_Status_2 == GLFW_RELEASE)
+	{
+		if (LastMouseStatus_2 == GLFW_PRESS)
+		{
+			SB->Play_Sound(SOUND_MOUSE_CLICK);
+			std::cout << "Mouse 2 Press" << std::endl;
+			Tips->Update_Count();
+			_Is_Key_Pressed = true;
+		}
+	}
+
+	LastMouseStatus_1 = Temp_Mouse_Status_1;
+	LastMouseStatus_2 = Temp_Mouse_Status_2;
 }
 
 void InsertEventBase::Set_MaxFloat(float Max_float)

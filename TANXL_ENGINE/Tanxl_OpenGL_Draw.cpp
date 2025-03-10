@@ -37,7 +37,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B43", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B46", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -113,7 +113,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, _Main_Character->Check_Health());//Health Init
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, Main_Character->Check_Health());//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
@@ -720,25 +720,25 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 
 	if (Unit_State_Id == 2)
 	{
-		if (_Main_Character->Check_Health() <= 2)
+		if (Main_Character->Check_Health() <= 2)
 		{
-			_Main_Character->Set_Health(2, 10);
+			Main_Character->Set_Health(2, 10);
 		}
 		else
 		{
 			SB->Play_Sound(SOUND_EVENT_START);
-			_Main_Character->TakeDamage(1);
-			_Main_Character->Add_Money(1);
+			Main_Character->TakeDamage(1);
+			Main_Character->Add_Money(1);
 			CheckUnit->Set_Status(0);
 			ReLoadState(State);
 		}
 	}
 	else if (Unit_State_Id == 3)
 	{
-		if (_Main_Character->Check_Health() < _Main_Character->Get_MaxHealth())
+		if (Main_Character->Check_Health() < Main_Character->Get_MaxHealth())
 		{
 			SB->Play_Sound(SOUND_RESTORE_HEALTH);
-			_Main_Character->RestoreHealth(1);
+			Main_Character->RestoreHealth(1);
 			CheckUnit->Set_Status(0);
 			ReLoadState(State);
 		}
@@ -830,7 +830,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
 		this->_Middle_Frame = 0;
-
+		this->_Game_Status = GAME_MENU;
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 		glBindVertexArray(_vao[2]);
 		glUseProgram(_ITest_RenderingProgram);
@@ -852,6 +852,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 	else if (_Draw_Status == 5)
 	{
+		this->_Game_Status = GAME_ACTIVE;
 		if (this->_Middle_Frame == 0)
 		{
 			SB->Play_Sound(SOUND_GAME_START);
@@ -865,14 +866,16 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
+			this->_Game_Status = GAME_ACTIVE;
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
+			glDrawArrays(GL_TRIANGLES, 0, Main_Character->Check_Health() * 6);
 		}
 		else
 		{
+			this->_Game_Status = GAME_MENU;
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 			glBindVertexArray(_vao[2]);
 			glUseProgram(_ITest_RenderingProgram);
@@ -906,6 +909,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
+			this->_Game_Status = GAME_MENU;
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 			glBindVertexArray(_vao[2]);
 			glUseProgram(_ITest_RenderingProgram);
@@ -919,11 +923,12 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 		else
 		{
+			this->_Game_Status = GAME_ACTIVE;
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
+			glDrawArrays(GL_TRIANGLES, 0, Main_Character->Check_Health() * 6);
 		}
 
 		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
@@ -948,7 +953,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			_Draw_Status = 4;
 			SB->Play_Sound(SOUND_GAME_OVER);
-			_Main_Character->Set_Health(10);
+			Main_Character->Set_Health(10);
 		}
 
 		this->_Middle_Frame = 0;
@@ -956,7 +961,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, _Main_Character->Check_Health() * 6);
+		glDrawArrays(GL_TRIANGLES, 0, Main_Character->Check_Health() * 6);
 	}
 	glBindVertexArray(0);
 
@@ -964,7 +969,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	glUseProgram(_Fonts_RenderingProgram);
 
-	RenderText("TANXL GAME VERSION 2.43", 20.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+	if (this->_Game_Status == GAME_ACTIVE)
+		RenderText("Coins: " + std::to_string(Main_Character->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+
+	RenderText("TANXL GAME VERSION 2.46", 20.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
 
@@ -1008,9 +1016,10 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 	}
 
-	if (_Main_Character->Check_Health() == 2)
+	if (Main_Character->Check_Health() == 2)
 	{
 		_Draw_Status = 3;
+		Main_Character->Pay_Money(Main_Character->Get_Money());
 	}
 
 	static int Move_Loc{ this->_LCB->New_Location_set("Move_Adjust_Location") }; //记录手动移动状态的移动距离

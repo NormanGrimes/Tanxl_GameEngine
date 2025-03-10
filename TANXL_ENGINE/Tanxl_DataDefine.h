@@ -8,6 +8,7 @@
 // 增加坐标模块的支持
 // 移除未使用变量并调整数据顺序
 // 适配存储模块的改动
+// 存储模块编号关键字改为与其他编号统一
 
 #pragma once
 
@@ -114,7 +115,7 @@ static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFF
 		switch (Data)
 		{
 		case 0:
-			return "CURRENT_UNIQUE_ID";
+			return "UNIQUE_ID_CURRENT";
 		case 1:
 			return "GAME_STATE_BLOCK_DATA";
 		case 2:

@@ -44,6 +44,7 @@
 // 修改地图纵向显示方块个数
 // 重制初始界面纹理
 // 统一不同帧率下的过渡页面执行时间
+// 增加玩家的金币数量显示
 
 #pragma once
 
@@ -615,8 +616,6 @@ private:
 	int _Pre_MoveY{ 3 };
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
-	//主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值
-	//GameObject* _Main_Character;
 	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
 	int _Draw_Status{ 0 };
 	//当前的中间页面编号
@@ -627,6 +626,7 @@ private:
 	const std::string _Version{ "1.2" };
 	GLFWwindow* _Main_Window;
 	LocationBase* _LCB;
+	EGame_Status _Game_Status{ GAME_MENU };
 	//用于实例化绘制的偏移量
 	glm::vec2 _Translation[400];
 	glm::ivec2 _StateInfor[400];

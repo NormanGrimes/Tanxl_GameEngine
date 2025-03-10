@@ -213,6 +213,7 @@ void Tanxl_Engine::Engine_Insert_State_Update()
 	if (this->Tanxl_Engine_OpenGL_Draw->Get_Window() == nullptr)
 		return;
 	this->Tanxl_Engine_InsertBase->GetInsert(this->Tanxl_Engine_OpenGL_Draw->Get_Window(), this->Tanxl_Engine_GameState);
+	this->Tanxl_Engine_InsertBase->GetMouseInput(this->Tanxl_Engine_OpenGL_Draw->Get_Window());
 	this->Tanxl_Engine_OpenGL_Draw->Update_Current();//更新地图加载区块
 }
 

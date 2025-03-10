@@ -1,9 +1,9 @@
 #include "Tanxl_GameObject.h"
 
-Health_Base::Health_Base(int Maximum_Health, int Current_Health, bool Unable_Damage) :
+Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage) :
 	_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage) {};
 
-void Health_Base::RestoreHealth(int RestVal)
+void Health_Componment::RestoreHealth(int RestVal)
 {
 	if (RestVal < 0 || this->_Unable_Damage)
 		return;
@@ -12,7 +12,7 @@ void Health_Base::RestoreHealth(int RestVal)
 		_Current_Health = _Maximum_Health;
 }
 
-void Health_Base::TakeDamage(int TakeVal)
+void Health_Componment::TakeDamage(int TakeVal)
 {
 	if (TakeVal < 0 || this->_Unable_Damage)
 		return;
@@ -21,18 +21,18 @@ void Health_Base::TakeDamage(int TakeVal)
 		_Current_Health = 0;
 }
 
-void Health_Base::Set_Health(int Current_Health, int Max_Health)
+void Health_Componment::Set_Health(int Current_Health, int Max_Health)
 {
 	this->_Current_Health = Current_Health;
 	this->_Maximum_Health = Max_Health;
 }
 
-int Health_Base::Check_Health()
+int Health_Componment::Check_Health()
 {
 	return this->_Current_Health;
 }
 
-int Health_Base::Get_MaxHealth()
+int Health_Componment::Get_MaxHealth()
 {
 	return this->_Maximum_Health;
 }
@@ -47,12 +47,17 @@ int Money_Componment::Add_Money(int Money)
 
 bool Money_Componment::Pay_Money(int Price)
 {
-	if (this->_Current_Money > Price)
+	if (this->_Current_Money >= Price)
 	{
 		this->_Current_Money -= Price;
 		return true;
 	}
 	return false;
+}
+
+int Money_Componment::Get_Money()
+{
+	return this->_Current_Money;
 }
 
 Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0) {}
@@ -90,7 +95,7 @@ bool Componment::Get_Special_Status()
 }
 
 GameObject::GameObject(int Max_Health, int Current_Health, bool Unable_Damage)
-	:Health_Base(Max_Health, Current_Health, Unable_Damage), _Money_Componment(Money_Componment(0)) {}
+	:_Health_Componment(Max_Health, Current_Health, Unable_Damage), _Money_Componment(0) {}
 
 void GameObject::Add_Money(int Money)
 {
@@ -102,34 +107,34 @@ bool GameObject::Pay_Money(int Price)
 	return this->_Money_Componment.Pay_Money(Price);
 }
 
-bool GameObject::AppendComponment(Componment* CM)
+int GameObject::Get_Money()
 {
-	for (auto Componment : this->_Object_Content)//根据名称添加
-	{
-		if (Componment->GetName() == CM->GetName())
-			return false;//出现同名组件——添加失败
-	}
-	this->_Object_Content.push_back(CM);
-	return true;
+	return this->_Money_Componment.Get_Money();
 }
 
-bool GameObject::RemoveComponment(std::string Name)
+void GameObject::RestoreHealth(int RestVal)
 {
-	for (std::vector<Componment*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
-	{
-		if ((*IOCB)->GetName() == Name)
-		{
-			_Object_Content.erase(IOCB);
-			return true;
-		}
-	}
-	return false;
+	this->_Health_Componment.RestoreHealth(RestVal);
 }
 
-void GameObject::FinishComponment()
+void GameObject::TakeDamage(int TakeVal)
 {
-	for (int i{ 0 }; i < this->_Object_Content.size(); ++i)
-		this->_Object_Content.at(i)->Special();
+	this->_Health_Componment.TakeDamage(TakeVal);
+}
+
+void GameObject::Set_Health(int Current_Health, int Max_Health)
+{
+	this->_Health_Componment.Set_Health(Current_Health, Max_Health);
+}
+
+int GameObject::Check_Health()
+{
+	return this->_Health_Componment.Check_Health();
+}
+
+int GameObject::Get_MaxHealth()
+{
+	return this->_Health_Componment.Get_MaxHealth();
 }
 
 GameObjectBase& GameObjectBase::GetObjectBase()
@@ -163,4 +168,34 @@ Armor::Armor(int Defense) :_Defense(Defense) {}
 int Armor::Get_DefenseVal()
 {
 	return this->_Defense;
+}
+
+bool Componment_Unite::AppendComponment(Componment* CM)
+{
+	for (auto Componment : this->_Object_Content)//根据名称添加
+	{
+		if (Componment->GetName() == CM->GetName())
+			return false;//出现同名组件——添加失败
+	}
+	this->_Object_Content.push_back(CM);
+	return true;
+}
+
+bool Componment_Unite::RemoveComponment(std::string Name)
+{
+	for (std::vector<Componment*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
+	{
+		if ((*IOCB)->GetName() == Name)
+		{
+			_Object_Content.erase(IOCB);
+			return true;
+		}
+	}
+	return false;
+}
+
+void Componment_Unite::FinishComponment()
+{
+	for (int i{ 0 }; i < this->_Object_Content.size(); ++i)
+		this->_Object_Content.at(i)->Special();
 }

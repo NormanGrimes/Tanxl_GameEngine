@@ -13,6 +13,7 @@
 // 增加获取上一次定位到的数据链附近的接口
 // 移除重置单一数据链功能
 // 增加清除内存中所有数据的功能
+// 组合字符串功能去掉未使用变量
 
 #pragma once
 
@@ -142,8 +143,8 @@ public:
 	void Set_Internal_Data(Data_Link* Data, ELinkSet_Mode Set_Mode);
 	//↓读取指定Type(A)_Exac(B)级别的物品 Depth表示该级别下的第几个物品(从0开始)
 	Data_Unit* Get_Specified(int Type, int Exac, int Depth);
-	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level取值范围为1~5 用于选定Type Exac Oth1 ...
-	//↓修改OTH1 OTH2 OTH3的时候直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
+	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level用于选定第几个Data
+	//↓修改Data时会直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
 	void Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data);
 	//↓删除某一节点与其下所有内容 Type Exac分别用于定位节点的对应级别
 	void Remove_Link(int Type, int Exac);

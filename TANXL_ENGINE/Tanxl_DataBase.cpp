@@ -65,14 +65,13 @@ namespace TanxlDB
 			return "";
 		}
 		std::string New_data{};
-		for (int i{ Start }, j{ 0 }; i < End; ++i, ++j)
+		for (int i{ Start }; i < End; ++i)
 		{
 			if ((data[i] == '\t') || (data[i] == '<'))
 			{
-				End++; j--;
+				End++;
 				continue;
 			}
-			if (j < 0)j = 0;
 			New_data = New_data + data[i];
 		}
 		return New_data;
@@ -413,7 +412,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					throw "添加失败！ 申请内存空间失败";
 				continue;
 			}
-			else if ((Tag == "Data") || (Tag == "CURR") || (Tag == "UNIQ") || (Tag == "TANX") || (Tag == "GAME"))
+			else if ((Tag == "UNIQ") || (Tag == "TANX") || (Tag == "GAME"))
 			{
 				try
 				{

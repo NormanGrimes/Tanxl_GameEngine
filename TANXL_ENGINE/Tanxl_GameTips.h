@@ -43,7 +43,7 @@ public:
 			else
 				return this->_Internal_Count;
 		}
-		return this->_Internal_Count > 6 ? this->_Internal_Count = 0 : this->_Internal_Count;
+		return this->_Internal_Count > 7 ? this->_Internal_Count = 0 : this->_Internal_Count;
 	}
 
 private:
@@ -64,7 +64,7 @@ private:
 	bool _File_Loaded;
 	int _Internal_Count = 0;
 
-	std::string Tips[7]
+	std::string Tips[8]
 	{
 		"Tips : Golden square can restore your health",
 		"Tips : Press W or up button to move upward",
@@ -72,7 +72,8 @@ private:
 		"Tips : Watch out red squares !",
 		"Tips : Press A or left button to move leftward",
 		"Tips : Press D or right button to move rightward",
-		"Tips : You can not cross the blue squares"
+		"Tips : You can not cross the blue squares",
+		"Tips : Red squares can provide coins"
 	};
 };
 

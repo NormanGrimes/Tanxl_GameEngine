@@ -20,6 +20,9 @@
 // 增加武器与护甲基础类
 // 人物信息类增加各项数值的获取接口
 // 从绘制模块中移出玩家对象
+// 财产组件增加获取金钱数量接口
+// 游戏物品类不再继承自生命值组件
+// 游戏物品类中部分功能拆解为单独的物品组件类
 
 
 #ifndef _TANXL_GAME_OBJECT_
@@ -30,10 +33,10 @@
 
 //组件类
 
-class Health_Base
+class Health_Componment
 {
 public:
-	Health_Base(int Maximum_Health, int Current_Health, bool Unable_Damage = false);
+	Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage = false);
 
 	void RestoreHealth(int RestVal);
 
@@ -59,6 +62,8 @@ public:
 	int Add_Money(int Money);
 
 	bool Pay_Money(int Price);
+
+	int Get_Money();
 
 private:
 	int _Current_Money;
@@ -112,25 +117,41 @@ private:
 	bool _Is_Special_Enable;
 };
 
+class Componment_Unite
+{
+public:
+	bool AppendComponment(Componment* CM);
+	bool RemoveComponment(std::string Name);
+	void FinishComponment();
+
+private:
+	std::vector<Componment*> _Object_Content;
+};
+
 //游戏物品类
 
-class GameObject : public Health_Base
+class GameObject
 {
 public:
 	GameObject(int Max_Health, int Current_Health, bool Unable_Damage = false);
 	void Add_Money(int Money);
 	bool Pay_Money(int Price);
+	int Get_Money();
 
-	bool AppendComponment(Componment* CM);
-	bool RemoveComponment(std::string Name);
-	void FinishComponment();
+	void RestoreHealth(int RestVal);
+	void TakeDamage(int TakeVal);
+	void Set_Health(int Current_Health, int Max_Health = 10);
+	int Check_Health();
+	int Get_MaxHealth();
+	
 private:
 
+	Health_Componment _Health_Componment;
 	Money_Componment _Money_Componment;
-	std::vector<Componment*> _Object_Content;
 };
 
-static GameObject* _Main_Character = new GameObject(10, 10);
+//主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值
+static GameObject* Main_Character = new GameObject(10, 10);
 
 //GameObjectBase
 

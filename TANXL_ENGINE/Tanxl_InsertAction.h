@@ -29,6 +29,7 @@
 // 获取输入接口优化减少输入过程中的计算
 // 移除用于记录所有区域的是否可移动到状态的容器
 // 鼠标按键按下可切换提示内容
+// 从获取输入接口中独立出获取鼠标输入接口
 
 #pragma once
 
@@ -98,9 +99,11 @@ public:
 	//移除最近一个添加的按键功能
 	void RemoveEvent();
 	size_t Get_KeyEvent_Size();
-	//获取输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图 支持非移动按钮功能
+	//获取键盘输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图 支持非移动按钮功能
 	//获取到输入后不会立刻执行移动操作 仅记录移动距离 通过地图模块的更新移动功能执行移动操作
 	void GetInsert(GLFWwindow* window, GameStateBase* State);
+	//获取鼠标输入
+	void GetMouseInput(GLFWwindow* window);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）
 	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
 	//在使用后会导致Set_MaxFloat_Height/Width功能无效化
