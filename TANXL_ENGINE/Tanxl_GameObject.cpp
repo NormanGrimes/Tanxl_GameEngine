@@ -1,7 +1,11 @@
 #include "Tanxl_GameObject.h"
 
 Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage) :
-	_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage) {};
+	_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage) 
+{
+	if (_Current_Health > _Maximum_Health)
+		_Maximum_Health = _Current_Health;
+}
 
 void Health_Componment::RestoreHealth(int RestVal)
 {
@@ -199,3 +203,17 @@ void Componment_Unite::FinishComponment()
 	for (int i{ 0 }; i < this->_Object_Content.size(); ++i)
 		this->_Object_Content.at(i)->Special();
 }
+
+GameObject* Main_Character::Get_Main_Character()
+{
+	static GameObject * MainCharacter = new GameObject(10, 7);
+	return MainCharacter;
+}
+
+Main_Character::Main_Character() {}
+
+Main_Character::~Main_Character() {}
+
+Main_Character::Main_Character(const Main_Character&) {}
+
+Main_Character& Main_Character::operator=(const Main_Character&) { return *this; }

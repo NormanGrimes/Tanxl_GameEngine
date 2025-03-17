@@ -30,7 +30,7 @@ void State_ChangeEvent::Set_CoverString(std::string Cover_String)
 
 const std::string GameEventBase::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }
 
 void GameEventBase::RegistEvent(GameEvent* Event)

@@ -191,6 +191,7 @@ bool Tanxl_Engine::Engine_Save_Reset_Data()
 {
 	if (this->_Engine_Infinite_State_Set._Is_State_Set == false)
 		return false;
+	remove("Tanxl Engine SystemInfor.sd");
 	this->Tanxl_Engine_DataBase->Clear_DataChain();
 	this->Engine_Save_Infinite_State(true,
 		this->_Engine_Infinite_State_Set._Last_Range_Width,

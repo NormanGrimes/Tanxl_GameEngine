@@ -9,6 +9,7 @@
 // 游戏事件结构增加游戏物品指针成员
 // 增加指定事件目标的接口
 // 新增一个示例游戏事件
+// 游戏事件类改为继承自基础类
 
 #pragma once
 
@@ -18,6 +19,7 @@
 #include<vector>
 #include<string>
 #include "Tanxl_GameObject.h"
+#include "Tanxl_EngineBase.h"
 
 class GameEvent
 {
@@ -48,7 +50,7 @@ private:
 
 //GameEventBase
 
-class GameEventBase
+class GameEventBase : public Tanxl_ClassBase
 {
 public:
 	//获取此模块的版本信息
@@ -69,7 +71,6 @@ private:
 	GameEventBase& operator=(const GameEventBase&);
 
 	std::vector<GameEvent*> _GameEvents;
-	const std::string _Version{ "0.1" };
 };
 
 #endif

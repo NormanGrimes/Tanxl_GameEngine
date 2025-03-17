@@ -30,7 +30,12 @@ std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 	if (State_Id == "NULL")
 		return "NULL";
 	if (this->Get_Engine_File())
-		return Locate_Link(State_Id)->_Data->_Data_Units.at(1)->_Data;
+	{
+		Id_Link* Target_Link{ Locate_Link(State_Id) };
+		if (Target_Link != nullptr)
+			return Target_Link->_Data->_Data_Units.at(1)->_Data;
+		return "NULL";
+	}
 	return "NULL";
 }
 
@@ -939,7 +944,7 @@ void GameEvent::Set_EventTarget(GameObject* Obejct)
 
 //GameEventBase
 
-GameEventBase::GameEventBase() :_GameEvents(NULL) {}
+GameEventBase::GameEventBase() :_GameEvents(NULL), Tanxl_ClassBase("0.1") {}
 
 GameEventBase::~GameEventBase()
 {
@@ -947,7 +952,7 @@ GameEventBase::~GameEventBase()
 	delete& _GameEvents;
 }
 
-GameEventBase::GameEventBase(const GameEventBase&) {}
+GameEventBase::GameEventBase(const GameEventBase&) :_GameEvents(NULL), Tanxl_ClassBase("0.1") {}
 
 GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
 

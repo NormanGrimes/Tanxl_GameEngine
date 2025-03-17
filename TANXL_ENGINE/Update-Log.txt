@@ -1,3 +1,11 @@
+TEnGinE Version-0.2 Build-47 2023-10-19 09:51 UPDATE_LOG
+////////////////////////////////////////////////////////
+物品模块玩家变量整合为单例类。玩家生命值降低到临界值后重
+置地图。地图模块序列号定位地图数据的功能增加错误处理。游
+戏事件类改为继承自基础类。物品模块生命值组件增加错误参数
+的处理。绘制模块修复生命值纹理显示数量在特定情况下不增加
+的问题。修改金币栏的显示位置。修改初始生命值。
+
 TEnGinE Version-0.2 Build-46 2023-10-17 16:00 UPDATE_LOG
 ////////////////////////////////////////////////////////
 存储模块组合字符串功能去掉未使用变量。存储模块编号关键字
@@ -351,6 +359,18 @@ TEnGinE Version-0.2 Build-05 2023-05-24 16:58 UPDATE_LOG
 制模块边缘移动部分增加碰撞检测。绘制模块代码优化。地图顶
 点着色器方块由固定编号改为获取当前编号。地图模块坐标微调
 功能代码优化并加入输出控制宏。新增一个泥土纹理。
+--------------------------------------------------------
+The Engine Management module detects the engine status 
+feature and optionally closes the program. The drawing 
+module edge movement section is organized into 
+functions. The drawing module includes the coordinate 
+base class as a private member. Draw the edge movement 
+part of the module to add collision detection. Draw 
+module code optimization. Map Vertex Shader squares 
+changed from fixed number to get current number. Map 
+module coordinate fine-tuning function, code 
+optimization, and add output control macros. Added a 
+dirt texture.
 
 TEnGinE Version-0.2 Build-04 2023-05-17 14:24 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -359,6 +379,18 @@ TEnGinE Version-0.2 Build-04 2023-05-17 14:24 UPDATE_LOG
 接口。绘制模块边缘碰撞检测接口性能优化。绘制模块边缘碰撞
 检测接口不再修改按键状态属性。绘制模块推动屏幕移动部分不
 再需要按键按下。绘制模块优化去掉按键按下的标记。
+--------------------------------------------------------
+The engine management module optimizes the engine 
+status judgment part. The Map module adds an interface 
+to reload extended maps in a specified orientation. The 
+map module adds an interface to locate data by serial 
+number. Drawing module edge collision detection 
+interface performance optimization. The Draw Module 
+Edge Collision Detection interface no longer modifies 
+the key state properties. The drawing module pushes the 
+moving part of the screen without the need for key 
+presses. The drawing module is optimized to remove the 
+mark of key presses.
 
 TEnGinE Version-0.2 Build-03 2023-05-16 15:10 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -367,6 +399,18 @@ TEnGinE Version-0.2 Build-03 2023-05-16 15:10 UPDATE_LOG
 关改动。绘制模块单例获取功能修复多次获取无法调整尺寸的问
 题。地图模块移除一个参数相似的地图单元获取函数。绘制模块
 修复扩展地图读取到空区块错误的问题。
+--------------------------------------------------------
+The drawing module removes the old uniform variable 
+array and changes it to a three-dimensional vector 
+array. The 3D vector of the drawing module is pre-added 
+with the relevant settings for instantiation. Map 
+vertex shaders adapt to uniform variable related 
+changes. The singleton acquisition function of the 
+drawing module fixes the problem that multiple 
+acquisitions cannot be resized. The map module removes 
+a map unit with similar parameters to get the function. 
+The drawing module fixes the problem that the extended 
+map reads empty chunks incorrectly.
 
 TEnGinE Version-0.2 Build-02 TURBO 2023-05-06 15:56 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -379,6 +423,26 @@ TEnGinE Version-0.2 Build-02 TURBO 2023-05-06 15:56 UPDATE_LOG
 的绘制及其碰撞。绘制模块移除自动调整中调整绘制区域的功能。绘制
 模块移除自动调整的坐标记录并调整部分变量名称。地图模块微调位置
 功能去掉自动调整参数。
+--------------------------------------------------------------
+The Draw module adds drawing of the extended area in the 
+lower right and its collisions. The Draw module increases the 
+drawing of the extended area directly above and its 
+collisions. The Map module has updated the mobile capability 
+to add support for the symbol transformation section. 
+Organize the comments on each module. The Engine Management 
+Module engine status check feature is automatically destroyed 
+when initialization is incomplete. Engine Management Module 
+returns component information when engine initialization 
+fails. The engine management module adds the ability to 
+extend the starting area of the world settings. The Draw 
+module adds drawing of the extended area in the upper right 
+and its collisions. The Draw module adds drawing of the 
+extended areas directly left and upper left at the bottom 
+left and their collisions. The Draw module removes the 
+ability to adjust the drawing area in AutoTuning. The drawing 
+module removes the automatically adjusted coordinate records 
+and adjusts some variable names. The map module fine-tuning 
+location function removes the automatic adjustment parameters.
 
 TEnGinE Version-0.2 Build-01 2023-05-04 09:19 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -387,6 +451,18 @@ TEnGinE Version-0.2 Build-01 2023-05-04 09:19 UPDATE_LOG
 增加下方扩展区域的绘制及其碰撞。绘制模块增加单一地图方块
 编号获取功能。更新部分接口的介绍。绘制模块移除方向移动判
 断中另一轴的输入更新。
+--------------------------------------------------------
+The drawing module adds a print control macro. The 
+random module fixes the problem that the map 
+information generated in a short period of time is the 
+same. The drawing module optimizes and expands the map 
+information search process. The drawing module 
+increases the drawing of the extended area below and 
+its collisions. The drawing module adds the function of 
+obtaining a single map square number. Update the 
+introduction of some interfaces. The Plot module 
+removes the input update for the other axis in the 
+directional movement judgment.
 
 TEnGinE Version-0.1 Build-99 2023-04-27 18:01 UPDATE_LOG
 ////////////////////////////////////////////////////////

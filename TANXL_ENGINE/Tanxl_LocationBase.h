@@ -68,7 +68,7 @@ private:
 	SLocation _Internal_Location;
 };
 
-class Location_Limited :public Location
+class Location_Limited : public Location
 {
 public:
 

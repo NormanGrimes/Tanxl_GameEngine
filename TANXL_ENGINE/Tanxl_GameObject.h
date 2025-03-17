@@ -23,7 +23,12 @@
 // 财产组件增加获取金钱数量接口
 // 游戏物品类不再继承自生命值组件
 // 游戏物品类中部分功能拆解为单独的物品组件类
+// 玩家变量整合为单例类
+// 玩家生命值降低到临界值后重置地图
+// 生命值组件增加错误参数的处理
+// 修改初始生命值
 
+#pragma once
 
 #ifndef _TANXL_GAME_OBJECT_
 #define _TANXL_GAME_OBJECT_
@@ -151,7 +156,16 @@ private:
 };
 
 //主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值
-static GameObject* Main_Character = new GameObject(10, 10);
+class Main_Character
+{
+public:
+	static GameObject* Get_Main_Character();
+private:
+	Main_Character();
+	~Main_Character();
+	Main_Character(const Main_Character&);
+	Main_Character& operator=(const Main_Character&);
+};
 
 //GameObjectBase
 
