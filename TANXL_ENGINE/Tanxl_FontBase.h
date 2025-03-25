@@ -1,6 +1,7 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2023-10-10 15:58
 // 从绘制模块中独立出字体模块
+// 获取字体接口增加编号检查
 
 #pragma once
 
@@ -95,6 +96,8 @@ public:
 
 	std::map<GLchar, Character> Get_Characters(int Id)
 	{
+		if (Id > _Internal_Font_Counts)
+			Id = _Internal_Font_Counts;
 		return this->_Characters[Id];
 	}
 
@@ -104,7 +107,7 @@ private:
 	FontBase(const FontBase&) {}
 	FontBase& operator=(const FontBase&) {}
 
-	int _Internal_Font_Counts = 0;
+	int _Internal_Font_Counts{ 0 };
 
 	std::map<GLchar, Character> _Characters[5];
 };

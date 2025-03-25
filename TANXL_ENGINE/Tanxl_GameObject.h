@@ -47,7 +47,7 @@ public:
 
 	void TakeDamage(int TakeVal);
 
-	void Set_Health(int Current_Health, int Max_Health = 10);
+	void Set_Health(int Current_Health, int Max_Health);
 	// 获取当前生命值
 	int Check_Health();
 	// 获取最大生命值
@@ -145,7 +145,7 @@ public:
 
 	void RestoreHealth(int RestVal);
 	void TakeDamage(int TakeVal);
-	void Set_Health(int Current_Health, int Max_Health = 10);
+	void Set_Health(int Current_Health, int Max_Health = 13);
 	int Check_Health();
 	int Get_MaxHealth();
 	

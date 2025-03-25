@@ -106,7 +106,6 @@ int main()
 
 		static GameObject* MC{ Main_Character::Get_Main_Character()};
 
-		std::cout << "Current Health :" << MC->Check_Health() << std::endl;
 		if (MC->Check_Health() <= 2)
 		{
 			std::cout << "Reset the game !" << std::endl;

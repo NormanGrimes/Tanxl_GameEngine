@@ -200,6 +200,7 @@ bool Tanxl_Engine::Engine_Save_Reset_Data()
 		this->_Engine_Infinite_State_Set._Last_Begin_Height
 	);
 	this->Engine_Save_Source_Infor(this->_Engine_InforFile_Name);
+	return true;
 }
 
 void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)

@@ -47,6 +47,8 @@
 // 增加玩家的金币数量显示
 // 修复生命值纹理显示数量在特定情况下不增加的问题
 // 修改金币栏的显示位置
+// 字体渲染功能增加字体编号选择参数
+// 金币数量使用第二种字体渲染
 
 #pragma once
 
@@ -68,6 +70,7 @@
 #endif
 
 #include <math.h>
+
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_DataBase.h"
 #include "Tanxl_GameState.h"
@@ -547,7 +550,7 @@ public:
 	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
 	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
 	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
-	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id = 0);
 	//用于第一次或重新加载整个地图场景
 	void ReLoadState(GameStateBase* State);
 	int Get_Adjust_Status();

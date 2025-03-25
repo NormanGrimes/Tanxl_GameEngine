@@ -49,12 +49,6 @@ std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target,
 			Connect_Target = &this->_Data_Base.Get_Last_Located(1, State_Id, OffSet)->_Data->_Data_Units;
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
 		std::cout << "Connect_Target Size :" << Connect_Target->size() << std::endl;
-
-		if (Connect_Target->size() == 16)
-		{
-			for (int i = 0; i < 15; ++i)
-				std::cout << Connect_Target->at(i)->_Id << " + " << Connect_Target->at(i)->_Data << std::endl;
-		}
 #endif
 		if (Connect_Target->size() == 2)
 		{
@@ -66,6 +60,7 @@ std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target,
 			Connect_Target->push_back(new Data_Unit(7, "NULL"));
 			Connect_Target->push_back(new Data_Unit(8, "NULL"));
 			Connect_Target->push_back(new Data_Unit(9, "NULL"));
+			std::cout << "Append Function CALLED" << std::endl;
 		}
 		Connect_Target->at(CurrentState)->_Data = Build_Target->at(0)->_Data;
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
@@ -861,6 +856,7 @@ void GameStateBase::Generate_StateBlock()
 void GameStateBase::Generate_StateBlock(int State_Id)
 {
 	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
+	std::cout << std::endl << "Generate_StateBlock CALLED" << std::endl << std::endl;
 	try
 	{
 		this->_Data_Base.Id_Link_Locate(1, State_Id);
@@ -884,7 +880,7 @@ void GameStateBase::Build_Connect(int State_Id)
 	std::vector<Data_Unit*>* Build_Target{ &this->_Data_Base.Id_Link_Locate(1, State_Id)->_Data->_Data_Units };
 
 	std::string LEFT_STR	 { Single_Connect(Build_Target, STATE_LEFT,		 State_Id - 1)			}/*2*/;
-	std::string RIGH_STR	 { Single_Connect(Build_Target, STATE_RIGH,		 State_Id		, 1)	}/*3*/;
+	std::string RIGH_STR	 { Single_Connect(Build_Target, STATE_RIGH,		 State_Id + 1	, 1)	}/*3*/;
 	std::string BELO_STR	 { Single_Connect(Build_Target, STATE_BELO,		 State_Id + 256)		}/*5*/;
 	std::string LEFT_BELO_STR{ Single_Connect(Build_Target, STATE_LEFT_BELO, State_Id + 255	, -1)	}/*7*/;
 	std::string RIGH_BELO_STR{ Single_Connect(Build_Target, STATE_RIGH_BELO, State_Id + 257	, 1)	}/*9*/;

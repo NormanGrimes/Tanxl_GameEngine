@@ -135,13 +135,13 @@ void LocationBase::Remove_LocationS(int Location_Id)
 
 const std::string LocationBase::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }
 
-LocationBase::LocationBase() :_LocationS(0) {}
+LocationBase::LocationBase() :_LocationS(0), Tanxl_ClassBase("0.1") {}
 
 LocationBase::~LocationBase() {}
 
-LocationBase::LocationBase(const LocationBase&) :_LocationS(0) {};
+LocationBase::LocationBase(const LocationBase&) :_LocationS(0), Tanxl_ClassBase("0.1") {};
 
 LocationBase& LocationBase::operator=(const LocationBase&) { return *this; }

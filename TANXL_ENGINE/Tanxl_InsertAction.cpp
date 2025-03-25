@@ -81,6 +81,9 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	double MoveScale{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
 
+	if (this->_Is_Key_Enable == false)
+		return;
+
 	OPD->Update_Last_Location(State);
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
@@ -135,6 +138,9 @@ void InsertEventBase::GetMouseInput(GLFWwindow* window)
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	static int LastMouseStatus_1{ GLFW_RELEASE };
 	static int LastMouseStatus_2{ GLFW_RELEASE };
+
+	if (this->_Is_Key_Enable == false)
+		return;
 
 	glfwSetCursorPosCallback(window, curse_poscallback);
 
@@ -206,6 +212,11 @@ void InsertEventBase::Set_MultiSpeed(int Start, int End, double Adjust_Value)
 			this->_KeyEventS.at(Start)->MoveLen -= Adjust_Value;
 		Start++;
 	}
+}
+
+void InsertEventBase::Set_Key_Enable(bool Enable)
+{
+	this->_Is_Key_Enable = Enable;
 }
 
 void InsertEventBase::Init_Default_Key()
@@ -327,8 +338,9 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 
 //UnImportant 单例实现
 
-InsertEventBase::InsertEventBase() :_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Max_float(1.0f), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
+InsertEventBase::InsertEventBase() :
+	_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1), _Max_float(1.0f),
+	_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -336,8 +348,8 @@ InsertEventBase::~InsertEventBase()
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _Is_Max_Single(false),
-	_Max_float_Height(1), _Max_float_Width(1), _Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false) {}
+	_KeyEventS(NULL), _Max_float(1.0f), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
+	_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

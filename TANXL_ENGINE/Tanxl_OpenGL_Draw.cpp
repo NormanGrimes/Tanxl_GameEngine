@@ -92,6 +92,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUniformMatrix4fv(glGetUniformLocation(this->_Fonts_RenderingProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 	Font->Init_Fonts("Fonts/JosefinSans-SemiBoldItalic.ttf");
+	Font->Init_Fonts("Fonts/JosefinSans-Bold.ttf");
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);
@@ -724,7 +725,7 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 	{
 		if (MC->Check_Health() <= 2)
 		{
-			MC->Set_Health(2, 10);
+			MC->Set_Health(2, 13);
 		}
 		else
 		{
@@ -754,7 +755,7 @@ void OpenGL_Draw::Move_State(GameStateBase* State, EMove_State_EventId Direction
 	this->_Is_State_Changed = true;
 }
 
-void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color)
+void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id)
 {
 	glUniform3f(glGetUniformLocation(_Fonts_RenderingProgram, "textColor"), color.x, color.y, color.z);
 	glActiveTexture(GL_TEXTURE0);
@@ -764,7 +765,7 @@ void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat sca
 	std::string::const_iterator c;
 	for (c = text.begin(); c != text.end(); c++)
 	{
-		Character ch = (Font->Get_Characters(0))[*c];// Characters[*c];
+		Character ch = (Font->Get_Characters(Font_Id))[*c];// Characters[*c];
 
 		GLfloat xpos = x + ch.Bearing.x * scale;
 		GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
@@ -828,8 +829,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
-
-	std::cout << "Current Health Draw:" << MC->Check_Health() << std::endl;
 
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
@@ -976,7 +975,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	glUseProgram(_Fonts_RenderingProgram);
 
 	if (this->_Game_Status == GAME_ACTIVE)
-		RenderText("Coins: " + std::to_string(MC->Get_Money()), 40.0f, 730.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
 	RenderText("TANXL GAME VERSION 2.46", 20.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 

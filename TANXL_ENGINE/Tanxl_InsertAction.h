@@ -30,6 +30,7 @@
 // 移除用于记录所有区域的是否可移动到状态的容器
 // 鼠标按键按下可切换提示内容
 // 从获取输入接口中独立出获取鼠标输入接口
+// 增加接口控制是否响应输入
 
 #pragma once
 
@@ -116,6 +117,7 @@ public:
 	void Set_StateRange(bool Enable);
 	//同时设置多个按键控制的移动距离
 	void Set_MultiSpeed(int Start, int End, double Adjust_Value);
+	void Set_Key_Enable(bool Enable);
 	// 初始化默认提供的八个移动按键
 	void Init_Default_Key();
 	void Update_Move_Max();
@@ -134,6 +136,8 @@ private:
 	bool _Is_Max_Single;
 	//_Is_Key_Pressed 用于标记当前是否按下了按键
 	bool _Is_Key_Pressed;
+	//_Is_Key_Enable 用于标记当前是否响应输入
+	bool _Is_Key_Enable;
 	//_Margin_X 代表当前主控制物品最近一次移动的X坐标移动距离
 	float _Margin_X;
 	//_Margin_Y 代表当前主控制物品最近一次移动的Y坐标移动距离

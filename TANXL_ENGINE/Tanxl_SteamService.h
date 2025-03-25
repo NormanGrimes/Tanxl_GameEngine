@@ -5,6 +5,7 @@
 // 库存类增加版本信息
 // 库存类增加初始化状态并根据状态执行功能
 // 增加库存物品类
+// 增加成就枚举
 
 #pragma once
 
@@ -18,6 +19,12 @@ enum ETanxl_Inventory_ItemDefId
 {
 	Tanxl_Pormise_LIMITED_DROP_ITEM		= 1,
 	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2
+};
+
+enum ETanxl_Achievement_DefId
+{
+	NEW_ACHIEVEMENT_1_0 = 1,
+	NEW_ACHIEVEMENT_1_1 = 2
 };
 
 class Tanxl_Inventory

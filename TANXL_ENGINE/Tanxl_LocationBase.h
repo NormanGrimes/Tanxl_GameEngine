@@ -16,6 +16,7 @@
 // 修复边缘检测功能错误的问题
 // 增加删除已记录的坐标功能
 // 修复设置坐标功能错误的问题
+// 改为继承自引擎基础类
 
 #pragma once
 
@@ -24,6 +25,8 @@
 
 #include<string>
 #include<vector>
+
+#include "Tanxl_EngineBase.h"
 
 enum ELIMIT_RANGE_SIGNAL
 {
@@ -79,7 +82,7 @@ public:
 	inline void Set_Range(float Adjust_Height, float Adjust_Width);
 };
 
-class LocationBase
+class LocationBase : public Tanxl_ClassBase
 {
 public:
 	static LocationBase& GetLocationBase();
@@ -107,8 +110,6 @@ private:
 	LocationBase& operator=(const LocationBase&);
 
 	std::vector<Location*> _LocationS;
-
-	const std::string _Version{ "0.1" };
 };
 
 #endif

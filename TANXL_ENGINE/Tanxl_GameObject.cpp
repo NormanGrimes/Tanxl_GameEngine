@@ -206,7 +206,7 @@ void Componment_Unite::FinishComponment()
 
 GameObject* Main_Character::Get_Main_Character()
 {
-	static GameObject * MainCharacter = new GameObject(10, 7);
+	static GameObject * MainCharacter = new GameObject(13, 7);
 	return MainCharacter;
 }
 
