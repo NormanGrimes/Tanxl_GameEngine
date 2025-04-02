@@ -31,6 +31,7 @@
 // 鼠标按键按下可切换提示内容
 // 从获取输入接口中独立出获取鼠标输入接口
 // 增加接口控制是否响应输入
+// 输入基础类改为继承自引擎基础类
 
 #pragma once
 
@@ -50,10 +51,12 @@
 #include <vector>
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
+
 #include "Tanxl_OpenGL_Draw.h"
 #include "Tanxl_GameState.h"
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameTips.h"
+#include "Tanxl_EngineBase.h"
 
 struct Key_Unit
 {
@@ -79,7 +82,7 @@ struct Key_Unit
 	std::string Unit_Name;
 };
 
-class InsertEventBase
+class InsertEventBase : public Tanxl_ClassBase
 {
 public:
 	//获取输入模块的单例类
@@ -154,8 +157,6 @@ private:
 	int _Mouse_PosX{ 0 };
 	//_Mouse_PosY 记录当前鼠标的Y轴坐标
 	int _Mouse_PosY{ 0 };
-	//_Version 用于记录当前程序（输入模块-InserAction）的版本信息
-	const std::string _Version{ "0.8" };
 
 	//单例实现部分
 	InsertEventBase();

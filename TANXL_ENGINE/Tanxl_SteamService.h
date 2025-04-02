@@ -6,6 +6,7 @@
 // 库存类增加初始化状态并根据状态执行功能
 // 增加库存物品类
 // 增加成就枚举
+// 增加成就类与成就解锁功能
 
 #pragma once
 
@@ -14,6 +15,7 @@
 
 #include "public/steam/steam_api.h"
 #include "public/steam/isteamapps.h"
+
 
 enum ETanxl_Inventory_ItemDefId
 {
@@ -25,6 +27,52 @@ enum ETanxl_Achievement_DefId
 {
 	NEW_ACHIEVEMENT_1_0 = 1,
 	NEW_ACHIEVEMENT_1_1 = 2
+};
+
+struct Achievement_t
+{
+	ETanxl_Achievement_DefId m_eAchievementID;
+	const char* m_pchAchievementID;
+	char m_rgchName[128];
+	char m_rgchDescription[256];
+	bool m_bAchieved;
+	int m_iIconImage;
+};
+
+#define _ACH_ID( id, name ) { id, #id, name, "", 0, 0 }
+
+static Achievement_t g_rgAchievements[] =
+{
+	_ACH_ID(NEW_ACHIEVEMENT_1_0, "Secret"),
+	_ACH_ID(NEW_ACHIEVEMENT_1_1, "100 Coins")
+};
+
+class Tanxl_Achievement
+{
+public:
+	static Tanxl_Achievement& Get_AchievementBase()
+	{
+		static Tanxl_Achievement* Achievement{ new Tanxl_Achievement() };
+		return *Achievement;
+	}
+
+	void UnlockAchievement(Achievement_t& achievement)
+	{
+		achievement.m_bAchieved = true;
+		achievement.m_iIconImage = 0;
+		if (_SteamUserStats != nullptr)
+			_SteamUserStats->SetAchievement(achievement.m_pchAchievementID);
+	}
+
+private:
+	Tanxl_Achievement()
+	{
+		_SteamUser = SteamUser();
+		_SteamUserStats = SteamUserStats();
+	}
+
+	ISteamUser* _SteamUser;
+	ISteamUserStats* _SteamUserStats;
 };
 
 class Tanxl_Inventory

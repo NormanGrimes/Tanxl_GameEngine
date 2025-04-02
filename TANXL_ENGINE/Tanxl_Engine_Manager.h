@@ -8,14 +8,12 @@
 // 2023/10/12 增加匿名结构体存储上次无限世界设置参数
 // 2023/10/16 增加对音频模块的支持
 // 2023/10/17 增加用于重新生成地图数据与引擎信息的接口
+// 2023/10/25 支持STEAMWORKS158SDK
 
 #pragma once
 
 #ifndef _TANXL_ENGINE_MANAGER_
 #define _TANXL_ENGINE_MANAGER_
-
-#define _CRT_SECURE_NO_WARNINGS
-#pragma warning (disable:4819)
 
 // mainCRTStartup
 

@@ -1270,16 +1270,6 @@ int GameStateBase::Get_Distance_Move_Id()
 	return this->_Distance_Move;
 }
 
-int GameStateBase::Get_State_Width()
-{
-	return this->_State_WidthS;
-}
-
-int GameStateBase::Get_State_Height()
-{
-	return this->_State_HeightS;
-}
-
 int GameStateBase::Get_StateHeight()const
 {
 	return this->_GameState_Height;

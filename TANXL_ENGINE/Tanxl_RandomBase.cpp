@@ -2,11 +2,11 @@
 
 #include "Tanxl_RandomBase.h"
 
-RandomBase::RandomBase() {}
+RandomBase::RandomBase() :Tanxl_ClassBase("0.3") {}
 
 RandomBase::~RandomBase() {}
 
-RandomBase::RandomBase(const RandomBase&) {}
+RandomBase::RandomBase(const RandomBase&) :Tanxl_ClassBase("0.3") {}
 
 RandomBase& RandomBase::operator=(const RandomBase&) 
 { 
@@ -169,5 +169,5 @@ void RandomBase::Reset_Default()
 
 const std::string RandomBase::Get_Version()
 {
-    return this->_Version;
+    return Tanxl_ClassBase::Get_Version();
 }

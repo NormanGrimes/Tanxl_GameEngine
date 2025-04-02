@@ -17,6 +17,7 @@
 // 随机世界生成功能可选随机事件生成
 // 修复随机世界生成错误数据的问题
 // 刷新字库执行的次数减半
+// 随机基础类改为继承自引擎基础类
 
 #pragma once
 
@@ -27,7 +28,9 @@
 #include <iostream>
 #include <random>
 
-class RandomBase
+#include "Tanxl_EngineBase.h"
+
+class RandomBase : public Tanxl_ClassBase
 {
 public:
     //单例获取函数
@@ -81,8 +84,6 @@ private:
     ~RandomBase();
     RandomBase(const RandomBase&);
     RandomBase& operator=(const RandomBase&);
-
-    const std::string _Version{ "0.3" };
 };
 
 #endif

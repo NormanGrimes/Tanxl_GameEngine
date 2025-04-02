@@ -49,6 +49,7 @@
 // 修改金币栏的显示位置
 // 字体渲染功能增加字体编号选择参数
 // 金币数量使用第二种字体渲染
+// 碰撞检测功能采用动态数据计算
 
 #pragma once
 
@@ -79,6 +80,7 @@
 #include "Tanxl_GameObject.h"
 #include "Tanxl_SoundBase.h"
 #include "Tanxl_FontBase.h"
+#include "Tanxl_SteamService.h"
 
 namespace TanxlOD
 {
@@ -517,8 +519,9 @@ namespace TanxlOD
 
 enum EGame_Status
 {
-	GAME_MENU,
-	GAME_ACTIVE
+	GAME_STMENU,
+	GAME_ACTIVE,
+	GAME_MARKET
 };
 
 class OpenGL_Draw
@@ -631,7 +634,7 @@ private:
 	const std::string _Version{ "1.2" };
 	GLFWwindow* _Main_Window;
 	LocationBase* _LCB;
-	EGame_Status _Game_Status{ GAME_MENU };
+	EGame_Status _Game_Status{ GAME_STMENU };
 	//用于实例化绘制的偏移量
 	glm::vec2 _Translation[400];
 	glm::ivec2 _StateInfor[400];

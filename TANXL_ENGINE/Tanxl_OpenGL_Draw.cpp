@@ -39,7 +39,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B46", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B49", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -561,6 +561,11 @@ int OpenGL_Draw::Get_PreLoad()
 
 void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction)
 {
+	static const float Check_Range{ 0.005f };
+	static double LastTime{ glfwGetTime() };
+	double DeltaTime{ glfwGetTime() - LastTime };
+	LastTime = glfwGetTime();
+
 	float Marg_Width{ static_cast<float>(this->_Each_Width * 10) };
 	float Marg_Height{ static_cast<float>(this->_Each_Height * 10) };
 
@@ -616,29 +621,29 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 				switch (Check_Direction)
 				{
 				case CHECK_EDGE_LEFT:
-					this->_Location_Distance_MidX += 0.005f;
-					this->_Location_Move_DistanceX += 0.005f;
+					this->_Location_Distance_MidX += Check_Range;// * DeltaTime;
+					this->_Location_Move_DistanceX += Check_Range;// *DeltaTime;
 
 					State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
 					State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 					break;
 				case CHECK_EDGE_RIGH:
-					this->_Location_Distance_MidX -= 0.005f;
-					this->_Location_Move_DistanceX -= 0.005f;
+					this->_Location_Distance_MidX -= Check_Range;// * DeltaTime;
+					this->_Location_Move_DistanceX -= Check_Range;// * DeltaTime;
 
 					State->Get_Screen_Distance()._Location_X = this->_Location_Distance_MidX;
 					State->Get_Move_Distance()._Location_X = this->_Location_Move_DistanceX;
 					break;
 				case CHECK_EDGE_BELO:
-					this->_Location_Distance_MidY += 0.005f;
-					this->_Location_Move_DistanceY += 0.005f;
+					this->_Location_Distance_MidY += Check_Range;// * DeltaTime;
+					this->_Location_Move_DistanceY += Check_Range;// * DeltaTime;
 
 					State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
 					State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
 					break;
 				case CHECK_EDGE_ABOV:
-					this->_Location_Distance_MidY -= 0.005f;
-					this->_Location_Move_DistanceY -= 0.005f;
+					this->_Location_Distance_MidY -= Check_Range;// * DeltaTime;
+					this->_Location_Move_DistanceY -= Check_Range;// * DeltaTime;
 
 					State->Get_Screen_Distance()._Location_Y = this->_Location_Distance_MidY;
 					State->Get_Move_Distance()._Location_Y = this->_Location_Move_DistanceY;
@@ -715,6 +720,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
 	State->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
 	StateUnit* CheckUnit{ State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY()) };
 	if (!CheckUnit)
@@ -732,6 +738,13 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			SB->Play_Sound(SOUND_EVENT_START);
 			MC->TakeDamage(1);
 			MC->Add_Money(1);
+
+			if (MC->Get_Money() >= 100)
+			{
+				std::cout << "Achievement Unlocked !" << std::endl;
+				AC->UnlockAchievement(g_rgAchievements[1]);
+			}
+
 			CheckUnit->Set_Status(0);
 			ReLoadState(State);
 		}
@@ -833,7 +846,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
 		this->_Middle_Frame = 0;
-		this->_Game_Status = GAME_MENU;
+		this->_Game_Status = GAME_STMENU;
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 		glBindVertexArray(_vao[2]);
 		glUseProgram(_ITest_RenderingProgram);
@@ -878,7 +891,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 		else
 		{
-			this->_Game_Status = GAME_MENU;
+			this->_Game_Status = GAME_STMENU;
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 			glBindVertexArray(_vao[2]);
 			glUseProgram(_ITest_RenderingProgram);
@@ -914,7 +927,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			ReLoadState(State);
 			MC->Set_Health(7);
-			this->_Game_Status = GAME_MENU;
+			this->_Game_Status = GAME_STMENU;
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 			glBindVertexArray(_vao[2]);
 			glUseProgram(_ITest_RenderingProgram);
@@ -977,7 +990,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	if (this->_Game_Status == GAME_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
-	RenderText("TANXL GAME VERSION 2.46", 20.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+	RenderText("TANXL GAME VERSION 2.49", 20.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
 

@@ -27,6 +27,7 @@
 // 玩家生命值降低到临界值后重置地图
 // 生命值组件增加错误参数的处理
 // 修改初始生命值
+// 物品基类改为继承自基础类
 
 #pragma once
 
@@ -35,6 +36,8 @@
 
 #include <vector>
 #include <string>
+
+#include "Tanxl_EngineBase.h"
 
 //组件类
 
@@ -169,7 +172,7 @@ private:
 
 //GameObjectBase
 
-class GameObjectBase
+class GameObjectBase : public Tanxl_ClassBase
 {
 public:
 	static GameObjectBase& GetObjectBase();
@@ -177,7 +180,6 @@ public:
 	const std::string Get_Version();
 
 private:
-	const std::string _Version{ "0.4" };
 
 	GameObjectBase();
 	~GameObjectBase();

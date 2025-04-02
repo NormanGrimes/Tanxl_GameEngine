@@ -289,7 +289,7 @@ short InsertEventBase::Get_Reach_Edge()
 
 const std::string InsertEventBase::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }
 
 void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY)
@@ -338,18 +338,18 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 
 //UnImportant 单例实现
 
-InsertEventBase::InsertEventBase() :
-	_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1), _Max_float(1.0f),
-	_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+InsertEventBase::InsertEventBase() :Tanxl_ClassBase("0.8"),
+_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1), _Max_float(1.0f),
+_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase::~InsertEventBase()
 {
 	std::vector<Key_Unit*>().swap(this->_KeyEventS);
 }
 
-InsertEventBase::InsertEventBase(const InsertEventBase&) :
-	_KeyEventS(NULL), _Max_float(1.0f), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-	_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+InsertEventBase::InsertEventBase(const InsertEventBase&) :Tanxl_ClassBase("0.8"),
+_KeyEventS(NULL), _Max_float(1.0f), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
+_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

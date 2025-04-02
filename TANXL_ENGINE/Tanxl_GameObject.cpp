@@ -149,14 +149,14 @@ GameObjectBase& GameObjectBase::GetObjectBase()
 
 const std::string GameObjectBase::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }
 
-GameObjectBase::GameObjectBase() {}
+GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.4") {}
 
 GameObjectBase::~GameObjectBase() {}
 
-GameObjectBase::GameObjectBase(const GameObjectBase&) {}
+GameObjectBase::GameObjectBase(const GameObjectBase&) : Tanxl_ClassBase("0.4") {}
 
 GameObjectBase& GameObjectBase::operator=(const GameObjectBase&) { return *this; }
 

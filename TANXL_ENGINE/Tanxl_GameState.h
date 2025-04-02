@@ -6,26 +6,28 @@
 // 移除获取扩展世界是否开启的功能
 // 序列号定位地图数据的功能增加错误处理
 // 修复右边构建连接指向了错误坐标的问题
+// 移除地图横向与纵向区块个数的获取接口
 
 #pragma once
 
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
 
-#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 1
+#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 0
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
 #define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
 #define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
-#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
+#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        0
 #define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
 
 #endif
 
 #include <iostream>
 #include <iomanip>
+
 #include "Tanxl_GameEvent.h"
 #include "Tanxl_DataBase.h"
 #include "Tanxl_LocationBase.h"
@@ -204,8 +206,6 @@ public:
 	int Get_Exac_LocationY();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
-	int Get_State_Width();
-	int Get_State_Height();
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
