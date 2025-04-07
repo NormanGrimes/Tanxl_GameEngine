@@ -50,6 +50,9 @@
 // 字体渲染功能增加字体编号选择参数
 // 金币数量使用第二种字体渲染
 // 碰撞检测功能采用动态数据计算
+// 新增医疗包纹理
+// 移除未使用的实例化变换成员
+// 玩家死亡后短暂禁用移动功能
 
 #pragma once
 
@@ -90,13 +93,14 @@ namespace TanxlOD
 	static const char* TexGrass_Snowy_01_128x128		{ "Texture/TANXL_GRASS_SNOWY_01_128X128.png"	};
 	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.png"	};
 	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.png"			};
-	static const char* TexCure_01_128x128				{ "Texture/TANXL_CURE_01_128X128.png"			};
+	static const char* TexGold_01_128x128				{ "Texture/TANXL_GOLD_01_128X128.png"			};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_256x256			{ "Texture/YANG_PRINCESS_01_256X256.png"		};
 	static const char* TexPrincess_02_256x256			{ "Texture/YANG_PRINCESS_02_256X256.png"		};
 	static const char* TexPrincess_03_256x256			{ "Texture/YANG_PRINCESS_03_256X256.png"		};
 	static const char* TexPrincess_04_256x256			{ "Texture/YANG_PRINCESS_04_256X256.png"		};
+	static const char* TexMedic_01_64x64				{ "Texture/TANXL_MEDIC_01_64X64.png"			};
 	static const char* TexStartMenu_01_1024x1024        { "Texture/TANXL_MENU_01_1024X1024.png"			};
 
 	static StateEvent* EventSlot[16];
@@ -581,6 +585,7 @@ private:
 	GLuint _Adjst_RenderingProgram{ 0 };
 	GLuint _Start_RenderingProgram{ 0 };
 	GLuint _ITest_RenderingProgram{ 0 };
+	GLuint _Event_RenderingProgram{ 0 };
 
 	GLuint _Fonts_RenderingProgram{ 0 };
 
@@ -635,8 +640,6 @@ private:
 	GLFWwindow* _Main_Window;
 	LocationBase* _LCB;
 	EGame_Status _Game_Status{ GAME_STMENU };
-	//用于实例化绘制的偏移量
-	glm::vec2 _Translation[400];
 	glm::ivec2 _StateInfor[400];
 };
 

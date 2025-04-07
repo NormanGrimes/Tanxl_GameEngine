@@ -18,12 +18,17 @@ void SoundBase::Play_Sound(ESound_WAV Sound_Name)
 	this->_SoundEngine->play2D(this->Sound_Names[Sound_Name].c_str());
 }
 
-const std::string SoundBase::Get_Version()
+void SoundBase::Stop_AllSound()
 {
-	return this->_Version;
+	this->_SoundEngine->stopAllSounds();
 }
 
-SoundBase::SoundBase() :_SoundEngine(irrklang::createIrrKlangDevice()) {}
+const std::string SoundBase::Get_Version()
+{
+	return Tanxl_ClassBase::Get_Version();
+}
+
+SoundBase::SoundBase() :_SoundEngine(irrklang::createIrrKlangDevice()), Tanxl_ClassBase("0.1") {}
 SoundBase::~SoundBase() { this->_SoundEngine->drop(); }
-SoundBase::SoundBase(const SoundBase&) :_SoundEngine(irrklang::createIrrKlangDevice()) {};
+SoundBase::SoundBase(const SoundBase&) :_SoundEngine(irrklang::createIrrKlangDevice()), Tanxl_ClassBase("0.1") {};
 SoundBase& SoundBase::operator=(const SoundBase&) { return *this; };

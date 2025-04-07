@@ -28,6 +28,7 @@
 // 生命值组件增加错误参数的处理
 // 修改初始生命值
 // 物品基类改为继承自基础类
+// 生命值组件增加死亡状态
 
 #pragma once
 
@@ -55,11 +56,14 @@ public:
 	int Check_Health();
 	// 获取最大生命值
 	int Get_MaxHealth();
+	// 获取当前是否为存活状态
+	bool Is_Alive();
 
 private:
 	int _Maximum_Health;
 	int _Current_Health;
 	bool _Unable_Damage;
+	bool _Is_Alive;
 };
 
 class Money_Componment
@@ -151,6 +155,7 @@ public:
 	void Set_Health(int Current_Health, int Max_Health = 13);
 	int Check_Health();
 	int Get_MaxHealth();
+	bool Get_Is_Alive();
 	
 private:
 

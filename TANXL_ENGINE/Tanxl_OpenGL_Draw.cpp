@@ -26,7 +26,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(), _Font_vbo(), _Inst_vbo(),
 _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _Translation(), _LCB(&LocationBase::GetLocationBase()),
+_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()),
 _StateInfor() {}
 
 const std::string OpenGL_Draw::Get_Version()
@@ -84,6 +84,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	this->_Event_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_04_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Test_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
 
@@ -131,7 +132,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_128x128);
 	Append_Texture(TanxlOD::TexOcean_01_128x128);
 	Append_Texture(TanxlOD::TexDirt_01_128x128);
-	Append_Texture(TanxlOD::TexCure_01_128x128);
+	Append_Texture(TanxlOD::TexGold_01_128x128);
 
 	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
 	int Tex_02{ Append_Texture(TanxlOD::TexPrincess_02_256x256)		};
@@ -140,6 +141,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	int Tex_05{ Append_Texture(TanxlOD::TexHealth_01_32x32)			};
 	int Tex_06{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
 	int Tex_07{ Append_Texture(TanxlOD::TexStartMenu_01_1024x1024)	};
+	int Tex_08{ Append_Texture(TanxlOD::TexMedic_01_64x64) };
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
@@ -342,11 +344,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 	GLuint StatePos;
 	for (int i{ 0 }; i < State_Length; ++i)
 	{
-		std::string Tag{ "State[" + std::to_string(i) + "]" };
-		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
-		glProgramUniform2fv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_Translation[i]));
-
-		Tag = "Infor[" + std::to_string(i) + "]";
+		std::string Tag = "Infor[" + std::to_string(i) + "]";
 		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
 		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
 
@@ -729,11 +727,7 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 
 	if (Unit_State_Id == 2)
 	{
-		if (MC->Check_Health() <= 2)
-		{
-			MC->Set_Health(2, 13);
-		}
-		else
+		if (MC->Get_Is_Alive())
 		{
 			SB->Play_Sound(SOUND_EVENT_START);
 			MC->TakeDamage(1);
@@ -830,6 +824,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 {
 	static double LastTime{ glfwGetTime() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	double DeltaTime{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
 	
@@ -887,7 +882,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, MC->Check_Health() * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 		}
 		else
 		{
@@ -921,12 +916,13 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
 		{
 			this->_Draw_Status = 2;
+			IEB->Set_Key_Enable(true);
 		}
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			ReLoadState(State);
-			MC->Set_Health(7);
+			MC->Set_Health(5);
 			this->_Game_Status = GAME_STMENU;
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 			glBindVertexArray(_vao[2]);
@@ -946,7 +942,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, MC->Check_Health() * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 		}
 
 		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
@@ -971,7 +967,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			_Draw_Status = 4;
 			SB->Play_Sound(SOUND_GAME_OVER);
-			MC->Set_Health(3);
+			MC->Set_Health(5);
 		}
 
 		this->_Middle_Frame = 0;
@@ -979,7 +975,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, MC->Check_Health() * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 	}
 	glBindVertexArray(0);
 
@@ -1034,9 +1030,10 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 	}
 
-	if (MC->Check_Health() == 2)
+	if (!MC->Get_Is_Alive())
 	{
 		_Draw_Status = 3;
+		IEB->Set_Key_Enable(false);
 		MC->Pay_Money(MC->Get_Money());
 	}
 

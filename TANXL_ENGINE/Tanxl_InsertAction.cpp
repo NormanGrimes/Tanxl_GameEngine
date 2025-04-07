@@ -80,11 +80,11 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	double MoveScale{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
+	OPD->Update_Last_Location(State);
 
 	if (this->_Is_Key_Enable == false)
 		return;
 
-	OPD->Update_Last_Location(State);
 	this->_Margin_X = 0.0f;
 	this->_Margin_Y = 0.0f;
 

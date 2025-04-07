@@ -1,7 +1,7 @@
 #include "Tanxl_GameObject.h"
 
 Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage) :
-	_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage) 
+	_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage), _Is_Alive(true)
 {
 	if (_Current_Health > _Maximum_Health)
 		_Maximum_Health = _Current_Health;
@@ -9,7 +9,7 @@ Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, boo
 
 void Health_Componment::RestoreHealth(int RestVal)
 {
-	if (RestVal < 0 || this->_Unable_Damage)
+	if ((RestVal < 0) || this->_Unable_Damage || (this->_Is_Alive == false))
 		return;
 	_Current_Health += RestVal;
 	if (_Current_Health > _Maximum_Health)
@@ -18,17 +18,22 @@ void Health_Componment::RestoreHealth(int RestVal)
 
 void Health_Componment::TakeDamage(int TakeVal)
 {
-	if (TakeVal < 0 || this->_Unable_Damage)
+	if ((TakeVal < 0) || (this->_Unable_Damage))
 		return;
 	_Current_Health -= TakeVal;
 	if (_Current_Health < 0)
 		_Current_Health = 0;
+	if (_Current_Health == 0)
+		this->_Is_Alive = false;
 }
 
 void Health_Componment::Set_Health(int Current_Health, int Max_Health)
 {
 	this->_Current_Health = Current_Health;
 	this->_Maximum_Health = Max_Health;
+
+	if (this->_Current_Health > 0)
+		this->_Is_Alive = true;
 }
 
 int Health_Componment::Check_Health()
@@ -39,6 +44,11 @@ int Health_Componment::Check_Health()
 int Health_Componment::Get_MaxHealth()
 {
 	return this->_Maximum_Health;
+}
+
+bool Health_Componment::Is_Alive()
+{
+	return this->_Is_Alive;
 }
 
 Money_Componment::Money_Componment(int Init_Money) :_Current_Money(Init_Money) {}
@@ -141,6 +151,11 @@ int GameObject::Get_MaxHealth()
 	return this->_Health_Componment.Get_MaxHealth();
 }
 
+bool GameObject::Get_Is_Alive()
+{
+	return this->_Health_Componment.Is_Alive();
+}
+
 GameObjectBase& GameObjectBase::GetObjectBase()
 {
 	static GameObjectBase* ObjectBase{ new GameObjectBase };
@@ -206,7 +221,7 @@ void Componment_Unite::FinishComponment()
 
 GameObject* Main_Character::Get_Main_Character()
 {
-	static GameObject * MainCharacter = new GameObject(13, 7);
+	static GameObject * MainCharacter = new GameObject(11, 5);
 	return MainCharacter;
 }
 

@@ -148,6 +148,9 @@
     <None Include="Shader\Tanxl_Test_01_VertShader.glsl">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="Shader\Tanxl_State_04_VertShader.glsl">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="public\steam\lib\win64\steam_api64.lib" />

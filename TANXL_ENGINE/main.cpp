@@ -106,7 +106,7 @@ int main()
 
 		static GameObject* MC{ Main_Character::Get_Main_Character()};
 
-		if (MC->Check_Health() <= 2)
+		if (MC->Check_Health() <= 0)
 		{
 			std::cout << "Reset the game !" << std::endl;
 			TGE.Engine_Save_Reset_Data();

@@ -6,6 +6,8 @@
 // 新增恢复生命值和鼠标点击的音频
 // 新增系统调用音频
 // 增加版本信息功能
+// 增加停止所有音频功能
+// 改为继承自引擎基础类
 
 #pragma once
 
@@ -14,6 +16,8 @@
 
 #include <string>
 #include <irrKlang/irrKlang.h>
+
+#include "Tanxl_EngineBase.h"
 
 enum ESound_WAV
 {
@@ -25,7 +29,7 @@ enum ESound_WAV
     SOUND_SYSTEM_CALL       = 5
 };
 
-class SoundBase
+class SoundBase : public Tanxl_ClassBase
 {
 public:
     static SoundBase& GetSoundBase();
@@ -33,6 +37,8 @@ public:
     void Play_Sound(std::string Wav_File_Location);
 
     void Play_Sound(ESound_WAV Sound_Name);
+
+    void Stop_AllSound();
 
     const std::string Get_Version();
 
@@ -48,8 +54,6 @@ private:
         "music/Game_Mouse_Click.wav",
         "music/Game_System_Call.wav"
     };
-
-    const std::string _Version{ "0.1" };
 
     SoundBase();
     ~SoundBase();
