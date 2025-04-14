@@ -9,13 +9,6 @@ static FontBase* Font{ &FontBase::GetFontBase() };
 
 static GameObject* MC{ Main_Character::Get_Main_Character() };
 
-void delay(int misec)
-{
-	clock_t start = clock();
-	clock_t lay = (clock_t)misec;
-	while ((clock() - start) < lay);
-}
-
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
 	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
@@ -121,9 +114,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
-	glProgramUniform1i(this->_State_RenderingProgram, 4, this->_HeightInt);//SHeight
-	glProgramUniform1i(this->_State_RenderingProgram, 5, this->_WidthInt);//SWidth
-	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_PreLoads);//PreLoads
+	glProgramUniform1i(this->_State_RenderingProgram, 2, this->_HeightInt);//SHeight
+	glProgramUniform1i(this->_State_RenderingProgram, 3, this->_WidthInt);//SWidth
+	glProgramUniform1i(this->_State_RenderingProgram, 6, this->_PreLoads);//PreLoads
+
+	glProgramUniform1i(this->_Event_RenderingProgram, 2, this->_HeightInt);//SHeight
+	glProgramUniform1i(this->_Event_RenderingProgram, 3, this->_WidthInt);//SWidth
+	glProgramUniform1i(this->_Event_RenderingProgram, 6, this->_PreLoads);//PreLoads
 
 	//State_Square Part 0~6  Adjust random range when number of textures change 
 	Append_Texture(TanxlOD::TexGrass_01_128x128);
@@ -141,7 +138,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	int Tex_05{ Append_Texture(TanxlOD::TexHealth_01_32x32)			};
 	int Tex_06{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
 	int Tex_07{ Append_Texture(TanxlOD::TexStartMenu_01_1024x1024)	};
-	int Tex_08{ Append_Texture(TanxlOD::TexMedic_01_64x64) };
+	int Tex_08{ Append_Texture(TanxlOD::TexMedic_01_64x64)			};
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
@@ -152,9 +149,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
 
+	glProgramUniform1i(this->_Event_RenderingProgram, 7, Tex_08);
+
 	glBindVertexArray(0);
 
-	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
+	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads <<"_"<< Tex_08 << std::endl;
 
 	float Half_Width{ (this->_WidthInt - 1) / 2.0f };
 	float Half_Height{ (this->_HeightInt - 1) / 2.0f };
@@ -341,15 +340,29 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 			std::cout << this->_StateInfor[i].x;
 		}
 	}
+	Update_VertData(this->_StateInfor);
+}
+
+void OpenGL_Draw::Update_VertData(glm::ivec2 StateInfor[])
+{
 	GLuint StatePos;
+	int State_Length{ (this->_HeightInt + this->_PreLoads * 2) * (this->_WidthInt + this->_PreLoads * 2) + 1 };
+
+	if (State_Length > 400)
+		State_Length = 400;
+
 	for (int i{ 0 }; i < State_Length; ++i)
 	{
 		std::string Tag = "Infor[" + std::to_string(i) + "]";
 		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
-		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(this->_StateInfor[i]));
+		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(StateInfor[i]));
+
+		Tag = "EventInfor[" + std::to_string(i) + "]";
+		StatePos = glGetUniformLocation(_Event_RenderingProgram, Tag.c_str());
+		glProgramUniform1i(_Event_RenderingProgram, StatePos, StateInfor[i].y);
 
 #if _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_
-		std::cout << this->_StateInfor[i].x << " ";
+		std::cout << StateInfor[i].x << " ";
 		if (i % (this->_WidthInt + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
 #endif
@@ -516,7 +529,6 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		}
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 3);//Insert Status
 	}
-	State_Check_Event(State);
 }
 
 void OpenGL_Draw::Update_Current()
@@ -826,6 +838,9 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	double DeltaTime{ glfwGetTime() - LastTime };
+
+	static float VersionFontSize{ 20.0f };
+
 	LastTime = glfwGetTime();
 	
 	glBindVertexArray(_vao[1]);
@@ -869,6 +884,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			SB->Play_Sound(SOUND_GAME_START);
 		}
 		this->_Middle_Frame += DeltaTime * 100;
+		if (VersionFontSize > -800.0f)
+			VersionFontSize -= 6.0f;
+		if (VersionFontSize < -800.0f)
+			VersionFontSize = -800.0f;
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
 		{
@@ -986,7 +1005,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	if (this->_Game_Status == GAME_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
-	RenderText("TANXL GAME VERSION 2.49", 20.0f, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+	if(VersionFontSize > -800.0f)
+		RenderText("TANXL GAME VERSION 2.49", VersionFontSize, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
 
@@ -1143,6 +1163,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		HitEdge_Check(State);
 
+		State_Check_Event(State);
+
 		if (!State->Is_Adjust_While_Move())
 		{
 			if (IEB->Get_Key_Pressed())
@@ -1234,9 +1256,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			}
 		}
 
-		glProgramUniform1f(_State_RenderingProgram, 2, this->_LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
-		glProgramUniform1f(_State_RenderingProgram, 3, this->_LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//
-
 		glProgramUniform1f(_Adjst_RenderingProgram, 2, this->_LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
 		glProgramUniform1f(_Adjst_RenderingProgram, 3, this->_LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//
 
@@ -1248,8 +1267,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		State->StateMove_Edge_Set(Dist_Mid, Stat_Loc, Move_Loc, IEB->Get_Reach_Edge(), MoveScale);
 
-		glProgramUniform1f(_State_RenderingProgram, 6, this->_LCB->Get_LocationX(Stat_Loc));//State_MoveX
-		glProgramUniform1f(_State_RenderingProgram, 7, this->_LCB->Get_LocationY(Stat_Loc));//State_MoveY
+		glProgramUniform1f(_State_RenderingProgram, 4, this->_LCB->Get_LocationX(Stat_Loc));//State_MoveX
+		glProgramUniform1f(_State_RenderingProgram, 5, this->_LCB->Get_LocationY(Stat_Loc));//State_MoveY
+
+		glProgramUniform1f(_Event_RenderingProgram, 4, this->_LCB->Get_LocationX(Stat_Loc));//State_MoveX
+		glProgramUniform1f(_Event_RenderingProgram, 5, this->_LCB->Get_LocationY(Stat_Loc));//State_MoveY
 
 		glfwPollEvents();
 

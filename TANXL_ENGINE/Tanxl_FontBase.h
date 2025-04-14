@@ -11,6 +11,7 @@
 #include <map>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
 #include "Tanxl_OpenGL_Render.h"
 
 struct Character
@@ -40,7 +41,7 @@ public:
 			std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
 
 		FT_Face face;
-		if (FT_New_Face(ft, Font_Path.c_str()/*"Fonts/JosefinSans-SemiBoldItalic.ttf"*/, 0, &face))
+		if (FT_New_Face(ft, Font_Path.c_str(), 0, &face))
 			std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 		// Set size to load glyphs as
@@ -102,6 +103,7 @@ public:
 	}
 
 private:
+
 	FontBase() {}
 	~FontBase() {}
 	FontBase(const FontBase&) {}

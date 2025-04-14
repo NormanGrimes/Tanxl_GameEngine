@@ -5,11 +5,14 @@
 // 增加不需要文件的准备着色器重载版本
 // 增加不需要文件的创建着色器重载版本
 // 改为继承自引擎基础类
+// 增加宏控制渲染模块的信息输出
 
 #pragma once
 
 #ifndef _TANXL_OPENGL_RENDER_
 #define _TANXL_OPENGL_RENDER_
+
+#define _DEBUG_CONSOLE_OUTPUT_ 1
 
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>

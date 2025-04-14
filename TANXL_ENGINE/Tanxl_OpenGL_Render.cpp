@@ -26,7 +26,9 @@ void OpenGL_Render::printShaderLog(GLuint shader)
 	if (len > 0) {
 		log = (char*)malloc(len);
 		glGetShaderInfoLog(shader, len, &chWrittn, log);
+#if _DEBUG_CONSOLE_OUTPUT_
 		std::cout << "Shader Info Log: " << log << std::endl;
+#endif
 		free(log);
 	}
 }
@@ -40,7 +42,9 @@ void OpenGL_Render::printProgramLog(int prog)
 	if (len > 0) {
 		log = (char*)malloc(len);
 		glGetProgramInfoLog(prog, len, &chWrittn, log);
+#if _DEBUG_CONSOLE_OUTPUT_
 		std::cout << "Program Info Log: " << log << std::endl;
+#endif
 		free(log);
 	}
 }
@@ -57,12 +61,14 @@ GLuint OpenGL_Render::prepareShader(int shaderTYPE, const char* shaderPath)
 	glGetShaderiv(shaderRef, GL_COMPILE_STATUS, &shaderCompiled);
 	if (shaderCompiled != 1)
 	{
+#if _DEBUG_CONSOLE_OUTPUT_
 		if (shaderTYPE == 35633) std::cout << "Vertex ";
 		if (shaderTYPE == 36488) std::cout << "Tess Control ";
 		if (shaderTYPE == 36487) std::cout << "Tess Eval ";
 		if (shaderTYPE == 36313) std::cout << "Geometry ";
 		if (shaderTYPE == 35632) std::cout << "Fragment ";
 		std::cout << "shader compilation error." << std::endl;
+#endif
 		printShaderLog(shaderRef);
 	}
 	return shaderRef;
@@ -79,12 +85,14 @@ GLuint OpenGL_Render::prepareShader(int shaderTYPE, std::string shaderStr)
 	glGetShaderiv(shaderRef, GL_COMPILE_STATUS, &shaderCompiled);
 	if (shaderCompiled != 1)
 	{
+#if _DEBUG_CONSOLE_OUTPUT_
 		if (shaderTYPE == 35633) std::cout << "Vertex ";
 		if (shaderTYPE == 36488) std::cout << "Tess Control ";
 		if (shaderTYPE == 36487) std::cout << "Tess Eval ";
 		if (shaderTYPE == 36313) std::cout << "Geometry ";
 		if (shaderTYPE == 35632) std::cout << "Fragment ";
 		std::cout << "shader compilation error." << std::endl;
+#endif
 		printShaderLog(shaderRef);
 	}
 	return shaderRef;
@@ -98,7 +106,9 @@ int OpenGL_Render::finalizeShaderProgram(GLuint sprogram)
 	glGetProgramiv(sprogram, GL_LINK_STATUS, &linked);
 	if (linked != 1)
 	{
+#if _DEBUG_CONSOLE_OUTPUT_
 		std::cout << "linking failed" << std::endl;
+#endif
 		printProgramLog(sprogram);
 	}
 	return sprogram;
@@ -109,7 +119,9 @@ bool OpenGL_Render::checkOpenGLError()
 	bool foundError{ false };
 	int glErr = glGetError();
 	while (glErr != GL_NO_ERROR) {
+#if _DEBUG_CONSOLE_OUTPUT_
 		std::cout << "glError: " << glErr << std::endl;
+#endif
 		foundError = true;
 		glErr = glGetError();
 	}
@@ -141,7 +153,9 @@ GLuint OpenGL_Render::createShaderProgram(std::string vp, std::string fp)
 GLuint OpenGL_Render::loadTexture(const char *texImagePath)
 {
 	GLuint textureRef{ SOIL_load_OGL_texture(texImagePath, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y) };
+#if _DEBUG_CONSOLE_OUTPUT_
 	if (textureRef == 0) std::cout << "didnt find texture file " << texImagePath << std::endl;
+#endif
 	// ----- mipmap/anisotroPIL section
 	glBindTexture(GL_TEXTURE_2D, textureRef);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

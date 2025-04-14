@@ -22,7 +22,7 @@ void StateUnit::SetEvent(std::string GameEventName, int State_Id)
 
 const std::string GameStateBase::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }
 
 std::string GameStateBase::Locate_Extend_State(std::string State_Id)
@@ -279,7 +279,6 @@ void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
 		this->_GameState_Extend._RIGH_ABOV._Id = Link->_Data->_Data_Units.at(8)->_Data;
 		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
 		this->_GameState_Extend._RIGH_BELO._Id = Link->_Data->_Data_Units.at(9)->_Data;
-		this->_Extend_State_Enable = true;
 		this->Set_Data_Length(10, 10);
 		return;
 	}
@@ -470,11 +469,6 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 void GameStateBase::Set_Adjust_Frequency(int Frame)
 {
 	this->_Adjust_Frame = Frame;
-}
-
-void GameStateBase::Set_Extend_State_Enable(bool Enable)
-{
-	this->_Extend_State_Enable = Enable;
 }
 
 void GameStateBase::Set_Move_State(int PreSetX, int PreSetY, int PreLoad)
@@ -901,8 +895,8 @@ void GameStateBase::Build_Connect(int State_Id)
 
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
-	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1),
-	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false), _Extend_State_Enable(false)
+	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), Tanxl_ClassBase("1.1"),
+	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
@@ -1199,8 +1193,8 @@ Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0), _Extend_Mid_Id(0),
-_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false),
-_Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false), _Extend_State_Enable(false)
+_Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
+_Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");

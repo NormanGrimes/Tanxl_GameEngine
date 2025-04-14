@@ -24,6 +24,8 @@
 // 修改游戏纹理起始位置
 // 额外预留四个纹理用于其他用途
 // 调整第一层地图的深度
+// 移除未使用变量
+// 调整统一变量位置
 
 #version 430
 
@@ -31,18 +33,14 @@
 
 layout (location = 1) in vec2 texCoord;
 
-layout (location = 2) uniform float Current_Move_LocationX;
-layout (location = 3) uniform float Current_Move_LocationY;
+layout (location = 2) uniform int SHeight;
+layout (location = 3) uniform int SWidth;
 
-layout (location = 4) uniform int SHeight;
-layout (location = 5) uniform int SWidth;
+layout (location = 4) uniform float StateMoveX;
+layout (location = 5) uniform float StateMoveY;
 
-layout (location = 6) uniform float StateMoveX;
-layout (location = 7) uniform float StateMoveY;
+layout (location = 6) uniform int PreLoads;
 
-layout (location = 8) uniform int PreLoads;
-
-uniform vec2 State[400];
 uniform ivec2 Infor[400];
 
 out vec4 vs_color;

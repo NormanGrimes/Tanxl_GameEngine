@@ -7,6 +7,8 @@
 // 序列号定位地图数据的功能增加错误处理
 // 修复右边构建连接指向了错误坐标的问题
 // 移除地图横向与纵向区块个数的获取接口
+// 地图基础类改为继承自引擎基础类
+// 移除扩展世界启用标记以及设置函数
 
 #pragma once
 
@@ -32,6 +34,7 @@
 #include "Tanxl_DataBase.h"
 #include "Tanxl_LocationBase.h"
 #include "Tanxl_RandomBase.h"
+#include "Tanxl_EngineBase.h"
 
 class StateUnit;
 
@@ -152,7 +155,7 @@ private:
 
 //GameStateBase CLASS
 
-class GameStateBase
+class GameStateBase : public Tanxl_ClassBase
 {
 public:
 	
@@ -185,7 +188,6 @@ public:
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
 	void Set_Adjust_Frequency(int Frame);
-	void Set_Extend_State_Enable(bool Enable);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);
@@ -274,8 +276,6 @@ private:
 	bool _Is_Adjusting;
 	//_Compile_Success用于标记输入的地图数据是否编译成功
 	bool _Compile_Success;
-	//_Extend_State_Enable用以标记是否启用了扩展世界功能
-	bool _Extend_State_Enable;
 	//_Trigger_Mode用以标记是否启用了移动到地图边缘触发地图跟随移动的功能
 	bool _Trigger_Mode{ false };
 	//_MState用于记录当前加载地图区域
@@ -291,7 +291,6 @@ private:
 	//_Data_Size地图数据大小
 	int _Data_Size{ 0 };
 	std::vector<State_Policy*> _Policy;
-	const std::string _Version{ "1.1" };
 };
 
 #endif

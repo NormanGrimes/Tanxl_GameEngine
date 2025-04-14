@@ -91,21 +91,11 @@ double Character_Data::Get_Move_Speed()
 	return this->_Move_Speed;
 }
 
-Componment::Componment(std::string Name) :_Name(Name), _Is_Special_Enable(false) {}
+Componment_Base::Componment_Base(std::string Name) :_Name(Name) {}
 
-std::string Componment::GetName()
+std::string Componment_Base::GetName()
 {
 	return this->_Name;
-}
-
-void Componment::Set_Special_Status(bool Enable)
-{
-	this->_Is_Special_Enable = Enable;
-}
-
-bool Componment::Get_Special_Status()
-{
-	return this->_Is_Special_Enable;
 }
 
 GameObject::GameObject(int Max_Health, int Current_Health, bool Unable_Damage)
@@ -189,7 +179,7 @@ int Armor::Get_DefenseVal()
 	return this->_Defense;
 }
 
-bool Componment_Unite::AppendComponment(Componment* CM)
+bool Componment_Unite::AppendComponment(Componment_Base* CM)
 {
 	for (auto Componment : this->_Object_Content)//根据名称添加
 	{
@@ -202,7 +192,7 @@ bool Componment_Unite::AppendComponment(Componment* CM)
 
 bool Componment_Unite::RemoveComponment(std::string Name)
 {
-	for (std::vector<Componment*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
+	for (std::vector<Componment_Base*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
 	{
 		if ((*IOCB)->GetName() == Name)
 		{
@@ -213,15 +203,9 @@ bool Componment_Unite::RemoveComponment(std::string Name)
 	return false;
 }
 
-void Componment_Unite::FinishComponment()
-{
-	for (int i{ 0 }; i < this->_Object_Content.size(); ++i)
-		this->_Object_Content.at(i)->Special();
-}
-
 GameObject* Main_Character::Get_Main_Character()
 {
-	static GameObject * MainCharacter = new GameObject(11, 5);
+	static GameObject* MainCharacter{ new GameObject(13, 5) };
 	return MainCharacter;
 }
 

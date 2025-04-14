@@ -10,7 +10,6 @@
 layout (location = 1) in vec2 texCoord;
 layout (location = 2) uniform int Image_Id;
 
-
 out vec4 vs_color;
 out vec2 tc;
 flat out int Cube;

@@ -62,7 +62,7 @@ private:
 	TANXL_DataBase Tips_Data;
 
 	bool _File_Loaded;
-	int _Internal_Count = 0;
+	int _Internal_Count{ 0 };
 
 	std::string Tips[8]
 	{

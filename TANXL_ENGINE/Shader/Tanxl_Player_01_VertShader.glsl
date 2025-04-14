@@ -15,6 +15,7 @@
 // 纹理编号改为自动获取
 // 代码整理优化
 // 调整并增加宏控制生命方块大小
+// 移除未使用的颜色输入
 
 #version 430
 
@@ -44,8 +45,6 @@ layout (location = 14) uniform int Player_Texture_04;
 
 layout (location = 15) uniform int Player_Texture_05;
 layout (location = 16) uniform int Player_Texture_06;
-
-in vec4 color;
 
 out vec4 vs_color;
 out vec2 tc;

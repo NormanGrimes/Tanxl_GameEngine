@@ -123,6 +123,7 @@ public:
 	void Set_Key_Enable(bool Enable);
 	// 初始化默认提供的八个移动按键
 	void Init_Default_Key();
+	// 更新最大移动距离
 	void Update_Move_Max();
 private:
 	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘

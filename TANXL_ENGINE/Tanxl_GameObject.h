@@ -29,6 +29,7 @@
 // 修改初始生命值
 // 物品基类改为继承自基础类
 // 生命值组件增加死亡状态
+// 重写组件基础类
 
 #pragma once
 
@@ -116,28 +117,24 @@ private:
 	int _Defense;
 };
 
-class Componment
+class Componment_Base
 {
 public:
-	Componment(std::string Name);
+	Componment_Base(std::string Name);
+
 	std::string GetName();
-	virtual void Special() = 0;
-	void Set_Special_Status(bool Enable);
-	bool Get_Special_Status();
 private:
 	std::string _Name;
-	bool _Is_Special_Enable;
 };
 
 class Componment_Unite
 {
 public:
-	bool AppendComponment(Componment* CM);
+	bool AppendComponment(Componment_Base* CM);
 	bool RemoveComponment(std::string Name);
-	void FinishComponment();
 
 private:
-	std::vector<Componment*> _Object_Content;
+	std::vector<Componment_Base*> _Object_Content;
 };
 
 //游戏物品类
