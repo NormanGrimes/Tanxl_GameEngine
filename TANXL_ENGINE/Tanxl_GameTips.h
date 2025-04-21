@@ -66,14 +66,14 @@ private:
 
 	std::string Tips[8]
 	{
-		"Tips : Golden square can restore your health",
+		"Tips : The golden square provides five gold coins",
 		"Tips : Press W or up button to move upward",
 		"Tips : Press S or down button to move downward",
 		"Tips : Watch out red squares !",
 		"Tips : Press A or left button to move leftward",
 		"Tips : Press D or right button to move rightward",
 		"Tips : You can not cross the blue squares",
-		"Tips : Red squares can provide coins"
+		"Tips : Red squares can provide coin"
 	};
 };
 

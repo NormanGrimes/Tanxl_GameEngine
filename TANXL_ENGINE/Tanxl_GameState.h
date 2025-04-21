@@ -181,7 +181,9 @@ public:
 	void Set_Adjust_Flag(bool Adjust_Flag);
 	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
+	//↓Set_StartState : 设置起始区域并构建初始连接编译周围区域 State_Id起始区域Id Cover_String不为NULL时覆盖起始区域内容
 	void Set_StartState(int State_Id, std::string Cover_String = "NULL");
+	//↓Set_State : 仅修改指定区域的地图数据 State_Id 指定区域Id Cover_String为覆盖的内容
 	void Set_State(int State_Id, std::string Cover_String);
 	void Set_State_Counts(int Width, int Height);
 	void Set_Adjust(float Adjust);

@@ -26,10 +26,12 @@
 // 调整第一层地图的深度
 // 移除未使用变量
 // 调整统一变量位置
+// 增加纹理偏移的宏
 
 #version 430
 
 #define STATE_01_LAYER 0.5f
+#define TEXTURE_OFFSET 5
 
 layout (location = 1) in vec2 texCoord;
 
@@ -68,72 +70,42 @@ void main(void)
 			gl_Position = vec4( -Width + WidthMove + StateMoveX, 
 							    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 
-			if		(int(Infor[VertexId].y) == 2)
-				Cube = 10;
-			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 11;
-			else
-				Cube = int(Infor[VertexId].x) + 5;
+			Cube = int(Infor[VertexId].x) + TEXTURE_OFFSET;
 		}
 		else if (gl_VertexID == VertexId * 6 + 1) 
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f); 
 
-			if		(int(Infor[VertexId].y) == 2)
-				Cube = 10;
-			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 11;
-			else
-				Cube = int(Infor[VertexId].x) + 5;
+			Cube = int(Infor[VertexId].x) + TEXTURE_OFFSET;
 		}
 		else if (gl_VertexID == VertexId * 6 + 2) 
 		{ 
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 			
-			if		(int(Infor[VertexId].y) == 2)
-				Cube = 10;
-			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 11;
-			else
-				Cube = int(Infor[VertexId].x) + 5;
+			Cube = int(Infor[VertexId].x) + TEXTURE_OFFSET;
 		}
 		else if (gl_VertexID == VertexId * 6 + 3) 
 		{ 
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                    -Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f); 
 			
-			if		(int(Infor[VertexId].y) == 2)
-				Cube = 10;
-			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 11;
-			else
-				Cube = int(Infor[VertexId].x) + 5;
+			Cube = int(Infor[VertexId].x) + TEXTURE_OFFSET;
 		}
 		else if (gl_VertexID == VertexId * 6 + 4) 
 		{
 			gl_Position = vec4(  Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 			
-			if		(int(Infor[VertexId].y) == 2)
-				Cube = 10;
-			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 11;
-			else
-				Cube = int(Infor[VertexId].x) + 5;
+			Cube = int(Infor[VertexId].x) + TEXTURE_OFFSET;
 		}
 		else if (gl_VertexID == VertexId * 6 + 5) 
 		{
 			gl_Position = vec4( -Width + WidthMove + StateMoveX,
 			                     Height + HeightMove + StateMoveY, STATE_01_LAYER, 1.0f);
 			
-			if		(int(Infor[VertexId].y) == 2)
-				Cube = 10;
-			else if	(int(Infor[VertexId].y) == 3)
-				Cube = 11;
-			else
-				Cube = int(Infor[VertexId].x) + 5;
+			Cube = int(Infor[VertexId].x) + TEXTURE_OFFSET;
 		}
 
 		WidthMove += (Width * 2);

@@ -51,36 +51,21 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
 {
     static unsigned seed{ static_cast<unsigned>(time(0)) };
     std::default_random_engine DRE(seed++);
-    std::uniform_int_distribution<int> UID(0, 6);
     std::uniform_int_distribution<int> SID(0, 3);
+    std::uniform_int_distribution<int> EID(1, 4);
     this->Suffle_UniData(1);
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
     {
-        int StateVal = UID(DRE);
-        if (StateVal == 4)//OCEAN BLOCK
-            ReturnVal += "1-";
-        else if (Random_Event)
-        {
-            if (StateVal == 5)
-            {
-                StateVal = SID(DRE);
-                ReturnVal += "2-";
-            }
-            else if (StateVal == 6)
-            {
-                StateVal = SID(DRE);
-                ReturnVal += "3-";
-            }
-            else
-                ReturnVal += "0-";
-        }
-        else
-            ReturnVal += "0-";
+        int StateVal = SID(DRE);
+        int EventVal = EID(DRE);
 
-        ReturnVal += std::to_string(StateVal);
-        ReturnVal += ",";
+        if(Random_Event)
+            ReturnVal += std::to_string(EventVal) + "-" + std::to_string(StateVal) + ",";
+        else
+            ReturnVal += "0-" + std::to_string(StateVal) + ",";
     }
+    //std::cout << ReturnVal << std::endl;
     return ReturnVal;
 }
 
