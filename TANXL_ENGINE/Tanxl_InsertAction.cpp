@@ -4,7 +4,9 @@
 
 void curse_poscallback(GLFWwindow* window, double x, double y)
 {
+#if _TANXL_INSERTACTION_CONSOLE_MOUSE_OUTPUT_
 	std::cout << "(pos:" << x << "," << y << ")" << std::endl;
+#endif
 }
 
 Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0), SaveLen(0)
@@ -60,12 +62,12 @@ float InsertEventBase::Get_AutoFloat(int Blocks)
 
 void InsertEventBase::RegistEvent(Key_Unit* KU)
 {
-	_KeyEventS.push_back(KU);
+	this->_KeyEventS.push_back(KU);
 }
 
 void InsertEventBase::RemoveEvent()
 {
-	_KeyEventS.pop_back();
+	this->_KeyEventS.pop_back();
 }
 
 size_t InsertEventBase::Get_KeyEvent_Size()
@@ -85,8 +87,8 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	if (this->_Is_Key_Enable == false)
 		return;
 
-	this->_Margin_X = 0.0f;
-	this->_Margin_Y = 0.0f;
+	this->_LastMove_X = 0.0f;
+	this->_LastMove_Y = 0.0f;
 
 	double Insert_Move_LengthX{ 0.0f };
 	double Insert_Move_LengthY{ 0.0f };
@@ -123,8 +125,8 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	State->Get_Move_Distance()._Location_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
 	State->Get_Move_Distance()._Location_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
 
-	this->_Margin_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
-	this->_Margin_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+	this->_LastMove_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
+	this->_LastMove_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
 
 	AutoCheck(State->Get_Screen_Distance()._Location_X, State->Get_Screen_Distance()._Location_Y, State->Get_Move_Distance()._Location_X, State->Get_Move_Distance()._Location_Y);
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
@@ -252,14 +254,14 @@ void InsertEventBase::Update_Move_Max()
 	this->_Max_float_Width *= OD->Get_Trigger_Ratio();
 }
 
-float InsertEventBase::Get_Margin_X()
+float InsertEventBase::Get_LastMove_X()
 {
-	return this->_Margin_X;
+	return this->_LastMove_X;
 }
 
-float InsertEventBase::Get_Margin_Y()
+float InsertEventBase::Get_LastMove_Y()
 {
-	return this->_Margin_Y;
+	return this->_LastMove_Y;
 }
 
 bool InsertEventBase::Get_Key_Pressed()
@@ -340,7 +342,7 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 
 InsertEventBase::InsertEventBase() :Tanxl_ClassBase("0.8"),
 _KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1), _Max_float(1.0f),
-_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+_LastMove_X(0.0f), _LastMove_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase::~InsertEventBase()
 {
@@ -349,7 +351,7 @@ InsertEventBase::~InsertEventBase()
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :Tanxl_ClassBase("0.8"),
 _KeyEventS(NULL), _Max_float(1.0f), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Margin_X(0.0f), _Margin_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+_LastMove_X(0.0f), _LastMove_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

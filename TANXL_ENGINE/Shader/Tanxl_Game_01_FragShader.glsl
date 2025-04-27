@@ -8,6 +8,7 @@
 // 变量名称调整
 // 整理输入纹理顺序
 // 完整支持所有编号的纹理
+// 增加透明颜色输出选项
 
 #version 430
 
@@ -54,6 +55,9 @@ void main(void)
 {	
 	switch(Cube)
 	{
+	case -1:
+		color = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+		break;
 	case 0:
 		color = texture(Tex_00, tc);
 		break;
@@ -150,6 +154,7 @@ void main(void)
 	case 31:
 		color = texture(Tex_31, tc);
 		break;
+	case 32:
 	default:
 		color = vs_color;
 		break;

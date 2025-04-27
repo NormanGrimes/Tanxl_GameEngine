@@ -57,7 +57,8 @@ static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFF
 	// |  06  | TANXL_RANDOMBASE      |
 	// |  07  | TANXL_LOCATIONBASE    |
 	// |  08  | TANXL_GAME_OBJECTBASE |
-	// |  09  | TANXL_ENGINE_MANAGER  |
+	// |  09  | TANXL_SOUNDBASE       |
+	// |  10  | TANXL_ENGINE_MANAGER  |
 	// |------|-----------------------|
 
 	if ((Type == 0) && (Exac == 0))
@@ -98,16 +99,16 @@ static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFF
 	// |------|-----------------------|
 	// | DAT1 |                       |
 	// |------|-----------------------|
-	// |  00  | CURRENT_UNIQUE_ID     |
-	// |  01  | UNIQUE_ID_LEFT        |
-	// |  02  | UNIQUE_ID_RIGHT       |
-	// |  03  | UNIQUE_ID_ABOVE       |
-	// |  04  | UNIQUE_ID_BELOW       |
-	// |  05  | UNIQUE_ID_LEFT_ABOVE  |
-	// |  06  | UNIQUE_ID_LEFT_BELOW  |
-	// |  07  | UNIQUE_ID_RIGHT_ABOVE |
-	// |  08  | UNIQUE_ID_RIGHT_BELOW |
-	// |  09  | GAME_STATE_BLOCK_DATA |
+	// |  00  | UNIQUE_ID_CURRENT	  |
+	// |  01  | GAME_STATE_BLOCK_DATA |	
+	// |  02  | UNIQUE_ID_LEFT        |
+	// |  03  | UNIQUE_ID_RIGHT       |
+	// |  04  | UNIQUE_ID_ABOVE       |
+	// |  05  | UNIQUE_ID_BELOW       |
+	// |  06  | UNIQUE_ID_LEFT_ABOVE  |
+	// |  07  | UNIQUE_ID_LEFT_BELOW  |
+	// |  08  | UNIQUE_ID_RIGHT_ABOVE |
+	// |  09  | UNIQUE_ID_RIGHT_BELOW |
 	// |------|-----------------------|
 
 	else if (Type == 1)

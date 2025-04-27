@@ -57,8 +57,8 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
     {
-        int StateVal = SID(DRE);
-        int EventVal = EID(DRE);
+        int StateVal{ SID(DRE) };
+        int EventVal{ EID(DRE) };
 
         if(Random_Event)
             ReturnVal += std::to_string(EventVal) + "-" + std::to_string(StateVal) + ",";

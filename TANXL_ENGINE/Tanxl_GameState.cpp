@@ -833,20 +833,6 @@ void GameStateBase::Set_Trigger_Mode(bool Mode)
 	this->_Trigger_Mode = Mode;
 }
 
-void GameStateBase::Generate_StateBlock()
-{
-	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
-	static int State_Level{ 0x02 };
-	int State_Size{ this->_State_WidthS * this->_State_HeightS };
-	for (int i{ 0 }; i < State_Size; ++i)
-	{
-		TRB->Suffle_UniData(1);
-		this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, State_Level);
-		this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true));
-	}
-	State_Level++;
-}
-
 void GameStateBase::Generate_StateBlock(int State_Id)
 {
 	static RandomBase* TRB{ &RandomBase::GetRandomBase() };

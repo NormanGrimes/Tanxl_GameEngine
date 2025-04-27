@@ -18,7 +18,6 @@ flat out int Cube;
 
 void main(void)
 {
-	Cube = -1;
 	tc = texCoord;
 
 	float Status_0 = 0.0f;
@@ -39,6 +38,7 @@ void main(void)
 
 	for(int VertexId = 0; VertexId < 30; ++VertexId)
 	{
+		Cube = 32;
 		if      (gl_VertexID == VertexId * 6 + 0) 
 		{
 			gl_Position = vec4( -Line_Length_Width + WidthMove, -Line_Length_Height + HeightMove, STATE_03_LAYER, 1.0f);

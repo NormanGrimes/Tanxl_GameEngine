@@ -9,6 +9,7 @@
 // 移除地图横向与纵向区块个数的获取接口
 // 地图基础类改为继承自引擎基础类
 // 移除扩展世界启用标记以及设置函数
+// 移除无参数版本的地图生成函数
 
 #pragma once
 
@@ -197,7 +198,6 @@ public:
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
-	void Generate_StateBlock();
 	void Generate_StateBlock(int State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
 	void Build_Connect(int State_Id);

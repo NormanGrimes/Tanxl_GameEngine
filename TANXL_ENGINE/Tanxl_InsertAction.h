@@ -32,6 +32,7 @@
 // 从获取输入接口中独立出获取鼠标输入接口
 // 增加接口控制是否响应输入
 // 输入基础类改为继承自引擎基础类
+// 增加宏控制鼠标坐标的输出
 
 #pragma once
 
@@ -45,6 +46,7 @@
 #define _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_   1
 #define _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_ 1
 #define _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_   1
+#define _TANXL_INSERTACTION_CONSOLE_MOUSE_OUTPUT_  1
 
 #endif
 
@@ -89,8 +91,8 @@ public:
 	static InsertEventBase& GetInsertBase();
 	//自动根据已知信息返回方块能移动的最大范围 公式 1 - ( 1 / 游戏地图边长（方块数）)
 	float Get_AutoFloat(int Blocks);
-	float Get_Margin_X();
-	float Get_Margin_Y();
+	float Get_LastMove_X();
+	float Get_LastMove_Y();
 	//获取当前是否按下了按键 并重置此变量状态为未按下
 	bool Get_Key_Pressed();
 	//删除指定名称的输入按键功能
@@ -142,10 +144,10 @@ private:
 	bool _Is_Key_Pressed;
 	//_Is_Key_Enable 用于标记当前是否响应输入
 	bool _Is_Key_Enable;
-	//_Margin_X 代表当前主控制物品最近一次移动的X坐标移动距离
-	float _Margin_X;
-	//_Margin_Y 代表当前主控制物品最近一次移动的Y坐标移动距离
-	float _Margin_Y;
+	//_LastMove_X 代表当前主控制物品最近一次移动的X坐标移动距离
+	float _LastMove_X;
+	//_LastMove_Y 代表当前主控制物品最近一次移动的Y坐标移动距离
+	float _LastMove_Y;
 	//_Max_float_Height 代表当前主控制物品在Y轴的最大移动距离
 	float _Max_float_Height;
 	//_Max_float_Width 代表当前主控制物品在X轴的最大移动距离

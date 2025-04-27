@@ -22,27 +22,27 @@ void main(void)
 
 	for(int VertexId = 0; VertexId < 1; ++VertexId)
 	{
-		if      (gl_VertexID == VertexId * 6 + 0) 
-		{ 
+		if      (gl_VertexID == (VertexId * 6 + 0))
+		{
 			gl_Position = vec4( -1.01f, -1.01f, STATE_02_LAYER, 1.0f);
 		}
-		else if (gl_VertexID == VertexId * 6 + 1) 
-		{ 
+		else if (gl_VertexID == (VertexId * 6 + 1))
+		{
 			gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f); 
 		}
-		else if (gl_VertexID == VertexId * 6 + 2) 
-		{ 
+		else if (gl_VertexID == (VertexId * 6 + 2))
+		{
 			gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
 		}
-		else if (gl_VertexID == VertexId * 6 + 3) 
-		{ 
+		else if (gl_VertexID == (VertexId * 6 + 3))
+		{
 			gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f); 
 		}
-		else if (gl_VertexID == VertexId * 6 + 4) 
+		else if (gl_VertexID == (VertexId * 6 + 4))
 		{
 			gl_Position = vec4(  1.01f,  1.01f, STATE_02_LAYER, 1.0f);
 		}
-		else if (gl_VertexID == VertexId * 6 + 5) 
+		else if (gl_VertexID == (VertexId * 6 + 5))
 		{
 			gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
 		}

@@ -1,7 +1,7 @@
 #include "Tanxl_GameObject.h"
 
-Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage) :
-	_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage), _Is_Alive(true)
+Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage) : Componment_Base("Health"),
+_Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage), _Is_Alive(true)
 {
 	if (_Current_Health > _Maximum_Health)
 		_Maximum_Health = _Current_Health;
@@ -51,7 +51,7 @@ bool Health_Componment::Is_Alive()
 	return this->_Is_Alive;
 }
 
-Money_Componment::Money_Componment(int Init_Money) :_Current_Money(Init_Money) {}
+Money_Componment::Money_Componment(int Init_Money) :Componment_Base("Money"), _Current_Money(Init_Money) {}
 
 int Money_Componment::Add_Money(int Money)
 {

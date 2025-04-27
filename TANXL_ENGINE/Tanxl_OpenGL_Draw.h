@@ -540,7 +540,6 @@ private:
 	GLuint _Start_RenderingProgram{ 0 };
 	GLuint _ITest_RenderingProgram{ 0 };
 	GLuint _Event_RenderingProgram{ 0 };
-
 	GLuint _Fonts_RenderingProgram{ 0 };
 
 	GLuint _vao[3];

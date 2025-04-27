@@ -30,6 +30,7 @@
 // 物品基类改为继承自基础类
 // 生命值组件增加死亡状态
 // 重写组件基础类
+// 生命值与金钱组件改为继承自组件基类
 
 #pragma once
 
@@ -42,8 +43,17 @@
 #include "Tanxl_EngineBase.h"
 
 //组件类
+class Componment_Base
+{
+public:
+	Componment_Base(std::string Name);
 
-class Health_Componment
+	std::string GetName();
+private:
+	std::string _Name;
+};
+
+class Health_Componment : public Componment_Base
 {
 public:
 	Health_Componment(int Maximum_Health, int Current_Health, bool Unable_Damage = false);
@@ -67,7 +77,7 @@ private:
 	bool _Is_Alive;
 };
 
-class Money_Componment
+class Money_Componment : public Componment_Base
 {
 public:
 	Money_Componment(int Init_Money);
@@ -115,16 +125,6 @@ public:
 	int Get_DefenseVal();
 private:
 	int _Defense;
-};
-
-class Componment_Base
-{
-public:
-	Componment_Base(std::string Name);
-
-	std::string GetName();
-private:
-	std::string _Name;
 };
 
 class Componment_Unite

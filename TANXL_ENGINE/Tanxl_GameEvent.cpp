@@ -10,7 +10,13 @@ GameEvent::GameEvent(std::string Name, GameObject* Obejct) :_EventName(Name), _G
 //State_ChangeEvent
 
 State_ChangeEvent::State_ChangeEvent(std::string Name, int LocationX, int LocationY, std::string Cover_String) :
-	GameEvent(Name), _LocationX(LocationX), _LocationY(LocationY), _Cover_String(Cover_String) {};
+	GameEvent(Name), _LocationX(LocationX), _LocationY(LocationY), _Cover_String(Cover_String) {}
+
+void State_ChangeEvent::CheckEvent(int LocationX, int LocationY)
+{
+	if ((LocationX == this->_LocationX) && (LocationY == this->_LocationY))
+		this->EventAction();
+}
 
 void State_ChangeEvent::EventAction()
 {
@@ -85,3 +91,5 @@ GameEventBase& GameEventBase::GetEventBase()
 	static GameEventBase* EventBase{ new GameEventBase };
 	return *EventBase;
 }
+
+GameEvent_By_Location::GameEvent_By_Location(std::string Name, GameObject* Obejct) :GameEvent(Name, Obejct) {}

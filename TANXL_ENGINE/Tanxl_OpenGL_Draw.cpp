@@ -427,7 +427,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 
 	static int Exac_Mov{ State->Get_Distance_Move_Id() };
 
-	if (IEB->Get_Margin_X() < 0)
+	if (IEB->Get_LastMove_X() < 0)
 	{
 		if (this->_LCB->Get_LocationX(Exac_Mov) < -static_cast<int>(State->Get_DataWidth()) - 1)
 		{
@@ -441,7 +441,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_LEFT);
+				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_LEFT);
 
 				if (State->Get_Exac_LocationX() >= -static_cast<int>(State->Get_DataWidth()) - 1)
 					State_Check_Block(State, CHECK_EDGE_LEFT);
@@ -450,7 +450,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 	}
 
-	if (IEB->Get_Margin_X() > 0)
+	if (IEB->Get_LastMove_X() > 0)
 	{
 		if ((this->_LCB->Get_LocationX(Exac_Mov) > State_Data_Width))
 		{
@@ -464,7 +464,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(IEB->Get_Margin_X(), 0.0f, CHECK_EDGE_RIGH);
+				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_RIGH);
 
 				if (State->Get_Exac_LocationX() <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
 					State_Check_Block(State, CHECK_EDGE_RIGH);
@@ -473,7 +473,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 1);//Insert Status
 	}
 
-	if (IEB->Get_Margin_Y() > 0)
+	if (IEB->Get_LastMove_Y() > 0)
 	{
 		if ((this->_LCB->Get_LocationY(Exac_Mov) > State->Get_DataHeight() + 1))
 		{
@@ -487,7 +487,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_ABOV);
+				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_ABOV);
 
 				if (State->Get_Exac_LocationY() >= -static_cast<int>(State->Get_DataHeight()) - 1)
 					State_Check_Block(State, CHECK_EDGE_ABOV);
@@ -496,7 +496,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 2);//Insert Status
 	}
 
-	if (IEB->Get_Margin_Y() < 0)
+	if (IEB->Get_LastMove_Y() < 0)
 	{
 		if (this->_LCB->Get_LocationY(Exac_Mov) < -State_Data_Height)
 		{
@@ -510,7 +510,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(0.0f, IEB->Get_Margin_Y(), CHECK_EDGE_BELO);
+				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_BELO);
 
 				if (State->Get_Exac_LocationY() <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
 					State_Check_Block(State, CHECK_EDGE_BELO);

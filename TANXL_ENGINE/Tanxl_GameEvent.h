@@ -10,6 +10,8 @@
 // 增加指定事件目标的接口
 // 新增一个示例游戏事件
 // 游戏事件类改为继承自基础类
+// 地图替换事件改为通过检查坐标自动执行事件
+// 增加坐标触发的事件类
 
 #pragma once
 
@@ -33,16 +35,27 @@ private:
 	GameObject* _GameObejct;
 };
 
+class GameEvent_By_Location : public GameEvent
+{
+public:
+	GameEvent_By_Location(std::string Name = "", GameObject* Obejct = nullptr);
+	virtual void CheckEvent(int LocationX, int LocationY) = 0;
+private:
+	virtual void EventAction() = 0;
+};
+
 class State_ChangeEvent : public GameEvent
 {
 public:
 	State_ChangeEvent(std::string Name, int LocationX, int LocationY, std::string Cover_String);
 
-	void EventAction();
+	void CheckEvent(int LocationX, int LocationY);
 
 	void Set_CoverString(std::string Cover_String);
 
 private:
+
+	void EventAction();
 	int _LocationX;
 	int _LocationY;
 	std::string _Cover_String;
@@ -64,6 +77,7 @@ public:
 	bool Search_GameEvent(std::string EventName);
 	void Remove_GameEvent(int Event_Id);
 	void Remove_GameEvent(std::string EventName);
+
 private:
 	GameEventBase();
 	~GameEventBase();

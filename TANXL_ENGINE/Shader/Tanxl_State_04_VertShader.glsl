@@ -63,9 +63,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if(Cube == -1)
-				gl_Position = vec4( 0.0f, 0.0f, 1.0f, 1.0f);
-			else if (EventInfor[VertexId] == 4)
+			if (EventInfor[VertexId] == 4)
 				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4( -Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -81,12 +79,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if(Cube == -1)
-				gl_Position = vec4( 0.0f, 0.0f, 1.0f, 1.0f);
-			else if (EventInfor[VertexId] == 4)
+			if (EventInfor[VertexId] == 4)
 				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f); 
 			else
-				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f); 
+				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == VertexId * 6 + 2) 
 		{
@@ -99,9 +95,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if(Cube == -1)
-				gl_Position = vec4( 0.0f, 0.0f, 1.0f, 1.0f);
-			else if (EventInfor[VertexId] == 4)
+			if (EventInfor[VertexId] == 4)
 				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4( -Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -117,12 +111,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if(Cube == -1)
-				gl_Position = vec4( 0.0f, 0.0f, 1.0f, 1.0f);
-			else if (EventInfor[VertexId] == 4)
+			if (EventInfor[VertexId] == 4)
 				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
-				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f); 
+				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == VertexId * 6 + 4) 
 		{
@@ -135,9 +127,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if(Cube == -1)
-				gl_Position = vec4( 0.0f, 0.0f, 1.0f, 1.0f);
-			else if (EventInfor[VertexId] == 4)
+			if (EventInfor[VertexId] == 4)
 				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4(  Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -153,9 +143,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if(Cube == -1)
-				gl_Position = vec4( 0.0f, 0.0f, 1.0f, 1.0f);
-			else if (EventInfor[VertexId] == 4)
+			if (EventInfor[VertexId] == 4)
 				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4( -Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
