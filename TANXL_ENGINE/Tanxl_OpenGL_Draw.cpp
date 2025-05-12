@@ -4,7 +4,6 @@
 
 #include <Windows.h>
 
-static GameTips* Tips{ &GameTips::GetTipsBase() };
 static FontBase* Font{ &FontBase::GetFontBase() };
 
 static GameObject* MC{ Main_Character::Get_Main_Character() };
@@ -12,7 +11,7 @@ static GameObject* MC{ Main_Character::Get_Main_Character() };
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
 	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
-	if (OGD->_ScreenWidth != ScreenWidth && OGD->_ScreenHeight != ScreenHeight)
+	if ((OGD->_ScreenWidth != ScreenWidth) && (OGD->_ScreenHeight != ScreenHeight))
 		OGD->Set_DisplaySize(ScreenWidth, ScreenHeight);
 	return *OGD;
 }
@@ -32,7 +31,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_Game TEST VERSION /// 0.2B49", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_GAME /// 0.2B54", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -110,7 +109,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_WidthInt);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, MC->Get_MaxHealth());//Health Init
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, MC->Get_MaxHealth() + 2);//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
@@ -761,6 +760,7 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			ReLoadState(State);
 		}
 	}
+	std::cout << "Health :" << MC->Check_Health() << std::endl;
 }
 
 void OpenGL_Draw::Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times)
@@ -777,16 +777,15 @@ void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat sca
 	glBindVertexArray(_vao[0]);
 
 	// Iterate through all characters
-	std::string::const_iterator c;
-	for (c = text.begin(); c != text.end(); c++)
+	for (std::string::const_iterator c{ text.begin() }; c != text.end(); ++c)
 	{
-		Character ch = (Font->Get_Characters(Font_Id))[*c];// Characters[*c];
+		Character ch{ (Font->Get_Characters(Font_Id))[*c] };// Characters[*c];
 
-		GLfloat xpos = x + ch.Bearing.x * scale;
-		GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+		GLfloat xpos{ x + ch.Bearing.x * scale };
+		GLfloat ypos{ y - (ch.Size.y - ch.Bearing.y) * scale };
 
-		GLfloat w = ch.Size.x * scale;
-		GLfloat h = ch.Size.y * scale;
+		GLfloat w{ ch.Size.x * scale };
+		GLfloat h{ ch.Size.y * scale };
 		// Update VBO for each character
 		GLfloat vertices[6][4] = {
 			{ xpos,     ypos + h,   0.0, 0.0 },
@@ -830,6 +829,7 @@ bool OpenGL_Draw::Check_Key_Press()
 
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
+	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	static double LastTime{ glfwGetTime() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
@@ -1011,7 +1011,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
 	if(VersionFontSize > -800.0f)
-		RenderText("TANXL GAME VERSION 2.49", VersionFontSize, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+		RenderText("TANXL GAME VERSION 2.54", VersionFontSize, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
 

@@ -14,6 +14,7 @@
 // 移除重置单一数据链功能
 // 增加清除内存中所有数据的功能
 // 组合字符串功能去掉未使用变量
+// 增加复制接口用于复制所有数据
 
 #pragma once
 
@@ -161,6 +162,8 @@ public:
 	void Append_DataChain(std::string Data, unsigned Divide = 0, unsigned Type = 0x01, unsigned Exac = 0xFFFF);
 	//↓清理内存中所有的数据
 	void Clear_DataChain();
+	//↓复制当前容器中的数据到另一个容器
+	void Copy_DataBase(TANXL_DataBase DataBase);
 	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息

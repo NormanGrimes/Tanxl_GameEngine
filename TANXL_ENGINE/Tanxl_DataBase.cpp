@@ -648,6 +648,12 @@ void TANXL_DataBase::Clear_DataChain()
 	std::vector<Id_Link*>().swap(*this->_Id_Links);
 }
 
+void TANXL_DataBase::Copy_DataBase(TANXL_DataBase DataBase)
+{
+	for (int i{ 0 }; i < this->_Id_Links->size(); ++i)
+		DataBase.Append_Link(*this->_Id_Links->at(i));
+}
+
 const std::string TANXL_DataBase::Get_Version()
 {
 	return this->_Version;

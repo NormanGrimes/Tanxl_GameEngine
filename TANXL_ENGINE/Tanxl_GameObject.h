@@ -149,7 +149,7 @@ public:
 
 	void RestoreHealth(int RestVal);
 	void TakeDamage(int TakeVal);
-	void Set_Health(int Current_Health, int Max_Health = 13);
+	void Set_Health(int Current_Health, int Max_Health = 11);
 	int Check_Health();
 	int Get_MaxHealth();
 	bool Get_Is_Alive();

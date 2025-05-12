@@ -205,7 +205,7 @@ bool Componment_Unite::RemoveComponment(std::string Name)
 
 GameObject* Main_Character::Get_Main_Character()
 {
-	static GameObject* MainCharacter{ new GameObject(13, 5) };
+	static GameObject* MainCharacter{ new GameObject(11, 5) };
 	return MainCharacter;
 }
 

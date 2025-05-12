@@ -19,6 +19,9 @@
     <Filter Include="头文件\Engine">
       <UniqueIdentifier>{46f0d6e0-797d-4aa3-a790-91ce7b4d68a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="资源文件\图片资源">
+      <UniqueIdentifier>{06715d9d-7981-4692-bbe7-5b5692782e7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tanxl_DataBase.h">
@@ -159,5 +162,10 @@
     <ResourceCompile Include="TANXL_ENGINE.rc">
       <Filter>源文件</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Texture\TANXL_SOFTWARE_LOGO.ico">
+      <Filter>资源文件\图片资源</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -29,8 +29,9 @@ public:
 	GameEvent(std::string Name = "", GameObject* Obejct = nullptr);
 	std::string GetEventName();
 	void Set_EventTarget(GameObject* Obejct);
-	virtual void EventAction() = 0;
+	
 private:
+	virtual void EventAction() = 0;
 	std::string _EventName;
 	GameObject* _GameObejct;
 };

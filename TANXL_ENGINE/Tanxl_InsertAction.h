@@ -33,6 +33,9 @@
 // 增加接口控制是否响应输入
 // 输入基础类改为继承自引擎基础类
 // 增加宏控制鼠标坐标的输出
+// 增加按键事件结构体
+// 使用按键事件结构体替换按键单元
+// 注册按键功能返回按键的编号
 
 #pragma once
 
@@ -84,6 +87,15 @@ struct Key_Unit
 	std::string Unit_Name;
 };
 
+struct Key_Event
+{
+	Key_Event(Key_Unit* Key);
+
+	Key_Unit* _Key_Unit;
+	bool _Is_Key_Press;
+	int _Press_Count;
+};
+
 class InsertEventBase : public Tanxl_ClassBase
 {
 public:
@@ -101,7 +113,7 @@ public:
 	short Get_Reach_Edge();
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
-	void RegistEvent(Key_Unit* KU);
+	int RegistEvent(Key_Unit* KU);
 	//移除最近一个添加的按键功能
 	void RemoveEvent();
 	size_t Get_KeyEvent_Size();
@@ -131,7 +143,7 @@ private:
 	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘
 	void AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);
 	//_KeyEventS 所有已注册输入事件的容器
-	std::vector<Key_Unit*> _KeyEventS;
+	std::vector<Key_Event*> _KeyEventS;
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离
 	float _Max_float;
 	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘 0为未到达边缘 1为左边缘 2为右边缘 3为上边缘 4为下边缘

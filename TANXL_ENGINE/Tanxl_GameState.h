@@ -120,8 +120,8 @@ struct State_Policy
 struct SExtend_State
 {
 	SExtend_State(std::string Id = "NULL", std::vector<StateUnit*>* Data = nullptr);
-	std::string _Id{ "NULL" };
-	std::vector<StateUnit*>* _Data{ nullptr };
+	std::string _Id;
+	std::vector<StateUnit*>* _Data;
 };
 
 class StateEvent

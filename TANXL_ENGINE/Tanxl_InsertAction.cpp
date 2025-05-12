@@ -60,9 +60,11 @@ float InsertEventBase::Get_AutoFloat(int Blocks)
 	return (1.0f - 1.0f / Blocks);
 }
 
-void InsertEventBase::RegistEvent(Key_Unit* KU)
+int InsertEventBase::RegistEvent(Key_Unit* KU)
 {
-	this->_KeyEventS.push_back(KU);
+	Key_Event* KE{ new Key_Event(KU) };
+	this->_KeyEventS.push_back(KE);
+	return static_cast<int>(this->_KeyEventS.size()) - 1;
 }
 
 void InsertEventBase::RemoveEvent()
@@ -95,30 +97,33 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 
 	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
-		if (glfwGetKey(window, this->_KeyEventS.at(i)->GLFW_KEY) == GLFW_PRESS)
+		if (glfwGetKey(window, this->_KeyEventS.at(i)->_Key_Unit->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
-			if (this->_KeyEventS.at(i)->Unit_Type == 1)
+			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)
 			{
-				this->_KeyEventS.at(i)->SaveLen++;
-				if (this->_KeyEventS.at(i)->SaveLen > this->_KeyEventS.at(i)->MoveLen)
+				this->_KeyEventS.at(i)->_Key_Unit->SaveLen++;
+				if (this->_KeyEventS.at(i)->_Key_Unit->SaveLen > this->_KeyEventS.at(i)->_Key_Unit->MoveLen)
 				{
-					this->_KeyEventS.at(i)->MoveToY = !this->_KeyEventS.at(i)->MoveToY;
-					this->_KeyEventS.at(i)->SaveLen = -25;
+					this->_KeyEventS.at(i)->_Key_Unit->MoveToY = !this->_KeyEventS.at(i)->_Key_Unit->MoveToY;
+					this->_KeyEventS.at(i)->_Key_Unit->SaveLen = -25;
+
+					this->_KeyEventS.at(i)->_Press_Count++;
+					this->_KeyEventS.at(i)->_Is_Key_Press = true;
 				}
 				continue;
 			}
 			if (!OPD->Get_Adjust_Status())
 			{
-				if (this->_KeyEventS.at(i)->MoveToY)
-					Insert_Move_LengthY += this->_KeyEventS.at(i)->MoveLen;
-				if (this->_KeyEventS.at(i)->MoveToX)
-					Insert_Move_LengthX += this->_KeyEventS.at(i)->MoveLen;
+				if (this->_KeyEventS.at(i)->_Key_Unit->MoveToY)
+					Insert_Move_LengthY += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
+				if (this->_KeyEventS.at(i)->_Key_Unit->MoveToX)
+					Insert_Move_LengthX += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
 			}
 		}
 		else
-			if (this->_KeyEventS.at(i)->Unit_Type == 1)
-				this->_KeyEventS.at(i)->SaveLen = 0;
+			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)
+				this->_KeyEventS.at(i)->_Key_Unit->SaveLen = 0;
 	}
 	State->Get_Screen_Distance()._Location_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
 	State->Get_Screen_Distance()._Location_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
@@ -208,10 +213,10 @@ void InsertEventBase::Set_MultiSpeed(int Start, int End, double Adjust_Value)
 
 	while (Start < End)
 	{
-		if (this->_KeyEventS.at(Start)->MoveLen > 0.0f)
-			this->_KeyEventS.at(Start)->MoveLen += Adjust_Value;
-		else if (this->_KeyEventS.at(Start)->MoveLen < 0.0f)
-			this->_KeyEventS.at(Start)->MoveLen -= Adjust_Value;
+		if (this->_KeyEventS.at(Start)->_Key_Unit->MoveLen > 0.0f)
+			this->_KeyEventS.at(Start)->_Key_Unit->MoveLen += Adjust_Value;
+		else if (this->_KeyEventS.at(Start)->_Key_Unit->MoveLen < 0.0f)
+			this->_KeyEventS.at(Start)->_Key_Unit->MoveLen -= Adjust_Value;
 		Start++;
 	}
 }
@@ -275,7 +280,7 @@ bool InsertEventBase::RemoveEvent(std::string Event_Name)
 {
 	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
-		if (this->_KeyEventS.at(i)->Unit_Name == Event_Name)
+		if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Name == Event_Name)
 		{
 			this->_KeyEventS.erase(_KeyEventS.begin() + i);
 			return true;
@@ -346,7 +351,7 @@ _LastMove_X(0.0f), _LastMove_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(fal
 
 InsertEventBase::~InsertEventBase()
 {
-	std::vector<Key_Unit*>().swap(this->_KeyEventS);
+	std::vector<Key_Event*>().swap(this->_KeyEventS);
 }
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :Tanxl_ClassBase("0.8"),
@@ -357,3 +362,5 @@ InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {
 	return *this;
 }
+
+Key_Event::Key_Event(Key_Unit* Key) :_Key_Unit(Key), _Is_Key_Press(false), _Press_Count(0) {}
