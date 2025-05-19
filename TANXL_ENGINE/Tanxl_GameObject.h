@@ -31,6 +31,7 @@
 // 生命值组件增加死亡状态
 // 重写组件基础类
 // 生命值与金钱组件改为继承自组件基类
+// 组件容器类增加无参数版清理函数
 
 #pragma once
 
@@ -130,8 +131,9 @@ private:
 class Componment_Unite
 {
 public:
-	bool AppendComponment(Componment_Base* CM);
-	bool RemoveComponment(std::string Name);
+	bool Append(Componment_Base* CM);
+	bool Remove(std::string Name);
+	bool Remove();
 
 private:
 	std::vector<Componment_Base*> _Object_Content;

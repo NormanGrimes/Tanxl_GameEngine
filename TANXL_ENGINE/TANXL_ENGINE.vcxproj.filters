@@ -66,14 +66,14 @@
     <ClInclude Include="Tanxl_SoundBase.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Tanxl_FontBase.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="Tanxl_Console_List.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_EngineBase.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Tanxl_FontBase.h">
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +117,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_Console_List.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanxl_FontBase.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>

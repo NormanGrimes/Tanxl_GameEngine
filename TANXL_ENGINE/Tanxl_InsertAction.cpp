@@ -69,7 +69,8 @@ int InsertEventBase::RegistEvent(Key_Unit* KU)
 
 void InsertEventBase::RemoveEvent()
 {
-	this->_KeyEventS.pop_back();
+	if (this->_KeyEventS.size() != 0)
+		this->_KeyEventS.erase(this->_KeyEventS.end() - 1, this->_KeyEventS.end());
 }
 
 size_t InsertEventBase::Get_KeyEvent_Size()

@@ -486,7 +486,7 @@ void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int 
 			return;
 		case ADD_UNIT_IDADAT:
 		{
-			Id_Link* PIL = { Id_Link_Locate(Type,Exac) };
+			Id_Link* PIL{ Id_Link_Locate(Type,Exac) };
 			PIL->Append_Data_Link(new Data_Link(Id, Data));
 			return;
 		}
@@ -506,6 +506,8 @@ void TANXL_DataBase::Remove_Link(int Type, int Exac)
 
 Id_Link* TANXL_DataBase::Id_Link_Search(int Level)
 {
+	if ((Level < 0) && (Level > this->_Id_Links->size()))
+		return nullptr;
 	return this->_Id_Links->at(Level);
 }
 

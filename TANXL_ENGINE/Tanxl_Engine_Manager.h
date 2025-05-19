@@ -9,6 +9,8 @@
 // 2023/10/16 增加对音频模块的支持
 // 2023/10/17 增加用于重新生成地图数据与引擎信息的接口
 // 2023/10/25 支持STEAMWORKS158SDK
+// 2023/11/09 引擎重置接口增加音频模块的操作
+// 2023/11/10 增加字体模块的支持
 
 #pragma once
 
@@ -29,6 +31,7 @@
 #include "Tanxl_LocationBase.h"
 #include "Tanxl_SteamService.h"
 #include "Tanxl_SoundBase.h"
+#include "Tanxl_FontBase.h"
 
 enum class EENGINE_BASES
 {
@@ -42,7 +45,8 @@ enum class EENGINE_BASES
 	ENGINE_RANDOMBASE    =  7,
 	ENGINE_LOCATIONBASE  =  8,
 	ENGINE_OBJECTBASE    =  9,
-	ENGINE_SOUNDBASE     = 10
+	ENGINE_FONTBASE      = 10,
+	ENGINE_SOUNDBASE     = 11
 };
 
 class Tanxl_Engine
@@ -122,6 +126,7 @@ private:
 	GameObjectBase* Tanxl_Engine_ObjectBase;
 	Tanxl_Inventory* Tanxl_Engine_Inventory;
 	SoundBase* Tanxl_Engine_SoundBase;
+	FontBase* Tanxl_Engine_FontBase;
 
 	//Status :
 	// 0x001 引擎组件控制台列表初始化失败
@@ -138,7 +143,7 @@ private:
 	// 0x100 已启用扩展世界功能
 	unsigned _Engine_Status;
 
-	std::string _Engine_InforFile_Name = "";
+	std::string _Engine_InforFile_Name{ "" };
 
 	struct
 	{

@@ -179,7 +179,7 @@ int Armor::Get_DefenseVal()
 	return this->_Defense;
 }
 
-bool Componment_Unite::AppendComponment(Componment_Base* CM)
+bool Componment_Unite::Append(Componment_Base* CM)
 {
 	for (auto Componment : this->_Object_Content)//根据名称添加
 	{
@@ -190,7 +190,7 @@ bool Componment_Unite::AppendComponment(Componment_Base* CM)
 	return true;
 }
 
-bool Componment_Unite::RemoveComponment(std::string Name)
+bool Componment_Unite::Remove(std::string Name)
 {
 	for (std::vector<Componment_Base*>::iterator IOCB{ this->_Object_Content.begin() }; IOCB != this->_Object_Content.end(); ++IOCB)//根据名称删除
 	{
@@ -201,6 +201,12 @@ bool Componment_Unite::RemoveComponment(std::string Name)
 		}
 	}
 	return false;
+}
+
+bool Componment_Unite::Remove()
+{
+	_Object_Content.erase(this->_Object_Content.begin(), this->_Object_Content.end());
+	return true;
 }
 
 GameObject* Main_Character::Get_Main_Character()

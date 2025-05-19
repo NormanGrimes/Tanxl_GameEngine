@@ -58,7 +58,8 @@ static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFF
 	// |  07  | TANXL_LOCATIONBASE    |
 	// |  08  | TANXL_GAME_OBJECTBASE |
 	// |  09  | TANXL_SOUNDBASE       |
-	// |  10  | TANXL_ENGINE_MANAGER  |
+	// |  10  | TANXL_FONTBASE        |
+	// |  11  | TANXL_ENGINE_MANAGER  |
 	// |------|-----------------------|
 
 	if ((Type == 0) && (Exac == 0))
@@ -86,6 +87,8 @@ static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFF
 		case 9:
 			return "TANXL_SOUNDBASE";
 		case 10:
+			return "TANXL_FONTBASE";
+		case 11:
 			return "TANXL_ENGINE_MANAGER";
 		default:
 			break;

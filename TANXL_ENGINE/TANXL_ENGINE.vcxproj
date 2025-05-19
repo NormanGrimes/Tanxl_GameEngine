@@ -232,6 +232,7 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <ClCompile Include="Tanxl_Console_List.cpp" />
     <ClCompile Include="Tanxl_DataBase.cpp" />
     <ClCompile Include="Tanxl_Engine_Manager.cpp" />
+    <ClCompile Include="Tanxl_FontBase.cpp" />
     <ClCompile Include="Tanxl_GameEvent.cpp" />
     <ClCompile Include="Tanxl_GameObject.cpp" />
     <ClCompile Include="Tanxl_GameState.cpp" />

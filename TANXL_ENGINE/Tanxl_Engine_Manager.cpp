@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Tanxl_Engine_Manager.h"
 
 Tanxl_Engine::Tanxl_Engine() :_Engine_Status(0),
@@ -11,7 +13,8 @@ Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase()),
 Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase()),
 Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase()),
 Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase()),
-Tanxl_Engine_SoundBase(&SoundBase::GetSoundBase())
+Tanxl_Engine_SoundBase(&SoundBase::GetSoundBase()),
+Tanxl_Engine_FontBase(&FontBase::GetFontBase())
 {
 	if (!this->Tanxl_Engine_Console_List)
 		this->_Engine_Status = 0x1;
@@ -115,7 +118,8 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	Data->Append_Data(7, "VERSION " + this->Tanxl_Engine_LocationBase->Get_Version());
 	Data->Append_Data(8, "VERSION " + this->Tanxl_Engine_ObjectBase->Get_Version());
 	Data->Append_Data(9, "VERSION " + this->Tanxl_Engine_SoundBase->Get_Version());
-	Data->Append_Data(10, "VERSION " + this->__ENGINE_VERSION__);
+	Data->Append_Data(10, "VERSION " + this->Tanxl_Engine_FontBase->Get_Version());
+	Data->Append_Data(11, "VERSION " + this->__ENGINE_VERSION__);
 	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
 	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
 
@@ -277,8 +281,12 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_OBJECTBASE:
+		
 		if (!All_Selected)
 			break;
+	case EENGINE_BASES::ENGINE_SOUNDBASE:
+		this->Tanxl_Engine_SoundBase->Stop_AllSound();
+		break;
 	}
 }
 
