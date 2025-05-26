@@ -87,4 +87,4 @@ const std::string FontBase::Get_Version()
 FontBase::FontBase() :Tanxl_ClassBase("0.1") {}
 FontBase::~FontBase() {}
 FontBase::FontBase(const FontBase&) :Tanxl_ClassBase("0.1") {}
-FontBase& FontBase::operator=(const FontBase&) {}
+FontBase& FontBase::operator=(const FontBase&) { return *this; }

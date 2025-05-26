@@ -52,13 +52,16 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
     static unsigned seed{ static_cast<unsigned>(time(0)) };
     std::default_random_engine DRE(seed++);
     std::uniform_int_distribution<int> SID(0, 3);
-    std::uniform_int_distribution<int> EID(1, 4);
+    std::uniform_int_distribution<int> EID(0, 6);
     this->Suffle_UniData(1);
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
     {
         int StateVal{ SID(DRE) };
         int EventVal{ EID(DRE) };
+
+        if (EventVal > 4)
+            EventVal = 0;
 
         if(Random_Event)
             ReturnVal += std::to_string(EventVal) + "-" + std::to_string(StateVal) + ",";

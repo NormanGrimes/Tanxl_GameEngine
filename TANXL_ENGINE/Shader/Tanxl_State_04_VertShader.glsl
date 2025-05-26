@@ -4,6 +4,7 @@
 // 根据事件统一变量选择纹理
 // 增加对输出事件纹理的尺寸设置
 // 三个已定义的事件纹理移动到事件顶点着色器进行绘制
+// 缩小金币纹理的尺寸
 
 #version 430
 
@@ -63,7 +64,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if (EventInfor[VertexId] == 4)
+			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
 				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4( -Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -79,7 +80,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if (EventInfor[VertexId] == 4)
+			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
 				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f); 
 			else
 				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -95,7 +96,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if (EventInfor[VertexId] == 4)
+			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
 				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4( -Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -111,7 +112,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if (EventInfor[VertexId] == 4)
+			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
 				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -127,7 +128,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if (EventInfor[VertexId] == 4)
+			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
 				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4(  Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
@@ -143,7 +144,7 @@ void main(void)
 			else if (EventInfor[VertexId] == 4)
 				Cube = Event_01_TextureId;
 
-			if (EventInfor[VertexId] == 4)
+			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
 				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
 			else
 				gl_Position = vec4( -Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);

@@ -8,6 +8,7 @@
 // 金色方块改为增加金币而不是生命值
 // 修复生命值纹理个数显示异常的问题
 // 字体绘制效率改进
+// 从绘制循环中独立出移动时调整地图坐标的接口
 
 #pragma once
 
@@ -48,7 +49,7 @@ namespace TanxlOD
 	static const char* TexGrass_Snowy_01_128x128		{ "Texture/TANXL_GRASS_SNOWY_01_128X128.png"	};
 	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.png"	};
 	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.png"			};
-	static const char* TexGold_01_128x128				{ "Texture/TANXL_GOLD_01_128X128.png"			};
+	static const char* TexCoin_01_64x64					{ "Texture/TANXL_COIN_01_64X64.png"				};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
 	static const char* TexPrincess_01_256x256			{ "Texture/YANG_PRINCESS_01_256X256.png"		};
@@ -502,6 +503,7 @@ public:
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	int Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State);
+	void Move_Adjust(GameStateBase* State);
 	//Update_Current 更新地图加载区块
 	void Update_Current();
 	void Update_Last_Location(GameStateBase* State);
@@ -590,6 +592,8 @@ private:
 	double _Middle_Frame{ 0 };
 	//最大的中间页面编号
 	int _Max_Middle_Frame{ 0 };
+	//记录地图场景移动距离
+	int _State_Loc;
 	//当前此模块的版本号
 	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;

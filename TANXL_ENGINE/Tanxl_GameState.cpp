@@ -335,7 +335,7 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 	if (_Adjust_Enable == false)
 		return 0.0f;
 	float Temp_Move{};
-	float Temp_GameState_Adjust = static_cast<float>(_GameState_Adjust * Scale);
+	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
 	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
 	{
 		EHCountS++;
@@ -402,14 +402,14 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 	if (_Adjust_Enable == false)
 		return 0.0f;
 	float Temp_Move{};
-	float Temp_GameState_Adjust = static_cast<float>(_GameState_Adjust * Scale);
+	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
 	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
 	{
 		EWCountS++;
 		EWCountL = 0;
 		if (EWCountS == this->_Adjust_Frame)
 		{
-			if (-MoveState < 0 && (Temp_GameState_Adjust + -MoveState > 0))
+			if (-MoveState < 0 && (Temp_GameState_Adjust + -MoveState > 0))//微调小于最小值的情况 直接调整到屏幕中间
 			{
 				Temp_Move = MoveState;
 				while (Temp_Move > 2.5)
@@ -441,7 +441,7 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 				MoveState -= Temp_GameState_Adjust;
 				State_MoveX -= Temp_GameState_Adjust;
 			}
-			else if (MoveState < Temp_GameState_Adjust)
+			else if (MoveState < Temp_GameState_Adjust)//微调小于最小值的情况 直接调整到屏幕中间
 			{
 				Temp_Move = MoveState;
 				while (Temp_Move > 2.5)

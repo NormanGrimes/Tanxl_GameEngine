@@ -18,8 +18,10 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(), _Font_vbo(), _Inst_vbo(),
 _ScreenWidth(ScreenWidth), _ScreenHeight(ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()),
-_StateInfor() {}
+_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor()
+{
+	this->_State_Loc = this->_LCB->New_Location_set("State_Move_Location");
+}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -128,7 +130,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexGrass_Snowy_02_128x128);
 	Append_Texture(TanxlOD::TexOcean_01_128x128);
 	Append_Texture(TanxlOD::TexDirt_01_128x128);
-	Append_Texture(TanxlOD::TexGold_01_128x128);
+	Append_Texture(TanxlOD::TexCoin_01_64x64);
 
 	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
 	int Tex_02{ Append_Texture(TanxlOD::TexPrincess_02_256x256)		};
@@ -519,6 +521,84 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 	}
 }
 
+void OpenGL_Draw::Move_Adjust(GameStateBase* State)
+{
+	if (!State->Get_Adjust_Flag() || State->Is_Adjust_While_Move())//Move Adjust Part
+	{
+		State->Set_Adjust_Flag(true);
+
+		if (_New_Current_Height != _Current_Move_Height)
+		{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUH __ " << _New_Current_Height << " CUH __ " << _Current_Move_Height << std::endl;
+#endif
+			int TempVal{ _New_Current_Height };
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
+#endif
+			if (_New_Current_Height > _Current_Move_Height)
+			{
+				while (_New_Current_Height-- > _Current_Move_Height)
+				{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __HN---" << State->Get_Adjust_Flag() << std::endl;
+#endif
+					State->Set_Move_State(MoveToNH);
+					this->_LCB->Get_LocationY(_State_Loc) -= static_cast<float>(_Each_Height);
+				}
+			}
+			else if (_New_Current_Height < _Current_Move_Height)
+			{
+				while (_New_Current_Height++ < _Current_Move_Height)
+				{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __HP___" << State->Get_Adjust_Flag() << std::endl;
+#endif
+					State->Set_Move_State(MoveToPH);
+					this->_LCB->Get_LocationY(_State_Loc) += static_cast<float>(_Each_Height);
+				}
+			}
+			_Current_Move_Height = TempVal;
+			_Is_State_Changed = true;
+		}
+
+		if (_New_Current_Width != _Current_Move_Width)
+		{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUW __ " << _New_Current_Width << " CUW __ " << _Current_Move_Width << std::endl;
+#endif
+			int TempVal{ _New_Current_Width };
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
+#endif
+			if (_New_Current_Width > _Current_Move_Width)
+			{
+				while (_New_Current_Width-- > _Current_Move_Width)
+				{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __WN---" << State->Get_Adjust_Flag() << std::endl;
+#endif
+					State->Set_Move_State(MoveToPW);
+					this->_LCB->Get_LocationX(_State_Loc) -= static_cast<float>(_Each_Width);
+				}
+			}
+			else if (_New_Current_Width < _Current_Move_Width)
+			{
+				while (_New_Current_Width++ < _Current_Move_Width)
+				{
+#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __WP---" << State->Get_Adjust_Flag() << std::endl;
+#endif
+					State->Set_Move_State(MoveToNW);
+					this->_LCB->Get_LocationX(_State_Loc) += static_cast<float>(_Each_Width);
+				}
+			}
+			_Current_Move_Width = TempVal;
+			_Is_State_Changed = true;
+		}
+	}
+}
+
 void OpenGL_Draw::Update_Current()
 {
 	static GameStateBase* GSB{ &GameStateBase::GetStateBase() };
@@ -834,12 +914,29 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	double DeltaTime{ glfwGetTime() - LastTime };
+	int Start_State_Cnt{ 6 };
 
 	static float VersionFontSize{ 20.0f };
 
 	LastTime = glfwGetTime();
+
+	glProgramUniform1i(this->_Start_RenderingProgram, 3, this->_Game_Status);
+
+	if (this->_Game_Status != GAME_STMENU)
+		Start_State_Cnt = 0;
 	
 	glBindVertexArray(_vao[1]);
+
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+	glBindVertexArray(_vao[2]);
+	glUseProgram(_ITest_RenderingProgram);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
+	glBindVertexArray(0);
+	glBindVertexArray(_vao[1]);
+#else
+	glUseProgram(_Start_RenderingProgram);
+	glDrawArrays(GL_TRIANGLES, 0, Start_State_Cnt);
+#endif
 
 	if (_Clear_Function)
 	{
@@ -853,16 +950,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	{
 		this->_Middle_Frame = 0;
 		this->_Game_Status = GAME_STMENU;
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-		glBindVertexArray(_vao[2]);
-		glUseProgram(_ITest_RenderingProgram);
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
-		glBindVertexArray(0);
-		glBindVertexArray(_vao[1]);
-#else
-		glUseProgram(_Start_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-#endif
 
 		glBindVertexArray(_vao[0]);
 		glUseProgram(_Fonts_RenderingProgram);
@@ -905,16 +992,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		else
 		{
 			this->_Game_Status = GAME_STMENU;
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-			glBindVertexArray(_vao[2]);
-			glUseProgram(_ITest_RenderingProgram);
-			glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
-			glBindVertexArray(0);
-			glBindVertexArray(_vao[1]);
-#else
-			glUseProgram(_Start_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-#endif
 		}
 
 		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
@@ -942,16 +1019,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			ReLoadState(State);
 			MC->Set_Health(5);
 			this->_Game_Status = GAME_STMENU;
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-			glBindVertexArray(_vao[2]);
-			glUseProgram(_ITest_RenderingProgram);
-			glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
-			glBindVertexArray(0);
-			glBindVertexArray(_vao[1]);
-#else
-			glUseProgram(_Start_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-#endif
 		}
 		else
 		{
@@ -1063,7 +1130,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	}
 
 	static int Move_Loc{ this->_LCB->New_Location_set("Move_Adjust_Location") }; //记录手动移动状态的移动距离
-	static int Stat_Loc{ this->_LCB->New_Location_set("State_Move_Location") };  //记录地图场景移动距离
 	static int Dist_Mid{ State->Get_Distance_Screen_Id() };
 	static int Exac_Mov{ State->Get_Distance_Move_Id() };
 
@@ -1071,7 +1137,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	std::cout << "Move_Loc " << this->_LCB->Get_LocationX(Move_Loc) << " -- " << this->_LCB->Get_LocationY(Move_Loc) << std::endl;
 	std::cout << "Dist_Mid " << this->_LCB->Get_LocationX(Dist_Mid) << " -- " << this->_LCB->Get_LocationY(Dist_Mid) << std::endl;
 	std::cout << "Exac_Mov " << this->_LCB->Get_LocationX(Exac_Mov) << " -- " << this->_LCB->Get_LocationY(Exac_Mov) << std::endl;// MAJOR
-	std::cout << "Stat_Loc " << this->_LCB->Get_LocationX(Stat_Loc) << " -- " << this->_LCB->Get_LocationY(Stat_Loc) << std::endl << std::endl << std::endl;
+	std::cout << "Stat_Loc " << this->_LCB->Get_LocationX(_State_Loc) << " -- " << this->_LCB->Get_LocationY(_State_Loc) << std::endl << std::endl << std::endl;
 #endif
 
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
@@ -1159,8 +1225,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			return;
 		}
 
-		static int Wait_Frame{ 0 };
-
 #if _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_
 		std::cout << "Limit " << State->Get_DataWidth() * this->_Each_Width << " -- "
 			<< State->Get_DataHeight() * this->_Each_Height << std::endl;
@@ -1183,83 +1247,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if (State->Get_Adjust_Flag())//Auto Adjust Part
 		{
-			Temp_MoveY = State->Set_ExacHeight(Current_Height, this->_LCB->Get_LocationY(Dist_Mid), this->_LCB->Get_LocationY(Stat_Loc), MoveScale);
-			Temp_MoveX = State->Set_ExacWidth(Current_Width, this->_LCB->Get_LocationX(Dist_Mid), this->_LCB->Get_LocationX(Stat_Loc), MoveScale);
+			Temp_MoveY = State->Set_ExacHeight(Current_Height, this->_LCB->Get_LocationY(Dist_Mid), this->_LCB->Get_LocationY(_State_Loc), MoveScale);
+			Temp_MoveX = State->Set_ExacWidth(Current_Width, this->_LCB->Get_LocationX(Dist_Mid), this->_LCB->Get_LocationX(_State_Loc), MoveScale);
 		}
-		if (!State->Get_Adjust_Flag() || State->Is_Adjust_While_Move())//Move Adjust Part
-		{
-			State->Set_Adjust_Flag(true);
-
-			if (_New_Current_Height != _Current_Move_Height)
-			{
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-				std::cout << "NCUH __ " << _New_Current_Height << " CUH __ " << _Current_Move_Height << std::endl;
-#endif
-				int TempVal{ _New_Current_Height };
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-				std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
-#endif
-				if (_New_Current_Height > _Current_Move_Height)
-				{
-					while (_New_Current_Height-- > _Current_Move_Height)
-					{
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-						std::cout << "Adjust_Flag() __HN---" << State->Get_Adjust_Flag() << std::endl;
-#endif
-						State->Set_Move_State(MoveToNH);
-						this->_LCB->Get_LocationY(Stat_Loc) -= static_cast<float>(_Each_Height);
-					}
-				}
-				else if (_New_Current_Height < _Current_Move_Height)
-				{
-					while (_New_Current_Height++ < _Current_Move_Height)
-					{
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-						std::cout << "Adjust_Flag() __HP___" << State->Get_Adjust_Flag() << std::endl;
-#endif
-						State->Set_Move_State(MoveToPH);
-						this->_LCB->Get_LocationY(Stat_Loc) += static_cast<float>(_Each_Height);
-					}
-				}
-				_Current_Move_Height = TempVal;
-				_Is_State_Changed = true;
-			}
-
-			if (_New_Current_Width != _Current_Move_Width)
-			{
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-				std::cout << "NCUW __ " << _New_Current_Width << " CUW __ " << _Current_Move_Width << std::endl;
-#endif
-				int TempVal{ _New_Current_Width };
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-				std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
-#endif
-				if (_New_Current_Width > _Current_Move_Width)
-				{
-					while (_New_Current_Width-- > _Current_Move_Width)
-					{
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-						std::cout << "Adjust_Flag() __WN---" << State->Get_Adjust_Flag() << std::endl;
-#endif
-						State->Set_Move_State(MoveToPW);
-						this->_LCB->Get_LocationX(Stat_Loc) -= static_cast<float>(_Each_Width);
-					}
-				}
-				else if (_New_Current_Width < _Current_Move_Width)
-				{
-					while (_New_Current_Width++ < _Current_Move_Width)
-					{
-#if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
-						std::cout << "Adjust_Flag() __WP---" << State->Get_Adjust_Flag() << std::endl;
-#endif
-						State->Set_Move_State(MoveToNW);
-						this->_LCB->Get_LocationX(Stat_Loc) += static_cast<float>(_Each_Width);
-					}
-				}
-				_Current_Move_Width = TempVal;
-				_Is_State_Changed = true;
-			}
-		}
+		
+		Move_Adjust(State);
 
 		glProgramUniform1f(_Adjst_RenderingProgram, 2, this->_LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
 		glProgramUniform1f(_Adjst_RenderingProgram, 3, this->_LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//
@@ -1270,13 +1262,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			_Is_State_Changed = false;
 		}
 
-		State->StateMove_Edge_Set(Dist_Mid, Stat_Loc, Move_Loc, IEB->Get_Reach_Edge(), MoveScale);
+		State->StateMove_Edge_Set(Dist_Mid, _State_Loc, Move_Loc, IEB->Get_Reach_Edge(), MoveScale);
 
-		glProgramUniform1f(_State_RenderingProgram, 4, this->_LCB->Get_LocationX(Stat_Loc));//State_MoveX
-		glProgramUniform1f(_State_RenderingProgram, 5, this->_LCB->Get_LocationY(Stat_Loc));//State_MoveY
+		glProgramUniform1f(_State_RenderingProgram, 4, this->_LCB->Get_LocationX(_State_Loc));//State_MoveX
+		glProgramUniform1f(_State_RenderingProgram, 5, this->_LCB->Get_LocationY(_State_Loc));//State_MoveY
 
-		glProgramUniform1f(_Event_RenderingProgram, 4, this->_LCB->Get_LocationX(Stat_Loc));//State_MoveX
-		glProgramUniform1f(_Event_RenderingProgram, 5, this->_LCB->Get_LocationY(Stat_Loc));//State_MoveY
+		glProgramUniform1f(_Event_RenderingProgram, 4, this->_LCB->Get_LocationX(_State_Loc));//State_MoveX
+		glProgramUniform1f(_Event_RenderingProgram, 5, this->_LCB->Get_LocationY(_State_Loc));//State_MoveY
 
 		glfwPollEvents();
 

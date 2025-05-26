@@ -2,6 +2,7 @@
 // LAST_UPDATE 2023-07-12 14:55
 // 修复起始页面存在一像素偏差的问题
 // 纹理编号改为自动获取
+// 增加游戏状态统一变量
 
 #version 430
 
@@ -9,6 +10,7 @@
 
 layout (location = 1) in vec2 texCoord;
 layout (location = 2) uniform int Image_Id;
+layout (location = 3) uniform int Game_Status;
 
 out vec4 vs_color;
 out vec2 tc;

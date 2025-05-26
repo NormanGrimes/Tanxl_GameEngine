@@ -66,7 +66,7 @@ private:
 
 	std::string Tips[8]
 	{
-		"Tips : The golden square provides five gold coins",
+		"Tips : The golden circle provides five gold coins",
 		"Tips : Press W or up button to move upward",
 		"Tips : Press S or down button to move downward",
 		"Tips : Watch out red squares !",
