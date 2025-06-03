@@ -33,7 +33,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_GAME /// 0.2B54", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_ScreenWidth, _ScreenHeight, "Tanxl_GAME /// 0.2B56", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -162,7 +162,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	State->Get_Move_Distance()._Location_X = (2.0f / this->_WidthInt) * Half_Width + (1.0f / this->_WidthInt) * (8 - this->_PreLoads);
 	State->Get_Move_Distance()._Location_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (8 - this->_PreLoads);
 
-	State->Set_Move_State(_Pre_MoveX, _Pre_MoveY, this->_PreLoads);
+	State->Get_Square_State().Set_State_Length(State->Get_StateWidth(), State->Get_StateHeight());
+	State->Get_Square_State().Set_Move_State(_Pre_MoveX, _Pre_MoveY, this->_PreLoads);
 
 	this->_LCB->Get_LocationX(State->Get_Distance_Move_Id()) += static_cast<float>((_Pre_MoveX - 4) * this->_Each_Width);
 	this->_LCB->Get_LocationY(State->Get_Distance_Move_Id()) -= static_cast<float>((_Pre_MoveY - 4) * this->_Each_Height);
@@ -543,7 +544,7 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __HN---" << State->Get_Adjust_Flag() << std::endl;
 #endif
-					State->Set_Move_State(MoveToNH);
+					State->Get_Square_State().Set_Move_State(MoveToNH);
 					this->_LCB->Get_LocationY(_State_Loc) -= static_cast<float>(_Each_Height);
 				}
 			}
@@ -554,7 +555,7 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __HP___" << State->Get_Adjust_Flag() << std::endl;
 #endif
-					State->Set_Move_State(MoveToPH);
+					State->Get_Square_State().Set_Move_State(MoveToPH);
 					this->_LCB->Get_LocationY(_State_Loc) += static_cast<float>(_Each_Height);
 				}
 			}
@@ -578,7 +579,7 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __WN---" << State->Get_Adjust_Flag() << std::endl;
 #endif
-					State->Set_Move_State(MoveToPW);
+					State->Get_Square_State().Set_Move_State(MoveToPW);
 					this->_LCB->Get_LocationX(_State_Loc) -= static_cast<float>(_Each_Width);
 				}
 			}
@@ -589,7 +590,7 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __WP---" << State->Get_Adjust_Flag() << std::endl;
 #endif
-					State->Set_Move_State(MoveToNW);
+					State->Get_Square_State().Set_Move_State(MoveToNW);
 					this->_LCB->Get_LocationX(_State_Loc) += static_cast<float>(_Each_Width);
 				}
 			}
@@ -840,13 +841,13 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			ReLoadState(State);
 		}
 	}
-	std::cout << "Health :" << MC->Check_Health() << std::endl;
+	//std::cout << "Health :" << MC->Check_Health() << std::endl;
 }
 
 void OpenGL_Draw::Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times)
 {
 	while (Times--)
-		State->Set_Move_State(Direction);
+		State->Get_Square_State().Set_Move_State(Direction);
 	this->_Is_State_Changed = true;
 }
 
@@ -914,7 +915,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	double DeltaTime{ glfwGetTime() - LastTime };
-	int Start_State_Cnt{ 6 };
 
 	static float VersionFontSize{ 20.0f };
 
@@ -922,21 +922,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 3, this->_Game_Status);
 
-	if (this->_Game_Status != GAME_STMENU)
-		Start_State_Cnt = 0;
-	
 	glBindVertexArray(_vao[1]);
-
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-	glBindVertexArray(_vao[2]);
-	glUseProgram(_ITest_RenderingProgram);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
-	glBindVertexArray(0);
-	glBindVertexArray(_vao[1]);
-#else
-	glUseProgram(_Start_RenderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, Start_State_Cnt);
-#endif
 
 	if (_Clear_Function)
 	{
@@ -945,23 +931,17 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
+	//std::cout << "_Game_Status :" << _Game_Status << std::endl;
 
 	if ((_Draw_Status == 0) || (_Draw_Status == 2))
 	{
 		this->_Middle_Frame = 0;
 		this->_Game_Status = GAME_STMENU;
 
-		glBindVertexArray(_vao[0]);
-		glUseProgram(_Fonts_RenderingProgram);
-		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
 		this->_Middle_Frame += DeltaTime * 100;
-		glBindVertexArray(0);
-
-		glBindVertexArray(_vao[1]);
 	}
 	else if (_Draw_Status == 5)
 	{
-		this->_Game_Status = GAME_ACTIVE;
 		if (this->_Middle_Frame == 0)
 		{
 			SB->Play_Sound(SOUND_GAME_START);
@@ -994,17 +974,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			this->_Game_Status = GAME_STMENU;
 		}
 
-		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
-		glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
-		glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
-
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
 		{
 			this->_Middle_Frame = 0;
 		}
-
-		glUseProgram(_Midle_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6 * 30);
 	}
 	else if (_Draw_Status == 4)
 	{
@@ -1033,21 +1006,9 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 		}
 
-		//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
-		glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
-		glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
+		this->_Game_Status = GAME_DEOVER;
 
-		glUseProgram(_Midle_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6 * 30);
-
-		glBindVertexArray(_vao[0]);
-		glUseProgram(_Fonts_RenderingProgram);
-		RenderText("GAME OVER", 270.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
-		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
 		this->_Middle_Frame += DeltaTime * 100;
-		glBindVertexArray(0);
-
-		glBindVertexArray(_vao[1]);
 	}
 	else
 	{
@@ -1068,17 +1029,44 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 	}
+
+#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
+	glBindVertexArray(_vao[2]);
+	glUseProgram(_ITest_RenderingProgram);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
+	glBindVertexArray(0);
+	glBindVertexArray(_vao[1]);
+#else
+	glUseProgram(_Start_RenderingProgram);
+	glProgramUniform1i(_Start_RenderingProgram, 3, this->_Game_Status);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+#endif
+
+	std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
+	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
+	glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
+
+	glUseProgram(_Midle_RenderingProgram);
+	glDrawArrays(GL_TRIANGLES, 0, 6 * 30);
+
 	glBindVertexArray(0);
 
 	glBindVertexArray(_vao[0]);
 
 	glUseProgram(_Fonts_RenderingProgram);
 
-	if (this->_Game_Status == GAME_ACTIVE)
+	if(this->_Game_Status == GAME_STMENU)
+		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+	else if (this->_Game_Status == GAME_DEOVER)
+	{
+		RenderText("GAME OVER", 270.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
+		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+	}
+	else if (this->_Game_Status == GAME_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
 	if(VersionFontSize > -800.0f)
-		RenderText("TANXL GAME VERSION 2.54", VersionFontSize, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+		RenderText("TANXL GAME VERSION 2.56", VersionFontSize, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
 
 	glBindVertexArray(0);
 

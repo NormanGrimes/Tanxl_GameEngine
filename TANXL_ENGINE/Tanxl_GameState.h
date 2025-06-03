@@ -10,6 +10,9 @@
 // 地图基础类改为继承自引擎基础类
 // 移除扩展世界启用标记以及设置函数
 // 移除无参数版本的地图生成函数
+// 获取地图范围接口效率改进
+// 将三个地图矩形区域设置接口移动到结构体中
+// 矩形地图结构体增加地图宽度与高度的设置接口
 
 #pragma once
 
@@ -103,11 +106,23 @@ enum EState_Current
 
 struct Square_State
 {
-	Square_State(int NX = 0, int PX = 0, int NY = 0, int PY = 0);
+public:
+	Square_State(int NX = 0, int PX = 0, int NY = 0, int PY = 0, int StateWidth = 0, int StateHeight = 0);
+
+	//↓Set_Move_State : 设置在绘制时显示的矩阵区域
+	void Set_Move_State(int PreSetX, int PreSetY, int PreLoad);
+	void Set_Move_State(int NX, int PX, int NY, int PY);
+	void Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set = 1);
+
+	void Set_State_Length(int Width, int Height);
+
 	int _Move_NX;
 	int _Move_PX;
 	int _Move_NY;
 	int _Move_PY;
+private:
+	int _State_Width;
+	int _State_Height;
 };
 
 struct State_Policy
@@ -166,17 +181,13 @@ public:
 	Id_Link* Locate_Link(std::string Link_Name);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
-	Square_State Get_Square_State();
+	Square_State& Get_Square_State();
 	SLocation& Get_Screen_Distance();
 	SLocation& Get_Move_Distance();
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
 	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
-	//↓Set_Move_State : 设置在绘制时显示的矩阵区域
-	void Set_Move_State(int PreSetX, int PreSetY, int PreLoad);
-	void Set_Move_State(int NX, int PX, int NY, int PY);
-	void Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set = 1);
 	void Set_Display_State(int Width, int Height);
 	void Set_Data_Length(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);

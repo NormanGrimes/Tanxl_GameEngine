@@ -3,6 +3,8 @@
 // 修复起始页面存在一像素偏差的问题
 // 纹理编号改为自动获取
 // 增加游戏状态统一变量
+// 增加下方的游戏状态栏
+// 通过游戏状态控制绘制内容
 
 #version 430
 
@@ -26,27 +28,63 @@ void main(void)
 	{
 		if      (gl_VertexID == (VertexId * 6 + 0))
 		{
-			gl_Position = vec4( -1.01f, -1.01f, STATE_02_LAYER, 1.0f);
+			if((Game_Status != 0) && (Game_Status != 3))
+			{
+				Cube = -1;
+				gl_Position = vec4( -1.0f, -1.0f, STATE_02_LAYER, 1.0f);
+			}
+			else
+				gl_Position = vec4( -1.01f, -1.01f, STATE_02_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == (VertexId * 6 + 1))
 		{
-			gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f); 
+			if((Game_Status != 0) && (Game_Status != 3))
+			{
+				Cube = -1;
+				gl_Position = vec4(  1.0f, -1.0f, STATE_02_LAYER, 1.0f);
+			}
+			else
+				gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == (VertexId * 6 + 2))
 		{
-			gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
+			if((Game_Status != 0) && (Game_Status != 3))
+			{
+				Cube = -1;
+				gl_Position = vec4( -1.0f, -0.6f, STATE_02_LAYER, 1.0f);
+			}
+			else
+				gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == (VertexId * 6 + 3))
 		{
-			gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f); 
+			if((Game_Status != 0) && (Game_Status != 3))
+			{
+				Cube = -1;
+				gl_Position = vec4(  1.0f, -1.0f, STATE_02_LAYER, 1.0f);
+			}
+			else
+				gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f); 
 		}
 		else if (gl_VertexID == (VertexId * 6 + 4))
 		{
-			gl_Position = vec4(  1.01f,  1.01f, STATE_02_LAYER, 1.0f);
+			if((Game_Status != 0) && (Game_Status != 3))
+			{
+				Cube = -1;
+				gl_Position = vec4(  1.0f, -0.6f, STATE_02_LAYER, 1.0f);
+			}
+			else
+				gl_Position = vec4(  1.01f,  1.01f, STATE_02_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == (VertexId * 6 + 5))
 		{
-			gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
+			if((Game_Status != 0) && (Game_Status != 3))
+			{
+				Cube = -1;
+				gl_Position = vec4( -1.0f, -0.6f, STATE_02_LAYER, 1.0f);
+			}
+			else
+				gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
 		}
 	}
 }

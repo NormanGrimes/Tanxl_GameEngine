@@ -60,7 +60,9 @@ std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target,
 			Connect_Target->push_back(new Data_Unit(7, "NULL"));
 			Connect_Target->push_back(new Data_Unit(8, "NULL"));
 			Connect_Target->push_back(new Data_Unit(9, "NULL"));
+#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
 			std::cout << "Append Function CALLED" << std::endl;
+#endif
 		}
 		Connect_Target->at(CurrentState)->_Data = Build_Target->at(0)->_Data;
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
@@ -313,7 +315,7 @@ GameStateBase& GameStateBase::GetStateBase(int Display_Width, int Display_Height
 	return GameState;
 }
 
-Square_State GameStateBase::Get_Square_State()
+Square_State& GameStateBase::Get_Square_State()
 {
 	return this->_MState;
 }
@@ -469,73 +471,6 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 void GameStateBase::Set_Adjust_Frequency(int Frame)
 {
 	this->_Adjust_Frame = Frame;
-}
-
-void GameStateBase::Set_Move_State(int PreSetX, int PreSetY, int PreLoad)
-{
-	this->_MState._Move_NX = 0 - PreLoad + PreSetX;
-	this->_MState._Move_PX = this->_GameState_Width - 1 + PreLoad + PreSetX;
-	this->_MState._Move_NY = 0 - PreLoad + PreSetY;
-	this->_MState._Move_PY = this->_GameState_Height - 1 + PreLoad + PreSetY;
-}
-
-void GameStateBase::Set_Move_State(int NX, int PX, int NY, int PY)
-{
-	this->_MState._Move_NX = NX;
-	this->_MState._Move_PX = PX;
-	this->_MState._Move_NY = NY;
-	this->_MState._Move_PY = PY;
-}
-
-void GameStateBase::Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set)
-{
-	switch (Event_Id)
-	{
-	case MoveToNW:
-		this->_MState._Move_NX += Multi_Set;
-		this->_MState._Move_PX += Multi_Set;
-		break;
-	case MoveToPW:
-		this->_MState._Move_NX -= Multi_Set;
-		this->_MState._Move_PX -= Multi_Set;
-		break;
-	case MoveToNH:
-		this->_MState._Move_NY += Multi_Set;
-		this->_MState._Move_PY += Multi_Set;
-		break;
-	case MoveToPH:
-		this->_MState._Move_NY -= Multi_Set;
-		this->_MState._Move_PY -= Multi_Set;
-		break;
-
-	case MoveToNWNH:
-		this->_MState._Move_NX += Multi_Set;
-		this->_MState._Move_PX += Multi_Set;
-		this->_MState._Move_NY += Multi_Set;
-		this->_MState._Move_PY += Multi_Set;
-		break;
-
-	case MoveToNWPH:
-		this->_MState._Move_NX += Multi_Set;
-		this->_MState._Move_PX += Multi_Set;
-		this->_MState._Move_NY -= Multi_Set;
-		this->_MState._Move_PY -= Multi_Set;
-		break;
-
-	case MoveToPWNH:
-		this->_MState._Move_NX -= Multi_Set;
-		this->_MState._Move_PX -= Multi_Set;
-		this->_MState._Move_NY += Multi_Set;
-		this->_MState._Move_PY += Multi_Set;
-		break;
-
-	case MoveToPWPH:
-		this->_MState._Move_NX -= Multi_Set;
-		this->_MState._Move_PX -= Multi_Set;
-		this->_MState._Move_NY += Multi_Set;
-		this->_MState._Move_PY += Multi_Set;
-		break;
-	}
 }
 
 void GameStateBase::Reload_State(EState_Extend Extend_Dire)
@@ -1322,4 +1257,78 @@ bool StateEvent::Check_Event_Status()
 
 //Square_State
 
-Square_State::Square_State(int NX, int PX, int NY, int PY) :_Move_NX(NY), _Move_NY(NY), _Move_PX(PX), _Move_PY(PY) {}
+Square_State::Square_State(int NX, int PX, int NY, int PY, int StateWidth, int StateHeight) :
+	_Move_NX(NY), _Move_NY(NY), _Move_PX(PX), _Move_PY(PY), _State_Width(StateWidth), _State_Height(StateHeight) {};
+
+void Square_State::Set_Move_State(int PreSetX, int PreSetY, int PreLoad)
+{
+	this->_Move_NX = 0 - PreLoad + PreSetX;
+	this->_Move_PX = this->_State_Width - 1 + PreLoad + PreSetX;
+	this->_Move_NY = 0 - PreLoad + PreSetY;
+	this->_Move_PY = this->_State_Height - 1 + PreLoad + PreSetY;
+}
+
+void Square_State::Set_Move_State(int NX, int PX, int NY, int PY)
+{
+	this->_Move_NX = NX;
+	this->_Move_PX = PX;
+	this->_Move_NY = NY;
+	this->_Move_PY = PY;
+}
+
+void Square_State::Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set)
+{
+	switch (Event_Id)
+	{
+	case MoveToNW:
+		this->_Move_NX += Multi_Set;
+		this->_Move_PX += Multi_Set;
+		break;
+	case MoveToPW:
+		this->_Move_NX -= Multi_Set;
+		this->_Move_PX -= Multi_Set;
+		break;
+	case MoveToNH:
+		this->_Move_NY += Multi_Set;
+		this->_Move_PY += Multi_Set;
+		break;
+	case MoveToPH:
+		this->_Move_NY -= Multi_Set;
+		this->_Move_PY -= Multi_Set;
+		break;
+
+	case MoveToNWNH:
+		this->_Move_NX += Multi_Set;
+		this->_Move_PX += Multi_Set;
+		this->_Move_NY += Multi_Set;
+		this->_Move_PY += Multi_Set;
+		break;
+
+	case MoveToNWPH:
+		this->_Move_NX += Multi_Set;
+		this->_Move_PX += Multi_Set;
+		this->_Move_NY -= Multi_Set;
+		this->_Move_PY -= Multi_Set;
+		break;
+
+	case MoveToPWNH:
+		this->_Move_NX -= Multi_Set;
+		this->_Move_PX -= Multi_Set;
+		this->_Move_NY += Multi_Set;
+		this->_Move_PY += Multi_Set;
+		break;
+
+	case MoveToPWPH:
+		this->_Move_NX -= Multi_Set;
+		this->_Move_PX -= Multi_Set;
+		this->_Move_NY += Multi_Set;
+		this->_Move_PY += Multi_Set;
+		break;
+	}
+}
+
+void Square_State::Set_State_Length(int Width, int Height)
+{
+	this->_State_Width = Width;
+	this->_State_Height = Height;
+}

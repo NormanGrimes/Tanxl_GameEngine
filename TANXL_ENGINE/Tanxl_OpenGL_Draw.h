@@ -9,6 +9,7 @@
 // 修复生命值纹理个数显示异常的问题
 // 字体绘制效率改进
 // 从绘制循环中独立出移动时调整地图坐标的接口
+// 调整各页面的绘制顺序减少冗余代码
 
 #pragma once
 
@@ -481,7 +482,8 @@ enum EGame_Status
 {
 	GAME_STMENU,
 	GAME_ACTIVE,
-	GAME_MARKET
+	GAME_MARKET,
+	GAME_DEOVER
 };
 
 class OpenGL_Draw

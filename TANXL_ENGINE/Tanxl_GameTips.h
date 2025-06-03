@@ -1,5 +1,6 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2023-10-07 16:41
+// 改为继承自引擎基础类并增加版本获取功能
 
 #pragma once
 
@@ -7,9 +8,11 @@
 #define _TANXL_GAME_TIPS_
 
 #include <string>
-#include "Tanxl_DataBase.h"
 
-class GameTips
+#include "Tanxl_DataBase.h"
+#include "Tanxl_EngineBase.h"
+
+class GameTips : public Tanxl_ClassBase
 {
 public:
 	static GameTips& GetTipsBase()
@@ -46,8 +49,13 @@ public:
 		return this->_Internal_Count > 7 ? this->_Internal_Count = 0 : this->_Internal_Count;
 	}
 
+	const std::string Get_Version()
+	{
+		return Tanxl_ClassBase::Get_Version();
+	}
+
 private:
-	GameTips() :_File_Loaded(true)
+	GameTips() :_File_Loaded(true), Tanxl_ClassBase("0.1")
 	{
 		if (Tips_Data.Get_LocalData("Tanxl_Tips"))
 			Tips_Data.Print_Data();
@@ -56,7 +64,7 @@ private:
 	}
 
 	~GameTips() {}
-	GameTips(const GameTips&) :_File_Loaded(true) {}
+	GameTips(const GameTips&) :_File_Loaded(true), Tanxl_ClassBase("0.1") {}
 	GameTips& operator=(const GameTips&) {}
 
 	TANXL_DataBase Tips_Data;
