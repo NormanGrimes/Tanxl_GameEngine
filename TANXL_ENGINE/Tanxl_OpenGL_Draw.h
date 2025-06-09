@@ -10,6 +10,8 @@
 // 字体绘制效率改进
 // 从绘制循环中独立出移动时调整地图坐标的接口
 // 调整各页面的绘制顺序减少冗余代码
+// 增加游戏状态设置接口
+// 移除两个初始绘制状态
 
 #pragma once
 
@@ -480,10 +482,11 @@ namespace TanxlOD
 
 enum EGame_Status
 {
-	GAME_STMENU,
-	GAME_ACTIVE,
-	GAME_MARKET,
-	GAME_DEOVER
+	GAME_START_MENU,
+	GAME_PLAYER_ACTIVE,
+	GAME_STORE_BUYING_PAGE,
+	GAME_PLAYER_DEAD_STATUS,
+	GAME_PLAYER_STATUS_DISPLAY,
 };
 
 class OpenGL_Draw
@@ -503,6 +506,7 @@ public:
 	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
+	void Set_Game_Status(EGame_Status Game_Status);
 	int Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State);
 	void Move_Adjust(GameStateBase* State);
@@ -600,7 +604,7 @@ private:
 	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;
 	LocationBase* _LCB;
-	EGame_Status _Game_Status{ GAME_STMENU };
+	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2 _StateInfor[400];
 };
 

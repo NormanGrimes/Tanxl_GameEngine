@@ -207,6 +207,11 @@ void GameStateBase::Set_Data_Length(unsigned Width, unsigned Height)
 	this->_Data_Height = Height - 1;
 }
 
+StateUnit* GameStateBase::Get_State()
+{
+	return Get_State(this->_Exac_Location._Coord_X, this->_Exac_Location._Coord_Y);
+}
+
 void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 {
 	static GameEventBase* Event{ &GameEventBase::GetEventBase() };
@@ -701,15 +706,15 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 	Temp_LocationX = static_cast<int>(Temp_LocationX + 0.5f) > static_cast<int>(Temp_LocationX) ? Temp_LocationX + 0.5f : Temp_LocationX;
 	Temp_LocationY = static_cast<int>(Temp_LocationY - 0.5f) < static_cast<int>(Temp_LocationY) ? Temp_LocationY - 0.5f : Temp_LocationY;
 
-	this->_Exac_LocationX = static_cast<int>(Temp_LocationX);
-	this->_Exac_LocationY = static_cast<int>(Temp_LocationY);
+	this->_Exac_Location._Coord_X = static_cast<int>(Temp_LocationX);
+	this->_Exac_Location._Coord_Y = static_cast<int>(Temp_LocationY);
 
 	if (Distance->_Location_X + MoveX < -0.24f)
-		--this->_Exac_LocationX;
+		--this->_Exac_Location._Coord_X;
 	if (Distance->_Location_Y + MoveY > 0.24f)
-		++this->_Exac_LocationY;
+		++this->_Exac_Location._Coord_Y;
 
-	this->_Exac_LocationY = -this->_Exac_LocationY;
+	this->_Exac_Location._Coord_Y = -this->_Exac_Location._Coord_Y;
 
 #if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
 	std::cout << "After :" << Temp_LocationX << "____" << Temp_LocationY << std::endl;
@@ -817,7 +822,7 @@ void GameStateBase::Build_Connect(int State_Id)
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
 	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), Tanxl_ClassBase("1.1"),
-	_Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
+	_Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
@@ -1115,7 +1120,7 @@ Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0), _Extend_Mid_Id(0),
 _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
-_Adjust_Frame(1), _Adjust_Enable(false), _Exac_LocationX(0), _Exac_LocationY(0), _GameState_Extend(), _Is_Data_Set(false)
+_Adjust_Frame(1), _Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
@@ -1165,14 +1170,9 @@ bool GameStateBase::Get_Engine_File()
 	return true;
 }
 
-int GameStateBase::Get_Exac_LocationX()
+Tanxl_Coord<int> GameStateBase::Get_Exac_Location()
 {
-	return this->_Exac_LocationX;
-}
-
-int GameStateBase::Get_Exac_LocationY()
-{
-	return this->_Exac_LocationY;
+	return this->_Exac_Location;
 }
 
 int GameStateBase::Get_Distance_Screen_Id()

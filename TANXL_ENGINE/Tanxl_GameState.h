@@ -13,6 +13,8 @@
 // 获取地图范围接口效率改进
 // 将三个地图矩形区域设置接口移动到结构体中
 // 矩形地图结构体增加地图宽度与高度的设置接口
+// 增加无参数版本地图单元获取接口
+// 地图精确坐标改为坐标模板实现
 
 #pragma once
 
@@ -178,6 +180,7 @@ public:
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	//↓Get_State : 指定坐标获取地图单元
 	StateUnit* Get_State(int LocationX, int LocationY);
+	StateUnit* Get_State();
 	Id_Link* Locate_Link(std::string Link_Name);
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
@@ -217,8 +220,7 @@ public:
 	bool Get_Adjust_Flag();
 	bool Is_Adjust_While_Move();
 	bool Get_Engine_File();
-	int Get_Exac_LocationX();
-	int Get_Exac_LocationY();
+	Tanxl_Coord<int> Get_Exac_Location();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
 	// 获取上次移动触发的边沿
@@ -267,10 +269,8 @@ private:
 	int _State_HeightS{ 0 };
 	float _Half_State_Width{ 0.0f };
 	float _Half_State_Height{ 0.0f };
-	// _Exac_LocationX 玩家方块经过计算后的实际X坐标
-	int _Exac_LocationX;
-	// _Exac_LocationY 玩家方块经过计算后的实际Y坐标
-	int _Exac_LocationY;
+	// _Exac_Location 玩家方块经过计算后的实际坐标
+	Tanxl_Coord<int> _Exac_Location;
 	//_Adjust_Frame 用于控制当前每多少帧进行一次坐标控制
 	int _Adjust_Frame;
 	//_GameState_Width用于控制当前地图的显示宽度

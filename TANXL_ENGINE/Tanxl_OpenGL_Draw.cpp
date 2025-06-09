@@ -398,6 +398,11 @@ void OpenGL_Draw::Set_Max_Middle_Frame(int Max_Middle_Frame)
 	this->_Max_Middle_Frame = Max_Middle_Frame;
 }
 
+void OpenGL_Draw::Set_Game_Status(EGame_Status Game_Status)
+{
+	this->_Game_Status = Game_Status;
+}
+
 int OpenGL_Draw::Append_Texture(const char* Texture)
 {
 	const int OffSet = 4;
@@ -445,7 +450,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_LEFT);
 
-				if (State->Get_Exac_LocationX() >= -static_cast<int>(State->Get_DataWidth()) - 1)
+				if (State->Get_Exac_Location()._Coord_X >= -static_cast<int>(State->Get_DataWidth()) - 1)
 					State_Check_Block(State, CHECK_EDGE_LEFT);
 			}
 		}
@@ -468,7 +473,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_RIGH);
 
-				if (State->Get_Exac_LocationX() <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
+				if (State->Get_Exac_Location()._Coord_X <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
 					State_Check_Block(State, CHECK_EDGE_RIGH);
 			}
 		}
@@ -491,7 +496,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_ABOV);
 
-				if (State->Get_Exac_LocationY() >= -static_cast<int>(State->Get_DataHeight()) - 1)
+				if (State->Get_Exac_Location()._Coord_Y >= -static_cast<int>(State->Get_DataHeight()) - 1)
 					State_Check_Block(State, CHECK_EDGE_ABOV);
 			}
 		}
@@ -514,7 +519,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			{
 				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_BELO);
 
-				if (State->Get_Exac_LocationY() <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
+				if (State->Get_Exac_Location()._Coord_Y <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
 					State_Check_Block(State, CHECK_EDGE_BELO);
 			}
 		}
@@ -656,25 +661,25 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 	switch (Check_Direction)
 	{
 	case CHECK_EDGE_LEFT:
-		if (State->Get_Exac_LocationX() < 0)
+		if (State->Get_Exac_Location()._Coord_X < 0)
 			Reset = true;
 		break;
 	case CHECK_EDGE_RIGH:
-		if (State->Get_Exac_LocationX() > 10)
+		if (State->Get_Exac_Location()._Coord_X > 10)
 			Reset = true;
 		break;
 	case CHECK_EDGE_BELO:
-		if (State->Get_Exac_LocationY() > 10)
+		if (State->Get_Exac_Location()._Coord_Y > 10)
 			Reset = true;
 		break;
 	case CHECK_EDGE_ABOV:
-		if (State->Get_Exac_LocationY() < 0)
+		if (State->Get_Exac_Location()._Coord_Y < 0)
 			Reset = true;
 		break;
 	}
 
-	if ((State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY()) == nullptr) ||
-		(State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY())->Get_Extra_Status() == 1))
+	if ((State->Get_State() == nullptr) ||
+		(State->Get_State()->Get_Extra_Status() == 1))
 	{
 		switch (Check_Direction)
 		{
@@ -693,8 +698,8 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 		while (true)
 		{
 			State->Update_Move(0.0f, 0.0f, Check_Direction);
-			if ((State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY()) == nullptr) ||
-				(State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY())->Get_Extra_Status() == 1))
+			if ((State->Get_State() == nullptr) ||
+				(State->Get_State()->Get_Extra_Status() == 1))
 			{
 				std::cout << "Adjusting" << std::endl;
 				switch (Check_Direction)
@@ -756,8 +761,8 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 
 		State->Update_Move(0.0f, 0.0f, Check_Direction);
 
-		int Temp_Height = this->_New_Current_Height;
-		int Temp_Width = this->_New_Current_Width;
+		int Temp_Height{ this->_New_Current_Height };
+		int Temp_Width{ this->_New_Current_Width };
 
 		Update_Current();
 
@@ -800,11 +805,20 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
+	static bool Achievement{ true };
 	State->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
-	StateUnit* CheckUnit{ State->Get_State(State->Get_Exac_LocationX(), State->Get_Exac_LocationY()) };
+	StateUnit* CheckUnit{ State->Get_State() };
 	if (!CheckUnit)
 		return;
 	int Unit_State_Id{ CheckUnit->Get_Extra_Status()};
+
+	if ((MC->Get_Money() >= 100) && Achievement)
+	{
+		Achievement = false;
+		std::cout << "Achievement Unlocked !" << std::endl;
+		AC->UnlockAchievement(g_rgAchievements[1]);
+		SB->Play_Sound(SOUND_ACHIEVEMENT);
+	}
 
 	if (Unit_State_Id == 2)
 	{
@@ -813,12 +827,6 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			SB->Play_Sound(SOUND_EVENT_START);
 			MC->TakeDamage(1);
 			MC->Add_Money(1);
-
-			if (MC->Get_Money() >= 100)
-			{
-				std::cout << "Achievement Unlocked !" << std::endl;
-				AC->UnlockAchievement(g_rgAchievements[1]);
-			}
 
 			CheckUnit->Set_Status(0);
 			ReLoadState(State);
@@ -920,8 +928,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	LastTime = glfwGetTime();
 
-	glProgramUniform1i(this->_Start_RenderingProgram, 3, this->_Game_Status);
-
 	glBindVertexArray(_vao[1]);
 
 	if (_Clear_Function)
@@ -930,17 +936,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Clear_Function = false;
 	}
 
-	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
-	//std::cout << "_Game_Status :" << _Game_Status << std::endl;
+	std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
+	std::cout << "_Game_Status :" << _Game_Status << std::endl << std::endl;
 
-	if ((_Draw_Status == 0) || (_Draw_Status == 2))
-	{
-		this->_Middle_Frame = 0;
-		this->_Game_Status = GAME_STMENU;
-
-		this->_Middle_Frame += DeltaTime * 100;
-	}
-	else if (_Draw_Status == 5)
+	if (_Draw_Status == 5)
 	{
 		if (this->_Middle_Frame == 0)
 		{
@@ -959,7 +958,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
-			this->_Game_Status = GAME_ACTIVE;
+			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
@@ -971,7 +970,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		}
 		else
 		{
-			this->_Game_Status = GAME_STMENU;
+			this->_Game_Status = GAME_START_MENU;
 		}
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
@@ -991,11 +990,11 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			ReLoadState(State);
 			MC->Set_Health(5);
-			this->_Game_Status = GAME_STMENU;
+			this->_Game_Status = GAME_START_MENU;
 		}
 		else
 		{
-			this->_Game_Status = GAME_ACTIVE;
+			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
@@ -1006,7 +1005,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 		}
 
-		this->_Game_Status = GAME_DEOVER;
+		this->_Game_Status = GAME_PLAYER_DEAD_STATUS;
 
 		this->_Middle_Frame += DeltaTime * 100;
 	}
@@ -1042,7 +1041,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 #endif
 
-	std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
+	//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
 	glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
 
@@ -1055,14 +1054,14 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	glUseProgram(_Fonts_RenderingProgram);
 
-	if(this->_Game_Status == GAME_STMENU)
+	if(this->_Game_Status == GAME_START_MENU)
 		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
-	else if (this->_Game_Status == GAME_DEOVER)
+	else if (this->_Game_Status == GAME_PLAYER_DEAD_STATUS)
 	{
 		RenderText("GAME OVER", 270.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
 		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
 	}
-	else if (this->_Game_Status == GAME_ACTIVE)
+	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
 	if(VersionFontSize > -800.0f)

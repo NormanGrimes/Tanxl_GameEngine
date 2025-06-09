@@ -21,7 +21,7 @@ void State_ChangeEvent::CheckEvent(int LocationX, int LocationY)
 void State_ChangeEvent::EventAction()
 {
 	static GameStateBase* State{ &GameStateBase::GetStateBase() };
-	if ((State->Get_Exac_LocationX() == _LocationX) && (State->Get_Exac_LocationY() == _LocationY))
+	if ((State->Get_Exac_Location()._Coord_X == _LocationX) && (State->Get_Exac_Location()._Coord_Y == _LocationY))
 	{
 		State->Set_State(_LocationY * State->Get_DataWidth() + _LocationX, _Cover_String);
 	}

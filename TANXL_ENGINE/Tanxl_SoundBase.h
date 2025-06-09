@@ -8,6 +8,7 @@
 // 增加版本信息功能
 // 增加停止所有音频功能
 // 改为继承自引擎基础类
+// 新增成就解锁音频
 
 #pragma once
 
@@ -26,7 +27,8 @@ enum ESound_WAV
     SOUND_EVENT_START       = 2,
     SOUND_RESTORE_HEALTH    = 3,
     SOUND_MOUSE_CLICK       = 4,
-    SOUND_SYSTEM_CALL       = 5
+    SOUND_SYSTEM_CALL       = 5,
+    SOUND_ACHIEVEMENT       = 6
 };
 
 class SoundBase : public Tanxl_ClassBase
@@ -45,14 +47,15 @@ public:
 private:
     irrklang::ISoundEngine* _SoundEngine;
 
-    std::string Sound_Names[6]
+    std::string Sound_Names[7]
     { 
         "music/Game_Start.wav", 
         "music/Game_Over.wav",
         "music/Game_Event_Start.wav",
         "music/Game_Event_Restore_Health.wav" ,
         "music/Game_Mouse_Click.wav",
-        "music/Game_System_Call.wav"
+        "music/Game_System_Call.wav",
+        "music/Achievement_Unlock.wav"
     };
 
     SoundBase();

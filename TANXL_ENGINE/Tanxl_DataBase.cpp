@@ -157,7 +157,7 @@ std::ostream& operator<<(std::ostream& out, TANXL_DataBase& s)
 }
 
 TANXL_DataBase::TANXL_DataBase() :
-	_Is_Instance_Data(false), _Id_Links(new std::vector<Id_Link*>), _Current_Location(0) {}
+	_Is_Instance_Data(false), _Id_Links(new std::vector<Id_Link*>), _Current_Location(0), Tanxl_ClassBase("2.1") {}
 
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
 {
@@ -658,5 +658,5 @@ void TANXL_DataBase::Copy_DataBase(TANXL_DataBase DataBase)
 
 const std::string TANXL_DataBase::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }

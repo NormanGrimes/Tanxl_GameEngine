@@ -16,6 +16,7 @@
 // 组合字符串功能去掉未使用变量
 // 增加复制接口用于复制所有数据
 // 获取指定深度物品的接口增加错误检查
+// 改为继承自引擎基础类
 
 #pragma once
 
@@ -32,12 +33,13 @@
 
 #endif
 
-#include<iostream>
-#include<fstream>
-#include<sstream>
-#include<vector>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
 
-#include"Tanxl_DataDefine.h"
+#include "Tanxl_DataDefine.h"
+#include "Tanxl_EngineBase.h"
 
 enum EAppendItem_Mode
 {
@@ -106,7 +108,7 @@ struct Id_Link//序号数据结构V4
 	Data_Link* _Data;
 };
 
-class TANXL_DataBase
+class TANXL_DataBase : public Tanxl_ClassBase
 {
 private:
 	struct
@@ -117,7 +119,6 @@ private:
 		Data_Link* _Data{ nullptr };
 	}_Internal_Data;
 
-	const std::string _Version{ "2.1" };
 	std::vector<Id_Link*>* _Id_Links;
 	int _Current_Location;
 	//用来判断_Internal_Data中是否有数据
@@ -158,7 +159,7 @@ public:
 	void AppendItem(EAppendItem_Mode Mode, std::string File_Name = "Tanxl_Data", bool Delete_After = false);
 	//↓使本地(.usd)文件的内容合理化 In_File_Name为输入文件名 Out_File_Name为输出文件名 现在具有保存链表修改功能
 	//↓Delete_After_Sort为true时 在数据处理完成之后会删除处理前的原文件 为false则不会删除
-	void SortDataBase(ESort_Mode Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data",bool Delete_After_Sort = false);
+	void SortDataBase(ESort_Mode Mode = SORT_LOCALF, std::string Out_File_Name = "Tanxl_Data", std::string In_File_Name = "Tanxl_Data", bool Delete_After_Sort = false);
 	//↓添加数据链 Data为需要添加的数据 Divide仅需一次设置 用于标记第几个数据后切换到下一个数据单元 Type指定输入到的Type编号
 	void Append_DataChain(std::string Data, unsigned Divide = 0, unsigned Type = 0x01, unsigned Exac = 0xFFFF);
 	//↓清理内存中所有的数据
