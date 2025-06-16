@@ -2,33 +2,30 @@
 
 #include "Tanxl_LocationBase.h"
 
-SLocation::SLocation(float Location_X, float Location_Y, std::string Location_Name) :
-	_Location_X(Location_X), _Location_Y(Location_Y), _Location_Name(Location_Name) {}
+Location::Location(std::string Location_Name) :_Internal_Location(Tanxl_Coord<float>(0.0f, 0.0f)) {}
 
-Location::Location(std::string Location_Name) :_Internal_Location(SLocation(0.0f, 0.0f, Location_Name)) {}
-
-inline SLocation& Location::Get_Current_Location()
+inline Tanxl_Coord<float>& Location::Get_Current_Location()
 {
 	return this->_Internal_Location;
 }
 
 inline void Location::Adjust_Location(float Adjust_Height, float Adjust_Width)
 {
-	this->_Internal_Location._Location_X += Adjust_Width;
-	this->_Internal_Location._Location_Y += Adjust_Height;
+	this->_Internal_Location._Coord_X += Adjust_Width;
+	this->_Internal_Location._Coord_Y += Adjust_Height;
 }
 
 inline void Location::Set_Location(float Set_Height, float Set_Width)
 {
-	this->_Internal_Location._Location_X = Set_Width;
-	this->_Internal_Location._Location_Y = Set_Height;
+	this->_Internal_Location._Coord_X = Set_Width;
+	this->_Internal_Location._Coord_Y = Set_Height;
 }
 
 inline float Location::Get_Calculated_Location(ECALCUL_MARKING Marking, float Value, bool begin)
 {
-	float Return_Value{ this->_Internal_Location._Location_Y };
+	float Return_Value{ this->_Internal_Location._Coord_Y };
 	if (begin)
-		Return_Value = this->_Internal_Location._Location_X;
+		Return_Value = this->_Internal_Location._Coord_X;
 	switch (Marking)
 	{
 	case MARKING_ADD:
@@ -50,25 +47,25 @@ Location_Limited::Location_Limited(std::string Location_Name) :Location(Location
 unsigned Location_Limited::Check_Range()
 {
 	unsigned Range_Status{ 0x0 };
-	if (this->Get_Current_Location()._Location_X > 0)
-		if (this->Get_Current_Location()._Location_X > this->Get_Current_Location()._Location_X)
+	if (this->Get_Current_Location()._Coord_X > 0)
+		if (this->Get_Current_Location()._Coord_X > this->Get_Current_Location()._Coord_X)
 			Range_Status |= SIGNAL_RIGH;
-	if (this->Get_Current_Location()._Location_X <= 0)
-		if (-this->Get_Current_Location()._Location_X > this->Get_Current_Location()._Location_X)
+	if (this->Get_Current_Location()._Coord_X <= 0)
+		if (-this->Get_Current_Location()._Coord_X > this->Get_Current_Location()._Coord_X)
 			Range_Status |= SIGNAL_LEFT;
-	if (this->Get_Current_Location()._Location_Y > 0)
-		if (this->Get_Current_Location()._Location_Y > this->Get_Current_Location()._Location_Y)
+	if (this->Get_Current_Location()._Coord_Y > 0)
+		if (this->Get_Current_Location()._Coord_Y > this->Get_Current_Location()._Coord_Y)
 			Range_Status |= SIGNAL_ABOV;
-	if (this->Get_Current_Location()._Location_Y <= 0)
-		if (-this->Get_Current_Location()._Location_Y > this->Get_Current_Location()._Location_Y)
+	if (this->Get_Current_Location()._Coord_Y <= 0)
+		if (-this->Get_Current_Location()._Coord_Y > this->Get_Current_Location()._Coord_Y)
 			Range_Status |= SIGNAL_BELO;
 	return Range_Status;
 }
 
 inline void Location_Limited::Set_Range(float Adjust_Height, float Adjust_Width)
 {
-	this->Get_Current_Location()._Location_X = Adjust_Width;
-	this->Get_Current_Location()._Location_Y = Adjust_Height;
+	this->Get_Current_Location()._Coord_X = Adjust_Width;
+	this->Get_Current_Location()._Coord_Y = Adjust_Height;
 }
 
 LocationBase& LocationBase::GetLocationBase()
@@ -96,15 +93,15 @@ int LocationBase::New_Location_set(std::string Location_Name, float Init_LocX, f
 
 float& LocationBase::Get_LocationX(int Pos)
 {
-	return this->_LocationS.at(Pos)->Get_Current_Location()._Location_X;
+	return this->_LocationS.at(Pos)->Get_Current_Location()._Coord_X;
 }
 
 float& LocationBase::Get_LocationY(int Pos)
 {
-	return this->_LocationS.at(Pos)->Get_Current_Location()._Location_Y;
+	return this->_LocationS.at(Pos)->Get_Current_Location()._Coord_Y;
 }
 
-SLocation& LocationBase::Get_LocationS(int Pos)
+Tanxl_Coord<float>& LocationBase::Get_LocationS(int Pos)
 {
 	return this->_LocationS.at(Pos)->Get_Current_Location();
 }

@@ -325,157 +325,114 @@ Square_State& GameStateBase::Get_Square_State()
 	return this->_MState;
 }
 
-SLocation& GameStateBase::Get_Screen_Distance()
+Tanxl_Coord<float>& GameStateBase::Get_Screen_Distance()
 {
 	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Screen_Mid);
 }
 
-SLocation& GameStateBase::Get_Move_Distance()
+Tanxl_Coord<float>& GameStateBase::Get_Move_Distance()
 {
 	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move);
 }
 
 float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, double Scale)
 {
-	static int EHCountS{ 0 };
-	static int EHCountL{ 0 };
 	if (_Adjust_Enable == false)
 		return 0.0f;
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
 	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
 	{
-		EHCountS++;
-		EHCountL = 0;
-		if (EHCountS == this->_Adjust_Frame)
+		if (MoveState < 0 && MoveState + Temp_GameState_Adjust > 0)
 		{
-			if (MoveState < 0 && MoveState + Temp_GameState_Adjust > 0)
-			{
-				Temp_Move = MoveState;
+			Temp_Move = MoveState;
 #if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
-				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
-				std::cout << "A MoveState  _" << MoveState << std::endl;
+			std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
+			std::cout << "A MoveState  _" << MoveState << std::endl;
 #endif
-				State_MoveY += Temp_Move;
-				MoveState = 0;
-			}
-			else
-			{
-				MoveState += Temp_GameState_Adjust;
-				State_MoveY += Temp_GameState_Adjust;
-			}
-			EHCountS = 0;
-			this->_Is_Adjusting = true;
+			State_MoveY += Temp_Move;
+			MoveState = 0;
 		}
+		else
+		{
+			MoveState += Temp_GameState_Adjust;
+			State_MoveY += Temp_GameState_Adjust;
+		}
+		this->_Is_Adjusting = true;
 	}
 	else if ((float)Current > ((float)this->Get_StateHeight()) / 2)
 	{
-		EHCountL++;
-		EHCountS = 0;
-		if (EHCountL == this->_Adjust_Frame)
+		if (MoveState > Temp_GameState_Adjust)
 		{
-			if (MoveState > Temp_GameState_Adjust)
-			{
-				MoveState -= Temp_GameState_Adjust;
-				State_MoveY -= Temp_GameState_Adjust;
-			}
-			else if (MoveState - Temp_GameState_Adjust < 0)
-			{
-				Temp_Move = MoveState;
-#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
-				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
-				std::cout << "B MoveState  _" << MoveState << std::endl;
-#endif
-				State_MoveY -= Temp_Move;
-				Temp_Move = -Temp_Move;
-				MoveState = 0;
-			}
-			EHCountL = 0;
-			this->_Is_Adjusting = true;
+			MoveState -= Temp_GameState_Adjust;
+			State_MoveY -= Temp_GameState_Adjust;
 		}
-	}
-	else
-	{
-		EHCountS = 0;
-		EHCountL = 0;
+		else if (MoveState - Temp_GameState_Adjust < 0)
+		{
+			Temp_Move = MoveState;
+#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
+			std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
+			std::cout << "B MoveState  _" << MoveState << std::endl;
+#endif
+			State_MoveY -= Temp_Move;
+			Temp_Move = -Temp_Move;
+			MoveState = 0;
+		}
+		this->_Is_Adjusting = true;
 	}
 	return Temp_Move;
 }
 
 float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, double Scale)
 {
-	static int EWCountS{ 0 };
-	static int EWCountL{ 0 };
 	if (_Adjust_Enable == false)
 		return 0.0f;
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
 	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
 	{
-		EWCountS++;
-		EWCountL = 0;
-		if (EWCountS == this->_Adjust_Frame)
+		if (-MoveState < 0 && (Temp_GameState_Adjust + -MoveState > 0))//微调小于最小值的情况 直接调整到屏幕中间
 		{
-			if (-MoveState < 0 && (Temp_GameState_Adjust + -MoveState > 0))//微调小于最小值的情况 直接调整到屏幕中间
-			{
-				Temp_Move = MoveState;
-				while (Temp_Move > 2.5)
-					Temp_Move -= 2.5;
+			Temp_Move = MoveState;
+			while (Temp_Move > 2.5)
+				Temp_Move -= 2.5;
 #if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
-				std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
-				std::cout << "A MoveState  _" << MoveState << std::endl;
+			std::cout << "A Temp_Move  _" << Temp_Move << std::endl;
+			std::cout << "A MoveState  _" << MoveState << std::endl;
 #endif
-				State_MoveX += Temp_Move;
-				MoveState = 0;
-			}
-			else
-			{
-				MoveState += Temp_GameState_Adjust;
-				State_MoveX += Temp_GameState_Adjust;
-			}
-			EWCountS = 0;
-			this->_Is_Adjusting = true;
+			State_MoveX += Temp_Move;
+			MoveState = 0;
 		}
+		else
+		{
+			MoveState += Temp_GameState_Adjust;
+			State_MoveX += Temp_GameState_Adjust;
+		}
+		this->_Is_Adjusting = true;
 	}
 	else if ((float)Current > ((float)this->Get_StateWidth()) / 2)
 	{
-		EWCountL++;
-		EWCountS = 0;
-		if (EWCountL == this->_Adjust_Frame)
+		if (MoveState > Temp_GameState_Adjust)
 		{
-			if (MoveState > Temp_GameState_Adjust)
-			{
-				MoveState -= Temp_GameState_Adjust;
-				State_MoveX -= Temp_GameState_Adjust;
-			}
-			else if (MoveState < Temp_GameState_Adjust)//微调小于最小值的情况 直接调整到屏幕中间
-			{
-				Temp_Move = MoveState;
-				while (Temp_Move > 2.5)
-					Temp_Move -= 2.5;
-#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
-				std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
-				std::cout << "B MoveState  _" << MoveState << std::endl;
-#endif
-				State_MoveX -= Temp_Move;
-				Temp_Move = -Temp_Move;
-				MoveState = 0;
-			}
-			EWCountL = 0;
-			this->_Is_Adjusting = true;
+			MoveState -= Temp_GameState_Adjust;
+			State_MoveX -= Temp_GameState_Adjust;
 		}
-	}
-	else
-	{
-		EWCountS = 0;
-		EWCountL = 0;
+		else if (MoveState < Temp_GameState_Adjust)//微调小于最小值的情况 直接调整到屏幕中间
+		{
+			Temp_Move = MoveState;
+			while (Temp_Move > 2.5)
+				Temp_Move -= 2.5;
+#if _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_
+			std::cout << "B Temp_Move  _" << Temp_Move << std::endl;
+			std::cout << "B MoveState  _" << MoveState << std::endl;
+#endif
+			State_MoveX -= Temp_Move;
+			Temp_Move = -Temp_Move;
+			MoveState = 0;
+		}
+		this->_Is_Adjusting = true;
 	}
 	return Temp_Move;
-}
-
-void GameStateBase::Set_Adjust_Frequency(int Frame)
-{
-	this->_Adjust_Frame = Frame;
 }
 
 void GameStateBase::Reload_State(EState_Extend Extend_Dire)
@@ -660,7 +617,7 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 
 void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 {
-	static SLocation* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
+	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
 
 	if ((this->_Half_State_Width == 0.0f) || (this->_Half_State_Height == 0.0f))
 		this->Set_Display_State(this->_GameState_Width, this->_GameState_Height);
@@ -696,8 +653,8 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		break;
 	}
 
-	float Temp_LocationX = (Distance->_Location_X + MoveX) * (this->_GameState_Width / 2.0f);
-	float Temp_LocationY = (Distance->_Location_Y + MoveY) * (this->_GameState_Height / 2.0f);
+	float Temp_LocationX = (Distance->_Coord_X + MoveX) * (this->_GameState_Width / 2.0f);
+	float Temp_LocationY = (Distance->_Coord_Y + MoveY) * (this->_GameState_Height / 2.0f);
 
 #if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
 	std::cout << "Before Adjust :" << Temp_LocationX << "____" << Temp_LocationY << std::endl;
@@ -709,9 +666,9 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 	this->_Exac_Location._Coord_X = static_cast<int>(Temp_LocationX);
 	this->_Exac_Location._Coord_Y = static_cast<int>(Temp_LocationY);
 
-	if (Distance->_Location_X + MoveX < -0.24f)
+	if (Distance->_Coord_X + MoveX < -0.24f)
 		--this->_Exac_Location._Coord_X;
-	if (Distance->_Location_Y + MoveY > 0.24f)
+	if (Distance->_Coord_Y + MoveY > 0.24f)
 		++this->_Exac_Location._Coord_Y;
 
 	this->_Exac_Location._Coord_Y = -this->_Exac_Location._Coord_Y;
@@ -737,7 +694,7 @@ void GameStateBase::StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_Loc,
 #endif
 		LCB->Get_LocationY(Stat_Loc) += static_cast<float>(0.35f * Scale);
 		LCB->Get_LocationY(Move_Loc) += static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Location_Y -= static_cast<float>(0.35f * Scale);
+		this->Get_Move_Distance()._Coord_Y -= static_cast<float>(0.35f * Scale);
 	}
 	if ((Moves & MoveToPH) == MoveToPH)
 	{
@@ -746,7 +703,7 @@ void GameStateBase::StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_Loc,
 #endif
 		LCB->Get_LocationY(Stat_Loc) -= static_cast<float>(0.35f * Scale);
 		LCB->Get_LocationY(Move_Loc) -= static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Location_Y += static_cast<float>(0.35f * Scale);
+		this->Get_Move_Distance()._Coord_Y += static_cast<float>(0.35f * Scale);
 	}
 	if ((Moves & MoveToNW) == MoveToNW)
 	{
@@ -755,7 +712,7 @@ void GameStateBase::StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_Loc,
 #endif
 		LCB->Get_LocationX(Stat_Loc) += static_cast<float>(0.35f * Scale);
 		LCB->Get_LocationX(Move_Loc) += static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Location_X -= static_cast<float>(0.35f * Scale);
+		this->Get_Move_Distance()._Coord_X -= static_cast<float>(0.35f * Scale);
 	}
 	if ((Moves & MoveToPW) == MoveToPW)
 	{
@@ -764,7 +721,7 @@ void GameStateBase::StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_Loc,
 #endif
 		LCB->Get_LocationX(Stat_Loc) -= static_cast<float>(0.35f * Scale);
 		LCB->Get_LocationX(Move_Loc) -= static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Location_X += static_cast<float>(0.35f * Scale);
+		this->Get_Move_Distance()._Coord_X += static_cast<float>(0.35f * Scale);
 	}
 }
 
@@ -821,7 +778,7 @@ void GameStateBase::Build_Connect(int State_Id)
 
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
-	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), _Adjust_Frame(1), Tanxl_ClassBase("1.1"),
+	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
 	_Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
@@ -898,9 +855,9 @@ void StateUnit::Set_Status(int Extra_Status)
 
 void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY)
 {
-	static SLocation* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
-	Distance->_Location_X = CurrentX;
-	Distance->_Location_Y = CurrentY;
+	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
+	Distance->_Coord_X = CurrentX;
+	Distance->_Coord_Y = CurrentY;
 }
 
 void GameStateBase::Set_Compile_Policy(std::string State_Name, int Set_To_Status)
@@ -1120,7 +1077,7 @@ Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0), _Extend_Mid_Id(0),
 _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
-_Adjust_Frame(1), _Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
+_Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");

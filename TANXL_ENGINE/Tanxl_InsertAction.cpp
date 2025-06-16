@@ -126,15 +126,15 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)
 				this->_KeyEventS.at(i)->_Key_Unit->SaveLen = 0;
 	}
-	State->Get_Screen_Distance()._Location_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
-	State->Get_Screen_Distance()._Location_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
-	State->Get_Move_Distance()._Location_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
-	State->Get_Move_Distance()._Location_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+	State->Get_Screen_Distance()._Coord_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
+	State->Get_Screen_Distance()._Coord_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+	State->Get_Move_Distance()._Coord_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
+	State->Get_Move_Distance()._Coord_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
 
 	this->_LastMove_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
 	this->_LastMove_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
 
-	AutoCheck(State->Get_Screen_Distance()._Location_X, State->Get_Screen_Distance()._Location_Y, State->Get_Move_Distance()._Location_X, State->Get_Move_Distance()._Location_Y);
+	AutoCheck(State->Get_Screen_Distance()._Coord_X, State->Get_Screen_Distance()._Coord_Y, State->Get_Move_Distance()._Coord_X, State->Get_Move_Distance()._Coord_Y);
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
 	std::cout << "Move Distance X :" << State->Get_Move_Distance()._LocX << " -  Y :" << State->Get_Move_Distance()._LocY << std::endl;
 #endif

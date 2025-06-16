@@ -11,6 +11,7 @@
 // 2023/10/25 支持STEAMWORKS158SDK
 // 2023/11/09 引擎重置接口增加音频模块的操作
 // 2023/11/10 增加字体模块的支持
+// 2023/11/23 增加音频播放接口
 
 #pragma once
 
@@ -113,6 +114,9 @@ public:
 
 	//用于注册移动指定区域触发的地图替换功能 Name为事件名称 LocationX/LocationY为替换的区域坐标 Cover_String为替换的地图数据
 	void Engine_Event_State_Regist(std::string Name, int LocationX, int LocationY, std::string Cover_String);
+
+	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐枚举
+	void Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV SoundName);
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

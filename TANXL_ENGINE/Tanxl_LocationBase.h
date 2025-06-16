@@ -17,6 +17,7 @@
 // 增加删除已记录的坐标功能
 // 修复设置坐标功能错误的问题
 // 改为继承自引擎基础类
+// 坐标模板结构替换原有坐标结构
 
 #pragma once
 
@@ -45,12 +46,21 @@ enum ECALCUL_MARKING
 	MARKING_DIV
 };
 
-struct SLocation
+template<typename Tanxl_TypeName>
+struct Tanxl_Coord
 {
-	SLocation(float Location_X, float Location_Y, std::string Location_Name = "NULL");
-	std::string _Location_Name;
-	float _Location_X;
-	float _Location_Y;
+	Tanxl_Coord(Tanxl_TypeName Coord_X, Tanxl_TypeName Coord_Y) :
+		_Coord_X(Coord_X), _Coord_Y(Coord_Y) {}
+
+	Tanxl_TypeName _Coord_X;
+	Tanxl_TypeName _Coord_Y;
+
+	bool operator==(const Tanxl_Coord& Coord)
+	{
+		if ((this->_Coord_X == Coord._Coord_X) && (this->_Coord_Y == Coord._Coord_Y))
+			return true;
+		return false;
+	}
 };
 
 class Location
@@ -58,7 +68,7 @@ class Location
 public:
 	Location(std::string Location_Name = "");
 	// 获取坐标结构体
-	inline SLocation& Get_Current_Location();
+	inline Tanxl_Coord<float>& Get_Current_Location();
 	// 调整坐标的两个参数
 	inline void Adjust_Location(float Adjust_Height, float Adjust_Width);
 	// 设置坐标的两个参数
@@ -68,7 +78,7 @@ public:
 
 private:
 
-	SLocation _Internal_Location;
+	Tanxl_Coord<float> _Internal_Location;
 };
 
 class Location_Limited : public Location
@@ -93,7 +103,7 @@ public:
 
 	float& Get_LocationY(int Pos);
 
-	SLocation& Get_LocationS(int Pos);
+	Tanxl_Coord<float>& Get_LocationS(int Pos);
 
 	float Adjust_Location(int Pos, ECALCUL_MARKING Marking, float Adjust, bool Is_LocX);
 

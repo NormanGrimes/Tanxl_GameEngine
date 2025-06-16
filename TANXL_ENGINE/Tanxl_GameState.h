@@ -15,6 +15,7 @@
 // 矩形地图结构体增加地图宽度与高度的设置接口
 // 增加无参数版本地图单元获取接口
 // 地图精确坐标改为坐标模板实现
+// 移除调整等待帧的所有设定
 
 #pragma once
 
@@ -185,8 +186,8 @@ public:
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
 	Square_State& Get_Square_State();
-	SLocation& Get_Screen_Distance();
-	SLocation& Get_Move_Distance();
+	Tanxl_Coord<float>& Get_Screen_Distance();
+	Tanxl_Coord<float>& Get_Move_Distance();
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
@@ -271,8 +272,6 @@ private:
 	float _Half_State_Height{ 0.0f };
 	// _Exac_Location 玩家方块经过计算后的实际坐标
 	Tanxl_Coord<int> _Exac_Location;
-	//_Adjust_Frame 用于控制当前每多少帧进行一次坐标控制
-	int _Adjust_Frame;
 	//_GameState_Width用于控制当前地图的显示宽度
 	int _GameState_Width;
 	//_GameState_Height用于控制当前地图的显示高度

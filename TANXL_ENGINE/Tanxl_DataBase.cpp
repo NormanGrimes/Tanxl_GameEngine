@@ -412,7 +412,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					throw "添加失败！ 申请内存空间失败";
 				continue;
 			}
-			else if ((Tag == "UNIQ") || (Tag == "TANX") || (Tag == "GAME"))
+			else if ((Tag == "UNIQ") || (Tag == "TANX") || (Tag == "GAME") || (Tag == "DATA"))
 			{
 				try
 				{

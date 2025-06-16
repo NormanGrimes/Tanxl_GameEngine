@@ -12,6 +12,9 @@
 // 调整各页面的绘制顺序减少冗余代码
 // 增加游戏状态设置接口
 // 移除两个初始绘制状态
+// 修复玩家死亡后界面错误的问题
+// 坐标成员改为新版模板坐标
+// 从地图碰撞检测函数中独立出地图更新接口
 
 #pragma once
 
@@ -23,12 +26,12 @@
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
-#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
-#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
-#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
-#define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
-#define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   0
-#define _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_     0
+#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     1
+#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      1
+#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      1
+#define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   1
+#define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   1
+#define _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_     1
 
 #endif
 
@@ -512,6 +515,7 @@ public:
 	void Move_Adjust(GameStateBase* State);
 	//Update_Current 更新地图加载区块
 	void Update_Current();
+	void Update_State(GameStateBase* State, ECheck_Edge Check_Direction);
 	void Update_Last_Location(GameStateBase* State);
 	//删除OpenGL窗口
 	void Destroy_Window();
@@ -563,33 +567,23 @@ private:
 	double _Each_Width{ 0 };
 	//触发地图移动事件时的方向移动距离占总距离的比率
 	float _Trigger_Ratio{ 1.0f };
-	float _Location_Distance_MidX{ 0.0f };
-	float _Location_Distance_MidY{ 0.0f };
-	float _Location_Move_DistanceX{ 0.0f };
-	float _Location_Move_DistanceY{ 0.0f };
+	Tanxl_Coord<float> _Location_Distance_Mid{ 0.0f, 0.0f };
+	Tanxl_Coord<float> _Location_Move_Distance{ 0.0f, 0.0f };
 	int _Current_Status{ 0 };
 	//记录移动导致的新坐标高度值
-	int _New_Current_Height{ 0 };
-	//记录移动导致的新坐标宽度值
-	int _New_Current_Width{ 0 };
+	Tanxl_Coord<int> _New_Current_Loc{ 0, 0 };
 	//记录地图场景的基本矩形行数
 	int _HeightInt;
 	//记录地图场景的基本矩形列数
 	int _WidthInt;
-	//窗口的宽度
-	int _ScreenWidth;
-	//窗口的高度
-	int _ScreenHeight;
+	//窗口的宽/高度
+	Tanxl_Coord<int> _Screen_Length;
 	//记载额外加载的地图环数量
 	int _PreLoads;
-	//记录手动移动指定的当前X轴基本矩形
-	int _Current_Move_Height{ 0 };
-	//记录手动移动指定的当前Y轴基本矩形
-	int _Current_Move_Width{ 0 };
-	//记录在地图初始化时 玩家方块的X轴初始移动距离
-	int _Pre_MoveX{ 3 };
-	//记录在地图初始化时 玩家方块的X轴初始移动距离
-	int _Pre_MoveY{ 3 };
+	//记录手动移动指定的当前X/Y轴基本矩形
+	Tanxl_Coord<int> _Current_Move_{ 0, 0 };
+	//记录在地图初始化时 玩家方块的初始移动距离
+	Tanxl_Coord<int> _Pre_Move{ 3, 3 };
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
 	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
