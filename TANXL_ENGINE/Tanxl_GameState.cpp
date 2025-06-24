@@ -733,7 +733,7 @@ void GameStateBase::Set_Trigger_Mode(bool Mode)
 void GameStateBase::Generate_StateBlock(int State_Id)
 {
 	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
-	std::cout << std::endl << "Generate_StateBlock CALLED" << std::endl << std::endl;
+	//std::cout << std::endl << "Generate_StateBlock CALLED" << std::endl << std::endl;
 	try
 	{
 		this->_Data_Base.Id_Link_Locate(1, State_Id);

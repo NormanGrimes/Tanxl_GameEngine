@@ -140,6 +140,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	int Tex_06{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
 	int Tex_07{ Append_Texture(TanxlOD::TexStartMenu_01_1024x1024)	};
 	int Tex_08{ Append_Texture(TanxlOD::TexMedic_01_64x64)			};
+	int Tex_09{ Append_Texture(TanxlOD::TexPrincess_01_Blink_01_256x256) };
+	int Tex_10{ Append_Texture(TanxlOD::TexPrincess_01_Blink_02_256x256) };
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
@@ -147,6 +149,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 14, Tex_04);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 15, Tex_05);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 16, Tex_06);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 17, Tex_09);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 18, Tex_10);
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
 
@@ -454,7 +458,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					State_Check_Block(State, CHECK_EDGE_LEFT);
 			}
 		}
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
+		this->_Insert_Status = 0;
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
 
 	if (IEB->Get_LastMove_X() > 0)
@@ -477,7 +482,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					State_Check_Block(State, CHECK_EDGE_RIGH);
 			}
 		}
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 1);//Insert Status
+		this->_Insert_Status = 1;
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
 
 	if (IEB->Get_LastMove_Y() > 0)
@@ -500,7 +506,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					State_Check_Block(State, CHECK_EDGE_ABOV);
 			}
 		}
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 2);//Insert Status
+		this->_Insert_Status = 2;
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
 
 	if (IEB->Get_LastMove_Y() < 0)
@@ -523,7 +530,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 					State_Check_Block(State, CHECK_EDGE_BELO);
 			}
 		}
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 3);//Insert Status
+		this->_Insert_Status = 3;
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
 }
 
@@ -821,12 +829,21 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 		return;
 	int Unit_State_Id{ CheckUnit->Get_Extra_Status()};
 
+	AC->CheckAchievement(g_rgAchievements[1]);
+
 	if ((MC->Get_Money() >= 100) && Achievement)
 	{
 		Achievement = false;
-		std::cout << "Achievement Unlocked !" << std::endl;
-		AC->UnlockAchievement(g_rgAchievements[1]);
-		SB->Play_Sound(SOUND_ACHIEVEMENT);
+		if (AC->RequestStats())
+		{
+			std::cout << "Achievement Unlocked !" << std::endl;
+			AC->UnlockAchievement(g_rgAchievements[1]);
+			SB->Play_Sound(SOUND_ACHIEVEMENT);
+		}
+		else
+		{
+			std::cout << "Achievement Request Fail !" << std::endl;
+		}
 	}
 
 	if (Unit_State_Id == 2)
@@ -845,6 +862,7 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 	{
 		SB->Play_Sound(SOUND_RESTORE_HEALTH);
 		MC->Add_Money(5);
+
 		CheckUnit->Set_Status(0);
 		ReLoadState(State);
 	}
@@ -932,6 +950,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	double DeltaTime{ glfwGetTime() - LastTime };
+	static double Blink_Cnt{ 0 };
 
 	static float VersionFontSize{ 20.0f };
 
@@ -1018,6 +1037,15 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	}
 	else
 	{
+		if ((this->_Insert_Status == 3) && (this->_Game_Status == GAME_PLAYER_ACTIVE))
+		{
+			Blink_Cnt += DeltaTime * 100;
+			if (Blink_Cnt > 400)
+				Blink_Cnt = 0;
+		}
+
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 19, static_cast<int>(Blink_Cnt));
+
 		if (_Draw_Status == 3)
 		{
 			_Draw_Status = 4;
@@ -1048,7 +1076,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 #endif
 
-	//std::cout << "Middle_Frame :" << _Middle_Frame << std::endl;
+	//std::cout << "Blink_Cnt :" << Blink_Cnt << std::endl;
+
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
 	glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
 

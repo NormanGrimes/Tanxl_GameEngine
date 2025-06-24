@@ -7,6 +7,11 @@
 // 增加库存物品类
 // 增加成就枚举
 // 增加成就类与成就解锁功能
+// 增加请求用户数据接口
+// 修正初始化流程
+// 增加生成测试物品接口
+// 增加宏控制程序启动条件
+// 增加检测成就状态的接口
 
 #pragma once
 
@@ -16,10 +21,12 @@
 #include "public/steam/steam_api.h"
 #include "public/steam/isteamapps.h"
 
+#define _STEAM_ALPHA_VERSION_ 0
+
 
 enum ETanxl_Inventory_ItemDefId
 {
-	Tanxl_Pormise_LIMITED_DROP_ITEM		= 1,
+	Tanxl_Pormise_LIMITED_ITEM			= 1,
 	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2
 };
 
@@ -39,7 +46,7 @@ struct Achievement_t
 	int m_iIconImage;
 };
 
-#define _ACH_ID( id, name ) { id, #id, name, "", 0, 0 }
+#define _ACH_ID( id, name ) { id, #id, name, ""}
 
 static Achievement_t g_rgAchievements[] =
 {
@@ -64,9 +71,27 @@ public:
 			_SteamUserStats->SetAchievement(achievement.m_pchAchievementID);
 	}
 
+	bool CheckAchievement(Achievement_t& achievement)
+	{
+		bool Is_Unlock{ false };
+		if (_SteamUserStats != nullptr)
+			_SteamUserStats->GetAchievementAndUnlockTime(achievement.m_pchAchievementID, &Is_Unlock, nullptr);
+		return Is_Unlock;
+	}
+
+	bool RequestStats()//请求用户统计数据
+	{
+		if (NULL == SteamUserStats() || NULL == SteamUser())// 是否已加载 Steam 若否,则我们无法获取统计
+			return false;
+		if (!SteamUser()->BLoggedOn())// 用户是否已登录 若否,则我们无法获取统计
+			return false;
+		return SteamUserStats()->RequestCurrentStats();
+	}
+
 private:
 	Tanxl_Achievement()
 	{
+		std::cout << "Achievement Init Called" << std::endl;
 		_SteamUser = SteamUser();
 		_SteamUserStats = SteamUserStats();
 	}
@@ -102,6 +127,14 @@ public:
 		if (!_SteamInventoryInit_Status)
 			return;
 		SteamInventory()->TriggerItemDrop(&_PlaytimeRequestResult, Tanxl_Secret_Core_LIMITED_DROP_ITEM);
+		//std::cout << "Item Drop Called !" << std::endl;
+	}
+
+	void GenerateItemsTest(ETanxl_Inventory_ItemDefId Item)
+	{
+		std::vector<SteamItemDef_t> newItems;
+		newItems.push_back(Item);
+		SteamInventory()->GenerateItems(NULL, newItems.data(), NULL, (uint32)newItems.size());
 	}
 
 private:
@@ -110,8 +143,13 @@ private:
 	{
 		if (SteamAPI_RestartAppIfNecessary(1929530))
 		{
-			std::cout << "Fail to init SteamAPI_RestartAppIfNecessary(1929530) !" << std::endl;
-
+			std::cout << "Fail to init SteamAPI_(1929530) !" << std::endl;
+#if _STEAM_ALPHA_VERSION_
+			exit(0);
+#endif
+		}
+		else
+		{
 			if (!SteamAPI_Init())
 			{
 				std::cout << "Fail to init Steam API !" << std::endl;
@@ -124,6 +162,8 @@ private:
 				std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
 				std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
 				std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
+				
+				std::cout << "Steam API Init Success !" << std::endl;
 			}
 		}
 	}

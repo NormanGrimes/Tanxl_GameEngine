@@ -15,6 +15,7 @@
 // 修复玩家死亡后界面错误的问题
 // 坐标成员改为新版模板坐标
 // 从地图碰撞检测函数中独立出地图更新接口
+// 增加变量记录上次移动导致主角面向的方向
 
 #pragma once
 
@@ -49,21 +50,23 @@
 
 namespace TanxlOD
 {
-	static const char* TexDirt_01_128x128				{ "Texture/TANXL_DIRT_01_128X128.png"           };
-	static const char* TexGrass_01_128x128				{ "Texture/TANXL_GRASS_01_128X128.png"			};
-	static const char* TexGrass_02_128x128				{ "Texture/TANXL_GRASS_02_128X128.png"			};
-	static const char* TexGrass_Snowy_01_128x128		{ "Texture/TANXL_GRASS_SNOWY_01_128X128.png"	};
-	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.png"	};
-	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.png"			};
-	static const char* TexCoin_01_64x64					{ "Texture/TANXL_COIN_01_64X64.png"				};
-	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"			};
-	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"			};
-	static const char* TexPrincess_01_256x256			{ "Texture/YANG_PRINCESS_01_256X256.png"		};
-	static const char* TexPrincess_02_256x256			{ "Texture/YANG_PRINCESS_02_256X256.png"		};
-	static const char* TexPrincess_03_256x256			{ "Texture/YANG_PRINCESS_03_256X256.png"		};
-	static const char* TexPrincess_04_256x256			{ "Texture/YANG_PRINCESS_04_256X256.png"		};
-	static const char* TexMedic_01_64x64				{ "Texture/TANXL_MEDIC_01_64X64.png"			};
-	static const char* TexStartMenu_01_1024x1024        { "Texture/TANXL_MENU_01_1024X1024.png"			};
+	static const char* TexDirt_01_128x128				{ "Texture/TANXL_DIRT_01_128X128.png"				};
+	static const char* TexGrass_01_128x128				{ "Texture/TANXL_GRASS_01_128X128.png"				};
+	static const char* TexGrass_02_128x128				{ "Texture/TANXL_GRASS_02_128X128.png"				};
+	static const char* TexGrass_Snowy_01_128x128		{ "Texture/TANXL_GRASS_SNOWY_01_128X128.png"		};
+	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.png"		};
+	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.png"				};
+	static const char* TexCoin_01_64x64					{ "Texture/TANXL_COIN_01_64X64.png"					};
+	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"				};
+	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"				};
+	static const char* TexPrincess_01_256x256			{ "Texture/TANXL_PRINCESS_01_256X256.png"			};
+	static const char* TexPrincess_02_256x256			{ "Texture/TANXL_PRINCESS_02_256X256.png"			};
+	static const char* TexPrincess_03_256x256			{ "Texture/TANXL_PRINCESS_03_256X256.png"			};
+	static const char* TexPrincess_04_256x256			{ "Texture/TANXL_PRINCESS_04_256X256.png"			};
+	static const char* TexPrincess_01_Blink_01_256x256	{ "Texture/TANXL_PRINCESS_01_BLINK_01_256X256.png"	};
+	static const char* TexPrincess_01_Blink_02_256x256	{ "Texture/TANXL_PRINCESS_01_BLINK_02_256X256.png"	};
+	static const char* TexMedic_01_64x64				{ "Texture/TANXL_MEDIC_01_64X64.png"				};
+	static const char* TexStartMenu_01_1024x1024        { "Texture/TANXL_MENU_01_1024X1024.png"				};
 
 	static StateEvent* EventSlot[16];
 
@@ -594,6 +597,8 @@ private:
 	int _Max_Middle_Frame{ 0 };
 	//记录地图场景移动距离
 	int _State_Loc;
+	//记录上次移动导致主角面向的方向
+	int _Insert_Status{ 0 };
 	//当前此模块的版本号
 	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;

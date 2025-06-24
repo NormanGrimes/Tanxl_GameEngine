@@ -94,7 +94,7 @@ int main()
 		static int DropCnt{ 0 };
 
 		DropCnt++;
-		if (DropCnt > 5)
+		if (DropCnt > 50)
 		{
 			DropCnt = 0;
 			TGE.Engine_Invent_Update_Drop();

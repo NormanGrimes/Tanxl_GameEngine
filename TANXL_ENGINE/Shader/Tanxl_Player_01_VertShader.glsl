@@ -16,6 +16,7 @@
 // 代码整理优化
 // 调整并增加宏控制生命方块大小
 // 移除未使用的颜色输入
+// 增加正面眨眼的动作纹理
 
 #version 430
 
@@ -46,6 +47,11 @@ layout (location = 14) uniform int Player_Texture_04;
 layout (location = 15) uniform int Player_Texture_05;
 layout (location = 16) uniform int Player_Texture_06;
 
+layout (location = 17) uniform int Player_Blink_01;
+layout (location = 18) uniform int Player_Blink_02;
+
+layout (location = 19) uniform int Player_Blink_Cnt;
+
 out vec4 vs_color;
 out vec2 tc;
 flat out int Cube;
@@ -69,7 +75,16 @@ void main(void)
 		else if(Insert_Status == 2)
 			Cube = Player_Texture_03;
 		else if(Insert_Status == 3)
-			Cube = Player_Texture_01;
+		{
+			if((Player_Blink_Cnt >= 0) && (Player_Blink_Cnt <= 370))
+				Cube = Player_Texture_01;
+			else if((Player_Blink_Cnt > 370) && (Player_Blink_Cnt <= 380))
+				Cube = Player_Blink_01;
+			else if((Player_Blink_Cnt > 380) && (Player_Blink_Cnt <= 390))
+				Cube = Player_Blink_02;
+			else
+				Cube = Player_Blink_01;
+		}
 
 		if      (gl_VertexID == 0) //MainMoveBlock 0.2F
 		{
