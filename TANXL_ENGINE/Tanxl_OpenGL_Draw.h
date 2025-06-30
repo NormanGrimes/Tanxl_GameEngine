@@ -16,6 +16,7 @@
 // 坐标成员改为新版模板坐标
 // 从地图碰撞检测函数中独立出地图更新接口
 // 增加变量记录上次移动导致主角面向的方向
+// 死亡后首页显示的提示切换到下一个
 
 #pragma once
 
@@ -57,6 +58,7 @@ namespace TanxlOD
 	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.png"		};
 	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.png"				};
 	static const char* TexCoin_01_64x64					{ "Texture/TANXL_COIN_01_64X64.png"					};
+	static const char* TexSecretCore_01_64x64			{ "Texture/TANXL_SECRET_CORE_01_64X64.png"			};
 	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"				};
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"				};
 	static const char* TexPrincess_01_256x256			{ "Texture/TANXL_PRINCESS_01_256X256.png"			};
@@ -575,10 +577,8 @@ private:
 	int _Current_Status{ 0 };
 	//记录移动导致的新坐标高度值
 	Tanxl_Coord<int> _New_Current_Loc{ 0, 0 };
-	//记录地图场景的基本矩形行数
-	int _HeightInt;
-	//记录地图场景的基本矩形列数
-	int _WidthInt;
+	//记录地图场景的高度与宽度基本矩形行数
+	Tanxl_Coord<int> _Scene_Int{ 0, 0 };
 	//窗口的宽/高度
 	Tanxl_Coord<int> _Screen_Length;
 	//记载额外加载的地图环数量

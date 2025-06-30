@@ -8,6 +8,8 @@ static FontBase* Font{ &FontBase::GetFontBase() };
 
 static GameObject* MC{ Main_Character::Get_Main_Character() };
 
+//static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
+
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
 	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
@@ -16,8 +18,8 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 	return *OGD;
 }
 
-OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) :_HeightInt(0), _WidthInt(0), _vao(), _vbo(), _Font_vbo(),
-_Inst_vbo(),_Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
+OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
+_Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
 _Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor()
 {
 	this->_State_Loc = this->_LCB->New_Location_set("State_Move_Location");
@@ -33,7 +35,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, "Tanxl_GAME /// 0.2B59", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, "Tanxl_GAME /// 0.2B61", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -65,8 +67,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0f);
 
-	this->_HeightInt = State->Get_StateHeight();
-	this->_WidthInt = State->Get_StateWidth();
+	this->_Scene_Int._Coord_Y = State->Get_StateHeight();
+	this->_Scene_Int._Coord_X = State->Get_StateWidth();
 
 	this->_Each_Height = 2.0f / State->Get_StateHeight();//10 0.2
 	this->_Each_Width = 2.0f / State->Get_StateWidth();//10 0.2
@@ -107,20 +109,20 @@ void OpenGL_Draw::init(GameStateBase* State)
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_HeightInt);//SHeight
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_WidthInt);//SWidth
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_Scene_Int._Coord_Y);//SHeight
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, MC->Get_MaxHealth() + 2);//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
-	glProgramUniform1i(this->_State_RenderingProgram, 2, this->_HeightInt);//SHeight
-	glProgramUniform1i(this->_State_RenderingProgram, 3, this->_WidthInt);//SWidth
+	glProgramUniform1i(this->_State_RenderingProgram, 2, this->_Scene_Int._Coord_Y);//SHeight
+	glProgramUniform1i(this->_State_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 6, this->_PreLoads);//PreLoads
 
-	glProgramUniform1i(this->_Event_RenderingProgram, 2, this->_HeightInt);//SHeight
-	glProgramUniform1i(this->_Event_RenderingProgram, 3, this->_WidthInt);//SWidth
+	glProgramUniform1i(this->_Event_RenderingProgram, 2, this->_Scene_Int._Coord_Y);//SHeight
+	glProgramUniform1i(this->_Event_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1i(this->_Event_RenderingProgram, 6, this->_PreLoads);//PreLoads
 
 	//State_Square Part 0~6  Adjust random range when number of textures change 
@@ -142,6 +144,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	int Tex_08{ Append_Texture(TanxlOD::TexMedic_01_64x64)			};
 	int Tex_09{ Append_Texture(TanxlOD::TexPrincess_01_Blink_01_256x256) };
 	int Tex_10{ Append_Texture(TanxlOD::TexPrincess_01_Blink_02_256x256) };
+	int Tex_11{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)			 };
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
@@ -155,16 +158,17 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
 
 	glProgramUniform1i(this->_Event_RenderingProgram, 7, Tex_08);
+	glProgramUniform1i(this->_Event_RenderingProgram, 8, Tex_11);
 
 	glBindVertexArray(0);
 
-	std::cout << "___" << this->_HeightInt << "___" << this->_WidthInt << "___" << this->_PreLoads << std::endl;
+	std::cout << "___" << this->_Scene_Int._Coord_Y << "___" << this->_Scene_Int._Coord_X << "___" << this->_PreLoads << std::endl;
 
-	float Half_Width{ (this->_WidthInt - 1) / 2.0f };
-	float Half_Height{ (this->_HeightInt - 1) / 2.0f };
+	float Half_Width{ (this->_Scene_Int._Coord_X - 1) / 2.0f };
+	float Half_Height{ (this->_Scene_Int._Coord_Y - 1) / 2.0f };
 
-	State->Get_Move_Distance()._Coord_X = (2.0f / this->_WidthInt) * Half_Width + (1.0f / this->_WidthInt) * (8 - this->_PreLoads);
-	State->Get_Move_Distance()._Coord_Y = -(2.0f / this->_HeightInt) * Half_Height - (1.0f / this->_HeightInt) * (8 - this->_PreLoads);
+	State->Get_Move_Distance()._Coord_X = (2.0f / this->_Scene_Int._Coord_X) * Half_Width + (1.0f / this->_Scene_Int._Coord_X) * (8 - this->_PreLoads);
+	State->Get_Move_Distance()._Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
 
 	State->Get_Square_State().Set_State_Length(State->Get_StateWidth(), State->Get_StateHeight());
 	State->Get_Square_State().Set_Move_State(_Pre_Move._Coord_X, _Pre_Move._Coord_Y, this->_PreLoads);
@@ -185,7 +189,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 	int Move_NY{ State->Get_Square_State()._Move_NY };
 	int Move_PY{ State->Get_Square_State()._Move_PY };
 
-	int State_Length{ (this->_HeightInt + this->_PreLoads * 2) * (this->_WidthInt + this->_PreLoads * 2) + 1 };
+	int State_Length{ (this->_Scene_Int._Coord_Y + this->_PreLoads * 2) * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + 1 };
 
 #if _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_
 	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
@@ -341,7 +345,7 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 void OpenGL_Draw::Update_VertData(glm::ivec2 StateInfor[])
 {
 	GLuint StatePos;
-	int State_Length{ (this->_HeightInt + this->_PreLoads * 2) * (this->_WidthInt + this->_PreLoads * 2) + 1 };
+	int State_Length{ (this->_Scene_Int._Coord_Y + this->_PreLoads * 2) * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + 1 };
 
 	if (State_Length > 400)
 		State_Length = 400;
@@ -358,7 +362,7 @@ void OpenGL_Draw::Update_VertData(glm::ivec2 StateInfor[])
 
 #if _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_
 		std::cout << StateInfor[i].x << " ";
-		if (i % (this->_WidthInt + this->_PreLoads * 2) == 0)
+		if (i % (this->_Scene_Int._Coord_X + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
 #endif
 	}
@@ -876,6 +880,42 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			ReLoadState(State);
 		}
 	}
+	else if (Unit_State_Id == 5)
+	{
+		static int Internal_Cnt{ 0 };
+		Internal_Cnt++;
+		CheckUnit->Set_Status(0);
+
+		if (Internal_Cnt == 4)
+		{
+			State->Set_State(0x5252,
+				"0-3,0-2,1-4,1-4,1-4,1-4,1-4,1-4,0-2,0-3,"
+				"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
+				"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
+				"1-4,1-4,0-2,0-3,0-1,0-1,0-3,0-2,1-4,1-4,"
+				"1-4,0-1,0-2,0-1,5-3,5-3,0-1,0-2,0-1,1-4,"
+				"1-4,0-1,0-2,0-1,5-3,5-3,0-1,0-2,0-1,1-4,"
+				"1-4,1-4,0-2,0-3,0-1,0-1,0-3,0-2,1-4,1-4,"
+				"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
+				"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
+				"0-3,0-2,1-4,1-4,1-4,1-4,1-4,1-4,0-2,0-3,");
+		}
+		if (Internal_Cnt == 8)
+		{
+			Internal_Cnt = 0;
+			std::cout << "Achievement Unlocked !" << std::endl;
+			//if (!AC->CheckAchievement(g_rgAchievements[0]))
+			//	TI->AddPromoItem(Tanxl_Secret_Core_LIMITED_DROP_ITEM);
+			//else
+			//	std::cout << "No Drop Available !" << std::endl;
+			AC->UnlockAchievement(g_rgAchievements[0]);
+			SB->Play_Sound(SOUND_ACHIEVEMENT);
+		}
+
+		ReLoadState(State);
+
+		std::cout << "Secret Core Found !" << std::endl;
+	}
 	//std::cout << "Health :" << MC->Check_Health() << std::endl;
 }
 
@@ -888,7 +928,7 @@ void OpenGL_Draw::Move_State(GameStateBase* State, EMove_State_EventId Direction
 
 void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id)
 {
-	glUniform3f(glGetUniformLocation(_Fonts_RenderingProgram, "textColor"), color.x, color.y, color.z);
+	glUniform3f(0, color.x, color.y, color.z);
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(_vao[0]);
 
@@ -1051,6 +1091,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			_Draw_Status = 4;
 			SB->Play_Sound(SOUND_GAME_OVER);
 			MC->Set_Health(5);
+			Tips->Update_Count();
 		}
 
 		this->_Middle_Frame = 0;
@@ -1100,8 +1141,12 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
+	float ColorR = static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f;
+	float ColorG = static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f;
+	float ColorB = 0.5f;
+
 	if(VersionFontSize > -800.0f)
-		RenderText("TANXL GAME VERSION 2.59", VersionFontSize, 10.0f, 1.0f, glm::vec3(0.8, 0.8f, 0.2f));
+		RenderText("TANXL GAME VERSION 2.61", VersionFontSize, 10.0f, 1.0f, glm::vec3(ColorR, ColorG, ColorB));
 
 	glBindVertexArray(0);
 
@@ -1168,18 +1213,18 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	int index = 0;
 	float offset = this->_Each_Height;
 
-	float BeginHeight{ (this->_HeightInt + this->_PreLoads - 1) * (1.0f / this->_HeightInt) };
+	float BeginHeight{ (this->_Scene_Int._Coord_Y + this->_PreLoads - 1) * (1.0f / this->_Scene_Int._Coord_Y) };
 	for (int Height{ 0 }; Height < (this->_Each_Height + this->_PreLoads * 4); ++Height)
 	{
-		float BeginWidth{ -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt) };
+		float BeginWidth{ -(this->_Scene_Int._Coord_X + this->_PreLoads - 1) * (1.0f / this->_Scene_Int._Coord_X) };
 		for (int Width{ 0 }; Width < (this->_Each_Width + this->_PreLoads * 4); ++Width)
 		{
-			BeginWidth += ((1.0f / this->_WidthInt) * 2);
-			translations[Height * (this->_WidthInt + this->_PreLoads * 2) + Width].x = BeginWidth;
-			translations[Height * (this->_WidthInt + this->_PreLoads * 2) + Width].y = BeginHeight;
+			BeginWidth += ((1.0f / this->_Scene_Int._Coord_X) * 2);
+			translations[Height * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + Width].x = BeginWidth;
+			translations[Height * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + Width].y = BeginHeight;
 		}
-		BeginHeight -= ((1.0f / this->_HeightInt) * 2);
-		BeginWidth = -(this->_WidthInt + this->_PreLoads - 1) * (1.0f / this->_WidthInt);
+		BeginHeight -= ((1.0f / this->_Scene_Int._Coord_Y) * 2);
+		BeginWidth = -(this->_Scene_Int._Coord_X + this->_PreLoads - 1) * (1.0f / this->_Scene_Int._Coord_X);
 	}
 
 	glGenBuffers(1, &_Inst_vbo[0]);

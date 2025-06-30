@@ -26,11 +26,11 @@
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
-#define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
-#define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
-#define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
-#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        0
-#define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
+#define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     1
+#define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          1
+#define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  1
+#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
+#define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     1
 
 #endif
 
@@ -205,7 +205,6 @@ public:
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
-	void Set_Adjust_Frequency(int Frame);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);
@@ -268,14 +267,12 @@ private:
 	int _State_WidthS{ 0 };
 	// _State_HeightS 地图区块在纵向的个数
 	int _State_HeightS{ 0 };
-	float _Half_State_Width{ 0.0f };
-	float _Half_State_Height{ 0.0f };
+	// _Half_State_Length 半个地图单元的长度
+	Tanxl_Coord<float> _Half_State_Length{ 0.0f, 0.0f };
 	// _Exac_Location 玩家方块经过计算后的实际坐标
 	Tanxl_Coord<int> _Exac_Location;
-	//_GameState_Width用于控制当前地图的显示宽度
-	int _GameState_Width;
-	//_GameState_Height用于控制当前地图的显示高度
-	int _GameState_Height;
+	//_GameState_Length 用于控制当前地图的显示宽/高度
+	Tanxl_Coord<int> _GameState_Length;
 	//_GameState_Adjust用于记录每次自动调整的距离
 	float _GameState_Adjust;
 	//_Is_Data_Set用于标记是否从文件中获取到了地图数据

@@ -195,10 +195,10 @@ void GameStateBase::Clear_Display_Vector(EState_Extend Clear_Id)
 
 void GameStateBase::Set_Display_State(int Width, int Height)
 {
-	this->_GameState_Width = Width;
-	this->_Half_State_Width = 1.0f / Width;
-	this->_GameState_Height = Height;
-	this->_Half_State_Height = 1.0f / Height;
+	this->_GameState_Length._Coord_X = Width;
+	this->_Half_State_Length._Coord_X = 1.0f / Width;
+	this->_GameState_Length._Coord_Y = Height;
+	this->_Half_State_Length._Coord_Y = 1.0f / Height;
 }
 
 void GameStateBase::Set_Data_Length(unsigned Width, unsigned Height)
@@ -609,7 +609,6 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 			this->_GameState_Extend._RIGH_BELO._Data = new std::vector<StateUnit*>;
 			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
 		}
-
 		break;
 	}
 	}
@@ -619,11 +618,11 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 {
 	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
 
-	if ((this->_Half_State_Width == 0.0f) || (this->_Half_State_Height == 0.0f))
-		this->Set_Display_State(this->_GameState_Width, this->_GameState_Height);
+	if ((this->_Half_State_Length._Coord_X == 0.0f) || (this->_Half_State_Length._Coord_Y == 0.0f))
+		this->Set_Display_State(this->_GameState_Length._Coord_X, this->_GameState_Length._Coord_Y);
 
-	static float State_Above_Below_Width{ this->_Half_State_Width * 2 / 3 };
-	static float State_Above_Below_Height{ this->_Half_State_Height * 2 / 3 };
+	static float State_Above_Below_Width{ this->_Half_State_Length._Coord_X * 2 / 3 };
+	static float State_Above_Below_Height{ this->_Half_State_Length._Coord_Y * 2 / 3 };
 
 	switch (Check)
 	{
@@ -632,29 +631,29 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		MoveY += 0.0f;
 		break;
 	case CHECK_EDGE_LEFT:
-		MoveX -= this->_Half_State_Width * 2 / 3;
+		MoveX -= this->_Half_State_Length._Coord_X * 2 / 3;
 		MoveY += State_Above_Below_Height;
 		State_Above_Below_Height = -State_Above_Below_Height;
 		break;
 	case CHECK_EDGE_RIGH:
-		MoveX += this->_Half_State_Width * 2 / 3;
+		MoveX += this->_Half_State_Length._Coord_X * 2 / 3;
 		MoveY += State_Above_Below_Height;
 		State_Above_Below_Height = -State_Above_Below_Height;
 		break;
 	case CHECK_EDGE_BELO:
 		MoveX += State_Above_Below_Width;
-		MoveY -= this->_Half_State_Height * 2 / 3;
+		MoveY -= this->_Half_State_Length._Coord_Y * 2 / 3;
 		State_Above_Below_Width = -State_Above_Below_Width;
 		break;
 	case CHECK_EDGE_ABOV:
 		MoveX += State_Above_Below_Width;
-		MoveY += this->_Half_State_Height * 2 / 3;
+		MoveY += this->_Half_State_Length._Coord_Y * 2 / 3;
 		State_Above_Below_Width = -State_Above_Below_Width;
 		break;
 	}
 
-	float Temp_LocationX = (Distance->_Coord_X + MoveX) * (this->_GameState_Width / 2.0f);
-	float Temp_LocationY = (Distance->_Coord_Y + MoveY) * (this->_GameState_Height / 2.0f);
+	float Temp_LocationX = (Distance->_Coord_X + MoveX) * (this->_GameState_Length._Coord_X / 2.0f);
+	float Temp_LocationY = (Distance->_Coord_Y + MoveY) * (this->_GameState_Length._Coord_Y / 2.0f);
 
 #if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
 	std::cout << "Before Adjust :" << Temp_LocationX << "____" << Temp_LocationY << std::endl;
@@ -675,7 +674,7 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 
 #if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
 	std::cout << "After :" << Temp_LocationX << "____" << Temp_LocationY << std::endl;
-	std::cout << this->_Exac_LocationX << "____" << this->_Exac_LocationY << std::endl;
+	std::cout << this->_Exac_Location._Coord_X << "____" << this->_Exac_Location._Coord_Y << std::endl;
 #endif
 }
 
@@ -777,7 +776,7 @@ void GameStateBase::Build_Connect(int State_Id)
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :
-	_GameState_Width(Height), _GameState_Height(Width), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
+	_GameState_Length(Width, Height), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
 	_CurrentMid(nullptr), _MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
 	_Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
@@ -1075,7 +1074,7 @@ Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 	return nullptr;
 }
 
-GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Width(0), _GameState_Height(0), _GameState_Adjust(0), _Extend_Mid_Id(0),
+GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Length(0, 0), _GameState_Adjust(0), _Extend_Mid_Id(0),
 _Compile_Success(false), _CurrentMid(nullptr), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
 _Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
@@ -1144,12 +1143,12 @@ int GameStateBase::Get_Distance_Move_Id()
 
 int GameStateBase::Get_StateHeight()const
 {
-	return this->_GameState_Height;
+	return this->_GameState_Length._Coord_Y;
 }
 
 int GameStateBase::Get_StateWidth()const
 {
-	return this->_GameState_Width;
+	return this->_GameState_Length._Coord_X;
 }
 
 EMove_State_EventId GameStateBase::Auto_Update_Trigger(short Edge)

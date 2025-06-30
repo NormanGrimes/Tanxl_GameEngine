@@ -12,11 +12,18 @@
 // 增加生成测试物品接口
 // 增加宏控制程序启动条件
 // 增加检测成就状态的接口
+// 增加消耗物品接口
+// 增加成员存储库存指针
+// 增加获取所有库存的功能
 
 #pragma once
 
 #ifndef _TANXL_STEAMSERVICE_
 #define _TANXL_STEAMSERVICE_
+
+#include <list>
+#include <vector>
+#include <iostream>
 
 #include "public/steam/steam_api.h"
 #include "public/steam/isteamapps.h"
@@ -34,6 +41,18 @@ enum ETanxl_Achievement_DefId
 {
 	NEW_ACHIEVEMENT_1_0 = 1,
 	NEW_ACHIEVEMENT_1_1 = 2
+};
+
+class TanxlItem
+{
+public:
+	SteamItemInstanceID_t GetItemId() const { return _Details.m_itemId; }
+	SteamItemDef_t GetDefinition() const { return _Details.m_iDefinition; }
+	uint16 GetQuantity() const { return _Details.m_unQuantity; }
+	SteamItemDetails_t GetDetails() const { return this->_Details; }
+	void SetDetails(SteamItemDetails_t Details) { this->_Details = Details; }
+private:
+	SteamItemDetails_t _Details;
 };
 
 struct Achievement_t
@@ -119,27 +138,45 @@ public:
 	{
 		if (!_SteamInventoryInit_Status)
 			return;
-		SteamInventory()->GetAllItems(NULL);
+		_Steam_Invetory->GetAllItems(NULL);
 	}
 
 	void CheckForItemDrops()
 	{
 		if (!_SteamInventoryInit_Status)
 			return;
-		SteamInventory()->TriggerItemDrop(&_PlaytimeRequestResult, Tanxl_Secret_Core_LIMITED_DROP_ITEM);
-		//std::cout << "Item Drop Called !" << std::endl;
+		_Steam_Invetory->TriggerItemDrop(&_PlaytimeRequestResult, Tanxl_Secret_Core_LIMITED_DROP_ITEM);
+		std::cout << "Item Drop Called !" << std::endl;
+
+		std::list<TanxlItem*>::iterator iter;
+		for (iter = _listPlayerItems.begin(); iter != _listPlayerItems.end(); ++iter)
+		{
+			std::cout << "InstanceId :" << (*iter)->GetItemId() << std::endl;
+		}
+		std::cout << std::endl;
 	}
 
 	void GenerateItemsTest(ETanxl_Inventory_ItemDefId Item)
 	{
 		std::vector<SteamItemDef_t> newItems;
 		newItems.push_back(Item);
-		SteamInventory()->GenerateItems(NULL, newItems.data(), NULL, (uint32)newItems.size());
+		_Steam_Invetory->GenerateItems(NULL, newItems.data(), NULL, (uint32)newItems.size());
+	}
+
+	void ConsumeInvetoryItem(ETanxl_Inventory_ItemDefId ItemInstanceId)
+	{
+		_Steam_Invetory->ConsumeItem(NULL, ItemInstanceId, 1);
+	}
+
+	bool AddPromoItem(ETanxl_Inventory_ItemDefId Item)
+	{
+		return _Steam_Invetory->AddPromoItem(NULL, Item);
 	}
 
 private:
 
-	Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false)
+	Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
+		_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr)
 	{
 		if (SteamAPI_RestartAppIfNecessary(1929530))
 		{
@@ -157,6 +194,8 @@ private:
 			else
 			{
 				_SteamInventoryInit_Status = true;
+				_Steam_Invetory = SteamInventory();
+				_Steam_Invetory->LoadItemDefinitions();
 
 				std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
 				std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
@@ -169,24 +208,19 @@ private:
 	}
 
 	~Tanxl_Inventory() {};
-	Tanxl_Inventory(const Tanxl_Inventory&) :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false){}
+	Tanxl_Inventory(const Tanxl_Inventory&) :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
+		_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr) {}
 	Tanxl_Inventory& operator=(const Tanxl_Inventory&) { return *this; }
 
+	STEAM_CALLBACK(Tanxl_Inventory, OnSteamInventoryFullUpdate, SteamInventoryFullUpdate_t, _SteamInventoryFullUpdate);
+
+	ISteamInventory* _Steam_Invetory;
 	const std::string _Version{ "0.1" };
+
+	std::list<TanxlItem*> _listPlayerItems;
 
 	SteamInventoryResult_t _PlaytimeRequestResult;
 	bool _SteamInventoryInit_Status;
-};
-
-class TanxlItem
-{
-public:
-	SteamItemInstanceID_t GetItemId() const { return _Details.m_itemId; }
-	SteamItemDef_t GetDefinition() const { return _Details.m_iDefinition; }
-	uint16 GetQuantity() const { return _Details.m_unQuantity; }
-private:
-	friend class Tanxl_Inventory;
-	SteamItemDetails_t _Details;
 };
 
 #endif

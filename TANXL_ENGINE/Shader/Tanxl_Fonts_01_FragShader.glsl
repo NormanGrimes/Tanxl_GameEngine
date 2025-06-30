@@ -1,13 +1,16 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2023-09-22 16:29
+// 为字体颜色统一变量指定初始位置
 
 #version 430
+
+layout (location = 0) uniform vec3 textColor;
+uniform sampler2D text;
 
 in vec2 TexCoords;
 out vec4 color;
 
-uniform sampler2D text;
-uniform vec3 textColor;
+
 
 void main()
 {    

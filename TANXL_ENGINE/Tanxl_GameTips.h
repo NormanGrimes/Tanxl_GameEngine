@@ -81,7 +81,7 @@ private:
 		"Tips : Press A or left button to move leftward",
 		"Tips : Press D or right button to move rightward",
 		"Tips : You can not cross the blue squares",
-		"Tips : Red squares can provide coin"
+		"Tips : Red squares can also provide coin"
 	};
 };
 
