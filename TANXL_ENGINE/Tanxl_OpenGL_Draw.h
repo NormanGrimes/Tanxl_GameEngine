@@ -17,6 +17,7 @@
 // 从地图碰撞检测函数中独立出地图更新接口
 // 增加变量记录上次移动导致主角面向的方向
 // 死亡后首页显示的提示切换到下一个
+// 优化控制台地图数据调试功能的直观性
 
 #pragma once
 
@@ -28,11 +29,11 @@
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
-#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     1
-#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      1
-#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      1
-#define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   1
-#define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   1
+#define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
+#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
+#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
+#define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
+#define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_     1
 
 #endif
@@ -48,6 +49,7 @@
 #include "Tanxl_SoundBase.h"
 #include "Tanxl_FontBase.h"
 #include "Tanxl_SteamService.h"
+#include "Tanxl_Console_List.h"
 
 namespace TanxlOD
 {

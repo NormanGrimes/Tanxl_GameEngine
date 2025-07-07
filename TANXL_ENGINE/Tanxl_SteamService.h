@@ -15,6 +15,7 @@
 // 增加消耗物品接口
 // 增加成员存储库存指针
 // 增加获取所有库存的功能
+// 定义转移到源文件中
 
 #pragma once
 
@@ -76,44 +77,16 @@ static Achievement_t g_rgAchievements[] =
 class Tanxl_Achievement
 {
 public:
-	static Tanxl_Achievement& Get_AchievementBase()
-	{
-		static Tanxl_Achievement* Achievement{ new Tanxl_Achievement() };
-		return *Achievement;
-	}
+	static Tanxl_Achievement& Get_AchievementBase();
 
-	void UnlockAchievement(Achievement_t& achievement)
-	{
-		achievement.m_bAchieved = true;
-		achievement.m_iIconImage = 0;
-		if (_SteamUserStats != nullptr)
-			_SteamUserStats->SetAchievement(achievement.m_pchAchievementID);
-	}
+	void UnlockAchievement(Achievement_t& achievement);
 
-	bool CheckAchievement(Achievement_t& achievement)
-	{
-		bool Is_Unlock{ false };
-		if (_SteamUserStats != nullptr)
-			_SteamUserStats->GetAchievementAndUnlockTime(achievement.m_pchAchievementID, &Is_Unlock, nullptr);
-		return Is_Unlock;
-	}
+	bool CheckAchievement(Achievement_t& achievement);
 
-	bool RequestStats()//请求用户统计数据
-	{
-		if (NULL == SteamUserStats() || NULL == SteamUser())// 是否已加载 Steam 若否,则我们无法获取统计
-			return false;
-		if (!SteamUser()->BLoggedOn())// 用户是否已登录 若否,则我们无法获取统计
-			return false;
-		return SteamUserStats()->RequestCurrentStats();
-	}
+	bool RequestStats();//请求用户统计数据
 
 private:
-	Tanxl_Achievement()
-	{
-		std::cout << "Achievement Init Called" << std::endl;
-		_SteamUser = SteamUser();
-		_SteamUserStats = SteamUserStats();
-	}
+	Tanxl_Achievement();
 
 	ISteamUser* _SteamUser;
 	ISteamUserStats* _SteamUserStats;
@@ -123,94 +96,27 @@ class Tanxl_Inventory
 {
 public:
 
-	static Tanxl_Inventory& Get_InventoryBase()
-	{
-		static Tanxl_Inventory* Inventory{ new Tanxl_Inventory() };
-		return *Inventory;
-	}
+	static Tanxl_Inventory& Get_InventoryBase();
 
-	const std::string Get_Version()
-	{
-		return this->_Version;
-	}
+	const std::string Get_Version();
 
-	void RefreshFromServer()
-	{
-		if (!_SteamInventoryInit_Status)
-			return;
-		_Steam_Invetory->GetAllItems(NULL);
-	}
+	void RefreshFromServer();
 
-	void CheckForItemDrops()
-	{
-		if (!_SteamInventoryInit_Status)
-			return;
-		_Steam_Invetory->TriggerItemDrop(&_PlaytimeRequestResult, Tanxl_Secret_Core_LIMITED_DROP_ITEM);
-		std::cout << "Item Drop Called !" << std::endl;
+	void CheckForItemDrops();
 
-		std::list<TanxlItem*>::iterator iter;
-		for (iter = _listPlayerItems.begin(); iter != _listPlayerItems.end(); ++iter)
-		{
-			std::cout << "InstanceId :" << (*iter)->GetItemId() << std::endl;
-		}
-		std::cout << std::endl;
-	}
+	void GenerateItemsTest(ETanxl_Inventory_ItemDefId Item);
 
-	void GenerateItemsTest(ETanxl_Inventory_ItemDefId Item)
-	{
-		std::vector<SteamItemDef_t> newItems;
-		newItems.push_back(Item);
-		_Steam_Invetory->GenerateItems(NULL, newItems.data(), NULL, (uint32)newItems.size());
-	}
+	void ConsumeInvetoryItem(ETanxl_Inventory_ItemDefId ItemInstanceId);
 
-	void ConsumeInvetoryItem(ETanxl_Inventory_ItemDefId ItemInstanceId)
-	{
-		_Steam_Invetory->ConsumeItem(NULL, ItemInstanceId, 1);
-	}
-
-	bool AddPromoItem(ETanxl_Inventory_ItemDefId Item)
-	{
-		return _Steam_Invetory->AddPromoItem(NULL, Item);
-	}
+	bool AddPromoItem(ETanxl_Inventory_ItemDefId Item);
 
 private:
 
-	Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
-		_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr)
-	{
-		if (SteamAPI_RestartAppIfNecessary(1929530))
-		{
-			std::cout << "Fail to init SteamAPI_(1929530) !" << std::endl;
-#if _STEAM_ALPHA_VERSION_
-			exit(0);
-#endif
-		}
-		else
-		{
-			if (!SteamAPI_Init())
-			{
-				std::cout << "Fail to init Steam API !" << std::endl;
-			}
-			else
-			{
-				_SteamInventoryInit_Status = true;
-				_Steam_Invetory = SteamInventory();
-				_Steam_Invetory->LoadItemDefinitions();
+	Tanxl_Inventory();
 
-				std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
-				std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
-				std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
-				std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
-				
-				std::cout << "Steam API Init Success !" << std::endl;
-			}
-		}
-	}
-
-	~Tanxl_Inventory() {};
-	Tanxl_Inventory(const Tanxl_Inventory&) :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
-		_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr) {}
-	Tanxl_Inventory& operator=(const Tanxl_Inventory&) { return *this; }
+	~Tanxl_Inventory();
+	Tanxl_Inventory(const Tanxl_Inventory&);
+	Tanxl_Inventory& operator=(const Tanxl_Inventory&);
 
 	STEAM_CALLBACK(Tanxl_Inventory, OnSteamInventoryFullUpdate, SteamInventoryFullUpdate_t, _SteamInventoryFullUpdate);
 

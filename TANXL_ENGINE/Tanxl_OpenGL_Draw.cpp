@@ -338,7 +338,6 @@ void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
 			Move_NY++;
 		}
 	}
-
 	Update_VertData(this->_StateInfor);
 }
 
@@ -361,7 +360,14 @@ void OpenGL_Draw::Update_VertData(glm::ivec2 StateInfor[])
 		glProgramUniform1i(_Event_RenderingProgram, StatePos, StateInfor[i].y);
 
 #if _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_
-		std::cout << StateInfor[i].x << " ";
+
+		if (StateInfor[i].x != 0)
+			Col(StateInfor[i].x);
+		else
+			Col(0x17);
+
+		std::cout << StateInfor[i].x << "-" << StateInfor[i].y;
+		Col();
 		if (i % (this->_Scene_Int._Coord_X + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
 #endif
@@ -884,23 +890,10 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 	{
 		static int Internal_Cnt{ 0 };
 		Internal_Cnt++;
+		SB->Play_Sound(SOUND_SECRET_CORE);
 		CheckUnit->Set_Status(0);
 
 		if (Internal_Cnt == 4)
-		{
-			State->Set_State(0x5252,
-				"0-3,0-2,1-4,1-4,1-4,1-4,1-4,1-4,0-2,0-3,"
-				"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
-				"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
-				"1-4,1-4,0-2,0-3,0-1,0-1,0-3,0-2,1-4,1-4,"
-				"1-4,0-1,0-2,0-1,5-3,5-3,0-1,0-2,0-1,1-4,"
-				"1-4,0-1,0-2,0-1,5-3,5-3,0-1,0-2,0-1,1-4,"
-				"1-4,1-4,0-2,0-3,0-1,0-1,0-3,0-2,1-4,1-4,"
-				"1-4,0-1,0-3,0-2,0-2,0-2,0-2,0-3,0-1,1-4,"
-				"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
-				"0-3,0-2,1-4,1-4,1-4,1-4,1-4,1-4,0-2,0-3,");
-		}
-		if (Internal_Cnt == 8)
 		{
 			Internal_Cnt = 0;
 			std::cout << "Achievement Unlocked !" << std::endl;
@@ -1141,12 +1134,11 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
-	float ColorR = static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f;
-	float ColorG = static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f;
-	float ColorB = 0.5f;
-
 	if(VersionFontSize > -800.0f)
-		RenderText("TANXL GAME VERSION 2.61", VersionFontSize, 10.0f, 1.0f, glm::vec3(ColorR, ColorG, ColorB));
+		RenderText("TANXL GAME VERSION 2.61", VersionFontSize, 10.0f, 1.0f, glm::vec3(
+			static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
+			static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
+			0.5f));
 
 	glBindVertexArray(0);
 

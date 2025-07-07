@@ -442,20 +442,12 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 	{
 	case STATE_EXTEND_ABOV:
 	{
+		Replace_State(this->_Extend_Mid_Id + 255, this->_GameState_Extend._LEFT_BELO, this->_GameState_Extend._LEFT);
+		Replace_State(this->_Extend_Mid_Id, this->_GameState_Extend._BELO, this->_GameState_Extend._MIDD);
+		Replace_State(this->_Extend_Mid_Id + 1, this->_GameState_Extend._RIGH_BELO, this->_GameState_Extend._RIGH);
+
 		this->_Extend_Mid_Id -= 256;
-
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO._Data);
-		this->_GameState_Extend._LEFT_BELO._Id = this->_GameState_Extend._LEFT._Id;
-		this->_GameState_Extend._LEFT_BELO._Data->assign(this->_GameState_Extend._LEFT._Data->begin(), this->_GameState_Extend._LEFT._Data->end());
 		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._BELO._Data);
-		this->_GameState_Extend._BELO._Id = this->_GameState_Extend._MIDD._Id;
-		this->_GameState_Extend._BELO._Data->assign(this->_GameState_Extend._MIDD._Data->begin(), this->_GameState_Extend._MIDD._Data->end());
-		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_BELO._Data);
-		this->_GameState_Extend._RIGH_BELO._Id = this->_GameState_Extend._RIGH._Id;
-		this->_GameState_Extend._RIGH_BELO._Data->assign(this->_GameState_Extend._RIGH._Data->begin(), this->_GameState_Extend._RIGH._Data->end());
-
 		Generate_StateBlock(this->_Extend_Mid_Id - 257);
 		Generate_StateBlock(this->_Extend_Mid_Id - 256);
 		Generate_StateBlock(this->_Extend_Mid_Id - 255);
@@ -485,19 +477,11 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 	}
 	case STATE_EXTEND_BELO:
 	{
+		Replace_State(this->_Extend_Mid_Id - 257, this->_GameState_Extend._LEFT_ABOV, this->_GameState_Extend._LEFT);
+		Replace_State(this->_Extend_Mid_Id - 256, this->_GameState_Extend._ABOV, this->_GameState_Extend._MIDD);
+		Replace_State(this->_Extend_Mid_Id - 255, this->_GameState_Extend._RIGH_ABOV, this->_GameState_Extend._RIGH);
+		
 		this->_Extend_Mid_Id += 256;
-
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV._Data);
-		this->_GameState_Extend._LEFT_ABOV._Id = this->_GameState_Extend._LEFT._Id;
-		this->_GameState_Extend._LEFT_ABOV._Data->assign(this->_GameState_Extend._LEFT._Data->begin(), this->_GameState_Extend._LEFT._Data->end());
-		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._ABOV._Data);
-		this->_GameState_Extend._ABOV._Id = this->_GameState_Extend._MIDD._Id;
-		this->_GameState_Extend._ABOV._Data->assign(this->_GameState_Extend._MIDD._Data->begin(), this->_GameState_Extend._MIDD._Data->end());
-		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV._Data);
-		this->_GameState_Extend._RIGH_ABOV._Id = this->_GameState_Extend._RIGH._Id;
-		this->_GameState_Extend._RIGH_ABOV._Data->assign(this->_GameState_Extend._RIGH._Data->begin(), this->_GameState_Extend._RIGH._Data->end());
 
 		Generate_StateBlock(this->_Extend_Mid_Id + 255);
 		Generate_StateBlock(this->_Extend_Mid_Id + 256);
@@ -528,19 +512,11 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 	}
 	case STATE_EXTEND_LEFT:
 	{
-		this->_Extend_Mid_Id -= 1;
+		Replace_State(this->_Extend_Mid_Id - 255, this->_GameState_Extend._RIGH_ABOV, this->_GameState_Extend._ABOV);
+		Replace_State(this->_Extend_Mid_Id + 1, this->_GameState_Extend._RIGH, this->_GameState_Extend._MIDD);
+		Replace_State(this->_Extend_Mid_Id + 257, this->_GameState_Extend._RIGH_BELO, this->_GameState_Extend._BELO);
 
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_ABOV._Data);
-		this->_GameState_Extend._RIGH_ABOV._Id = this->_GameState_Extend._ABOV._Id;
-		this->_GameState_Extend._RIGH_ABOV._Data->assign(this->_GameState_Extend._ABOV._Data->begin(), this->_GameState_Extend._ABOV._Data->end());
-		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH._Data);
-		this->_GameState_Extend._RIGH._Id = this->_GameState_Extend._MIDD._Id;
-		this->_GameState_Extend._RIGH._Data->assign(this->_GameState_Extend._MIDD._Data->begin(), this->_GameState_Extend._MIDD._Data->end());
-		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._RIGH_BELO._Data);
-		this->_GameState_Extend._RIGH_BELO._Id = this->_GameState_Extend._BELO._Id;
-		this->_GameState_Extend._RIGH_BELO._Data->assign(this->_GameState_Extend._BELO._Data->begin(), this->_GameState_Extend._BELO._Data->end());
+		this->_Extend_Mid_Id -= 1;
 
 		Generate_StateBlock(this->_Extend_Mid_Id - 257);
 		Generate_StateBlock(this->_Extend_Mid_Id - 1);
@@ -571,19 +547,11 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 	}
 	case STATE_EXTEND_RIGH:
 	{
-		this->_Extend_Mid_Id += 1;
+		Replace_State(this->_Extend_Mid_Id - 257, this->_GameState_Extend._LEFT_ABOV, this->_GameState_Extend._ABOV);
+		Replace_State(this->_Extend_Mid_Id - 1, this->_GameState_Extend._LEFT, this->_GameState_Extend._MIDD);
+		Replace_State(this->_Extend_Mid_Id + 255, this->_GameState_Extend._LEFT_BELO, this->_GameState_Extend._BELO);
 
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_ABOV._Data);
-		this->_GameState_Extend._LEFT_ABOV._Id = this->_GameState_Extend._ABOV._Id;
-		this->_GameState_Extend._LEFT_ABOV._Data->assign(this->_GameState_Extend._ABOV._Data->begin(), this->_GameState_Extend._ABOV._Data->end());
-		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT._Data);
-		this->_GameState_Extend._LEFT._Id = this->_GameState_Extend._MIDD._Id;
-		this->_GameState_Extend._LEFT._Data->assign(this->_GameState_Extend._MIDD._Data->begin(), this->_GameState_Extend._MIDD._Data->end());
-		
-		std::vector<StateUnit*>().swap(*this->_GameState_Extend._LEFT_BELO._Data);
-		this->_GameState_Extend._LEFT_BELO._Id = this->_GameState_Extend._BELO._Id;
-		this->_GameState_Extend._LEFT_BELO._Data->assign(this->_GameState_Extend._BELO._Data->begin(), this->_GameState_Extend._BELO._Data->end());
+		this->_Extend_Mid_Id += 1;
 
 		Generate_StateBlock(this->_Extend_Mid_Id - 255);
 		Generate_StateBlock(this->_Extend_Mid_Id + 1);
@@ -773,6 +741,14 @@ void GameStateBase::Build_Connect(int State_Id)
 	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
 	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
 	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
+}
+
+void GameStateBase::Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id)
+{
+	this->Set_State(Cover_Id, State_Target.Get_Stand_Data());
+	std::vector<StateUnit*>().swap(*State_Target._Data);
+	State_Target._Id = State_Id._Id;
+	State_Target._Data->assign(State_Id._Data->begin(), State_Id._Data->end());
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :
@@ -1187,6 +1163,17 @@ State_Policy::State_Policy(std::string Name, int State_Status)
 
 SExtend_State::SExtend_State(std::string Id, std::vector<StateUnit*>* Data)
 	:_Id(Id), _Data(Data) {}
+
+std::string SExtend_State::Get_Stand_Data()
+{
+	std::string Data{};
+	for (int i{ 0 }; i < this->_Data->size(); ++i)
+	{
+		Data += std::to_string(this->_Data->at(i)->Get_Extra_Status()) + "-" +
+			std::to_string(this->_Data->at(i)->Get_State_Id()) + ",";
+	}
+	return Data;
+}
 
 StateEvent::StateEvent(int State_Id, int Counts)
 	:_State_Id(State_Id), _Trigger_Counts(Counts), _Event_Enable(false) {}

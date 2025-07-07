@@ -16,6 +16,9 @@
 // 增加无参数版本地图单元获取接口
 // 地图精确坐标改为坐标模板实现
 // 移除调整等待帧的所有设定
+// 新增扩展地图替换接口
+// 扩展地图结构体增加字符串数据获取接口
+// 析构地图数据时保留对地图的更改
 
 #pragma once
 
@@ -138,6 +141,8 @@ struct State_Policy
 struct SExtend_State
 {
 	SExtend_State(std::string Id = "NULL", std::vector<StateUnit*>* Data = nullptr);
+
+	std::string Get_Stand_Data();
 	std::string _Id;
 	std::vector<StateUnit*>* _Data;
 };
@@ -215,6 +220,7 @@ public:
 	void Generate_StateBlock(int State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
 	void Build_Connect(int State_Id);
+	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
@@ -238,6 +244,7 @@ public:
 private:
 	std::string Locate_Extend_State(std::string State_Id);
 	std::string Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
+	
 	struct State_Extend
 	{
 		SExtend_State _MIDD{ SExtend_State() };
