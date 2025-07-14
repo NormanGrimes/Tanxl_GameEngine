@@ -4,6 +4,7 @@
 // 获取字体接口增加编号检查
 // 整理进入引擎核心层
 // 改为继承自引擎基础类
+// 增加语言设置枚举
 
 #pragma once
 
@@ -16,6 +17,15 @@
 
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_EngineBase.h"
+
+enum ECurren_Language
+{
+	LANGUAGE_ENGLISH,
+	LANGUAGE_CHINESE,
+	LANGUAGE_FRENCH,
+	LANGUAGE_RUSSIAN,
+	LANGUAGE_JAPANESE
+};
 
 struct Character
 {

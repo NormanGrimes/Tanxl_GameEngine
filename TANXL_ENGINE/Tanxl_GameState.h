@@ -19,6 +19,9 @@
 // 新增扩展地图替换接口
 // 扩展地图结构体增加字符串数据获取接口
 // 析构地图数据时保留对地图的更改
+// 修复新添加的地图单元构建连接失败的问题
+// 构建连接功能效率优化
+// 单一连接接口不再返回连接对象的序列号
 
 #pragma once
 
@@ -29,11 +32,11 @@
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
-#define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     1
-#define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          1
-#define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  1
+#define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
+#define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
+#define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
 #define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
-#define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     1
+#define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
 
 #endif
 
@@ -243,7 +246,7 @@ public:
 	int Get_StateWidth()const;
 private:
 	std::string Locate_Extend_State(std::string State_Id);
-	std::string Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
+	void Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
 	
 	struct State_Extend
 	{

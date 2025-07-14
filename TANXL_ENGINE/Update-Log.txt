@@ -1,3 +1,11 @@
+TEnGinE Version-0.2 Build-63 2023-12-04 09:32 UPDATE_LOG
+////////////////////////////////////////////////////////
+项目移除32位的构建选项。角色死亡后游戏结束字符在主界面常
+驻显示。新增一种英文字体和一种中文字体。字体模块增加语言
+设置枚举。地图模块修复新添加的地图单元因长度导致构建连接
+失败的问题。地图模块构建连接功能效率优化。地图模块单一连
+接接口不再返回连接对象的序列号。
+
 TEnGinE Version-0.2 Build-62 2023-11-30 09:16 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块优化控制台地图数据调试功能的直观性。地图模块新增
@@ -444,6 +452,18 @@ TEnGinE Version-0.2 Build-10 2023-06-16 09:10 UPDATE_LOG
 能未能成功删除无用数据的问题。地图模块修复重新载入地图功
 能使用了错误数据编译与设置的问题。绘制模块右侧区域开启多
 段扩展地图测试。
+--------------------------------------------------------
+Draw module textures to reorder. Drawing module adds 
+map environmental damage test. The Draw module removes 
+the low-quality mode of drawing. The Maps module fixed 
+an issue where the setting start area feature provided 
+incorrect values for map properties. The map module 
+fixed the issue that the reload map function failed to 
+delete useless data. The map module fixed the issue 
+that the reload map function used the wrong data 
+compilation and settings. The area on the right side of 
+the drawing module is open for the multi-segment 
+extended map test.
 
 TEnGinE Version-0.2 Build-09 2023-06-14 18:36 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -452,6 +472,17 @@ TEnGinE Version-0.2 Build-09 2023-06-14 18:36 UPDATE_LOG
 雪地纹理。输入模块增加同时设置多个按键移动距离的接口。引
 擎管理模块增加连续调整多个按键单元的移动距离的接口。主程
 序中加速功能采用更好的处理方式。
+--------------------------------------------------------
+Added the function of moving the background map as a 
+whole in the drawing module. The map module sets the 
+movement matrix interface, adjusts and supports 
+diagonal movement. Remove five unused textures. 
+Reworked two snow textures. The input module adds an 
+interface to set the movement distance of multiple 
+keys at the same time. The engine management module 
+adds an interface to continuously adjust the movement 
+distance of multiple key units. The acceleration 
+function in the main program is handled in a better way.
 
 TEnGinE Version-0.2 Build-08 2023-06-12 17:40 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -460,6 +491,18 @@ TEnGinE Version-0.2 Build-08 2023-06-12 17:40 UPDATE_LOG
 化绘制启用导致编译错误的问题。绘制模块地图碰撞不再根据方
 块序号而是根据额外的可自定义变量判断。随机模块增加对新版
 随机地图的支持。绘制模块重新载入地图部分优化减少判断。
+--------------------------------------------------------
+The function of obtaining the map block number of the 
+drawing module has been changed to the function of 
+obtaining the map unit. Draw module map collision 
+function adds collision to undefined cells. Map vertex 
+shader fixes an issue where instantiated drawing 
+enabled causes compilation errors. Drawing module maps, 
+collisions are no longer based on block numbers, but 
+are judged based on additional customizable variables. 
+The Random Module adds support for the new version of 
+Random Maps. The drawing module reloads the map section 
+and optimizes the reduction of judgment.
 
 TEnGinE Version-0.2 Build-07 2023-06-05 18:18 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -469,6 +512,19 @@ TEnGinE Version-0.2 Build-07 2023-06-05 18:18 UPDATE_LOG
 译中设定移动策略的功能。地图模块地图单元编译功能中固定的
 判断逻辑改为动态的。地图模块新增地图编译策略数组。绘制模
 块地图载入功能增加对地图单元信息的设置。
+--------------------------------------------------------
+The moving target property of the map unit of the map 
+module is changed to the moving state property. The 
+engine management module detects the engine status 
+function and adds information display. The map vertex 
+shader map texture number is moved from the coordinate 
+vector to the new vector. The map module adds the 
+ability to set the movement strategy in the compilation 
+of the map unit. The fixed judgment logic in the map 
+unit compilation function of the map module has been 
+changed to dynamic. The map module adds an array of map 
+compilation strategies. The map loading function of the 
+drawing module adds the setting of map unit information.
 
 TEnGinE Version-0.2 Build-06 2023-05-25 18:27 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -476,6 +532,15 @@ TEnGinE Version-0.2 Build-06 2023-05-25 18:27 UPDATE_LOG
 功能效率优化。地图顶点着色器预加入实例化相关代码。绘制模
 块修改实例化数组初始内容。绘制模块地图上增加新泥土纹理的
 绘制。随机模块地图生成功能修改参数。
+--------------------------------------------------------
+The map vertex shader adds macro control for alternate 
+colors enabled. The coordinate fine-tuning function of 
+the map module is optimized for efficiency. The map 
+vertex shader is pre-loaded with instantiation related 
+code. The drawing module modifies the initial contents 
+of the instantiated array. Added new dirt texture to 
+the map of the Draw module. Modify the parameters of 
+the random module map generation function.
 
 TEnGinE Version-0.2 Build-05 2023-05-24 16:58 UPDATE_LOG
 ////////////////////////////////////////////////////////

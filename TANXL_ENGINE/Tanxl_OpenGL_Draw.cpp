@@ -90,6 +90,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	Font->Init_Fonts("Fonts/JosefinSans-SemiBoldItalic.ttf");
 	Font->Init_Fonts("Fonts/JosefinSans-Bold.ttf");
+	Font->Init_Fonts("Fonts/Nacelle-Black.otf");
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);
@@ -179,7 +180,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->Set_Max_Middle_Frame(200);
 
 	ReLoadState(State);
-	std::cout << "Error CodeE :" << glGetError() << std::endl;
 }
 
 void OpenGL_Draw::ReLoadState(GameStateBase* State)//NEXT
@@ -897,10 +897,6 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 		{
 			Internal_Cnt = 0;
 			std::cout << "Achievement Unlocked !" << std::endl;
-			//if (!AC->CheckAchievement(g_rgAchievements[0]))
-			//	TI->AddPromoItem(Tanxl_Secret_Core_LIMITED_DROP_ITEM);
-			//else
-			//	std::cout << "No Drop Available !" << std::endl;
 			AC->UnlockAchievement(g_rgAchievements[0]);
 			SB->Play_Sound(SOUND_ACHIEVEMENT);
 		}
@@ -984,6 +980,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 	double DeltaTime{ glfwGetTime() - LastTime };
 	static double Blink_Cnt{ 0 };
+	static bool Is_Dead{ false };
 
 	static float VersionFontSize{ 20.0f };
 
@@ -1020,6 +1017,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
+			Is_Dead = false;
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
@@ -1056,6 +1054,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		else
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
+			//Is_Dead = false;
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
 
@@ -1082,6 +1081,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		if (_Draw_Status == 3)
 		{
 			_Draw_Status = 4;
+			this->_Game_Status = GAME_PLAYER_DEAD_STATUS;
 			SB->Play_Sound(SOUND_GAME_OVER);
 			MC->Set_Health(5);
 			Tips->Update_Count();
@@ -1110,8 +1110,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 #endif
 
-	//std::cout << "Blink_Cnt :" << Blink_Cnt << std::endl;
-
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
 	glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
 
@@ -1128,11 +1126,14 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
 	else if (this->_Game_Status == GAME_PLAYER_DEAD_STATUS)
 	{
-		RenderText("GAME OVER", 270.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f));
+		Is_Dead = true;
 		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
+
+	if(Is_Dead)
+		RenderText("GAME OVER", 310.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
 
 	if(VersionFontSize > -800.0f)
 		RenderText("TANXL GAME VERSION 2.61", VersionFontSize, 10.0f, 1.0f, glm::vec3(
@@ -1141,8 +1142,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			0.5f));
 
 	glBindVertexArray(0);
-
-	//std::cout << "Error Code :" << glGetError() << std::endl;
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)

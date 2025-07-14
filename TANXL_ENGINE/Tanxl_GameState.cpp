@@ -39,7 +39,7 @@ std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 	return "NULL";
 }
 
-std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet)
+void GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet)
 {
 	try {
 		std::vector<Data_Unit*>* Connect_Target;
@@ -47,23 +47,11 @@ std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target,
 			Connect_Target = &this->_Data_Base.Id_Link_Locate(1, State_Id)->_Data->_Data_Units;
 		else
 			Connect_Target = &this->_Data_Base.Get_Last_Located(1, State_Id, OffSet)->_Data->_Data_Units;
+		//this->_Data_Base.Print_Data();
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target Size :" << Connect_Target->size() << std::endl;
+		std::cout << "Connect Targrt :" << Connect_Target->at(0)->_Data << " Size :" << Connect_Target->size()
+			<< " " << CurrentState << std::endl;
 #endif
-		if (Connect_Target->size() == 2)
-		{
-			Connect_Target->push_back(new Data_Unit(2, "NULL"));
-			Connect_Target->push_back(new Data_Unit(3, "NULL"));
-			Connect_Target->push_back(new Data_Unit(4, "NULL"));
-			Connect_Target->push_back(new Data_Unit(5, "NULL"));
-			Connect_Target->push_back(new Data_Unit(6, "NULL"));
-			Connect_Target->push_back(new Data_Unit(7, "NULL"));
-			Connect_Target->push_back(new Data_Unit(8, "NULL"));
-			Connect_Target->push_back(new Data_Unit(9, "NULL"));
-#if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-			std::cout << "Append Function CALLED" << std::endl;
-#endif
-		}
 		Connect_Target->at(CurrentState)->_Data = Build_Target->at(0)->_Data;
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
 		std::cout << "Build_Target Id : " << Build_Target->at(0)->_Data << std::endl;
@@ -103,21 +91,18 @@ std::string GameStateBase::Single_Connect(std::vector<Data_Unit*>* Build_Target,
 		std::cout << "Connect_Target Id : " << Connect_Target->at(0)->_Data << std::endl;
 		std::cout << "Connect_Target : PASS" << std::endl;
 #endif
-		return Connect_Target->at(0)->_Data;
 	}
-	catch (std::string)
+	catch (std::string ErrorMessage)
 	{
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
-		std::cout << "Connect_Target : FAIL" << std::endl;
+		std::cout << "Connect_Target : FAIL - " << ErrorMessage << std::endl;
 #endif
-		return "NULL";
 	}
 	catch (std::out_of_range)
 	{
 #if _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_
 		std::cout << "Connect_Target : OUT OF RANGE" << std::endl;
 #endif
-		return "NULL";
 	}
 }
 
@@ -700,7 +685,7 @@ void GameStateBase::Set_Trigger_Mode(bool Mode)
 void GameStateBase::Generate_StateBlock(int State_Id)
 {
 	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
-	//std::cout << std::endl << "Generate_StateBlock CALLED" << std::endl << std::endl;
+	std::cout << std::endl << "Generate_StateBlock " << State_Id << " CALLED" << std::endl;
 	try
 	{
 		this->_Data_Base.Id_Link_Locate(1, State_Id);
@@ -711,8 +696,17 @@ void GameStateBase::Generate_StateBlock(int State_Id)
 		{
 			Set_Data_Size(this->_Data_Size + 1);
 
-			this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 2, 1, State_Id);
+			this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 10, 1, State_Id);
 			this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, State_Id);
+
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
 
 			Build_Connect(State_Id);
 		}
@@ -723,24 +717,14 @@ void GameStateBase::Build_Connect(int State_Id)
 {
 	std::vector<Data_Unit*>* Build_Target{ &this->_Data_Base.Id_Link_Locate(1, State_Id)->_Data->_Data_Units };
 
-	std::string LEFT_STR	 { Single_Connect(Build_Target, STATE_LEFT,		 State_Id - 1)			}/*2*/;
-	std::string RIGH_STR	 { Single_Connect(Build_Target, STATE_RIGH,		 State_Id + 1	, 1)	}/*3*/;
-	std::string BELO_STR	 { Single_Connect(Build_Target, STATE_BELO,		 State_Id + 256)		}/*5*/;
-	std::string LEFT_BELO_STR{ Single_Connect(Build_Target, STATE_LEFT_BELO, State_Id + 255	, -1)	}/*7*/;
-	std::string RIGH_BELO_STR{ Single_Connect(Build_Target, STATE_RIGH_BELO, State_Id + 257	, 1)	}/*9*/;
-	std::string ABOV_STR	 { Single_Connect(Build_Target, STATE_ABOV,		 State_Id - 256)		}/*4*/;
-	std::string LEFT_ABOV_STR{ Single_Connect(Build_Target, STATE_LEFT_ABOV, State_Id - 257	,-1)	}/*6*/;
-	std::string RIGH_ABOV_STR{ Single_Connect(Build_Target, STATE_RIGH_ABOV, State_Id - 255	,-1)	}/*8*/;
-
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 4, ABOV_STR);
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 5, BELO_STR);
-
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 6, LEFT_ABOV_STR);
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
-	this->_Data_Base.Set_Specified(1, State_Id, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
+	Single_Connect(Build_Target, STATE_LEFT, State_Id - 1);
+	Single_Connect(Build_Target, STATE_RIGH, State_Id + 1, 1);
+	Single_Connect(Build_Target, STATE_BELO, State_Id + 256);
+	Single_Connect(Build_Target, STATE_LEFT_BELO, State_Id + 255, -1);
+	Single_Connect(Build_Target, STATE_RIGH_BELO, State_Id + 257, 1);
+	Single_Connect(Build_Target, STATE_ABOV, State_Id - 256);
+	Single_Connect(Build_Target, STATE_LEFT_ABOV, State_Id - 257, -1);
+	Single_Connect(Build_Target, STATE_RIGH_ABOV, State_Id - 255, -1);
 }
 
 void GameStateBase::Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id)
