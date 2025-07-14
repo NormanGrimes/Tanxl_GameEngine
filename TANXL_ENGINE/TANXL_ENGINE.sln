@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TANXL_ENGINE", "TANXL_ENGINE\TANXL_ENGINE.vcxproj", "{C8ADC988-74BF-4304-A506-B5C41BA7ADDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8ADC988-74BF-4304-A506-B5C41BA7ADDE}.Debug|x64.ActiveCfg = Debug|x64
+		{C8ADC988-74BF-4304-A506-B5C41BA7ADDE}.Debug|x64.Build.0 = Debug|x64
+		{C8ADC988-74BF-4304-A506-B5C41BA7ADDE}.Release|x64.ActiveCfg = Release|x64
+		{C8ADC988-74BF-4304-A506-B5C41BA7ADDE}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31344C25-AEB7-465D-8002-C2B1ED9AF71D}
+	EndGlobalSection
+EndGlobal
