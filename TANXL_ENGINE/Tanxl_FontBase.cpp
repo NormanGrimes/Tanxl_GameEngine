@@ -72,6 +72,11 @@ void FontBase::Init_Fonts(std::string Font_Path)
 	FT_Done_FreeType(ft);
 }
 
+void FontBase::Init_Fonts(EFontSet Font)
+{
+	this->Init_Fonts(this->_Internal_FontPath[Font]);
+}
+
 std::map<GLchar, Character> FontBase::Get_Characters(int Id)
 {
 	if (Id > _Internal_Font_Counts)

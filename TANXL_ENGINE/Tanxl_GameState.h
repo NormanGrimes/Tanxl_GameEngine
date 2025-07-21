@@ -22,6 +22,7 @@
 // 修复新添加的地图单元构建连接失败的问题
 // 构建连接功能效率优化
 // 单一连接接口不再返回连接对象的序列号
+// 优化枚举设置显示矩阵的接口
 
 #pragma once
 
@@ -37,6 +38,7 @@
 #define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
 #define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
 #define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
+#define _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_  0
 
 #endif
 
@@ -48,6 +50,7 @@
 #include "Tanxl_LocationBase.h"
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_EngineBase.h"
+#include "Tanxl_OpenGL_Render.h"
 
 class StateUnit;
 
@@ -216,7 +219,8 @@ public:
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);
-	void Reload_State(EState_Extend Extend_Dire);
+	void Reload_Display_State(EState_Extend Extend_Dire);
+	void Reload_State_Data(int State_Length, glm::ivec2* StateInfor);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);

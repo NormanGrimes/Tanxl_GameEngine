@@ -274,7 +274,11 @@ void TANXL_DataBase::SortDataBase(ESort_Mode Mode, std::string Out_File_Name, st
 		{
 			if (Count == 0)
 				out << "\t\t<Exac_Status : " << (*IOIB)->_Exac_Name << " / " << (*IOIB)->_Exac << ">" << std::endl;
+#if !_ENABLE_TANXL_DATABASE_INDEPENDENT_
 			std::string TAG{ DataTag((*IOIB)->_Type, (*IOIB)->_Exac, (*IODB)->_Id) };
+#else
+			std::string TAG{};
+#endif
 			TAG = (TAG == "" ? "DATA" : TAG);
 			out << "\t\t\t<" + TAG + ": " << (*IODB)->_Id << ">" << (*IODB)->_Data << "</" + TAG + ">" << std::endl;
 #if _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_
@@ -658,5 +662,9 @@ void TANXL_DataBase::Copy_DataBase(TANXL_DataBase DataBase)
 
 const std::string TANXL_DataBase::Get_Version()
 {
+#if !_ENABLE_TANXL_DATABASE_INDEPENDENT_
 	return Tanxl_ClassBase::Get_Version();
+#else
+	return "2.1";
+#endif
 }

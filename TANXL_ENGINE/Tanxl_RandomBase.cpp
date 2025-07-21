@@ -28,7 +28,7 @@ std::string RandomBase::Generate()
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        Data += UniData[UID(DRE)];
+        Data += this->_UniData[UID(DRE)];
     }
     return Data;
 }
@@ -42,7 +42,7 @@ std::string RandomBase::Generate(int seed)
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        Data += UniData[UID(DRE)];
+        Data += this->_UniData[UID(DRE)];
     }
     return Data;
 }
@@ -82,17 +82,16 @@ std::string RandomBase::GenerateAutoSeed()
     {
         if ((i % 5 == 0) && (i != 0))
             Data += "-";
-        Data += UniData[UID(DRE)];
+        Data += this->_UniData[UID(DRE)];
     }
     return Data;
 }
 
 int RandomBase::GenerateNum(int seed)
 {
-    std::string Data{};
     std::default_random_engine DRE(seed++);
     std::uniform_int_distribution<int> UID(0, 9);
-    return NumData[UID(DRE)];
+    return this->_NumData[UID(DRE)];
 }
 
 int RandomBase::RandomAutoSeed(int Start, int End)
@@ -113,10 +112,10 @@ void RandomBase::Suffle_UniData(int Times)
     {
         for (int i{ 0 }; i < 31; ++i)
         {
-            std::string Temp{ UniData[i] };
+            std::string Temp{ this->_UniData[i] };
             int Exchange_Val{ UID(DRE)};
-            UniData[i] = UniData[Exchange_Val];
-            UniData[Exchange_Val] = Temp;
+            this->_UniData[i] = this->_UniData[Exchange_Val];
+            this->_UniData[Exchange_Val] = Temp;
         }
     }
 }
@@ -129,10 +128,10 @@ void RandomBase::Suffle_NumData(int Times)
     {
         for (int i{ 0 }; i < 10; ++i)
         {
-            int Temp{ NumData[i] };
+            int Temp{ this->_NumData[i] };
             int Exchange_Val{ UID(DRE) };
-            NumData[i] = NumData[Exchange_Val];
-            NumData[Exchange_Val] = Temp;
+            this->_NumData[i] = this->_NumData[Exchange_Val];
+            this->_NumData[Exchange_Val] = Temp;
         }
     }
 }
@@ -148,11 +147,11 @@ void RandomBase::Reset_Default()
     {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"},
     {"Y"}, {"Z"} };
     for (int i{ 0 }; i < 62; ++i)
-        this->UniData[i] = SaveUniData[i];
+        this->_UniData[i] = SaveUniData[i];
     int SaveNumData[10] =
     { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
     for (int i{ 0 }; i < 10; ++i)
-        this->NumData[i] = SaveNumData[i];
+        this->_NumData[i] = SaveNumData[i];
 }
 
 const std::string RandomBase::Get_Version()

@@ -420,7 +420,7 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 	return Temp_Move;
 }
 
-void GameStateBase::Reload_State(EState_Extend Extend_Dire)
+void GameStateBase::Reload_Display_State(EState_Extend Extend_Dire)
 {
 	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
 	switch (Extend_Dire)
@@ -564,6 +564,162 @@ void GameStateBase::Reload_State(EState_Extend Extend_Dire)
 		}
 		break;
 	}
+	}
+}
+
+void GameStateBase::Reload_State_Data(int State_Length, glm::ivec2* StateInfor)
+{
+	int Move_NX{ this->Get_Square_State()._Move_NX };
+	int Move_PX{ this->Get_Square_State()._Move_PX };
+	int Move_NY{ this->Get_Square_State()._Move_NY };
+	int Move_PY{ this->Get_Square_State()._Move_PY };
+
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+	std::cout << "Move_NX: " << Move_NX << "Move_PX: " << Move_PX << std::endl;
+	std::cout << "Move_NY: " << Move_NY << "Move_PY: " << Move_PY << std::endl;
+#endif
+
+	if ((!this->Get_Compile_Status()) || (this->Get_GameState()->size() == 0))
+		return;
+
+	for (int i{ 0 }; i < State_Length; ++i)
+	{
+		StateInfor[i].x = 4;
+		StateInfor[i].y = 1;
+
+		if (Move_NX > static_cast<int>(this->Get_DataWidth()))//RIGH AREA
+		{
+			if (Move_NY > static_cast<int>(this->Get_DataHeight()))
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
+				{
+					unsigned x{ Move_NX - this->Get_DataWidth() - 1 + (Move_NY - this->Get_DataHeight() - 1) * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % this->Get_GameState(STATE_EXTEND_RIGH_BELO)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+			else if (Move_NY >= 0)
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_RIGH))
+				{
+					unsigned x{ Move_NX - this->Get_DataWidth() - 1 + Move_NY * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH, x % this->Get_GameState(STATE_EXTEND_RIGH)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+			else if (Move_NY >= -static_cast<int>(this->Get_DataHeight()))
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
+				{
+					unsigned x{ Move_NX - this->Get_DataWidth() - 1 + (Move_NY + this->Get_DataHeight() + 1) * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % this->Get_GameState(STATE_EXTEND_RIGH_ABOV)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+		}
+		else if (Move_NX >= 0)//MID AREA
+		{
+			if (Move_NY > static_cast<int>(this->Get_DataHeight()))
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_BELO))
+				{
+					unsigned x{ Move_NX + (Move_NY - this->Get_DataHeight() - 1) * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_BELO, x % this->Get_GameState(STATE_EXTEND_BELO)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+			else if (Move_NY >= 0)
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_MIDD))
+				{
+					unsigned x{ Move_NX + Move_NY * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_MIDD, x % this->Get_GameState(STATE_EXTEND_MIDD)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+			else if (Move_NY >= -static_cast<int>(this->Get_DataHeight()))
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_ABOV))
+				{
+					unsigned x{ Move_NX + (Move_NY + this->Get_DataHeight() + 1) * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_ABOV, x % this->Get_GameState(STATE_EXTEND_ABOV)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+		}
+		else if (Move_NX >= -static_cast<int>(this->Get_DataWidth()))//LEFT AREA
+		{
+			if (Move_NY > static_cast<int>(this->Get_DataHeight()))
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_LEFT_BELO))
+				{
+					unsigned x{ Move_NX + this->Get_DataWidth() + 1 + (Move_NY - this->Get_DataHeight() - 1) * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % this->Get_GameState(STATE_EXTEND_LEFT_BELO)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+			else if (Move_NY >= 0)
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_LEFT))
+				{
+					unsigned x{ Move_NX + this->Get_DataWidth() + 1 + Move_NY * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT, x % this->Get_GameState(STATE_EXTEND_LEFT)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+			else if (Move_NY >= -static_cast<int>(this->Get_DataHeight()))
+			{
+				if (this->Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
+				{
+					unsigned x{ Move_NX + this->Get_DataWidth() + 1 + (Move_NY + this->Get_DataHeight() + 1) * (this->Get_DataWidth() + 1) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % this->Get_GameState(STATE_EXTEND_LEFT_ABOV)->size()) };
+					StateInfor[i].x = Unit->Get_State_Id();
+					StateInfor[i].y = Unit->Get_Extra_Status();
+#if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
+					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
+#endif
+				}
+			}
+		}
+
+		Move_NX++;
+		if (Move_NX > Move_PX)//抵达尽头 重新获取初值
+		{
+			Move_NX = this->Get_Square_State()._Move_NX;
+			Move_NY++;
+		}
 	}
 }
 
@@ -1205,52 +1361,26 @@ void Square_State::Set_Move_State(int NX, int PX, int NY, int PY)
 
 void Square_State::Set_Move_State(EMove_State_EventId Event_Id, int Multi_Set)
 {
-	switch (Event_Id)
+	if ((Event_Id & MoveToNW) != 0)
 	{
-	case MoveToNW:
 		this->_Move_NX += Multi_Set;
 		this->_Move_PX += Multi_Set;
-		break;
-	case MoveToPW:
+	}
+	else if ((Event_Id & MoveToPW) != 0)
+	{
 		this->_Move_NX -= Multi_Set;
 		this->_Move_PX -= Multi_Set;
-		break;
-	case MoveToNH:
+	}
+
+	if ((Event_Id & MoveToNH) != 0)
+	{
 		this->_Move_NY += Multi_Set;
 		this->_Move_PY += Multi_Set;
-		break;
-	case MoveToPH:
+	}
+	else if ((Event_Id & MoveToPH) != 0)
+	{
 		this->_Move_NY -= Multi_Set;
 		this->_Move_PY -= Multi_Set;
-		break;
-
-	case MoveToNWNH:
-		this->_Move_NX += Multi_Set;
-		this->_Move_PX += Multi_Set;
-		this->_Move_NY += Multi_Set;
-		this->_Move_PY += Multi_Set;
-		break;
-
-	case MoveToNWPH:
-		this->_Move_NX += Multi_Set;
-		this->_Move_PX += Multi_Set;
-		this->_Move_NY -= Multi_Set;
-		this->_Move_PY -= Multi_Set;
-		break;
-
-	case MoveToPWNH:
-		this->_Move_NX -= Multi_Set;
-		this->_Move_PX -= Multi_Set;
-		this->_Move_NY += Multi_Set;
-		this->_Move_PY += Multi_Set;
-		break;
-
-	case MoveToPWPH:
-		this->_Move_NX -= Multi_Set;
-		this->_Move_PX -= Multi_Set;
-		this->_Move_NY += Multi_Set;
-		this->_Move_PY += Multi_Set;
-		break;
 	}
 }
 

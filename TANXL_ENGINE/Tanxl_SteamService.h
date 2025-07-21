@@ -16,6 +16,7 @@
 // 增加成员存储库存指针
 // 增加获取所有库存的功能
 // 定义转移到源文件中
+// 库存组件改为继承自引擎基础类
 
 #pragma once
 
@@ -28,6 +29,7 @@
 
 #include "public/steam/steam_api.h"
 #include "public/steam/isteamapps.h"
+#include "Tanxl_EngineBase.h"
 
 #define _STEAM_ALPHA_VERSION_ 0
 
@@ -92,7 +94,7 @@ private:
 	ISteamUserStats* _SteamUserStats;
 };
 
-class Tanxl_Inventory
+class Tanxl_Inventory : public Tanxl_ClassBase
 {
 public:
 
@@ -121,7 +123,6 @@ private:
 	STEAM_CALLBACK(Tanxl_Inventory, OnSteamInventoryFullUpdate, SteamInventoryFullUpdate_t, _SteamInventoryFullUpdate);
 
 	ISteamInventory* _Steam_Invetory;
-	const std::string _Version{ "0.1" };
 
 	std::list<TanxlItem*> _listPlayerItems;
 

@@ -2,6 +2,7 @@
 // LAST_UPDATE 2023-10-16 11:24
 // 引擎基础类增加名称参数
 // 增加游戏坐标模板类
+// 引擎基础类增加名称获取函数
 
 #pragma once
 
@@ -18,6 +19,11 @@ public:
 	std::string Get_Version()
 	{
 		return this->_Version;
+	}
+
+	std::string Get_Name()
+	{
+		return this->_Name;
 	}
 
 private:

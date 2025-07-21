@@ -18,6 +18,7 @@
 // 获取指定深度物品的接口增加错误检查
 // 改为继承自引擎基础类
 // 修复无法获取无标签本地文件的问题
+// 增加独立运行模式
 
 #pragma once
 
@@ -25,6 +26,7 @@
 #define _TANXL_DATABASE_
 
 #define _ENABLE_TANXL_DATABASE_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_DATABASE_INDEPENDENT_    0
 
 #if _ENABLE_TANXL_DATABASE_CONSOLE_OUTPUT_
 
@@ -39,8 +41,10 @@
 #include <sstream>
 #include <vector>
 
+#if !_ENABLE_TANXL_DATABASE_INDEPENDENT_
 #include "Tanxl_DataDefine.h"
 #include "Tanxl_EngineBase.h"
+#endif
 
 enum EAppendItem_Mode
 {

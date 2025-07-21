@@ -90,8 +90,8 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	if (this->_Is_Key_Enable == false)
 		return;
 
-	this->_LastMove_X = 0.0f;
-	this->_LastMove_Y = 0.0f;
+	this->_LastMove._Coord_X = 0.0f;
+	this->_LastMove._Coord_Y = 0.0f;
 
 	double Insert_Move_LengthX{ 0.0f };
 	double Insert_Move_LengthY{ 0.0f };
@@ -126,13 +126,13 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)
 				this->_KeyEventS.at(i)->_Key_Unit->SaveLen = 0;
 	}
-	State->Get_Screen_Distance()._Coord_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
-	State->Get_Screen_Distance()._Coord_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
-	State->Get_Move_Distance()._Coord_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
-	State->Get_Move_Distance()._Coord_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+	Tanxl_Coord<float> Insert_Length(
+		static_cast<float>(Insert_Move_LengthX * MoveScale), 
+		static_cast<float>(Insert_Move_LengthY * MoveScale));
 
-	this->_LastMove_X += static_cast<float>(Insert_Move_LengthX * MoveScale);
-	this->_LastMove_Y += static_cast<float>(Insert_Move_LengthY * MoveScale);
+	State->Get_Screen_Distance() += Insert_Length;
+	State->Get_Move_Distance() += Insert_Length;
+	this->_LastMove += Insert_Length;
 
 	AutoCheck(State->Get_Screen_Distance()._Coord_X, State->Get_Screen_Distance()._Coord_Y, State->Get_Move_Distance()._Coord_X, State->Get_Move_Distance()._Coord_Y);
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
@@ -262,12 +262,12 @@ void InsertEventBase::Update_Move_Max()
 
 float InsertEventBase::Get_LastMove_X()
 {
-	return this->_LastMove_X;
+	return this->_LastMove._Coord_X;
 }
 
 float InsertEventBase::Get_LastMove_Y()
 {
-	return this->_LastMove_Y;
+	return this->_LastMove._Coord_Y;
 }
 
 bool InsertEventBase::Get_Key_Pressed()
@@ -346,18 +346,18 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 
 //UnImportant 单例实现
 
-InsertEventBase::InsertEventBase() :Tanxl_ClassBase("0.8"),
+InsertEventBase::InsertEventBase() :Tanxl_ClassBase("0.9"),
 _KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1), _Max_float(1.0f),
-_LastMove_X(0.0f), _LastMove_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+_LastMove(0.0f, 0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase::~InsertEventBase()
 {
 	std::vector<Key_Event*>().swap(this->_KeyEventS);
 }
 
-InsertEventBase::InsertEventBase(const InsertEventBase&) :Tanxl_ClassBase("0.8"),
+InsertEventBase::InsertEventBase(const InsertEventBase&) :Tanxl_ClassBase("0.9"),
 _KeyEventS(NULL), _Max_float(1.0f), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_LastMove_X(0.0f), _LastMove_Y(0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+_LastMove(0.0f, 0.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {

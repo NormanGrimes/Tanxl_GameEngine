@@ -104,7 +104,7 @@ Tanxl_Inventory& Tanxl_Inventory::Get_InventoryBase()
 
 const std::string Tanxl_Inventory::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }
 
 void Tanxl_Inventory::RefreshFromServer()
@@ -147,7 +147,7 @@ bool Tanxl_Inventory::AddPromoItem(ETanxl_Inventory_ItemDefId Item)
 }
 
 Tanxl_Inventory::Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
-_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr)
+_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr), Tanxl_ClassBase("0.1")
 {
 	if (SteamAPI_RestartAppIfNecessary(1929530))
 	{
@@ -181,6 +181,6 @@ _SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _
 Tanxl_Inventory::~Tanxl_Inventory() {};
 
 Tanxl_Inventory::Tanxl_Inventory(const Tanxl_Inventory&) :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
-_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr) {}
+_SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr), Tanxl_ClassBase("0.1") {}
 
 Tanxl_Inventory& Tanxl_Inventory::operator=(const Tanxl_Inventory&) { return *this; }

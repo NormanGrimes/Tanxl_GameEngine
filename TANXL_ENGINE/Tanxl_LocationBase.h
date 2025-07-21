@@ -18,6 +18,7 @@
 // 修复设置坐标功能错误的问题
 // 改为继承自引擎基础类
 // 坐标模板结构替换原有坐标结构
+// 坐标模板类增加加法重载
 
 #pragma once
 
@@ -60,6 +61,20 @@ struct Tanxl_Coord
 		if ((this->_Coord_X == Coord._Coord_X) && (this->_Coord_Y == Coord._Coord_Y))
 			return true;
 		return false;
+	}
+	
+	Tanxl_Coord operator+(Tanxl_Coord& Coord)
+	{
+		this->_Coord_X += Coord._Coord_X;
+		this->_Coord_Y += Coord._Coord_Y;
+		return *this;
+	}
+
+	Tanxl_Coord operator+=(Tanxl_Coord& Coord)
+	{
+		this->_Coord_X += Coord._Coord_X;
+		this->_Coord_Y += Coord._Coord_Y;
+		return *this;
 	}
 };
 

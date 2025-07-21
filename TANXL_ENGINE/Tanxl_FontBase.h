@@ -5,6 +5,8 @@
 // 整理进入引擎核心层
 // 改为继承自引擎基础类
 // 增加语言设置枚举
+// 增加字体枚举并在类内部存储字体路径
+// 增加通过枚举初始化字体的功能
 
 #pragma once
 
@@ -27,6 +29,14 @@ enum ECurren_Language
 	LANGUAGE_JAPANESE
 };
 
+enum EFontSet
+{
+	JosefinSansSemiBoldItalic,
+	JosefinSansBold,
+	NacelleBlack,
+	光良酒干杯体
+};
+
 struct Character
 {
 	GLuint     TextureID;  // 字形纹理ID
@@ -42,6 +52,8 @@ public:
 
 	void Init_Fonts(std::string Font_Path);
 
+	void Init_Fonts(EFontSet Font);
+
 	std::map<GLchar, Character> Get_Characters(int Id);
 
 	const std::string Get_Version();
@@ -54,6 +66,14 @@ private:
 	FontBase& operator=(const FontBase&);
 
 	int _Internal_Font_Counts{ 0 };
+
+	std::string _Internal_FontPath[4]
+	{
+		"Fonts/JosefinSans-SemiBoldItalic.ttf",
+		"Fonts/JosefinSans-Bold.ttf",
+		"Fonts/Nacelle-Black.otf",
+		"Fonts/光良酒-干杯体.ttf"
+	};
 
 	std::map<GLchar, Character> _Characters[5];
 };

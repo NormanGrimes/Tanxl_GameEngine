@@ -19,6 +19,9 @@
 // 死亡后首页显示的提示切换到下一个
 // 优化控制台地图数据调试功能的直观性
 // 角色死亡后游戏结束字符常驻显示
+// 更新顶点数据功能从重新载入地图功能中移出
+// 重新载入地图接口移动到地图模块
+// 增加变量存储地图显示单元个数
 
 #pragma once
 
@@ -534,8 +537,7 @@ public:
 	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id = 0);
 	//用于第一次或重新加载整个地图场景
-	void ReLoadState(GameStateBase* State);
-	void Update_VertData(glm::ivec2 StateInfor[]);
+	void Update_VertData(glm::ivec2* StateInfor);
 	int Get_Adjust_Status();
 	//获取预载的数值
 	int Get_PreLoad();
@@ -602,6 +604,8 @@ private:
 	int _State_Loc;
 	//记录上次移动导致主角面向的方向
 	int _Insert_Status{ 0 };
+	//记录地图总显示单元个数
+	int _State_Length{ 0 };
 	//当前此模块的版本号
 	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;
