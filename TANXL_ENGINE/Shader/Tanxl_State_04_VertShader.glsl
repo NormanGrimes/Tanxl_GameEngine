@@ -5,10 +5,12 @@
 // 增加对输出事件纹理的尺寸设置
 // 三个已定义的事件纹理移动到事件顶点着色器进行绘制
 // 缩小金币纹理的尺寸
+// 增加控制事件纹理绘制偏移长度的统一变量
+// 缩小神秘核心的纹理尺寸
 
 #version 430
 
-#define STATE_04_LAYER 0.4f
+#define STATE_04_LAYER 0.4f // EVENT SHADER
 
 layout (location = 1) in vec2 texCoord;
 
@@ -24,6 +26,8 @@ layout (location = 7 ) uniform int Event_01_TextureId;
 layout (location = 8 ) uniform int Event_02_TextureId;
 layout (location = 9 ) uniform int Event_03_TextureId;
 layout (location = 10) uniform int Event_04_TextureId;
+
+uniform vec2 State_OffSet[400];
 
 uniform int EventInfor[400];
 
@@ -67,10 +71,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 5)
 			    Cube = Event_02_TextureId;
 
-			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
-				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+			if ((EventInfor[VertexId] == 5) || (EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
+				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, -Shrink_Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 			else
-				gl_Position = vec4( -Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+				gl_Position = vec4( -Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, -Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == VertexId * 6 + 1) 
 		{
@@ -85,10 +89,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 5)
 			    Cube = Event_02_TextureId;
 
-			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
-				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f); 
+			if ((EventInfor[VertexId] == 5) || (EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
+				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, -Shrink_Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f); 
 			else
-				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+				gl_Position = vec4(  Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, -Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == VertexId * 6 + 2) 
 		{
@@ -103,10 +107,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 5)
 			    Cube = Event_02_TextureId;
 
-			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
-				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+			if ((EventInfor[VertexId] == 5) || (EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
+				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, Shrink_Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 			else
-				gl_Position = vec4( -Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+				gl_Position = vec4( -Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == VertexId * 6 + 3) 
 		{
@@ -121,10 +125,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 5)
 			    Cube = Event_02_TextureId;
 
-			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
-				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, -Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+			if ((EventInfor[VertexId] == 5) || (EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
+				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, -Shrink_Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 			else
-				gl_Position = vec4(  Width + WidthMove + StateMoveX, -Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+				gl_Position = vec4(  Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, -Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == VertexId * 6 + 4) 
 		{
@@ -139,10 +143,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 5)
 			    Cube = Event_02_TextureId;
 
-			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
-				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+			if ((EventInfor[VertexId] == 5) || (EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
+				gl_Position = vec4(  Shrink_Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, Shrink_Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 			else
-				gl_Position = vec4(  Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+				gl_Position = vec4(  Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 		}
 		else if (gl_VertexID == VertexId * 6 + 5) 
 		{
@@ -157,10 +161,10 @@ void main(void)
 			else if (EventInfor[VertexId] == 5)
 			    Cube = Event_02_TextureId;
 
-			if ((EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
-				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX, Shrink_Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+			if ((EventInfor[VertexId] == 5) || (EventInfor[VertexId] == 4) || (EventInfor[VertexId] == 3))
+				gl_Position = vec4( -Shrink_Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, Shrink_Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 			else
-				gl_Position = vec4( -Width + WidthMove + StateMoveX, Height + HeightMove + StateMoveY, STATE_04_LAYER, 1.0f);
+				gl_Position = vec4( -Width + WidthMove + StateMoveX + State_OffSet[VertexId].x, Height + HeightMove + StateMoveY + State_OffSet[VertexId].y, STATE_04_LAYER, 1.0f);
 		}
 
 		WidthMove += (Width * 2);

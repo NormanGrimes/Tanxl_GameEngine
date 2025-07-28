@@ -20,7 +20,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor()
+_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), _StateOffSet()
 {
 	this->_State_Loc = this->_LCB->New_Location_set("State_Move_Location");
 }
@@ -67,11 +67,10 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClearDepth(1.0f);
 
-	this->_Scene_Int._Coord_Y = State->Get_StateHeight();
-	this->_Scene_Int._Coord_X = State->Get_StateWidth();
+	this->_Scene_Int = State->Get_StateLength();
 
-	this->_Each_Height = 2.0f / State->Get_StateHeight();//10 0.2
-	this->_Each_Width = 2.0f / State->Get_StateWidth();//10 0.2
+	this->_Each_Height = 2.0f / State->Get_StateLength()._Coord_Y;//10 0.2
+	this->_Each_Width = 2.0f / State->Get_StateLength()._Coord_X;//10 0.2
 
 	this->_Current_Move_._Coord_Y = 0;
 	this->_Current_Move_._Coord_X = 0;
@@ -171,7 +170,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	State->Get_Move_Distance()._Coord_X = (2.0f / this->_Scene_Int._Coord_X) * Half_Width + (1.0f / this->_Scene_Int._Coord_X) * (8 - this->_PreLoads);
 	State->Get_Move_Distance()._Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
 
-	State->Get_Square_State().Set_State_Length(State->Get_StateWidth(), State->Get_StateHeight());
+	State->Get_Square_State().Set_State_Length(State->Get_StateLength()._Coord_X, State->Get_StateLength()._Coord_Y);
 	State->Get_Square_State().Set_Move_State(_Pre_Move._Coord_X, _Pre_Move._Coord_Y, this->_PreLoads);
 
 	this->_LCB->Get_LocationX(State->Get_Distance_Move_Id()) += static_cast<float>((_Pre_Move._Coord_X - 4) * this->_Each_Width);
@@ -180,6 +179,16 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_State_Length = (this->_Scene_Int._Coord_Y + this->_PreLoads * 2) * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + 1;
 
 	this->Set_Max_Middle_Frame(200);
+
+	for (int i{ 0 }; i < 400; ++i)
+	{
+		_StateOffSet[i].x = 0.0f;
+		_StateOffSet[i].y = 0.0f;
+
+		std::string Tag = "State_OffSet[" + std::to_string(i) + "]";
+		GLuint StatePos = glGetUniformLocation(_Event_RenderingProgram, Tag.c_str());
+		glProgramUniform2fv(_Event_RenderingProgram, StatePos, 1, glm::value_ptr(_StateOffSet[i]));
+	}
 
 	State->Reload_State_Data(this->_State_Length, this->_StateInfor);
 	Update_VertData(this->_StateInfor);
@@ -552,7 +561,7 @@ int OpenGL_Draw::Get_PreLoad()
 
 void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction)
 {
-	static const float Check_Range{ 0.005f };
+	static const float Check_Range{ 1.0f };
 	static double LastTime{ glfwGetTime() };
 	double DeltaTime{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
@@ -612,29 +621,29 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 				switch (Check_Direction)
 				{
 				case CHECK_EDGE_LEFT:
-					this->_Location_Distance_Mid._Coord_X += Check_Range;// * DeltaTime;
-					this->_Location_Move_Distance._Coord_X += Check_Range;// *DeltaTime;
+					this->_Location_Distance_Mid._Coord_X += static_cast<float>(Check_Range * DeltaTime);
+					this->_Location_Move_Distance._Coord_X += static_cast<float>(Check_Range * DeltaTime);
 
 					State->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
 					State->Get_Move_Distance()._Coord_X = this->_Location_Move_Distance._Coord_X;
 					break;
 				case CHECK_EDGE_RIGH:
-					this->_Location_Distance_Mid._Coord_X -= Check_Range;// * DeltaTime;
-					this->_Location_Move_Distance._Coord_X -= Check_Range;// * DeltaTime;
+					this->_Location_Distance_Mid._Coord_X -= static_cast<float>(Check_Range * DeltaTime);
+					this->_Location_Move_Distance._Coord_X -= static_cast<float>(Check_Range * DeltaTime);
 
 					State->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
 					State->Get_Move_Distance()._Coord_X = this->_Location_Move_Distance._Coord_X;
 					break;
 				case CHECK_EDGE_BELO:
-					this->_Location_Distance_Mid._Coord_Y += Check_Range;// * DeltaTime;
-					this->_Location_Move_Distance._Coord_Y += Check_Range;// * DeltaTime;
+					this->_Location_Distance_Mid._Coord_Y += static_cast<float>(Check_Range * DeltaTime);
+					this->_Location_Move_Distance._Coord_Y += static_cast<float>(Check_Range * DeltaTime);
 
 					State->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
 					State->Get_Move_Distance()._Coord_Y = this->_Location_Move_Distance._Coord_Y;
 					break;
 				case CHECK_EDGE_ABOV:
-					this->_Location_Distance_Mid._Coord_Y -= Check_Range;// * DeltaTime;
-					this->_Location_Move_Distance._Coord_Y -= Check_Range;// * DeltaTime;
+					this->_Location_Distance_Mid._Coord_Y -= static_cast<float>(Check_Range * DeltaTime);
+					this->_Location_Move_Distance._Coord_Y -= static_cast<float>(Check_Range * DeltaTime);
 
 					State->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
 					State->Get_Move_Distance()._Coord_Y = this->_Location_Move_Distance._Coord_Y;
@@ -867,10 +876,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			Is_Dead = false;
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Event_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
@@ -905,10 +914,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			//Is_Dead = false;
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Event_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2)* (State->Get_StateWidth() + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2)* (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
@@ -938,10 +947,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		this->_Middle_Frame = 0;
 		glUseProgram(_State_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Event_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateHeight() + _PreLoads * 2) * (State->Get_StateWidth() + _PreLoads * 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);

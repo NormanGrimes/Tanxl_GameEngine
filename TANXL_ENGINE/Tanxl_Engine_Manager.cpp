@@ -83,8 +83,8 @@ void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, floa
 	this->Tanxl_Engine_InsertBase->Set_StateRange(Enable);
 	if (Enable)
 	{
-		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateHeight()));
-		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateWidth()));
+		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateLength()._Coord_Y));
+		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateLength()._Coord_X));
 		return;
 	}
 	this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Max_Height);

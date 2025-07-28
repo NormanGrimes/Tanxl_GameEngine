@@ -326,7 +326,7 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 		return 0.0f;
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
-	if ((float)Current < ((float)this->Get_StateHeight()) / 2)
+	if ((float)Current < ((float)this->Get_StateLength()._Coord_Y) / 2)
 	{
 		if (MoveState < 0 && MoveState + Temp_GameState_Adjust > 0)
 		{
@@ -345,7 +345,7 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 		}
 		this->_Is_Adjusting = true;
 	}
-	else if ((float)Current > ((float)this->Get_StateHeight()) / 2)
+	else if ((float)Current > ((float)this->Get_StateLength()._Coord_Y) / 2)
 	{
 		if (MoveState > Temp_GameState_Adjust)
 		{
@@ -374,7 +374,7 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 		return 0.0f;
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
-	if ((float)Current < ((float)this->Get_StateWidth()) / 2)
+	if ((float)Current < ((float)this->Get_StateLength()._Coord_X) / 2)
 	{
 		if (-MoveState < 0 && (Temp_GameState_Adjust + -MoveState > 0))//微调小于最小值的情况 直接调整到屏幕中间
 		{
@@ -395,7 +395,7 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 		}
 		this->_Is_Adjusting = true;
 	}
-	else if ((float)Current > ((float)this->Get_StateWidth()) / 2)
+	else if ((float)Current > ((float)this->Get_StateLength()._Coord_X) / 2)
 	{
 		if (MoveState > Temp_GameState_Adjust)
 		{
@@ -1257,14 +1257,9 @@ int GameStateBase::Get_Distance_Move_Id()
 	return this->_Distance_Move;
 }
 
-int GameStateBase::Get_StateHeight()const
+Tanxl_Coord<int> GameStateBase::Get_StateLength()const
 {
-	return this->_GameState_Length._Coord_Y;
-}
-
-int GameStateBase::Get_StateWidth()const
-{
-	return this->_GameState_Length._Coord_X;
+	return this->_GameState_Length;
 }
 
 EMove_State_EventId GameStateBase::Auto_Update_Trigger(short Edge)

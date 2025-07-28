@@ -159,6 +159,12 @@ std::ostream& operator<<(std::ostream& out, TANXL_DataBase& s)
 TANXL_DataBase::TANXL_DataBase() :
 	_Is_Instance_Data(false), _Id_Links(new std::vector<Id_Link*>), _Current_Location(0), Tanxl_ClassBase("2.1") {}
 
+TANXL_DataBase::TANXL_DataBase(std::string File_Name) :
+	_Is_Instance_Data(false), _Id_Links(new std::vector<Id_Link*>), _Current_Location(0), Tanxl_ClassBase("2.1")
+{
+	this->Get_LocalData(File_Name);
+}
+
 inline void TANXL_DataBase::OstreamSpace(std::ostream& os, int Before, int After)
 {
 	static int TDB_Status{ 0 };//级别数值 用于记录当前行的Tab数量

@@ -32,6 +32,8 @@
 // 重写组件基础类
 // 生命值与金钱组件改为继承自组件基类
 // 组件容器类增加无参数版清理函数
+// 玩家数据类增加武器与护甲槽位
+// 武器与护甲类简化为结构体
 
 #pragma once
 
@@ -93,6 +95,20 @@ private:
 	int _Current_Money;
 };
 
+struct Weapon
+{
+	Weapon(int Damage);
+
+	int _Damage;
+};
+
+struct Armor
+{
+	Armor(int Defense);
+
+	int _Defense;
+};
+
 class Character_Data
 {
 public:
@@ -106,26 +122,9 @@ private:
 	int _Attack_Damage;
 	int _Defense_Armor;
 	double _Move_Speed;
-};
 
-class Weapon
-{
-public:
-	Weapon(int Damage);
-
-	int Get_DamageVal();
-private:
-	int _Damage;
-};
-
-class Armor
-{
-public:
-	Armor(int Defense);
-
-	int Get_DefenseVal();
-private:
-	int _Defense;
+	Weapon* _Weapon_Slot;
+	Armor* _Armor_Slot;
 };
 
 class Componment_Unite

@@ -19,6 +19,7 @@
 // 改为继承自引擎基础类
 // 修复无法获取无标签本地文件的问题
 // 增加独立运行模式
+// 增加文件路径为参数的构造函数
 
 #pragma once
 
@@ -138,6 +139,7 @@ private:
 	inline void OstreamSpace(std::ostream& os, int Before = 0, int After = 0);//根据级别输出空格 Before用于执行前对级别数值进行修改 After用于执行后
 public:
 	TANXL_DataBase();//构造函数
+	TANXL_DataBase(std::string File_Name);//构造函数
 	//↓用于直接获取内存中指定编号的数据
 	Id_Link* Id_Link_Search(int Level);
 	//↓时间复杂度为logN的Id_Link快速定位函数 Type Exac 指Id_Link的同名变量

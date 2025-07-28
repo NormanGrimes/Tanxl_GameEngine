@@ -23,6 +23,7 @@
 // 构建连接功能效率优化
 // 单一连接接口不再返回连接对象的序列号
 // 优化枚举设置显示矩阵的接口
+// 合并获取地图需要绘制的高度与宽度接口
 
 #pragma once
 
@@ -244,10 +245,8 @@ public:
 	unsigned Get_DataHeight()const;
 	//↓Get_DataWidth : 获取单个地图区块横向包含的单元个数
 	unsigned Get_DataWidth()const;
-	//↓Get_StateHeight : 获取当前需要绘制的State的高度值
-	int Get_StateHeight()const;
-	//↓Get_StateWidth : 获取当前需要绘制的State的宽度值
-	int Get_StateWidth()const;
+	//↓Get_StateHeight : 获取当前需要绘制的State的高/宽度值
+	Tanxl_Coord<int> Get_StateLength()const;
 private:
 	std::string Locate_Extend_State(std::string State_Id);
 	void Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);

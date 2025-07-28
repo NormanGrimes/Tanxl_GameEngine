@@ -22,6 +22,7 @@
 // 更新顶点数据功能从重新载入地图功能中移出
 // 重新载入地图接口移动到地图模块
 // 增加变量存储地图显示单元个数
+// 碰撞功能采用动态计算
 
 #pragma once
 
@@ -612,6 +613,7 @@ private:
 	LocationBase* _LCB;
 	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2 _StateInfor[400];
+	glm::vec2 _StateOffSet[400];
 };
 
 #endif

@@ -74,15 +74,20 @@ int Money_Componment::Get_Money()
 	return this->_Current_Money;
 }
 
-Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0) {}
+Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0),
+_Weapon_Slot(nullptr), _Armor_Slot(nullptr) {}
 
 int Character_Data::Get_Attack_Damage()
 {
+	if (this->_Weapon_Slot != nullptr)
+		return this->_Attack_Damage + this->_Weapon_Slot->_Damage;
 	return this->_Attack_Damage;
 }
 
 int Character_Data::Get_Defense_Armor()
 {
+	if (this->_Armor_Slot != nullptr)
+		return this->_Defense_Armor + this->_Armor_Slot->_Defense;
 	return this->_Defense_Armor;
 }
 
@@ -167,17 +172,7 @@ GameObjectBase& GameObjectBase::operator=(const GameObjectBase&) { return *this;
 
 Weapon::Weapon(int Damage) :_Damage(Damage) {}
 
-int Weapon::Get_DamageVal()
-{
-	return this->_Damage;
-}
-
 Armor::Armor(int Defense) :_Defense(Defense) {}
-
-int Armor::Get_DefenseVal()
-{
-	return this->_Defense;
-}
 
 bool Componment_Unite::Append(Componment_Base* CM)
 {
