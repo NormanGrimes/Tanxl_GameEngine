@@ -2,9 +2,9 @@
 
 #include "Tanxl_FontBase.h"
 
-FontBase& FontBase::GetFontBase()
+FontBase& FontBase::GetFontBase(ECurren_Language Language)
 {
-	static FontBase* FontsBase{ new FontBase };
+	static FontBase* FontsBase{ new FontBase(Language)};
 	return *FontsBase;
 }
 
@@ -77,6 +77,25 @@ void FontBase::Init_Fonts(EFontSet Font)
 	this->Init_Fonts(this->_Internal_FontPath[Font]);
 }
 
+void FontBase::Set_Language(ECurren_Language Language)
+{
+	this->_Internal_Language = Language;
+}
+
+void FontBase::Comfirm_Language()
+{
+	if (this->_Internal_Language == LANGUAGE_ENGLISH)
+	{
+		this->Init_Fonts(EFontSet::JosefinSansSemiBoldItalic);
+		this->Init_Fonts(EFontSet::JosefinSansBold);
+		this->Init_Fonts(EFontSet::NacelleBlack);
+	}
+	else
+	{
+		this->Init_Fonts(EFontSet::π‚¡ºæ∆∏…±≠ÃÂ);
+	}
+}
+
 std::map<GLchar, Character> FontBase::Get_Characters(int Id)
 {
 	if (Id > _Internal_Font_Counts)
@@ -89,7 +108,7 @@ const std::string FontBase::Get_Version()
 	return Tanxl_ClassBase::Get_Version();
 }
 
-FontBase::FontBase() :Tanxl_ClassBase("0.1") {}
+FontBase::FontBase(ECurren_Language Language) :Tanxl_ClassBase("0.1"), _Internal_Language(Language) {}
 FontBase::~FontBase() {}
-FontBase::FontBase(const FontBase&) :Tanxl_ClassBase("0.1") {}
+FontBase::FontBase(const FontBase&) :Tanxl_ClassBase("0.1"), _Internal_Language(LANGUAGE_ENGLISH) {}
 FontBase& FontBase::operator=(const FontBase&) { return *this; }

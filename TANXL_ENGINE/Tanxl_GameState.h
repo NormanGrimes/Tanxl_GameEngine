@@ -24,6 +24,7 @@
 // 单一连接接口不再返回连接对象的序列号
 // 优化枚举设置显示矩阵的接口
 // 合并获取地图需要绘制的高度与宽度接口
+// 移动绘制模块部分代码组成检测是否到达边缘的接口
 
 #pragma once
 
@@ -234,6 +235,7 @@ public:
 	bool Get_Adjust_Flag();
 	bool Is_Adjust_While_Move();
 	bool Get_Engine_File();
+	bool Check_Edge_Reached(ECheck_Edge Check);
 	Tanxl_Coord<int> Get_Exac_Location();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();

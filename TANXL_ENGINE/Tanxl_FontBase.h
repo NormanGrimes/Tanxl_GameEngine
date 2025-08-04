@@ -7,6 +7,8 @@
 // 增加语言设置枚举
 // 增加字体枚举并在类内部存储字体路径
 // 增加通过枚举初始化字体的功能
+// 增加语言的初始化设置与设置接口
+// 增加确认语言接口用于统一初始化
 
 #pragma once
 
@@ -48,11 +50,15 @@ struct Character
 class FontBase : public Tanxl_ClassBase
 {
 public:
-	static FontBase& GetFontBase();
+	static FontBase& GetFontBase(ECurren_Language Language = LANGUAGE_ENGLISH);
 
 	void Init_Fonts(std::string Font_Path);
 
 	void Init_Fonts(EFontSet Font);
+
+	void Set_Language(ECurren_Language Language);
+
+	void Comfirm_Language();
 
 	std::map<GLchar, Character> Get_Characters(int Id);
 
@@ -60,7 +66,7 @@ public:
 
 private:
 
-	FontBase();
+	FontBase(ECurren_Language Language);
 	~FontBase();
 	FontBase(const FontBase&);
 	FontBase& operator=(const FontBase&);
@@ -76,6 +82,8 @@ private:
 	};
 
 	std::map<GLchar, Character> _Characters[5];
+
+	ECurren_Language _Internal_Language;
 };
 
 #endif

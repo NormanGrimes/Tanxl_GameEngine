@@ -5,6 +5,9 @@
 // 增加游戏状态统一变量
 // 增加下方的游戏状态栏
 // 通过游戏状态控制绘制内容
+// 使用无背景纹理替换之前带预渲染的背景
+// 增加初始界面背景的绘制
+// 去掉游戏信息界面绘制部分
 
 #version 430
 
@@ -22,69 +25,175 @@ void main(void)
 {
 	tc = texCoord;
 
-	Cube = Image_Id;
+	int counts = 0;
+	int CLevel = 1;
 
-	for(int VertexId = 0; VertexId < 1; ++VertexId)
+	float Line_Length_Width = 1.0f / 6.0f;
+	float Line_Length_Height = 0.20f;// 1/5
+
+	float WidthMove  = - 5 * Line_Length_Width;
+	float HeightMove =   4 * Line_Length_Height;
+
+	for(int VertexId = 0; VertexId < 31; ++VertexId)
 	{
-		if      (gl_VertexID == (VertexId * 6 + 0))
+		if(VertexId == 30)
 		{
-			if((Game_Status != 0) && (Game_Status != 3))
+			if      (gl_VertexID == 180)
 			{
-				Cube = -1;
-				gl_Position = vec4( -1.0f, -1.0f, STATE_02_LAYER, 1.0f);
+				Cube = Image_Id;
+				gl_Position = vec4( -0.9f,  0.0f, STATE_02_LAYER, 1.0f);
 			}
-			else
-				gl_Position = vec4( -1.01f, -1.01f, STATE_02_LAYER, 1.0f);
+			else if (gl_VertexID == 181)
+			{
+				Cube = Image_Id;
+				gl_Position = vec4(  0.9f,  0.0f, STATE_02_LAYER, 1.0f);
+			}
+			else if (gl_VertexID == 182)
+			{
+				Cube = Image_Id;
+				gl_Position = vec4( -0.9f,  0.51f, STATE_02_LAYER, 1.0f);
+			}
+			else if (gl_VertexID == 183)
+			{
+				Cube = Image_Id;
+				gl_Position = vec4(  0.9f,  0.0f, STATE_02_LAYER, 1.0f);
+			}
+			else if (gl_VertexID == 184)
+			{
+				Cube = Image_Id;
+				gl_Position = vec4(  0.9f,  0.51f, STATE_02_LAYER, 1.0f);
+			}
+			else if (gl_VertexID == 185)
+			{
+				Cube = Image_Id;
+				gl_Position = vec4( -0.9f,  0.51f, STATE_02_LAYER, 1.0f);
+			}
 		}
-		else if (gl_VertexID == (VertexId * 6 + 1))
+		else
 		{
-			if((Game_Status != 0) && (Game_Status != 3))
+			Cube = 32;
+			if      (gl_VertexID == VertexId * 6 + 0) 
 			{
-				Cube = -1;
-				gl_Position = vec4(  1.0f, -1.0f, STATE_02_LAYER, 1.0f);
+				gl_Position = vec4( -Line_Length_Width + WidthMove, -Line_Length_Height + HeightMove, STATE_02_LAYER, 1.0f);
+				if(CLevel == 1)
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+					else
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+				}
+				else
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+					else
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+				}
 			}
-			else
-				gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f);
-		}
-		else if (gl_VertexID == (VertexId * 6 + 2))
-		{
-			if((Game_Status != 0) && (Game_Status != 3))
+			else if (gl_VertexID == VertexId * 6 + 1) 
 			{
-				Cube = -1;
-				gl_Position = vec4( -1.0f, -0.6f, STATE_02_LAYER, 1.0f);
+				gl_Position = vec4(  Line_Length_Width + WidthMove, -Line_Length_Height + HeightMove, STATE_02_LAYER, 1.0f);
+				if(CLevel == 1)
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+					else
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+				}
+				else
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+					else
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+				}
 			}
-			else
-				gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
-		}
-		else if (gl_VertexID == (VertexId * 6 + 3))
-		{
-			if((Game_Status != 0) && (Game_Status != 3))
+			else if (gl_VertexID == VertexId * 6 + 2) 
 			{
-				Cube = -1;
-				gl_Position = vec4(  1.0f, -1.0f, STATE_02_LAYER, 1.0f);
+				gl_Position = vec4( -Line_Length_Width + WidthMove,  Line_Length_Height + HeightMove, STATE_02_LAYER, 1.0f);
+				if(CLevel == 1)
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+					else
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+				}
+				else
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+					else
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+				}
 			}
-			else
-				gl_Position = vec4(  1.01f, -1.01f, STATE_02_LAYER, 1.0f); 
-		}
-		else if (gl_VertexID == (VertexId * 6 + 4))
-		{
-			if((Game_Status != 0) && (Game_Status != 3))
+			else if (gl_VertexID == VertexId * 6 + 3) 
 			{
-				Cube = -1;
-				gl_Position = vec4(  1.0f, -0.6f, STATE_02_LAYER, 1.0f);
+				gl_Position = vec4(  Line_Length_Width + WidthMove, -Line_Length_Height + HeightMove, STATE_02_LAYER, 1.0f);
+				if(CLevel == 1)
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+					else
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+				}
+				else
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+					else
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+				}
 			}
-			else
-				gl_Position = vec4(  1.01f,  1.01f, STATE_02_LAYER, 1.0f);
-		}
-		else if (gl_VertexID == (VertexId * 6 + 5))
-		{
-			if((Game_Status != 0) && (Game_Status != 3))
+			else if (gl_VertexID == VertexId * 6 + 4) 
 			{
-				Cube = -1;
-				gl_Position = vec4( -1.0f, -0.6f, STATE_02_LAYER, 1.0f);
+				gl_Position = vec4(  Line_Length_Width + WidthMove,  Line_Length_Height + HeightMove, STATE_02_LAYER, 1.0f);
+				if(CLevel == 1)
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+					else
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+				}
+				else
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+					else
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+				}
 			}
-			else
-				gl_Position = vec4( -1.01f,  1.01f, STATE_02_LAYER, 1.0f);
+			else if (gl_VertexID == VertexId * 6 + 5) 
+			{
+				gl_Position = vec4( -Line_Length_Width + WidthMove,  Line_Length_Height + HeightMove, STATE_02_LAYER, 1.0f);
+				if(CLevel == 1)
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+					else
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+				}
+				else
+				{
+					if(mod(float(VertexId), 2.0f) == 0.0f)
+						vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0f);
+					else
+						vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0f);
+				}
+			}
+
+			WidthMove += Line_Length_Width * 2;
+			counts++;
+			if(counts == 6)
+			{
+				if(CLevel == 1)
+					CLevel = 0;
+				else
+					CLevel = 1;
+
+				counts = 0;
+				WidthMove = -5 * Line_Length_Width;
+				HeightMove -= 2 * Line_Length_Height;
+			}
 		}
 	}
 }

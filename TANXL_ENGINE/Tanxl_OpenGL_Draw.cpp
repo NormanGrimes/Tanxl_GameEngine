@@ -87,9 +87,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
-	Font->Init_Fonts(EFontSet::JosefinSansSemiBoldItalic);
-	Font->Init_Fonts(EFontSet::JosefinSansBold);
-	Font->Init_Fonts(EFontSet::NacelleBlack);
+	Font->Comfirm_Language();
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);
@@ -277,11 +275,7 @@ int OpenGL_Draw::Append_Texture(const char* Texture)
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
 
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinatesTiny), TanxlOD::textureCoordinatesTiny, GL_STATIC_DRAW);
-#else
 	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
-#endif
 
 	glActiveTexture(GL_TEXTURE1 + Id + OffSet);
 
@@ -572,27 +566,7 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 	int State_Unit_Width{ static_cast<int>(State->Get_DataWidth()) + 1 };
 	int State_Unit_Height{ static_cast<int>(State->Get_DataHeight()) + 1 };
 
-	bool Reset{ false };
-
-	switch (Check_Direction)
-	{
-	case CHECK_EDGE_LEFT:
-		if (State->Get_Exac_Location()._Coord_X < 0)
-			Reset = true;
-		break;
-	case CHECK_EDGE_RIGH:
-		if (State->Get_Exac_Location()._Coord_X > 10)
-			Reset = true;
-		break;
-	case CHECK_EDGE_BELO:
-		if (State->Get_Exac_Location()._Coord_Y > 10)
-			Reset = true;
-		break;
-	case CHECK_EDGE_ABOV:
-		if (State->Get_Exac_Location()._Coord_Y < 0)
-			Reset = true;
-		break;
-	}
+	bool Reset{ State->Check_Edge_Reached(Check_Direction) };
 
 	if ((State->Get_State() == nullptr) ||
 		(State->Get_State()->Get_Extra_Status() == 1))
@@ -653,7 +627,6 @@ void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Dire
 			else
 				break;
 		}
-		//std::cout << "Return" << std::endl;
 	}
 	else if (Reset)
 	{
@@ -917,7 +890,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Event_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2)* (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
@@ -956,18 +929,21 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 	}
 
+	if (this->_Game_Status == GAME_START_MENU)
+	{
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-	glBindVertexArray(0);
-	glBindVertexArray(_vao[2]);
-	glUseProgram(_ITest_RenderingProgram);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 400); // 100 triangles of 6 vertices each
-	glBindVertexArray(0);
-	glBindVertexArray(_vao[1]);
+		glBindVertexArray(0);
+		glBindVertexArray(_vao[2]);
+		glUseProgram(_ITest_RenderingProgram);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 30);
+		glBindVertexArray(0);
+		glBindVertexArray(_vao[1]);
 #else
-	glUseProgram(_Start_RenderingProgram);
-	glProgramUniform1i(_Start_RenderingProgram, 3, this->_Game_Status);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+		glUseProgram(_Start_RenderingProgram);
+		glProgramUniform1i(_Start_RenderingProgram, 3, this->_Game_Status);
+		glDrawArrays(GL_TRIANGLES, 0, 6 * 31);
 #endif
+	}
 
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
 	glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
@@ -1059,27 +1035,26 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #endif
 
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-	glm::vec2 translations[400]{};
+	glm::vec2 translations[30]{};
+	int Instance_Cnt = 0;
 	int index = 0;
-	float offset = static_cast<float>(this->_Each_Height);
-
-	float BeginHeight{ (this->_Scene_Int._Coord_Y + this->_PreLoads - 1) * (1.0f / this->_Scene_Int._Coord_Y) };
-	for (int Height{ 0 }; Height < (this->_Each_Height + this->_PreLoads * 4); ++Height)
+	double BeginHeight{ ((this->_Scene_Int._Coord_Y) / 2.0f) * this->_Each_Height - this->_Each_Height / 2.0f };
+	for (int Height{ 0 }; Height < (5); ++Height)
 	{
-		float BeginWidth{ -(this->_Scene_Int._Coord_X + this->_PreLoads - 1) * (1.0f / this->_Scene_Int._Coord_X) };
-		for (int Width{ 0 }; Width < (this->_Each_Width + this->_PreLoads * 4); ++Width)
+		double BeginWidth{ -((this->_Scene_Int._Coord_X) / 2.0f) * this->_Each_Width + this->_Each_Width / 2.0f };
+		for (int Width{ 0 }; Width < (6); ++Width)
 		{
-			BeginWidth += ((1.0f / this->_Scene_Int._Coord_X) * 2);
-			translations[Height * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + Width].x = BeginWidth;
-			translations[Height * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + Width].y = BeginHeight;
+			translations[Instance_Cnt].x = static_cast<float>(BeginWidth);
+			translations[Instance_Cnt].y = static_cast<float>(BeginHeight);
+			++Instance_Cnt;
+			BeginWidth += this->_Each_Width;
 		}
-		BeginHeight -= ((1.0f / this->_Scene_Int._Coord_Y) * 2);
-		BeginWidth = -(this->_Scene_Int._Coord_X + this->_PreLoads - 1) * (1.0f / this->_Scene_Int._Coord_X);
+		BeginHeight -= this->_Each_Height;
 	}
 
 	glGenBuffers(1, &_Inst_vbo[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 400, &translations[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 30, &translations[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	float HalfW{ static_cast<float>(this->_Each_Width / 2) };
@@ -1087,13 +1062,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 	float quadVertices[] = {
 		// positions     // colors
-		-HalfW,  HalfH,  1.0f, 0.0f, 0.0f,
-		 HalfW, -HalfH,  0.0f, 1.0f, 0.0f,
-		-HalfW, -HalfH,  0.0f, 0.0f, 1.0f,
+		-HalfW,  HalfH,  0.1f, 1.0f, 1.0f,
+		 HalfW, -HalfH,  0.1f, 1.0f, 1.0f,
+		-HalfW, -HalfH,  0.1f, 1.0f, 1.0f,
 
-		-HalfW,  HalfH,  1.0f, 0.0f, 0.0f,
-		 HalfW, -HalfH,  0.0f, 1.0f, 0.0f,
-		 HalfW,  HalfH,  1.0f, 1.0f, 1.0f
+		-HalfW,  HalfH,  1.0f, 1.0f, 0.1f,
+		 HalfW, -HalfH,  1.0f, 1.0f, 0.1f,
+		 HalfW,  HalfH,  1.0f, 1.0f, 0.1f
 	};
 	glGenVertexArrays(1, &_vao[2]);
 	glGenBuffers(1, &_Inst_vbo[1]);

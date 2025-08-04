@@ -1242,6 +1242,30 @@ bool GameStateBase::Get_Engine_File()
 	return true;
 }
 
+bool GameStateBase::Check_Edge_Reached(ECheck_Edge Check)
+{
+	switch (Check)
+	{
+	case CHECK_EDGE_LEFT:
+		if (this->Get_Exac_Location()._Coord_X < 0)
+			return true;
+		break;
+	case CHECK_EDGE_RIGH:
+		if (this->Get_Exac_Location()._Coord_X > 10)
+			return true;
+		break;
+	case CHECK_EDGE_BELO:
+		if (this->Get_Exac_Location()._Coord_Y > 10)
+			return true;
+		break;
+	case CHECK_EDGE_ABOV:
+		if (this->Get_Exac_Location()._Coord_Y < 0)
+			return true;
+		break;
+	}
+	return false;
+}
+
 Tanxl_Coord<int> GameStateBase::Get_Exac_Location()
 {
 	return this->_Exac_Location;
