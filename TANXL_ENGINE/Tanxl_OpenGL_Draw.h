@@ -25,6 +25,7 @@
 // 碰撞功能采用动态计算
 // 实例化测试部分修复多处问题
 // 修改开始界面的绘制条件
+// 鼠标移动到提示字体上后会缩放字体大小
 
 #pragma once
 
@@ -592,7 +593,7 @@ private:
 	//记载额外加载的地图环数量
 	int _PreLoads;
 	//记录手动移动指定的当前X/Y轴基本矩形
-	Tanxl_Coord<int> _Current_Move_{ 0, 0 };
+	Tanxl_Coord<int> _Current_Move{ 0, 0 };
 	//记录在地图初始化时 玩家方块的初始移动距离
 	Tanxl_Coord<int> _Pre_Move{ 3, 3 };
 	//记录需要绘制的生命值纹理之间的距离

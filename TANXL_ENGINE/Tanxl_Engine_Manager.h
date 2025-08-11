@@ -12,6 +12,9 @@
 // 2023/11/09 引擎重置接口增加音频模块的操作
 // 2023/11/10 增加字体模块的支持
 // 2023/11/23 增加音频播放接口
+// 2023/12/13 增加析构函数用于输出游戏数据
+// 2023/12/13 增加接口用于检测是否需要关闭引擎并退出程序
+// 2023/12/13 增加关闭程序后的即时游戏数据输出
 
 #pragma once
 
@@ -55,6 +58,9 @@ class Tanxl_Engine
 public:
 	//引擎初始化构造函数
 	Tanxl_Engine();
+
+	//引擎析构函数
+	~Tanxl_Engine();
 
 	//获取当前引擎状态
 	unsigned Engine_Check_Engine_Status(bool ShutDown = false);
@@ -117,6 +123,9 @@ public:
 
 	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐枚举
 	void Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV SoundName);
+
+	//用于检测是否需要关闭引擎并退出程序
+	bool Engine_Should_Shut_Down();
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

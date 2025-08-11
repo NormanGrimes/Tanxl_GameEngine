@@ -34,6 +34,7 @@
 // 组件容器类增加无参数版清理函数
 // 玩家数据类增加武器与护甲槽位
 // 武器与护甲类简化为结构体
+// 角色参数类增加基础数据设置接口
 
 #pragma once
 
@@ -116,6 +117,7 @@ public:
 
 	int Get_Attack_Damage();
 	int Get_Defense_Armor();
+	void Set_Default_Data(int Damage, int Defense);
 	double Get_Move_Speed();
 
 private:

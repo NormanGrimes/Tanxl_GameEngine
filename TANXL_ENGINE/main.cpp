@@ -103,6 +103,13 @@ int main()
 		TGE.Engine_Insert_State_Update();//Key Insert
 
 		TGE.Engine_Draw_State_Adjust(0);//Draw Once
+		
+		if (TGE.Engine_Should_Shut_Down())
+		{
+			TGE.Engine_Save_Source_Infor("Tanxl_Game_InstantSave");
+			std::cout << "Output save file !" << std::endl;
+			exit(0);
+		}
 
 		static GameObject* MC{ Main_Character::Get_Main_Character()};
 

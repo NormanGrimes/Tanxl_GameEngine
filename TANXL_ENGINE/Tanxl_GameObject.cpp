@@ -91,6 +91,12 @@ int Character_Data::Get_Defense_Armor()
 	return this->_Defense_Armor;
 }
 
+void Character_Data::Set_Default_Data(int Damage, int Defense)
+{
+	this->_Attack_Damage = Damage;
+	this->_Defense_Armor = Defense;
+}
+
 double Character_Data::Get_Move_Speed()
 {
 	return this->_Move_Speed;

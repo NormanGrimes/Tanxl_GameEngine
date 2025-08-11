@@ -841,7 +841,9 @@ void GameStateBase::Set_Trigger_Mode(bool Mode)
 void GameStateBase::Generate_StateBlock(int State_Id)
 {
 	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
+#if _TANXL_GAMESTATE_GENERATE_STATE_OUTPUT_
 	std::cout << std::endl << "Generate_StateBlock " << State_Id << " CALLED" << std::endl;
+#endif
 	try
 	{
 		this->_Data_Base.Id_Link_Locate(1, State_Id);

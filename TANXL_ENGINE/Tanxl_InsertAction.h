@@ -1,6 +1,7 @@
 ﻿//_VERSION_0_9_ UPDATE LOG
 // LAST_UPDATE 2023-12-05 15:17
 // 简化检测输入功能中数值计算部分
+// 增加鼠标坐标的设置与获取接口
 
 #pragma once
 
@@ -11,9 +12,9 @@
 
 #if _ENABLE_TANXL_INSERTACTION_CONSOLE_OUTPUT_
 
-#define _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_   1
-#define _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_ 1
-#define _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_   1
+#define _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_   0
+#define _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_ 0
+#define _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_   0
 #define _TANXL_INSERTACTION_CONSOLE_MOUSE_OUTPUT_  1
 
 #endif
@@ -80,6 +81,7 @@ public:
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	int RegistEvent(Key_Unit* KU);
 	//移除最近一个添加的按键功能
+	Tanxl_Coord<double> Get_Mouse_Location();
 	void RemoveEvent();
 	size_t Get_KeyEvent_Size();
 	//获取键盘输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图 支持非移动按钮功能
@@ -104,6 +106,7 @@ public:
 	void Init_Default_Key();
 	// 更新最大移动距离
 	void Update_Move_Max();
+	void Set_Mouse_Pos(double LocationX, double LocationY);
 private:
 	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘
 	void AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);
@@ -131,11 +134,8 @@ private:
 	double _Key_Press_Length{ 10 };
 	//_Key_Extra_Press 记录一个按键事件重复执行按下操作需要的帧数
 	double _Key_Extra_Press{ 20 };
-	//_Mouse_PosX 记录当前鼠标的X轴坐标
-	int _Mouse_PosX{ 0 };
-	//_Mouse_PosY 记录当前鼠标的Y轴坐标
-	int _Mouse_PosY{ 0 };
-
+	//_Mouse_PosX 记录当前鼠标的X/Y轴坐标
+	Tanxl_Coord<double> _Mouse_Pos{ 0, 0 };
 	//单例实现部分
 	InsertEventBase();
 	~InsertEventBase();

@@ -25,6 +25,7 @@
 // 优化枚举设置显示矩阵的接口
 // 合并获取地图需要绘制的高度与宽度接口
 // 移动绘制模块部分代码组成检测是否到达边缘的接口
+// 增加宏控制地图生成信息的输出
 
 #pragma once
 
@@ -41,6 +42,7 @@
 #define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
 #define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
 #define _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_  0
+#define _TANXL_GAMESTATE_GENERATE_STATE_OUTPUT_       1
 
 #endif
 

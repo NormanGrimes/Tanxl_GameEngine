@@ -4,9 +4,11 @@
 
 void curse_poscallback(GLFWwindow* window, double x, double y)
 {
+	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 #if _TANXL_INSERTACTION_CONSOLE_MOUSE_OUTPUT_
 	std::cout << "(pos:" << x << "," << y << ")" << std::endl;
 #endif
+	IEB->Set_Mouse_Pos(x, y);
 }
 
 Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0), SaveLen(0)
@@ -65,6 +67,11 @@ int InsertEventBase::RegistEvent(Key_Unit* KU)
 	Key_Event* KE{ new Key_Event(KU) };
 	this->_KeyEventS.push_back(KE);
 	return static_cast<int>(this->_KeyEventS.size()) - 1;
+}
+
+Tanxl_Coord<double> InsertEventBase::Get_Mouse_Location()
+{
+	return this->_Mouse_Pos;
 }
 
 void InsertEventBase::RemoveEvent()
@@ -258,6 +265,12 @@ void InsertEventBase::Update_Move_Max()
 	this->_Max_float *= OD->Get_Trigger_Ratio();
 	this->_Max_float_Height *= OD->Get_Trigger_Ratio();
 	this->_Max_float_Width *= OD->Get_Trigger_Ratio();
+}
+
+void InsertEventBase::Set_Mouse_Pos(double LocationX, double LocationY)
+{
+	this->_Mouse_Pos._Coord_X = LocationX;
+	this->_Mouse_Pos._Coord_Y = LocationY;
 }
 
 float InsertEventBase::Get_LastMove_X()

@@ -46,6 +46,15 @@ Tanxl_Engine_FontBase(&FontBase::GetFontBase())
 	this->Tanxl_Engine_GameState->Set_Compile_Policy("d", 3);*/
 }
 
+Tanxl_Engine::~Tanxl_Engine()
+{
+	this->Engine_Save_Source_Infor(this->_Engine_InforFile_Name);
+
+	delete this->Tanxl_Engine_Console_List;
+	delete this->Tanxl_Engine_DataBase;
+	delete this->Tanxl_Engine_OpenGL_Draw;
+}
+
 unsigned Tanxl_Engine::Engine_Check_Engine_Status(bool ShutDown)
 {
 	if (((this->_Engine_Status & 0xFF) != 0) && ShutDown)
@@ -107,21 +116,27 @@ void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Valu
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 {
-	this->Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");
-	Data_Link* Data{ new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version()) };
-	Data->Append_Data(1, "VERSION " + this->Tanxl_Engine_DataBase->Get_Version());
-	Data->Append_Data(2, "VERSION " + this->Tanxl_Engine_GameEvent->Get_Version());
-	Data->Append_Data(3, "VERSION " + this->Tanxl_Engine_GameState->Get_Version());
-	Data->Append_Data(4, "VERSION " + this->Tanxl_Engine_InsertBase->Get_Version());
-	Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
-	Data->Append_Data(6, "VERSION " + this->Tanxl_Engine_RandomBase->Get_Version());
-	Data->Append_Data(7, "VERSION " + this->Tanxl_Engine_LocationBase->Get_Version());
-	Data->Append_Data(8, "VERSION " + this->Tanxl_Engine_ObjectBase->Get_Version());
-	Data->Append_Data(9, "VERSION " + this->Tanxl_Engine_SoundBase->Get_Version());
-	Data->Append_Data(10, "VERSION " + this->Tanxl_Engine_FontBase->Get_Version());
-	Data->Append_Data(11, "VERSION " + this->__ENGINE_VERSION__);
-	this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
-	this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
+	static bool FirstSort = true;
+	if (FirstSort)
+	{
+		this->Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");
+		Data_Link* Data{ new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version()) };
+		Data->Append_Data(1, "VERSION " + this->Tanxl_Engine_DataBase->Get_Version());
+		Data->Append_Data(2, "VERSION " + this->Tanxl_Engine_GameEvent->Get_Version());
+		Data->Append_Data(3, "VERSION " + this->Tanxl_Engine_GameState->Get_Version());
+		Data->Append_Data(4, "VERSION " + this->Tanxl_Engine_InsertBase->Get_Version());
+		Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
+		Data->Append_Data(6, "VERSION " + this->Tanxl_Engine_RandomBase->Get_Version());
+		Data->Append_Data(7, "VERSION " + this->Tanxl_Engine_LocationBase->Get_Version());
+		Data->Append_Data(8, "VERSION " + this->Tanxl_Engine_ObjectBase->Get_Version());
+		Data->Append_Data(9, "VERSION " + this->Tanxl_Engine_SoundBase->Get_Version());
+		Data->Append_Data(10, "VERSION " + this->Tanxl_Engine_FontBase->Get_Version());
+		Data->Append_Data(11, "VERSION " + this->__ENGINE_VERSION__);
+		this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
+		this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
+
+		FirstSort = false;
+	}
 
 	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
 	this->_Engine_InforFile_Name = FileName;
@@ -307,6 +322,11 @@ void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV Sound
 		Tanxl_Engine_SoundBase->Play_Sound(SoundName);
 	else
 		Tanxl_Engine_SoundBase->Stop_AllSound();
+}
+
+bool Tanxl_Engine::Engine_Should_Shut_Down()
+{
+	return glfwWindowShouldClose(this->Tanxl_Engine_OpenGL_Draw->Get_Window());
 }
 
 void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Is_Begin, std::string State_Infor)

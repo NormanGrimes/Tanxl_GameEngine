@@ -35,7 +35,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, "Tanxl_GAME /// 0.2B64", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, "Tanxl_GAME /// 0.2B67", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -72,8 +72,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Each_Height = 2.0f / State->Get_StateLength()._Coord_Y;//10 0.2
 	this->_Each_Width = 2.0f / State->Get_StateLength()._Coord_X;//10 0.2
 
-	this->_Current_Move_._Coord_Y = 0;
-	this->_Current_Move_._Coord_X = 0;
+	this->_Current_Move._Coord_Y = 0;
+	this->_Current_Move._Coord_X = 0;
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
@@ -87,6 +87,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
+	Font->Set_Language(LANGUAGE_ENGLISH);
 	Font->Comfirm_Language();
 
 	glGenVertexArrays(1, &_vao[0]);
@@ -398,7 +399,7 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 	{
 		State->Set_Adjust_Flag(true);
 
-		if (_New_Current_Loc._Coord_Y != _Current_Move_._Coord_Y)
+		if (_New_Current_Loc._Coord_Y != _Current_Move._Coord_Y)
 		{
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 			std::cout << "NCUH __ " << _New_Current_Loc._Coord_Y << " CUH __ " << _Current_Move_._Coord_Y << std::endl;
@@ -407,9 +408,9 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 			std::cout << "NCUH != CUH !State->Get_Adjust_Flag() RELOAD" << std::endl;
 #endif
-			if (_New_Current_Loc._Coord_Y > _Current_Move_._Coord_Y)
+			if (_New_Current_Loc._Coord_Y > _Current_Move._Coord_Y)
 			{
-				while (_New_Current_Loc._Coord_Y-- > _Current_Move_._Coord_Y)
+				while (_New_Current_Loc._Coord_Y-- > _Current_Move._Coord_Y)
 				{
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __HN---" << State->Get_Adjust_Flag() << std::endl;
@@ -418,9 +419,9 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 					this->_LCB->Get_LocationY(_State_Loc) -= static_cast<float>(_Each_Height);
 				}
 			}
-			else if (_New_Current_Loc._Coord_Y < _Current_Move_._Coord_Y)
+			else if (_New_Current_Loc._Coord_Y < _Current_Move._Coord_Y)
 			{
-				while (_New_Current_Loc._Coord_Y++ < _Current_Move_._Coord_Y)
+				while (_New_Current_Loc._Coord_Y++ < _Current_Move._Coord_Y)
 				{
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __HP___" << State->Get_Adjust_Flag() << std::endl;
@@ -429,11 +430,11 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 					this->_LCB->Get_LocationY(_State_Loc) += static_cast<float>(_Each_Height);
 				}
 			}
-			_Current_Move_._Coord_Y = TempVal;
+			_Current_Move._Coord_Y = TempVal;
 			_Is_State_Changed = true;
 		}
 
-		if (_New_Current_Loc._Coord_X != _Current_Move_._Coord_X)
+		if (_New_Current_Loc._Coord_X != _Current_Move._Coord_X)
 		{
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 			std::cout << "NCUW __ " << _New_Current_Loc._Coord_X << " CUW __ " << _Current_Move_._Coord_X << std::endl;
@@ -442,9 +443,9 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 			std::cout << "NCUW != CUW !State->Get_Adjust_Flag() RELOAD" << std::endl;
 #endif
-			if (_New_Current_Loc._Coord_X > _Current_Move_._Coord_X)
+			if (_New_Current_Loc._Coord_X > _Current_Move._Coord_X)
 			{
-				while (_New_Current_Loc._Coord_X-- > _Current_Move_._Coord_X)
+				while (_New_Current_Loc._Coord_X-- > _Current_Move._Coord_X)
 				{
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __WN---" << State->Get_Adjust_Flag() << std::endl;
@@ -453,9 +454,9 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 					this->_LCB->Get_LocationX(_State_Loc) -= static_cast<float>(_Each_Width);
 				}
 			}
-			else if (_New_Current_Loc._Coord_X < _Current_Move_._Coord_X)
+			else if (_New_Current_Loc._Coord_X < _Current_Move._Coord_X)
 			{
-				while (_New_Current_Loc._Coord_X++ < _Current_Move_._Coord_X)
+				while (_New_Current_Loc._Coord_X++ < _Current_Move._Coord_X)
 				{
 #if _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_
 					std::cout << "Adjust_Flag() __WP---" << State->Get_Adjust_Flag() << std::endl;
@@ -464,7 +465,7 @@ void OpenGL_Draw::Move_Adjust(GameStateBase* State)
 					this->_LCB->Get_LocationX(_State_Loc) += static_cast<float>(_Each_Width);
 				}
 			}
-			_Current_Move_._Coord_X = TempVal;
+			_Current_Move._Coord_X = TempVal;
 			_Is_State_Changed = true;
 		}
 	}
@@ -490,32 +491,32 @@ void OpenGL_Draw::Update_State(GameStateBase* State, ECheck_Edge Check_Direction
 	switch (Check_Direction)
 	{
 	case CHECK_EDGE_LEFT:
-		this->_Current_Move_._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y);
-		this->_Current_Move_._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X + 1);
+		this->_Current_Move._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y);
+		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X + 1);
 
 		State->Reload_Display_State(STATE_EXTEND_LEFT);
 		this->Move_State(State, MoveToNW, State_Unit_Width);
 		this->_Is_State_Changed = true;
 		break;
 	case CHECK_EDGE_RIGH:
-		this->_Current_Move_._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y);
-		this->_Current_Move_._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X - 1);
+		this->_Current_Move._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y);
+		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X - 1);
 
 		State->Reload_Display_State(STATE_EXTEND_RIGH);
 		this->Move_State(State, MoveToPW, State_Unit_Width);
 		this->_Is_State_Changed = true;
 		break;
 	case CHECK_EDGE_BELO:
-		this->_Current_Move_._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y + 1);
-		this->_Current_Move_._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X);
+		this->_Current_Move._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y + 1);
+		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X);
 
 		State->Reload_Display_State(STATE_EXTEND_BELO);
 		this->Move_State(State, MoveToPH, State_Unit_Height);
 		this->_Is_State_Changed = true;
 		break;
 	case CHECK_EDGE_ABOV:
-		this->_Current_Move_._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y - 1);
-		this->_Current_Move_._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X);
+		this->_Current_Move._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y - 1);
+		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X);
 
 		State->Reload_Display_State(STATE_EXTEND_ABOV);
 		this->Move_State(State, MoveToNH, State_Unit_Height);
@@ -913,6 +914,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			_Draw_Status = 4;
 			this->_Game_Status = GAME_PLAYER_DEAD_STATUS;
+			Is_Dead = true;
 			SB->Play_Sound(SOUND_GAME_OVER);
 			MC->Set_Health(5);
 			Tips->Update_Count();
@@ -957,12 +959,14 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	glUseProgram(_Fonts_RenderingProgram);
 
-	if(this->_Game_Status == GAME_START_MENU)
-		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
-	else if (this->_Game_Status == GAME_PLAYER_DEAD_STATUS)
+	if ((this->_Game_Status == GAME_START_MENU) || (this->_Game_Status == GAME_PLAYER_DEAD_STATUS))
 	{
-		Is_Dead = true;
-		RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+		//std::cout << "Exac :" << IEB->Get_Mouse_Location()._Coord_X << " _ " << IEB->Get_Mouse_Location()._Coord_Y << std::endl;
+		if ((IEB->Get_Mouse_Location()._Coord_X > 80) && (IEB->Get_Mouse_Location()._Coord_X < 880) &&
+			(IEB->Get_Mouse_Location()._Coord_Y > 450) && (IEB->Get_Mouse_Location()._Coord_Y < 660))
+			RenderText(Tips->GetTips(), 70.0f, 250.0f, 0.8f, glm::vec3(0.4, 0.7f, 0.9f));
+		else
+			RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
@@ -971,7 +975,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		RenderText("GAME OVER", 310.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
 
 	if(VersionFontSize > -800.0f)
-		RenderText("TANXL GAME VERSION 2.64", VersionFontSize, 10.0f, 1.0f, glm::vec3(
+		RenderText("TANXL GAME VERSION 2.67", VersionFontSize, 10.0f, 1.0f, glm::vec3(
 			static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
 			static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
 			0.5f));
@@ -1037,7 +1041,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 #if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 	glm::vec2 translations[30]{};
 	int Instance_Cnt = 0;
-	int index = 0;
 	double BeginHeight{ ((this->_Scene_Int._Coord_Y) / 2.0f) * this->_Each_Height - this->_Each_Height / 2.0f };
 	for (int Height{ 0 }; Height < (5); ++Height)
 	{

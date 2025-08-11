@@ -89,17 +89,19 @@ void FontBase::Comfirm_Language()
 		this->Init_Fonts(EFontSet::JosefinSansSemiBoldItalic);
 		this->Init_Fonts(EFontSet::JosefinSansBold);
 		this->Init_Fonts(EFontSet::NacelleBlack);
+		this->_Internal_Font_Counts = 3;
 	}
 	else
 	{
 		this->Init_Fonts(EFontSet::¹âÁ¼¾Æ¸É±­Ìå);
+		this->_Internal_Font_Counts = 1;
 	}
 }
 
 std::map<GLchar, Character> FontBase::Get_Characters(int Id)
 {
-	if (Id > _Internal_Font_Counts)
-		Id = _Internal_Font_Counts;
+	if (Id > _Internal_Font_Counts - 1)
+		Id = _Internal_Font_Counts - 1;
 	return this->_Characters[Id];
 }
 
