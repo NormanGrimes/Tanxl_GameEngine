@@ -918,8 +918,6 @@ GameStateBase::~GameStateBase()
 	Clear_Display_Vector(STATE_EXTEND_SPEC);
 }
 
-//unimportant Stuff (GET/SET)
-
 //GameEvent
 
 std::string GameEvent::GetEventName()
@@ -1221,6 +1219,17 @@ bool GameStateBase::Get_Compile_Status()
 void GameStateBase::Set_Adjust_Flag(bool Adjust_Flag)
 {
 	this->_Is_Adjusting = Adjust_Flag;
+}
+
+void GameStateBase::Check_Adjust_Status(bool Is_Key_Pressed)
+{
+	if (!this->_Adjust_While_Move)
+	{
+		if (Is_Key_Pressed)
+			this->_Is_Adjusting = false;
+		else
+			this->_Is_Adjusting = true;
+	}
 }
 
 bool GameStateBase::Get_Adjust_Flag()

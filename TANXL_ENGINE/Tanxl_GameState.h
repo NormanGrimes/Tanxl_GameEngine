@@ -26,6 +26,7 @@
 // 合并获取地图需要绘制的高度与宽度接口
 // 移动绘制模块部分代码组成检测是否到达边缘的接口
 // 增加宏控制地图生成信息的输出
+// 增加根据输入状态控制地图调整的功能
 
 #pragma once
 
@@ -210,6 +211,7 @@ public:
 	void Set_Display_State(int Width, int Height);
 	void Set_Data_Length(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
+	void Check_Adjust_Status(bool Is_Key_Pressed);
 	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 	//↓Set_StartState : 设置起始区域并构建初始连接编译周围区域 State_Id起始区域Id Cover_String不为NULL时覆盖起始区域内容

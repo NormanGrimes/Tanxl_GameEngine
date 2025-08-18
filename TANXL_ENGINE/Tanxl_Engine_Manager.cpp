@@ -225,7 +225,7 @@ bool Tanxl_Engine::Engine_Save_Reset_Data()
 void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)
 {
 	this->Tanxl_Engine_OpenGL_Draw->Render_Once(&this->Tanxl_Engine_GameState->GetStateBase());
-	int Temp_Preload = this->Tanxl_Engine_OpenGL_Draw->Get_PreLoad() + PreLoad_Adjust;
+	int Temp_Preload{ this->Tanxl_Engine_OpenGL_Draw->Get_PreLoad() + PreLoad_Adjust };
 	this->Tanxl_Engine_OpenGL_Draw->Set_PreLoad(Temp_Preload < 0 ? 0 : Temp_Preload);
 }
 

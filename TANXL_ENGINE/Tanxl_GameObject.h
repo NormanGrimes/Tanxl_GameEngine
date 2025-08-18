@@ -35,6 +35,7 @@
 // 玩家数据类增加武器与护甲槽位
 // 武器与护甲类简化为结构体
 // 角色参数类增加基础数据设置接口
+// 基础数据设置接口拆分为两个独立接口
 
 #pragma once
 
@@ -115,10 +116,11 @@ class Character_Data
 public:
 	Character_Data();
 
-	int Get_Attack_Damage();
-	int Get_Defense_Armor();
-	void Set_Default_Data(int Damage, int Defense);
-	double Get_Move_Speed();
+	inline int Get_Attack_Damage();
+	inline int Get_Defense_Armor();
+	inline void Set_Default_Damage(int Damage);
+	inline void Set_Default_Defense(int Defense);
+	inline double Get_Move_Speed();
 
 private:
 	int _Attack_Damage;

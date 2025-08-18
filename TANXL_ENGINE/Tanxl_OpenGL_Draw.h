@@ -26,6 +26,8 @@
 // 实例化测试部分修复多处问题
 // 修改开始界面的绘制条件
 // 鼠标移动到提示字体上后会缩放字体大小
+// 实例化绘制修复一个可能导致内存泄漏的问题
+// 实例化绘制功能启用并用于开始界面的绘制
 
 #pragma once
 
@@ -33,7 +35,6 @@
 #define _TANXL_OPENGL_DRAW_
 
 #define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
-#define _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_  0
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
@@ -95,12 +96,6 @@ namespace TanxlOD
 	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
 	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
 	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	};
-
-	static float textureCoordinatesTiny[] =
-	{
-		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 	};
 
 	static float textureCoordinates[] =

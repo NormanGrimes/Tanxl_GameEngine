@@ -1,15 +1,14 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2023-08-28 15:34
 // 实例化测试版本顶点着色器
+// 实例化绘制的颜色设置改为着色器实现
 
 #version 430
 
 #define TEST_01_LAYER 0.2f //UI LAYER
 
-layout (location = 0) in vec2 aPos;
-layout (location = 1) in vec3 aColor;
-layout (location = 2) in vec2 aOffset;
-
+layout (location = 0) in vec2 Pos;
+layout (location = 2) in vec3 Offset;
 layout (location = 3) in vec2 texCoord;
 
 flat out int Cube;
@@ -21,6 +20,11 @@ void main()
 {
     tc = texCoord;
     Cube = 32;
-    vs_color = vec4(aColor, 1.0);
-    gl_Position = vec4(aPos + aOffset, TEST_01_LAYER, 1.0);
+
+    if(Offset.z == 0.0f)
+        vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0);
+    else
+        vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0);
+
+    gl_Position = vec4(Pos.x + Offset.x, Pos.y + Offset.y, TEST_01_LAYER, 1.0);
 }

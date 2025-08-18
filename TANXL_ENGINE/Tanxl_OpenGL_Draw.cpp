@@ -110,8 +110,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_Scene_Int._Coord_Y);//SHeight
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_Scene_Int._Coord_X);//SWidth
-	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//State_MoveX
-	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//State_MoveY
+	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//HP UI MoveX
+	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//HP UI MoveY
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, MC->Get_MaxHealth() + 2);//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
@@ -159,6 +159,61 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Event_RenderingProgram, 7, Tex_08);
 	glProgramUniform1i(this->_Event_RenderingProgram, 8, Tex_11);
 
+	glBindVertexArray(0);
+
+	glm::vec3 translations[30]{};
+	int Instance_Cnt = 0;
+	double BeginHeight{ ((this->_Scene_Int._Coord_Y) / 2.0f) * this->_Each_Height - this->_Each_Height / 2.0f };
+	for (int Height{ 0 }; Height < (5); ++Height)
+	{
+		double BeginWidth{ -((this->_Scene_Int._Coord_X) / 2.0f) * this->_Each_Width + this->_Each_Width / 2.0f };
+		for (int Width{ 0 }; Width < (6); ++Width)
+		{
+			translations[Instance_Cnt].x = static_cast<float>(BeginWidth);
+			translations[Instance_Cnt].y = static_cast<float>(BeginHeight);
+
+			if ((Instance_Cnt / 6) % 2 == 1)
+				translations[Instance_Cnt].z = static_cast<float>((Instance_Cnt + 1) % 2);
+			else
+				translations[Instance_Cnt].z = static_cast<float>(Instance_Cnt % 2);
+
+			++Instance_Cnt;
+			BeginWidth += this->_Each_Width;
+		}
+		BeginHeight -= this->_Each_Height;
+	}
+
+	glGenBuffers(1, &_Inst_vbo[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 30, &translations[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	float HalfW{ static_cast<float>(this->_Each_Width / 2) };
+	float HalfH{ static_cast<float>(this->_Each_Height / 2) };
+
+	float quadVertices[] = {
+		// positions
+		-HalfW,  HalfH,
+		 HalfW, -HalfH,
+		-HalfW, -HalfH,
+
+		-HalfW,  HalfH,
+		 HalfW, -HalfH,
+		 HalfW,  HalfH,
+	};
+	glGenVertexArrays(1, &_vao[2]);
+	glGenBuffers(1, &_Inst_vbo[1]);
+	glBindVertexArray(_vao[2]);
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);// Test VertShader uniform aPos
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(2);// Test VertShader uniform aOffset
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]); // this attribute comes from a different vertex buffer
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 	glBindVertexArray(0);
 
 	std::cout << "___" << this->_Scene_Int._Coord_Y << "___" << this->_Scene_Int._Coord_X << "___" << this->_PreLoads << std::endl;
@@ -933,18 +988,16 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	if (this->_Game_Status == GAME_START_MENU)
 	{
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
 		glBindVertexArray(0);
 		glBindVertexArray(_vao[2]);
 		glUseProgram(_ITest_RenderingProgram);
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 30);
 		glBindVertexArray(0);
 		glBindVertexArray(_vao[1]);
-#else
+
 		glUseProgram(_Start_RenderingProgram);
 		glProgramUniform1i(_Start_RenderingProgram, 3, this->_Game_Status);
-		glDrawArrays(GL_TRIANGLES, 0, 6 * 31);
-#endif
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
@@ -1038,62 +1091,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	std::cout << "Stat_Loc " << this->_LCB->Get_LocationX(_State_Loc) << " -- " << this->_LCB->Get_LocationY(_State_Loc) << std::endl << std::endl << std::endl;
 #endif
 
-#if _ENABLE_TANXL_OPENGLDRAW_INSTANCE_TEST_
-	glm::vec2 translations[30]{};
-	int Instance_Cnt = 0;
-	double BeginHeight{ ((this->_Scene_Int._Coord_Y) / 2.0f) * this->_Each_Height - this->_Each_Height / 2.0f };
-	for (int Height{ 0 }; Height < (5); ++Height)
-	{
-		double BeginWidth{ -((this->_Scene_Int._Coord_X) / 2.0f) * this->_Each_Width + this->_Each_Width / 2.0f };
-		for (int Width{ 0 }; Width < (6); ++Width)
-		{
-			translations[Instance_Cnt].x = static_cast<float>(BeginWidth);
-			translations[Instance_Cnt].y = static_cast<float>(BeginHeight);
-			++Instance_Cnt;
-			BeginWidth += this->_Each_Width;
-		}
-		BeginHeight -= this->_Each_Height;
-	}
-
-	glGenBuffers(1, &_Inst_vbo[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 30, &translations[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	float HalfW{ static_cast<float>(this->_Each_Width / 2) };
-	float HalfH{ static_cast<float>(this->_Each_Height / 2) };
-
-	float quadVertices[] = {
-		// positions     // colors
-		-HalfW,  HalfH,  0.1f, 1.0f, 1.0f,
-		 HalfW, -HalfH,  0.1f, 1.0f, 1.0f,
-		-HalfW, -HalfH,  0.1f, 1.0f, 1.0f,
-
-		-HalfW,  HalfH,  1.0f, 1.0f, 0.1f,
-		 HalfW, -HalfH,  1.0f, 1.0f, 0.1f,
-		 HalfW,  HalfH,  1.0f, 1.0f, 0.1f
-	};
-	glGenVertexArrays(1, &_vao[2]);
-	glGenBuffers(1, &_Inst_vbo[1]);
-	glBindVertexArray(_vao[2]);
-	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
-	// also set instance data
-	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]); // this attribute comes from a different vertex buffer
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
-	glBindVertexArray(0);
-
-	glBindVertexArray(_vao[1]);
-#endif
-
 	if (!glfwWindowShouldClose(_Main_Window))
 	{
 		float Temp_MoveX{ 0.0f };
@@ -1129,13 +1126,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		State_Check_Event(State);
 
-		if (!State->Is_Adjust_While_Move())
-		{
-			if (IEB->Get_Key_Pressed())
-				State->Set_Adjust_Flag(false);
-			else
-				State->Set_Adjust_Flag(true);
-		}
+		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
 
 		double Current_Height{ (static_cast<double>(this->_LCB->Get_LocationY(Dist_Mid)) * 2 + 1) / (_Each_Height) };
 		double Current_Width{ (static_cast<double>(this->_LCB->Get_LocationX(Dist_Mid)) * 2 + 1) / (_Each_Width) };

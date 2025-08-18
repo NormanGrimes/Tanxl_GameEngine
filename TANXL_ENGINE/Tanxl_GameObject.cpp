@@ -4,7 +4,7 @@ Health_Componment::Health_Componment(int Maximum_Health, int Current_Health, boo
 _Maximum_Health(Maximum_Health), _Current_Health(Current_Health), _Unable_Damage(Unable_Damage), _Is_Alive(true)
 {
 	if (_Current_Health > _Maximum_Health)
-		_Maximum_Health = _Current_Health;
+		_Current_Health = _Maximum_Health;
 }
 
 void Health_Componment::RestoreHealth(int RestVal)
@@ -91,9 +91,13 @@ int Character_Data::Get_Defense_Armor()
 	return this->_Defense_Armor;
 }
 
-void Character_Data::Set_Default_Data(int Damage, int Defense)
+void Character_Data::Set_Default_Damage(int Damage)
 {
 	this->_Attack_Damage = Damage;
+}
+
+void Character_Data::Set_Default_Defense(int Defense)
+{
 	this->_Defense_Armor = Defense;
 }
 
