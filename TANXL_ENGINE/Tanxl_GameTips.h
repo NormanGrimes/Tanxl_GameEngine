@@ -1,6 +1,7 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2023-10-07 16:41
 // 改为继承自引擎基础类并增加版本获取功能
+// 增加接口用于重置提示信息的语言
 
 #pragma once
 
@@ -11,6 +12,7 @@
 
 #include "Tanxl_DataBase.h"
 #include "Tanxl_EngineBase.h"
+#include "Tanxl_FontBase.h"
 
 class GameTips : public Tanxl_ClassBase
 {
@@ -19,6 +21,32 @@ public:
 	{
 		static GameTips* TipBase{ new GameTips };
 		return *TipBase;
+	}
+
+	void ResetTips(ECurren_Language Language)
+	{
+		if (Language == ECurren_Language::LANGUAGE_CHINESE)
+		{
+			Tips[0] = "提示 : 金币道具可以提供五个金币";
+			Tips[1] = "提示 : 按W键或者上方向箭向上移动";
+			Tips[2] = "提示 : 按S键或者下方向箭向下移动";
+			Tips[3] = "提示 : 注意红色的方块!";
+			Tips[4] = "提示 : 按A键或者左方向箭向左移动";
+			Tips[5] = "提示 : 按D键或者右方向箭向右移动";
+			Tips[6] = "提示 : 你无法通过红色的方块";
+			Tips[7] = "提示 : 红色方块在造成伤害的同时也提供金币";
+		}
+		else if (Language == ECurren_Language::LANGUAGE_RUSSIAN)
+		{
+			Tips[0] = "Sovetj: Zolotoy krug daet pqt' zolotjx monet";
+			Tips[1] = "Sovetj: Nazhmite knopku W ili vverx, chtobj peremestit'sq vverx";
+			Tips[2] = "Sovetj: Nazhmite knopku S ili vniz, chtobj dvigat'sq vniz";
+			Tips[3] = "Sovetj: Ostorozhno, krasnje kvadratj!";
+			Tips[4] = "Sovetj: Nazhmite knopku A ili levuü knopku, chtobj peremestit'sq vlevo";
+			Tips[5] = "Sovetj: Nazhmite D ili pravuü knopku, chtobj dvigat'sq vpravo";
+			Tips[6] = "Sovetj: Nel'zq peresekat' sinie kvadratj";
+			Tips[7] = "Sovetj: Krasnje kvadratj takzhe mogut dat' monetu";
+		}
 	}
 
 	std::string GetTips()

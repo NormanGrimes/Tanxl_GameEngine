@@ -11,7 +11,10 @@ FontBase& FontBase::GetFontBase(ECurren_Language Language)
 void FontBase::Init_Fonts(std::string Font_Path)
 {
 	if (_Internal_Font_Counts > 4)
+	{
+		std::cout << "ERROR::FREETYPE: Out of space for Fonts" << std::endl;
 		return;
+	}
 
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft))
@@ -22,7 +25,13 @@ void FontBase::Init_Fonts(std::string Font_Path)
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 	// Set size to load glyphs as
-	FT_Set_Pixel_Sizes(face, 0, 48);
+	if (this->_Internal_Language == ECurren_Language::LANGUAGE_CHINESE)
+	{
+		FT_Set_Pixel_Sizes(face, 96, 96);
+		FT_Select_Charmap(face, ft_encoding_unicode);
+	}
+	else
+		FT_Set_Pixel_Sizes(face, 0, 48);
 
 	// Disable byte-alignment restriction
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -91,11 +100,21 @@ void FontBase::Comfirm_Language()
 		this->Init_Fonts(EFontSet::NacelleBlack);
 		this->_Internal_Font_Counts = 3;
 	}
-	else
+	/*else if (this->_Internal_Language == LANGUAGE_CHINESE)
 	{
-		this->Init_Fonts(EFontSet::¹âÁ¼¾Æ¸É±­Ìå);
+		this->Init_Fonts(EFontSet::GuangLiangFont);
+		this->_Internal_Font_Counts = 1;
+	}*/
+	else if (this->_Internal_Language == LANGUAGE_RUSSIAN)
+	{
+		this->Init_Fonts(EFontSet::kremlinPremierRegular);
 		this->_Internal_Font_Counts = 1;
 	}
+}
+
+ECurren_Language FontBase::Get_Language()
+{
+	return this->_Internal_Language;
 }
 
 std::map<GLchar, Character> FontBase::Get_Characters(int Id)
@@ -110,7 +129,7 @@ const std::string FontBase::Get_Version()
 	return Tanxl_ClassBase::Get_Version();
 }
 
-FontBase::FontBase(ECurren_Language Language) :Tanxl_ClassBase("0.1"), _Internal_Language(Language) {}
+FontBase::FontBase(ECurren_Language Language) :Tanxl_ClassBase("FontBase", "0.1"), _Internal_Language(Language) {}
 FontBase::~FontBase() {}
-FontBase::FontBase(const FontBase&) :Tanxl_ClassBase("0.1"), _Internal_Language(LANGUAGE_ENGLISH) {}
+FontBase::FontBase(const FontBase&) :Tanxl_ClassBase("FontBase", "0.1"), _Internal_Language(LANGUAGE_ENGLISH) {}
 FontBase& FontBase::operator=(const FontBase&) { return *this; }

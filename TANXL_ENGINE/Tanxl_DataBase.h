@@ -172,7 +172,7 @@ public:
 	//↓清理内存中所有的数据
 	void Clear_DataChain();
 	//↓复制当前容器中的数据到另一个容器
-	void Copy_DataBase(TANXL_DataBase DataBase);
+	void Copy_DataBase(TANXL_DataBase& DataBase);
 	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();
 	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息

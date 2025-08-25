@@ -8,7 +8,7 @@ static FontBase* Font{ &FontBase::GetFontBase() };
 
 static GameObject* MC{ Main_Character::Get_Main_Character() };
 
-//static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
+static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
 
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
@@ -87,8 +87,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
-	Font->Set_Language(LANGUAGE_ENGLISH);
+	Font->Set_Language(TI->Get_User_Language());
 	Font->Comfirm_Language();
+
+	static GameTips* Tips{ &GameTips::GetTipsBase() };
+	Tips->ResetTips(TI->Get_User_Language());
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);
@@ -879,6 +882,19 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		this->_Clear_Function = false;
 	}
+
+	/*static int x = 0;
+	if (x == 0)
+	{
+		x = 1;
+		SB->Play_Sound(SOUND_BACKGROUND_01);
+	}
+	if(x == 1)
+		if (!SB->Sound_Playing(SOUND_BACKGROUND_01))
+		{
+			SB->Play_Sound(SOUND_BACKGROUND_02);
+			x = 2;
+		}*/
 
 	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
 	//std::cout << "_Game_Status :" << _Game_Status << std::endl << std::endl;

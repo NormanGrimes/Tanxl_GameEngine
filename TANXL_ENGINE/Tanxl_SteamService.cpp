@@ -146,6 +146,20 @@ bool Tanxl_Inventory::AddPromoItem(ETanxl_Inventory_ItemDefId Item)
 	return _Steam_Invetory->AddPromoItem(NULL, Item);
 }
 
+ECurren_Language Tanxl_Inventory::Get_User_Language()
+{
+	if(SteamApps() == nullptr)
+		return ECurren_Language::LANGUAGE_ENGLISH;
+
+	std::string UserLanguage{ SteamApps()->GetCurrentGameLanguage() };
+	if (UserLanguage == "schinese")
+		return ECurren_Language::LANGUAGE_CHINESE;
+	else if (UserLanguage == "russian")
+		return ECurren_Language::LANGUAGE_RUSSIAN;
+	else
+		return ECurren_Language::LANGUAGE_ENGLISH;
+}
+
 Tanxl_Inventory::Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
 _SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr), Tanxl_ClassBase("0.1")
 {
@@ -172,6 +186,7 @@ _SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _
 			std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
 			std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
 			std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
+			std::cout << "Current Language :" << SteamApps()->GetCurrentGameLanguage() << std::endl;
 
 			std::cout << "Steam API Init Success !" << std::endl;
 		}

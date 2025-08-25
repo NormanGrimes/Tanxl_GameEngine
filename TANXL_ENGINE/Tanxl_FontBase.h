@@ -9,6 +9,8 @@
 // 增加通过枚举初始化字体的功能
 // 增加语言的初始化设置与设置接口
 // 增加确认语言接口用于统一初始化
+// 增加一个俄语字体
+// 字体初始化接口针对中文进行修改
 
 #pragma once
 
@@ -22,21 +24,13 @@
 #include "Tanxl_OpenGL_Render.h"
 #include "Tanxl_EngineBase.h"
 
-enum ECurren_Language
-{
-	LANGUAGE_ENGLISH,
-	LANGUAGE_CHINESE,
-	LANGUAGE_FRENCH,
-	LANGUAGE_RUSSIAN,
-	LANGUAGE_JAPANESE
-};
-
 enum EFontSet
 {
 	JosefinSansSemiBoldItalic,
 	JosefinSansBold,
 	NacelleBlack,
-	光良酒干杯体
+	GuangLiangFont,
+	kremlinPremierRegular
 };
 
 struct Character
@@ -60,6 +54,8 @@ public:
 
 	void Comfirm_Language();
 
+	ECurren_Language Get_Language();
+
 	std::map<GLchar, Character> Get_Characters(int Id);
 
 	const std::string Get_Version();
@@ -73,12 +69,13 @@ private:
 
 	int _Internal_Font_Counts{ 0 };
 
-	std::string _Internal_FontPath[4]
+	std::string _Internal_FontPath[5]
 	{
 		"Fonts/JosefinSans-SemiBoldItalic.ttf",
 		"Fonts/JosefinSans-Bold.ttf",
 		"Fonts/Nacelle-Black.otf",
-		"Fonts/光良酒-干杯体.ttf"
+		"Fonts/GuangLiang.ttf",
+		"Fonts/kremlin-premier.regular.ttf"
 	};
 
 	std::map<GLchar, Character> _Characters[5];

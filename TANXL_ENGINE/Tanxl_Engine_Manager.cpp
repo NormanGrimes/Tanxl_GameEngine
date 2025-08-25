@@ -324,6 +324,12 @@ void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV Sound
 		Tanxl_Engine_SoundBase->Stop_AllSound();
 }
 
+void Tanxl_Engine::Engine_System_Set_Language(ECurren_Language Language)
+{
+	this->Tanxl_Engine_FontBase->Set_Language(Language);
+	this->Tanxl_Engine_FontBase->Comfirm_Language();
+}
+
 bool Tanxl_Engine::Engine_Should_Shut_Down()
 {
 	return glfwWindowShouldClose(this->Tanxl_Engine_OpenGL_Draw->Get_Window());

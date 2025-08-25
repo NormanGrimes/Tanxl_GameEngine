@@ -15,6 +15,7 @@
 // 2023/12/13 增加析构函数用于输出游戏数据
 // 2023/12/13 增加接口用于检测是否需要关闭引擎并退出程序
 // 2023/12/13 增加关闭程序后的即时游戏数据输出
+// 2023/12/19 增加语言设置接口
 
 #pragma once
 
@@ -123,6 +124,9 @@ public:
 
 	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐枚举
 	void Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV SoundName);
+
+	//设置当前系统显示语言 Language用于指定语言枚举
+	void Engine_System_Set_Language(ECurren_Language Language);
 
 	//用于检测是否需要关闭引擎并退出程序
 	bool Engine_Should_Shut_Down();

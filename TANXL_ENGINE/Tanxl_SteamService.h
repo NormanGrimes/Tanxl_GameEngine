@@ -17,6 +17,7 @@
 // 增加获取所有库存的功能
 // 定义转移到源文件中
 // 库存组件改为继承自引擎基础类
+// 增加对玩家当前语言的获取
 
 #pragma once
 
@@ -87,6 +88,8 @@ public:
 
 	bool RequestStats();//请求用户统计数据
 
+	ECurren_Language Get_User_Language();
+
 private:
 	Tanxl_Achievement();
 
@@ -111,6 +114,8 @@ public:
 	void ConsumeInvetoryItem(ETanxl_Inventory_ItemDefId ItemInstanceId);
 
 	bool AddPromoItem(ETanxl_Inventory_ItemDefId Item);
+
+	ECurren_Language Get_User_Language();
 
 private:
 

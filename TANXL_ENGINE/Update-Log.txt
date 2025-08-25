@@ -1,3 +1,12 @@
+TEnGinE Version-0.2 Build-69 2023-12-18 09:34 UPDATE_LOG
+////////////////////////////////////////////////////////
+增加一个俄语字体。提示模块增加接口用于重置并选择提示信息
+的语言。引擎管理模块增加语言设置接口。移动语言枚举到引擎
+基础模块中。服务模块增加对玩家当前语言的获取。字体模块字
+体初始化接口针对中文进行修改。音频模块增加检测指定音频是
+否在播放的接口。音频模块增加用于检测当前播放音频编号的接
+口。增加五个背景音乐文件。
+
 TEnGinE Version-0.2 Build-68 2023-12-14 11:49 UPDATE_LOG
 ////////////////////////////////////////////////////////
 绘制模块实例化绘制修复一个可能导致内存泄漏的问题。实例化
@@ -454,6 +463,15 @@ TEnGinE Version-0.2 Build-15 2023-07-07 10:47 UPDATE_LOG
 询服务。引擎管理模块错误检测增加新的情况并优化代码。绘制
 模块新增地图方块检测功能替换大量重复代码。STEAM_服务模块
 增加检测物品掉落的功能。预加入音频库。
+--------------------------------------------------------
+SUPPORT FOR STEAM'S LATEST 157 SDK. The STEAM service 
+module is added to provide inventory query service 
+initially. The engine management module adds new cases 
+for error detection and optimizes the code. The drawing 
+module adds map block detection to replace a large 
+number of duplicate codes. STEAM_ service module adds 
+the function of detecting the drop of items. Pre-join 
+the audio library.
 
 TEnGinE Version-0.2 Build-14 2023-07-04 09:16 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -462,6 +480,17 @@ TEnGinE Version-0.2 Build-14 2023-07-04 09:16 UPDATE_LOG
 图模块增加宏控制更新移动部分的输出。地图模块更新移动部分
 修复只采用宽度值计算的问题。地图模块多个遍历函数支持超过
 两百五十六个区块。
+--------------------------------------------------------
+The Draw Module Move Map interface allows you to set 
+the number of moves. The Draw module optimizes the 
+collision logic of injured blocks. The Draw module 
+fixed the issue that black bars still appear when 
+moving laterally. The map module adds a macro to 
+control the output of the updated moving part. The map 
+module has been updated to fix the issue that only the 
+width value is used for calculation. The map module 
+supports more than 256 blocks with multiple traversal 
+functions.
 
 TEnGinE Version-0.2 Build-13 2023-07-03 10:46 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -470,6 +499,18 @@ TEnGinE Version-0.2 Build-13 2023-07-03 10:46 UPDATE_LOG
 地图区块数据设置功能。绘制模块修复长距离移动会导致绘制黑
 边的问题。地图模块增加变量记录地图的区块数量并添加设置函
 数。引擎管理模块无限世界设置功能中增加地图区块数量设置。
+--------------------------------------------------------
+The structure of the input module button unit has been 
+added to obtain the button status. The engine 
+management module has the function of setting the 
+starting area of the map, and supports the modification 
+of other areas. The map module adds the function of 
+setting the data of the map block. The Draw module 
+fixed an issue where moving long distances would cause 
+black bars to be drawn. The map module increases the 
+number of blocks recorded in the map and adds a setting 
+function. Added the number of map tiles in the infinite 
+world setting function of the engine management module.
 
 TEnGinE Version-0.2 Build-12 2023-06-28 16:08 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -478,6 +519,17 @@ TEnGinE Version-0.2 Build-12 2023-06-28 16:08 UPDATE_LOG
 件成员改为公有继承生命值组件。绘制模块生命值变量以及相关
 设置函数使用游戏物品对象替代。引擎管理模块信息输出功能增
 加游戏物品版本号输出。
+--------------------------------------------------------
+The game item module adds a constructor that contains a 
+health component. The health component of the item 
+module has added the function of setting health. The 
+item module removes the health component members of the 
+game item class and changes them to the public 
+inherited health component. Draw module health 
+variables and related setting functions using game item 
+objects instead. The information output function of the 
+engine management module has increased the output of 
+the version number of the game item.
 
 TEnGinE Version-0.2 Build-11 TURBO 2023-06-25 14:31 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -488,6 +540,22 @@ TEnGinE Version-0.2 Build-11 TURBO 2023-06-25 14:31 UPDATE_LOG
 能增加非移动按钮注册功能。事件模块增加重载版本事件移除功能。游
 戏物品模块整理至引擎核心层。游戏物品模块增加版本信息。绘制模块
 增加宏控制重新载入地图的坐标输出。
+--------------------------------------------------------------
+The Maps module has fixed a pointer bug with the reload map 
+function. The drawing module opens a multi-segment extended 
+map test in four directions. The Draw Module expands the map 
+section with generic variables instead of the original data. 
+The engine management module infinitely expands the world 
+function and removes the world size parameter. The engine 
+management module registers the key function, returns the key 
+pointer, and adds the default parameters. The non-mobile 
+button registration function is added to the registration 
+button function of the engine management module. The event 
+module adds the function of removing overloaded version 
+events. The game item module is organized into the core layer 
+of the engine. Added version information to the Game Item 
+module. The Draw module adds macro control to reload the 
+coordinate output of the map.
 
 TEnGinE Version-0.2 Build-10 2023-06-16 09:10 UPDATE_LOG
 ////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@
 // 引擎基础类增加名称参数
 // 增加游戏坐标模板类
 // 引擎基础类增加名称获取函数
+// 移动语言枚举到引擎基础模块中
 
 #pragma once
 
@@ -11,17 +12,26 @@
 
 #include <string>
 
+enum ECurren_Language
+{
+	LANGUAGE_ENGLISH,
+	LANGUAGE_CHINESE,
+	LANGUAGE_FRENCH,
+	LANGUAGE_RUSSIAN,
+	LANGUAGE_JAPANESE
+};
+
 class Tanxl_ClassBase
 {
 public:
 	Tanxl_ClassBase(std::string Version, std::string Name = "UNDEFINE NAME") :_Version(Version), _Name(Name) {}
 
-	std::string Get_Version()
+	inline std::string Get_Version()
 	{
 		return this->_Version;
 	}
 
-	std::string Get_Name()
+	inline std::string Get_Name()
 	{
 		return this->_Name;
 	}

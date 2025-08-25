@@ -34,7 +34,7 @@
 #ifndef _TANXL_OPENGL_DRAW_
 #define _TANXL_OPENGL_DRAW_
 
-#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_   0
 
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
@@ -81,22 +81,7 @@ namespace TanxlOD
 	static const char* TexMedic_01_64x64				{ "Texture/TANXL_MEDIC_01_64X64.png"				};
 	static const char* TexStartMenu_01_1024x1024        { "Texture/TANXL_MENU_01_1024X1024.png"				};
 
-	static StateEvent* EventSlot[16];
-
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-	static std::string ZeroStateBlock{
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	"1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,1-4,"
-	};
 
 	static float textureCoordinates[] =
 	{
