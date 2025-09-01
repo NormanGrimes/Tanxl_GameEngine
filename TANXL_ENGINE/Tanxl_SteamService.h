@@ -88,8 +88,6 @@ public:
 
 	bool RequestStats();//请求用户统计数据
 
-	ECurren_Language Get_User_Language();
-
 private:
 	Tanxl_Achievement();
 

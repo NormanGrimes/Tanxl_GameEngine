@@ -12,6 +12,11 @@
 // 增加捡起神秘核心的音频
 // 增加检测指定音频是否在播放的接口
 // 增加检测当前播放音频编号的接口
+// 增加背景音乐容器与添加接口
+// 增加音乐枚举重载为文件路径的函数版本
+// 新增背景音乐播放接口
+// 增加无声枚举的检查
+// 增加获取背景音乐是否播放的接口
 
 #pragma once
 
@@ -19,6 +24,7 @@
 #define _TANXL_SOUNDBASE_
 
 #include <string>
+#include <vector>
 #include <irrKlang/irrKlang.h>
 
 #include "Tanxl_EngineBase.h"
@@ -51,9 +57,19 @@ public:
 
     void Play_Sound(ESound_WAV Sound_Name);
 
+    void Append_BackGround_Music(std::string Wav_File_Location);
+
+    void Append_BackGround_Music(ESound_WAV Sound_Name);
+
     void Stop_AllSound();
+    // 包含对背景音乐的顺序播放功能 顺序播放功能需要持续调用
+    void Play_BackGround_Music(int Begin_Id);
+
+    bool Sound_Playing(std::string Wav_File_Location);
 
     bool Sound_Playing(ESound_WAV Sound_Name);
+
+    bool BackGround_Playing();
 
     ESound_WAV Sound_Playing_Id();
 
@@ -78,6 +94,11 @@ private:
         "music/Game_BackGround_04.mp3",
         "music/Game_BackGround_05.mp3"
     };
+
+    std::vector<std::string> _BackGround_Music_List;
+
+    int _Current_BackGround_Id;
+    bool _BackGround_Music_Playing;
 
     SoundBase();
     ~SoundBase();

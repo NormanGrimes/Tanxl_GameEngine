@@ -25,13 +25,7 @@ void FontBase::Init_Fonts(std::string Font_Path)
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 	// Set size to load glyphs as
-	if (this->_Internal_Language == ECurren_Language::LANGUAGE_CHINESE)
-	{
-		FT_Set_Pixel_Sizes(face, 96, 96);
-		FT_Select_Charmap(face, ft_encoding_unicode);
-	}
-	else
-		FT_Set_Pixel_Sizes(face, 0, 48);
+	FT_Set_Pixel_Sizes(face, 0, 48);
 
 	// Disable byte-alignment restriction
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

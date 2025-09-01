@@ -28,6 +28,7 @@
 // 鼠标移动到提示字体上后会缩放字体大小
 // 实例化绘制修复一个可能导致内存泄漏的问题
 // 实例化绘制功能启用并用于开始界面的绘制
+// 增加获取当前游戏状态的接口
 
 #pragma once
 
@@ -529,6 +530,7 @@ public:
 	float Get_Trigger_Ratio();
 	//检测是否有按键按下
 	bool Check_Key_Press();
+	EGame_Status Get_Game_Status();
 	//获取OpenGL窗口
 	GLFWwindow* Get_Window()const;
 private:

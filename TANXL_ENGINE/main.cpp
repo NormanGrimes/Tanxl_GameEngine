@@ -88,6 +88,12 @@ int main()
 		"0-2,0-3,0-1,1-4,0-1,0-1,1-4,0-1,0-3,0-2,"
 		"0-3,0-2,1-4,0-2,0-2,0-2,0-2,1-4,0-2,0-3,");
 
+	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_01);
+	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_02);
+	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_03);
+	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_04);
+	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_05);
+
 	while (1)
 	{
 		static bool Appended{ false };
@@ -99,6 +105,7 @@ int main()
 			DropCnt = 0;
 			TGE.Engine_Invent_Update_Drop();
 		}*/
+		TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_NO_SOUND, true);
 
 		TGE.Engine_Insert_State_Update();//Key Insert
 

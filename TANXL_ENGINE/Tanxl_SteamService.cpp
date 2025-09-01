@@ -152,9 +152,9 @@ ECurren_Language Tanxl_Inventory::Get_User_Language()
 		return ECurren_Language::LANGUAGE_ENGLISH;
 
 	std::string UserLanguage{ SteamApps()->GetCurrentGameLanguage() };
-	if (UserLanguage == "schinese")
+	/*if (UserLanguage == "schinese")
 		return ECurren_Language::LANGUAGE_CHINESE;
-	else if (UserLanguage == "russian")
+	else */if (UserLanguage == "russian")
 		return ECurren_Language::LANGUAGE_RUSSIAN;
 	else
 		return ECurren_Language::LANGUAGE_ENGLISH;

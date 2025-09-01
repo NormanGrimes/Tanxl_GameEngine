@@ -861,6 +861,11 @@ bool OpenGL_Draw::Check_Key_Press()
 	return false;
 }
 
+EGame_Status OpenGL_Draw::Get_Game_Status()
+{
+	return this->_Game_Status;
+}
+
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	static GameTips* Tips{ &GameTips::GetTipsBase() };

@@ -324,6 +324,25 @@ void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV Sound
 		Tanxl_Engine_SoundBase->Stop_AllSound();
 }
 
+void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable_Play)
+{
+	if (SoundName != SOUND_NO_SOUND)
+		this->Tanxl_Engine_SoundBase->Append_BackGround_Music(SoundName);
+	if (Enable_Play)
+	{
+		if (this->Tanxl_Engine_OpenGL_Draw->Get_Game_Status() == GAME_PLAYER_ACTIVE)
+		{
+			static int Begin_Id{ this->Tanxl_Engine_RandomBase->GenerateNum(static_cast<int>(time(0))) };
+			this->Tanxl_Engine_SoundBase->Play_BackGround_Music(Begin_Id);
+		}
+		else
+		{
+			if (this->Tanxl_Engine_SoundBase->BackGround_Playing() == true)
+				this->Tanxl_Engine_SoundBase->Stop_AllSound();
+		}
+	}
+}
+
 void Tanxl_Engine::Engine_System_Set_Language(ECurren_Language Language)
 {
 	this->Tanxl_Engine_FontBase->Set_Language(Language);
