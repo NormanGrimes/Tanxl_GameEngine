@@ -17,6 +17,8 @@
 // 新增背景音乐播放接口
 // 增加无声枚举的检查
 // 增加获取背景音乐是否播放的接口
+// 背景音乐使用独立的音源播放
+// 多个接口增加音源选择参数
 
 #pragma once
 
@@ -53,30 +55,30 @@ class SoundBase : public Tanxl_ClassBase
 public:
     static SoundBase& GetSoundBase();
 
-    void Play_Sound(std::string Wav_File_Location);
+    void Play_Sound(std::string Wav_File_Location, int SoundEngine_Id = 0);
 
-    void Play_Sound(ESound_WAV Sound_Name);
+    void Play_Sound(ESound_WAV Sound_Name, int SoundEngine_Id = 0);
 
     void Append_BackGround_Music(std::string Wav_File_Location);
 
     void Append_BackGround_Music(ESound_WAV Sound_Name);
 
-    void Stop_AllSound();
+    void Stop_AllSound(int SoundEngine_Id = 0);
     // 包含对背景音乐的顺序播放功能 顺序播放功能需要持续调用
     void Play_BackGround_Music(int Begin_Id);
 
-    bool Sound_Playing(std::string Wav_File_Location);
+    bool Sound_Playing(std::string Wav_File_Location, int SoundEngine_Id = 0);
 
-    bool Sound_Playing(ESound_WAV Sound_Name);
+    bool Sound_Playing(ESound_WAV Sound_Name, int SoundEngine_Id = 0);
 
     bool BackGround_Playing();
 
-    ESound_WAV Sound_Playing_Id();
+    ESound_WAV Sound_Playing_Id(int SoundEngine_Id = 0);
 
     const std::string Get_Version();
 
 private:
-    irrklang::ISoundEngine* _SoundEngine;
+    irrklang::ISoundEngine* _SoundEngine[2];
 
     std::string _Sound_Names[13]
     { 

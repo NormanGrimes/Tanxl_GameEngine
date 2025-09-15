@@ -27,6 +27,7 @@
 // 移动绘制模块部分代码组成检测是否到达边缘的接口
 // 增加宏控制地图生成信息的输出
 // 增加根据输入状态控制地图调整的功能
+// 增加获取当前地图数据的接口
 
 #pragma once
 
@@ -207,6 +208,7 @@ public:
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
+	TANXL_DataBase* Get_Data_Source();
 	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
 	void Set_Display_State(int Width, int Height);
 	void Set_Data_Length(unsigned Width, unsigned Height);

@@ -113,6 +113,11 @@ std::string GameStateBase::Get_State_Id(int Location)
 	return "NULL";
 }
 
+TANXL_DataBase* GameStateBase::Get_Data_Source()
+{
+	return &this->_Data_Base;
+}
+
 void GameStateBase::Clear_Display_Vector(EState_Extend Clear_Id)
 {
 	if (Clear_Id == STATE_EXTEND_SPEC)

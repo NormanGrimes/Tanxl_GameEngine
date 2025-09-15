@@ -35,7 +35,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, "Tanxl_GAME /// 0.2B67", NULL, NULL);
+	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, "Tanxl_GAME /// 0.2B70", NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -888,22 +888,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		this->_Clear_Function = false;
 	}
 
-	/*static int x = 0;
-	if (x == 0)
-	{
-		x = 1;
-		SB->Play_Sound(SOUND_BACKGROUND_01);
-	}
-	if(x == 1)
-		if (!SB->Sound_Playing(SOUND_BACKGROUND_01))
-		{
-			SB->Play_Sound(SOUND_BACKGROUND_02);
-			x = 2;
-		}*/
-
-	//std::cout << "_Draw_Status :" << _Draw_Status << std::endl;
-	//std::cout << "_Game_Status :" << _Game_Status << std::endl << std::endl;
-
 	if (_Draw_Status == 5)
 	{
 		if (this->_Middle_Frame == 0)
@@ -941,6 +925,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame)
 		{
+			VersionFontSize = -800.0f;
 			this->_Middle_Frame = 0;
 		}
 	}
@@ -1041,18 +1026,37 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			RenderText(Tips->GetTips(), 70.0f, 250.0f, 0.8f, glm::vec3(0.4, 0.7f, 0.9f));
 		else
 			RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+
+		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
+			RenderText("S Rozhdestvom", 210.0f, 710.0f, 1.3f, glm::vec3(0.9, 0.3f, 0.3f), 2);
+		else
+			RenderText("Merry Christmas", 210.0f, 710.0f, 1.3f, glm::vec3(0.9, 0.3f, 0.3f), 2);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
+		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
+			RenderText("Monetj: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
+		else
+			RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
-	if(Is_Dead)
-		RenderText("GAME OVER", 310.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
+	if (Is_Dead)
+	{
+		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
+			RenderText("Igra zakonchena", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
+		else
+			RenderText("GAME OVER", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
+	}
 
-	if(VersionFontSize > -800.0f)
-		RenderText("TANXL GAME VERSION 2.67", VersionFontSize, 10.0f, 1.0f, glm::vec3(
-			static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
-			static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
-			0.5f));
+	if (VersionFontSize > -800.0f)
+		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
+			RenderText("VERSIQ IGRJ TANXL 2.70", VersionFontSize, 10.0f, 1.0f, glm::vec3(
+				static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
+				static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
+				0.5f));
+		else
+			RenderText("TANXL GAME VERSION 2.70", VersionFontSize, 10.0f, 1.0f, glm::vec3(
+				static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
+				static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
+				0.5f));
 
 	glBindVertexArray(0);
 }

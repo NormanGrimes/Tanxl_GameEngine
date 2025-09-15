@@ -113,7 +113,7 @@ int main()
 		
 		if (TGE.Engine_Should_Shut_Down())
 		{
-			TGE.Engine_Save_Source_Infor("Tanxl_Game_InstantSave");
+			TGE.Engine_Save_Instant_Output();
 			std::cout << "Output save file !" << std::endl;
 			exit(0);
 		}

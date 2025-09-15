@@ -17,6 +17,7 @@
 // 2023/12/13 增加关闭程序后的即时游戏数据输出
 // 2023/12/19 增加语言设置接口
 // 2023/12/21 增加背景音乐添加和播放的接口
+// 2023/12/22 用于接口输出游戏当前地图存档数据信息
 
 #pragma once
 
@@ -103,6 +104,9 @@ public:
 	//选定是否开启游戏世界无限扩展的功能 执行后会自动生成TANXL_STATE_DATA文件并存放256: 16X16个地图单元数据 Build_Connect为true时会额外构建各区块的连接ID Begin_PosX/Y为地图起始左上角坐标
 	void Engine_Save_Infinite_State(bool Build_Connect = true, int Width = 16, int Height = 16, int Begin_PosX = 0, int Begin_PosY = 0);
 
+	//用于输出游戏当前地图存档数据信息
+	void Engine_Save_Instant_Output();
+	
 	//用于重新生成地图数据与引擎信息 仅在内存中已有数据时会生效 返回false时清理并生成失败
 	bool Engine_Save_Reset_Data();
 
