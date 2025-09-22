@@ -352,7 +352,7 @@ void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable
 void Tanxl_Engine::Engine_System_Set_Language(ECurren_Language Language)
 {
 	this->Tanxl_Engine_FontBase->Set_Language(Language);
-	this->Tanxl_Engine_FontBase->Comfirm_Language();
+	this->Tanxl_Engine_FontBase->Confirm_Language();
 }
 
 bool Tanxl_Engine::Engine_Should_Shut_Down()

@@ -52,7 +52,7 @@ public:
 
 	void Set_Language(ECurren_Language Language);
 
-	void Comfirm_Language();
+	void Confirm_Language();
 
 	ECurren_Language Get_Language();
 

@@ -28,6 +28,7 @@
 // 增加宏控制地图生成信息的输出
 // 增加根据输入状态控制地图调整的功能
 // 增加获取当前地图数据的接口
+// 移除地图中心点的记录
 
 #pragma once
 
@@ -45,6 +46,7 @@
 #define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
 #define _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_  0
 #define _TANXL_GAMESTATE_GENERATE_STATE_OUTPUT_       1
+#define _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_     0
 
 #endif
 
@@ -203,8 +205,11 @@ public:
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
 	Square_State& Get_Square_State();
+	Tanxl_Coord<float>& Get_State_Loc();
 	Tanxl_Coord<float>& Get_Screen_Distance();
 	Tanxl_Coord<float>& Get_Move_Distance();
+	double Get_Each_Width();
+	double Get_Each_Height();
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
@@ -230,19 +235,24 @@ public:
 	void Reload_Display_State(EState_Extend Extend_Dire);
 	void Reload_State_Data(int State_Length, glm::ivec2* StateInfor);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
-	void StateMove_Edge_Set(int Dist_Mid, int Stat_Loc, int Move_LocM, short Edge = 0, double Scale = 1);
+	void StateMove_Edge_Set(int Dist_Mid, int Move_LocM, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock(int State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
 	void Build_Connect(int State_Id);
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
+	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
+	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
 	bool Is_Adjust_While_Move();
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check);
+	bool Move_Adjust();
 	Tanxl_Coord<int> Get_Exac_Location();
+	Tanxl_Coord<int>& Get_New_Current();
+	Tanxl_Coord<int>& Get_Current_Move();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
 	// 获取上次移动触发的边沿
@@ -284,41 +294,49 @@ private:
 	unsigned _Data_Width;
 	// _Data_Height 单个地图区块纵向包含的单元个数
 	unsigned _Data_Height;
+	//_Each_Height 记录地图场景基本矩形的高度值
+	double _Each_Height{ 0 };
+	//_Each_Width 记录地图场景基本矩形的宽度值
+	double _Each_Width{ 0 };
 	// _State_WidthS 地图区块在横向的个数
 	int _State_WidthS{ 0 };
 	// _State_HeightS 地图区块在纵向的个数
 	int _State_HeightS{ 0 };
+	//_Current_Move 记录手动移动指定的当前坐标高度值
+	Tanxl_Coord<int> _Current_Move{ 0, 0 };
+	//_New_Current_Loc 移动导致改变的新坐标高度值
+	Tanxl_Coord<int> _New_Current_Loc{ 0, 0 };
 	// _Half_State_Length 半个地图单元的长度
 	Tanxl_Coord<float> _Half_State_Length{ 0.0f, 0.0f };
 	// _Exac_Location 玩家方块经过计算后的实际坐标
 	Tanxl_Coord<int> _Exac_Location;
 	//_GameState_Length 用于控制当前地图的显示宽/高度
 	Tanxl_Coord<int> _GameState_Length;
-	//_GameState_Adjust用于记录每次自动调整的距离
+	//_GameState_Adjust 用于记录每次自动调整的距离
 	float _GameState_Adjust;
-	//_Is_Data_Set用于标记是否从文件中获取到了地图数据
+	//_Is_Data_Set 用于标记是否从文件中获取到了地图数据
 	bool _Is_Data_Set;
-	//_Adjust_Enable用于标记是否启用了自动调整
+	//_Adjust_Enable 用于标记是否启用了自动调整
 	bool _Adjust_Enable;
-	//_Adjust_Enable用于标记是否启用了移动中自动调整
+	//_Adjust_Enable 用于标记是否启用了移动中自动调整
 	bool _Adjust_While_Move{ false };
-	//_Is_Adjusting用于标记是否正处于调整坐标中
+	//_Is_Adjusting 用于标记是否正处于调整坐标中
 	bool _Is_Adjusting;
-	//_Compile_Success用于标记输入的地图数据是否编译成功
+	//_Compile_Success 用于标记输入的地图数据是否编译成功
 	bool _Compile_Success;
-	//_Trigger_Mode用以标记是否启用了移动到地图边缘触发地图跟随移动的功能
+	//_Trigger_Mode 用以标记是否启用了移动到地图边缘触发地图跟随移动的功能
 	bool _Trigger_Mode{ false };
-	//_MState用于记录当前加载地图区域
+	//_MState 用于记录当前加载地图区域
 	Square_State _MState;
-	//_Distance_Screen_Mid用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
+	//_Distance_Screen_Mid 用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
 	int _Distance_Screen_Mid;
-	//_Distance_Move用于记录当前相对于原点的移动距离
+	//_Distance_Move 用于记录当前相对于原点的移动距离
 	int _Distance_Move;
-	//_CurrentMid用于记录当前地图中心的地图单元
-	StateUnit* _CurrentMid;
-	//_Extend_Mid_Id记录当前扩展世界中心点的编号
+	//_State_Loc 记录地图场景移动距离
+	int _State_Loc{};
+	//_Extend_Mid_Id 记录当前扩展世界中心点的编号
 	int _Extend_Mid_Id;
-	//_Data_Size地图数据大小
+	//_Data_Size 地图数据大小
 	int _Data_Size{ 0 };
 	std::vector<State_Policy*> _Policy;
 };

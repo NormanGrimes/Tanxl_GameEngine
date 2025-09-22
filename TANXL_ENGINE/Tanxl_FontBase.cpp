@@ -85,7 +85,7 @@ void FontBase::Set_Language(ECurren_Language Language)
 	this->_Internal_Language = Language;
 }
 
-void FontBase::Comfirm_Language()
+void FontBase::Confirm_Language()
 {
 	if (this->_Internal_Language == LANGUAGE_ENGLISH)
 	{

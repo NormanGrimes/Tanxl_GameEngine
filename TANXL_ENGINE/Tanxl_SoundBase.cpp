@@ -51,7 +51,7 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 		this->_Current_BackGround_Id = Begin_Id + static_cast<int>(this->_BackGround_Music_List.size()) - 1;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1);
-		this->_SoundEngine[1]->setSoundVolume(0.2f);
+		this->_SoundEngine[1]->setSoundVolume(0.5f);
 	}
 
 	if (!this->Sound_Playing(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1))
@@ -59,7 +59,7 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 		this->_Current_BackGround_Id++;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1);
-		this->_SoundEngine[1]->setSoundVolume(0.2f);
+		this->_SoundEngine[1]->setSoundVolume(0.5f);
 	}
 }
 

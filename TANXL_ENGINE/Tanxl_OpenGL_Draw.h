@@ -31,6 +31,11 @@
 // 增加获取当前游戏状态的接口
 // 修复游戏开始后版本号不会消失的问题
 // 增加更多俄语文本的支持
+// 两个计算后的地图坐标成员移动到地图模块
+// 记录地图场景移动距离的变量移入地图模块
+// 地图单元的边长移入地图模块保存
+// 移动坐标调整接口移动到地图模块
+// 修改绘制地图区域的接口移动到地图模块
 
 #pragma once
 
@@ -510,7 +515,6 @@ public:
 	void Set_Game_Status(EGame_Status Game_Status);
 	int Append_Texture(const char* Texture);
 	void HitEdge_Check(GameStateBase* State);
-	void Move_Adjust(GameStateBase* State);
 	//Update_Current 更新地图加载区块
 	void Update_Current();
 	void Update_State(GameStateBase* State, ECheck_Edge Check_Direction);
@@ -520,8 +524,6 @@ public:
 	void Enable_State_Adjust(bool Enable);
 	void State_Check_Event(GameStateBase* State);
 	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
-	//将绘制的地图整体沿Direction方向移动Times个地图单元长度
-	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times = 1);
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id = 0);
 	//用于第一次或重新加载整个地图场景
 	void Update_VertData(glm::ivec2* StateInfor);
@@ -559,25 +561,17 @@ private:
 	GLuint _Font_vbo[5];
 	GLuint _Inst_vbo[32];
 
-	//记录地图场景基本矩形的高度值
-	double _Each_Height{ 0 };
-	//记录地图场景基本矩形的宽度值
-	double _Each_Width{ 0 };
 	//触发地图移动事件时的方向移动距离占总距离的比率
 	float _Trigger_Ratio{ 1.0f };
 	Tanxl_Coord<float> _Location_Distance_Mid{ 0.0f, 0.0f };
 	Tanxl_Coord<float> _Location_Move_Distance{ 0.0f, 0.0f };
 	int _Current_Status{ 0 };
-	//记录移动导致的新坐标高度值
-	Tanxl_Coord<int> _New_Current_Loc{ 0, 0 };
 	//记录地图场景的高度与宽度基本矩形行数
 	Tanxl_Coord<int> _Scene_Int{ 0, 0 };
 	//窗口的宽/高度
 	Tanxl_Coord<int> _Screen_Length;
 	//记载额外加载的地图环数量
 	int _PreLoads;
-	//记录手动移动指定的当前X/Y轴基本矩形
-	Tanxl_Coord<int> _Current_Move{ 0, 0 };
 	//记录在地图初始化时 玩家方块的初始移动距离
 	Tanxl_Coord<int> _Pre_Move{ 3, 3 };
 	//记录需要绘制的生命值纹理之间的距离
@@ -588,8 +582,6 @@ private:
 	double _Middle_Frame{ 0 };
 	//最大的中间页面编号
 	int _Max_Middle_Frame{ 0 };
-	//记录地图场景移动距离
-	int _State_Loc;
 	//记录上次移动导致主角面向的方向
 	int _Insert_Status{ 0 };
 	//记录地图总显示单元个数
