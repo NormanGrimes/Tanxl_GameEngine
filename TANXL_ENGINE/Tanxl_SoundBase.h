@@ -19,6 +19,8 @@
 // 增加获取背景音乐是否播放的接口
 // 背景音乐使用独立的音源播放
 // 多个接口增加音源选择参数
+// 背景音乐音量降低到百分之三十
+// 增加接口用于随机选择背景音乐
 
 #pragma once
 
@@ -30,6 +32,7 @@
 #include <irrKlang/irrKlang.h>
 
 #include "Tanxl_EngineBase.h"
+#include "Tanxl_RandomBase.h"
 
 enum ESound_WAV
 {
@@ -66,6 +69,8 @@ public:
     void Stop_AllSound(int SoundEngine_Id = 0);
     // 包含对背景音乐的顺序播放功能 顺序播放功能需要持续调用
     void Play_BackGround_Music(int Begin_Id);
+
+    void Random_BackGround_Music();
 
     bool Sound_Playing(std::string Wav_File_Location, int SoundEngine_Id = 0);
 

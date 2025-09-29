@@ -51,7 +51,7 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 		this->_Current_BackGround_Id = Begin_Id + static_cast<int>(this->_BackGround_Music_List.size()) - 1;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1);
-		this->_SoundEngine[1]->setSoundVolume(0.5f);
+		this->_SoundEngine[1]->setSoundVolume(0.3f);
 	}
 
 	if (!this->Sound_Playing(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1))
@@ -59,8 +59,15 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 		this->_Current_BackGround_Id++;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1);
-		this->_SoundEngine[1]->setSoundVolume(0.5f);
+		this->_SoundEngine[1]->setSoundVolume(0.3f);
 	}
+}
+
+void SoundBase::Random_BackGround_Music()
+{
+	RandomBase* RB{ &RandomBase::GetRandomBase() };
+	this->_Current_BackGround_Id = RB->GenerateNum(static_cast<int>(time(0)));
+	this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 }
 
 bool SoundBase::Sound_Playing(std::string Wav_File_Location, int SoundEngine_Id)

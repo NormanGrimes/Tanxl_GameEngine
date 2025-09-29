@@ -29,6 +29,7 @@
 // 增加根据输入状态控制地图调整的功能
 // 增加获取当前地图数据的接口
 // 移除地图中心点的记录
+// 多个接口性能优化
 
 #pragma once
 
@@ -235,14 +236,14 @@ public:
 	void Reload_Display_State(EState_Extend Extend_Dire);
 	void Reload_State_Data(int State_Length, glm::ivec2* StateInfor);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
-	void StateMove_Edge_Set(int Dist_Mid, int Move_LocM, short Edge = 0, double Scale = 1);
+	void StateMove_Edge_Set(int Dist_Mid, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock(int State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
 	void Build_Connect(int State_Id);
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
-	void Move_State(GameStateBase* State, EMove_State_EventId Direction, int Times);
+	void Move_State(EMove_State_EventId Direction, int Times);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
@@ -250,9 +251,12 @@ public:
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check);
 	bool Move_Adjust();
+	bool Update_State(ECheck_Edge Check_Direction);
 	Tanxl_Coord<int> Get_Exac_Location();
 	Tanxl_Coord<int>& Get_New_Current();
 	Tanxl_Coord<int>& Get_Current_Move();
+	Tanxl_Coord<float>& Get_Location_Distance_Mid();
+	Tanxl_Coord<float>& Get_Location_Move_Distance();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
 	// 获取上次移动触发的边沿
@@ -312,6 +316,10 @@ private:
 	Tanxl_Coord<int> _Exac_Location;
 	//_GameState_Length 用于控制当前地图的显示宽/高度
 	Tanxl_Coord<int> _GameState_Length;
+	//_Location_Distance_Mid 方块离中心点的距离
+	Tanxl_Coord<float> _Location_Distance_Mid{ 0.0f, 0.0f };
+	//_Location_Move_Distance 方块移动的距离
+	Tanxl_Coord<float> _Location_Move_Distance{ 0.0f, 0.0f };
 	//_GameState_Adjust 用于记录每次自动调整的距离
 	float _GameState_Adjust;
 	//_Is_Data_Set 用于标记是否从文件中获取到了地图数据

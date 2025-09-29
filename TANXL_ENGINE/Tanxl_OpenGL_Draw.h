@@ -36,6 +36,10 @@
 // 地图单元的边长移入地图模块保存
 // 移动坐标调整接口移动到地图模块
 // 修改绘制地图区域的接口移动到地图模块
+// 玩家死亡后随机切换背景音乐
+// 移除记录手动移动状态的移动距离的变量
+// 两个地图更新接口移动到地图模块
+// 两个记录坐标的变量移入地图模块
 
 #pragma once
 
@@ -514,10 +518,7 @@ public:
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
 	int Append_Texture(const char* Texture);
-	void HitEdge_Check(GameStateBase* State);
-	//Update_Current 更新地图加载区块
-	void Update_Current();
-	void Update_State(GameStateBase* State, ECheck_Edge Check_Direction);
+	void HitEdge_Check(GameStateBase* State);;
 	void Update_Last_Location(GameStateBase* State);
 	//删除OpenGL窗口
 	void Destroy_Window();
@@ -563,8 +564,6 @@ private:
 
 	//触发地图移动事件时的方向移动距离占总距离的比率
 	float _Trigger_Ratio{ 1.0f };
-	Tanxl_Coord<float> _Location_Distance_Mid{ 0.0f, 0.0f };
-	Tanxl_Coord<float> _Location_Move_Distance{ 0.0f, 0.0f };
 	int _Current_Status{ 0 };
 	//记录地图场景的高度与宽度基本矩形行数
 	Tanxl_Coord<int> _Scene_Int{ 0, 0 };

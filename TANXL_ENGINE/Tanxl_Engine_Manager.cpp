@@ -240,7 +240,7 @@ void Tanxl_Engine::Engine_Insert_State_Update()
 		return;
 	this->Tanxl_Engine_InsertBase->GetInsert(this->Tanxl_Engine_OpenGL_Draw->Get_Window(), this->Tanxl_Engine_GameState);
 	this->Tanxl_Engine_InsertBase->GetMouseInput(this->Tanxl_Engine_OpenGL_Draw->Get_Window());
-	this->Tanxl_Engine_OpenGL_Draw->Update_Current();//更新地图加载区块
+	this->Tanxl_Engine_GameState->Update_State(CHECK_EDGE_CURR);//更新地图加载区块
 }
 
 Key_Unit* Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)

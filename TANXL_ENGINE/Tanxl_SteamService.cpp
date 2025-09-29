@@ -5,10 +5,10 @@ void Tanxl_Inventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* cal
 	bool bGotResult = false;
 	std::vector<SteamItemDetails_t> vecDetails;
 	uint32 count = 0;
-	if (SteamInventory()->GetResultItems(callback->m_handle, NULL, &count))
+	if (_Steam_Invetory->GetResultItems(callback->m_handle, NULL, &count))
 	{
 		vecDetails.resize(count);
-		bGotResult = SteamInventory()->GetResultItems(callback->m_handle, vecDetails.data(), &count);
+		bGotResult = _Steam_Invetory->GetResultItems(callback->m_handle, vecDetails.data(), &count);
 	}
 
 	if (bGotResult)
@@ -58,6 +58,124 @@ void Tanxl_Inventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* cal
 	}
 }
 
+Steam_Service& Steam_Service::GetServiceBase()
+{
+	static Steam_Service Service_Base;
+	return Service_Base;
+}
+
+inline ISteamUser* Steam_Service::GetSteamUser()
+{
+	if (NULL == _SteamUserStats || NULL == _SteamUser)// 是否已加载 Steam 若否,则我们无法获取统计
+		return nullptr;
+	if (!_SteamUser->BLoggedOn())// 用户是否已登录 若否,则我们无法获取统计
+		return nullptr;
+	if (this->_Steam_API_InitStatus == true)
+		return this->_SteamUser;
+	return nullptr;
+}
+
+inline ISteamUserStats* Steam_Service::GetSteamUserStats()
+{
+	if (this->_Steam_API_InitStatus == true)
+		return this->_SteamUserStats;
+	return nullptr;
+}
+
+inline ISteamInventory* Steam_Service::GetSteamInvetory()
+{
+	if (this->_Steam_API_InitStatus == true)
+		return this->_Steam_Invetory;
+	return nullptr;
+}
+
+bool Steam_Service::Reinit_Steam()
+{
+#if _STEAM_REINIT_ENABLE_
+	if (this->_Steam_API_InitStatus == false)
+	{
+		if (SteamAPI_RestartAppIfNecessary(1929530))
+		{
+			std::cout << "Fail to init SteamAPI_(1929530) !" << std::endl;
+#if _STEAM_ALPHA_VERSION_
+			exit(0);
+#endif
+		}
+		else
+		{
+			if (!SteamAPI_Init())
+			{
+				std::cout << "Fail to init Steam API !" << std::endl;
+			}
+			else
+			{
+				_Steam_API_InitStatus = true;
+				_Steam_Invetory = SteamInventory();
+				_Steam_Invetory->LoadItemDefinitions();
+
+				_SteamUser = SteamUser();
+				_SteamUserStats = SteamUserStats();
+
+				std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
+				std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
+				std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
+				std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
+				std::cout << "Current Language :" << SteamApps()->GetCurrentGameLanguage() << std::endl;
+
+				std::cout << "Steam API Init Success !" << std::endl;
+			}
+		}
+	}
+#endif
+	return this->_Steam_API_InitStatus;
+}
+
+bool Steam_Service::Get_InitStatus()
+{
+	return this->_Steam_API_InitStatus;
+}
+
+Steam_Service::Steam_Service() :_Steam_API_InitStatus(false),
+_SteamUser(nullptr), _SteamUserStats(nullptr), _Steam_Invetory(nullptr)
+{
+	if (SteamAPI_RestartAppIfNecessary(1929530))
+	{
+		std::cout << "Fail to init SteamAPI_(1929530) !" << std::endl;
+#if _STEAM_ALPHA_VERSION_
+		exit(0);
+#endif
+	}
+	else
+	{
+		if (!SteamAPI_Init())
+		{
+			std::cout << "Fail to init Steam API !" << std::endl;
+		}
+		else
+		{
+			_Steam_API_InitStatus = true;
+			_Steam_Invetory = SteamInventory();
+			_Steam_Invetory->LoadItemDefinitions();
+
+			_SteamUser = SteamUser();
+			_SteamUserStats = SteamUserStats();
+
+			std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
+			std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
+			std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
+			std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
+			std::cout << "Current Language :" << SteamApps()->GetCurrentGameLanguage() << std::endl;
+
+			std::cout << "Steam API Init Success !" << std::endl;
+		}
+	}
+}
+
+Steam_Service::~Steam_Service() {}
+Steam_Service::Steam_Service(const Steam_Service&) :_Steam_API_InitStatus(false),
+_SteamUser(nullptr), _SteamUserStats(nullptr), _Steam_Invetory(nullptr) {}
+Steam_Service& Steam_Service::operator=(const Steam_Service&) { return *this; }
+
 Tanxl_Achievement& Tanxl_Achievement::Get_AchievementBase()
 {
 	static Tanxl_Achievement* Achievement{ new Tanxl_Achievement() };
@@ -82,18 +200,20 @@ bool Tanxl_Achievement::CheckAchievement(Achievement_t& achievement)
 
 bool Tanxl_Achievement::RequestStats()
 {
-	if (NULL == SteamUserStats() || NULL == SteamUser())// 是否已加载 Steam 若否,则我们无法获取统计
+	if (NULL == _SteamUserStats || NULL == _SteamUser)// 是否已加载 Steam 若否,则我们无法获取统计
 		return false;
-	if (!SteamUser()->BLoggedOn())// 用户是否已登录 若否,则我们无法获取统计
+	if (!_SteamUser->BLoggedOn())// 用户是否已登录 若否,则我们无法获取统计
 		return false;
-	return SteamUserStats()->RequestCurrentStats();
+	return _SteamUserStats->RequestCurrentStats();
 }
 
 Tanxl_Achievement::Tanxl_Achievement()
 {
 	std::cout << "Achievement Init Called" << std::endl;
-	_SteamUser = SteamUser();
-	_SteamUserStats = SteamUserStats();
+	Steam_Service* Service{ &Steam_Service::GetServiceBase() };
+	Service->Reinit_Steam();
+	_SteamUser = Service->GetSteamUser();
+	_SteamUserStats = Service->GetSteamUserStats();
 }
 
 Tanxl_Inventory& Tanxl_Inventory::Get_InventoryBase()
@@ -163,34 +283,11 @@ ECurren_Language Tanxl_Inventory::Get_User_Language()
 Tanxl_Inventory::Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),
 _SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr), Tanxl_ClassBase("0.1")
 {
-	if (SteamAPI_RestartAppIfNecessary(1929530))
-	{
-		std::cout << "Fail to init SteamAPI_(1929530) !" << std::endl;
-#if _STEAM_ALPHA_VERSION_
-		exit(0);
-#endif
-	}
-	else
-	{
-		if (!SteamAPI_Init())
-		{
-			std::cout << "Fail to init Steam API !" << std::endl;
-		}
-		else
-		{
-			_SteamInventoryInit_Status = true;
-			_Steam_Invetory = SteamInventory();
-			_Steam_Invetory->LoadItemDefinitions();
-
-			std::cout << "Current user Name :" << SteamFriends()->GetPersonaName() << std::endl;
-			std::cout << "Current user State :" << SteamFriends()->GetPersonaState() << std::endl;
-			std::cout << "Current user SteamId :" << SteamApps()->GetAppOwner().GetAccountID() << std::endl;
-			std::cout << "Current user VAC Status :" << SteamApps()->BIsVACBanned() << std::endl;
-			std::cout << "Current Language :" << SteamApps()->GetCurrentGameLanguage() << std::endl;
-
-			std::cout << "Steam API Init Success !" << std::endl;
-		}
-	}
+	Steam_Service* Service{ &Steam_Service::GetServiceBase() };
+	Service->Reinit_Steam();
+	_Steam_Invetory = Service->GetSteamInvetory();
+	if (Service->Get_InitStatus())
+		_Steam_Invetory->LoadItemDefinitions();
 }
 
 Tanxl_Inventory::~Tanxl_Inventory() {};

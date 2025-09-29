@@ -18,6 +18,7 @@
 // 定义转移到源文件中
 // 库存组件改为继承自引擎基础类
 // 增加对玩家当前语言的获取
+// 增加基础类用于初始化SteamAPI
 
 #pragma once
 
@@ -33,6 +34,7 @@
 #include "Tanxl_EngineBase.h"
 
 #define _STEAM_ALPHA_VERSION_ 0
+#define _STEAM_REINIT_ENABLE_ 0
 
 
 enum ETanxl_Inventory_ItemDefId
@@ -75,6 +77,31 @@ static Achievement_t g_rgAchievements[] =
 {
 	_ACH_ID(NEW_ACHIEVEMENT_1_0, "Secret"),
 	_ACH_ID(NEW_ACHIEVEMENT_1_1, "100 Coins")
+};
+
+class Steam_Service
+{
+public:
+	static Steam_Service& GetServiceBase();
+
+	inline ISteamUser* GetSteamUser();
+	inline ISteamUserStats* GetSteamUserStats();
+	inline ISteamInventory* GetSteamInvetory();
+
+	bool Reinit_Steam();
+	bool Get_InitStatus();
+
+private:
+	Steam_Service();
+	~Steam_Service();
+	Steam_Service(const Steam_Service&);
+	Steam_Service& operator=(const Steam_Service&);
+
+	ISteamUser* _SteamUser;
+	ISteamUserStats* _SteamUserStats;
+	ISteamInventory* _Steam_Invetory;
+
+	bool _Steam_API_InitStatus;
 };
 
 class Tanxl_Achievement
