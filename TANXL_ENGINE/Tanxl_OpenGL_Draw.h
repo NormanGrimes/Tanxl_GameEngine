@@ -40,6 +40,9 @@
 // 移除记录手动移动状态的移动距离的变量
 // 两个地图更新接口移动到地图模块
 // 两个记录坐标的变量移入地图模块
+// 地图更新接口与事件触发接口分离
+// 地图单元检测功能移动到地图模块
+// 更新上次移动坐标接口移动到地图模块
 
 #pragma once
 
@@ -518,13 +521,11 @@ public:
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
 	int Append_Texture(const char* Texture);
-	void HitEdge_Check(GameStateBase* State);;
-	void Update_Last_Location(GameStateBase* State);
+	void HitEdge_Check(GameStateBase* State);
 	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
 	void State_Check_Event(GameStateBase* State);
-	void State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction);
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id = 0);
 	//用于第一次或重新加载整个地图场景
 	void Update_VertData(glm::ivec2* StateInfor);

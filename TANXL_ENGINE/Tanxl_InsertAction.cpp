@@ -92,7 +92,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	double MoveScale{ glfwGetTime() - LastTime };
 	LastTime = glfwGetTime();
-	OPD->Update_Last_Location(State);
+	State->Update_Last_Location();
 
 	if (this->_Is_Key_Enable == false)
 		return;
@@ -141,7 +141,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	State->Get_Move_Distance() += Insert_Length;
 	this->_LastMove += Insert_Length;
 
-	AutoCheck(State->Get_Screen_Distance()._Coord_X, State->Get_Screen_Distance()._Coord_Y, State->Get_Move_Distance()._Coord_X, State->Get_Move_Distance()._Coord_Y);
+	AutoCheck(State->Get_Screen_Distance(), State->Get_Move_Distance());
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
 	std::cout << "Move Distance X :" << State->Get_Move_Distance()._LocX << " -  Y :" << State->Get_Move_Distance()._LocY << std::endl;
 #endif
@@ -259,12 +259,11 @@ void InsertEventBase::Init_Default_Key()
 	this->RegistEvent(MOVE_DOWN);
 }
 
-void InsertEventBase::Update_Move_Max()
+void InsertEventBase::Update_Move_Max(float Trigger_Ratio)
 {
-	OpenGL_Draw* OD{ &OpenGL_Draw::GetOpenGLBase() };
-	this->_Max_float *= OD->Get_Trigger_Ratio();
-	this->_Max_float_Height *= OD->Get_Trigger_Ratio();
-	this->_Max_float_Width *= OD->Get_Trigger_Ratio();
+	this->_Max_float *= Trigger_Ratio;
+	this->_Max_float_Height *= Trigger_Ratio;
+	this->_Max_float_Width *= Trigger_Ratio;
 }
 
 void InsertEventBase::Set_Mouse_Pos(double LocationX, double LocationY)
@@ -313,7 +312,7 @@ const std::string InsertEventBase::Get_Version()
 	return Tanxl_ClassBase::Get_Version();
 }
 
-void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY)
+void InsertEventBase::AutoCheck(Tanxl_Coord<float>& Screen_Move, Tanxl_Coord<float>& Move_Distance)
 {
 	this->_Is_Reach_Edge = 0;
 
@@ -323,34 +322,34 @@ void InsertEventBase::AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float&
 	if (this->_Is_Max_Single)
 		this->_Max_float = this->_Max_float_Width;
 
-	if (Screen_MoveX > this->_Max_float)
+	if (Screen_Move._Coord_X > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 2;
-		Move_DistanceX -= (Screen_MoveX - this->_Max_float);
-		Screen_MoveX = this->_Max_float;
+		Move_Distance._Coord_X -= (Screen_Move._Coord_X - this->_Max_float);
+		Screen_Move._Coord_X = this->_Max_float;
 
 	}
-	else if (Screen_MoveX < -this->_Max_float)
+	else if (Screen_Move._Coord_X < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 1;
-		Move_DistanceX -= (Screen_MoveX + this->_Max_float);
-		Screen_MoveX = -this->_Max_float;
+		Move_Distance._Coord_X -= (Screen_Move._Coord_X + this->_Max_float);
+		Screen_Move._Coord_X = -this->_Max_float;
 	}
 
 	if (this->_Is_Max_Single)
 		this->_Max_float = this->_Max_float_Height;
 
-	if (Screen_MoveY > this->_Max_float)
+	if (Screen_Move._Coord_Y > this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 8;
-		Move_DistanceY -= (Screen_MoveY - this->_Max_float);
-		Screen_MoveY = this->_Max_float;
+		Move_Distance._Coord_Y -= (Screen_Move._Coord_Y - this->_Max_float);
+		Screen_Move._Coord_Y = this->_Max_float;
 	}
-	else if (Screen_MoveY < -this->_Max_float)
+	else if (Screen_Move._Coord_Y < -this->_Max_float)
 	{
 		this->_Is_Reach_Edge += 4;
-		Move_DistanceY -= (Screen_MoveY + this->_Max_float);
-		Screen_MoveY = -this->_Max_float;
+		Move_Distance._Coord_Y -= (Screen_Move._Coord_Y + this->_Max_float);
+		Screen_Move._Coord_Y = -this->_Max_float;
 	}
 #if _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_
 	std::cout << "this->_Margin_X " << this->_Margin_X << " this->_Margin_Y " << this->_Margin_X << std::endl;

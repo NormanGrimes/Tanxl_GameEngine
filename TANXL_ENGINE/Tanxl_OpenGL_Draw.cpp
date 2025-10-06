@@ -362,7 +362,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_LEFT);
 
 				if (State->Get_Exac_Location()._Coord_X >= -static_cast<int>(State->Get_DataWidth()) - 1)
-					State_Check_Block(State, CHECK_EDGE_LEFT);
+					if (State->State_Check_Block(CHECK_EDGE_LEFT))
+						this->_Is_State_Changed = true;
 			}
 		}
 		this->_Insert_Status = 0;
@@ -386,7 +387,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_RIGH);
 
 				if (State->Get_Exac_Location()._Coord_X <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
-					State_Check_Block(State, CHECK_EDGE_RIGH);
+					if (State->State_Check_Block(CHECK_EDGE_RIGH))
+						this->_Is_State_Changed = true;
 			}
 		}
 		this->_Insert_Status = 1;
@@ -410,7 +412,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_ABOV);
 
 				if (State->Get_Exac_Location()._Coord_Y >= -static_cast<int>(State->Get_DataHeight()) - 1)
-					State_Check_Block(State, CHECK_EDGE_ABOV);
+					if (State->State_Check_Block(CHECK_EDGE_ABOV))
+						this->_Is_State_Changed = true;
 			}
 		}
 		this->_Insert_Status = 2;
@@ -434,19 +437,13 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_BELO);
 
 				if (State->Get_Exac_Location()._Coord_Y <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
-					State_Check_Block(State, CHECK_EDGE_BELO);
+					if (State->State_Check_Block(CHECK_EDGE_BELO))
+						this->_Is_State_Changed = true;
 			}
 		}
 		this->_Insert_Status = 3;
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
-}
-
-void OpenGL_Draw::Update_Last_Location(GameStateBase* State)
-{
-	static int Dist_Mid{ State->Get_Distance_Screen_Id() };
-	State->Get_Location_Distance_Mid() = this->_LCB->Get_LocationS(Dist_Mid);
-	State->Get_Location_Move_Distance() = State->Get_Move_Distance();
 }
 
 void OpenGL_Draw::Destroy_Window()
@@ -469,108 +466,6 @@ int OpenGL_Draw::Get_Adjust_Status()
 int OpenGL_Draw::Get_PreLoad()
 {
 	return this->_PreLoads;
-}
-
-void OpenGL_Draw::State_Check_Block(GameStateBase* State, ECheck_Edge Check_Direction)
-{
-	static const float Check_Range{ 1.0f };
-	static double LastTime{ glfwGetTime() };
-	double DeltaTime{ glfwGetTime() - LastTime };
-	LastTime = glfwGetTime();
-
-	float Marg_Width{ static_cast<float>(State->Get_Each_Width() * 10) };
-	float Marg_Height{ static_cast<float>(State->Get_Each_Height() * 10) };
-
-	int State_Unit_Width{ static_cast<int>(State->Get_DataWidth()) + 1 };
-	int State_Unit_Height{ static_cast<int>(State->Get_DataHeight()) + 1 };
-
-	bool Reset{ State->Check_Edge_Reached(Check_Direction) };
-
-	if ((State->Get_State() == nullptr) ||
-		(State->Get_State()->Get_Extra_Status() == 1))
-	{
-		switch (Check_Direction)
-		{
-		case CHECK_EDGE_LEFT:
-		case CHECK_EDGE_RIGH:
-			State->Get_Screen_Distance()._Coord_X = State->Get_Location_Distance_Mid()._Coord_X;
-			State->Get_Move_Distance()._Coord_X = State->Get_Location_Move_Distance()._Coord_X;
-			break;
-		case CHECK_EDGE_BELO:
-		case CHECK_EDGE_ABOV:
-			State->Get_Screen_Distance()._Coord_Y = State->Get_Location_Distance_Mid()._Coord_Y;
-			State->Get_Move_Distance()._Coord_Y = State->Get_Location_Move_Distance()._Coord_Y;
-			break;
-		}
-
-		while (true)
-		{
-			State->Update_Move(0.0f, 0.0f, Check_Direction);
-			if ((State->Get_State() == nullptr) ||
-				(State->Get_State()->Get_Extra_Status() == 1))
-			{
-				std::cout << "Adjusting" << std::endl;
-				switch (Check_Direction)
-				{
-				case CHECK_EDGE_LEFT:
-					State->Get_Location_Distance_Mid()._Coord_X += static_cast<float>(Check_Range * DeltaTime);
-					State->Get_Location_Move_Distance()._Coord_X += static_cast<float>(Check_Range * DeltaTime);
-
-					State->Get_Screen_Distance()._Coord_X = State->Get_Location_Distance_Mid()._Coord_X;
-					State->Get_Move_Distance()._Coord_X = State->Get_Location_Move_Distance()._Coord_X;
-					break;
-				case CHECK_EDGE_RIGH:
-					State->Get_Location_Distance_Mid()._Coord_X -= static_cast<float>(Check_Range * DeltaTime);
-					State->Get_Location_Move_Distance()._Coord_X -= static_cast<float>(Check_Range * DeltaTime);
-
-					State->Get_Screen_Distance()._Coord_X = State->Get_Location_Distance_Mid()._Coord_X;
-					State->Get_Move_Distance()._Coord_X = State->Get_Location_Move_Distance()._Coord_X;
-					break;
-				case CHECK_EDGE_BELO:
-					State->Get_Location_Distance_Mid()._Coord_Y += static_cast<float>(Check_Range * DeltaTime);
-					State->Get_Location_Move_Distance()._Coord_Y += static_cast<float>(Check_Range * DeltaTime);
-
-					State->Get_Screen_Distance()._Coord_Y = State->Get_Location_Distance_Mid()._Coord_Y;
-					State->Get_Move_Distance()._Coord_Y = State->Get_Location_Move_Distance()._Coord_Y;
-					break;
-				case CHECK_EDGE_ABOV:
-					State->Get_Location_Distance_Mid()._Coord_Y -= static_cast<float>(Check_Range * DeltaTime);
-					State->Get_Location_Move_Distance()._Coord_Y -= static_cast<float>(Check_Range * DeltaTime);
-
-					State->Get_Screen_Distance()._Coord_Y = State->Get_Location_Distance_Mid()._Coord_Y;
-					State->Get_Move_Distance()._Coord_Y = State->Get_Location_Move_Distance()._Coord_Y;
-					break;
-				}
-			}
-			else
-				break;
-		}
-	}
-	else if (Reset)
-	{
-		std::cout << "Enter Adjust Map" << std::endl;
-
-		switch (Check_Direction)
-		{
-		case CHECK_EDGE_LEFT:
-			State->Get_Move_Distance()._Coord_X += Marg_Width;
-			break;
-		case CHECK_EDGE_RIGH:
-			State->Get_Move_Distance()._Coord_X -= Marg_Width;
-			break;
-		case CHECK_EDGE_BELO:
-			State->Get_Move_Distance()._Coord_Y += Marg_Height;
-			break;
-		case CHECK_EDGE_ABOV:
-			State->Get_Move_Distance()._Coord_Y -= Marg_Height;
-			break;
-		}
-
-		State->Update_Move(0.0f, 0.0f, Check_Direction);
-
-		if (State->Update_State(Check_Direction))
-			this->_Is_State_Changed = true;
-	}
 }
 
 void OpenGL_Draw::State_Check_Event(GameStateBase* State)
@@ -610,8 +505,6 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			MC->Add_Money(1);
 
 			CheckUnit->Set_Status(0);
-			State->Reload_State_Data(this->_State_Length, this->_StateInfor);
-			Update_VertData(this->_StateInfor);
 		}
 	}
 	else if (Unit_State_Id == 3)
@@ -620,8 +513,6 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 		MC->Add_Money(5);
 
 		CheckUnit->Set_Status(0);
-		State->Reload_State_Data(this->_State_Length, this->_StateInfor);
-		Update_VertData(this->_StateInfor);
 	}
 	else if (Unit_State_Id == 4)
 	{
@@ -630,8 +521,6 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			SB->Play_Sound(SOUND_SYSTEM_CALL);
 			MC->RestoreHealth(1);
 			CheckUnit->Set_Status(0);
-			State->Reload_State_Data(this->_State_Length, this->_StateInfor);
-			Update_VertData(this->_StateInfor);
 		}
 	}
 	else if (Unit_State_Id == 5)
@@ -649,12 +538,8 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 			SB->Play_Sound(SOUND_ACHIEVEMENT);
 		}
 
-		State->Reload_State_Data(this->_State_Length, this->_StateInfor);
-		Update_VertData(this->_StateInfor);
-
 		std::cout << "Secret Core Found !" << std::endl;
 	}
-	//std::cout << "Health :" << MC->Check_Health() << std::endl;
 }
 
 void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id)
@@ -1003,6 +888,9 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		State_Check_Event(State);
 
+		State->Reload_State_Data(this->_State_Length, this->_StateInfor);
+		Update_VertData(this->_StateInfor);
+
 		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
 
 		double Current_Height{ (static_cast<double>(this->_LCB->Get_LocationY(Dist_Mid)) * 2 + 1) / (State->Get_Each_Height()) };
@@ -1010,8 +898,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if (State->Get_Adjust_Flag())//Auto Adjust Part
 		{
-			Temp_MoveY = State->Set_ExacHeight(Current_Height, this->_LCB->Get_LocationY(Dist_Mid), State->Get_State_Loc()._Coord_Y, MoveScale);
-			Temp_MoveX = State->Set_ExacWidth(Current_Width, this->_LCB->Get_LocationX(Dist_Mid), State->Get_State_Loc()._Coord_X, MoveScale);
+			Temp_MoveY = State->Set_ExacHeight(Current_Height, this->_LCB->Get_LocationY(Dist_Mid), MoveScale);
+			Temp_MoveX = State->Set_ExacWidth(Current_Width, this->_LCB->Get_LocationX(Dist_Mid), MoveScale);
 		}
 		
 		if (State->Move_Adjust())

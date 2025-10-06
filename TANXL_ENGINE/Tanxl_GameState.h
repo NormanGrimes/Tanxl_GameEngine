@@ -30,6 +30,8 @@
 // 增加获取当前地图数据的接口
 // 移除地图中心点的记录
 // 多个接口性能优化
+// 微调地图功能去掉一个参数
+// 地图微调功能性能优化
 
 #pragma once
 
@@ -60,6 +62,9 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_OpenGL_Render.h"
+#include "Tanxl_GameObject.h"
+#include "Tanxl_SoundBase.h"
+#include "Tanxl_SteamService.h"
 
 class StateUnit;
 
@@ -244,6 +249,7 @@ public:
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
 	void Move_State(EMove_State_EventId Direction, int Times);
+	void Update_Last_Location();
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
@@ -252,6 +258,7 @@ public:
 	bool Check_Edge_Reached(ECheck_Edge Check);
 	bool Move_Adjust();
 	bool Update_State(ECheck_Edge Check_Direction);
+	bool State_Check_Block(ECheck_Edge Check_Direction);
 	Tanxl_Coord<int> Get_Exac_Location();
 	Tanxl_Coord<int>& Get_New_Current();
 	Tanxl_Coord<int>& Get_Current_Move();
@@ -261,8 +268,8 @@ public:
 	int Get_Distance_Move_Id();
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
-	float Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
-	float Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, double Scale = 1.0);
+	float Set_ExacHeight(double Current, float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(double Current, float& MoveState, double Scale = 1.0);
 	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数
 	unsigned Get_DataHeight()const;
 	//↓Get_DataWidth : 获取单个地图区块横向包含的单元个数

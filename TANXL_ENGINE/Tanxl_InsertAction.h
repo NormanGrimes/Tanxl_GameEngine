@@ -2,6 +2,8 @@
 // LAST_UPDATE 2023-12-05 15:17
 // 简化检测输入功能中数值计算部分
 // 增加鼠标坐标的设置与获取接口
+// 更新最大移动距离的接口不再依赖绘制模块进行更新
+// 自动检测接口参数简化
 
 #pragma once
 
@@ -105,11 +107,11 @@ public:
 	// 初始化默认提供的八个移动按键
 	void Init_Default_Key();
 	// 更新最大移动距离
-	void Update_Move_Max();
+	void Update_Move_Max(float Trigger_Ratio);
 	void Set_Mouse_Pos(double LocationX, double LocationY);
 private:
 	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘
-	void AutoCheck(float& Screen_MoveX, float& Screen_MoveY, float& Move_DistanceX, float& Move_DistanceY);
+	void AutoCheck(Tanxl_Coord<float>& Screen_Move, Tanxl_Coord<float>& Move_Distance);
 	//_KeyEventS 所有已注册输入事件的容器
 	std::vector<Key_Event*> _KeyEventS;
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离

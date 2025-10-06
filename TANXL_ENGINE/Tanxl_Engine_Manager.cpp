@@ -104,7 +104,7 @@ void Tanxl_Engine::Engine_Insert_State_MoveWith(bool Enable, float Compare_Ratio
 {
 	this->Tanxl_Engine_GameState->Set_Trigger_Mode(Enable);
 	this->Tanxl_Engine_OpenGL_Draw->Set_Trigger_Range(Compare_Ratio);
-	this->Tanxl_Engine_InsertBase->Update_Move_Max();
+	this->Tanxl_Engine_InsertBase->Update_Move_Max(this->Tanxl_Engine_OpenGL_Draw->Get_Trigger_Ratio());
 }
 
 void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move)

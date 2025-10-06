@@ -343,13 +343,14 @@ double GameStateBase::Get_Each_Height()
 	return this->_Each_Height;
 }
 
-float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& State_MoveY, double Scale)
+float GameStateBase::Set_ExacHeight(double Current, float& MoveState, double Scale)
 {
 	if (_Adjust_Enable == false)
 		return 0.0f;
+	float& State_MoveY{ this->Get_State_Loc()._Coord_Y };
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
-	if ((float)Current < ((float)this->Get_StateLength()._Coord_Y) / 2)
+	if (static_cast<float>(Current) < static_cast<float>(this->_GameState_Length._Coord_Y) * 0.5f)
 	{
 		if (MoveState < 0 && MoveState + Temp_GameState_Adjust > 0)
 		{
@@ -368,7 +369,7 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 		}
 		this->_Is_Adjusting = true;
 	}
-	else if ((float)Current > ((float)this->_GameState_Length._Coord_Y) / 2)
+	else if (static_cast<float>(Current) > static_cast<float>(this->_GameState_Length._Coord_Y) * 0.5f)
 	{
 		if (MoveState > Temp_GameState_Adjust)
 		{
@@ -391,13 +392,14 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, float& Sta
 	return Temp_Move;
 }
 
-float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& State_MoveX, double Scale)
+float GameStateBase::Set_ExacWidth(double Current, float& MoveState, double Scale)
 {
 	if (_Adjust_Enable == false)
 		return 0.0f;
+	float& State_MoveX{ this->Get_State_Loc()._Coord_X };
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
-	if ((float)Current < ((float)this->Get_StateLength()._Coord_X) / 2)
+	if (static_cast<float>(Current) < static_cast<float>(this->_GameState_Length._Coord_X) * 0.5f)
 	{
 		if (-MoveState < 0 && (Temp_GameState_Adjust + -MoveState > 0))//微调小于最小值的情况 直接调整到屏幕中间
 		{
@@ -418,7 +420,7 @@ float GameStateBase::Set_ExacWidth(double Current, float& MoveState, float& Stat
 		}
 		this->_Is_Adjusting = true;
 	}
-	else if ((float)Current > ((float)this->_GameState_Length._Coord_X) / 2)
+	else if (static_cast<float>(Current) > static_cast<float>(this->_GameState_Length._Coord_X) * 0.5f)
 	{
 		if (MoveState > Temp_GameState_Adjust)
 		{
@@ -916,6 +918,13 @@ void GameStateBase::Move_State(EMove_State_EventId Direction, int Times)
 {
 	while (Times--)
 		this->Get_Square_State().Set_Move_State(Direction);
+}
+
+void GameStateBase::Update_Last_Location()
+{
+	static int Dist_Mid{ this->Get_Distance_Screen_Id() };
+	this->_Location_Distance_Mid = LocationBase::GetLocationBase().Get_LocationS(Dist_Mid);
+	this->_Location_Move_Distance = this->Get_Move_Distance();
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :
@@ -1436,6 +1445,111 @@ bool GameStateBase::Update_State(ECheck_Edge Check_Direction)
 		this->Move_State(MoveToNH, State_Unit_Height);
 		Is_State_Changed = true;
 		break;
+	}
+	return Is_State_Changed;
+}
+
+bool GameStateBase::State_Check_Block(ECheck_Edge Check_Direction)
+{
+	bool Is_State_Changed{ false };
+	float Check_Range{ 1.0f };
+	static double LastTime{ glfwGetTime() };
+	double DeltaTime{ glfwGetTime() - LastTime };
+	LastTime = glfwGetTime();
+
+	float Marg_Width{ static_cast<float>(this->_Each_Width * 10) };
+	float Marg_Height{ static_cast<float>(this->_Each_Height * 10) };
+
+	int State_Unit_Width{ static_cast<int>(this->_Data_Width) + 1 };
+	int State_Unit_Height{ static_cast<int>(this->_Data_Height) + 1 };
+
+	bool Reset{ this->Check_Edge_Reached(Check_Direction) };
+
+	if ((this->Get_State() == nullptr) ||
+		(this->Get_State()->Get_Extra_Status() == 1))
+	{
+		switch (Check_Direction)
+		{
+		case CHECK_EDGE_LEFT:
+		case CHECK_EDGE_RIGH:
+			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
+			this->Get_Move_Distance()._Coord_X = this->_Location_Move_Distance._Coord_X;
+			break;
+		case CHECK_EDGE_BELO:
+		case CHECK_EDGE_ABOV:
+			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			this->Get_Move_Distance()._Coord_Y = this->_Location_Move_Distance._Coord_Y;
+			break;
+		}
+
+		while (true)
+		{
+			this->Update_Move(0.0f, 0.0f, Check_Direction);
+			if ((this->Get_State() == nullptr) ||
+				(this->Get_State()->Get_Extra_Status() == 1))
+			{
+				std::cout << "Adjusting" << std::endl;
+				Check_Range = static_cast<float>(Check_Range * DeltaTime);
+				switch (Check_Direction)
+				{
+				case CHECK_EDGE_LEFT:
+					this->Get_Location_Distance_Mid()._Coord_X += Check_Range;
+					this->Get_Location_Move_Distance()._Coord_X += Check_Range;
+
+					this->Get_Screen_Distance()._Coord_X = this->Get_Location_Distance_Mid()._Coord_X;
+					this->Get_Move_Distance()._Coord_X = this->Get_Location_Move_Distance()._Coord_X;
+					break;
+				case CHECK_EDGE_RIGH:
+					this->Get_Location_Distance_Mid()._Coord_X -= Check_Range;
+					this->Get_Location_Move_Distance()._Coord_X -= Check_Range;
+
+					this->Get_Screen_Distance()._Coord_X = this->Get_Location_Distance_Mid()._Coord_X;
+					this->Get_Move_Distance()._Coord_X = this->Get_Location_Move_Distance()._Coord_X;
+					break;
+				case CHECK_EDGE_BELO:
+					this->Get_Location_Distance_Mid()._Coord_Y += Check_Range;
+					this->Get_Location_Move_Distance()._Coord_Y += Check_Range;
+
+					this->Get_Screen_Distance()._Coord_Y = this->Get_Location_Distance_Mid()._Coord_Y;
+					this->Get_Move_Distance()._Coord_Y = this->Get_Location_Move_Distance()._Coord_Y;
+					break;
+				case CHECK_EDGE_ABOV:
+					this->Get_Location_Distance_Mid()._Coord_Y -= Check_Range;
+					this->Get_Location_Move_Distance()._Coord_Y -= Check_Range;
+
+					this->Get_Screen_Distance()._Coord_Y = this->Get_Location_Distance_Mid()._Coord_Y;
+					this->Get_Move_Distance()._Coord_Y = this->Get_Location_Move_Distance()._Coord_Y;
+					break;
+				}
+			}
+			else
+				break;
+		}
+	}
+	else if (Reset)
+	{
+		std::cout << "Enter Adjust Map" << std::endl;
+
+		switch (Check_Direction)
+		{
+		case CHECK_EDGE_LEFT:
+			this->Get_Move_Distance()._Coord_X += Marg_Width;
+			break;
+		case CHECK_EDGE_RIGH:
+			this->Get_Move_Distance()._Coord_X -= Marg_Width;
+			break;
+		case CHECK_EDGE_BELO:
+			this->Get_Move_Distance()._Coord_Y += Marg_Height;
+			break;
+		case CHECK_EDGE_ABOV:
+			this->Get_Move_Distance()._Coord_Y -= Marg_Height;
+			break;
+		}
+
+		this->Update_Move(0.0f, 0.0f, Check_Direction);
+
+		if (this->Update_State(Check_Direction))
+			Is_State_Changed = true;
 	}
 	return Is_State_Changed;
 }
