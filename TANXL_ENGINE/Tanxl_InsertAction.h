@@ -4,6 +4,7 @@
 // 增加鼠标坐标的设置与获取接口
 // 更新最大移动距离的接口不再依赖绘制模块进行更新
 // 自动检测接口参数简化
+// 上次移动距离的记录移入地图模块
 
 #pragma once
 
@@ -30,6 +31,7 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameTips.h"
 #include "Tanxl_EngineBase.h"
+#include "Tanxl_LocationBase.h"
 
 struct Key_Unit
 {
@@ -71,12 +73,12 @@ public:
 	static InsertEventBase& GetInsertBase();
 	//自动根据已知信息返回方块能移动的最大范围 公式 1 - ( 1 / 游戏地图边长（方块数）)
 	float Get_AutoFloat(int Blocks);
-	float Get_LastMove_X();
-	float Get_LastMove_Y();
 	//获取当前是否按下了按键 并重置此变量状态为未按下
 	bool Get_Key_Pressed();
 	//删除指定名称的输入按键功能
 	bool RemoveEvent(std::string Event_Name);
+	//检测是否有按键按下
+	bool Check_Key_Press(GLFWwindow* Window);
 	//获取到当前移动操作是否导致移动到地图边缘 调用后会重置成员内容为否
 	short Get_Reach_Edge();
 	const std::string Get_Version();
@@ -126,8 +128,6 @@ private:
 	bool _Is_Key_Pressed;
 	//_Is_Key_Enable 用于标记当前是否响应输入
 	bool _Is_Key_Enable;
-	//_LastMove 代表当前主控制物品最近一次移动的X/Y坐标移动距离
-	Tanxl_Coord<float> _LastMove;
 	//_Max_float_Height 代表当前主控制物品在Y轴的最大移动距离
 	float _Max_float_Height;
 	//_Max_float_Width 代表当前主控制物品在X轴的最大移动距离

@@ -335,17 +335,14 @@ int OpenGL_Draw::Append_Texture(const char* Texture)
 	return Id + OffSet;
 }
 
-void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
+short OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 {
-	//示例提供八个按键操作事件 （单例模式于其他地方定义）
-	InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
-
 	static double State_Data_Width{ State->Get_DataWidth() * State->Get_Each_Width() * 2 + State->Get_Each_Width() };
 	static double State_Data_Height{ State->Get_DataHeight() * State->Get_Each_Height() * 2 + State->Get_Each_Height() };
 
 	static int Exac_Mov{ State->Get_Distance_Move_Id() };
 
-	if (IEB->Get_LastMove_X() < 0)
+	if (State->Get_Last_Move()._Coord_X < 0)
 	{
 		if (this->_LCB->Get_LocationX(Exac_Mov) < -static_cast<int>(State->Get_DataWidth()) - 1)
 		{
@@ -359,7 +356,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_LEFT);
+				State->Update_Move(State->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_LEFT);
 
 				if (State->Get_Exac_Location()._Coord_X >= -static_cast<int>(State->Get_DataWidth()) - 1)
 					if (State->State_Check_Block(CHECK_EDGE_LEFT))
@@ -367,10 +364,9 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			}
 		}
 		this->_Insert_Status = 0;
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
 
-	if (IEB->Get_LastMove_X() > 0)
+	if (State->Get_Last_Move()._Coord_X > 0)
 	{
 		if ((this->_LCB->Get_LocationX(Exac_Mov) > State_Data_Width))
 		{
@@ -384,7 +380,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(IEB->Get_LastMove_X(), 0.0f, CHECK_EDGE_RIGH);
+				State->Update_Move(State->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_RIGH);
 
 				if (State->Get_Exac_Location()._Coord_X <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
 					if (State->State_Check_Block(CHECK_EDGE_RIGH))
@@ -392,10 +388,9 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			}
 		}
 		this->_Insert_Status = 1;
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
 
-	if (IEB->Get_LastMove_Y() > 0)
+	if (State->Get_Last_Move()._Coord_Y > 0)
 	{
 		if ((this->_LCB->Get_LocationY(Exac_Mov) > State->Get_DataHeight() + 1))
 		{
@@ -409,7 +404,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_ABOV);
+				State->Update_Move(0.0f, State->Get_Last_Move()._Coord_Y, CHECK_EDGE_ABOV);
 
 				if (State->Get_Exac_Location()._Coord_Y >= -static_cast<int>(State->Get_DataHeight()) - 1)
 					if (State->State_Check_Block(CHECK_EDGE_ABOV))
@@ -417,10 +412,9 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			}
 		}
 		this->_Insert_Status = 2;
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
 
-	if (IEB->Get_LastMove_Y() < 0)
+	if (State->Get_Last_Move()._Coord_Y < 0)
 	{
 		if (this->_LCB->Get_LocationY(Exac_Mov) < -State_Data_Height)
 		{
@@ -434,7 +428,7 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				State->Update_Move(0.0f, IEB->Get_LastMove_Y(), CHECK_EDGE_BELO);
+				State->Update_Move(0.0f, State->Get_Last_Move()._Coord_Y, CHECK_EDGE_BELO);
 
 				if (State->Get_Exac_Location()._Coord_Y <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
 					if (State->State_Check_Block(CHECK_EDGE_BELO))
@@ -442,8 +436,8 @@ void OpenGL_Draw::HitEdge_Check(GameStateBase* State)
 			}
 		}
 		this->_Insert_Status = 3;
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 	}
+	return _Insert_Status;
 }
 
 void OpenGL_Draw::Destroy_Window()
@@ -586,17 +580,6 @@ void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat sca
 float OpenGL_Draw::Get_Trigger_Ratio()
 {
 	return this->_Trigger_Ratio;
-}
-
-bool OpenGL_Draw::Check_Key_Press()
-{
-	for (int i{ 32 }; i < 96; ++i)
-		if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-			return true;
-	for (int i{ 256 }; i < 348; ++i)
-		if (glfwGetKey(Get_Window(), i) == GLFW_PRESS)
-			return true;
-	return false;
 }
 
 EGame_Status OpenGL_Draw::Get_Game_Status()
@@ -765,11 +748,6 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			RenderText(Tips->GetTips(), 70.0f, 250.0f, 0.8f, glm::vec3(0.4, 0.7f, 0.9f));
 		else
 			RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
-
-		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
-			RenderText("S Rozhdestvom", 210.0f, 710.0f, 1.3f, glm::vec3(0.9, 0.3f, 0.3f), 2);
-		else
-			RenderText("Merry Christmas", 210.0f, 710.0f, 1.3f, glm::vec3(0.9, 0.3f, 0.3f), 2);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
@@ -821,7 +799,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 	if (_Draw_Status == 0)
 	{
-		if (Check_Key_Press())
+		if (IEB->Check_Key_Press(this->_Main_Window))
 		{
 			IEB->Init_Default_Key();
 			_Draw_Status = 5;
@@ -830,7 +808,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	}
 	else if (_Draw_Status == 2)
 	{
-		if (Check_Key_Press())
+		if (IEB->Check_Key_Press(this->_Main_Window))
 		{
 			_Draw_Status = 5;
 			this->_Middle_Frame = 0;
@@ -886,8 +864,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		HitEdge_Check(State);
 
-		State_Check_Event(State);
-
+		State->State_Check_Event();
 		State->Reload_State_Data(this->_State_Length, this->_StateInfor);
 		Update_VertData(this->_StateInfor);
 
@@ -904,6 +881,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		
 		if (State->Move_Adjust())
 			this->_Is_State_Changed = true;
+
+		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 
 		glProgramUniform1f(_Adjst_RenderingProgram, 2, this->_LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
 		glProgramUniform1f(_Adjst_RenderingProgram, 3, this->_LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//

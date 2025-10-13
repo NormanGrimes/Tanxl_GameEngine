@@ -43,6 +43,9 @@
 // 地图更新接口与事件触发接口分离
 // 地图单元检测功能移动到地图模块
 // 更新上次移动坐标接口移动到地图模块
+// 检测按键按下的功能移动到输入模块
+// 碰撞检测接口改为返回短整形变量
+// 事件检测功能移入地图模块
 
 #pragma once
 
@@ -521,7 +524,7 @@ public:
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
 	int Append_Texture(const char* Texture);
-	void HitEdge_Check(GameStateBase* State);
+	short HitEdge_Check(GameStateBase* State);
 	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
@@ -534,8 +537,6 @@ public:
 	int Get_PreLoad();
 	//获取移动触发地图移动的距离与半地图距离的比值
 	float Get_Trigger_Ratio();
-	//检测是否有按键按下
-	bool Check_Key_Press();
 	EGame_Status Get_Game_Status();
 	//获取OpenGL窗口
 	GLFWwindow* Get_Window()const;
@@ -583,7 +584,7 @@ private:
 	//最大的中间页面编号
 	int _Max_Middle_Frame{ 0 };
 	//记录上次移动导致主角面向的方向
-	int _Insert_Status{ 0 };
+	short _Insert_Status{ 0 };
 	//记录地图总显示单元个数
 	int _State_Length{ 0 };
 	//当前此模块的版本号

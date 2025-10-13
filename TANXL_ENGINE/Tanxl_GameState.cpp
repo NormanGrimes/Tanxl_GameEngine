@@ -333,6 +333,11 @@ Tanxl_Coord<float>& GameStateBase::Get_Move_Distance()
 	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move);
 }
 
+Tanxl_Coord<float>& GameStateBase::Get_Last_Move()
+{
+	return LocationBase::GetLocationBase().Get_LocationS(this->_Last_Move);
+}
+
 double GameStateBase::Get_Each_Width()
 {
 	return this->_Each_Width;
@@ -814,8 +819,6 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 
 void GameStateBase::StateMove_Edge_Set(int Dist_Mid, short Edge, double Scale)//Reach Screen Edge : Then push screen to move
 {
-	LocationBase* LCB{ &LocationBase::GetLocationBase() };
-
 	int Moves{};
 	if (_Trigger_Mode)
 		Moves = this->Auto_Update_Trigger(Edge);
@@ -927,6 +930,81 @@ void GameStateBase::Update_Last_Location()
 	this->_Location_Move_Distance = this->Get_Move_Distance();
 }
 
+void GameStateBase::State_Check_Event()
+{
+	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
+	static GameObject* MC{ Main_Character::Get_Main_Character() };
+	static bool Achievement{ true };
+	this->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
+	StateUnit* CheckUnit{ this->Get_State() };
+	if (!CheckUnit)
+		return;
+	int Unit_State_Id{ CheckUnit->Get_Extra_Status() };
+
+	AC->CheckAchievement(g_rgAchievements[1]);
+
+	if ((MC->Get_Money() >= 100) && Achievement)
+	{
+		Achievement = false;
+		if (AC->RequestStats())
+		{
+			std::cout << "Achievement Unlocked !" << std::endl;
+			AC->UnlockAchievement(g_rgAchievements[1]);
+			SB->Play_Sound(SOUND_ACHIEVEMENT);
+		}
+		else
+		{
+			std::cout << "Achievement Request Fail !" << std::endl;
+		}
+	}
+
+	if (Unit_State_Id == 2)
+	{
+		if (MC->Get_Is_Alive())
+		{
+			SB->Play_Sound(SOUND_EVENT_START);
+			MC->TakeDamage(1);
+			MC->Add_Money(1);
+
+			CheckUnit->Set_Status(0);
+		}
+	}
+	else if (Unit_State_Id == 3)
+	{
+		SB->Play_Sound(SOUND_RESTORE_HEALTH);
+		MC->Add_Money(5);
+
+		CheckUnit->Set_Status(0);
+	}
+	else if (Unit_State_Id == 4)
+	{
+		if (MC->Check_Health() < MC->Get_MaxHealth())
+		{
+			SB->Play_Sound(SOUND_SYSTEM_CALL);
+			MC->RestoreHealth(1);
+			CheckUnit->Set_Status(0);
+		}
+	}
+	else if (Unit_State_Id == 5)
+	{
+		static int Internal_Cnt{ 0 };
+		Internal_Cnt++;
+		SB->Play_Sound(SOUND_SECRET_CORE);
+		CheckUnit->Set_Status(0);
+
+		if (Internal_Cnt == 4)
+		{
+			Internal_Cnt = 0;
+			std::cout << "Achievement Unlocked !" << std::endl;
+			AC->UnlockAchievement(g_rgAchievements[0]);
+			SB->Play_Sound(SOUND_ACHIEVEMENT);
+		}
+
+		std::cout << "Secret Core Found !" << std::endl;
+	}
+}
+
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Length(Width, Height), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
 	_MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
@@ -936,6 +1014,7 @@ GameStateBase::GameStateBase(int Width, int Height) :
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
 	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
 	this->_State_Loc = LCB->New_Location_set("State_Move_Location");
+	this->_Last_Move = LCB->New_Location_set("Last_Move");
 
 	this->_Each_Height = 2.0f / this->_GameState_Length._Coord_Y;//10 0.2
 	this->_Each_Width = 2.0f / this->_GameState_Length._Coord_X;//10 0.2
@@ -1235,6 +1314,7 @@ _Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(f
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
 	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
 	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
+	this->_Last_Move = LCB->New_Location_set("Last_Move");
 
 	this->_Each_Height = 2.0f / this->_GameState_Length._Coord_Y;//10 0.2
 	this->_Each_Width = 2.0f / this->_GameState_Length._Coord_X;//10 0.2
@@ -1488,8 +1568,10 @@ bool GameStateBase::State_Check_Block(ECheck_Edge Check_Direction)
 			if ((this->Get_State() == nullptr) ||
 				(this->Get_State()->Get_Extra_Status() == 1))
 			{
-				std::cout << "Adjusting" << std::endl;
+				std::cout << "Adjusting" << DeltaTime << std::endl;
 				Check_Range = static_cast<float>(Check_Range * DeltaTime);
+				if (Check_Range < 0.0035f)
+					Check_Range = 0.0035f;
 				switch (Check_Direction)
 				{
 				case CHECK_EDGE_LEFT:
@@ -1587,6 +1669,11 @@ int GameStateBase::Get_Distance_Screen_Id()
 int GameStateBase::Get_Distance_Move_Id()
 {
 	return this->_Distance_Move;
+}
+
+short GameStateBase::HitEdge_Check()
+{
+	return 0;
 }
 
 Tanxl_Coord<int> GameStateBase::Get_StateLength()const

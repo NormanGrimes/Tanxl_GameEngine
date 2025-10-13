@@ -32,6 +32,7 @@
 // 多个接口性能优化
 // 微调地图功能去掉一个参数
 // 地图微调功能性能优化
+// 单元检测接口修复一个可导致死循环的问题
 
 #pragma once
 
@@ -65,6 +66,7 @@
 #include "Tanxl_GameObject.h"
 #include "Tanxl_SoundBase.h"
 #include "Tanxl_SteamService.h"
+#include "Tanxl_GameObject.h"
 
 class StateUnit;
 
@@ -214,6 +216,7 @@ public:
 	Tanxl_Coord<float>& Get_State_Loc();
 	Tanxl_Coord<float>& Get_Screen_Distance();
 	Tanxl_Coord<float>& Get_Move_Distance();
+	Tanxl_Coord<float>& Get_Last_Move();
 	double Get_Each_Width();
 	double Get_Each_Height();
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
@@ -250,6 +253,7 @@ public:
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
 	void Move_State(EMove_State_EventId Direction, int Times);
 	void Update_Last_Location();
+	void State_Check_Event();
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
@@ -266,6 +270,7 @@ public:
 	Tanxl_Coord<float>& Get_Location_Move_Distance();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
+	short HitEdge_Check();
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	float Set_ExacHeight(double Current, float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
@@ -347,6 +352,8 @@ private:
 	int _Distance_Screen_Mid;
 	//_Distance_Move 用于记录当前相对于原点的移动距离
 	int _Distance_Move;
+	//_Last_Move 用于记录上次移动距离
+	int _Last_Move;
 	//_State_Loc 记录地图场景移动距离
 	int _State_Loc{};
 	//_Extend_Mid_Id 记录当前扩展世界中心点的编号
