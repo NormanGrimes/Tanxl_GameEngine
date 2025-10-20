@@ -267,6 +267,9 @@ void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 		else
 			Col(0x17);
 
+		if(StateInfor[i].y == 1)
+			Col(0x04);
+
 		std::cout << StateInfor[i].x << "-" << StateInfor[i].y;
 		Col();
 		if (i % (this->_Scene_Int._Coord_X + this->_PreLoads * 2) == 0)
@@ -318,14 +321,17 @@ void OpenGL_Draw::Set_Game_Status(EGame_Status Game_Status)
 	this->_Game_Status = Game_Status;
 }
 
-int OpenGL_Draw::Append_Texture(const char* Texture)
+int OpenGL_Draw::Append_Texture(const char* Texture, bool InstanceUse)
 {
 	const int OffSet{ 4 };
 	static unsigned Id{ 0 };
 
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
+	if (InstanceUse)
+		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::InstanceCoord), TanxlOD::InstanceCoord, GL_STATIC_DRAW);
+	else
+		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
 
 	glActiveTexture(GL_TEXTURE1 + Id + OffSet);
 
@@ -333,111 +339,6 @@ int OpenGL_Draw::Append_Texture(const char* Texture)
 	Id++;
 
 	return Id + OffSet;
-}
-
-short OpenGL_Draw::HitEdge_Check(GameStateBase* State)
-{
-	static double State_Data_Width{ State->Get_DataWidth() * State->Get_Each_Width() * 2 + State->Get_Each_Width() };
-	static double State_Data_Height{ State->Get_DataHeight() * State->Get_Each_Height() * 2 + State->Get_Each_Height() };
-
-	static int Exac_Mov{ State->Get_Distance_Move_Id() };
-
-	if (State->Get_Last_Move()._Coord_X < 0)
-	{
-		if (this->_LCB->Get_LocationX(Exac_Mov) < -static_cast<int>(State->Get_DataWidth()) - 1)
-		{
-			State->Get_Screen_Distance()._Coord_X = State->Get_Location_Distance_Mid()._Coord_X;
-			State->Get_Move_Distance()._Coord_X = State->Get_Location_Distance_Mid()._Coord_X;
-#if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "LEFT RES :" << State->Get_Location_Distance_Mid()._Coord_X << "__" << State->Get_Location_Move_Distance()._Coord_X << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				State->Update_Move(State->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_LEFT);
-
-				if (State->Get_Exac_Location()._Coord_X >= -static_cast<int>(State->Get_DataWidth()) - 1)
-					if (State->State_Check_Block(CHECK_EDGE_LEFT))
-						this->_Is_State_Changed = true;
-			}
-		}
-		this->_Insert_Status = 0;
-	}
-
-	if (State->Get_Last_Move()._Coord_X > 0)
-	{
-		if ((this->_LCB->Get_LocationX(Exac_Mov) > State_Data_Width))
-		{
-			State->Get_Screen_Distance()._Coord_X = State->Get_Location_Distance_Mid()._Coord_X;
-			State->Get_Move_Distance()._Coord_X = State->Get_Location_Distance_Mid()._Coord_X;
-#if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "RIGH RES :" << State->Get_Location_Distance_Mid()._Coord_X << "__" << State->Get_Location_Move_Distance()._Coord_X << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				State->Update_Move(State->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_RIGH);
-
-				if (State->Get_Exac_Location()._Coord_X <= static_cast<int>(State->Get_DataWidth()) * 2 + 1)
-					if (State->State_Check_Block(CHECK_EDGE_RIGH))
-						this->_Is_State_Changed = true;
-			}
-		}
-		this->_Insert_Status = 1;
-	}
-
-	if (State->Get_Last_Move()._Coord_Y > 0)
-	{
-		if ((this->_LCB->Get_LocationY(Exac_Mov) > State->Get_DataHeight() + 1))
-		{
-			State->Get_Screen_Distance()._Coord_Y = State->Get_Location_Distance_Mid()._Coord_Y;
-			State->Get_Move_Distance()._Coord_Y = State->Get_Location_Distance_Mid()._Coord_Y;
-#if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "ABOV RES :" << State->Get_Location_Distance_Mid()._Coord_Y << "__" << State->Get_Location_Move_Distance()._Coord_Y << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				State->Update_Move(0.0f, State->Get_Last_Move()._Coord_Y, CHECK_EDGE_ABOV);
-
-				if (State->Get_Exac_Location()._Coord_Y >= -static_cast<int>(State->Get_DataHeight()) - 1)
-					if (State->State_Check_Block(CHECK_EDGE_ABOV))
-						this->_Is_State_Changed = true;
-			}
-		}
-		this->_Insert_Status = 2;
-	}
-
-	if (State->Get_Last_Move()._Coord_Y < 0)
-	{
-		if (this->_LCB->Get_LocationY(Exac_Mov) < -State_Data_Height)
-		{
-			State->Get_Screen_Distance()._Coord_Y = State->Get_Location_Distance_Mid()._Coord_Y;
-			State->Get_Move_Distance()._Coord_Y = State->Get_Location_Move_Distance()._Coord_Y;
-#if _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "DOWN RES :" << State->Get_Location_Distance_Mid()._Coord_Y << "__" << State->Get_Location_Move_Distance()._Coord_Y << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				State->Update_Move(0.0f, State->Get_Last_Move()._Coord_Y, CHECK_EDGE_BELO);
-
-				if (State->Get_Exac_Location()._Coord_Y <= static_cast<int>(State->Get_DataHeight()) * 2 + 1)
-					if (State->State_Check_Block(CHECK_EDGE_BELO))
-						this->_Is_State_Changed = true;
-			}
-		}
-		this->_Insert_Status = 3;
-	}
-	return _Insert_Status;
 }
 
 void OpenGL_Draw::Destroy_Window()
@@ -752,6 +653,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
 			RenderText("Monetj: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
+		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
+			RenderText("Point: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 		else
 			RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
 
@@ -759,6 +662,8 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	{
 		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
 			RenderText("Igra zakonchena", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
+		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
+			RenderText("FIN DU JEU", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
 		else
 			RenderText("GAME OVER", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
 	}
@@ -766,6 +671,11 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 	if (VersionFontSize > -800.0f)
 		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
 			RenderText("VERSIQ IGRJ TANXL 2.73", VersionFontSize, 10.0f, 1.0f, glm::vec3(
+				static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
+				static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
+				0.5f));
+		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
+			RenderText("JEU TANXL VERSION 2.73", VersionFontSize, 10.0f, 1.0f, glm::vec3(
 				static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
 				static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
 				0.5f));
@@ -862,12 +772,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			<< State->Get_DataHeight() * this->_Each_Height << std::endl;
 #endif
 
-		HitEdge_Check(State);
-
-		State->State_Check_Event();
-		State->Reload_State_Data(this->_State_Length, this->_StateInfor);
-		Update_VertData(this->_StateInfor);
-
+		this->_Insert_Status = State->HitEdge_Check(this->_Is_State_Changed);
+		State->State_Check_Event(this->_Is_State_Changed);
 		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
 
 		double Current_Height{ (static_cast<double>(this->_LCB->Get_LocationY(Dist_Mid)) * 2 + 1) / (State->Get_Each_Height()) };

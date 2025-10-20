@@ -46,6 +46,8 @@
 // 检测按键按下的功能移动到输入模块
 // 碰撞检测接口改为返回短整形变量
 // 事件检测功能移入地图模块
+// 边缘碰撞检测功能移入地图模块
+// 添加纹理接口增加实例化添加选项
 
 #pragma once
 
@@ -57,10 +59,6 @@
 #if _ENABLE_TANXL_OPENGLDRAW_CONSOLE_OUTPUT_
 
 #define _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_     0
-#define _TANXL_OPENGLDRAW_START_MOVEADJUST_OUTPUT_      0
-#define _TANXL_OPENGLDRAW_EDGE_LIMIT_CHECK_OUTPUT_      0
-#define _TANXL_OPENGLDRAW_EDGE_LOCATION_VALUE_OUTPUT_   0
-#define _TANXL_OPENGLDRAW_RELOAD_STATE_SQUARE_OUTPUT_   0
 #define _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_     1
 
 #endif
@@ -100,6 +98,12 @@ namespace TanxlOD
 	static const char* TexStartMenu_01_1024x1024        { "Texture/TANXL_MENU_01_1024X1024.png"				};
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+	static float InstanceCoord[] =
+	{
+		0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+	};
 
 	static float textureCoordinates[] =
 	{
@@ -523,8 +527,7 @@ public:
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
-	int Append_Texture(const char* Texture);
-	short HitEdge_Check(GameStateBase* State);
+	int Append_Texture(const char* Texture, bool InstanceUse = false);
 	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);

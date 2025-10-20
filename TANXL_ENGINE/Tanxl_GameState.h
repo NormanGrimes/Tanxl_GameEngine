@@ -33,6 +33,7 @@
 // 微调地图功能去掉一个参数
 // 地图微调功能性能优化
 // 单元检测接口修复一个可导致死循环的问题
+// 提升碰撞功能动态计算的稳定性
 
 #pragma once
 
@@ -51,6 +52,8 @@
 #define _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_  0
 #define _TANXL_GAMESTATE_GENERATE_STATE_OUTPUT_       1
 #define _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_     0
+#define _TANXL_GAMESTATE_EDGE_LOCATION_VALUE_OUTPUT_  0
+#define _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_     0
 
 #endif
 
@@ -253,7 +256,7 @@ public:
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
 	void Move_State(EMove_State_EventId Direction, int Times);
 	void Update_Last_Location();
-	void State_Check_Event();
+	void State_Check_Event(bool& Is_State_Changed);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status();
 	bool Get_Adjust_Flag();
@@ -270,7 +273,7 @@ public:
 	Tanxl_Coord<float>& Get_Location_Move_Distance();
 	int Get_Distance_Screen_Id();
 	int Get_Distance_Move_Id();
-	short HitEdge_Check();
+	short HitEdge_Check(bool& Is_State_Changed);
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	float Set_ExacHeight(double Current, float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置

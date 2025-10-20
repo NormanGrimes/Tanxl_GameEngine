@@ -94,11 +94,13 @@ void FontBase::Confirm_Language()
 		this->Init_Fonts(EFontSet::NacelleBlack);
 		this->_Internal_Font_Counts = 3;
 	}
-	/*else if (this->_Internal_Language == LANGUAGE_CHINESE)
+	else if (this->_Internal_Language == LANGUAGE_FRENCH)
 	{
-		this->Init_Fonts(EFontSet::GuangLiangFont);
-		this->_Internal_Font_Counts = 1;
-	}*/
+		this->Init_Fonts(EFontSet::JosefinSansSemiBoldItalic);
+		this->Init_Fonts(EFontSet::JosefinSansBold);
+		this->Init_Fonts(EFontSet::NacelleBlack);
+		this->_Internal_Font_Counts = 3;
+	}
 	else if (this->_Internal_Language == LANGUAGE_RUSSIAN)
 	{
 		this->Init_Fonts(EFontSet::kremlinPremierRegular);

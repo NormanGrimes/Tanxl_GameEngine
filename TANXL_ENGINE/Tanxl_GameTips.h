@@ -2,6 +2,7 @@
 // LAST_UPDATE 2023-10-07 16:41
 // 改为继承自引擎基础类并增加版本获取功能
 // 增加接口用于重置提示信息的语言
+// 增加法语的游戏内文本
 
 #pragma once
 
@@ -38,14 +39,25 @@ public:
 		}
 		else if (Language == ECurren_Language::LANGUAGE_RUSSIAN)
 		{
-			Tips[0] = "Sovetj: Zolotoy krug daet pqt' zolotjx monet";
-			Tips[1] = "Sovetj: Nazhmite knopku W ili vverx, chtobj peremestit'sq vverx";
-			Tips[2] = "Sovetj: Nazhmite knopku S ili vniz, chtobj dvigat'sq vniz";
-			Tips[3] = "Sovetj: Ostorozhno, krasnje kvadratj!";
-			Tips[4] = "Sovetj: Nazhmite knopku A ili levuü knopku, chtobj peremestit'sq vlevo";
-			Tips[5] = "Sovetj: Nazhmite D ili pravuü knopku, chtobj dvigat'sq vpravo";
-			Tips[6] = "Sovetj: Nel'zq peresekat' sinie kvadratj";
-			Tips[7] = "Sovetj: Krasnje kvadratj takzhe mogut dat' monetu";
+			Tips[0] = "Zolotoy krug daet pqt' zolotjx monet";
+			Tips[1] = "Nazhmite knopku W ili vverx, chtobj peremestit'sq vverx";
+			Tips[2] = "Nazhmite knopku S ili vniz, chtobj dvigat'sq vniz";
+			Tips[3] = "Ostorozhno, krasnje kvadratj!";
+			Tips[4] = "Nazhmite knopku A ili levuü knopku, chtobj peremestit'sq vlevo";
+			Tips[5] = "Nazhmite D ili pravuü knopku, chtobj dvigat'sq vpravo";
+			Tips[6] = "Nel'zq peresekat' sinie kvadratj";
+			Tips[7] = "Krasnje kvadratj takzhe mogut dat' monetu";
+		}
+		else if (Language == ECurren_Language::LANGUAGE_FRENCH)
+		{
+			Tips[0] = "Le cercle d or donne cinq points";
+			Tips[1] = "Appuyez sur le bouton W ou vers le haut pour monter";
+			Tips[2] = "Appuyez sur le bouton S ou vers le bas pour descendre";
+			Tips[3] = "Attention aux treillis rouges !";
+			Tips[4] = "Appuyez sur A ou sur le bouton gauche pour aller vers la gauche";
+			Tips[5] = "Appuyez sur le bouton D ou droit pour aller vers la droite";
+			Tips[6] = "Vous ne pouvez pas traverser les treillis bleus";
+			Tips[7] = "Les treillis rouges peuvent aussi fournir de la monnaie";
 		}
 	}
 

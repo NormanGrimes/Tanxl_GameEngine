@@ -119,7 +119,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 	static bool FirstSort = true;
 	if (FirstSort)
 	{
-		this->Tanxl_Engine_DataBase->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");
+		this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");
 		Data_Link* Data{ new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version()) };
 		Data->Append_Data(1, "VERSION " + this->Tanxl_Engine_DataBase->Get_Version());
 		Data->Append_Data(2, "VERSION " + this->Tanxl_Engine_GameEvent->Get_Version());
@@ -132,13 +132,13 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 		Data->Append_Data(9, "VERSION " + this->Tanxl_Engine_SoundBase->Get_Version());
 		Data->Append_Data(10, "VERSION " + this->Tanxl_Engine_FontBase->Get_Version());
 		Data->Append_Data(11, "VERSION " + this->__ENGINE_VERSION__);
-		this->Tanxl_Engine_DataBase->Set_Internal_Data(Data, SIMPLE_SET);
-		this->Tanxl_Engine_DataBase->AppendItem(APPENDTO_BOTH, FileName, true);
+		this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Internal_Data(Data, SIMPLE_SET);
+		this->Tanxl_Engine_GameState->Get_Data_Source()->AppendItem(APPENDTO_BOTH, FileName, true);
 
 		FirstSort = false;
 	}
 
-	this->Tanxl_Engine_DataBase->SortDataBase(SORT_MEMORY, FileName);
+	this->Tanxl_Engine_GameState->Get_Data_Source()->SortDataBase(SORT_MEMORY, FileName);
 	this->_Engine_InforFile_Name = FileName;
 	remove((FileName + ".usd").c_str());
 }
@@ -158,8 +158,8 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 		{
 			int TempVal{ Begin_PosX + j + (i + Begin_PosY) * 256 };
 			this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
-			this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2, 1, TempVal);
-			this->Tanxl_Engine_DataBase->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10, true), 0, 1, TempVal);
+			this->Tanxl_Engine_GameState->Get_Data_Source()->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2, 1, TempVal);
+			this->Tanxl_Engine_GameState->Get_Data_Source()->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10, true), 0, 1, TempVal);
 		}
 	}
 	this->Tanxl_Engine_GameState->Set_Data_Size(Width * Height);
@@ -176,32 +176,32 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 				std::string BELO_STR{ "NULL" }, RIGH_BELO_STR{ "NULL" };
 
 				if (j != Begin_PosX)
-					LEFT_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 256 + j - 1, 0)->_Data;
+					LEFT_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, i * 256 + j - 1, 0)->_Data;
 				if (j != Begin_PosX + Width - 1)
-					RIGH_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, i * 256 + j + 1, 0)->_Data;
+					RIGH_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, i * 256 + j + 1, 0)->_Data;
 				if (i != Begin_PosY)
-					ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 256 + j, 0)->_Data;
+					ABOV_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i - 1) * 256 + j, 0)->_Data;
 				if (i != Begin_PosY + Height - 1)
-					BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 256 + j, 0)->_Data;
+					BELO_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i + 1) * 256 + j, 0)->_Data;
 
 				if ((j != Begin_PosX) && (i != Begin_PosY))
-					LEFT_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 256 + j - 1, 0)->_Data;
+					LEFT_ABOV_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i - 1) * 256 + j - 1, 0)->_Data;
 				if ((j != Begin_PosX) && (i != Begin_PosY + Height - 1))
-					LEFT_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 256 + j - 1, 0)->_Data;
+					LEFT_BELO_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i + 1) * 256 + j - 1, 0)->_Data;
 				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY))
-					RIGH_ABOV_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i - 1) * 256 + j + 1, 0)->_Data;
+					RIGH_ABOV_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i - 1) * 256 + j + 1, 0)->_Data;
 				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY + Height - 1))
-					RIGH_BELO_STR = this->Tanxl_Engine_DataBase->Get_Specified(1, (i + 1) * 256 + j + 1, 0)->_Data;
+					RIGH_BELO_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i + 1) * 256 + j + 1, 0)->_Data;
 
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 4, ABOV_STR);
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 5, BELO_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 4, ABOV_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 5, BELO_STR);
 
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 6, LEFT_ABOV_STR);
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
-				this->Tanxl_Engine_DataBase->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 6, LEFT_ABOV_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
+				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
 			}
 	}
 }
@@ -216,7 +216,7 @@ bool Tanxl_Engine::Engine_Save_Reset_Data()
 	if (this->_Engine_Infinite_State_Set._Is_State_Set == false)
 		return false;
 	remove("Tanxl Engine SystemInfor.sd");
-	this->Tanxl_Engine_DataBase->Clear_DataChain();
+	this->Tanxl_Engine_GameState->Get_Data_Source()->Clear_DataChain();
 	this->Engine_Save_Infinite_State(true,
 		this->_Engine_Infinite_State_Set._Last_Range_Width,
 		this->_Engine_Infinite_State_Set._Last_Range_Height,

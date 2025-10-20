@@ -22,9 +22,15 @@ void main()
     Cube = 32;
 
     if(Offset.z == 0.0f)
+    {
         vs_color = vec4(0.1f, 1.0f, 1.0f, 1.0);
+        //Cube = 1;
+    }
     else
+    {
         vs_color = vec4(1.0f, 1.0f, 0.1f, 1.0);
+        //Cube = 2;
+    }
 
     gl_Position = vec4(Pos.x + Offset.x, Pos.y + Offset.y, TEST_01_LAYER, 1.0);
 }
