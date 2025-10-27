@@ -2,7 +2,7 @@
 
 #include "Tanxl_InsertAction.h"
 
-void curse_poscallback(GLFWwindow* window, double x, double y)
+static void curse_poscallback(GLFWwindow* window, double x, double y)
 {
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 #if _TANXL_INSERTACTION_CONSOLE_MOUSE_OUTPUT_
@@ -46,7 +46,7 @@ Key_Unit::Key_Unit(int GLKEY, std::string UNAM) :
 #endif
 }
 
-bool Key_Unit::Get_KeyStatus()
+bool Key_Unit::Get_KeyStatus() const
 {
 	return this->MoveToY;
 }
@@ -69,7 +69,7 @@ int InsertEventBase::RegistEvent(Key_Unit* KU)
 	return static_cast<int>(this->_KeyEventS.size()) - 1;
 }
 
-Tanxl_Coord<double> InsertEventBase::Get_Mouse_Location()
+Tanxl_Coord<double> InsertEventBase::Get_Mouse_Location() const
 {
 	return this->_Mouse_Pos;
 }
@@ -303,7 +303,7 @@ bool InsertEventBase::Check_Key_Press(GLFWwindow* Window)
 	return false;
 }
 
-short InsertEventBase::Get_Reach_Edge()
+short InsertEventBase::Get_Reach_Edge() const
 {
 	return this->_Is_Reach_Edge;
 }

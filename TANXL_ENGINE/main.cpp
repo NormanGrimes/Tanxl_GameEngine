@@ -28,7 +28,7 @@ int main()
 	TGE.Engine_Insert_State_Limit(true);
 	//启用移动到达指定范围后地图随玩家移动 设置距离为0.6倍某方向距离的长度
 	TGE.Engine_Insert_State_MoveWith(true, 0.6f);
-	//启动地图视角自动调整 将玩家单元调整到地图中心位置 每次调整距离为0.005并可在移动中调整
+	//启动地图视角自动调整 将玩家单元调整到地图中心位置 每次调整距离为0.20乘以增量时间 可在移动中调整
 	TGE.Engine_Adjust_Multi_Set(true, 0.20f, true);
 	//编辑四个区块的内容
 	TGE.Engine_State_Set_Data(0x5151, false,

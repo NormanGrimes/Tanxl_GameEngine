@@ -19,6 +19,7 @@
 // 库存组件改为继承自引擎基础类
 // 增加对玩家当前语言的获取
 // 增加基础类用于初始化SteamAPI
+// 多个成员函数设为常量
 
 #pragma once
 
@@ -88,8 +89,8 @@ public:
 	inline ISteamUserStats* GetSteamUserStats();
 	inline ISteamInventory* GetSteamInvetory();
 
-	bool Reinit_Steam();
-	bool Get_InitStatus();
+	bool Reinit_Steam() const;
+	bool Get_InitStatus() const;
 
 private:
 	Steam_Service();

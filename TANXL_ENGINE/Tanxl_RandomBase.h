@@ -21,6 +21,7 @@
 // 地图生成接口解除纹理与事件的绑定
 // 降低地图事件的生成概率
 // 修改内部变量名称
+// 多个成员函数设为常量
 
 #pragma once
 
@@ -40,19 +41,19 @@ public:
     static RandomBase& GetRandomBase();
 
     //根据当前时间生成一组序列号 不适合短时间大量生成
-    std::string Generate();
+    std::string Generate() const;
 
     //根据提供的种子生成一组序列号 相同的种子结果相同
-    std::string Generate(int seed);
+    std::string Generate(int seed) const;
 
     //随机生成一组地图数据 Width为数据宽度 Height为数据高度
     std::string Generate_State(unsigned Width, unsigned Height, bool Random_Event = false);
 
     //根据内部提供的种子生成一组序列号 可用于短时间大量生成 重启后若不调用Suffle_UniData刷新字典再调用会出现重复序列号
-    std::string GenerateAutoSeed();
+    std::string GenerateAutoSeed() const;
 
     //根据输入的种子生成一组数字
-    int GenerateNum(int seed);
+    int GenerateNum(int seed) const;
 
     //随机生成一个介于Start与End之间的数字
     int RandomAutoSeed(int Start, int End);

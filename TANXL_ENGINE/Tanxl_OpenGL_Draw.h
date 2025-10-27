@@ -48,6 +48,7 @@
 // 事件检测功能移入地图模块
 // 边缘碰撞检测功能移入地图模块
 // 添加纹理接口增加实例化添加选项
+// 多个成员函数设为常量
 
 #pragma once
 
@@ -535,12 +536,12 @@ public:
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id = 0);
 	//用于第一次或重新加载整个地图场景
 	void Update_VertData(glm::ivec2* StateInfor);
-	int Get_Adjust_Status();
+	int Get_Adjust_Status() const;
 	//获取预载的数值
-	int Get_PreLoad();
+	int Get_PreLoad() const;
 	//获取移动触发地图移动的距离与半地图距离的比值
-	float Get_Trigger_Ratio();
-	EGame_Status Get_Game_Status();
+	float Get_Trigger_Ratio() const;
+	EGame_Status Get_Game_Status() const;
 	//获取OpenGL窗口
 	GLFWwindow* Get_Window()const;
 private:

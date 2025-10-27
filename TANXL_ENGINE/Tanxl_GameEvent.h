@@ -12,6 +12,7 @@
 // 游戏事件类改为继承自基础类
 // 地图替换事件改为通过检查坐标自动执行事件
 // 增加坐标触发的事件类
+// 新增观察者模式的类定义
 
 #pragma once
 
@@ -35,6 +36,40 @@ private:
 	virtual void EventAction() = 0;
 	std::string _EventName;
 	GameObject* _GameObejct;
+};
+
+class Event_Observer
+{
+public:
+	virtual void EventStart() = 0;
+	virtual ~Event_Observer() {};
+private:
+};
+
+class EventSubject
+{
+public:
+	void Add_Observer(Event_Observer* Observer)
+	{
+		if (Observer)
+			this->_ObserverS.push_back(Observer);
+	}
+
+	void Remove_Observer(Event_Observer* Observer)
+	{
+		auto Location{ std::find(this->_ObserverS.begin(), this->_ObserverS.end(), Observer) };
+		if (Location != this->_ObserverS.end())
+			this->_ObserverS.erase(Location);
+	}
+
+	void Notify()
+	{
+		for (const auto& Observer : this->_ObserverS)
+			Observer->EventStart();
+	}
+
+private:
+	std::vector<Event_Observer*> _ObserverS;
 };
 
 class GameEvent_By_Location : public GameEvent

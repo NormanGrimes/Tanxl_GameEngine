@@ -1,3 +1,14 @@
+TEnGinE Version-0.2 Build-77 TURBO 2024-01-08 11:58 UPDATE_LOG
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+存储模块降低文件标签的字符长度。存储模块数据单元定位接口改为公
+开。存储模块移除原公开的数据定位接口。引擎管理模块文件数据输出
+接口增加错误检查。事件模块新增观察者模式的类定义。存储模块复制
+数据接口修改复制的方向。存储模块获取本地数据接口增加不清理当前
+内存的选项。存储模块组合文件功能流程简化。地图模块效率改进并移
+除部分不必要的接口。地图模块地图微调接口改为私有。地图模块新增
+简化版自动调整接口。各个模块多个成员函数设为常量。输入模块获取
+鼠标位置的函数设为静态函数。
+
 TEnGinE Version-0.2 Build-76 2024-01-04 10:09 UPDATE_LOG
 ////////////////////////////////////////////////////////
 重制金币纹理。绘制模块边缘碰撞检测功能移入地图模块。引擎
@@ -483,6 +494,15 @@ TEnGinE Version-0.2 Build-20 2023-07-24 09:15 UPDATE_LOG
 增加中间页面的绘制。绘制模块增加切换页面时的音效。绘制模
 块增加死亡页面的中间页面。绘制模块增加死亡时的音效。调整
 各个顶点着色器的距离设定。
+--------------------------------------------------------
+Map shader 2 fixes the issue of pixel bias on the start 
+page. Added map shader 3 for drawing transition pages. 
+An audio module has been added. The Draw module adds 
+the drawing of the middle page when entering the game 
+page. The Draw module adds a sound effect when 
+switching pages. The draw module adds the middle page 
+of the dead page. Added dying sound to the Draw module. 
+Adjust the distance settings for each vertex shader.
 
 TEnGinE Version-0.2 Build-19 2023-07-17 09:46 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -490,6 +510,16 @@ TEnGinE Version-0.2 Build-19 2023-07-17 09:46 UPDATE_LOG
 初始尺寸扩展到16乘16个区块。绘制模块碰撞接口代码简化。增
 加死亡回到首页的设定。绘制模块增加时钟延时函数。绘制模块
 重新载入地图功能代码优化。新增多语言初始界面纹理。
+--------------------------------------------------------
+The map module fixed the problem that the map data 
+positioning function used the wrong range. The initial 
+size of the map has been expanded to 16 by 16 chunks. 
+Drawing module collision interface code is simplified. 
+Added the setting for death to return to the home page. 
+The Draw module adds a clock delay function. The code 
+for the reloading of the map function in the drawing 
+module has been optimized. Added multi-language initial 
+UI textures.
 
 TEnGinE Version-0.2 Build-18 2023-07-14 10:16 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -498,6 +528,19 @@ TEnGinE Version-0.2 Build-18 2023-07-14 10:16 UPDATE_LOG
 口。地图模块设置起始区域的功能增加地图序号的检查。地图模
 块获取扩展区域尺寸的接口改为获取扩展区域是否存在。库存类
 增加初始化状态并根据状态执行功能。
+--------------------------------------------------------
+The inventory class is changed to a singleton pattern. 
+Inventory class added version information. The Engine 
+Management module adds support for the Steam Services 
+module. In the map module, the interface for obtaining 
+the total number of map blocks is added. The function 
+of setting the starting area of the map module 
+additionally adds an additional check for the map 
+serial number. The interface for the map module to 
+obtain the size of the extended area has been changed 
+to obtain whether the extended area exists. 
+The inventory class adds initialization status and 
+performs functions based on the state.
 
 TEnGinE Version-0.2 Build-17 2023-07-13 14:28 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -506,6 +549,18 @@ TEnGinE Version-0.2 Build-17 2023-07-13 14:28 UPDATE_LOG
 点着色器根据移动操作状态对玩家方块绘制方向。物品模块增加
 物品组件的状态与设置和获取函数。地图模块修复获取所有单元
 是否可移动接口未清理上次数据的问题。
+--------------------------------------------------------
+The item module adds the item base class, and the 
+original base class is changed to the game item class. 
+The Engine Management module adds support for item 
+modules. Added a unified variable for the status of the 
+input movement operation. The player vertex shader 
+draws the direction of the player's block based on the 
+state of the movement operation. The item module adds 
+the state of the item component, the setting and the 
+function of getting it. The map module fixed the issue 
+that the Get All Units Movable interface did not clean 
+up the last data.
 
 TEnGinE Version-0.2 Build-16 2023-07-11 17:23 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -514,6 +569,17 @@ TEnGinE Version-0.2 Build-16 2023-07-11 17:23 UPDATE_LOG
 与玩家顶点着色器增加宏控制该层下所有顶点的距离。新增游戏
 首页界面顶点着色器。增加起始界面的纹理与绘制。地图顶点着
 色器修复纹理绘制方向横向相反的问题。
+--------------------------------------------------------
+The audio library irrKlang is configured and ready. The 
+input module initialization phase no longer initializes 
+the move button by default. The input module provides 
+an interface to initialize eight default movement 
+buttons. The map and the player vertex shader add a 
+macro that controls the distance of all vertices under 
+that layer. Added vertex shader for the game's home 
+screen. Added texture and painting on the start screen. 
+The map vertex shader fixes an issue where textures are 
+drawn in opposite directions.
 
 TEnGinE Version-0.2 Build-15 2023-07-07 10:47 UPDATE_LOG
 ////////////////////////////////////////////////////////

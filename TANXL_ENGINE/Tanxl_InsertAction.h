@@ -5,6 +5,8 @@
 // 更新最大移动距离的接口不再依赖绘制模块进行更新
 // 自动检测接口参数简化
 // 上次移动距离的记录移入地图模块
+// 多个成员函数设为常量
+// 获取鼠标位置的函数设为静态函数
 
 #pragma once
 
@@ -39,7 +41,7 @@ struct Key_Unit
 	Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM = "");
 	Key_Unit(int GLKEY, std::string UNAM = "");
 
-	bool Get_KeyStatus();
+	bool Get_KeyStatus() const;
 
 	//用于标记当前按键的类型
 	short Unit_Type;
@@ -80,12 +82,12 @@ public:
 	//检测是否有按键按下
 	bool Check_Key_Press(GLFWwindow* Window);
 	//获取到当前移动操作是否导致移动到地图边缘 调用后会重置成员内容为否
-	short Get_Reach_Edge();
+	short Get_Reach_Edge() const;
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	int RegistEvent(Key_Unit* KU);
 	//移除最近一个添加的按键功能
-	Tanxl_Coord<double> Get_Mouse_Location();
+	Tanxl_Coord<double> Get_Mouse_Location() const;
 	void RemoveEvent();
 	size_t Get_KeyEvent_Size();
 	//获取键盘输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图 支持非移动按钮功能

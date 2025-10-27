@@ -66,7 +66,7 @@ public:
 private:
 	void Display(int Depth = 0, unsigned Def_Col = (FONT_COLOR_WHITE | BACK_COLOR_RED), unsigned Real_Sel = (FONT_COLOR_WHITE | BACK_COLOR_PURPLE));
 
-	bool Insert_Action(unsigned* Action_Num, bool* Action_Bol, size_t List_Size);
+	bool Insert_Action(unsigned* Action_Num, bool* Action_Bol, size_t List_Size) const;
 
 	CONSOLE* Locate(int Target = 0);
 	// _Name 选项当前显示的字符串

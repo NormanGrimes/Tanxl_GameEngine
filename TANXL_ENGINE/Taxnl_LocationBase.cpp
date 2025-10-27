@@ -21,7 +21,7 @@ inline void Location::Set_Location(float Set_Height, float Set_Width)
 	this->_Internal_Location._Coord_Y = Set_Height;
 }
 
-inline float Location::Get_Calculated_Location(ECALCUL_MARKING Marking, float Value, bool begin)
+inline float Location::Get_Calculated_Location(ECALCUL_MARKING Marking, float Value, bool begin) const
 {
 	float Return_Value{ this->_Internal_Location._Coord_Y };
 	if (begin)

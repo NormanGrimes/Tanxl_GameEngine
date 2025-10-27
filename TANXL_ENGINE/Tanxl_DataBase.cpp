@@ -123,19 +123,10 @@ namespace TanxlDB
 
 	void Combine_File(std::string FileA, std::string FileB)
 	{
-		std::string Line{};
-		std::fstream in(FileB + ".usd", std::ios::in);
-		if (!in.is_open())
-			std::fstream in(FileB + ".sd", std::ios::in);
-		std::fstream out(FileA + ".sd", std::ios::app);
-		if (in.is_open() && out.is_open())
-		{
-			out << std::endl;
-			while (std::getline(in, Line))
-				out << Line << std::endl;
-		}
-		else
-			throw "失败 : Combine_File 无法打开的指定文件";
+		TANXL_DataBase TDB;
+		TDB.Get_LocalData(FileA);
+		TDB.Get_LocalData(FileB, false);
+		TDB.SortDataBase(SORT_MEMORY);
 	}
 }
 
@@ -345,9 +336,10 @@ void TANXL_DataBase::Append_Link(Id_Link& New_Id)
 	return;
 }
 
-bool TANXL_DataBase::Get_LocalData(std::string File_Name)
+bool TANXL_DataBase::Get_LocalData(std::string File_Name, bool Clear_Current)
 {
-	std::vector<Id_Link*>().swap(*this->_Id_Links);
+	if (Clear_Current)
+		std::vector<Id_Link*>().swap(*this->_Id_Links);
 	std::fstream in(File_Name + ".usd", std::ios::in);
 	if (!in.is_open())
 		in.open(File_Name + ".sd", std::ios::in);
@@ -422,7 +414,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 					throw "添加失败！ 申请内存空间失败";
 				continue;
 			}
-			else if ((Tag == "UNIQ") || (Tag == "TANX") || (Tag == "GAME") || (Tag == "DATA"))
+			else if ((Tag == "UNIQ") || (Tag == "TANX") || (Tag == "DATA"))
 			{
 				try
 				{
@@ -454,14 +446,6 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name)
 		in.close();
 		return false;
 	}
-}
-
-Data_Unit* TANXL_DataBase::Get_Specified(int Type, int Exac, int Depth)
-{
-	if (Data_Unit * PDU{ Data_Link_Locate(Type, Exac, Depth) })
-		return PDU;
-	throw static_cast<std::string>("Get_Specified() Failed ！ : 未能成功匹配相同值");
-	return nullptr;
 }
 
 void TANXL_DataBase::Print_Data()
@@ -662,8 +646,9 @@ void TANXL_DataBase::Clear_DataChain()
 
 void TANXL_DataBase::Copy_DataBase(TANXL_DataBase& DataBase)
 {
-	for (int i{ 0 }; i < this->_Id_Links->size(); ++i)
-		DataBase.Append_Link(*this->_Id_Links->at(i));
+	this->_Id_Links->erase(this->_Id_Links->begin(), this->_Id_Links->end());
+	for (const auto& Data : *DataBase._Id_Links)
+		this->_Id_Links->push_back(Data);
 }
 
 const std::string TANXL_DataBase::Get_Version()

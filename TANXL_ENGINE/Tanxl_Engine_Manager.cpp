@@ -175,33 +175,36 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 				std::string ABOV_STR{ "NULL" }, RIGH_ABOV_STR{ "NULL" };
 				std::string BELO_STR{ "NULL" }, RIGH_BELO_STR{ "NULL" };
 
-				if (j != Begin_PosX)
-					LEFT_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, i * 256 + j - 1, 0)->_Data;
-				if (j != Begin_PosX + Width - 1)
-					RIGH_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, i * 256 + j + 1, 0)->_Data;
-				if (i != Begin_PosY)
-					ABOV_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i - 1) * 256 + j, 0)->_Data;
-				if (i != Begin_PosY + Height - 1)
-					BELO_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i + 1) * 256 + j, 0)->_Data;
+				TANXL_DataBase* DataSource{ this->Tanxl_Engine_GameState->Get_Data_Source() };
+				Data_Unit* DataUnit{};
 
-				if ((j != Begin_PosX) && (i != Begin_PosY))
-					LEFT_ABOV_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i - 1) * 256 + j - 1, 0)->_Data;
-				if ((j != Begin_PosX) && (i != Begin_PosY + Height - 1))
-					LEFT_BELO_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i + 1) * 256 + j - 1, 0)->_Data;
-				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY))
-					RIGH_ABOV_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i - 1) * 256 + j + 1, 0)->_Data;
-				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY + Height - 1))
-					RIGH_BELO_STR = this->Tanxl_Engine_GameState->Get_Data_Source()->Get_Specified(1, (i + 1) * 256 + j + 1, 0)->_Data;
+				if ((j != Begin_PosX) && (DataUnit = DataSource->Data_Link_Locate(1, i * 256 + j - 1, 0)))
+					LEFT_STR = DataUnit->_Data;
+				if ((j != Begin_PosX + Width - 1) && (DataUnit = DataSource->Data_Link_Locate(1, i * 256 + j + 1, 0)))
+					RIGH_STR = DataUnit->_Data;
+				if ((i != Begin_PosY) && (DataUnit = DataSource->Data_Link_Locate(1, (i - 1) * 256 + j, 0)))
+					ABOV_STR = DataUnit->_Data;
+				if ((i != Begin_PosY + Height - 1) && (DataUnit = DataSource->Data_Link_Locate(1, (i + 1) * 256 + j, 0)))
+					BELO_STR = DataUnit->_Data;
 
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 4, ABOV_STR);
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 5, BELO_STR);
+				if ((j != Begin_PosX) && (i != Begin_PosY) && (DataUnit = DataSource->Data_Link_Locate(1, (i - 1) * 256 + j - 1, 0)))
+					LEFT_ABOV_STR = DataUnit->_Data;
+				if ((j != Begin_PosX) && (i != Begin_PosY + Height - 1) && (DataUnit = DataSource->Data_Link_Locate(1, (i + 1) * 256 + j - 1, 0)))
+					LEFT_BELO_STR = DataUnit->_Data;
+				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY) && (DataUnit = DataSource->Data_Link_Locate(1, (i - 1) * 256 + j + 1, 0)))
+					RIGH_ABOV_STR = DataUnit->_Data;
+				if ((j != Begin_PosX + Width - 1) && (i != Begin_PosY + Height - 1) && (DataUnit = DataSource->Data_Link_Locate(1, (i + 1) * 256 + j + 1, 0)))
+					RIGH_BELO_STR = DataUnit->_Data;
 
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 6, LEFT_ABOV_STR);
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
-				this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 2, LEFT_STR);
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 3, RIGH_STR);
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 4, ABOV_STR);
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 5, BELO_STR);
+				
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 6, LEFT_ABOV_STR);
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 7, LEFT_BELO_STR);
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 8, RIGH_ABOV_STR);
+				DataSource->Set_Specified(1, i * 256 + j, NULL, ADD_UNIT_IDADAT, 9, RIGH_BELO_STR);
 			}
 	}
 }

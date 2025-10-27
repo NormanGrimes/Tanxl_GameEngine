@@ -126,7 +126,7 @@ void CONSOLE::Display_Once()
 	}
 }
 
-bool CONSOLE::Insert_Action(unsigned* Action_Num, bool* Action_Bol, size_t List_Size)
+bool CONSOLE::Insert_Action(unsigned* Action_Num, bool* Action_Bol, size_t List_Size) const
 {
 	char key = _getch();
 	if ((key == 'c') || (key == 'C'))//如果输入了大小写的C则返回上一级

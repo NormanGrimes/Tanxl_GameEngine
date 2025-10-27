@@ -119,25 +119,25 @@ static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFF
 		switch (Data)
 		{
 		case 0:
-			return "UNIQUE_ID_CURRENT";
+			return "UNIQ_CURRENT";
 		case 1:
-			return "GAME_STATE_BLOCK_DATA";
+			return "UNIQ_BLOCK_DATA";
 		case 2:
-			return "UNIQUE_ID_LEFT";
+			return "UNIQ_LEFT";
 		case 3:
-			return "UNIQUE_ID_RIGHT";
+			return "UNIQ_RIGHT";
 		case 4:
-			return "UNIQUE_ID_ABOVE";
+			return "UNIQ_ABOVE";
 		case 5:
-			return "UNIQUE_ID_BELOW";
+			return "UNIQ_BELOW";
 		case 6:
-			return "UNIQUE_ID_LEFT_ABOVE";
+			return "UNIQ_LABOVE";
 		case 7:
-			return "UNIQUE_ID_LEFT_BELOW";
+			return "UNIQ_LBELOW";
 		case 8:
-			return "UNIQUE_ID_RIGHT_ABOVE";
+			return "UNIQ_RABOVE";
 		case 9:
-			return "UNIQUE_ID_RIGHT_BELOW";
+			return "UNIQ_RBELOW";
 		default:
 			break;
 		}

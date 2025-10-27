@@ -89,7 +89,7 @@ inline ISteamInventory* Steam_Service::GetSteamInvetory()
 	return nullptr;
 }
 
-bool Steam_Service::Reinit_Steam()
+bool Steam_Service::Reinit_Steam() const
 {
 #if _STEAM_REINIT_ENABLE_
 	if (this->_Steam_API_InitStatus == false)
@@ -130,7 +130,7 @@ bool Steam_Service::Reinit_Steam()
 	return this->_Steam_API_InitStatus;
 }
 
-bool Steam_Service::Get_InitStatus()
+bool Steam_Service::Get_InitStatus() const
 {
 	return this->_Steam_API_InitStatus;
 }

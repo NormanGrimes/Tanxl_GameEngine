@@ -34,6 +34,10 @@
 // 地图微调功能性能优化
 // 单元检测接口修复一个可导致死循环的问题
 // 提升碰撞功能动态计算的稳定性
+// 效率改进并移除部分不必要的接口
+// 地图微调接口改为私有
+// 新增简化版自动调整接口
+// 多个成员函数设为常量
 
 #pragma once
 
@@ -177,7 +181,7 @@ class StateEvent
 public:
 	StateEvent(int State_Id, int Counts);
 	bool Check_State_Id(int State_Id);
-	bool Check_Event_Status();
+	bool Check_Event_Status() const;
 private:
 	int _State_Id;
 	int _Trigger_Counts;
@@ -192,8 +196,8 @@ class StateUnit
 public:
 	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, int Move_Status = 0);
 	void SetEvent(std::string GameEventName, int State_Id = -1);
-	int Get_Extra_Status();
-	int Get_State_Id();
+	int Get_Extra_Status() const;
+	int Get_State_Id() const;
 	void Set_State_Id(int State_Id);
 	void Set_Status(int Extra_Status);
 private:
@@ -216,17 +220,18 @@ public:
 	//↓Get_StateBase : 返回State单例类 注意！其中的Height和Width仅用于指定绘制显示的区域大小
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
 	Square_State& Get_Square_State();
-	Tanxl_Coord<float>& Get_State_Loc();
-	Tanxl_Coord<float>& Get_Screen_Distance();
-	Tanxl_Coord<float>& Get_Move_Distance();
-	Tanxl_Coord<float>& Get_Last_Move();
-	double Get_Each_Width();
-	double Get_Each_Height();
-	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD);
+	Tanxl_Coord<float>& Get_State_Loc() const;
+	Tanxl_Coord<float>& Get_Screen_Distance() const;
+	Tanxl_Coord<float>& Get_Move_Distance() const;
+	Tanxl_Coord<float>& Get_Last_Move() const;
+	Tanxl_Coord<float> Auto_Adjust(double Move_Scale);
+	double Get_Each_Width() const;
+	double Get_Each_Height() const;
+	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD) const;
 	const std::string Get_Version();
 	std::string Get_State_Id(int Location);
 	TANXL_DataBase* Get_Data_Source();
-	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC);
+	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC) const;
 	void Set_Display_State(int Width, int Height);
 	void Set_Data_Length(unsigned Width, unsigned Height);
 	void Set_Adjust_Flag(bool Adjust_Flag);
@@ -241,7 +246,7 @@ public:
 	void Set_Adjust(float Adjust);
 	void Set_Adjust_While_Move(bool Enable);
 	void Set_Enable_Adjust(bool Enable);
-	void Set_CurrentLoc(float& CurrentX, float& CurrentY);
+	void Set_CurrentLoc(float& CurrentX, float& CurrentY) const;
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);
 	void Reload_Display_State(EState_Extend Extend_Dire);
@@ -258,26 +263,18 @@ public:
 	void Update_Last_Location();
 	void State_Check_Event(bool& Is_State_Changed);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
-	bool Get_Compile_Status();
-	bool Get_Adjust_Flag();
-	bool Is_Adjust_While_Move();
+	bool Get_Compile_Status() const;
 	bool Get_Engine_File();
-	bool Check_Edge_Reached(ECheck_Edge Check);
+	bool Check_Edge_Reached(ECheck_Edge Check) const;
 	bool Move_Adjust();
 	bool Update_State(ECheck_Edge Check_Direction);
 	bool State_Check_Block(ECheck_Edge Check_Direction);
-	Tanxl_Coord<int> Get_Exac_Location();
-	Tanxl_Coord<int>& Get_New_Current();
-	Tanxl_Coord<int>& Get_Current_Move();
-	Tanxl_Coord<float>& Get_Location_Distance_Mid();
-	Tanxl_Coord<float>& Get_Location_Move_Distance();
-	int Get_Distance_Screen_Id();
-	int Get_Distance_Move_Id();
+	Tanxl_Coord<int> Get_Exac_Location() const;
+	int Get_Distance_Screen_Id() const;
+	int Get_Distance_Move_Id() const;
 	short HitEdge_Check(bool& Is_State_Changed);
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
-	float Set_ExacHeight(double Current, float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
-	float Set_ExacWidth(double Current, float& MoveState, double Scale = 1.0);
 	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数
 	unsigned Get_DataHeight()const;
 	//↓Get_DataWidth : 获取单个地图区块横向包含的单元个数
@@ -285,6 +282,8 @@ public:
 	//↓Get_StateHeight : 获取当前需要绘制的State的高/宽度值
 	Tanxl_Coord<int> Get_StateLength()const;
 private:
+	float Set_ExacHeight(double Current, float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(double Current, float& MoveState, double Scale = 1.0);
 	std::string Locate_Extend_State(std::string State_Id);
 	void Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
 	

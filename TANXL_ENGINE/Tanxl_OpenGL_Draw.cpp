@@ -353,12 +353,12 @@ void OpenGL_Draw::Enable_State_Adjust(bool Enable)
 	this->_Is_Adjust_Enable = Enable;
 }
 
-int OpenGL_Draw::Get_Adjust_Status()
+int OpenGL_Draw::Get_Adjust_Status() const
 {
 	return this->_Current_Status;
 }
 
-int OpenGL_Draw::Get_PreLoad()
+int OpenGL_Draw::Get_PreLoad() const
 {
 	return this->_PreLoads;
 }
@@ -478,12 +478,12 @@ void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat sca
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-float OpenGL_Draw::Get_Trigger_Ratio()
+float OpenGL_Draw::Get_Trigger_Ratio() const
 {
 	return this->_Trigger_Ratio;
 }
 
-EGame_Status OpenGL_Draw::Get_Game_Status()
+EGame_Status OpenGL_Draw::Get_Game_Status() const
 {
 	return this->_Game_Status;
 }
@@ -743,8 +743,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 	if (!glfwWindowShouldClose(_Main_Window))
 	{
-		float Temp_MoveX{ 0.0f };
-		float Temp_MoveY{ 0.0f };
 		_Current_Status = 0;
 
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -776,22 +774,15 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		State->State_Check_Event(this->_Is_State_Changed);
 		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
 
-		double Current_Height{ (static_cast<double>(this->_LCB->Get_LocationY(Dist_Mid)) * 2 + 1) / (State->Get_Each_Height()) };
-		double Current_Width{ (static_cast<double>(this->_LCB->Get_LocationX(Dist_Mid)) * 2 + 1) / (State->Get_Each_Width()) };
-
-		if (State->Get_Adjust_Flag())//Auto Adjust Part
-		{
-			Temp_MoveY = State->Set_ExacHeight(Current_Height, this->_LCB->Get_LocationY(Dist_Mid), MoveScale);
-			Temp_MoveX = State->Set_ExacWidth(Current_Width, this->_LCB->Get_LocationX(Dist_Mid), MoveScale);
-		}
+		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(MoveScale));
 		
 		if (State->Move_Adjust())
 			this->_Is_State_Changed = true;
 
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 
-		glProgramUniform1f(_Adjst_RenderingProgram, 2, this->_LCB->Get_LocationX(Dist_Mid) + Temp_MoveX);//Current_Move_LocationX
-		glProgramUniform1f(_Adjst_RenderingProgram, 3, this->_LCB->Get_LocationY(Dist_Mid) + Temp_MoveY);//
+		glProgramUniform1f(_Adjst_RenderingProgram, 2, Temp_Move._Coord_X);//Current_Move_LocationX
+		glProgramUniform1f(_Adjst_RenderingProgram, 3, Temp_Move._Coord_Y);//
 
 		if (_Is_State_Changed)
 		{

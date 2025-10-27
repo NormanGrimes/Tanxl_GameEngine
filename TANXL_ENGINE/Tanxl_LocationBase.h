@@ -89,7 +89,7 @@ public:
 	// 设置坐标的两个参数
 	inline void Set_Location(float Set_Height, float Set_Width);
 
-	inline float Get_Calculated_Location(ECALCUL_MARKING Marking, float Value, bool begin);
+	inline float Get_Calculated_Location(ECALCUL_MARKING Marking, float Value, bool begin) const;
 
 private:
 

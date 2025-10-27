@@ -36,17 +36,17 @@ void Health_Componment::Set_Health(int Current_Health, int Max_Health)
 		this->_Is_Alive = true;
 }
 
-int Health_Componment::Check_Health()
+int Health_Componment::Check_Health() const
 {
 	return this->_Current_Health;
 }
 
-int Health_Componment::Get_MaxHealth()
+int Health_Componment::Get_MaxHealth() const
 {
 	return this->_Maximum_Health;
 }
 
-bool Health_Componment::Is_Alive()
+bool Health_Componment::Is_Alive() const
 {
 	return this->_Is_Alive;
 }
@@ -69,7 +69,7 @@ bool Money_Componment::Pay_Money(int Price)
 	return false;
 }
 
-int Money_Componment::Get_Money()
+int Money_Componment::Get_Money() const
 {
 	return this->_Current_Money;
 }
@@ -101,7 +101,7 @@ void Character_Data::Set_Default_Defense(int Defense)
 	this->_Defense_Armor = Defense;
 }
 
-double Character_Data::Get_Move_Speed()
+double Character_Data::Get_Move_Speed() const
 {
 	return this->_Move_Speed;
 }

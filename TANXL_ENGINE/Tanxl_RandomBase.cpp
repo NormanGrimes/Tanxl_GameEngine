@@ -19,7 +19,7 @@ RandomBase& RandomBase::GetRandomBase()
     return RB;
 }
 
-std::string RandomBase::Generate()
+std::string RandomBase::Generate() const
 {
     std::string Data{};
     std::default_random_engine DRE(static_cast<unsigned>(time(0)));
@@ -33,7 +33,7 @@ std::string RandomBase::Generate()
     return Data;
 }
 
-std::string RandomBase::Generate(int seed)
+std::string RandomBase::Generate(int seed) const
 {
     std::string Data{ "" };
     std::default_random_engine DRE(seed);
@@ -72,7 +72,7 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
     return ReturnVal;
 }
 
-std::string RandomBase::GenerateAutoSeed()
+std::string RandomBase::GenerateAutoSeed() const
 {
     static unsigned seed{ static_cast<unsigned>(time(0)) };
     std::string Data{};
@@ -87,7 +87,7 @@ std::string RandomBase::GenerateAutoSeed()
     return Data;
 }
 
-int RandomBase::GenerateNum(int seed)
+int RandomBase::GenerateNum(int seed) const
 {
     std::default_random_engine DRE(seed++);
     std::uniform_int_distribution<int> UID(0, 9);

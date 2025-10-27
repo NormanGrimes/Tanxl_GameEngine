@@ -20,6 +20,12 @@
 // 修复无法获取无标签本地文件的问题
 // 增加独立运行模式
 // 增加文件路径为参数的构造函数
+// 降低文件标签的字符长度
+// 数据单元定位接口改为公开
+// 移除原公开的数据定位接口
+// 复制数据接口修改复制的方向
+// 获取本地数据接口增加不清理当前内存的选项
+// 组合文件功能流程简化
 
 #pragma once
 
@@ -129,8 +135,6 @@ private:
 	int _Current_Location;
 	//用来判断_Internal_Data中是否有数据
 	bool _Is_Instance_Data;
-	//借由Id_Link_Locate函数对不同深度的Data_Chain定位
-	Data_Unit* Data_Link_Locate(int Type, int Exac, int Depth);
 	void Replace_Link(int OldType, int OldExac, int OldDepth, int Id, std::string Data);//转移Data_Chain到另一个Id_Chain下
 	//↓添加内部数据结构的内容到内存里的Vector中
 	void Append_Link(Id_Link& New_Id);
@@ -146,14 +150,14 @@ public:
 	Id_Link* Id_Link_Locate(int Type, int Exac);
 	//↓获取上一次定位到的数据链 Check_Type/Check_Exac 用于对比确认获取的数据 OffSet为上一次定位的偏移位置
 	Id_Link* Get_Last_Located(int Check_Type = 0, int Check_Exac = 0, int OffSet = 0);
+	//↓借由Id_Link_Locate函数对不同深度的Data_Chain定位 读取指定Type(A)_Exac(B)级别的物品 Depth表示该级别下的第几个物品(从0开始)
+	Data_Unit* Data_Link_Locate(int Type, int Exac, int Depth);
 	//↓获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
-	bool Get_LocalData(std::string File_Name);
+	bool Get_LocalData(std::string File_Name, bool Clear_Current = true);
 	//↓编辑实例 0x1122 11代表Type位 22代表Exac位 Type_Name为Type字符串 Exac_Name为Exac字符串
 	void Set_Internal_Id(unsigned Status, std::string Type_Name, std::string Exac_Name);
 	//↓为当前内存中的匿名结构体通过 Set_Mode 的方式添加 Data_Link数据
 	void Set_Internal_Data(Data_Link* Data, ELinkSet_Mode Set_Mode);
-	//↓读取指定Type(A)_Exac(B)级别的物品 Depth表示该级别下的第几个物品(从0开始)
-	Data_Unit* Get_Specified(int Type, int Exac, int Depth);
 	//↓修改指定Type(A)_Exac(B)级别的物品 Nums表示链表中的第几个(从0开始) level用于选定第几个Data
 	//↓修改Data时会直接更改相关内容 修改TYPE-EXAC时 会转移当前Data_Chain到新的符合修改后的TYPE-EXAC的Id_Chain下
 	void Set_Specified(int Type, int Exac, int Nums, int level, int Id, std::string Data);

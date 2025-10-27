@@ -36,6 +36,7 @@
 // 武器与护甲类简化为结构体
 // 角色参数类增加基础数据设置接口
 // 基础数据设置接口拆分为两个独立接口
+// 多个成员函数设为常量
 
 #pragma once
 
@@ -69,11 +70,11 @@ public:
 
 	void Set_Health(int Current_Health, int Max_Health);
 	// 获取当前生命值
-	int Check_Health();
+	int Check_Health() const;
 	// 获取最大生命值
-	int Get_MaxHealth();
+	int Get_MaxHealth() const;
 	// 获取当前是否为存活状态
-	bool Is_Alive();
+	bool Is_Alive() const;
 
 private:
 	int _Maximum_Health;
@@ -91,7 +92,7 @@ public:
 
 	bool Pay_Money(int Price);
 
-	int Get_Money();
+	int Get_Money() const;
 
 private:
 	int _Current_Money;
@@ -120,7 +121,7 @@ public:
 	inline int Get_Defense_Armor();
 	inline void Set_Default_Damage(int Damage);
 	inline void Set_Default_Defense(int Defense);
-	inline double Get_Move_Speed();
+	inline double Get_Move_Speed() const;
 
 private:
 	int _Attack_Damage;
