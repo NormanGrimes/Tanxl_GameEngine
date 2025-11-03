@@ -832,7 +832,7 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 #endif
 }
 
-void GameStateBase::StateMove_Edge_Set(int Dist_Mid, short Edge, double Scale)//Reach Screen Edge : Then push screen to move
+void GameStateBase::StateMove_Edge_Set(short Edge, double Scale)//Reach Screen Edge : Then push screen to move
 {
 	int Moves{};
 	if (_Trigger_Mode)

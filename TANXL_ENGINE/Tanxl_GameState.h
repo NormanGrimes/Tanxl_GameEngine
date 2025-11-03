@@ -38,6 +38,7 @@
 // 地图微调接口改为私有
 // 新增简化版自动调整接口
 // 多个成员函数设为常量
+// 屏幕边缘移动接口减少参数
 
 #pragma once
 
@@ -252,7 +253,7 @@ public:
 	void Reload_Display_State(EState_Extend Extend_Dire);
 	void Reload_State_Data(int State_Length, glm::ivec2* StateInfor);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
-	void StateMove_Edge_Set(int Dist_Mid, short Edge = 0, double Scale = 1);
+	void StateMove_Edge_Set(short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock(int State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号

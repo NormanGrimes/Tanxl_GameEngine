@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="资源文件">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="源文件\Engine">
       <UniqueIdentifier>{d2a03b4e-ad5c-458b-b483-752cd313354f}</UniqueIdentifier>
     </Filter>
@@ -19,7 +15,11 @@
     <Filter Include="头文件\Engine">
       <UniqueIdentifier>{46f0d6e0-797d-4aa3-a790-91ce7b4d68a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="资源文件\图片资源">
+    <Filter Include="源文件\Engine\资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\Engine\资源文件\图片资源">
       <UniqueIdentifier>{06715d9d-7981-4692-bbe7-5b5692782e7e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -127,38 +127,33 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Update-Log.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="public\steam\lib\win64\steam_api64.dll" />
     <None Include="Shader\Tanxl_Fonts_01_FragShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_Fonts_01_VertShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_Game_01_FragShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_Player_01_VertShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_State_01_VertShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_State_02_VertShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_State_03_VertShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_Test_01_VertShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
     <None Include="Shader\Tanxl_State_04_VertShader.glsl">
-      <Filter>资源文件</Filter>
+      <Filter>源文件\Engine\资源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -171,7 +166,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Texture\TANXL_SOFTWARE_LOGO.ico">
-      <Filter>资源文件\图片资源</Filter>
+      <Filter>源文件\Engine\资源文件\图片资源</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Update-Log.txt">
+      <Filter>源文件</Filter>
+    </Text>
   </ItemGroup>
 </Project>

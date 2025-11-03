@@ -108,7 +108,59 @@ void FontBase::Confirm_Language()
 	}
 }
 
-ECurren_Language FontBase::Get_Language()
+void FontBase::Bind_FontVAO(GLuint Font_VAO, GLuint Font_VBO)
+{
+	this->_Font_VAO = Font_VAO;
+	this->_Font_VBO = Font_VBO;
+}
+
+void FontBase::Set_FontColor(glm::vec3 color)
+{
+	this->_Font_Color = color;
+}
+
+void FontBase::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, int Font_Id)
+{
+	glUniform3f(0, this->_Font_Color.x, this->_Font_Color.y, this->_Font_Color.z);
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(this->_Font_VAO);
+
+	// Iterate through all characters
+	for (std::string::const_iterator c{ text.begin() }; c != text.end(); ++c)
+	{
+		Character ch{ (this->Get_Characters(Font_Id))[*c] };// Characters[*c];
+
+		GLfloat xpos{ x + ch.Bearing.x * scale };
+		GLfloat ypos{ y - (ch.Size.y - ch.Bearing.y) * scale };
+
+		GLfloat w{ ch.Size.x * scale };
+		GLfloat h{ ch.Size.y * scale };
+		// Update VBO for each character
+		GLfloat vertices[6][4] = {
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos,     ypos,       0.0, 1.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+
+			{ xpos,     ypos + h,   0.0, 0.0 },
+			{ xpos + w, ypos,       1.0, 1.0 },
+			{ xpos + w, ypos + h,   1.0, 0.0 }
+		};
+		// Render glyph texture over quad
+		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+		// Update content of VBO memory
+		glBindBuffer(GL_ARRAY_BUFFER, this->_Font_VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		// Render quad
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+		x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+	}
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+ECurren_Language FontBase::Get_Language() const
 {
 	return this->_Internal_Language;
 }

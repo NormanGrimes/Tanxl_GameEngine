@@ -218,7 +218,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	State->Get_Move_Distance()._Coord_X = (2.0f / this->_Scene_Int._Coord_X) * Half_Width + (1.0f / this->_Scene_Int._Coord_X) * (8 - this->_PreLoads);
 	State->Get_Move_Distance()._Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
 
-	State->Get_Square_State().Set_State_Length(State->Get_StateLength()._Coord_X, State->Get_StateLength()._Coord_Y);
+	State->Get_Square_State().Set_State_Length(this->_Scene_Int._Coord_X, this->_Scene_Int._Coord_Y);
 	State->Get_Square_State().Set_Move_State(_Pre_Move._Coord_X, _Pre_Move._Coord_Y, this->_PreLoads);
 
 	this->_LCB->Get_LocationX(State->Get_Distance_Move_Id()) += static_cast<float>((_Pre_Move._Coord_X - 4) * State->Get_Each_Width());
@@ -291,11 +291,6 @@ void OpenGL_Draw::Set_PreLoad(int PreLoads)
 void OpenGL_Draw::Set_Clear(bool Clear)
 {
 	this->_Clear_Function = Clear;
-}
-
-void OpenGL_Draw::Set_Trigger_Range(float Ratio)
-{
-	this->_Trigger_Ratio = Ratio;
 }
 
 void OpenGL_Draw::Set_PreMove(int PreMoveX, int PreMoveY)
@@ -437,52 +432,6 @@ void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 	}
 }
 
-void OpenGL_Draw::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id)
-{
-	glUniform3f(0, color.x, color.y, color.z);
-	glActiveTexture(GL_TEXTURE0);
-	glBindVertexArray(_vao[0]);
-
-	// Iterate through all characters
-	for (std::string::const_iterator c{ text.begin() }; c != text.end(); ++c)
-	{
-		Character ch{ (Font->Get_Characters(Font_Id))[*c] };// Characters[*c];
-
-		GLfloat xpos{ x + ch.Bearing.x * scale };
-		GLfloat ypos{ y - (ch.Size.y - ch.Bearing.y) * scale };
-
-		GLfloat w{ ch.Size.x * scale };
-		GLfloat h{ ch.Size.y * scale };
-		// Update VBO for each character
-		GLfloat vertices[6][4] = {
-			{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos,     ypos,       0.0, 1.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
-
-			{ xpos,     ypos + h,   0.0, 0.0 },
-			{ xpos + w, ypos,       1.0, 1.0 },
-			{ xpos + w, ypos + h,   1.0, 0.0 }
-		};
-		// Render glyph texture over quad
-		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-		// Update content of VBO memory
-		glBindBuffer(GL_ARRAY_BUFFER, _Font_vbo[0]);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		// Render quad
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-	}
-	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-float OpenGL_Draw::Get_Trigger_Ratio() const
-{
-	return this->_Trigger_Ratio;
-}
-
 EGame_Status OpenGL_Draw::Get_Game_Status() const
 {
 	return this->_Game_Status;
@@ -532,10 +481,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			Is_Dead = false;
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Event_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
@@ -571,10 +520,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Event_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
@@ -606,10 +555,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 		this->_Middle_Frame = 0;
 		glUseProgram(_State_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Event_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (State->Get_StateLength()._Coord_Y + _PreLoads * 2) * (State->Get_StateLength()._Coord_X + _PreLoads * 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
@@ -641,55 +590,56 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 
 	glUseProgram(_Fonts_RenderingProgram);
 
+	Font->Bind_FontVAO(_vao[0], _Font_vbo[0]);
+
+	Font->Set_FontColor(glm::vec3(0.3, 0.7f, 0.9f));
+
 	if ((this->_Game_Status == GAME_START_MENU) || (this->_Game_Status == GAME_PLAYER_DEAD_STATUS))
 	{
 		//std::cout << "Exac :" << IEB->Get_Mouse_Location()._Coord_X << " _ " << IEB->Get_Mouse_Location()._Coord_Y << std::endl;
 		if ((IEB->Get_Mouse_Location()._Coord_X > 80) && (IEB->Get_Mouse_Location()._Coord_X < 880) &&
 			(IEB->Get_Mouse_Location()._Coord_Y > 450) && (IEB->Get_Mouse_Location()._Coord_Y < 660))
-			RenderText(Tips->GetTips(), 70.0f, 250.0f, 0.8f, glm::vec3(0.4, 0.7f, 0.9f));
+			Font->RenderText(Tips->GetTips(), 70.0f, 250.0f, 0.8f);
 		else
-			RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f));
+			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
-			RenderText("Monetj: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
+		/*if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
+			Font->RenderText("Monetj: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
-			RenderText("Point: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
-		else
-			RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, glm::vec3(0.3, 0.7f, 0.9f), 1);
+			Font->RenderText("Point: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
+		else*/
+			Font->RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 
 	if (Is_Dead)
 	{
-		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
-			RenderText("Igra zakonchena", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
+		/*if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
+			Font->RenderText("Igra zakonchena", 280.0f, 650.0f, 1.3f, 2);
 		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
-			RenderText("FIN DU JEU", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
-		else
-			RenderText("GAME OVER", 280.0f, 650.0f, 1.3f, glm::vec3(0.3, 0.7f, 0.9f), 2);
+			Font->RenderText("FIN DU JEU", 280.0f, 650.0f, 1.3f, 2);
+		else*/
+			Font->RenderText("GAME OVER", 280.0f, 650.0f, 1.3f, 2);
 	}
 
 	if (VersionFontSize > -800.0f)
-		if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
-			RenderText("VERSIQ IGRJ TANXL 2.73", VersionFontSize, 10.0f, 1.0f, glm::vec3(
-				static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
-				static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
-				0.5f));
+	{
+		Font->Set_FontColor(glm::vec3(
+			static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
+			static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
+			0.5f));
+		/*if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
+			Font->RenderText("VERSIQ IGRJ TANXL 2.73", VersionFontSize, 10.0f, 1.0f);
 		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
-			RenderText("JEU TANXL VERSION 2.73", VersionFontSize, 10.0f, 1.0f, glm::vec3(
-				static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
-				static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
-				0.5f));
-		else
-			RenderText("TANXL GAME VERSION 2.73", VersionFontSize, 10.0f, 1.0f, glm::vec3(
-				static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
-				static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
-				0.5f));
+			Font->RenderText("JEU TANXL VERSION 2.73", VersionFontSize, 10.0f, 1.0f);
+		else*/
+			Font->RenderText("TANXL GAME VERSION 2.73", VersionFontSize, 10.0f, 1.0f);
+	}
 
 	glBindVertexArray(0);
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)
-{ 
+{
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
 	static Key_Unit* OpenGL_Stop_Key{ new Key_Unit(GLFW_KEY_F) };
 
@@ -731,15 +681,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		IEB->Set_Key_Enable(false);
 		MC->Pay_Money(MC->Get_Money());
 	}
-
-	static int Dist_Mid{ State->Get_Distance_Screen_Id() };
-	static int Exac_Mov{ State->Get_Distance_Move_Id() };
-
-#if _TANXL_OPENGLDRAW_REALTIME_LOCATION_OUTPUT_
-	std::cout << "Dist_Mid " << this->_LCB->Get_LocationX(Dist_Mid) << " -- " << this->_LCB->Get_LocationY(Dist_Mid) << std::endl;
-	std::cout << "Exac_Mov " << this->_LCB->Get_LocationX(Exac_Mov) << " -- " << this->_LCB->Get_LocationY(Exac_Mov) << std::endl;// MAJOR
-	std::cout << "Stat_Loc " << this->_LCB->Get_LocationX(_State_Loc) << " -- " << this->_LCB->Get_LocationY(_State_Loc) << std::endl << std::endl << std::endl;
-#endif
 
 	if (!glfwWindowShouldClose(_Main_Window))
 	{
@@ -791,7 +732,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			this->_Is_State_Changed = false;
 		}
 
-		State->StateMove_Edge_Set(Dist_Mid, IEB->Get_Reach_Edge(), MoveScale);
+		State->StateMove_Edge_Set(IEB->Get_Reach_Edge(), MoveScale);
 
 		glProgramUniform1f(_State_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
 		glProgramUniform1f(_State_RenderingProgram, 5, State->Get_State_Loc()._Coord_Y);//State_MoveY

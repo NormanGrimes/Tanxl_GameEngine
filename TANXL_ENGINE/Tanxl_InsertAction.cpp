@@ -259,17 +259,24 @@ void InsertEventBase::Init_Default_Key()
 	this->RegistEvent(MOVE_DOWN);
 }
 
-void InsertEventBase::Update_Move_Max(float Trigger_Ratio)
-{
-	this->_Max_float *= Trigger_Ratio;
-	this->_Max_float_Height *= Trigger_Ratio;
-	this->_Max_float_Width *= Trigger_Ratio;
-}
-
 void InsertEventBase::Set_Mouse_Pos(double LocationX, double LocationY)
 {
 	this->_Mouse_Pos._Coord_X = LocationX;
 	this->_Mouse_Pos._Coord_Y = LocationY;
+}
+
+void InsertEventBase::Set_Trigger_Range(float Ratio)
+{
+	this->_Max_float *= Ratio;
+	this->_Max_float_Height *= Ratio;
+	this->_Max_float_Width *= Ratio;
+}
+
+void InsertEventBase::Reset_Move_Range()
+{
+	this->_Max_float = 1.0f;
+	this->_Max_float_Height = 1;
+	this->_Max_float_Width = 1;
 }
 
 bool InsertEventBase::Get_Key_Pressed()

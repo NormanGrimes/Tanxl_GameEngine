@@ -103,8 +103,7 @@ void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, floa
 void Tanxl_Engine::Engine_Insert_State_MoveWith(bool Enable, float Compare_Ratio)
 {
 	this->Tanxl_Engine_GameState->Set_Trigger_Mode(Enable);
-	this->Tanxl_Engine_OpenGL_Draw->Set_Trigger_Range(Compare_Ratio);
-	this->Tanxl_Engine_InsertBase->Update_Move_Max(this->Tanxl_Engine_OpenGL_Draw->Get_Trigger_Ratio());
+	this->Tanxl_Engine_InsertBase->Set_Trigger_Range(Compare_Ratio);
 }
 
 void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move)
@@ -116,7 +115,7 @@ void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Valu
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 {
-	static bool FirstSort = true;
+	static bool FirstSort{ true };
 	if (FirstSort)
 	{
 		this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");

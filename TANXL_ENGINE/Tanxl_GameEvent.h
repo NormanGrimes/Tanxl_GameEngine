@@ -13,6 +13,7 @@
 // 地图替换事件改为通过检查坐标自动执行事件
 // 增加坐标触发的事件类
 // 新增观察者模式的类定义
+// 观察者模式增加模板定义
 
 #pragma once
 
@@ -38,38 +39,42 @@ private:
 	GameObject* _GameObejct;
 };
 
+template<typename Tanxl_TypeName>
 class Event_Observer
 {
 public:
-	virtual void EventStart() = 0;
+	Event_Observer(Tanxl_TypeName Init_Type) :_Init_Type(Init_Type) {}
+	virtual void EventCheck(Tanxl_TypeName& Tanxl_Type) = 0;
 	virtual ~Event_Observer() {};
 private:
+	Tanxl_TypeName _Init_Type;
 };
 
+template<typename Tanxl_TypeName>
 class EventSubject
 {
 public:
-	void Add_Observer(Event_Observer* Observer)
+	void Add_Observer(Event_Observer<Tanxl_TypeName>* Observer)
 	{
 		if (Observer)
 			this->_ObserverS.push_back(Observer);
 	}
 
-	void Remove_Observer(Event_Observer* Observer)
+	void Remove_Observer(Event_Observer<Tanxl_TypeName>* Observer)
 	{
 		auto Location{ std::find(this->_ObserverS.begin(), this->_ObserverS.end(), Observer) };
 		if (Location != this->_ObserverS.end())
 			this->_ObserverS.erase(Location);
 	}
 
-	void Notify()
+	void Notify(Tanxl_TypeName Tanxl_Type)
 	{
 		for (const auto& Observer : this->_ObserverS)
-			Observer->EventStart();
+			Observer->EventCheck(Tanxl_Type);
 	}
 
 private:
-	std::vector<Event_Observer*> _ObserverS;
+	std::vector<Event_Observer<Tanxl_TypeName>*> _ObserverS;
 };
 
 class GameEvent_By_Location : public GameEvent

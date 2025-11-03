@@ -11,6 +11,7 @@
 // 增加确认语言接口用于统一初始化
 // 增加一个俄语字体
 // 字体初始化接口针对中文进行修改
+// 增加字体设置与绘制接口
 
 #pragma once
 
@@ -54,7 +55,13 @@ public:
 
 	void Confirm_Language();
 
-	ECurren_Language Get_Language();
+	void Bind_FontVAO(GLuint Font_VAO,GLuint Font_VBO);
+
+	void Set_FontColor(glm::vec3 color);
+
+	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, int Font_Id = 0);
+
+	ECurren_Language Get_Language() const;
 
 	std::map<GLchar, Character> Get_Characters(int Id);
 
@@ -79,6 +86,10 @@ private:
 	};
 
 	std::map<GLchar, Character> _Characters[5];
+
+	glm::vec3 _Font_Color{ 0.0f, 0.0f, 0.0f };
+	GLuint _Font_VAO{};
+	GLuint _Font_VBO{};
 
 	ECurren_Language _Internal_Language;
 };

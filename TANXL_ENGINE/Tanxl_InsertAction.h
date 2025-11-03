@@ -7,6 +7,7 @@
 // 上次移动距离的记录移入地图模块
 // 多个成员函数设为常量
 // 获取鼠标位置的函数设为静态函数
+// 设置最大移动范围功能整合进输入模块
 
 #pragma once
 
@@ -81,7 +82,7 @@ public:
 	bool RemoveEvent(std::string Event_Name);
 	//检测是否有按键按下
 	bool Check_Key_Press(GLFWwindow* Window);
-	//获取到当前移动操作是否导致移动到地图边缘 调用后会重置成员内容为否
+	//获取到当前移动操作是否导致移动到地图边缘
 	short Get_Reach_Edge() const;
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
@@ -110,9 +111,10 @@ public:
 	void Set_Key_Enable(bool Enable);
 	// 初始化默认提供的八个移动按键
 	void Init_Default_Key();
-	// 更新最大移动距离
-	void Update_Move_Max(float Trigger_Ratio);
 	void Set_Mouse_Pos(double LocationX, double LocationY);
+	// 设置触发地图移动事件时的方向移动距离占总距离的比率
+	void Set_Trigger_Range(float Ratio);
+	void Reset_Move_Range();
 private:
 	//对输入获取之后的数据进行各项限制的检查 如超出移动距离最大值则会将其限制到最大值 同时记录是否抵达屏幕边缘
 	void AutoCheck(Tanxl_Coord<float>& Screen_Move, Tanxl_Coord<float>& Move_Distance);

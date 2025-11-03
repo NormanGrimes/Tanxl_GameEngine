@@ -49,6 +49,9 @@
 // 边缘碰撞检测功能移入地图模块
 // 添加纹理接口增加实例化添加选项
 // 多个成员函数设为常量
+// 主绘制循环减少地图模块的调用
+// 显示语言默认为英语
+// 清理未使用的地图坐标及其他变量
 
 #pragma once
 
@@ -523,7 +526,6 @@ public:
 	void Render_Once(GameStateBase* State);
 	void Set_PreLoad(int PreLoads);
 	void Set_Clear(bool Clear);
-	void Set_Trigger_Range(float Ratio);
 	void Set_PreMove(int PreMoveX, int PreMoveY);
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
@@ -533,14 +535,11 @@ public:
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);
 	void State_Check_Event(GameStateBase* State);
-	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color, int Font_Id = 0);
 	//用于第一次或重新加载整个地图场景
 	void Update_VertData(glm::ivec2* StateInfor);
 	int Get_Adjust_Status() const;
 	//获取预载的数值
 	int Get_PreLoad() const;
-	//获取移动触发地图移动的距离与半地图距离的比值
-	float Get_Trigger_Ratio() const;
 	EGame_Status Get_Game_Status() const;
 	//获取OpenGL窗口
 	GLFWwindow* Get_Window()const;
@@ -568,8 +567,6 @@ private:
 	GLuint _Font_vbo[5];
 	GLuint _Inst_vbo[32];
 
-	//触发地图移动事件时的方向移动距离占总距离的比率
-	float _Trigger_Ratio{ 1.0f };
 	int _Current_Status{ 0 };
 	//记录地图场景的高度与宽度基本矩形行数
 	Tanxl_Coord<int> _Scene_Int{ 0, 0 };
