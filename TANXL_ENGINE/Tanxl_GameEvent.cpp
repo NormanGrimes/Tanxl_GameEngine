@@ -3,7 +3,33 @@
 #include "Tanxl_GameEvent.h"
 #include "Tanxl_GameState.h"
 
-//GameEvent
+template<typename Tanxl_TypeName>
+inline Event_Observer<Tanxl_TypeName>::Event_Observer(Tanxl_TypeName Init_Type) :_Init_Type(Init_Type) {}
+
+template<typename Tanxl_TypeName>
+Event_Observer<Tanxl_TypeName>::~Event_Observer() {}
+
+template<typename Tanxl_TypeName>
+inline void EventSubject<Tanxl_TypeName>::Add_Observer(Event_Observer<Tanxl_TypeName>* Observer)
+{
+	if (Observer)
+		this->_ObserverS.push_back(Observer);
+}
+
+template<typename Tanxl_TypeName>
+void EventSubject<Tanxl_TypeName>::Remove_Observer(Event_Observer<Tanxl_TypeName>* Observer)
+{
+	auto Location{ std::find(this->_ObserverS.begin(), this->_ObserverS.end(), Observer) };
+	if (Location != this->_ObserverS.end())
+		this->_ObserverS.erase(Location);
+}
+
+template<typename Tanxl_TypeName>
+void EventSubject<Tanxl_TypeName>::Notify(Tanxl_TypeName Tanxl_Type)
+{
+	for (const auto& Observer : this->_ObserverS)
+		Observer->EventCheck(Tanxl_Type);
+}
 
 GameEvent::GameEvent(std::string Name, GameObject* Obejct) :_EventName(Name), _GameObejct(Obejct) {}
 

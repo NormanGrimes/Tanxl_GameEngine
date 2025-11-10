@@ -79,6 +79,7 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
 		this->Tanxl_Engine_GameState->GetStateBase(Width, Height);
 		this->Tanxl_Engine_GameState->Set_Display_State(Width, Height);
 	}
+	this->Tanxl_Engine_OpenGL_Draw->init(this->Tanxl_Engine_GameState);
 }
 
 void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend)

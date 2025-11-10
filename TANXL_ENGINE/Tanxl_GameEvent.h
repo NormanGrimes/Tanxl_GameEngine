@@ -14,6 +14,7 @@
 // 增加坐标触发的事件类
 // 新增观察者模式的类定义
 // 观察者模式增加模板定义
+// 类定义源码移入源文件
 
 #pragma once
 
@@ -25,6 +26,18 @@
 
 #include "Tanxl_GameObject.h"
 #include "Tanxl_EngineBase.h"
+
+enum EStateEvent
+{
+	STATE_NO_EVENT,
+	STATE_EVENT_01,
+	STATE_EVENT_02,
+	STATE_EVENT_03,
+	STATE_EVENT_04,
+	STATE_EVENT_05,
+	STATE_EVENT_06,
+	STATE_EVENT_07,
+};
 
 class GameEvent
 {
@@ -43,9 +56,9 @@ template<typename Tanxl_TypeName>
 class Event_Observer
 {
 public:
-	Event_Observer(Tanxl_TypeName Init_Type) :_Init_Type(Init_Type) {}
+	Event_Observer(Tanxl_TypeName Init_Type);
 	virtual void EventCheck(Tanxl_TypeName& Tanxl_Type) = 0;
-	virtual ~Event_Observer() {};
+	virtual ~Event_Observer();
 private:
 	Tanxl_TypeName _Init_Type;
 };
@@ -54,24 +67,11 @@ template<typename Tanxl_TypeName>
 class EventSubject
 {
 public:
-	void Add_Observer(Event_Observer<Tanxl_TypeName>* Observer)
-	{
-		if (Observer)
-			this->_ObserverS.push_back(Observer);
-	}
+	void Add_Observer(Event_Observer<Tanxl_TypeName>* Observer);
 
-	void Remove_Observer(Event_Observer<Tanxl_TypeName>* Observer)
-	{
-		auto Location{ std::find(this->_ObserverS.begin(), this->_ObserverS.end(), Observer) };
-		if (Location != this->_ObserverS.end())
-			this->_ObserverS.erase(Location);
-	}
+	void Remove_Observer(Event_Observer<Tanxl_TypeName>* Observer);
 
-	void Notify(Tanxl_TypeName Tanxl_Type)
-	{
-		for (const auto& Observer : this->_ObserverS)
-			Observer->EventCheck(Tanxl_Type);
-	}
+	void Notify(Tanxl_TypeName Tanxl_Type);
 
 private:
 	std::vector<Event_Observer<Tanxl_TypeName>*> _ObserverS;

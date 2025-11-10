@@ -24,6 +24,8 @@ void FontBase::Init_Fonts(std::string Font_Path)
 	if (FT_New_Face(ft, Font_Path.c_str(), 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
+	//FT_GlyphSlot slot = face->glyph;
+
 	// Set size to load glyphs as
 	FT_Set_Pixel_Sizes(face, 0, 48);
 
@@ -31,10 +33,14 @@ void FontBase::Init_Fonts(std::string Font_Path)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	// Load first 128 characters of ASCII set
-	for (GLubyte c = 0; c < 128; c++)
+	GLuint FontCnts{ 256 };
+	//if (this->_Internal_Language == LANGUAGE_CHINESE)
+	//	FontCnts = 0xFFFF;
+
+	for (GLuint c = 0; c < FontCnts; c++)
 	{
 		// Load character glyph 
-		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		if (/*FT_Load_Glyph*/FT_Load_Char(face, c, FT_LOAD_RENDER))
 		{
 			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
 			continue;
@@ -60,13 +66,13 @@ void FontBase::Init_Fonts(std::string Font_Path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// Now store character for later use
-		Character character = {
+		Character character{
 			texture,
 			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			static_cast<GLuint>(face->glyph->advance.x)
 		};
-		_Characters[_Internal_Font_Counts].insert(std::pair<GLchar, Character>(c, character));
+		_Characters[_Internal_Font_Counts].insert(std::pair<GLuint, Character>(c, character));
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	_Internal_Font_Counts++;
@@ -126,7 +132,8 @@ void FontBase::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale,
 	glBindVertexArray(this->_Font_VAO);
 
 	// Iterate through all characters
-	for (std::string::const_iterator c{ text.begin() }; c != text.end(); ++c)
+	std::wstring wText{ std::wstring(text.begin(),text.end()) };
+	for (std::wstring::const_iterator c{ wText.begin() }; c != wText.end(); ++c)
 	{
 		Character ch{ (this->Get_Characters(Font_Id))[*c] };// Characters[*c];
 
@@ -165,7 +172,7 @@ ECurren_Language FontBase::Get_Language() const
 	return this->_Internal_Language;
 }
 
-std::map<GLchar, Character> FontBase::Get_Characters(int Id)
+std::map<GLuint, Character> FontBase::Get_Characters(int Id)
 {
 	if (Id > _Internal_Font_Counts - 1)
 		Id = _Internal_Font_Counts - 1;

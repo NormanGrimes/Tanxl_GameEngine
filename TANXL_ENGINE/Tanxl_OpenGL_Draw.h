@@ -52,6 +52,7 @@
 // 主绘制循环减少地图模块的调用
 // 显示语言默认为英语
 // 清理未使用的地图坐标及其他变量
+// 增加统一的增量时间计算
 
 #pragma once
 
@@ -540,6 +541,7 @@ public:
 	int Get_Adjust_Status() const;
 	//获取预载的数值
 	int Get_PreLoad() const;
+	double Get_DeltaTime() const;
 	EGame_Status Get_Game_Status() const;
 	//获取OpenGL窗口
 	GLFWwindow* Get_Window()const;
@@ -568,26 +570,28 @@ private:
 	GLuint _Inst_vbo[32];
 
 	int _Current_Status{ 0 };
+	//记载额外加载的地图环数量
+	int _PreLoads;
+	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
+	int _Draw_Status{ 0 };
+	//最大的中间页面编号
+	int _Max_Middle_Frame{ 0 };
+	//记录地图总显示单元个数
+	int _State_Length{ 0 };
 	//记录地图场景的高度与宽度基本矩形行数
 	Tanxl_Coord<int> _Scene_Int{ 0, 0 };
 	//窗口的宽/高度
 	Tanxl_Coord<int> _Screen_Length;
-	//记载额外加载的地图环数量
-	int _PreLoads;
 	//记录在地图初始化时 玩家方块的初始移动距离
 	Tanxl_Coord<int> _Pre_Move{ 3, 3 };
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.1f };
-	//当前绘制状态 为0时绘制起始界面为1绘制游戏画面
-	int _Draw_Status{ 0 };
 	//当前的中间页面编号
 	double _Middle_Frame{ 0 };
-	//最大的中间页面编号
-	int _Max_Middle_Frame{ 0 };
+	//距离上次调用绘制的增量时间
+	double _Delta_Time{ 0 };
 	//记录上次移动导致主角面向的方向
 	short _Insert_Status{ 0 };
-	//记录地图总显示单元个数
-	int _State_Length{ 0 };
 	//当前此模块的版本号
 	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;

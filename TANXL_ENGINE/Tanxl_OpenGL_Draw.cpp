@@ -4,6 +4,9 @@
 
 #include <Windows.h>
 
+const static std::string MainVersion{ "2" };
+const static std::string SubVersion{ "79" };
+
 static FontBase* Font{ &FontBase::GetFontBase() };
 
 static GameObject* MC{ Main_Character::Get_Main_Character() };
@@ -32,7 +35,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, "Tanxl_GAME /// 0.2B73", NULL, NULL);
+	std::string VersionTag{ "Tanxl_GAME /// 0." + MainVersion + "B" + SubVersion };
+	_Main_Window = glfwCreateWindow(_Screen_Length._Coord_X, _Screen_Length._Coord_Y, VersionTag.c_str(), NULL, NULL);
 	if (_Main_Window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -82,7 +86,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Font->Confirm_Language();
 
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
-	Tips->ResetTips(TI->Get_User_Language());
+	//Tips->ResetTips(TI->Get_User_Language());
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);
@@ -358,6 +362,11 @@ int OpenGL_Draw::Get_PreLoad() const
 	return this->_PreLoads;
 }
 
+double OpenGL_Draw::Get_DeltaTime() const
+{
+	return this->_Delta_Time;
+}
+
 void OpenGL_Draw::State_Check_Event(GameStateBase* State)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
@@ -440,16 +449,12 @@ EGame_Status OpenGL_Draw::Get_Game_Status() const
 void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
 {
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
-	static double LastTime{ glfwGetTime() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
-	double DeltaTime{ glfwGetTime() - LastTime };
 	static double Blink_Cnt{ 0 };
 	static bool Is_Dead{ false };
 
 	static float VersionFontSize{ 20.0f };
-
-	LastTime = glfwGetTime();
 
 	glBindVertexArray(_vao[1]);
 
@@ -465,7 +470,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 		{
 			SB->Play_Sound(SOUND_GAME_START);
 		}
-		this->_Middle_Frame += DeltaTime * 100;
+		this->_Middle_Frame += this->_Delta_Time * 100;
 		if (VersionFontSize > -800.0f)
 			VersionFontSize -= 6.0f;
 		if (VersionFontSize < -800.0f)
@@ -529,13 +534,13 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
 		}
 
-		this->_Middle_Frame += DeltaTime * 100;
+		this->_Middle_Frame += this->_Delta_Time * 100;
 	}
 	else
 	{
 		if ((this->_Insert_Status == 3) && (this->_Game_Status == GAME_PLAYER_ACTIVE))
 		{
-			Blink_Cnt += DeltaTime * 100;
+			Blink_Cnt += this->_Delta_Time * 100;
 			if (Blink_Cnt > 400)
 				Blink_Cnt = 0;
 		}
@@ -604,22 +609,10 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		/*if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
-			Font->RenderText("Monetj: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
-		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
-			Font->RenderText("Point: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
-		else*/
-			Font->RenderText("Coins: " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 
 	if (Is_Dead)
-	{
-		/*if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
-			Font->RenderText("Igra zakonchena", 280.0f, 650.0f, 1.3f, 2);
-		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
-			Font->RenderText("FIN DU JEU", 280.0f, 650.0f, 1.3f, 2);
-		else*/
-			Font->RenderText("GAME OVER", 280.0f, 650.0f, 1.3f, 2);
-	}
+		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
 
 	if (VersionFontSize > -800.0f)
 	{
@@ -627,12 +620,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
 			static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
 			0.5f));
-		/*if (Font->Get_Language() == ECurren_Language::LANGUAGE_RUSSIAN)
-			Font->RenderText("VERSIQ IGRJ TANXL 2.73", VersionFontSize, 10.0f, 1.0f);
-		else if (Font->Get_Language() == ECurren_Language::LANGUAGE_FRENCH)
-			Font->RenderText("JEU TANXL VERSION 2.73", VersionFontSize, 10.0f, 1.0f);
-		else*/
-			Font->RenderText("TANXL GAME VERSION 2.73", VersionFontSize, 10.0f, 1.0f);
+		Font->RenderText(Tips->Get_DisplayVersion() + " 2.79", VersionFontSize, 10.0f, 1.0f);
 	}
 
 	glBindVertexArray(0);
@@ -644,14 +632,13 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	static Key_Unit* OpenGL_Stop_Key{ new Key_Unit(GLFW_KEY_F) };
 
 	static double LastTime{ glfwGetTime() };
-	double MoveScale{ glfwGetTime() - LastTime };
+	this->_Delta_Time = glfwGetTime() - LastTime;
 	LastTime = glfwGetTime();
 
 	if (this->_Is_Init_Need)
 	{
 		this->_Is_Init_Need = false;
-		init(State);
-
+		//init(State);
 		IEB->RegistEvent(OpenGL_Stop_Key);
 	}
 
@@ -715,7 +702,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		State->State_Check_Event(this->_Is_State_Changed);
 		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
 
-		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(MoveScale));
+		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(this->_Delta_Time));
 		
 		if (State->Move_Adjust())
 			this->_Is_State_Changed = true;
@@ -732,7 +719,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			this->_Is_State_Changed = false;
 		}
 
-		State->StateMove_Edge_Set(IEB->Get_Reach_Edge(), MoveScale);
+		State->StateMove_Edge_Set(IEB->Get_Reach_Edge(), this->_Delta_Time);
 
 		glProgramUniform1f(_State_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
 		glProgramUniform1f(_State_RenderingProgram, 5, State->Get_State_Loc()._Coord_Y);//State_MoveY
