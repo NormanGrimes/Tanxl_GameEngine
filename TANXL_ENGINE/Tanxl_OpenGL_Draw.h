@@ -53,6 +53,7 @@
 // 显示语言默认为英语
 // 清理未使用的地图坐标及其他变量
 // 增加统一的增量时间计算
+// 增加实例化绘制的颜色自定义功能
 
 #pragma once
 
@@ -95,6 +96,8 @@ namespace TanxlOD
 	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"				};
 	static const char* TexPrincess_01_256x256			{ "Texture/TANXL_PRINCESS_01_256X256.png"			};
 	static const char* TexPrincess_02_256x256			{ "Texture/TANXL_PRINCESS_02_256X256.png"			};
+	static const char* TexPrincess_02_Run_01_256x256	{ "Texture/TANXL_PRINCESS_02_RUN_01_256X256.png"	};
+	static const char* TexPrincess_02_Run_02_256x256	{ "Texture/TANXL_PRINCESS_02_RUN_02_256X256.png"	};
 	static const char* TexPrincess_03_256x256			{ "Texture/TANXL_PRINCESS_03_256X256.png"			};
 	static const char* TexPrincess_04_256x256			{ "Texture/TANXL_PRINCESS_04_256X256.png"			};
 	static const char* TexPrincess_01_Blink_01_256x256	{ "Texture/TANXL_PRINCESS_01_BLINK_01_256X256.png"	};

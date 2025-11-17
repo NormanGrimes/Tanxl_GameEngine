@@ -76,6 +76,48 @@ struct Tanxl_Coord
 		this->_Coord_Y += Coord._Coord_Y;
 		return *this;
 	}
+
+	Tanxl_Coord operator-(Tanxl_Coord& Coord)
+	{
+		this->_Coord_X -= Coord._Coord_X;
+		this->_Coord_Y -= Coord._Coord_Y;
+		return *this;
+	}
+
+	Tanxl_Coord operator-=(Tanxl_Coord& Coord)
+	{
+		this->_Coord_X -= Coord._Coord_X;
+		this->_Coord_Y -= Coord._Coord_Y;
+		return *this;
+	}
+
+	Tanxl_Coord operator*(double& Mult)
+	{
+		this->_Coord_X *= Mult;
+		this->_Coord_Y *= Mult;
+		return *this;
+	}
+
+	Tanxl_Coord operator*=(double& Mult)
+	{
+		this->_Coord_X *= Mult;
+		this->_Coord_Y *= Mult;
+		return *this;
+	}
+
+	Tanxl_Coord operator/(double& Div)
+	{
+		this->_Coord_X /= Div;
+		this->_Coord_Y /= Div;
+		return *this;
+	}
+
+	Tanxl_Coord operator/=(double& Div)
+	{
+		this->_Coord_X /= Div;
+		this->_Coord_Y /= Div;
+		return *this;
+	}
 };
 
 class Location

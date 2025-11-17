@@ -15,6 +15,7 @@
 // 新增观察者模式的类定义
 // 观察者模式增加模板定义
 // 类定义源码移入源文件
+// 观察者类增加默认构造函数
 
 #pragma once
 
@@ -56,11 +57,8 @@ template<typename Tanxl_TypeName>
 class Event_Observer
 {
 public:
-	Event_Observer(Tanxl_TypeName Init_Type);
 	virtual void EventCheck(Tanxl_TypeName& Tanxl_Type) = 0;
 	virtual ~Event_Observer();
-private:
-	Tanxl_TypeName _Init_Type;
 };
 
 template<typename Tanxl_TypeName>

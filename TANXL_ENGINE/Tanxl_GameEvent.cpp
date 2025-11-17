@@ -4,9 +4,6 @@
 #include "Tanxl_GameState.h"
 
 template<typename Tanxl_TypeName>
-inline Event_Observer<Tanxl_TypeName>::Event_Observer(Tanxl_TypeName Init_Type) :_Init_Type(Init_Type) {}
-
-template<typename Tanxl_TypeName>
 Event_Observer<Tanxl_TypeName>::~Event_Observer() {}
 
 template<typename Tanxl_TypeName>

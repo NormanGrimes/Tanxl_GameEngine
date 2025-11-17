@@ -8,6 +8,7 @@
 // 多个成员函数设为常量
 // 获取鼠标位置的函数设为静态函数
 // 设置最大移动范围功能整合进输入模块
+// 预增加第二版按键单元的定义
 
 #pragma once
 
@@ -35,6 +36,38 @@
 #include "Tanxl_GameTips.h"
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_LocationBase.h"
+#include "Tanxl_GameEvent.h"
+
+class Key_UnitOB :public Event_Observer<bool>
+{
+public:
+	Key_UnitOB(int GLFW_KEY) :_GLFW_KEY(GLFW_KEY) {};
+
+	virtual void EventCheck(bool& Event)
+	{
+		if (Event)
+		{
+			std::cout << "Event_Call" << std::endl;
+		}
+	}
+
+	void Enable(bool Enable)
+	{
+		this->_Enable = Enable;
+	}
+
+	int Get_GLKey() const
+	{
+		return this->_GLFW_KEY;
+	}
+
+private:
+	int _GLFW_KEY{ GLFW_KEY_UNKNOWN };
+	bool _Enable{ true };
+
+	bool _Move_ToX{ true };
+	float _Move_Length{ 0.0f };
+};
 
 struct Key_Unit
 {

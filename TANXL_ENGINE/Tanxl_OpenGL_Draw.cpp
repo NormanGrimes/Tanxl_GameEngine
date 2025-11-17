@@ -75,7 +75,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Event_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_04_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
-	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Test_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Inst_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
 
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_Screen_Length._Coord_X), 0.0f, static_cast<GLfloat>(_Screen_Length._Coord_Y));
@@ -142,6 +142,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	int Tex_09{ Append_Texture(TanxlOD::TexPrincess_01_Blink_01_256x256) };
 	int Tex_10{ Append_Texture(TanxlOD::TexPrincess_01_Blink_02_256x256) };
 	int Tex_11{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)			 };
+	int Tex_12{ Append_Texture(TanxlOD::TexPrincess_02_Run_01_256x256) };
+	int Tex_13{ Append_Texture(TanxlOD::TexPrincess_02_Run_02_256x256) };
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
@@ -151,6 +153,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 16, Tex_06);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 17, Tex_09);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 18, Tex_10);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 20, Tex_12);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 21, Tex_13);
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
 
@@ -160,6 +164,20 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glBindVertexArray(0);
 
 	glm::vec3 translations[30]{};
+	glm::vec4 InstColorA[6]{
+		glm::vec4(0.1f, 1.0f, 1.0f, 1.0),
+		glm::vec4(0.6f, 0.7f, 1.0f, 1.0),
+		glm::vec4(0.6f, 0.7f, 1.0f, 1.0),
+		glm::vec4(0.1f, 1.0f, 1.0f, 1.0),
+		glm::vec4(0.6f, 0.7f, 1.0f, 1.0),
+		glm::vec4(0.6f, 0.7f, 1.0f, 1.0) };
+	glm::vec4 InstColorB[6]{
+		glm::vec4(1.0f, 1.0f, 0.1f, 1.0),
+		glm::vec4(0.9f, 0.7f, 0.6f, 1.0),
+		glm::vec4(0.9f, 0.7f, 0.6f, 1.0),
+		glm::vec4(1.0f, 1.0f, 0.1f, 1.0),
+		glm::vec4(0.9f, 0.7f, 0.6f, 1.0),
+		glm::vec4(0.9f, 0.7f, 0.6f, 1.0) };
 	int Instance_Cnt = 0;
 	double BeginHeight{ ((this->_Scene_Int._Coord_Y) / 2.0f) * State->Get_Each_Height() - State->Get_Each_Height() / 2.0f};
 	for (int Height{ 0 }; Height < (5); ++Height)
@@ -186,6 +204,16 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 30, &translations[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	glGenBuffers(1, &_Inst_vbo[2]);
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * 6, &InstColorA[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &_Inst_vbo[3]);
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[3]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * 6, &InstColorB[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	float HalfW{ static_cast<float>(State->Get_Each_Width() / 2) };
 	float HalfH{ static_cast<float>(State->Get_Each_Height() / 2) };
 
@@ -207,9 +235,19 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	glEnableVertexAttribArray(0);// Test VertShader uniform aPos
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
 	glEnableVertexAttribArray(2);// Test VertShader uniform aOffset
 	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]); // this attribute comes from a different vertex buffer
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	glEnableVertexAttribArray(4);// Test VertShader uniform ColorA
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[2]); // this attribute comes from a different vertex buffer
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
+	glEnableVertexAttribArray(5);// Test VertShader uniform ColorB
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[3]); // this attribute comes from a different vertex buffer
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 	glBindVertexArray(0);
@@ -237,7 +275,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 		_StateOffSet[i].x = 0.0f;
 		_StateOffSet[i].y = 0.0f;
 
-		std::string Tag = "State_OffSet[" + std::to_string(i) + "]";
+		std::string Tag{ "State_OffSet[" + std::to_string(i) + "]" };
 		GLuint StatePos = glGetUniformLocation(_Event_RenderingProgram, Tag.c_str());
 		glProgramUniform2fv(_Event_RenderingProgram, StatePos, 1, glm::value_ptr(_StateOffSet[i]));
 	}
@@ -545,6 +583,18 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 				Blink_Cnt = 0;
 		}
 
+		if ((this->_Insert_Status == 1) && (this->_Game_Status == GAME_PLAYER_ACTIVE))
+		{
+			if (State->Get_Last_Move()._Coord_X == 0.0f)
+				Blink_Cnt = -1;
+			else
+			{
+				Blink_Cnt += this->_Delta_Time * 100;
+				if (Blink_Cnt > 50)
+					Blink_Cnt = 0;
+			}
+		}
+
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 19, static_cast<int>(Blink_Cnt));
 
 		if (_Draw_Status == 3)
@@ -638,7 +688,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	if (this->_Is_Init_Need)
 	{
 		this->_Is_Init_Need = false;
-		//init(State);
 		IEB->RegistEvent(OpenGL_Stop_Key);
 	}
 
@@ -680,7 +729,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		glEnableVertexAttribArray(1);
 
-		glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_Screen_Length._Coord_X), 0.0f, static_cast<GLfloat>(_Screen_Length._Coord_Y));
+		glm::mat4 projection{ glm::ortho(0.0f, static_cast<GLfloat>(_Screen_Length._Coord_X), 0.0f, static_cast<GLfloat>(_Screen_Length._Coord_Y)) };
 		glUseProgram(this->_Fonts_RenderingProgram);
 		glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 

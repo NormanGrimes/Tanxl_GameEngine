@@ -87,11 +87,9 @@ size_t InsertEventBase::Get_KeyEvent_Size()
 
 void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 {
-	static double LastTime{ glfwGetTime() };
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
-	double MoveScale{ glfwGetTime() - LastTime };
-	LastTime = glfwGetTime();
+	double MoveScale{ OPD->Get_DeltaTime() };
 	State->Update_Last_Location();
 
 	if (this->_Is_Key_Enable == false)
@@ -100,8 +98,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	State->Get_Last_Move()._Coord_X = 0.0f;
 	State->Get_Last_Move()._Coord_Y = 0.0f;
 
-	double Insert_Move_LengthX{ 0.0f };
-	double Insert_Move_LengthY{ 0.0f };
+	Tanxl_Coord<double> Insert_Move_Length{ 0,0 };
 
 	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
 	{
@@ -124,18 +121,19 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 			if (!OPD->Get_Adjust_Status())
 			{
 				if (this->_KeyEventS.at(i)->_Key_Unit->MoveToY)
-					Insert_Move_LengthY += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
+					Insert_Move_Length._Coord_Y += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
 				if (this->_KeyEventS.at(i)->_Key_Unit->MoveToX)
-					Insert_Move_LengthX += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
+					Insert_Move_Length._Coord_X += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
 			}
 		}
 		else
 			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)
 				this->_KeyEventS.at(i)->_Key_Unit->SaveLen = 0;
 	}
+	Insert_Move_Length *= MoveScale;
 	Tanxl_Coord<float> Insert_Length(
-		static_cast<float>(Insert_Move_LengthX * MoveScale), 
-		static_cast<float>(Insert_Move_LengthY * MoveScale));
+		static_cast<float>(Insert_Move_Length._Coord_X),
+		static_cast<float>(Insert_Move_Length._Coord_Y));
 
 	State->Get_Screen_Distance() += Insert_Length;
 	State->Get_Move_Distance() += Insert_Length;
@@ -385,3 +383,4 @@ InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 }
 
 Key_Event::Key_Event(Key_Unit* Key) :_Key_Unit(Key), _Is_Key_Press(false), _Press_Count(0) {}
+
