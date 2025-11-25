@@ -54,6 +54,8 @@
 // 清理未使用的地图坐标及其他变量
 // 增加统一的增量时间计算
 // 增加实例化绘制的颜色自定义功能
+// 绘制接口去掉时间参数
+// 移除用于标记地图改变的变量
 
 #pragma once
 
@@ -525,7 +527,7 @@ public:
 	const std::string Get_Version();
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
 	void init(GameStateBase* State);
-	void display(GLFWwindow* window, double currentTime, GameStateBase* State);
+	void display(GLFWwindow* window, GameStateBase* State);
 	//进行一次游戏画面绘制
 	void Render_Once(GameStateBase* State);
 	void Set_PreLoad(int PreLoads);
@@ -552,7 +554,6 @@ private:
 	OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust);
 
 	bool _Clear_Function;
-	bool _Is_State_Changed;
 	bool _Trigger_Mode{ false };
 	//仅在初始化时可控制窗口是否可调整大小
 	bool _Window_Adjust_Enable;

@@ -945,7 +945,7 @@ void GameStateBase::Update_Last_Location()
 	this->_Location_Move_Distance = this->Get_Move_Distance();
 }
 
-void GameStateBase::State_Check_Event(bool& Is_State_Changed)
+void GameStateBase::State_Check_Event()
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
@@ -981,7 +981,6 @@ void GameStateBase::State_Check_Event(bool& Is_State_Changed)
 			SB->Play_Sound(SOUND_EVENT_START);
 			MC->TakeDamage(1);
 			MC->Add_Money(1);
-			Is_State_Changed = true;
 
 			CheckUnit->Set_Status(0);
 		}
@@ -990,7 +989,6 @@ void GameStateBase::State_Check_Event(bool& Is_State_Changed)
 	{
 		SB->Play_Sound(SOUND_RESTORE_HEALTH);
 		MC->Add_Money(5);
-		Is_State_Changed = true;
 
 		CheckUnit->Set_Status(0);
 	}
@@ -1000,7 +998,6 @@ void GameStateBase::State_Check_Event(bool& Is_State_Changed)
 		{
 			SB->Play_Sound(SOUND_SYSTEM_CALL);
 			MC->RestoreHealth(1);
-			Is_State_Changed = true;
 			CheckUnit->Set_Status(0);
 		}
 	}
@@ -1009,7 +1006,6 @@ void GameStateBase::State_Check_Event(bool& Is_State_Changed)
 		static int Internal_Cnt{ 0 };
 		Internal_Cnt++;
 		SB->Play_Sound(SOUND_SECRET_CORE);
-		Is_State_Changed = true;
 		CheckUnit->Set_Status(0);
 
 		if (Internal_Cnt == 4)
@@ -1666,7 +1662,7 @@ int GameStateBase::Get_Distance_Move_Id() const
 	return this->_Distance_Move;
 }
 
-short GameStateBase::HitEdge_Check(bool& Is_State_Changed)
+short GameStateBase::HitEdge_Check()
 {
 	static double State_Data_Width{ this->_Data_Width * this->_Each_Width * 2 + this->_Each_Width };
 	static double State_Data_Height{ this->_Data_Height * this->_Each_Height * 2 + this->_Each_Height };
@@ -1691,14 +1687,12 @@ short GameStateBase::HitEdge_Check(bool& Is_State_Changed)
 				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_LEFT);
 
 				if (this->_Exac_Location._Coord_X >= -static_cast<int>(this->Get_DataWidth()) - 1)
-					if (this->State_Check_Block(CHECK_EDGE_LEFT))
-						Is_State_Changed = true;
+					this->State_Check_Block(CHECK_EDGE_LEFT);
 			}
 		}
 		Insert_Status = 0;
 	}
-
-	if (this->Get_Last_Move()._Coord_X > 0)
+	else if (this->Get_Last_Move()._Coord_X > 0)
 	{
 		if (Distance->_Coord_X > State_Data_Width)
 		{
@@ -1715,8 +1709,7 @@ short GameStateBase::HitEdge_Check(bool& Is_State_Changed)
 				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_RIGH);
 
 				if (this->_Exac_Location._Coord_X <= static_cast<int>(this->Get_DataWidth()) * 2 + 1)
-					if (this->State_Check_Block(CHECK_EDGE_RIGH))
-						Is_State_Changed = true;
+					this->State_Check_Block(CHECK_EDGE_RIGH);
 			}
 		}
 		Insert_Status = 1;
@@ -1739,14 +1732,12 @@ short GameStateBase::HitEdge_Check(bool& Is_State_Changed)
 				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_ABOV);
 
 				if (this->_Exac_Location._Coord_Y >= -static_cast<int>(this->Get_DataHeight()) - 1)
-					if (this->State_Check_Block(CHECK_EDGE_ABOV))
-						Is_State_Changed = true;
+					this->State_Check_Block(CHECK_EDGE_ABOV);
 			}
 		}
 		Insert_Status = 2;
 	}
-
-	if (this->Get_Last_Move()._Coord_Y < 0)
+	else if (this->Get_Last_Move()._Coord_Y < 0)
 	{
 		if (Distance->_Coord_Y < -State_Data_Height)
 		{
@@ -1763,8 +1754,7 @@ short GameStateBase::HitEdge_Check(bool& Is_State_Changed)
 				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_BELO);
 
 				if (this->_Exac_Location._Coord_Y <= static_cast<int>(this->Get_DataHeight()) * 2 + 1)
-					if (this->State_Check_Block(CHECK_EDGE_BELO))
-						Is_State_Changed = true;
+					this->State_Check_Block(CHECK_EDGE_BELO);
 			}
 		}
 		Insert_Status = 3;

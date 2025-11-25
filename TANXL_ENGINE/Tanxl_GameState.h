@@ -39,6 +39,7 @@
 // 新增简化版自动调整接口
 // 多个成员函数设为常量
 // 屏幕边缘移动接口减少参数
+// 去掉地图改变相关的参数
 
 #pragma once
 
@@ -262,7 +263,7 @@ public:
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
 	void Move_State(EMove_State_EventId Direction, int Times);
 	void Update_Last_Location();
-	void State_Check_Event(bool& Is_State_Changed);
+	void State_Check_Event();
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status() const;
 	bool Get_Engine_File();
@@ -273,7 +274,8 @@ public:
 	Tanxl_Coord<int> Get_Exac_Location() const;
 	int Get_Distance_Screen_Id() const;
 	int Get_Distance_Move_Id() const;
-	short HitEdge_Check(bool& Is_State_Changed);
+	//↓HitEdge_Check 返回最后一次的按键状态
+	short HitEdge_Check();
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数

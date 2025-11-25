@@ -304,7 +304,6 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_OBJECTBASE:
-		
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_SOUNDBASE:
@@ -341,8 +340,10 @@ void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable
 	{
 		if (this->Tanxl_Engine_OpenGL_Draw->Get_Game_Status() == GAME_PLAYER_ACTIVE)
 		{
-			static int Begin_Id{ this->Tanxl_Engine_RandomBase->GenerateNum(static_cast<int>(time(0))) };
-			this->Tanxl_Engine_SoundBase->Play_BackGround_Music(Begin_Id);
+			if (this->Tanxl_Engine_SoundBase->BackGround_Playing())
+			{
+				this->Tanxl_Engine_SoundBase->Play_BackGround_Music();
+			}
 		}
 		else
 		{

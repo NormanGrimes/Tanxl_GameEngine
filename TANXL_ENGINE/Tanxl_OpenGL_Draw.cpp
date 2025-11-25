@@ -23,7 +23,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _Is_State_Changed(false), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), _StateOffSet(){}
+_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), _StateOffSet() {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -484,7 +484,7 @@ EGame_Status OpenGL_Draw::Get_Game_Status() const
 	return this->_Game_Status;
 }
 
-void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase* State)
+void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 {
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
@@ -670,7 +670,7 @@ void OpenGL_Draw::display(GLFWwindow* window, double currentTime, GameStateBase*
 			static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
 			static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
 			0.5f));
-		Font->RenderText(Tips->Get_DisplayVersion() + " 2.79", VersionFontSize, 10.0f, 1.0f);
+		Font->RenderText(Tips->Get_DisplayVersion() + " " + MainVersion + "." + SubVersion, VersionFontSize, 10.0f, 1.0f);
 	}
 
 	glBindVertexArray(0);
@@ -735,7 +735,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if ((OpenGL_Stop_Key->MoveToY == true) || (this->_Is_Adjust_Enable == false))
 		{
-			display(_Main_Window, glfwGetTime(), State);
+			display(_Main_Window, State);
 			glfwSwapBuffers(_Main_Window);
 			glfwPollEvents();
 			_Current_Status = 1;
@@ -747,27 +747,21 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			<< State->Get_DataHeight() * this->_Each_Height << std::endl;
 #endif
 
-		this->_Insert_Status = State->HitEdge_Check(this->_Is_State_Changed);
-		State->State_Check_Event(this->_Is_State_Changed);
+		this->_Insert_Status = State->HitEdge_Check();
+		State->State_Check_Event();
 		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
 
 		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(this->_Delta_Time));
 		
-		if (State->Move_Adjust())
-			this->_Is_State_Changed = true;
+		State->Move_Adjust();
 
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
 
 		glProgramUniform1f(_Adjst_RenderingProgram, 2, Temp_Move._Coord_X);//Current_Move_LocationX
 		glProgramUniform1f(_Adjst_RenderingProgram, 3, Temp_Move._Coord_Y);//
 
-		if (_Is_State_Changed)
-		{
-			State->Reload_State_Data(this->_State_Length, this->_StateInfor);
-			Update_VertData(this->_StateInfor);
-			this->_Is_State_Changed = false;
-		}
-
+		State->Reload_State_Data(this->_State_Length, this->_StateInfor);
+		Update_VertData(this->_StateInfor);
 		State->StateMove_Edge_Set(IEB->Get_Reach_Edge(), this->_Delta_Time);
 
 		glProgramUniform1f(_State_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
@@ -778,7 +772,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		glfwPollEvents();
 
-		display(_Main_Window, glfwGetTime(), State);
+		display(_Main_Window, State);
 
 		glfwSwapBuffers(_Main_Window);
 

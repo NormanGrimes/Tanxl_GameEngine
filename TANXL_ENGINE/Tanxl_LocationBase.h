@@ -19,6 +19,7 @@
 // 改为继承自引擎基础类
 // 坐标模板结构替换原有坐标结构
 // 坐标模板类增加加法重载
+// 坐标模板类增加与单数字的比较重载
 
 #pragma once
 
@@ -59,6 +60,13 @@ struct Tanxl_Coord
 	bool operator==(const Tanxl_Coord& Coord)
 	{
 		if ((this->_Coord_X == Coord._Coord_X) && (this->_Coord_Y == Coord._Coord_Y))
+			return true;
+		return false;
+	}
+
+	bool operator==(const Tanxl_TypeName& Compare)
+	{
+		if ((this->_Coord_X == Compare) && (this->_Coord_Y == Compare))
 			return true;
 		return false;
 	}

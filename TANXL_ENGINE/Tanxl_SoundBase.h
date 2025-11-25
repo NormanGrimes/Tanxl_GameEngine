@@ -21,6 +21,7 @@
 // 多个接口增加音源选择参数
 // 背景音乐音量降低到百分之三十
 // 增加接口用于随机选择背景音乐
+// 背景音乐播放接口增加默认参数
 
 #pragma once
 
@@ -68,7 +69,7 @@ public:
 
     void Stop_AllSound(int SoundEngine_Id = 0);
     // 包含对背景音乐的顺序播放功能 顺序播放功能需要持续调用
-    void Play_BackGround_Music(int Begin_Id);
+    void Play_BackGround_Music(int Begin_Id = -1);
 
     void Random_BackGround_Music();
 
@@ -76,7 +77,7 @@ public:
 
     bool Sound_Playing(ESound_WAV Sound_Name, int SoundEngine_Id = 0);
 
-    bool BackGround_Playing();
+    bool BackGround_Playing() const;
 
     ESound_WAV Sound_Playing_Id(int SoundEngine_Id = 0);
 

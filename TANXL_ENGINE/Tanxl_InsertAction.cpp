@@ -105,7 +105,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		if (glfwGetKey(window, this->_KeyEventS.at(i)->_Key_Unit->GLFW_KEY) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
-			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)
+			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)//非移动功能的按键判断
 			{
 				this->_KeyEventS.at(i)->_Key_Unit->SaveLen++;
 				if (this->_KeyEventS.at(i)->_Key_Unit->SaveLen > this->_KeyEventS.at(i)->_Key_Unit->MoveLen)
@@ -118,22 +118,30 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 				}
 				continue;
 			}
-			if (!OPD->Get_Adjust_Status())
-			{
-				if (this->_KeyEventS.at(i)->_Key_Unit->MoveToY)
-					Insert_Move_Length._Coord_Y += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
-				if (this->_KeyEventS.at(i)->_Key_Unit->MoveToX)
-					Insert_Move_Length._Coord_X += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
-			}
+			if (OPD->Get_Adjust_Status())
+				return;
+
+			if (this->_KeyEventS.at(i)->_Key_Unit->MoveToY)
+				Insert_Move_Length._Coord_Y += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
+			if (this->_KeyEventS.at(i)->_Key_Unit->MoveToX)
+				Insert_Move_Length._Coord_X += this->_KeyEventS.at(i)->_Key_Unit->MoveLen;
 		}
 		else
-			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)
-				this->_KeyEventS.at(i)->_Key_Unit->SaveLen = 0;
+			this->_KeyEventS.at(i)->_Key_Unit->SaveLen = 0;
 	}
 	Insert_Move_Length *= MoveScale;
 	Tanxl_Coord<float> Insert_Length(
 		static_cast<float>(Insert_Move_Length._Coord_X),
 		static_cast<float>(Insert_Move_Length._Coord_Y));
+
+	if (Insert_Move_Length._Coord_X < 0)
+		this->_Insert_Status = 1;
+	if (Insert_Move_Length._Coord_X > 0)
+		this->_Insert_Status = 2;
+	if (Insert_Move_Length._Coord_Y > 0)
+		this->_Insert_Status = 3;
+	if (Insert_Move_Length._Coord_Y > 0)
+		this->_Insert_Status = 4;
 
 	State->Get_Screen_Distance() += Insert_Length;
 	State->Get_Move_Distance() += Insert_Length;
@@ -311,6 +319,11 @@ bool InsertEventBase::Check_Key_Press(GLFWwindow* Window)
 short InsertEventBase::Get_Reach_Edge() const
 {
 	return this->_Is_Reach_Edge;
+}
+
+short InsertEventBase::Get_Insert_Status() const
+{
+	return this->_Insert_Status;
 }
 
 const std::string InsertEventBase::Get_Version()

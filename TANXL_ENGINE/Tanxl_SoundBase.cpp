@@ -45,6 +45,8 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 {
 	if (this->_BackGround_Music_List.size() == 0)
 		return;
+	if (Begin_Id == -1)
+		Begin_Id = this->_Current_BackGround_Id;
 	if (this->_BackGround_Music_Playing == false)
 	{
 		this->_BackGround_Music_Playing = true;
@@ -82,7 +84,7 @@ bool SoundBase::Sound_Playing(ESound_WAV Sound_Name, int SoundEngine_Id)
 	return this->_SoundEngine[SoundEngine_Id]->isCurrentlyPlaying(this->_Sound_Names[Sound_Name].c_str());
 }
 
-bool SoundBase::BackGround_Playing()
+bool SoundBase::BackGround_Playing() const
 {
 	return this->_BackGround_Music_Playing;
 }

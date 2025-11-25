@@ -18,6 +18,7 @@
 // 移除未使用的颜色输入
 // 增加正面眨眼的动作纹理
 // 修复人物纹理左右颠倒的问题
+// 移除未使用变量
 
 #version 430
 
@@ -62,9 +63,6 @@ flat out int Cube;
 
 void main(void)
 {
-	float Margin_X = 0.0f;
-	float Margin_Y = 0.0f;
-
 	float Height = 2.0f / SHeight;
 	float Width  = 2.0f / SWidth;
 	

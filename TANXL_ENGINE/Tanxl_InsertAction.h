@@ -9,6 +9,7 @@
 // 获取鼠标位置的函数设为静态函数
 // 设置最大移动范围功能整合进输入模块
 // 预增加第二版按键单元的定义
+// 加入上次输入导致的移动方向的记录
 
 #pragma once
 
@@ -117,6 +118,7 @@ public:
 	bool Check_Key_Press(GLFWwindow* Window);
 	//获取到当前移动操作是否导致移动到地图边缘
 	short Get_Reach_Edge() const;
+	short Get_Insert_Status() const;
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	int RegistEvent(Key_Unit* KU);
@@ -156,7 +158,9 @@ private:
 	//_Max_float 用于记录在移动过程中能够移动到的距中心X/Y轴最远距离
 	float _Max_float;
 	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘 0为未到达边缘 1为左边缘 2为右边缘 3为上边缘 4为下边缘
-	short _Is_Reach_Edge = 0;
+	short _Is_Reach_Edge{ 0 };
+	//_Insert_Status 用于标记第一次按下且未松手的移动方向
+	short _Insert_Status{ 0 };
 	//_Is_State_Range 用于标记当前是否限制了移动范围
 	bool _Is_State_Range;
 	//_Is_Max_Single 用于标记当前是否使用单一X/Y轴设置方式

@@ -89,7 +89,7 @@ std::string RandomBase::GenerateAutoSeed() const
 
 int RandomBase::GenerateNum(int seed) const
 {
-    std::default_random_engine DRE(seed++);
+    std::default_random_engine DRE(seed);
     std::uniform_int_distribution<int> UID(0, 9);
     return this->_NumData[UID(DRE)];
 }
