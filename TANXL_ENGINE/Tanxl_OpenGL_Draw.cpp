@@ -5,7 +5,7 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "79" };
+const static std::string SubVersion{ "82" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -378,6 +378,17 @@ int OpenGL_Draw::Append_Texture(const char* Texture, bool InstanceUse)
 	return Id + OffSet;
 }
 
+void OpenGL_Draw::Reinit_Texture(int CurrentId, const char* Texture)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo[CurrentId]);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
+
+	glActiveTexture(GL_TEXTURE0 + CurrentId);
+
+	glBindTexture(GL_TEXTURE_2D, OpenGL_Render::loadTexture(Texture));
+}
+
 void OpenGL_Draw::Destroy_Window()
 {
 	glfwDestroyWindow(_Main_Window);
@@ -685,6 +696,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	this->_Delta_Time = glfwGetTime() - LastTime;
 	LastTime = glfwGetTime();
 
+	this->_Insert_Status = IEB->Get_Insert_Status();
+
 	if (this->_Is_Init_Need)
 	{
 		this->_Is_Init_Need = false;
@@ -697,7 +710,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	{
 		if (IEB->Check_Key_Press(this->_Main_Window))
 		{
-			IEB->Init_Default_Key();
+			//IEB->Init_Default_Key();
 			_Draw_Status = 5;
 			this->_Middle_Frame = 0;
 		}
@@ -717,6 +730,31 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		IEB->Set_Key_Enable(false);
 		MC->Pay_Money(MC->Get_Money());
 	}
+
+	/*static double tempcnt = 0;
+	static int texId = 0;
+	tempcnt += this->_Delta_Time;
+	std::cout << "tempcnt : " << tempcnt << std::endl;
+	if (tempcnt > 3)
+	{
+		tempcnt = 0;
+		if (texId == 0)
+			Reinit_Texture(9, TanxlOD::TexOcean_01_128x128);
+		if (texId == 1)
+			Reinit_Texture(9, TanxlOD::TexGrass_01_128x128);
+		if (texId == 2)
+			Reinit_Texture(9, TanxlOD::TexDirt_01_128x128);
+		if (texId == 3)
+			Reinit_Texture(9, TanxlOD::TexGrass_02_128x128);
+		if (texId == 4)
+			Reinit_Texture(9, TanxlOD::TexGrass_Snowy_01_128x128);
+		if (texId == 5)
+			Reinit_Texture(9, TanxlOD::TexGrass_Snowy_02_128x128);
+
+		texId++;
+		if (texId > 5)
+			texId = 0;
+	}*/
 
 	if (!glfwWindowShouldClose(_Main_Window))
 	{
@@ -747,8 +785,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			<< State->Get_DataHeight() * this->_Each_Height << std::endl;
 #endif
 
-		this->_Insert_Status = State->HitEdge_Check();
-		State->State_Check_Event();
 		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
 
 		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(this->_Delta_Time));

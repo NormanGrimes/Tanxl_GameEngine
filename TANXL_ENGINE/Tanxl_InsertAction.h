@@ -10,6 +10,7 @@
 // 设置最大移动范围功能整合进输入模块
 // 预增加第二版按键单元的定义
 // 加入上次输入导致的移动方向的记录
+// 增加第二版输入状态量测试
 
 #pragma once
 
@@ -161,6 +162,8 @@ private:
 	short _Is_Reach_Edge{ 0 };
 	//_Insert_Status 用于标记第一次按下且未松手的移动方向
 	short _Insert_Status{ 0 };
+	//_Insert_StatusV2 第二版移动状态变量 包含更多状态
+	unsigned _Insert_StatusV2{ 0 };
 	//_Is_State_Range 用于标记当前是否限制了移动范围
 	bool _Is_State_Range;
 	//_Is_Max_Single 用于标记当前是否使用单一X/Y轴设置方式

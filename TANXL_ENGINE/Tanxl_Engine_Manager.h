@@ -22,6 +22,8 @@
 // 2024/01/08 文件数据输出接口增加错误检查
 // 2024/01/15 设置显示地图尺寸的接口增加绘制模块的初始化
 // 2024/01/17 移除背景音乐正常播放时的无效播放功能调用
+// 2024/01/19 增加地图事件与碰撞功能的检测接口
+// 2024/01/19 增加接口用于初始化内置的八个按键
 
 #pragma once
 
@@ -83,6 +85,9 @@ public:
 	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Is_Begin用于记录是否为起始区块 使用State_Infor的信息覆盖指定ID下的信息
 	void Engine_State_Set_Data(int State_Id, bool Is_Begin, std::string State_Infor = "NULL");
 
+	//用于地图的事件与碰撞功能的检测
+	void Engine_State_Event_Check();
+
 	//Insert Part
 
 	//设置是否启用输入移动限制 Eanble启用/关闭自动移动限制 启用后不需要设置后续内容 Max_Height最大移动高度(绝对值) Max_Widtd最大移动宽度(绝对值)
@@ -93,6 +98,9 @@ public:
 
 	//提供更新绘制部分的手动移动距离值 以及输入按键检测
 	void Engine_Insert_State_Update();
+
+	//初始化内置的八个按键功能
+	void Engine_Insert_Default_Key();
 
 	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
 	Key_Unit* Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move = false, bool Height_Move = false, double Move_Length = 3);

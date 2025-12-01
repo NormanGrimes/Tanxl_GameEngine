@@ -30,6 +30,8 @@ int main()
 	TGE.Engine_Insert_State_MoveWith(true, 0.6f);
 	//启动地图视角自动调整 将玩家单元调整到地图中心位置 每次调整距离为0.20乘以增量时间 可在移动中调整
 	TGE.Engine_Adjust_Multi_Set(true, 0.20f, true);
+	//初始化八个内置的移动按键功能
+	TGE.Engine_Insert_Default_Key();
 	//编辑四个区块的内容
 	TGE.Engine_State_Set_Data(0x5151, false,
 		"0-3,0-2,1-2,0-2,0-2,0-2,0-2,1-2,0-2,0-3,"
@@ -108,6 +110,8 @@ int main()
 		TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_NO_SOUND, true);
 
 		TGE.Engine_Insert_State_Update();//Key Insert
+
+		TGE.Engine_State_Event_Check();
 
 		TGE.Engine_Draw_State_Adjust(0);//Draw Once
 		

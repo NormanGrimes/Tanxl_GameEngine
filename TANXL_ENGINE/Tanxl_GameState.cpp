@@ -1020,6 +1020,177 @@ void GameStateBase::State_Check_Event()
 	}
 }
 
+void GameStateBase::HitEdge_Check()
+{
+	static double State_Data_Width{ this->_Data_Width * this->_Each_Width * 2 + this->_Each_Width };
+	static double State_Data_Height{ this->_Data_Height * this->_Each_Height * 2 + this->_Each_Height };
+
+	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
+
+	if (this->Get_Last_Move()._Coord_X < 0)
+	{
+		if (Distance->_Coord_X < -static_cast<int>(this->Get_DataWidth()) - 1)
+		{
+			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
+			this->Get_Move_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
+#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
+			std::cout << "LEFT RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
+#endif
+		}
+		else
+		{
+			for (int i{ 0 }; i < 2; ++i)
+			{
+				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_LEFT);
+
+				if (this->_Exac_Location._Coord_X >= -static_cast<int>(this->Get_DataWidth()) - 1)
+					this->State_Check_Block(CHECK_EDGE_LEFT);
+			}
+		}
+	}
+	else if (this->Get_Last_Move()._Coord_X > 0)
+	{
+		if (Distance->_Coord_X > State_Data_Width)
+		{
+			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
+			this->Get_Move_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
+#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
+			std::cout << "RIGH RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
+#endif
+		}
+		else
+		{
+			for (int i{ 0 }; i < 2; ++i)
+			{
+				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_RIGH);
+
+				if (this->_Exac_Location._Coord_X <= static_cast<int>(this->Get_DataWidth()) * 2 + 1)
+					this->State_Check_Block(CHECK_EDGE_RIGH);
+			}
+		}
+	}
+
+	if (this->Get_Last_Move()._Coord_Y > 0)
+	{
+		if (Distance->_Coord_Y > this->Get_DataHeight() + 1)
+		{
+			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			this->Get_Move_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
+			std::cout << "ABOV RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
+#endif
+		}
+		else
+		{
+			for (int i{ 0 }; i < 2; ++i)
+			{
+				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_ABOV);
+
+				if (this->_Exac_Location._Coord_Y >= -static_cast<int>(this->Get_DataHeight()) - 1)
+					this->State_Check_Block(CHECK_EDGE_ABOV);
+			}
+		}
+	}
+	else if (this->Get_Last_Move()._Coord_Y < 0)
+	{
+		if (Distance->_Coord_Y < -State_Data_Height)
+		{
+			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			this->Get_Move_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
+			std::cout << "DOWN RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
+#endif
+		}
+		else
+		{
+			for (int i{ 0 }; i < 2; ++i)
+			{
+				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_BELO);
+
+				if (this->_Exac_Location._Coord_Y <= static_cast<int>(this->Get_DataHeight()) * 2 + 1)
+					this->State_Check_Block(CHECK_EDGE_BELO);
+			}
+		}
+	}
+}
+
+void GameStateBase::Move_Adjust()
+{
+	Tanxl_Coord<float>& State_Loc{ LocationBase::GetLocationBase().Get_LocationS(this->_State_Loc) };
+	if (!this->_Is_Adjusting || this->_Adjust_While_Move)//Move Adjust Part
+	{
+		this->_Is_Adjusting = true;
+
+		if (this->_New_Current_Loc._Coord_Y != this->_Current_Move._Coord_Y)
+		{
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUH __ " << this->_New_Current_Loc._Coord_Y << " CUH __ " << this->_Current_Move._Coord_Y << std::endl;
+#endif
+			int TempVal{ this->_New_Current_Loc._Coord_Y };
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUH != CUH !_Is_Adjusting RELOAD" << std::endl;
+#endif
+			if (this->_New_Current_Loc._Coord_Y > this->_Current_Move._Coord_Y)
+			{
+				while (this->_New_Current_Loc._Coord_Y-- > this->_Current_Move._Coord_Y)
+				{
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __HN---" << this->_Is_Adjusting << std::endl;
+#endif
+					this->_MState.Set_Move_State(MoveToNH);
+					State_Loc._Coord_Y -= static_cast<float>(this->_Each_Height);
+				}
+			}
+			else if (this->_New_Current_Loc._Coord_Y < this->_Current_Move._Coord_Y)
+			{
+				while (this->_New_Current_Loc._Coord_Y++ < this->_Current_Move._Coord_Y)
+				{
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __HP___" << this->_Is_Adjusting << std::endl;
+#endif
+					this->_MState.Set_Move_State(MoveToPH);
+					State_Loc._Coord_Y += static_cast<float>(this->_Each_Height);
+				}
+			}
+			this->_Current_Move._Coord_Y = TempVal;
+		}
+
+		if (this->_New_Current_Loc._Coord_X != this->_Current_Move._Coord_X)
+		{
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUW __ " << this->_New_Current_Loc._Coord_X << " CUW __ " << this->_Current_Move._Coord_X << std::endl;
+#endif
+			int TempVal{ this->_New_Current_Loc._Coord_X };
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+			std::cout << "NCUW != CUW !_Is_Adjusting RELOAD" << std::endl;
+#endif
+			if (this->_New_Current_Loc._Coord_X > this->_Current_Move._Coord_X)
+			{
+				while (this->_New_Current_Loc._Coord_X-- > this->_Current_Move._Coord_X)
+				{
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __WN---" << this->_Is_Adjusting << std::endl;
+#endif
+					this->_MState.Set_Move_State(MoveToPW);
+					State_Loc._Coord_X -= static_cast<float>(this->_Each_Width);
+				}
+			}
+			else if (this->_New_Current_Loc._Coord_X < this->_Current_Move._Coord_X)
+			{
+				while (this->_New_Current_Loc._Coord_X++ < this->_Current_Move._Coord_X)
+				{
+#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
+					std::cout << "Adjust_Flag() __WP---" << this->_Is_Adjusting << std::endl;
+#endif
+					this->_MState.Set_Move_State(MoveToNW);
+					State_Loc._Coord_X += static_cast<float>(this->_Each_Width);
+				}
+			}
+			this->_Current_Move._Coord_X = TempVal;
+		}
+	}
+}
+
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Length(Width, Height), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
 	_MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
@@ -1403,87 +1574,6 @@ bool GameStateBase::Check_Edge_Reached(ECheck_Edge Check) const
 	return false;
 }
 
-bool GameStateBase::Move_Adjust()
-{
-	bool Is_State_Changed{ false };
-	Tanxl_Coord<float>& State_Loc{ LocationBase::GetLocationBase().Get_LocationS(this->_State_Loc) };
-	if (!this->_Is_Adjusting || this->_Adjust_While_Move)//Move Adjust Part
-	{
-		this->_Is_Adjusting = true;
-
-		if (this->_New_Current_Loc._Coord_Y != this->_Current_Move._Coord_Y)
-		{
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-			std::cout << "NCUH __ " << this->_New_Current_Loc._Coord_Y << " CUH __ " << this->_Current_Move._Coord_Y << std::endl;
-#endif
-			int TempVal{ this->_New_Current_Loc._Coord_Y };
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-			std::cout << "NCUH != CUH !_Is_Adjusting RELOAD" << std::endl;
-#endif
-			if (this->_New_Current_Loc._Coord_Y > this->_Current_Move._Coord_Y)
-			{
-				while (this->_New_Current_Loc._Coord_Y-- > this->_Current_Move._Coord_Y)
-				{
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-					std::cout << "Adjust_Flag() __HN---" << this->_Is_Adjusting << std::endl;
-#endif
-					this->_MState.Set_Move_State(MoveToNH);
-					State_Loc._Coord_Y -= static_cast<float>(this->_Each_Height);
-				}
-			}
-			else if (this->_New_Current_Loc._Coord_Y < this->_Current_Move._Coord_Y)
-			{
-				while (this->_New_Current_Loc._Coord_Y++ < this->_Current_Move._Coord_Y)
-				{
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-					std::cout << "Adjust_Flag() __HP___" << this->_Is_Adjusting << std::endl;
-#endif
-					this->_MState.Set_Move_State(MoveToPH);
-					State_Loc._Coord_Y += static_cast<float>(this->_Each_Height);
-				}
-			}
-			this->_Current_Move._Coord_Y = TempVal;
-			Is_State_Changed = true;
-		}
-
-		if (this->_New_Current_Loc._Coord_X != this->_Current_Move._Coord_X)
-		{
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-			std::cout << "NCUW __ " << this->_New_Current_Loc._Coord_X << " CUW __ " << this->_Current_Move._Coord_X << std::endl;
-#endif
-			int TempVal{ this->_New_Current_Loc._Coord_X };
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-			std::cout << "NCUW != CUW !_Is_Adjusting RELOAD" << std::endl;
-#endif
-			if (this->_New_Current_Loc._Coord_X > this->_Current_Move._Coord_X)
-			{
-				while (this->_New_Current_Loc._Coord_X-- > this->_Current_Move._Coord_X)
-				{
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-					std::cout << "Adjust_Flag() __WN---" << this->_Is_Adjusting << std::endl;
-#endif
-					this->_MState.Set_Move_State(MoveToPW);
-					State_Loc._Coord_X -= static_cast<float>(this->_Each_Width);
-				}
-			}
-			else if (this->_New_Current_Loc._Coord_X < this->_Current_Move._Coord_X)
-			{
-				while (this->_New_Current_Loc._Coord_X++ < this->_Current_Move._Coord_X)
-				{
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-					std::cout << "Adjust_Flag() __WP---" << this->_Is_Adjusting << std::endl;
-#endif
-					this->_MState.Set_Move_State(MoveToNW);
-					State_Loc._Coord_X += static_cast<float>(this->_Each_Width);
-				}
-			}
-			this->_Current_Move._Coord_X = TempVal;
-			Is_State_Changed = true;
-		}
-	}
-	return Is_State_Changed;
-}
-
 bool GameStateBase::Update_State(ECheck_Edge Check_Direction)
 {
 	bool Is_State_Changed{ false };
@@ -1660,106 +1750,6 @@ int GameStateBase::Get_Distance_Screen_Id() const
 int GameStateBase::Get_Distance_Move_Id() const
 {
 	return this->_Distance_Move;
-}
-
-short GameStateBase::HitEdge_Check()
-{
-	static double State_Data_Width{ this->_Data_Width * this->_Each_Width * 2 + this->_Each_Width };
-	static double State_Data_Height{ this->_Data_Height * this->_Each_Height * 2 + this->_Each_Height };
-
-	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
-	static short Insert_Status{ 0 };
-
-	if (this->Get_Last_Move()._Coord_X < 0)
-	{
-		if (Distance->_Coord_X < -static_cast<int>(this->Get_DataWidth()) - 1)
-		{
-			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-			this->Get_Move_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "LEFT RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_LEFT);
-
-				if (this->_Exac_Location._Coord_X >= -static_cast<int>(this->Get_DataWidth()) - 1)
-					this->State_Check_Block(CHECK_EDGE_LEFT);
-			}
-		}
-		Insert_Status = 0;
-	}
-	else if (this->Get_Last_Move()._Coord_X > 0)
-	{
-		if (Distance->_Coord_X > State_Data_Width)
-		{
-			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-			this->Get_Move_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "RIGH RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_RIGH);
-
-				if (this->_Exac_Location._Coord_X <= static_cast<int>(this->Get_DataWidth()) * 2 + 1)
-					this->State_Check_Block(CHECK_EDGE_RIGH);
-			}
-		}
-		Insert_Status = 1;
-	}
-
-	if (this->Get_Last_Move()._Coord_Y > 0)
-	{
-		if (Distance->_Coord_Y > this->Get_DataHeight() + 1)
-		{
-			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			this->Get_Move_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "ABOV RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_ABOV);
-
-				if (this->_Exac_Location._Coord_Y >= -static_cast<int>(this->Get_DataHeight()) - 1)
-					this->State_Check_Block(CHECK_EDGE_ABOV);
-			}
-		}
-		Insert_Status = 2;
-	}
-	else if (this->Get_Last_Move()._Coord_Y < 0)
-	{
-		if (Distance->_Coord_Y < -State_Data_Height)
-		{
-			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			this->Get_Move_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-#if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "DOWN RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
-#endif
-		}
-		else
-		{
-			for (int i{ 0 }; i < 2; ++i)
-			{
-				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_BELO);
-
-				if (this->_Exac_Location._Coord_Y <= static_cast<int>(this->Get_DataHeight()) * 2 + 1)
-					this->State_Check_Block(CHECK_EDGE_BELO);
-			}
-		}
-		Insert_Status = 3;
-	}
-	return Insert_Status;
 }
 
 Tanxl_Coord<int> GameStateBase::Get_StateLength()const

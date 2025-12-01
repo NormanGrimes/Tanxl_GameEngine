@@ -40,6 +40,7 @@
 // 多个成员函数设为常量
 // 屏幕边缘移动接口减少参数
 // 去掉地图改变相关的参数
+// 移除多个绘制模块相关的返回值
 
 #pragma once
 
@@ -264,18 +265,18 @@ public:
 	void Move_State(EMove_State_EventId Direction, int Times);
 	void Update_Last_Location();
 	void State_Check_Event();
+	void HitEdge_Check();
+	void Move_Adjust();
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status() const;
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check) const;
-	bool Move_Adjust();
 	bool Update_State(ECheck_Edge Check_Direction);
 	bool State_Check_Block(ECheck_Edge Check_Direction);
 	Tanxl_Coord<int> Get_Exac_Location() const;
 	int Get_Distance_Screen_Id() const;
 	int Get_Distance_Move_Id() const;
 	//↓HitEdge_Check 返回最后一次的按键状态
-	short HitEdge_Check();
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数

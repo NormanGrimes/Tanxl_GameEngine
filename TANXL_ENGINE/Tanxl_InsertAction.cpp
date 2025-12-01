@@ -135,13 +135,25 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		static_cast<float>(Insert_Move_Length._Coord_Y));
 
 	if (Insert_Move_Length._Coord_X < 0)
-		this->_Insert_Status = 1;
+	{
+		this->_Insert_Status = 0;
+		this->_Insert_StatusV2 |= 1;
+	}
 	if (Insert_Move_Length._Coord_X > 0)
+	{
+		this->_Insert_Status = 1;
+		this->_Insert_StatusV2 |= 2;
+	}
+	if (Insert_Move_Length._Coord_Y > 0)
+	{
 		this->_Insert_Status = 2;
-	if (Insert_Move_Length._Coord_Y > 0)
+		this->_Insert_StatusV2 |= 4;
+	}
+	if (Insert_Move_Length._Coord_Y < 0)
+	{
 		this->_Insert_Status = 3;
-	if (Insert_Move_Length._Coord_Y > 0)
-		this->_Insert_Status = 4;
+		this->_Insert_StatusV2 |= 8;
+	}
 
 	State->Get_Screen_Distance() += Insert_Length;
 	State->Get_Move_Distance() += Insert_Length;

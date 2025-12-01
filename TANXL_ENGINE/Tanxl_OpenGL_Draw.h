@@ -56,6 +56,8 @@
 // 增加实例化绘制的颜色自定义功能
 // 绘制接口去掉时间参数
 // 移除用于标记地图改变的变量
+// 输入状态改为从输入模块获取
+// 增加重新绑定现有纹理的接口
 
 #pragma once
 
@@ -537,6 +539,7 @@ public:
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
 	int Append_Texture(const char* Texture, bool InstanceUse = false);
+	void Reinit_Texture(int CurrentId, const char* Texture);
 	//删除OpenGL窗口
 	void Destroy_Window();
 	void Enable_State_Adjust(bool Enable);

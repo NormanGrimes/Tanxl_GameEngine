@@ -36,7 +36,7 @@ void SoundBase::Stop_AllSound(int SoundEngine_Id)
 {
 	this->_SoundEngine[SoundEngine_Id]->stopAllSounds();
 
-	this->_Current_BackGround_Id = 0;
+	//this->_Current_BackGround_Id = 0;
 	this->_BackGround_Music_Playing = false;
 	this->_SoundEngine[SoundEngine_Id]->setSoundVolume(1.0f);
 }

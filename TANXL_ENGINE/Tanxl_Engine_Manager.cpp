@@ -246,6 +246,11 @@ void Tanxl_Engine::Engine_Insert_State_Update()
 	this->Tanxl_Engine_GameState->Update_State(CHECK_EDGE_CURR);//更新地图加载区块
 }
 
+void Tanxl_Engine::Engine_Insert_Default_Key()
+{
+	this->Tanxl_Engine_InsertBase->Init_Default_Key();
+}
+
 Key_Unit* Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)
 {
 	Key_Unit* KEYU;
@@ -340,7 +345,7 @@ void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable
 	{
 		if (this->Tanxl_Engine_OpenGL_Draw->Get_Game_Status() == GAME_PLAYER_ACTIVE)
 		{
-			if (this->Tanxl_Engine_SoundBase->BackGround_Playing())
+			if (!this->Tanxl_Engine_SoundBase->BackGround_Playing())
 			{
 				this->Tanxl_Engine_SoundBase->Play_BackGround_Music();
 			}
@@ -375,6 +380,12 @@ void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Is_Begin, std::strin
 		this->Tanxl_Engine_GameState->Set_StartState(State_Id, State_Infor);
 	else
 		this->Tanxl_Engine_GameState->Set_State(State_Id, State_Infor);
+}
+
+void Tanxl_Engine::Engine_State_Event_Check()
+{
+	this->Tanxl_Engine_GameState->HitEdge_Check();
+	this->Tanxl_Engine_GameState->State_Check_Event();
 }
 
 void Tanxl_Engine::Engine_Insert_Adjust_Speed(int Start, int End, double Adjust_Value)
