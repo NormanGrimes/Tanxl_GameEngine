@@ -34,13 +34,11 @@ void FontBase::Init_Fonts(std::string Font_Path)
 
 	// Load first 128 characters of ASCII set
 	GLuint FontCnts{ 256 };
-	//if (this->_Internal_Language == LANGUAGE_CHINESE)
-	//	FontCnts = 0xFFFF;
 
 	for (GLuint c = 0; c < FontCnts; c++)
 	{
 		// Load character glyph 
-		if (/*FT_Load_Glyph*/FT_Load_Char(face, c, FT_LOAD_RENDER))
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 		{
 			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
 			continue;

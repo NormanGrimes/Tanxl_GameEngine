@@ -109,9 +109,8 @@ void Tanxl_Engine::Engine_Insert_State_MoveWith(bool Enable, float Compare_Ratio
 
 void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Value, bool Enable_While_Move)
 {
-	this->Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust);
+	this->Tanxl_Engine_GameState->Set_Enable_Adjust(Enable_Adjust, Enable_While_Move);
 	this->Tanxl_Engine_GameState->Set_Adjust(Adjust_Value);
-	this->Tanxl_Engine_GameState->Set_Adjust_While_Move(Enable_While_Move);
 }
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
@@ -371,15 +370,12 @@ bool Tanxl_Engine::Engine_Should_Shut_Down()
 
 void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Is_Begin, std::string State_Infor)
 {
-	if (((this->_Engine_Status & 0x100) == 0x0))
+	if (((this->_Engine_Status & 0x100) == 0x000))
 	{
 		std::cout << "当前未开启扩展世界功能";
 		return;
 	}
-	if (Is_Begin)
-		this->Tanxl_Engine_GameState->Set_StartState(State_Id, State_Infor);
-	else
-		this->Tanxl_Engine_GameState->Set_State(State_Id, State_Infor);
+	this->Tanxl_Engine_GameState->Set_State(State_Id, State_Infor, Is_Begin);
 }
 
 void Tanxl_Engine::Engine_State_Event_Check()

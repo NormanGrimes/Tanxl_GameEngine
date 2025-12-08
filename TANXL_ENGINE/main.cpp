@@ -14,9 +14,9 @@
 int main()
 {
 	Tanxl_Engine TGE;
-	//检测引擎12状态 是否有异常产生
+	//检测引擎状态 是否有异常产生
 	TGE.Engine_Check_Engine_Status();
-	//构造31x31个区块的(10x10)程序生成世界 并建立数据间的连接
+	//构造256x256个区块的(10x10)程序生成世界 初始化5x5部分的区域 并建立数据间的连接
 	TGE.Engine_Save_Infinite_State(true, 5, 5, 80, 80);
 	//生成引擎数据文件 "Tanxl Engine SystemInfor.sd"
 	TGE.Engine_Save_Source_Infor("Tanxl Engine SystemInfor");

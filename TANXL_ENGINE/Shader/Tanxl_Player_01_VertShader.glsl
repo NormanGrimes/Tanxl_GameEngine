@@ -19,6 +19,7 @@
 // 增加正面眨眼的动作纹理
 // 修复人物纹理左右颠倒的问题
 // 移除未使用变量
+// 移除奔跑动作相关参数
 
 #version 430
 
@@ -54,9 +55,6 @@ layout (location = 18) uniform int Player_Blink_02;
 
 layout (location = 19) uniform int Player_Blink_Cnt;
 
-layout (location = 20) uniform int Player_Run_01;
-layout (location = 21) uniform int Player_Run_02;
-
 out vec4 vs_color;
 out vec2 tc;
 flat out int Cube;
@@ -73,14 +71,7 @@ void main(void)
 		if(Insert_Status == 0)
 			Cube = Player_Texture_04;
 		else if(Insert_Status == 1)
-		{
-			if((Player_Blink_Cnt >= 0) && (Player_Blink_Cnt <= 25))
-				Cube = Player_Run_01;
-			else if((Player_Blink_Cnt > 25) && (Player_Blink_Cnt <= 50))
-				Cube = Player_Run_02;
-			else
 			Cube = Player_Texture_02;
-		}
 		else if(Insert_Status == 2)
 			Cube = Player_Texture_03;
 		else if(Insert_Status == 3)

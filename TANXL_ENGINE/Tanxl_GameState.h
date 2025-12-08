@@ -41,6 +41,9 @@
 // 屏幕边缘移动接口减少参数
 // 去掉地图改变相关的参数
 // 移除多个绘制模块相关的返回值
+// 移除设置调整状态的接口
+// 合并设置地图调节和移动中调节的接口
+// 合并设置地图数据和设置起始地图数据的接口
 
 #pragma once
 
@@ -214,7 +217,6 @@ private:
 class GameStateBase : public Tanxl_ClassBase
 {
 public:
-	
 	StateUnit* Get_StateUnit(EState_Extend State, int Pos);
 	//↓Get_State : 指定坐标获取地图单元
 	StateUnit* Get_State(int LocationX, int LocationY);
@@ -237,18 +239,15 @@ public:
 	void Clear_Display_Vector(EState_Extend Clear_Id = STATE_EXTEND_SPEC) const;
 	void Set_Display_State(int Width, int Height);
 	void Set_Data_Length(unsigned Width, unsigned Height);
-	void Set_Adjust_Flag(bool Adjust_Flag);
 	void Check_Adjust_Status(bool Is_Key_Pressed);
 	//↓CompileStateUnits : 使用一个字符串来完成整个地图单元的设计 以英文逗号(,)为间断 以英文句号(.)为结尾
 	void CompileStateUnits(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
-	//↓Set_StartState : 设置起始区域并构建初始连接编译周围区域 State_Id起始区域Id Cover_String不为NULL时覆盖起始区域内容
-	void Set_StartState(int State_Id, std::string Cover_String = "NULL");
-	//↓Set_State : 仅修改指定区域的地图数据 State_Id 指定区域Id Cover_String为覆盖的内容
-	void Set_State(int State_Id, std::string Cover_String);
+	//↓Set_State : Start 为False时仅修改指定区域的地图数据 State_Id 指定区域Id Cover_String为覆盖的内容
+	// Start 为True时设置起始区域并构建初始连接编译周围区域 State_Id起始区域Id Cover_String不为NULL时覆盖起始区域内容
+	void Set_State(int State_Id, std::string Cover_String = "NULL", bool Start = false);
 	void Set_State_Counts(int Width, int Height);
 	void Set_Adjust(float Adjust);
-	void Set_Adjust_While_Move(bool Enable);
-	void Set_Enable_Adjust(bool Enable);
+	void Set_Enable_Adjust(bool Enable_Adjust, bool Enable_While_Move);
 	void Set_CurrentLoc(float& CurrentX, float& CurrentY) const;
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);

@@ -353,52 +353,39 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 	_Compile_Success = true;
 }
 
-void GameStateBase::Set_StartState(int State_Id, std::string Cover_String)
+void GameStateBase::Set_State(int State_Id, std::string Cover_String, bool Start)
 {
 	if (this->Get_Engine_File())
 	{
 		Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, State_Id) };
 		std::string Data_Name{ Link->_Data->_Data_Units.at(0)->_Data };
-		this->_Extend_Mid_Id = State_Id;
+		Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
 
-		if (Cover_String != "NULL")
-			Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
-		this->CompileStateUnits(Link->_Data->_Data_Units.at(1)->_Data, STATE_EXTEND_MIDD);
-		this->_GameState_Extend._MIDD._Id = Link->_Data->_Data_Units.at(0)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(2)->_Data), STATE_EXTEND_LEFT);
-		this->_GameState_Extend._LEFT._Id = Link->_Data->_Data_Units.at(2)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(3)->_Data), STATE_EXTEND_RIGH);
-		this->_GameState_Extend._RIGH._Id = Link->_Data->_Data_Units.at(3)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(4)->_Data), STATE_EXTEND_ABOV);
-		this->_GameState_Extend._ABOV._Id = Link->_Data->_Data_Units.at(4)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(5)->_Data), STATE_EXTEND_BELO);
-		this->_GameState_Extend._BELO._Id = Link->_Data->_Data_Units.at(5)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(6)->_Data), STATE_EXTEND_LEFT_ABOV);
-		this->_GameState_Extend._LEFT_ABOV._Id = Link->_Data->_Data_Units.at(6)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(7)->_Data), STATE_EXTEND_LEFT_BELO);
-		this->_GameState_Extend._LEFT_BELO._Id = Link->_Data->_Data_Units.at(7)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(8)->_Data), STATE_EXTEND_RIGH_ABOV);
-		this->_GameState_Extend._RIGH_ABOV._Id = Link->_Data->_Data_Units.at(8)->_Data;
-		this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
-		this->_GameState_Extend._RIGH_BELO._Id = Link->_Data->_Data_Units.at(9)->_Data;
-		this->Set_Data_Length(10, 10);
-		return;
-	}
-}
-
-void GameStateBase::Set_State(int State_Id, std::string Cover_String)
-{
-	if (this->Get_Engine_File())
-	{
-		std::string Data_Name{ this->Get_State_Id(State_Id) };
-		for (int i{ 0 }; i < (this->_State_WidthS * this->_State_HeightS); ++i)
+		if (Start)
 		{
-			Id_Link* Link{ this->_Data_Base.Id_Link_Search(i) };
-			if (Link->_Data->_Data_Units.at(0)->_Data == Data_Name)
-			{
+			this->_Extend_Mid_Id = State_Id;
+
+			if (Cover_String != "NULL")
 				Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
-				return;
-			}
+			this->CompileStateUnits(Link->_Data->_Data_Units.at(1)->_Data, STATE_EXTEND_MIDD);
+			this->_GameState_Extend._MIDD._Id = Link->_Data->_Data_Units.at(0)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(2)->_Data), STATE_EXTEND_LEFT);
+			this->_GameState_Extend._LEFT._Id = Link->_Data->_Data_Units.at(2)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(3)->_Data), STATE_EXTEND_RIGH);
+			this->_GameState_Extend._RIGH._Id = Link->_Data->_Data_Units.at(3)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(4)->_Data), STATE_EXTEND_ABOV);
+			this->_GameState_Extend._ABOV._Id = Link->_Data->_Data_Units.at(4)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(5)->_Data), STATE_EXTEND_BELO);
+			this->_GameState_Extend._BELO._Id = Link->_Data->_Data_Units.at(5)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(6)->_Data), STATE_EXTEND_LEFT_ABOV);
+			this->_GameState_Extend._LEFT_ABOV._Id = Link->_Data->_Data_Units.at(6)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(7)->_Data), STATE_EXTEND_LEFT_BELO);
+			this->_GameState_Extend._LEFT_BELO._Id = Link->_Data->_Data_Units.at(7)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(8)->_Data), STATE_EXTEND_RIGH_ABOV);
+			this->_GameState_Extend._RIGH_ABOV._Id = Link->_Data->_Data_Units.at(8)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
+			this->_GameState_Extend._RIGH_BELO._Id = Link->_Data->_Data_Units.at(9)->_Data;
+			this->Set_Data_Length(10, 10);
 		}
 	}
 }
@@ -1303,14 +1290,10 @@ void GameStateBase::Set_Adjust(float Adjust)
 	this->_GameState_Adjust = Adjust;
 }
 
-void GameStateBase::Set_Adjust_While_Move(bool Enable)
+void GameStateBase::Set_Enable_Adjust(bool Enable_Adjust, bool Enable_While_Move)
 {
-	this->_Adjust_While_Move = Enable;
-}
-
-void GameStateBase::Set_Enable_Adjust(bool Enable)
-{
-	this->_Adjust_Enable = Enable;
+	this->_Adjust_Enable = Enable_Adjust;
+	this->_Adjust_While_Move = Enable_While_Move;
 }
 
 bool GameStateBase::Is_State_Exist(EState_Extend State_Id)
@@ -1521,11 +1504,6 @@ GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 bool GameStateBase::Get_Compile_Status() const
 {
 	return this->_Compile_Success;
-}
-
-void GameStateBase::Set_Adjust_Flag(bool Adjust_Flag)
-{
-	this->_Is_Adjusting = Adjust_Flag;
 }
 
 void GameStateBase::Check_Adjust_Status(bool Is_Key_Pressed)

@@ -58,6 +58,8 @@
 // 移除用于标记地图改变的变量
 // 输入状态改为从输入模块获取
 // 增加重新绑定现有纹理的接口
+// 新增动作类
+// 修复重新绑定纹理接口内存溢出的问题
 
 #pragma once
 
@@ -85,6 +87,8 @@
 #include "Tanxl_FontBase.h"
 #include "Tanxl_SteamService.h"
 #include "Tanxl_Console_List.h"
+
+class Motion_Cycle;
 
 namespace TanxlOD
 {
@@ -539,6 +543,7 @@ public:
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
 	int Append_Texture(const char* Texture, bool InstanceUse = false);
+	//编号不变 替换为新纹理
 	void Reinit_Texture(int CurrentId, const char* Texture);
 	//删除OpenGL窗口
 	void Destroy_Window();
@@ -599,6 +604,8 @@ private:
 	double _Delta_Time{ 0 };
 	//记录上次移动导致主角面向的方向
 	short _Insert_Status{ 0 };
+	//新版动作测试
+	Motion_Cycle* _MotionTest{ nullptr };
 	//当前此模块的版本号
 	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;
@@ -606,6 +613,31 @@ private:
 	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2 _StateInfor[400];
 	glm::vec2 _StateOffSet[400];
+};
+
+class Motion_Cycle
+{
+public:
+	Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine);
+
+	void Append_Montion_Image(const char* Motion_Image, double Delta_Time);
+
+	void Start_Motion(double Delta_Time);
+
+	void Set_Idle_Image(const char* Motion_Image);
+
+	void Idle_Image();
+
+private:
+	int _Motion_Id;
+	int _Motion_Count;
+	int _Current_Motion_Id;
+	bool _Idle_Status{ false };
+	double _Internal_Delta_Time[10];
+	const char* _Motion_Image[10];//最多十帧动画
+	const char* _Idle_Image;
+
+	OpenGL_Draw* _DrawEngine;
 };
 
 #endif

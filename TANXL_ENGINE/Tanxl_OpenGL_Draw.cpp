@@ -5,7 +5,7 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "82" };
+const static std::string SubVersion{ "82+" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -142,8 +142,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 	int Tex_09{ Append_Texture(TanxlOD::TexPrincess_01_Blink_01_256x256) };
 	int Tex_10{ Append_Texture(TanxlOD::TexPrincess_01_Blink_02_256x256) };
 	int Tex_11{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)			 };
-	int Tex_12{ Append_Texture(TanxlOD::TexPrincess_02_Run_01_256x256) };
-	int Tex_13{ Append_Texture(TanxlOD::TexPrincess_02_Run_02_256x256) };
+	//int Tex_12{ Append_Texture(TanxlOD::TexPrincess_02_Run_01_256x256) };
+	//int Tex_13{ Append_Texture(TanxlOD::TexPrincess_02_Run_02_256x256) };
+
+	this->_MotionTest = new Motion_Cycle(Tex_02, this);
+	this->_MotionTest->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_01_256x256, 25);
+	this->_MotionTest->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_02_256x256, 25);
+	this->_MotionTest->Set_Idle_Image(TanxlOD::TexPrincess_02_256x256);
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
@@ -153,8 +158,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 16, Tex_06);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 17, Tex_09);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 18, Tex_10);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 20, Tex_12);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 21, Tex_13);
+	//glProgramUniform1i(this->_Adjst_RenderingProgram, 20, Tex_12);
+	//glProgramUniform1i(this->_Adjst_RenderingProgram, 21, Tex_13);
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
 
@@ -178,7 +183,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 		glm::vec4(1.0f, 1.0f, 0.1f, 1.0),
 		glm::vec4(0.9f, 0.7f, 0.6f, 1.0),
 		glm::vec4(0.9f, 0.7f, 0.6f, 1.0) };
-	int Instance_Cnt = 0;
+
+	int Instance_Cnt{ 0 };
 	double BeginHeight{ ((this->_Scene_Int._Coord_Y) / 2.0f) * State->Get_Each_Height() - State->Get_Each_Height() / 2.0f};
 	for (int Height{ 0 }; Height < (5); ++Height)
 	{
@@ -199,8 +205,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 		BeginHeight -= State->Get_Each_Height();
 	}
 
-	glGenBuffers(1, &_Inst_vbo[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]);
+	glGenBuffers(1, &_Inst_vbo[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * 30, &translations[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -228,16 +234,17 @@ void OpenGL_Draw::init(GameStateBase* State)
 		 HalfW,  HalfH,
 	};
 	glGenVertexArrays(1, &_vao[2]);
-	glGenBuffers(1, &_Inst_vbo[1]);
+	glGenBuffers(1, &_Inst_vbo[0]);
 	glBindVertexArray(_vao[2]);
-	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);// Test VertShader uniform aPos
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
 
 	glEnableVertexAttribArray(2);// Test VertShader uniform aOffset
-	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[0]); // this attribute comes from a different vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]); // this attribute comes from a different vertex buffer
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	glEnableVertexAttribArray(4);// Test VertShader uniform ColorA
@@ -380,6 +387,10 @@ int OpenGL_Draw::Append_Texture(const char* Texture, bool InstanceUse)
 
 void OpenGL_Draw::Reinit_Texture(int CurrentId, const char* Texture)
 {
+	const GLuint Id{ static_cast<GLuint>(CurrentId) };
+
+	glDeleteTextures(1, &Id);
+
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo[CurrentId]);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
@@ -597,13 +608,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if ((this->_Insert_Status == 1) && (this->_Game_Status == GAME_PLAYER_ACTIVE))
 		{
 			if (State->Get_Last_Move()._Coord_X == 0.0f)
-				Blink_Cnt = -1;
+				this->_MotionTest->Idle_Image();
 			else
-			{
-				Blink_Cnt += this->_Delta_Time * 100;
-				if (Blink_Cnt > 50)
-					Blink_Cnt = 0;
-			}
+				this->_MotionTest->Start_Motion(this->_Delta_Time * 100);
 		}
 
 		glProgramUniform1i(this->_Adjst_RenderingProgram, 19, static_cast<int>(Blink_Cnt));
@@ -710,7 +717,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	{
 		if (IEB->Check_Key_Press(this->_Main_Window))
 		{
-			//IEB->Init_Default_Key();
 			_Draw_Status = 5;
 			this->_Middle_Frame = 0;
 		}
@@ -730,31 +736,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		IEB->Set_Key_Enable(false);
 		MC->Pay_Money(MC->Get_Money());
 	}
-
-	/*static double tempcnt = 0;
-	static int texId = 0;
-	tempcnt += this->_Delta_Time;
-	std::cout << "tempcnt : " << tempcnt << std::endl;
-	if (tempcnt > 3)
-	{
-		tempcnt = 0;
-		if (texId == 0)
-			Reinit_Texture(9, TanxlOD::TexOcean_01_128x128);
-		if (texId == 1)
-			Reinit_Texture(9, TanxlOD::TexGrass_01_128x128);
-		if (texId == 2)
-			Reinit_Texture(9, TanxlOD::TexDirt_01_128x128);
-		if (texId == 3)
-			Reinit_Texture(9, TanxlOD::TexGrass_02_128x128);
-		if (texId == 4)
-			Reinit_Texture(9, TanxlOD::TexGrass_Snowy_01_128x128);
-		if (texId == 5)
-			Reinit_Texture(9, TanxlOD::TexGrass_Snowy_02_128x128);
-
-		texId++;
-		if (texId > 5)
-			texId = 0;
-	}*/
 
 	if (!glfwWindowShouldClose(_Main_Window))
 	{
@@ -824,4 +805,49 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 void TanxlOD::framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+}
+
+Motion_Cycle::Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine) :
+	_Motion_Id(Motion_Id), _Motion_Count(0), _Motion_Image(),
+	_Internal_Delta_Time(), _DrawEngine(DrawEngine), _Current_Motion_Id(0), _Idle_Image() {}
+
+void Motion_Cycle::Append_Montion_Image(const char* Motion_Image, double Delta_Time)
+{
+	if (this->_Motion_Count > 9)
+		return;
+	this->_Internal_Delta_Time[this->_Motion_Count] = Delta_Time;
+	this->_Motion_Image[this->_Motion_Count] = Motion_Image;
+	this->_Motion_Count++;
+}
+
+void Motion_Cycle::Start_Motion(double Delta_Time)
+{
+	static double DeltaTime{};
+
+	DeltaTime += Delta_Time;
+	this->_Idle_Status = false;
+	if (DeltaTime > this->_Internal_Delta_Time[this->_Current_Motion_Id])
+	{
+		DeltaTime = 0;
+		this->_Current_Motion_Id++;
+		if (this->_Current_Motion_Id > (this->_Motion_Count - 1))
+			this->_Current_Motion_Id = 0;
+		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_Motion_Image[this->_Current_Motion_Id]);
+		//std::cout << "REINIT" << std::endl;
+	}
+	std::cout << "this->_Motion_Count :" << this->_Current_Motion_Id << " - " << DeltaTime << std::endl;
+}
+
+void Motion_Cycle::Set_Idle_Image(const char* Motion_Image)
+{
+	this->_Idle_Image = Motion_Image;
+}
+
+void Motion_Cycle::Idle_Image()
+{
+	if (!this->_Idle_Status)
+	{
+		this->_Idle_Status = true;
+		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_Idle_Image);
+	}
 }

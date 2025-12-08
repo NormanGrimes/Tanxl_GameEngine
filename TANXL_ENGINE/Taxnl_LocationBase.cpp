@@ -78,15 +78,15 @@ int LocationBase::New_Location_set(std::string Location_Name, float Init_LocX, f
 {
 	if (Limited)
 	{
-		Location_Limited* Limit = new Location_Limited(Location_Name);
+		Location_Limited* Limit{ new Location_Limited(Location_Name) };
 		Limit->Set_Location(Init_LocX, Init_LocY);
-		_LocationS.push_back(Limit);
+		this->_LocationS.push_back(Limit);
 	}
 	else
 	{
-		Location* Loc = new Location(Location_Name);
+		Location* Loc{ new Location(Location_Name) };
 		Loc->Set_Location(Init_LocX, Init_LocY);
-		_LocationS.push_back(Loc);
+		this->_LocationS.push_back(Loc);
 	}
 	return static_cast<int>(_LocationS.size()) - 1;
 }
