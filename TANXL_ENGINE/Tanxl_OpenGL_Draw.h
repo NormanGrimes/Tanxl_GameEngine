@@ -60,6 +60,11 @@
 // 增加重新绑定现有纹理的接口
 // 新增动作类
 // 修复重新绑定纹理接口内存溢出的问题
+// 正式应用动作类
+// 动作类增加静态成员用于动作的切换
+// 移除多个绑定的纹理
+// 启用第二版输入状态用于选择纹理
+// 移除输入状态成员
 
 #pragma once
 
@@ -602,10 +607,8 @@ private:
 	double _Middle_Frame{ 0 };
 	//距离上次调用绘制的增量时间
 	double _Delta_Time{ 0 };
-	//记录上次移动导致主角面向的方向
-	short _Insert_Status{ 0 };
 	//新版动作测试
-	Motion_Cycle* _MotionTest{ nullptr };
+	std::vector<Motion_Cycle*> _MotionS;
 	//当前此模块的版本号
 	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;
@@ -632,6 +635,9 @@ private:
 	int _Motion_Id;
 	int _Motion_Count;
 	int _Current_Motion_Id;
+	int _Internal_Id;
+	static int _SLastMotion_Id;
+	static int _SMotions_Count;
 	bool _Idle_Status{ false };
 	double _Internal_Delta_Time[10];
 	const char* _Motion_Image[10];//最多十帧动画

@@ -134,7 +134,8 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		static_cast<float>(Insert_Move_Length._Coord_X),
 		static_cast<float>(Insert_Move_Length._Coord_Y));
 
-	if (Insert_Move_Length._Coord_X < 0)
+	this->_Insert_StatusV2 = 0;
+	if (Insert_Move_Length._Coord_Y < 0)
 	{
 		this->_Insert_Status = 0;
 		this->_Insert_StatusV2 |= 1;
@@ -149,7 +150,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		this->_Insert_Status = 2;
 		this->_Insert_StatusV2 |= 4;
 	}
-	if (Insert_Move_Length._Coord_Y < 0)
+	if (Insert_Move_Length._Coord_X < 0)
 	{
 		this->_Insert_Status = 3;
 		this->_Insert_StatusV2 |= 8;
@@ -336,6 +337,18 @@ short InsertEventBase::Get_Reach_Edge() const
 short InsertEventBase::Get_Insert_Status() const
 {
 	return this->_Insert_Status;
+}
+
+unsigned InsertEventBase::Get_Insert_StatusV2() const
+{
+	static unsigned Insert_Mask{ this->_Insert_StatusV2 };
+	if (Insert_Mask & this->_Insert_StatusV2)
+		return Insert_Mask & this->_Insert_StatusV2;
+	else
+	{
+		Insert_Mask = this->_Insert_StatusV2;
+		return this->_Insert_StatusV2;
+	}
 }
 
 const std::string InsertEventBase::Get_Version()

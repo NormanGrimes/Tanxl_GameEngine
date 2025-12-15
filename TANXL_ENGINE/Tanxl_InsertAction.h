@@ -11,6 +11,7 @@
 // 预增加第二版按键单元的定义
 // 加入上次输入导致的移动方向的记录
 // 增加第二版输入状态量测试
+// 修改按键对应的输入状态
 
 #pragma once
 
@@ -120,6 +121,7 @@ public:
 	//获取到当前移动操作是否导致移动到地图边缘
 	short Get_Reach_Edge() const;
 	short Get_Insert_Status() const;
+	unsigned Get_Insert_StatusV2() const;
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	int RegistEvent(Key_Unit* KU);

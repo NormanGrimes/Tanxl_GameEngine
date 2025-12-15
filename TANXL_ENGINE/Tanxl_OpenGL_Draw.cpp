@@ -132,39 +132,37 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexCoin_01_64x64);
 
 	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
-	int Tex_02{ Append_Texture(TanxlOD::TexPrincess_02_256x256)		};
-	int Tex_03{ Append_Texture(TanxlOD::TexPrincess_03_256x256)		};
-	int Tex_04{ Append_Texture(TanxlOD::TexPrincess_04_256x256)		};
-	int Tex_05{ Append_Texture(TanxlOD::TexHealth_01_32x32)			};
-	int Tex_06{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
-	int Tex_07{ Append_Texture(TanxlOD::TexStartMenu_01_1024x1024)	};
-	int Tex_08{ Append_Texture(TanxlOD::TexMedic_01_64x64)			};
-	int Tex_09{ Append_Texture(TanxlOD::TexPrincess_01_Blink_01_256x256) };
-	int Tex_10{ Append_Texture(TanxlOD::TexPrincess_01_Blink_02_256x256) };
-	int Tex_11{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)			 };
-	//int Tex_12{ Append_Texture(TanxlOD::TexPrincess_02_Run_01_256x256) };
-	//int Tex_13{ Append_Texture(TanxlOD::TexPrincess_02_Run_02_256x256) };
+	int Tex_02{ Append_Texture(TanxlOD::TexHealth_01_32x32)			};
+	int Tex_03{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
+	int Tex_04{ Append_Texture(TanxlOD::TexStartMenu_01_1024x1024)	};
+	int Tex_05{ Append_Texture(TanxlOD::TexMedic_01_64x64)			};
+	int Tex_06{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)			 };
 
-	this->_MotionTest = new Motion_Cycle(Tex_02, this);
-	this->_MotionTest->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_01_256x256, 25);
-	this->_MotionTest->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_02_256x256, 25);
-	this->_MotionTest->Set_Idle_Image(TanxlOD::TexPrincess_02_256x256);
+	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01_256x256, 15);
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_02_256x256, 10);
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01_256x256, 15);
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_256x256, 250);
 
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_01);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_02);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 13, Tex_03);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 14, Tex_04);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 15, Tex_05);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 16, Tex_06);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 17, Tex_09);
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 18, Tex_10);
-	//glProgramUniform1i(this->_Adjst_RenderingProgram, 20, Tex_12);
-	//glProgramUniform1i(this->_Adjst_RenderingProgram, 21, Tex_13);
+	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_01_256x256, 25);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_02_256x256, 25);
+	this->_MotionS.at(1)->Set_Idle_Image(TanxlOD::TexPrincess_02_256x256);
 
-	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_07);
+	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
+	this->_MotionS.at(2)->Set_Idle_Image(TanxlOD::TexPrincess_03_256x256);
 
-	glProgramUniform1i(this->_Event_RenderingProgram, 7, Tex_08);
-	glProgramUniform1i(this->_Event_RenderingProgram, 8, Tex_11);
+	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
+	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04_256x256);
+
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, Tex_01);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_02);
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_03);
+
+	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_04);
+
+	glProgramUniform1i(this->_Event_RenderingProgram, 7, Tex_05);
+	glProgramUniform1i(this->_Event_RenderingProgram, 8, Tex_06);
 
 	glBindVertexArray(0);
 
@@ -511,7 +509,6 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
-	static double Blink_Cnt{ 0 };
 	static bool Is_Dead{ false };
 
 	static float VersionFontSize{ 20.0f };
@@ -598,22 +595,27 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	}
 	else
 	{
-		if ((this->_Insert_Status == 3) && (this->_Game_Status == GAME_PLAYER_ACTIVE))
+		unsigned Insert_Status = IEB->Get_Insert_StatusV2();
+		if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		{
-			Blink_Cnt += this->_Delta_Time * 100;
-			if (Blink_Cnt > 400)
-				Blink_Cnt = 0;
-		}
+			static unsigned LastStatus{ Insert_Status };
 
-		if ((this->_Insert_Status == 1) && (this->_Game_Status == GAME_PLAYER_ACTIVE))
-		{
-			if (State->Get_Last_Move()._Coord_X == 0.0f)
-				this->_MotionTest->Idle_Image();
+			if (Insert_Status & 0x01)
+				this->_MotionS.at(0)->Start_Motion(this->_Delta_Time * 100);
+			else if (Insert_Status & 0x02)
+				this->_MotionS.at(1)->Start_Motion(this->_Delta_Time * 100);
+			else if (Insert_Status & 0x04)
+				this->_MotionS.at(2)->Idle_Image();
+			else if (Insert_Status & 0x08)
+				this->_MotionS.at(3)->Idle_Image();
 			else
-				this->_MotionTest->Start_Motion(this->_Delta_Time * 100);
-		}
+			{
+				if (LastStatus & 0x02)
+					this->_MotionS.at(1)->Idle_Image();
+			}
 
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 19, static_cast<int>(Blink_Cnt));
+			LastStatus = Insert_Status;
+		}
 
 		if (_Draw_Status == 3)
 		{
@@ -703,8 +705,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	this->_Delta_Time = glfwGetTime() - LastTime;
 	LastTime = glfwGetTime();
 
-	this->_Insert_Status = IEB->Get_Insert_Status();
-
 	if (this->_Is_Init_Need)
 	{
 		this->_Is_Init_Need = false;
@@ -772,8 +772,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		
 		State->Move_Adjust();
 
-		glProgramUniform1i(this->_Adjst_RenderingProgram, 10, this->_Insert_Status);
-
 		glProgramUniform1f(_Adjst_RenderingProgram, 2, Temp_Move._Coord_X);//Current_Move_LocationX
 		glProgramUniform1f(_Adjst_RenderingProgram, 3, Temp_Move._Coord_Y);//
 
@@ -807,9 +805,15 @@ void TanxlOD::framebuffer_size_callback(GLFWwindow* window, int width, int heigh
 	glViewport(0, 0, width, height);
 }
 
+int Motion_Cycle::_SLastMotion_Id = 0;
+int Motion_Cycle::_SMotions_Count = 0;
+
 Motion_Cycle::Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine) :
 	_Motion_Id(Motion_Id), _Motion_Count(0), _Motion_Image(),
-	_Internal_Delta_Time(), _DrawEngine(DrawEngine), _Current_Motion_Id(0), _Idle_Image() {}
+	_Internal_Delta_Time(), _DrawEngine(DrawEngine), _Current_Motion_Id(0), _Idle_Image(), _Internal_Id(_SMotions_Count)
+{
+	this->_SMotions_Count++;
+}
 
 void Motion_Cycle::Append_Montion_Image(const char* Motion_Image, double Delta_Time)
 {
@@ -824,6 +828,14 @@ void Motion_Cycle::Start_Motion(double Delta_Time)
 {
 	static double DeltaTime{};
 
+	if (this->_Internal_Id != this->_SLastMotion_Id)
+	{
+		this->_Current_Motion_Id = 0;
+		DeltaTime = 0;
+		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_Motion_Image[this->_Current_Motion_Id]);
+	}
+	this->_SLastMotion_Id = this->_Internal_Id;
+
 	DeltaTime += Delta_Time;
 	this->_Idle_Status = false;
 	if (DeltaTime > this->_Internal_Delta_Time[this->_Current_Motion_Id])
@@ -833,9 +845,8 @@ void Motion_Cycle::Start_Motion(double Delta_Time)
 		if (this->_Current_Motion_Id > (this->_Motion_Count - 1))
 			this->_Current_Motion_Id = 0;
 		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_Motion_Image[this->_Current_Motion_Id]);
-		//std::cout << "REINIT" << std::endl;
 	}
-	std::cout << "this->_Motion_Count :" << this->_Current_Motion_Id << " - " << DeltaTime << std::endl;
+	//std::cout << "this->_Motion_Count :" << this->_Current_Motion_Id << " - " << DeltaTime << std::endl;
 }
 
 void Motion_Cycle::Set_Idle_Image(const char* Motion_Image)
@@ -845,6 +856,12 @@ void Motion_Cycle::Set_Idle_Image(const char* Motion_Image)
 
 void Motion_Cycle::Idle_Image()
 {
+	if (this->_Internal_Id != this->_SLastMotion_Id)
+	{
+		this->_Idle_Status = false;
+	}
+	this->_SLastMotion_Id = this->_Internal_Id;
+
 	if (!this->_Idle_Status)
 	{
 		this->_Idle_Status = true;

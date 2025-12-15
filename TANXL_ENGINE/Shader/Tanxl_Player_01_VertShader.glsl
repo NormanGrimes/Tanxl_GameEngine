@@ -20,6 +20,8 @@
 // 修复人物纹理左右颠倒的问题
 // 移除未使用变量
 // 移除奔跑动作相关参数
+// 移除眨眼动作相关参数
+// 玩家图形仅保留玩家纹理统一变量
 
 #version 430
 
@@ -40,20 +42,10 @@ layout (location = 7) uniform float Begin_Location_Y;
 layout (location = 8) uniform int Health_Length;
 layout (location = 9) uniform float Direct_Margin;
 
-layout (location = 10) uniform int Insert_Status;
+layout (location = 10) uniform int Player_Texture_Main;
 
-layout (location = 11) uniform int Player_Texture_01;
-layout (location = 12) uniform int Player_Texture_02;
-layout (location = 13) uniform int Player_Texture_03;
-layout (location = 14) uniform int Player_Texture_04;
-
-layout (location = 15) uniform int Player_Texture_05;
-layout (location = 16) uniform int Player_Texture_06;
-
-layout (location = 17) uniform int Player_Blink_01;
-layout (location = 18) uniform int Player_Blink_02;
-
-layout (location = 19) uniform int Player_Blink_Cnt;
+layout (location = 11) uniform int Player_Health_Texture_01;
+layout (location = 12) uniform int Player_Health_Texture_02;
 
 out vec4 vs_color;
 out vec2 tc;
@@ -68,23 +60,7 @@ void main(void)
 
 	if(gl_VertexID < 6)
 	{
-		if(Insert_Status == 0)
-			Cube = Player_Texture_04;
-		else if(Insert_Status == 1)
-			Cube = Player_Texture_02;
-		else if(Insert_Status == 2)
-			Cube = Player_Texture_03;
-		else if(Insert_Status == 3)
-		{
-			if((Player_Blink_Cnt >= 0) && (Player_Blink_Cnt <= 370))
-				Cube = Player_Texture_01;
-			else if((Player_Blink_Cnt > 370) && (Player_Blink_Cnt <= 380))
-				Cube = Player_Blink_01;
-			else if((Player_Blink_Cnt > 380) && (Player_Blink_Cnt <= 390))
-				Cube = Player_Blink_02;
-			else
-				Cube = Player_Blink_01;
-		}
+		Cube = Player_Texture_Main;
 
 		if      (gl_VertexID == 0) //MainMoveBlock 0.2F
 		{
@@ -119,7 +95,7 @@ void main(void)
 	}
 	else if(gl_VertexID < 12)
 	{
-		Cube = Player_Texture_06;
+		Cube = Player_Health_Texture_02;
 		if (gl_VertexID == 6)
 		{
 			gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
@@ -153,7 +129,7 @@ void main(void)
 	}
 	else
 	{
-		Cube = Player_Texture_05;
+		Cube = Player_Health_Texture_01;
 		for(int i = 2, j = 2; i < Health_Length; i++, j++)
 		{
 			float LineSpace = (i - 1) / 4 * Direct_Margin;
