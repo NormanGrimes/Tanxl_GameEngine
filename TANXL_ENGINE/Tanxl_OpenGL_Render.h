@@ -6,6 +6,8 @@
 // 增加不需要文件的创建着色器重载版本
 // 改为继承自引擎基础类
 // 增加宏控制渲染模块的信息输出
+// 移除重载版本的准备着色器接口
+// 多个接口转为私有
 
 #pragma once
 
@@ -32,17 +34,17 @@ class OpenGL_Render : public Tanxl_ClassBase
 {
 public:
 	OpenGL_Render();
-	static std::string readShaderFile(const char* filePath);
-	static void printShaderLog(GLuint shader);
-	static void printProgramLog(int prog);
-	static GLuint prepareShader(int shaderTYPE, const char* shaderPath);
-	static GLuint prepareShader(int shaderTYPE, std::string shaderStr);
-	static int finalizeShaderProgram(GLuint sprogram);
-	static bool checkOpenGLError();
 	static GLuint createShaderProgram(const char* vp, const char* fp);
 	static GLuint createShaderProgram(std::string vp, std::string fp);
 	static GLuint loadTexture(const char *texImagePath);
 	const std::string Get_Version();
+private:
+	static void printShaderLog(GLuint shader);
+	static void printProgramLog(int prog);
+	static std::string readShaderFile(const char* filePath);
+	static GLuint prepareShader(int shaderTYPE, const char* shaderPath);
+	static int finalizeShaderProgram(GLuint sprogram);
+	static bool checkOpenGLError();
 };
 
 #endif

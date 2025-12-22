@@ -13,6 +13,8 @@
 // 字体初始化接口针对中文进行修改
 // 增加字体设置与绘制接口
 // 增加宽字符的支持
+// 字体确认接口恢复中文字体的支持
+// 字体改为宽字符存储
 
 #pragma once
 
@@ -64,7 +66,7 @@ public:
 
 	ECurren_Language Get_Language() const;
 
-	std::map<GLuint, Character> Get_Characters(int Id);
+	std::map<wchar_t, Character> Get_Characters(int Id);
 
 	const std::string Get_Version();
 
@@ -86,7 +88,7 @@ private:
 		"Fonts/kremlin-premier.regular.ttf"
 	};
 
-	std::map<GLuint, Character> _Characters[5];
+	std::map<wchar_t, Character> _Characters[5];
 
 	glm::vec3 _Font_Color{ 0.0f, 0.0f, 0.0f };
 	GLuint _Font_VAO{};

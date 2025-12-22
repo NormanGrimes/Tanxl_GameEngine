@@ -65,6 +65,7 @@
 // 移除多个绑定的纹理
 // 启用第二版输入状态用于选择纹理
 // 移除输入状态成员
+// 修复无操作时待机动作暂停的问题
 
 #pragma once
 
@@ -526,7 +527,7 @@ enum EGame_Status
 	GAME_START_MENU,
 	GAME_PLAYER_ACTIVE,
 	GAME_STORE_BUYING_PAGE,
-	GAME_PLAYER_DEAD_STATUS,
+	GAME_PLAYER_DEAD,
 	GAME_PLAYER_STATUS_DISPLAY,
 };
 

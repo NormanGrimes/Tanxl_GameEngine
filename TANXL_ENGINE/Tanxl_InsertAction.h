@@ -12,6 +12,7 @@
 // 加入上次输入导致的移动方向的记录
 // 增加第二版输入状态量测试
 // 修改按键对应的输入状态
+// 移除第一版移动状态量
 
 #pragma once
 
@@ -120,8 +121,7 @@ public:
 	bool Check_Key_Press(GLFWwindow* Window);
 	//获取到当前移动操作是否导致移动到地图边缘
 	short Get_Reach_Edge() const;
-	short Get_Insert_Status() const;
-	unsigned Get_Insert_StatusV2() const;
+	unsigned Get_Insert_Status() const;
 	const std::string Get_Version();
 	//注册一个按键功能 使之能够在窗口中反应 如果仅定义按键而不注册则不会产生任何效果
 	int RegistEvent(Key_Unit* KU);
@@ -162,10 +162,8 @@ private:
 	float _Max_float;
 	//_Is_Reach_Edge 用于标记当前移动操作是否到达了地图边缘 0为未到达边缘 1为左边缘 2为右边缘 3为上边缘 4为下边缘
 	short _Is_Reach_Edge{ 0 };
-	//_Insert_Status 用于标记第一次按下且未松手的移动方向
-	short _Insert_Status{ 0 };
-	//_Insert_StatusV2 第二版移动状态变量 包含更多状态
-	unsigned _Insert_StatusV2{ 0 };
+	//_Insert_Status 第二版移动状态变量 包含更多状态
+	unsigned _Insert_Status{ 0 };
 	//_Is_State_Range 用于标记当前是否限制了移动范围
 	bool _Is_State_Range;
 	//_Is_Max_Single 用于标记当前是否使用单一X/Y轴设置方式

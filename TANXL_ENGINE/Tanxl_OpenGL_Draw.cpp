@@ -5,7 +5,7 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "82+" };
+const static std::string SubVersion{ "85" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -82,11 +82,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
-	Font->Set_Language(TI->Get_User_Language());
+	Font->Set_Language(ECurren_Language::LANGUAGE_ENGLISH/*TI->Get_User_Language()*/);
 	Font->Confirm_Language();
 
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
-	//Tips->ResetTips(TI->Get_User_Language());
+	//Tips->ResetFonts(ECurren_Language::LANGUAGE_CHINESE);
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);
@@ -163,6 +163,9 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	glProgramUniform1i(this->_Event_RenderingProgram, 7, Tex_05);
 	glProgramUniform1i(this->_Event_RenderingProgram, 8, Tex_06);
+
+	glProgramUniform1i(this->_State_RenderingProgram, 8, Tex_05);
+	glProgramUniform1i(this->_State_RenderingProgram, 9, Tex_06);
 
 	glBindVertexArray(0);
 
@@ -275,7 +278,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->Set_Max_Middle_Frame(200);
 
-	for (int i{ 0 }; i < 400; ++i)
+	for (int i{0}; i < 400; ++i)
 	{
 		_StateOffSet[i].x = 0.0f;
 		_StateOffSet[i].y = 0.0f;
@@ -542,8 +545,14 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			Is_Dead = false;
+
+			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+
+			//glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
+			//glUseProgram(_State_RenderingProgram);
+			//glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Event_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
@@ -581,8 +590,13 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			
+			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+
+			//glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
+			//glUseProgram(_State_RenderingProgram);
+			//glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Event_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
@@ -595,7 +609,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	}
 	else
 	{
-		unsigned Insert_Status = IEB->Get_Insert_StatusV2();
+		unsigned Insert_Status = IEB->Get_Insert_Status();
 		if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		{
 			static unsigned LastStatus{ Insert_Status };
@@ -610,17 +624,19 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 				this->_MotionS.at(3)->Idle_Image();
 			else
 			{
+				if (LastStatus & 0x01)
+					this->_MotionS.at(0)->Start_Motion(this->_Delta_Time * 100);
 				if (LastStatus & 0x02)
 					this->_MotionS.at(1)->Idle_Image();
 			}
-
-			LastStatus = Insert_Status;
+			if (Insert_Status != 0)
+				LastStatus = Insert_Status;
 		}
 
 		if (_Draw_Status == 3)
 		{
 			_Draw_Status = 4;
-			this->_Game_Status = GAME_PLAYER_DEAD_STATUS;
+			this->_Game_Status = GAME_PLAYER_DEAD;
 			Is_Dead = true;
 			SB->Play_Sound(SOUND_GAME_OVER);
 			SB->Random_BackGround_Music();
@@ -629,8 +645,14 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		}
 
 		this->_Middle_Frame = 0;
+
+		glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 		glUseProgram(_State_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+
+		//glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
+		//glUseProgram(_State_RenderingProgram);
+		//glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Event_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
@@ -669,7 +691,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 	Font->Set_FontColor(glm::vec3(0.3, 0.7f, 0.9f));
 
-	if ((this->_Game_Status == GAME_START_MENU) || (this->_Game_Status == GAME_PLAYER_DEAD_STATUS))
+	if ((this->_Game_Status == GAME_START_MENU) || (this->_Game_Status == GAME_PLAYER_DEAD))
 	{
 		//std::cout << "Exac :" << IEB->Get_Mouse_Location()._Coord_X << " _ " << IEB->Get_Mouse_Location()._Coord_Y << std::endl;
 		if ((IEB->Get_Mouse_Location()._Coord_X > 80) && (IEB->Get_Mouse_Location()._Coord_X < 880) &&

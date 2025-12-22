@@ -24,8 +24,6 @@ void FontBase::Init_Fonts(std::string Font_Path)
 	if (FT_New_Face(ft, Font_Path.c_str(), 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
-	//FT_GlyphSlot slot = face->glyph;
-
 	// Set size to load glyphs as
 	FT_Set_Pixel_Sizes(face, 0, 48);
 
@@ -110,6 +108,11 @@ void FontBase::Confirm_Language()
 		this->Init_Fonts(EFontSet::kremlinPremierRegular);
 		this->_Internal_Font_Counts = 1;
 	}
+	else if (this->_Internal_Language == LANGUAGE_CHINESE)
+	{
+		this->Init_Fonts(EFontSet::GuangLiangFont);
+		this->_Internal_Font_Counts = 1;
+	}
 }
 
 void FontBase::Bind_FontVAO(GLuint Font_VAO, GLuint Font_VBO)
@@ -170,7 +173,7 @@ ECurren_Language FontBase::Get_Language() const
 	return this->_Internal_Language;
 }
 
-std::map<GLuint, Character> FontBase::Get_Characters(int Id)
+std::map<wchar_t, Character> FontBase::Get_Characters(int Id)
 {
 	if (Id > _Internal_Font_Counts - 1)
 		Id = _Internal_Font_Counts - 1;
