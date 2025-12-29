@@ -23,7 +23,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), _StateOffSet() {}
+_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor() {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -74,7 +74,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
-	this->_Event_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_04_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_ITest_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Inst_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
 
@@ -118,51 +117,49 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 6, this->_PreLoads);//PreLoads
 
-	glProgramUniform1i(this->_Event_RenderingProgram, 2, this->_Scene_Int._Coord_Y);//SHeight
-	glProgramUniform1i(this->_Event_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
-	glProgramUniform1i(this->_Event_RenderingProgram, 6, this->_PreLoads);//PreLoads
-
 	//State_Square Part 0~6  Adjust random range when number of textures change 
-	Append_Texture(TanxlOD::TexGrass_01_128x128);
-	Append_Texture(TanxlOD::TexGrass_02_128x128);
-	Append_Texture(TanxlOD::TexGrass_Snowy_01_128x128);
-	Append_Texture(TanxlOD::TexGrass_Snowy_02_128x128);
-	Append_Texture(TanxlOD::TexOcean_01_128x128);
-	Append_Texture(TanxlOD::TexDirt_01_128x128);
+	Append_Texture(TanxlOD::TexGrass_01);
+	Append_Texture(TanxlOD::TexGrass_02);
+	Append_Texture(TanxlOD::TexGrass_Snowy_01);
+	Append_Texture(TanxlOD::TexGrass_Snowy_02);
+	Append_Texture(TanxlOD::TexOcean_01);
+	Append_Texture(TanxlOD::TexDirt_01);
 	Append_Texture(TanxlOD::TexCoin_01_64x64);
 
-	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01_256x256)		};
+	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01)		};
 	int Tex_02{ Append_Texture(TanxlOD::TexHealth_01_32x32)			};
 	int Tex_03{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
-	int Tex_04{ Append_Texture(TanxlOD::TexStartMenu_01_1024x1024)	};
+	int Tex_04{ Append_Texture(TanxlOD::TexStartMenuLogo_01)	};
 	int Tex_05{ Append_Texture(TanxlOD::TexMedic_01_64x64)			};
 	int Tex_06{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)			 };
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
-	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01_256x256, 15);
-	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_02_256x256, 10);
-	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01_256x256, 15);
-	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_256x256, 250);
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01, 15);
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_02, 10);
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01, 15);
+	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01, 250);
+
+	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this, true));
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_01, 5);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_02, 5);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_03, 5);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_04, 5);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_05, 5);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_06, 5);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_07, 5);
+	this->_MotionS.at(1)->Set_Idle_Image(TanxlOD::TexPrincess_02);
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_01_256x256, 25);
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_02_256x256, 25);
-	this->_MotionS.at(1)->Set_Idle_Image(TanxlOD::TexPrincess_02_256x256);
+	this->_MotionS.at(2)->Set_Idle_Image(TanxlOD::TexPrincess_03);
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
-	this->_MotionS.at(2)->Set_Idle_Image(TanxlOD::TexPrincess_03_256x256);
-
-	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
-	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04_256x256);
+	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04);
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, Tex_01);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 11, Tex_02);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 12, Tex_03);
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, Tex_04);
-
-	glProgramUniform1i(this->_Event_RenderingProgram, 7, Tex_05);
-	glProgramUniform1i(this->_Event_RenderingProgram, 8, Tex_06);
 
 	glProgramUniform1i(this->_State_RenderingProgram, 8, Tex_05);
 	glProgramUniform1i(this->_State_RenderingProgram, 9, Tex_06);
@@ -278,23 +275,12 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->Set_Max_Middle_Frame(200);
 
-	for (int i{0}; i < 400; ++i)
-	{
-		_StateOffSet[i].x = 0.0f;
-		_StateOffSet[i].y = 0.0f;
-
-		std::string Tag{ "State_OffSet[" + std::to_string(i) + "]" };
-		GLuint StatePos = glGetUniformLocation(_Event_RenderingProgram, Tag.c_str());
-		glProgramUniform2fv(_Event_RenderingProgram, StatePos, 1, glm::value_ptr(_StateOffSet[i]));
-	}
-
 	State->Reload_State_Data(this->_State_Length, this->_StateInfor);
 	Update_VertData(this->_StateInfor);
 }
 
 void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 {
-	GLuint StatePos;
 	int State_Length{ (this->_Scene_Int._Coord_Y + this->_PreLoads * 2) * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + 1 };
 
 	if (State_Length > 400)
@@ -302,13 +288,9 @@ void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 
 	for (int i{ 0 }; i < State_Length; ++i)
 	{
-		std::string Tag = "Infor[" + std::to_string(i) + "]";
-		StatePos = glGetUniformLocation(_State_RenderingProgram, Tag.c_str());
+		std::string Tag{ "Infor[" + std::to_string(i) + "]" };
+		GLint StatePos{ glGetUniformLocation(_State_RenderingProgram, Tag.c_str()) };
 		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(StateInfor[i]));
-
-		Tag = "EventInfor[" + std::to_string(i) + "]";
-		StatePos = glGetUniformLocation(_Event_RenderingProgram, Tag.c_str());
-		glProgramUniform1i(_Event_RenderingProgram, StatePos, StateInfor[i].y);
 
 #if _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_
 
@@ -550,11 +532,8 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
-			//glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
-			//glUseProgram(_State_RenderingProgram);
-			//glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
-
-			glUseProgram(_Event_RenderingProgram);
+			glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
+			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
@@ -594,11 +573,8 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
-			//glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
-			//glUseProgram(_State_RenderingProgram);
-			//glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
-
-			glUseProgram(_Event_RenderingProgram);
+			glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
+			glUseProgram(_State_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
@@ -650,12 +626,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glUseProgram(_State_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
-		//glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
-		//glUseProgram(_State_RenderingProgram);
-		//glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
-
-		glUseProgram(_Event_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+		glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
+		glUseProgram(_State_RenderingProgram);
+		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
@@ -804,9 +777,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glProgramUniform1f(_State_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
 		glProgramUniform1f(_State_RenderingProgram, 5, State->Get_State_Loc()._Coord_Y);//State_MoveY
 
-		glProgramUniform1f(_Event_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
-		glProgramUniform1f(_Event_RenderingProgram, 5, State->Get_State_Loc()._Coord_Y);//State_MoveY
-
 		glfwPollEvents();
 
 		display(_Main_Window, State);
@@ -830,9 +800,9 @@ void TanxlOD::framebuffer_size_callback(GLFWwindow* window, int width, int heigh
 int Motion_Cycle::_SLastMotion_Id = 0;
 int Motion_Cycle::_SMotions_Count = 0;
 
-Motion_Cycle::Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine) :
-	_Motion_Id(Motion_Id), _Motion_Count(0), _Motion_Image(),
-	_Internal_Delta_Time(), _DrawEngine(DrawEngine), _Current_Motion_Id(0), _Idle_Image(), _Internal_Id(_SMotions_Count)
+Motion_Cycle::Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine, bool Reverse_Cycle) :
+	_Motion_Id(Motion_Id), _Motion_Count(0), _MotionS(), _Reverse_Cycle(Reverse_Cycle),
+	_DrawEngine(DrawEngine), _Current_Motion_Id(0), _Idle_Image(), _Internal_Id(_SMotions_Count)
 {
 	this->_SMotions_Count++;
 }
@@ -841,8 +811,7 @@ void Motion_Cycle::Append_Montion_Image(const char* Motion_Image, double Delta_T
 {
 	if (this->_Motion_Count > 9)
 		return;
-	this->_Internal_Delta_Time[this->_Motion_Count] = Delta_Time;
-	this->_Motion_Image[this->_Motion_Count] = Motion_Image;
+	this->_MotionS.push_back(new Montion_Struct(Motion_Image, Delta_Time));
 	this->_Motion_Count++;
 }
 
@@ -854,19 +823,43 @@ void Motion_Cycle::Start_Motion(double Delta_Time)
 	{
 		this->_Current_Motion_Id = 0;
 		DeltaTime = 0;
-		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_Motion_Image[this->_Current_Motion_Id]);
+		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_MotionS.at(this->_Current_Motion_Id)->_Image);
 	}
 	this->_SLastMotion_Id = this->_Internal_Id;
 
 	DeltaTime += Delta_Time;
 	this->_Idle_Status = false;
-	if (DeltaTime > this->_Internal_Delta_Time[this->_Current_Motion_Id])
+	if (DeltaTime > this->_MotionS.at(this->_Current_Motion_Id)->_Delta_Time)
 	{
 		DeltaTime = 0;
-		this->_Current_Motion_Id++;
-		if (this->_Current_Motion_Id > (this->_Motion_Count - 1))
-			this->_Current_Motion_Id = 0;
-		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_Motion_Image[this->_Current_Motion_Id]);
+		if (this->_Reverse_Cycle)
+		{
+			if (this->_Direction)
+			{
+				this->_Current_Motion_Id++;
+				if (this->_Current_Motion_Id > (this->_Motion_Count - 1))
+				{
+					this->_Current_Motion_Id--;
+					this->_Direction = false;
+				}
+			}
+			else
+			{
+				this->_Current_Motion_Id--;
+				if (this->_Current_Motion_Id < 0)
+				{
+					this->_Current_Motion_Id++;
+					this->_Direction = true;
+				}
+			}
+		}
+		else
+		{
+			this->_Current_Motion_Id++;
+			if (this->_Current_Motion_Id > (this->_Motion_Count - 1))
+				this->_Current_Motion_Id = 0;
+		}
+		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_MotionS.at(this->_Current_Motion_Id)->_Image);
 	}
 	//std::cout << "this->_Motion_Count :" << this->_Current_Motion_Id << " - " << DeltaTime << std::endl;
 }
@@ -890,3 +883,5 @@ void Motion_Cycle::Idle_Image()
 		this->_DrawEngine->Reinit_Texture(this->_Motion_Id, this->_Idle_Image);
 	}
 }
+
+Montion_Struct::Montion_Struct(const char* Image, double Delta_Time) :_Image(Image), _Delta_Time(Delta_Time) {}

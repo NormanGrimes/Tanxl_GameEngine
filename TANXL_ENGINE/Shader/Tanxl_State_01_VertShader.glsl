@@ -27,6 +27,13 @@
 // 移除未使用变量
 // 调整统一变量位置
 // 增加纹理偏移的宏
+// 增加三个统一变量存储事件纹理
+// 根据事件统一变量选择纹理
+// 增加对输出事件纹理的尺寸设置
+// 三个已定义的事件纹理移动到事件顶点着色器进行绘制
+// 缩小金币纹理的尺寸
+// 增加控制事件纹理绘制偏移长度的统一变量
+// 缩小神秘核心的纹理尺寸
 
 #version 430
 
@@ -87,6 +94,7 @@ void main(void)
 			}
 			else
 			{
+				Cube = -1;
 				if		(Infor[VertexId].y == 1)
 					Cube = 9;
 				else if	(Infor[VertexId].y == 2)
@@ -113,6 +121,7 @@ void main(void)
 			}
 			else
 			{
+				Cube = -1;
 				if		(Infor[VertexId].y == 1)
 					Cube = 9;
 				else if	(Infor[VertexId].y == 2)
@@ -139,6 +148,7 @@ void main(void)
 			}
 			else
 			{
+				Cube = -1;
 				if		(Infor[VertexId].y == 1)
 					Cube = 9;
 				else if	(Infor[VertexId].y == 2)
@@ -165,6 +175,7 @@ void main(void)
 			}
 			else
 			{
+				Cube = -1;
 				if		(Infor[VertexId].y == 1)
 					Cube = 9;
 				else if	(Infor[VertexId].y == 2)
@@ -191,6 +202,7 @@ void main(void)
 			}
 			else
 			{
+				Cube = -1;
 				if		(Infor[VertexId].y == 1)
 					Cube = 9;
 				else if	(Infor[VertexId].y == 2)
@@ -217,6 +229,7 @@ void main(void)
 			}
 			else
 			{
+				Cube = -1;
 				if		(Infor[VertexId].y == 1)
 					Cube = 9;
 				else if	(Infor[VertexId].y == 2)

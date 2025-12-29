@@ -255,7 +255,6 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <None Include="Shader\Tanxl_State_01_VertShader.glsl" />
     <None Include="Shader\Tanxl_State_02_VertShader.glsl" />
     <None Include="Shader\Tanxl_State_03_VertShader.glsl" />
-    <None Include="Shader\Tanxl_State_04_VertShader.glsl" />
     <None Include="Shader\Tanxl_Inst_01_VertShader.glsl" />
   </ItemGroup>
   <ItemGroup>

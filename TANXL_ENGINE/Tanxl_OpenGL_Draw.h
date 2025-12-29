@@ -66,6 +66,11 @@
 // 启用第二版输入状态用于选择纹理
 // 移除输入状态成员
 // 修复无操作时待机动作暂停的问题
+// 移除所有事件着色器的调用
+// 调整纹理的命名规则
+// 动作类增加往复循环的动作功能
+// 增加结构体存储动作的图片与持续时间
+// 引入容器解除最大十帧动画的设定
 
 #pragma once
 
@@ -98,26 +103,31 @@ class Motion_Cycle;
 
 namespace TanxlOD
 {
-	static const char* TexDirt_01_128x128				{ "Texture/TANXL_DIRT_01_128X128.png"				};
-	static const char* TexGrass_01_128x128				{ "Texture/TANXL_GRASS_01_128X128.png"				};
-	static const char* TexGrass_02_128x128				{ "Texture/TANXL_GRASS_02_128X128.png"				};
-	static const char* TexGrass_Snowy_01_128x128		{ "Texture/TANXL_GRASS_SNOWY_01_128X128.png"		};
-	static const char* TexGrass_Snowy_02_128x128		{ "Texture/TANXL_GRASS_SNOWY_02_128X128.png"		};
-	static const char* TexOcean_01_128x128				{ "Texture/TANXL_OCEAN_01_128X128.png"				};
-	static const char* TexCoin_01_64x64					{ "Texture/TANXL_COIN_01_64X64.png"					};
-	static const char* TexSecretCore_01_64x64			{ "Texture/TANXL_SECRET_CORE_01_64X64.png"			};
-	static const char* TexHealth_01_32x32				{ "Texture/YANG_HEALTH_01_32X32.png"				};
-	static const char* TexPrincess_01_9x11				{ "Texture/YANG_PRINCESS_01_9X11.png"				};
-	static const char* TexPrincess_01_256x256			{ "Texture/TANXL_PRINCESS_01_256X256.png"			};
-	static const char* TexPrincess_02_256x256			{ "Texture/TANXL_PRINCESS_02_256X256.png"			};
-	static const char* TexPrincess_02_Run_01_256x256	{ "Texture/TANXL_PRINCESS_02_RUN_01_256X256.png"	};
-	static const char* TexPrincess_02_Run_02_256x256	{ "Texture/TANXL_PRINCESS_02_RUN_02_256X256.png"	};
-	static const char* TexPrincess_03_256x256			{ "Texture/TANXL_PRINCESS_03_256X256.png"			};
-	static const char* TexPrincess_04_256x256			{ "Texture/TANXL_PRINCESS_04_256X256.png"			};
-	static const char* TexPrincess_01_Blink_01_256x256	{ "Texture/TANXL_PRINCESS_01_BLINK_01_256X256.png"	};
-	static const char* TexPrincess_01_Blink_02_256x256	{ "Texture/TANXL_PRINCESS_01_BLINK_02_256X256.png"	};
-	static const char* TexMedic_01_64x64				{ "Texture/TANXL_MEDIC_01_64X64.png"				};
-	static const char* TexStartMenu_01_1024x1024        { "Texture/TANXL_MENU_01_1024X1024.png"				};
+	static const char* TexDirt_01				{ "Texture/TANXL_DIRT_01.png"				};
+	static const char* TexGrass_01				{ "Texture/TANXL_GRASS_01.png"				};
+	static const char* TexGrass_02				{ "Texture/TANXL_GRASS_02.png"				};
+	static const char* TexGrass_Snowy_01		{ "Texture/TANXL_GRASS_SNOWY_01.png"		};
+	static const char* TexGrass_Snowy_02		{ "Texture/TANXL_GRASS_SNOWY_02.png"		};
+	static const char* TexOcean_01				{ "Texture/TANXL_OCEAN_01.png"				};
+	static const char* TexCoin_01_64x64			{ "Texture/TANXL_COIN_01_64X64.png"			};
+	static const char* TexSecretCore_01_64x64	{ "Texture/TANXL_SECRET_CORE_01_64X64.png"	};
+	static const char* TexHealth_01_32x32		{ "Texture/YANG_HEALTH_01_32X32.png"		};
+	static const char* TexPrincess_01_9x11		{ "Texture/YANG_PRINCESS_01_9X11.png"		};
+	static const char* TexPrincess_01			{ "Texture/TANXL_PRINCESS_01.png"			};
+	static const char* TexPrincess_02			{ "Texture/TANXL_PRINCESS_02.png"			};
+	static const char* TexPrincess_02_Run_01	{ "Texture/TANXL_PRINCESS_02_RUN_01.png"	};
+	static const char* TexPrincess_02_Run_02	{ "Texture/TANXL_PRINCESS_02_RUN_02.png"	};
+	static const char* TexPrincess_02_Run_03	{ "Texture/TANXL_PRINCESS_02_RUN_03.png"	};
+	static const char* TexPrincess_02_Run_04	{ "Texture/TANXL_PRINCESS_02_RUN_04.png"	};
+	static const char* TexPrincess_02_Run_05	{ "Texture/TANXL_PRINCESS_02_RUN_05.png"	};
+	static const char* TexPrincess_02_Run_06	{ "Texture/TANXL_PRINCESS_02_RUN_06.png"	};
+	static const char* TexPrincess_02_Run_07	{ "Texture/TANXL_PRINCESS_02_RUN_06.png"	};
+	static const char* TexPrincess_03			{ "Texture/TANXL_PRINCESS_03.png"			};
+	static const char* TexPrincess_04			{ "Texture/TANXL_PRINCESS_04.png"			};
+	static const char* TexPrincess_01_Blink_01	{ "Texture/TANXL_PRINCESS_01_BLINK_01.png"	};
+	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
+	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};
+	static const char* TexStartMenuLogo_01		{ "Texture/TANXL_MENU_LOGO_01.png"			};
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -579,7 +589,6 @@ private:
 	GLuint _Adjst_RenderingProgram{ 0 };
 	GLuint _Start_RenderingProgram{ 0 };
 	GLuint _ITest_RenderingProgram{ 0 };
-	GLuint _Event_RenderingProgram{ 0 };
 	GLuint _Fonts_RenderingProgram{ 0 };
 
 	GLuint _vao[3];
@@ -616,13 +625,20 @@ private:
 	LocationBase* _LCB;
 	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2 _StateInfor[400];
-	glm::vec2 _StateOffSet[400];
+};
+
+struct Montion_Struct
+{
+	Montion_Struct(const char* Image, double Delta_Time);
+
+	const char* _Image;
+	double _Delta_Time;
 };
 
 class Motion_Cycle
 {
 public:
-	Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine);
+	Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine, bool Reverse_Cycle = false);
 
 	void Append_Montion_Image(const char* Motion_Image, double Delta_Time);
 
@@ -640,8 +656,10 @@ private:
 	static int _SLastMotion_Id;
 	static int _SMotions_Count;
 	bool _Idle_Status{ false };
-	double _Internal_Delta_Time[10];
-	const char* _Motion_Image[10];//最多十帧动画
+	bool _Reverse_Cycle;
+	bool _Direction{ true };
+	std::vector<Montion_Struct*> _MotionS;
+	//const char* _Motion_Image[10];//最多十帧动画
 	const char* _Idle_Image;
 
 	OpenGL_Draw* _DrawEngine;
