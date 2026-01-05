@@ -8,12 +8,12 @@ SoundBase& SoundBase::GetSoundBase()
 	return *SoundEngine;
 }
 
-void SoundBase::Play_Sound(std::string Wav_File_Location, int SoundEngine_Id)
+void SoundBase::Play_Sound(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id)
 {
 	this->_SoundEngine[SoundEngine_Id]->play2D(Wav_File_Location.c_str());
 }
 
-void SoundBase::Play_Sound(ESound_WAV Sound_Name, int SoundEngine_Id)
+void SoundBase::Play_Sound(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id)
 {
 	if (Sound_Name == ESound_WAV::SOUND_NO_SOUND)
 		return;
@@ -32,13 +32,20 @@ void SoundBase::Append_BackGround_Music(ESound_WAV Sound_Name)
 	this->_BackGround_Music_List.push_back(this->_Sound_Names[Sound_Name]);
 }
 
-void SoundBase::Stop_AllSound(int SoundEngine_Id)
+void SoundBase::Stop_AllSound(ESoundEngine_ID SoundEngine_Id)
 {
 	this->_SoundEngine[SoundEngine_Id]->stopAllSounds();
-
-	//this->_Current_BackGround_Id = 0;
-	this->_BackGround_Music_Playing = false;
-	this->_SoundEngine[SoundEngine_Id]->setSoundVolume(1.0f);
+	
+	if (SoundEngine_Id == 1)
+	{
+		this->_Current_BackGround_Id = 0;
+		this->_BackGround_Music_Playing = false;
+		this->_SoundEngine[SoundEngine_Id]->setSoundVolume(0.3f);
+	}
+	else
+	{
+		this->_SoundEngine[SoundEngine_Id]->setSoundVolume(1.0f);
+	}
 }
 
 void SoundBase::Play_BackGround_Music(int Begin_Id)
@@ -52,32 +59,34 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 		this->_BackGround_Music_Playing = true;
 		this->_Current_BackGround_Id = Begin_Id + static_cast<int>(this->_BackGround_Music_List.size()) - 1;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
-		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1);
-		this->_SoundEngine[1]->setSoundVolume(0.3f);
+		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND);
 	}
 
-	if (!this->Sound_Playing(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1))
+	if (!this->Sound_Playing(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND))
 	{
 		this->_Current_BackGround_Id++;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
-		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), 1);
-		this->_SoundEngine[1]->setSoundVolume(0.3f);
+		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND);
 	}
 }
 
 void SoundBase::Random_BackGround_Music()
 {
-	RandomBase* RB{ &RandomBase::GetRandomBase() };
-	this->_Current_BackGround_Id = RB->GenerateNum(static_cast<int>(time(0)));
+	this->_Current_BackGround_Id = RandomBase::GenerateNum(static_cast<int>(time(0)));
 	this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 }
 
-bool SoundBase::Sound_Playing(std::string Wav_File_Location, int SoundEngine_Id)
+void SoundBase::Set_SoundVolume(ESoundEngine_ID SoundEngine_Id, float Volume)
+{
+	this->_SoundEngine[SoundEngine_Id]->setSoundVolume(Volume);
+}
+
+bool SoundBase::Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id)
 {
 	return this->_SoundEngine[SoundEngine_Id]->isCurrentlyPlaying(Wav_File_Location.c_str());
 }
 
-bool SoundBase::Sound_Playing(ESound_WAV Sound_Name, int SoundEngine_Id)
+bool SoundBase::Sound_Playing(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id)
 {
 	if (Sound_Name == ESound_WAV::SOUND_NO_SOUND)
 		return false;
@@ -89,7 +98,7 @@ bool SoundBase::BackGround_Playing() const
 	return this->_BackGround_Music_Playing;
 }
 
-ESound_WAV SoundBase::Sound_Playing_Id(int SoundEngine_Id)
+ESound_WAV SoundBase::Sound_Playing_Id(ESoundEngine_ID SoundEngine_Id)
 {
 	for (int i{ 0 }; i < 8; ++i)
 	{
@@ -109,6 +118,7 @@ _BackGround_Music_Playing(false), _Current_BackGround_Id(0)
 {
 	_SoundEngine[0] = irrklang::createIrrKlangDevice();
 	_SoundEngine[1] = irrklang::createIrrKlangDevice();
+	this->_SoundEngine[1]->setSoundVolume(0.3f);
 }
 
 SoundBase::~SoundBase() 
@@ -122,6 +132,7 @@ _BackGround_Music_Playing(false), _Current_BackGround_Id(0)
 {
 	_SoundEngine[0] = irrklang::createIrrKlangDevice();
 	_SoundEngine[1] = irrklang::createIrrKlangDevice();
+	this->_SoundEngine[1]->setSoundVolume(0.3f);
 }
 
 SoundBase& SoundBase::operator=(const SoundBase&) { return *this; }

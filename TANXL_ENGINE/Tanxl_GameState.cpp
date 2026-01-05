@@ -454,7 +454,6 @@ double GameStateBase::Get_Each_Height() const
 
 void GameStateBase::Reload_Display_State(EState_Extend Extend_Dire)
 {
-	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
 	switch (Extend_Dire)
 	{
 	case STATE_EXTEND_ABOV:
@@ -866,7 +865,6 @@ void GameStateBase::Set_Trigger_Mode(bool Mode)
 
 void GameStateBase::Generate_StateBlock(int State_Id)
 {
-	static RandomBase* TRB{ &RandomBase::GetRandomBase() };
 #if _TANXL_GAMESTATE_GENERATE_STATE_OUTPUT_
 	std::cout << std::endl << "Generate_StateBlock " << State_Id << " CALLED" << std::endl;
 #endif
@@ -880,8 +878,8 @@ void GameStateBase::Generate_StateBlock(int State_Id)
 		{
 			Set_Data_Size(this->_Data_Size + 1);
 
-			this->_Data_Base.Append_DataChain(TRB->GenerateAutoSeed(), 10, 1, State_Id);
-			this->_Data_Base.Append_DataChain(TRB->Generate_State(10, 10, true), 0, 1, State_Id);
+			this->_Data_Base.Append_DataChain(RandomBase::GenerateAutoSeed(), 10, 1, State_Id);
+			this->_Data_Base.Append_DataChain(RandomBase::Generate_State(10, 10, true), 0, 1, State_Id);
 
 			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);
 			this->_Data_Base.Append_DataChain("NULL", 0, 1, State_Id);

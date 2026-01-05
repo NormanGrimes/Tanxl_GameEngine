@@ -71,6 +71,9 @@
 // 动作类增加往复循环的动作功能
 // 增加结构体存储动作的图片与持续时间
 // 引入容器解除最大十帧动画的设定
+// 修复动作循环类最多添加九个纹理的问题
+// 动作循环类增加析构函数处理动态添加的数据
+// 改为继承自引擎基础类
 
 #pragma once
 
@@ -121,7 +124,18 @@ namespace TanxlOD
 	static const char* TexPrincess_02_Run_04	{ "Texture/TANXL_PRINCESS_02_RUN_04.png"	};
 	static const char* TexPrincess_02_Run_05	{ "Texture/TANXL_PRINCESS_02_RUN_05.png"	};
 	static const char* TexPrincess_02_Run_06	{ "Texture/TANXL_PRINCESS_02_RUN_06.png"	};
-	static const char* TexPrincess_02_Run_07	{ "Texture/TANXL_PRINCESS_02_RUN_06.png"	};
+	static const char* TexPrincess_02_Run_07	{ "Texture/TANXL_PRINCESS_02_RUN_07.png"	};
+	static const char* TexPrincess_02_Run_08	{ "Texture/TANXL_PRINCESS_02_RUN_08.png"	};
+	static const char* TexPrincess_02_Run_09	{ "Texture/TANXL_PRINCESS_02_RUN_09.png"	};
+	static const char* TexPrincess_02_Run_10	{ "Texture/TANXL_PRINCESS_02_RUN_10.png"	};
+	static const char* TexPrincess_02_Run_11	{ "Texture/TANXL_PRINCESS_02_RUN_11.png"	};
+	static const char* TexPrincess_02_Run_12	{ "Texture/TANXL_PRINCESS_02_RUN_12.png"	};
+	static const char* TexPrincess_02_Run_13	{ "Texture/TANXL_PRINCESS_02_RUN_13.png"	};
+	static const char* TexPrincess_02_Run_14	{ "Texture/TANXL_PRINCESS_02_RUN_14.png"	};
+	static const char* TexPrincess_02_Run_15	{ "Texture/TANXL_PRINCESS_02_RUN_15.png"	};
+	static const char* TexPrincess_02_Run_16	{ "Texture/TANXL_PRINCESS_02_RUN_16.png"	};
+	static const char* TexPrincess_02_Run_17	{ "Texture/TANXL_PRINCESS_02_RUN_17.png"	};
+	static const char* TexPrincess_02_Run_18	{ "Texture/TANXL_PRINCESS_02_RUN_18.png"	};
 	static const char* TexPrincess_03			{ "Texture/TANXL_PRINCESS_03.png"			};
 	static const char* TexPrincess_04			{ "Texture/TANXL_PRINCESS_04.png"			};
 	static const char* TexPrincess_01_Blink_01	{ "Texture/TANXL_PRINCESS_01_BLINK_01.png"	};
@@ -541,7 +555,7 @@ enum EGame_Status
 	GAME_PLAYER_STATUS_DISPLAY,
 };
 
-class OpenGL_Draw
+class OpenGL_Draw : public Tanxl_ClassBase
 {
 public:
 	static OpenGL_Draw& GetOpenGLBase(int ScreenWidth = 960, int ScreenHeight = 800, bool Window_Adjust = true);
@@ -619,8 +633,6 @@ private:
 	double _Delta_Time{ 0 };
 	//新版动作测试
 	std::vector<Motion_Cycle*> _MotionS;
-	//当前此模块的版本号
-	const std::string _Version{ "1.3" };
 	GLFWwindow* _Main_Window;
 	LocationBase* _LCB;
 	EGame_Status _Game_Status{ GAME_START_MENU };
@@ -639,6 +651,8 @@ class Motion_Cycle
 {
 public:
 	Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine, bool Reverse_Cycle = false);
+
+	~Motion_Cycle();
 
 	void Append_Montion_Image(const char* Motion_Image, double Delta_Time);
 
@@ -659,7 +673,6 @@ private:
 	bool _Reverse_Cycle;
 	bool _Direction{ true };
 	std::vector<Montion_Struct*> _MotionS;
-	//const char* _Motion_Image[10];//最多十帧动画
 	const char* _Idle_Image;
 
 	OpenGL_Draw* _DrawEngine;

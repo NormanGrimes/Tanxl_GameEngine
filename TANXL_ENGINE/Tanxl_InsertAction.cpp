@@ -13,8 +13,7 @@ static void curse_poscallback(GLFWwindow* window, double x, double y)
 
 Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0), SaveLen(0)
 {
-	RandomBase* UIB{ &RandomBase::GetRandomBase() };
-	this->Unit_Name = UIB->GenerateAutoSeed();
+	this->Unit_Name = RandomBase::GenerateAutoSeed();
 #if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
 	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
 #endif
@@ -23,9 +22,8 @@ Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.
 Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
 	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0), SaveLen(0)
 {
-	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	if (UNAM == "")
-		this->Unit_Name = UIB->GenerateAutoSeed();
+		this->Unit_Name = RandomBase::GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
 #if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
@@ -36,9 +34,8 @@ Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNA
 Key_Unit::Key_Unit(int GLKEY, std::string UNAM) :
 	GLFW_KEY(GLKEY), MoveLen(3), MoveToX(false), MoveToY(false), Unit_Type(1), SaveLen(0)
 {
-	RandomBase* UIB{ &RandomBase::GetRandomBase() };
 	if (UNAM == "")
-		this->Unit_Name = UIB->GenerateAutoSeed();
+		this->Unit_Name = RandomBase::GenerateAutoSeed();
 	else
 		this->Unit_Name = UNAM;
 #if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_

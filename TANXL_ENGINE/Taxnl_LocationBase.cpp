@@ -137,7 +137,7 @@ const std::string LocationBase::Get_Version()
 
 LocationBase::LocationBase() :_LocationS(0), Tanxl_ClassBase("0.1") {}
 
-LocationBase::~LocationBase() {}
+LocationBase::~LocationBase() { std::vector<Location*>().swap(this->_LocationS); }
 
 LocationBase::LocationBase(const LocationBase&) :_LocationS(0), Tanxl_ClassBase("0.1") {};
 

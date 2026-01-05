@@ -188,14 +188,13 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
       <DisableSpecificWarnings>4819;4005</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\GRAPHIC\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;soil2.lib;%(AdditionalDependencies);irrKlang.lib;freetype.lib</AdditionalDependencies>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <Version>
       </Version>
       <IgnoreSpecificDefaultLibraries>libc;libcd;libcmt</IgnoreSpecificDefaultLibraries>
@@ -220,6 +219,7 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <ClInclude Include="Tanxl_GameEvent.h" />
     <ClInclude Include="Tanxl_GameObject.h" />
     <ClInclude Include="Tanxl_GameState.h" />
+    <ClInclude Include="Tanxl_GameTips.h" />
     <ClInclude Include="Tanxl_InsertAction.h" />
     <ClInclude Include="Tanxl_LocationBase.h" />
     <ClInclude Include="Tanxl_OpenGL_Draw.h" />
@@ -237,7 +237,7 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <ClCompile Include="Tanxl_GameEvent.cpp" />
     <ClCompile Include="Tanxl_GameObject.cpp" />
     <ClCompile Include="Tanxl_GameState.cpp" />
-    <ClCompile Include="Tanxl_GameTips.h" />
+    <ClCompile Include="Tanxl_GameTips.cpp" />
     <ClCompile Include="Tanxl_InsertAction.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Draw.cpp" />
     <ClCompile Include="Tanxl_OpenGL_Render.cpp" />

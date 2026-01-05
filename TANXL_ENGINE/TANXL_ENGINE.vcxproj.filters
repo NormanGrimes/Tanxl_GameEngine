@@ -75,6 +75,9 @@
     <ClInclude Include="Tanxl_SteamService.h">
       <Filter>头文件\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Tanxl_GameTips.h">
+      <Filter>头文件\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,9 +116,6 @@
     <ClCompile Include="Tanxl_SoundBase.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Tanxl_GameTips.h">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Tanxl_Console_List.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
@@ -123,6 +123,9 @@
       <Filter>源文件\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Tanxl_SteamService.cpp">
+      <Filter>源文件\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Tanxl_GameTips.cpp">
       <Filter>源文件\Engine</Filter>
     </ClCompile>
   </ItemGroup>

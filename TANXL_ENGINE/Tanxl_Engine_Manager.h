@@ -158,7 +158,6 @@ private:
 	GameStateBase* Tanxl_Engine_GameState;
 	OpenGL_Draw* Tanxl_Engine_OpenGL_Draw;
 	InsertEventBase* Tanxl_Engine_InsertBase;
-	RandomBase* Tanxl_Engine_RandomBase;
 	LocationBase* Tanxl_Engine_LocationBase;
 	GameObjectBase* Tanxl_Engine_ObjectBase;
 	Tanxl_Inventory* Tanxl_Engine_Inventory;

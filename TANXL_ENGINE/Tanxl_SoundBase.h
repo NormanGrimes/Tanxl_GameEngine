@@ -22,6 +22,10 @@
 // 背景音乐音量降低到百分之三十
 // 增加接口用于随机选择背景音乐
 // 背景音乐播放接口增加默认参数
+// 背景音乐音量初始化为百分之三十
+// 修复停止声音接口任意选项都会影响背景音乐的问题
+// 增加音量设置接口
+// 所有用于选择音频引擎的整形变量改为枚举
 
 #pragma once
 
@@ -34,6 +38,12 @@
 
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_RandomBase.h"
+
+enum ESoundEngine_ID
+{
+    SOUND_ENGINE_EVENT      = 0,
+    SOUND_ENGINE_BACKGROUND = 1
+};
 
 enum ESound_WAV
 {
@@ -59,27 +69,29 @@ class SoundBase : public Tanxl_ClassBase
 public:
     static SoundBase& GetSoundBase();
 
-    void Play_Sound(std::string Wav_File_Location, int SoundEngine_Id = 0);
+    void Play_Sound(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
-    void Play_Sound(ESound_WAV Sound_Name, int SoundEngine_Id = 0);
+    void Play_Sound(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
     void Append_BackGround_Music(std::string Wav_File_Location);
 
     void Append_BackGround_Music(ESound_WAV Sound_Name);
-
-    void Stop_AllSound(int SoundEngine_Id = 0);
+    // 停止指定声音引擎的声音播放
+    void Stop_AllSound(ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
     // 包含对背景音乐的顺序播放功能 顺序播放功能需要持续调用
     void Play_BackGround_Music(int Begin_Id = -1);
 
     void Random_BackGround_Music();
 
-    bool Sound_Playing(std::string Wav_File_Location, int SoundEngine_Id = 0);
+    void Set_SoundVolume(ESoundEngine_ID SoundEngine_Id, float Volume);
 
-    bool Sound_Playing(ESound_WAV Sound_Name, int SoundEngine_Id = 0);
+    bool Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
+
+    bool Sound_Playing(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
     bool BackGround_Playing() const;
 
-    ESound_WAV Sound_Playing_Id(int SoundEngine_Id = 0);
+    ESound_WAV Sound_Playing_Id(ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
     const std::string Get_Version();
 

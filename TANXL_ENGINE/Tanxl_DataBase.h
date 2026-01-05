@@ -26,6 +26,7 @@
 // 复制数据接口修改复制的方向
 // 获取本地数据接口增加不清理当前内存的选项
 // 组合文件功能流程简化
+// 移除用于判断内部结构体是否有数据的变量
 
 #pragma once
 
@@ -133,8 +134,6 @@ private:
 
 	std::vector<Id_Link*>* _Id_Links;
 	int _Current_Location;
-	//用来判断_Internal_Data中是否有数据
-	bool _Is_Instance_Data;
 	void Replace_Link(int OldType, int OldExac, int OldDepth, int Id, std::string Data);//转移Data_Chain到另一个Id_Chain下
 	//↓添加内部数据结构的内容到内存里的Vector中
 	void Append_Link(Id_Link& New_Id);

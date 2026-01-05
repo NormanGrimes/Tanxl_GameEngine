@@ -22,6 +22,7 @@
 // 降低地图事件的生成概率
 // 修改内部变量名称
 // 多个成员函数设为常量
+// 转为静态类
 
 #pragma once
 
@@ -32,62 +33,44 @@
 #include <iostream>
 #include <random>
 
-#include "Tanxl_EngineBase.h"
-
-class RandomBase : public Tanxl_ClassBase
+class RandomBase
 {
 public:
-    //单例获取函数
-    static RandomBase& GetRandomBase();
-
     //根据当前时间生成一组序列号 不适合短时间大量生成
-    std::string Generate() const;
+    static std::string Generate();
 
     //根据提供的种子生成一组序列号 相同的种子结果相同
-    std::string Generate(int seed) const;
+    static std::string Generate(int seed);
 
     //随机生成一组地图数据 Width为数据宽度 Height为数据高度
-    std::string Generate_State(unsigned Width, unsigned Height, bool Random_Event = false);
+    static std::string Generate_State(unsigned Width, unsigned Height, bool Random_Event = false);
 
     //根据内部提供的种子生成一组序列号 可用于短时间大量生成 重启后若不调用Suffle_UniData刷新字典再调用会出现重复序列号
-    std::string GenerateAutoSeed() const;
+    static std::string GenerateAutoSeed();
 
     //根据输入的种子生成一组数字
-    int GenerateNum(int seed) const;
+    static int GenerateNum(int seed);
 
     //随机生成一个介于Start与End之间的数字
-    int RandomAutoSeed(int Start, int End);
+    static int RandomAutoSeed(int Start, int End);
 
     //刷新随机字库
-    void Suffle_UniData(int Times);
+    static void Suffle_UniData(int Times);
 
     //刷新数字字库
-    void Suffle_NumData(int Times);
+    static void Suffle_NumData(int Times);
 
     //恢复到初始状态
-    void Reset_Default();
+    static void Reset_Default();
 
     //获取版本信息
-    const std::string Get_Version();
+    static const std::string Get_Version();
 
 private:
 
-    std::string _UniData[62] = {
-    {"1"}, {"2"}, {"3"}, {"4"}, {"5"}, {"6"}, {"7"}, {"8"}, {"9"}, {"0"},
-    {"a"}, {"b"}, {"c"}, {"d"}, {"e"}, {"f"}, {"g"}, {"h"}, {"i"}, {"j"},
-    {"k"}, {"l"}, {"m"}, {"n"}, {"o"}, {"p"}, {"q"}, {"r"}, {"s"}, {"t"},
-    {"u"}, {"v"}, {"w"}, {"x"}, {"y"}, {"z"}, {"A"}, {"B"}, {"C"}, {"D"},
-    {"E"}, {"F"}, {"G"}, {"H"}, {"I"}, {"J"}, {"K"}, {"L"}, {"M"}, {"N"},
-    {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"},
-    {"Y"}, {"Z"} };
-
-    int _NumData[10] =
-    { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-
-    RandomBase();
-    ~RandomBase();
-    RandomBase(const RandomBase&);
-    RandomBase& operator=(const RandomBase&);
+    static std::string _UniData[62];
+    static int _NumData[10];
+    static std::string _Version;
 };
 
 #endif

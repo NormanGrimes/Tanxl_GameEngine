@@ -9,7 +9,6 @@ Tanxl_Engine_GameEvent(&GameEventBase::GetEventBase()),
 Tanxl_Engine_GameState(&GameStateBase::GetStateBase(5, 5)),
 Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
 Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
-Tanxl_Engine_RandomBase(&RandomBase::GetRandomBase()),
 Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase()),
 Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase()),
 Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase()),
@@ -28,14 +27,12 @@ Tanxl_Engine_FontBase(&FontBase::GetFontBase())
 		this->_Engine_Status = 0x5;
 	else if (!this->Tanxl_Engine_InsertBase)
 		this->_Engine_Status = 0x6;
-	else if (!this->Tanxl_Engine_RandomBase)
-		this->_Engine_Status = 0x7;
 	else if (!this->Tanxl_Engine_LocationBase)
-		this->_Engine_Status = 0x8;
+		this->_Engine_Status = 0x7;
 	else if (!this->Tanxl_Engine_ObjectBase)
-		this->_Engine_Status = 0x9;
+		this->_Engine_Status = 0x8;
 	else if (!this->Tanxl_Engine_SoundBase)
-		this->_Engine_Status = 0xA;
+		this->_Engine_Status = 0x9;
 
 	if(this->_Engine_Status)
 		std::cout << "Fail to fully start Engine !" << std::endl;
@@ -125,7 +122,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 		Data->Append_Data(3, "VERSION " + this->Tanxl_Engine_GameState->Get_Version());
 		Data->Append_Data(4, "VERSION " + this->Tanxl_Engine_InsertBase->Get_Version());
 		Data->Append_Data(5, "VERSION " + this->Tanxl_Engine_OpenGL_Draw->Get_Version());
-		Data->Append_Data(6, "VERSION " + this->Tanxl_Engine_RandomBase->Get_Version());
+		Data->Append_Data(6, "VERSION " + RandomBase::Get_Version());
 		Data->Append_Data(7, "VERSION " + this->Tanxl_Engine_LocationBase->Get_Version());
 		Data->Append_Data(8, "VERSION " + this->Tanxl_Engine_ObjectBase->Get_Version());
 		Data->Append_Data(9, "VERSION " + this->Tanxl_Engine_SoundBase->Get_Version());
@@ -156,9 +153,9 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 		for (int j{ 0 }; j < Height; ++j)
 		{
 			int TempVal{ Begin_PosX + j + (i + Begin_PosY) * 256 };
-			this->Tanxl_Engine_RandomBase->Suffle_UniData(1);
-			this->Tanxl_Engine_GameState->Get_Data_Source()->Append_DataChain(this->Tanxl_Engine_RandomBase->GenerateAutoSeed(), 2, 1, TempVal);
-			this->Tanxl_Engine_GameState->Get_Data_Source()->Append_DataChain(this->Tanxl_Engine_RandomBase->Generate_State(10, 10, true), 0, 1, TempVal);
+			RandomBase::Suffle_UniData(1);
+			this->Tanxl_Engine_GameState->Get_Data_Source()->Append_DataChain(RandomBase::GenerateAutoSeed(), 2, 1, TempVal);
+			this->Tanxl_Engine_GameState->Get_Data_Source()->Append_DataChain(RandomBase::Generate_State(10, 10, true), 0, 1, TempVal);
 		}
 	}
 	this->Tanxl_Engine_GameState->Set_Data_Size(Width * Height);
@@ -300,7 +297,7 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_RANDOMBASE:
-		this->Tanxl_Engine_RandomBase->Reset_Default();
+		RandomBase::Reset_Default();
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_LOCATIONBASE:
@@ -311,8 +308,8 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_SOUNDBASE:
-		this->Tanxl_Engine_SoundBase->Stop_AllSound(0);
-		this->Tanxl_Engine_SoundBase->Stop_AllSound(1);
+		this->Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_EVENT);
+		this->Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_BACKGROUND);
 		break;
 	}
 }
@@ -333,7 +330,7 @@ void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV Sound
 	if (Enable_Current)
 		Tanxl_Engine_SoundBase->Play_Sound(SoundName);
 	else
-		Tanxl_Engine_SoundBase->Stop_AllSound(0);
+		Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_EVENT);
 }
 
 void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable_Play)
@@ -352,7 +349,7 @@ void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable
 		else
 		{
 			if (this->Tanxl_Engine_SoundBase->BackGround_Playing() == true)
-				this->Tanxl_Engine_SoundBase->Stop_AllSound(1);
+				this->Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_BACKGROUND);
 		}
 	}
 }

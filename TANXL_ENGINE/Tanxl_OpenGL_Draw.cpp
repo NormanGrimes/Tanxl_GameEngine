@@ -5,7 +5,7 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "85" };
+const static std::string SubVersion{ "87" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -23,11 +23,11 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor() {}
+_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), Tanxl_ClassBase("1.3") {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
-	return this->_Version;
+	return Tanxl_ClassBase::Get_Version();
 }
 
 void OpenGL_Draw::init(GameStateBase* State)
@@ -126,12 +126,12 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Append_Texture(TanxlOD::TexDirt_01);
 	Append_Texture(TanxlOD::TexCoin_01_64x64);
 
-	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01)		};
-	int Tex_02{ Append_Texture(TanxlOD::TexHealth_01_32x32)			};
-	int Tex_03{ Append_Texture(TanxlOD::TexPrincess_01_9x11)		};
+	int Tex_01{ Append_Texture(TanxlOD::TexPrincess_01)			};
+	int Tex_02{ Append_Texture(TanxlOD::TexHealth_01_32x32)		};
+	int Tex_03{ Append_Texture(TanxlOD::TexPrincess_01_9x11)	};
 	int Tex_04{ Append_Texture(TanxlOD::TexStartMenuLogo_01)	};
-	int Tex_05{ Append_Texture(TanxlOD::TexMedic_01_64x64)			};
-	int Tex_06{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)			 };
+	int Tex_05{ Append_Texture(TanxlOD::TexMedic_01_64x64)		};
+	int Tex_06{ Append_Texture(TanxlOD::TexSecretCore_01_64x64)	};
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
 	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01, 15);
@@ -140,13 +140,24 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01, 250);
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this, true));
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_01, 5);
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_02, 5);
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_03, 5);
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_04, 5);
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_05, 5);
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_06, 5);
-	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_07, 5);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_01, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_02, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_03, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_04, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_05, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_06, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_07, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_08, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_09, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_10, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_11, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_12, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_13, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_14, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_15, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_16, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_17, 2);
+	this->_MotionS.at(1)->Append_Montion_Image(TanxlOD::TexPrincess_02_Run_18, 2);
 	this->_MotionS.at(1)->Set_Idle_Image(TanxlOD::TexPrincess_02);
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
@@ -807,10 +818,13 @@ Motion_Cycle::Motion_Cycle(int Motion_Id, OpenGL_Draw* DrawEngine, bool Reverse_
 	this->_SMotions_Count++;
 }
 
+Motion_Cycle::~Motion_Cycle()
+{
+	std::vector<Montion_Struct*>().swap(this->_MotionS);
+}
+
 void Motion_Cycle::Append_Montion_Image(const char* Motion_Image, double Delta_Time)
 {
-	if (this->_Motion_Count > 9)
-		return;
 	this->_MotionS.push_back(new Montion_Struct(Motion_Image, Delta_Time));
 	this->_Motion_Count++;
 }
