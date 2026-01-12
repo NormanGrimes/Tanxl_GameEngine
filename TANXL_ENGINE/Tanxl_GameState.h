@@ -44,6 +44,8 @@
 // 移除设置调整状态的接口
 // 合并设置地图调节和移动中调节的接口
 // 合并设置地图数据和设置起始地图数据的接口
+// 移除检查地图方块接口的返回值
+// 移除更新地图接口的返回值
 
 #pragma once
 
@@ -266,12 +268,12 @@ public:
 	void State_Check_Event();
 	void HitEdge_Check();
 	void Move_Adjust();
+    void State_Check_Block(ECheck_Edge Check_Direction);
+	void Update_State(ECheck_Edge Check_Direction);
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status() const;
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check) const;
-	bool Update_State(ECheck_Edge Check_Direction);
-	bool State_Check_Block(ECheck_Edge Check_Direction);
 	Tanxl_Coord<int> Get_Exac_Location() const;
 	int Get_Distance_Screen_Id() const;
 	int Get_Distance_Move_Id() const;

@@ -308,8 +308,7 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_SOUNDBASE:
-		this->Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_EVENT);
-		this->Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_BACKGROUND);
+		this->Tanxl_Engine_SoundBase->Stop_AllSound();
 		break;
 	}
 }
@@ -330,7 +329,7 @@ void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV Sound
 	if (Enable_Current)
 		Tanxl_Engine_SoundBase->Play_Sound(SoundName);
 	else
-		Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_EVENT);
+		Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_EVENT);
 }
 
 void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable_Play)
@@ -349,7 +348,7 @@ void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable
 		else
 		{
 			if (this->Tanxl_Engine_SoundBase->BackGround_Playing() == true)
-				this->Tanxl_Engine_SoundBase->Stop_AllSound(SOUND_ENGINE_BACKGROUND);
+				this->Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_BACKGROUND);
 		}
 	}
 }

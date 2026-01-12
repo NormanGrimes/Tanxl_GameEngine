@@ -26,6 +26,8 @@
 // 修复停止声音接口任意选项都会影响背景音乐的问题
 // 增加音量设置接口
 // 所有用于选择音频引擎的整形变量改为枚举
+// 增加停止所有音频的接口
+// 修复停止后重新播放的背景音乐重复的问题
 
 #pragma once
 
@@ -55,6 +57,7 @@ enum ESound_WAV
     SOUND_SYSTEM_CALL       = 5,
     SOUND_ACHIEVEMENT       = 6,
     SOUND_SECRET_CORE       = 7,
+
     SOUND_BACKGROUND_01     = 8,
     SOUND_BACKGROUND_02     = 9,
     SOUND_BACKGROUND_03     = 10,
@@ -77,7 +80,9 @@ public:
 
     void Append_BackGround_Music(ESound_WAV Sound_Name);
     // 停止指定声音引擎的声音播放
-    void Stop_AllSound(ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
+    void Stop_Sound(ESoundEngine_ID SoundEngine_Id);
+    // 停止所有声音引擎的播放
+    void Stop_AllSound();
     // 包含对背景音乐的顺序播放功能 顺序播放功能需要持续调用
     void Play_BackGround_Music(int Begin_Id = -1);
 

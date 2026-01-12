@@ -23,7 +23,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), Tanxl_ClassBase("1.3") {}
+_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), Tanxl_ClassBase("1.4") {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -421,80 +421,6 @@ double OpenGL_Draw::Get_DeltaTime() const
 	return this->_Delta_Time;
 }
 
-void OpenGL_Draw::State_Check_Event(GameStateBase* State)
-{
-	static SoundBase* SB{ &SoundBase::GetSoundBase() };
-	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
-	static bool Achievement{ true };
-	State->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
-	StateUnit* CheckUnit{ State->Get_State() };
-	if (!CheckUnit)
-		return;
-	int Unit_State_Id{ CheckUnit->Get_Extra_Status()};
-
-	AC->CheckAchievement(g_rgAchievements[1]);
-
-	if ((MC->Get_Money() >= 100) && Achievement)
-	{
-		Achievement = false;
-		if (AC->RequestStats())
-		{
-			std::cout << "Achievement Unlocked !" << std::endl;
-			AC->UnlockAchievement(g_rgAchievements[1]);
-			SB->Play_Sound(SOUND_ACHIEVEMENT);
-		}
-		else
-		{
-			std::cout << "Achievement Request Fail !" << std::endl;
-		}
-	}
-
-	if (Unit_State_Id == 2)
-	{
-		if (MC->Get_Is_Alive())
-		{
-			SB->Play_Sound(SOUND_EVENT_START);
-			MC->TakeDamage(1);
-			MC->Add_Money(1);
-
-			CheckUnit->Set_Status(0);
-		}
-	}
-	else if (Unit_State_Id == 3)
-	{
-		SB->Play_Sound(SOUND_RESTORE_HEALTH);
-		MC->Add_Money(5);
-
-		CheckUnit->Set_Status(0);
-	}
-	else if (Unit_State_Id == 4)
-	{
-		if (MC->Check_Health() < MC->Get_MaxHealth())
-		{
-			SB->Play_Sound(SOUND_SYSTEM_CALL);
-			MC->RestoreHealth(1);
-			CheckUnit->Set_Status(0);
-		}
-	}
-	else if (Unit_State_Id == 5)
-	{
-		static int Internal_Cnt{ 0 };
-		Internal_Cnt++;
-		SB->Play_Sound(SOUND_SECRET_CORE);
-		CheckUnit->Set_Status(0);
-
-		if (Internal_Cnt == 4)
-		{
-			Internal_Cnt = 0;
-			std::cout << "Achievement Unlocked !" << std::endl;
-			AC->UnlockAchievement(g_rgAchievements[0]);
-			SB->Play_Sound(SOUND_ACHIEVEMENT);
-		}
-
-		std::cout << "Secret Core Found !" << std::endl;
-	}
-}
-
 EGame_Status OpenGL_Draw::Get_Game_Status() const
 {
 	return this->_Game_Status;
@@ -505,7 +431,6 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
-	static bool Is_Dead{ false };
 
 	static float VersionFontSize{ 20.0f };
 
@@ -537,7 +462,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
-			Is_Dead = false;
+			MC->Set_Health(5);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
@@ -578,7 +503,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		}
 		else
 		{
-			this->_Game_Status = GAME_PLAYER_ACTIVE;
+			this->_Game_Status = GAME_PLAYER_DEAD;
 			
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
@@ -596,7 +521,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	}
 	else
 	{
-		unsigned Insert_Status = IEB->Get_Insert_Status();
+		unsigned Insert_Status{ IEB->Get_Insert_Status() };
 		if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		{
 			static unsigned LastStatus{ Insert_Status };
@@ -624,10 +549,8 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			_Draw_Status = 4;
 			this->_Game_Status = GAME_PLAYER_DEAD;
-			Is_Dead = true;
 			SB->Play_Sound(SOUND_GAME_OVER);
 			SB->Random_BackGround_Music();
-			MC->Set_Health(5);
 			Tips->Update_Count();
 		}
 
@@ -687,7 +610,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 
-	if (Is_Dead)
+	if (!MC->Get_Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
 
 	if (VersionFontSize > -800.0f)
@@ -736,7 +659,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 	}
 
-	if (!MC->Get_Is_Alive())
+	if ((!MC->Get_Is_Alive()) && (_Draw_Status != 3) && (_Draw_Status != 4))
 	{
 		_Draw_Status = 3;
 		IEB->Set_Key_Enable(false);

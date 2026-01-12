@@ -186,11 +186,6 @@ Armor::Armor(int Defense) :_Defense(Defense) {}
 
 bool Componment_Unite::Append(Componment_Base* CM)
 {
-	for (auto Componment : this->_Object_Content)//根据名称添加
-	{
-		if (Componment->GetName() == CM->GetName())
-			return false;//出现同名组件——添加失败
-	}
 	this->_Object_Content.push_back(CM);
 	return true;
 }

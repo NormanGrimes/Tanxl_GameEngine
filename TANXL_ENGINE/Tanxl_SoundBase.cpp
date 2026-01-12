@@ -32,13 +32,13 @@ void SoundBase::Append_BackGround_Music(ESound_WAV Sound_Name)
 	this->_BackGround_Music_List.push_back(this->_Sound_Names[Sound_Name]);
 }
 
-void SoundBase::Stop_AllSound(ESoundEngine_ID SoundEngine_Id)
+void SoundBase::Stop_Sound(ESoundEngine_ID SoundEngine_Id)
 {
 	this->_SoundEngine[SoundEngine_Id]->stopAllSounds();
 	
 	if (SoundEngine_Id == 1)
 	{
-		this->_Current_BackGround_Id = 0;
+		//this->_Current_BackGround_Id = 0;
 		this->_BackGround_Music_Playing = false;
 		this->_SoundEngine[SoundEngine_Id]->setSoundVolume(0.3f);
 	}
@@ -46,6 +46,18 @@ void SoundBase::Stop_AllSound(ESoundEngine_ID SoundEngine_Id)
 	{
 		this->_SoundEngine[SoundEngine_Id]->setSoundVolume(1.0f);
 	}
+}
+
+void SoundBase::Stop_AllSound()
+{
+	this->_SoundEngine[SOUND_ENGINE_EVENT]->stopAllSounds();
+	this->_SoundEngine[SOUND_ENGINE_BACKGROUND]->stopAllSounds();
+
+	//this->_Current_BackGround_Id = 0;
+	this->_BackGround_Music_Playing = false;
+
+	this->_SoundEngine[SOUND_ENGINE_EVENT]->setSoundVolume(1.0f);
+	this->_SoundEngine[SOUND_ENGINE_BACKGROUND]->setSoundVolume(0.3f);
 }
 
 void SoundBase::Play_BackGround_Music(int Begin_Id)
