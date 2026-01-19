@@ -98,15 +98,6 @@ int main()
 
 	while (1)
 	{
-		static bool Appended{ false };
-		/*static int DropCnt{ 0 };
-
-		DropCnt++;
-		if (DropCnt > 50)
-		{
-			DropCnt = 0;
-			TGE.Engine_Invent_Update_Drop();
-		}*/
 		TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_NO_SOUND, true);
 
 		TGE.Engine_Insert_State_Update();//Key Insert
@@ -189,6 +180,7 @@ int main()
 			std::cout << "Reset Finish !" << std::endl;
 		}
 
+		static bool Appended{ false };
 		if (KU->Get_KeyStatus())
 		{
 			if (Appended == false)

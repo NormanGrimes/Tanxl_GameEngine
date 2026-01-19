@@ -598,7 +598,7 @@ void GameStateBase::Reload_Display_State(EState_Extend Extend_Dire)
 	}
 }
 
-void GameStateBase::Reload_State_Data(int State_Length, glm::ivec2* StateInfor)
+void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 {
 	int Move_NX{ this->_MState._Move_NX };
 	int Move_PX{ this->_MState._Move_PX };
@@ -612,6 +612,8 @@ void GameStateBase::Reload_State_Data(int State_Length, glm::ivec2* StateInfor)
 
 	if ((!this->_Compile_Success) || (this->Get_GameState()->size() == 0))
 		return;
+
+	int State_Length{ (this->_GameState_Length._Coord_Y + PreLoads * 2) * (this->_GameState_Length._Coord_X + PreLoads * 2) + 1 };
 
 	for (int i{ 0 }; i < State_Length; ++i)
 	{
@@ -1707,16 +1709,6 @@ bool GameStateBase::Check_Edge_Reached(ECheck_Edge Check) const
 Tanxl_Coord<int> GameStateBase::Get_Exac_Location() const
 {
 	return this->_Exac_Location;
-}
-
-int GameStateBase::Get_Distance_Screen_Id() const
-{
-	return this->_Distance_Screen_Mid;
-}
-
-int GameStateBase::Get_Distance_Move_Id() const
-{
-	return this->_Distance_Move;
 }
 
 Tanxl_Coord<int> GameStateBase::Get_StateLength()const

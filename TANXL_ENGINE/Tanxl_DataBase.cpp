@@ -25,10 +25,12 @@ void Data_Link::Append_Data(int Id, std::string Data)
 {
 	_Data_Units.push_back(new Data_Unit(Id, Data));
 }
+
 void Data_Link::Append_Data(Data_Unit Data)
 {
 	_Data_Units.push_back(&Data);
 }
+
 void Data_Link::Append_Data(Data_Link* Data, bool Replace)
 {
 	if (Data == nullptr)

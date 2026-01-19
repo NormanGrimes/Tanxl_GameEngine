@@ -46,6 +46,7 @@
 // 合并设置地图数据和设置起始地图数据的接口
 // 移除检查地图方块接口的返回值
 // 移除更新地图接口的返回值
+// 移除两个坐标编号获取接口
 
 #pragma once
 
@@ -254,7 +255,7 @@ public:
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);
 	void Reload_Display_State(EState_Extend Extend_Dire);
-	void Reload_State_Data(int State_Length, glm::ivec2* StateInfor);
+	void Reload_State_Data(int PreLoads, glm::ivec2* StateInfor);
 	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
 	void StateMove_Edge_Set(short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
@@ -275,8 +276,6 @@ public:
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check) const;
 	Tanxl_Coord<int> Get_Exac_Location() const;
-	int Get_Distance_Screen_Id() const;
-	int Get_Distance_Move_Id() const;
 	//↓HitEdge_Check 返回最后一次的按键状态
 	// 获取上次移动触发的边沿
 	EMove_State_EventId Auto_Update_Trigger(short Edge);

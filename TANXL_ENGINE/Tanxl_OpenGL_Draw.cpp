@@ -23,7 +23,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _PreLoads(0), _LCB(&LocationBase::GetLocationBase()), _StateInfor(), Tanxl_ClassBase("1.4") {}
+_Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4") {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -277,16 +277,14 @@ void OpenGL_Draw::init(GameStateBase* State)
 	State->Get_Move_Distance()._Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
 
 	State->Get_Square_State().Set_State_Length(this->_Scene_Int._Coord_X, this->_Scene_Int._Coord_Y);
-	State->Get_Square_State().Set_Move_State(_Pre_Move._Coord_X, _Pre_Move._Coord_Y, this->_PreLoads);
+	State->Get_Square_State().Set_Move_State(this->_Pre_Move._Coord_X, this->_Pre_Move._Coord_Y, this->_PreLoads);
 
-	this->_LCB->Get_LocationX(State->Get_Distance_Move_Id()) += static_cast<float>((_Pre_Move._Coord_X - 4) * State->Get_Each_Width());
-	this->_LCB->Get_LocationY(State->Get_Distance_Move_Id()) -= static_cast<float>((_Pre_Move._Coord_Y - 4) * State->Get_Each_Height());
-
-	this->_State_Length = (this->_Scene_Int._Coord_Y + this->_PreLoads * 2) * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + 1;
+	State->Get_Move_Distance()._Coord_X += static_cast<float>((this->_Pre_Move._Coord_X - 4) * State->Get_Each_Width());
+	State->Get_Move_Distance()._Coord_Y -= static_cast<float>((this->_Pre_Move._Coord_Y - 4) * State->Get_Each_Height());
 
 	this->Set_Max_Middle_Frame(200);
 
-	State->Reload_State_Data(this->_State_Length, this->_StateInfor);
+	State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 	Update_VertData(this->_StateInfor);
 }
 
@@ -319,6 +317,26 @@ void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 			std::cout << std::endl;
 #endif
 	}
+}
+
+int OpenGL_Draw::Append_Texture(const char* Texture, bool InstanceUse)
+{
+	const int OffSet{ 4 };
+	static unsigned Id{ 0 };
+
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
+
+	if (InstanceUse)
+		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::InstanceCoord), TanxlOD::InstanceCoord, GL_STATIC_DRAW);
+	else
+		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
+
+	glActiveTexture(GL_TEXTURE1 + Id + OffSet);
+
+	glBindTexture(GL_TEXTURE_2D, OpenGL_Render::loadTexture(Texture));
+	Id++;
+
+	return Id + OffSet;
 }
 
 GLFWwindow* OpenGL_Draw::Get_Window()const
@@ -357,26 +375,6 @@ void OpenGL_Draw::Set_Max_Middle_Frame(int Max_Middle_Frame)
 void OpenGL_Draw::Set_Game_Status(EGame_Status Game_Status)
 {
 	this->_Game_Status = Game_Status;
-}
-
-int OpenGL_Draw::Append_Texture(const char* Texture, bool InstanceUse)
-{
-	const int OffSet{ 4 };
-	static unsigned Id{ 0 };
-
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
-
-	if (InstanceUse)
-		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::InstanceCoord), TanxlOD::InstanceCoord, GL_STATIC_DRAW);
-	else
-		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
-
-	glActiveTexture(GL_TEXTURE1 + Id + OffSet);
-
-	glBindTexture(GL_TEXTURE_2D, OpenGL_Render::loadTexture(Texture));
-	Id++;
-
-	return Id + OffSet;
 }
 
 void OpenGL_Draw::Reinit_Texture(int CurrentId, const char* Texture)
@@ -496,7 +494,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
-			State->Reload_State_Data(this->_State_Length, this->_StateInfor);
+			State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 			Update_VertData(this->_StateInfor);
 			MC->Set_Health(5);
 			this->_Game_Status = GAME_START_MENU;
@@ -695,16 +693,12 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			<< State->Get_DataHeight() * this->_Each_Height << std::endl;
 #endif
 
-		State->Check_Adjust_Status(IEB->Get_Key_Pressed());
-
 		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(this->_Delta_Time));
-		
-		State->Move_Adjust();
 
 		glProgramUniform1f(_Adjst_RenderingProgram, 2, Temp_Move._Coord_X);//Current_Move_LocationX
 		glProgramUniform1f(_Adjst_RenderingProgram, 3, Temp_Move._Coord_Y);//
 
-		State->Reload_State_Data(this->_State_Length, this->_StateInfor);
+		State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 		Update_VertData(this->_StateInfor);
 		State->StateMove_Edge_Set(IEB->Get_Reach_Edge(), this->_Delta_Time);
 

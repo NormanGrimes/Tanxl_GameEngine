@@ -3,6 +3,10 @@
 // 修复玩家死亡后背景音乐会短暂播放的问题
 // 移除事件检测接口
 // 移除用于标记死亡的静态变量
+// 分离绘制循环中的两个地图模块接口调用
+// 记录地图总显示单元个数的变量分解到地图载入接口中
+// 移除内部的坐标基类指针成员
+// 初始化部分切换效率更高的接口
 
 #pragma once
 
@@ -501,7 +505,6 @@ public:
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
-	int Append_Texture(const char* Texture, bool InstanceUse = false);
 	//编号不变 替换为新纹理
 	void Reinit_Texture(int CurrentId, const char* Texture);
 	//删除OpenGL窗口
@@ -509,6 +512,7 @@ public:
 	void Enable_State_Adjust(bool Enable);
 	//用于第一次或重新加载整个地图场景
 	void Update_VertData(glm::ivec2* StateInfor);
+	int Append_Texture(const char* Texture, bool InstanceUse = false);
 	int Get_Adjust_Status() const;
 	//获取预载的数值
 	int Get_PreLoad() const;
@@ -545,8 +549,6 @@ private:
 	int _Draw_Status{ 0 };
 	//最大的中间页面编号
 	int _Max_Middle_Frame{ 0 };
-	//记录地图总显示单元个数
-	int _State_Length{ 0 };
 	//记录地图场景的高度与宽度基本矩形行数
 	Tanxl_Coord<int> _Scene_Int{ 0, 0 };
 	//窗口的宽/高度
@@ -562,7 +564,6 @@ private:
 	//新版动作测试
 	std::vector<Motion_Cycle*> _MotionS;
 	GLFWwindow* _Main_Window;
-	LocationBase* _LCB;
 	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2 _StateInfor[400];
 };
