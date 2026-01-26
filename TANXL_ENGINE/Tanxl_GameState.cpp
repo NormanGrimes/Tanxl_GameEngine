@@ -1455,23 +1455,32 @@ bool GameStateBase::Is_State_Exist(EState_Extend State_Id)
 	switch (State_Id)
 	{
 	case STATE_EXTEND_MIDD:
-		return (this->_GameState_Extend._MIDD._Data->size() != 0);
+		return ((this->_GameState_Extend._MIDD._Data) &&
+			(this->_GameState_Extend._MIDD._Data->size() != 0));
 	case STATE_EXTEND_LEFT:
-		return (this->_GameState_Extend._LEFT._Data->size() != 0);
+		return ((this->_GameState_Extend._LEFT._Data) &&
+			(this->_GameState_Extend._LEFT._Data->size() != 0));
 	case STATE_EXTEND_RIGH:
-		return (this->_GameState_Extend._RIGH._Data->size() != 0);
+		return ((this->_GameState_Extend._RIGH._Data) &&
+			(this->_GameState_Extend._RIGH._Data->size() != 0));
 	case STATE_EXTEND_ABOV:
-		return (this->_GameState_Extend._ABOV._Data->size() != 0);
+		return ((this->_GameState_Extend._ABOV._Data) &&
+			(this->_GameState_Extend._ABOV._Data->size() != 0));
 	case STATE_EXTEND_BELO:
-		return (this->_GameState_Extend._BELO._Data->size() != 0);
+		return ((this->_GameState_Extend._BELO._Data) &&
+			(this->_GameState_Extend._BELO._Data->size() != 0));
 	case STATE_EXTEND_LEFT_ABOV:
-		return (this->_GameState_Extend._LEFT_ABOV._Data->size() != 0);
+		return ((this->_GameState_Extend._LEFT_ABOV._Data) &&
+			(this->_GameState_Extend._LEFT_ABOV._Data->size() != 0));
 	case STATE_EXTEND_LEFT_BELO:
-		return (this->_GameState_Extend._LEFT_BELO._Data->size() != 0);
+		return ((this->_GameState_Extend._LEFT_BELO._Data) &&
+			(this->_GameState_Extend._LEFT_BELO._Data->size() != 0));
 	case STATE_EXTEND_RIGH_ABOV:
-		return (this->_GameState_Extend._RIGH_ABOV._Data->size() != 0);
+		return ((this->_GameState_Extend._RIGH_ABOV._Data) &&
+			(this->_GameState_Extend._RIGH_ABOV._Data->size() != 0));
 	case STATE_EXTEND_RIGH_BELO:
-		return (this->_GameState_Extend._RIGH_BELO._Data->size() != 0);
+		return ((this->_GameState_Extend._RIGH_BELO._Data) &&
+			(this->_GameState_Extend._RIGH_BELO._Data->size() != 0));
 	}
 	return 0;
 }

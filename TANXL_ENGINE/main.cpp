@@ -96,6 +96,38 @@ int main()
 	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_04);
 	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_05);
 
+	EventSubject<int> StateId;
+
+	class ObserverX : public Event_Observer<int>
+	{
+	public:
+		ObserverX(int Target)
+		{
+			_Target_Id = Target;
+		}
+
+		void EventCheck(int& Tanxl_Type)
+		{
+			if (_Target_Id == Tanxl_Type)
+				std::cout << "Observe enable" << _Target_Id << std::endl;
+			std::cout << "Observe : " << Tanxl_Type << std::endl;
+		}
+	private:
+		int _Target_Id;
+	};
+
+	Event_Observer<int>* Observer1 = new ObserverX(1);
+	Event_Observer<int>* Observer2 = new ObserverX(2);
+	Event_Observer<int>* Observer3 = new ObserverX(3);
+
+	StateId.Add_Observer(Observer1);
+	StateId.Add_Observer(Observer2);
+	StateId.Add_Observer(Observer3);
+
+	StateId.Notify(1);
+	StateId.Notify(2);
+	StateId.Notify(3);
+
 	while (1)
 	{
 		TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_NO_SOUND, true);
@@ -105,7 +137,7 @@ int main()
 		TGE.Engine_State_Event_Check();
 
 		TGE.Engine_Draw_State_Adjust(0);//Draw Once
-		
+
 		if (TGE.Engine_Should_Shut_Down())
 		{
 			TGE.Engine_Save_Instant_Output();
@@ -113,7 +145,7 @@ int main()
 			exit(0);
 		}
 
-		static GameObject* MC{ Main_Character::Get_Main_Character()};
+		static GameObject* MC{ Main_Character::Get_Main_Character() };
 
 		if (!MC->Get_Is_Alive())
 		{

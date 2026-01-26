@@ -47,6 +47,7 @@
 // 移除检查地图方块接口的返回值
 // 移除更新地图接口的返回值
 // 移除两个坐标编号获取接口
+// 检测地图数据是否存在的接口增加空指针检查
 
 #pragma once
 
@@ -271,6 +272,7 @@ public:
 	void Move_Adjust();
     void State_Check_Block(ECheck_Edge Check_Direction);
 	void Update_State(ECheck_Edge Check_Direction);
+	//↓Is_State_Exist : 检测某个区块的地图数据是否存在
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status() const;
 	bool Get_Engine_File();

@@ -4,20 +4,38 @@
 
 Data_Unit::Data_Unit(int Id, std::string Data) :_Id(Id), _Data(Data) {}
 
-Data_Link::Data_Link() :_Data_Units() {}
+Data_Link::Data_Link() :_Data_Units()
+{
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+	this->Current_Link_Id = Link_Count++;
+	std::cout << "Data Link " << this->Current_Link_Id << " was created" << std::endl;
+#endif
+}
 
 Data_Link::Data_Link(int Id, std::string Data)
 {
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+	this->Current_Link_Id = Link_Count++;
+	std::cout << "Data Link " << this->Current_Link_Id << " was created" << std::endl;
+#endif
 	_Data_Units.push_back(new Data_Unit(Id, Data));
 }
 
 Data_Link::Data_Link(Data_Unit& Data)
 {
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+	this->Current_Link_Id = Link_Count++;
+	std::cout << "Data Link " << this->Current_Link_Id << " was created" << std::endl;
+#endif
 	_Data_Units.push_back(&Data);
 }
 
 Data_Link::Data_Link(Data_Link* DataLink)
 {
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+	this->Current_Link_Id = Link_Count++;
+	std::cout << "Data Link " << this->Current_Link_Id << " was created" << std::endl;
+#endif
 	this->_Data_Units = DataLink->_Data_Units;
 }
 
@@ -42,9 +60,28 @@ void Data_Link::Append_Data(Data_Link* Data, bool Replace)
 		this->_Data_Units.push_back(Data->_Data_Units.at(i));
 }
 
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+int Data_Link::Link_Count = 0;
+int Id_Link::Link_Count = 0;
+
+Data_Link::~Data_Link()
+{
+	std::cout << "Data Link " << this->Current_Link_Id << " was destory" << std::endl;
+}
+
+Id_Link::~Id_Link()
+{
+	std::cout << "Id Link " << this->Current_Link_Id << " was destory" << std::endl;
+}
+#endif
+
 Id_Link::Id_Link(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link* Data) :
 	_Type(Type), _Type_Name(Type_Name), _Exac(Exac), _Exac_Name(Exac_Name)
 {
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+	this->Current_Link_Id = Link_Count++;
+	std::cout << "Id Link " << this->Current_Link_Id << " was created" << std::endl;
+#endif
 	_Data = new Data_Link;
 	_Data->Append_Data(Data);
 }

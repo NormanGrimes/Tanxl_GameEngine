@@ -16,6 +16,7 @@
 // 观察者模式增加模板定义
 // 类定义源码移入源文件
 // 观察者类增加默认构造函数
+// 观察者模式相关定义移入头文件
 
 #pragma once
 
@@ -126,5 +127,30 @@ private:
 
 	std::vector<GameEvent*> _GameEvents;
 };
+
+template<typename Tanxl_TypeName>
+Event_Observer<Tanxl_TypeName>::~Event_Observer() {}
+
+template<typename Tanxl_TypeName>
+inline void EventSubject<Tanxl_TypeName>::Add_Observer(Event_Observer<Tanxl_TypeName>* Observer)
+{
+	if (Observer)
+		this->_ObserverS.push_back(Observer);
+}
+
+template<typename Tanxl_TypeName>
+void EventSubject<Tanxl_TypeName>::Remove_Observer(Event_Observer<Tanxl_TypeName>* Observer)
+{
+	auto Location{ std::find(this->_ObserverS.begin(), this->_ObserverS.end(), Observer) };
+	if (Location != this->_ObserverS.end())
+		this->_ObserverS.erase(Location);
+}
+
+template<typename Tanxl_TypeName>
+void EventSubject<Tanxl_TypeName>::Notify(Tanxl_TypeName Tanxl_Type)
+{
+	for (const auto& Observer : this->_ObserverS)
+		Observer->EventCheck(Tanxl_Type);
+}
 
 #endif

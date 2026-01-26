@@ -23,6 +23,8 @@
 // 修改内部变量名称
 // 多个成员函数设为常量
 // 转为静态类
+// 随机引擎变量移入静态成员
+// 统一随机种子的获取方式
 
 #pragma once
 
@@ -68,6 +70,7 @@ public:
 
 private:
 
+    static std::default_random_engine _RandomEngine;
     static std::string _UniData[62];
     static int _NumData[10];
     static std::string _Version;

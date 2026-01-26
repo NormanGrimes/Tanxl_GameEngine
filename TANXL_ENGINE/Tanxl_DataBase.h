@@ -27,6 +27,7 @@
 // 获取本地数据接口增加不清理当前内存的选项
 // 组合文件功能流程简化
 // 移除用于判断内部结构体是否有数据的变量
+// 增加内存调试功能并使用宏控制开关
 
 #pragma once
 
@@ -38,9 +39,10 @@
 
 #if _ENABLE_TANXL_DATABASE_CONSOLE_OUTPUT_
 
-#define _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_   1
-#define _TANXL_DATABASE_CONSOLE_FILE_OUTPUT_   1
-#define _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_  1
+#define _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_   0
+#define _TANXL_DATABASE_CONSOLE_FILE_OUTPUT_   0
+#define _TANXL_DATABASE_CONSOLE_ERROR_OUTPUT_  0
+#define _TANXL_DATABASE_CONSOLE_DATA_DEBUG_    0
 
 #endif
 
@@ -99,7 +101,7 @@ struct Data_Unit
 	std::string _Data;
 };
 
-struct Data_Link//数据数据结构V4
+struct Data_Link//数据数据结构V4.1
 {
 	explicit Data_Link();
 	explicit Data_Link(int Id, std::string Data);
@@ -110,15 +112,29 @@ struct Data_Link//数据数据结构V4
 	void Append_Data(Data_Link* Data, bool Replace = false);
 
 	std::vector<Data_Unit*> _Data_Units;
+
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+	~Data_Link();
+
+	static int Link_Count;
+	int Current_Link_Id;
+#endif
 };
 
-struct Id_Link//序号数据结构V4
+struct Id_Link//序号数据结构V4.1
 {
 	explicit Id_Link(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link* Data = nullptr);
 	void Append_Data_Link(Data_Link* Data);
 	int _Type, _Exac;
 	std::string _Type_Name, _Exac_Name;
 	Data_Link* _Data;
+
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
+	~Id_Link();
+
+	static int Link_Count;
+	int Current_Link_Id;
+#endif
 };
 
 class TANXL_DataBase : public Tanxl_ClassBase
