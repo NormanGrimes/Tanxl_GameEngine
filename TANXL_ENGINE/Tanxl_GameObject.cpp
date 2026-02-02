@@ -91,21 +91,6 @@ int Character_Data::Get_Defense_Armor()
 	return this->_Defense_Armor;
 }
 
-void Character_Data::Set_Default_Damage(int Damage)
-{
-	this->_Attack_Damage = Damage;
-}
-
-void Character_Data::Set_Default_Defense(int Defense)
-{
-	this->_Defense_Armor = Defense;
-}
-
-double Character_Data::Get_Move_Speed() const
-{
-	return this->_Move_Speed;
-}
-
 Componment_Base::Componment_Base(std::string Name) :_Name(Name) {}
 
 std::string Componment_Base::GetName()
@@ -114,7 +99,12 @@ std::string Componment_Base::GetName()
 }
 
 GameObject::GameObject(int Max_Health, int Current_Health, bool Unable_Damage)
-	:_Health_Componment(Max_Health, Current_Health, Unable_Damage), _Money_Componment(0) {}
+	:_Character_Data(), _Health_Componment(Max_Health, Current_Health, Unable_Damage), _Money_Componment(0)
+{
+	this->_Last_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
+	this->_Distance_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
+	this->_Distance_Mid = new Tanxl_Coord<float>(0.0f, 0.0f);
+}
 
 void GameObject::Add_Money(int Money)
 {
@@ -159,6 +149,21 @@ int GameObject::Get_MaxHealth()
 bool GameObject::Get_Is_Alive()
 {
 	return this->_Health_Componment.Is_Alive();
+}
+
+Tanxl_Coord<float>* GameObject::Get_Last_Move()
+{
+	return this->_Last_Move;
+}
+
+Tanxl_Coord<float>* GameObject::Get_Distance_Move()
+{
+	return this->_Distance_Move;
+}
+
+Tanxl_Coord<float>* GameObject::Get_Distance_Mid()
+{
+	return this->_Distance_Mid;
 }
 
 GameObjectBase& GameObjectBase::GetObjectBase()

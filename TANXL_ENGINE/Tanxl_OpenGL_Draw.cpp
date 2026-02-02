@@ -5,11 +5,11 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "87" };
+const static std::string SubVersion{ "91" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
-static GameObject* MC{ Main_Character::Get_Main_Character() };
+static GameObject* Character{ Main_Character::Get_Main_Character() };
 
 static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
 
@@ -109,7 +109,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//HP UI MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//HP UI MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, MC->Get_MaxHealth() + 2);//Health Init
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, Character->Get_MaxHealth() + 2);//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
@@ -273,14 +273,14 @@ void OpenGL_Draw::init(GameStateBase* State)
 	float Half_Width{ (this->_Scene_Int._Coord_X - 1) / 2.0f };
 	float Half_Height{ (this->_Scene_Int._Coord_Y - 1) / 2.0f };
 
-	State->Get_Move_Distance()._Coord_X = (2.0f / this->_Scene_Int._Coord_X) * Half_Width + (1.0f / this->_Scene_Int._Coord_X) * (8 - this->_PreLoads);
-	State->Get_Move_Distance()._Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
+	Character->Get_Distance_Move()->_Coord_X = (2.0f / this->_Scene_Int._Coord_X) * Half_Width + (1.0f / this->_Scene_Int._Coord_X) * (8 - this->_PreLoads);
+	Character->Get_Distance_Move()->_Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
 
 	State->Get_Square_State().Set_State_Length(this->_Scene_Int._Coord_X, this->_Scene_Int._Coord_Y);
 	State->Get_Square_State().Set_Move_State(this->_Pre_Move._Coord_X, this->_Pre_Move._Coord_Y, this->_PreLoads);
 
-	State->Get_Move_Distance()._Coord_X += static_cast<float>((this->_Pre_Move._Coord_X - 4) * State->Get_Each_Width());
-	State->Get_Move_Distance()._Coord_Y -= static_cast<float>((this->_Pre_Move._Coord_Y - 4) * State->Get_Each_Height());
+	Character->Get_Distance_Move()->_Coord_X += static_cast<float>((this->_Pre_Move._Coord_X - 4) * State->Get_Each_Width());
+	Character->Get_Distance_Move()->_Coord_Y -= static_cast<float>((this->_Pre_Move._Coord_Y - 4) * State->Get_Each_Height());
 
 	this->Set_Max_Middle_Frame(200);
 
@@ -460,7 +460,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
-			MC->Set_Health(5);
+			Character->Set_Health(5);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
@@ -471,7 +471,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Check_Health() + 2) * 6);
 		}
 		else
 		{
@@ -496,7 +496,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 			Update_VertData(this->_StateInfor);
-			MC->Set_Health(5);
+			Character->Set_Health(5);
 			this->_Game_Status = GAME_START_MENU;
 		}
 		else
@@ -512,7 +512,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Check_Health() + 2) * 6);
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -563,7 +563,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (MC->Check_Health() + 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (Character->Check_Health() + 2) * 6);
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -606,9 +606,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(MC->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 
-	if (!MC->Get_Is_Alive())
+	if (!Character->Get_Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
 
 	if (VersionFontSize > -800.0f)
@@ -657,11 +657,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 	}
 
-	if ((!MC->Get_Is_Alive()) && (_Draw_Status != 3) && (_Draw_Status != 4))
+	if ((!Character->Get_Is_Alive()) && (_Draw_Status != 3) && (_Draw_Status != 4))
 	{
 		_Draw_Status = 3;
 		IEB->Set_Key_Enable(false);
-		MC->Pay_Money(MC->Get_Money());
+		Character->Pay_Money(Character->Get_Money());
 	}
 
 	if (!glfwWindowShouldClose(_Main_Window))
@@ -693,14 +693,14 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 			<< State->Get_DataHeight() * this->_Each_Height << std::endl;
 #endif
 
-		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(this->_Delta_Time));
+		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(*Character, this->_Delta_Time));
 
 		glProgramUniform1f(_Adjst_RenderingProgram, 2, Temp_Move._Coord_X);//Current_Move_LocationX
 		glProgramUniform1f(_Adjst_RenderingProgram, 3, Temp_Move._Coord_Y);//
 
 		State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 		Update_VertData(this->_StateInfor);
-		State->StateMove_Edge_Set(IEB->Get_Reach_Edge(), this->_Delta_Time);
+		State->StateMove_Edge_Set(*Character, IEB->Get_Reach_Edge(), this->_Delta_Time);
 
 		glProgramUniform1f(_State_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
 		glProgramUniform1f(_State_RenderingProgram, 5, State->Get_State_Loc()._Coord_Y);//State_MoveY

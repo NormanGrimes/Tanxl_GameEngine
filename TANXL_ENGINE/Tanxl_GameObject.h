@@ -38,6 +38,8 @@
 // 基础数据设置接口拆分为两个独立接口
 // 多个成员函数设为常量
 // 移除添加组件时的名称检查
+// 三个关于移动距离的变量移入物品类进行管理
+// 玩家数据类改为结构体并去掉三个获取变量的函数
 
 #pragma once
 
@@ -48,6 +50,7 @@
 #include <string>
 
 #include "Tanxl_EngineBase.h"
+#include "Tanxl_LocationBase.h"
 
 //组件类
 class Componment_Base
@@ -113,18 +116,13 @@ struct Armor
 	int _Defense;
 };
 
-class Character_Data
+struct Character_Data
 {
-public:
 	Character_Data();
 
 	inline int Get_Attack_Damage();
 	inline int Get_Defense_Armor();
-	inline void Set_Default_Damage(int Damage);
-	inline void Set_Default_Defense(int Defense);
-	inline double Get_Move_Speed() const;
 
-private:
 	int _Attack_Damage;
 	int _Defense_Armor;
 	double _Move_Speed;
@@ -150,6 +148,7 @@ class GameObject
 {
 public:
 	GameObject(int Max_Health, int Current_Health, bool Unable_Damage = false);
+
 	void Add_Money(int Money);
 	bool Pay_Money(int Price);
 	int Get_Money();
@@ -161,10 +160,22 @@ public:
 	int Get_MaxHealth();
 	bool Get_Is_Alive();
 	
+	Tanxl_Coord<float>* Get_Last_Move();
+	Tanxl_Coord<float>* Get_Distance_Move();
+	Tanxl_Coord<float>* Get_Distance_Mid();
+
 private:
+	Character_Data _Character_Data;
 
 	Health_Componment _Health_Componment;
 	Money_Componment _Money_Componment;
+
+	//_Last_Move 用于记录上次移动距离
+	Tanxl_Coord<float>* _Last_Move;
+	//_Distance_Move 用于记录当前相对于原点的移动距离
+	Tanxl_Coord<float>* _Distance_Move;
+	//_Distance_Mid 用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
+	Tanxl_Coord<float>* _Distance_Mid;
 };
 
 //主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值

@@ -13,12 +13,16 @@
 // 增加第二版输入状态量测试
 // 修改按键对应的输入状态
 // 移除第一版移动状态量
+// 增加按键移动方向的枚举
+// 按键观察者类优化改进
+// 增加按键观察者模式的测试
 
 #pragma once
 
 #ifndef _TANXL_INSERTACTION_
 #define _TANXL_INSERTACTION_
 
+#define _ENABLE_TANXL_INSERTACTION_OBSERVER_TEST_  1
 #define _ENABLE_TANXL_INSERTACTION_CONSOLE_OUTPUT_ 0
 
 #if _ENABLE_TANXL_INSERTACTION_CONSOLE_OUTPUT_
@@ -42,16 +46,25 @@
 #include "Tanxl_LocationBase.h"
 #include "Tanxl_GameEvent.h"
 
-class Key_UnitOB :public Event_Observer<bool>
+enum MoveTo_Direction
+{
+	MOVETO_PARA,
+	MOVETO_VERT,
+	MOVETO_BOTH
+};
+
+class Key_Observer :public Event_Observer<int>
 {
 public:
-	Key_UnitOB(int GLFW_KEY) :_GLFW_KEY(GLFW_KEY) {};
+	Key_Observer(int GLFW_KEY, MoveTo_Direction Direction, float Move_Length) :
+		_GLFW_KEY(GLFW_KEY), _Enable(true), _Direction(Direction), _Move_Length(Move_Length) {}
 
-	virtual void EventCheck(bool& Event)
+	virtual void EventCheck(int& Event)
 	{
 		if (Event)
 		{
-			std::cout << "Event_Call" << std::endl;
+			if (Event == _GLFW_KEY)
+				std::cout << "Key Event Call : " << _GLFW_KEY << std::endl;
 		}
 	}
 
@@ -66,11 +79,10 @@ public:
 	}
 
 private:
-	int _GLFW_KEY{ GLFW_KEY_UNKNOWN };
-	bool _Enable{ true };
-
-	bool _Move_ToX{ true };
-	float _Move_Length{ 0.0f };
+	int _GLFW_KEY;
+	bool _Enable;
+	MoveTo_Direction _Direction;
+	float _Move_Length;
 };
 
 struct Key_Unit
@@ -131,7 +143,7 @@ public:
 	size_t Get_KeyEvent_Size();
 	//获取键盘输入 window为需要获取输入的OpenGL窗口 State为需要操作的地图 支持非移动按钮功能
 	//获取到输入后不会立刻执行移动操作 仅记录移动距离 通过地图模块的更新移动功能执行移动操作
-	void GetInsert(GLFWwindow* window, GameStateBase* State);
+	void GetInsert(GLFWwindow* window, GameStateBase* State, GameObject& Character);
 	//获取鼠标输入
 	void GetMouseInput(GLFWwindow* window);
 	//地图边长相同时 或仅允许在一个正方形区域移动时使用 Max_float用于指定最大移动距离（相对地图比例）

@@ -48,6 +48,8 @@
 // 移除更新地图接口的返回值
 // 移除两个坐标编号获取接口
 // 检测地图数据是否存在的接口增加空指针检查
+// 多个接口增加操作对象参数
+// 移除获取上次移动触发的边沿的接口
 
 #pragma once
 
@@ -230,10 +232,7 @@ public:
 	static GameStateBase& GetStateBase(int Width = 0, int Height = 0);
 	Square_State& Get_Square_State();
 	Tanxl_Coord<float>& Get_State_Loc() const;
-	Tanxl_Coord<float>& Get_Screen_Distance() const;
-	Tanxl_Coord<float>& Get_Move_Distance() const;
-	Tanxl_Coord<float>& Get_Last_Move() const;
-	Tanxl_Coord<float> Auto_Adjust(double Move_Scale);
+	Tanxl_Coord<float> Auto_Adjust(GameObject& Character, double Move_Scale);
 	double Get_Each_Width() const;
 	double Get_Each_Height() const;
 	std::vector<StateUnit*>* Get_GameState(EState_Extend State_Id = STATE_EXTEND_MIDD) const;
@@ -252,13 +251,13 @@ public:
 	void Set_State_Counts(int Width, int Height);
 	void Set_Adjust(float Adjust);
 	void Set_Enable_Adjust(bool Enable_Adjust, bool Enable_While_Move);
-	void Set_CurrentLoc(float& CurrentX, float& CurrentY) const;
+	void Set_CurrentLoc(GameObject& Character, float& CurrentX, float& CurrentY) const;
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);
 	void Reload_Display_State(EState_Extend Extend_Dire);
 	void Reload_State_Data(int PreLoads, glm::ivec2* StateInfor);
-	void Update_Move(float MoveX, float MoveY, ECheck_Edge Check = CHECK_EDGE_CURR);
-	void StateMove_Edge_Set(short Edge = 0, double Scale = 1);
+	void Update_Move(float MoveX, float MoveY, GameObject& Character, ECheck_Edge Check = CHECK_EDGE_CURR);
+	void StateMove_Edge_Set(GameObject& Character, short Edge = 0, double Scale = 1);
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock(int State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
@@ -266,21 +265,19 @@ public:
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
 	void Move_State(EMove_State_EventId Direction, int Times);
-	void Update_Last_Location();
-	void State_Check_Event();
-	void HitEdge_Check();
+	void Update_Last_Location(GameObject& Character);
+	void State_Check_Event(GameObject& Character);
+	void HitEdge_Check(GameObject& Character);
+	//↓Move_Adjust : 根据移动位置将背景地图向某一方向微调一个或多个地图单元
 	void Move_Adjust();
-    void State_Check_Block(ECheck_Edge Check_Direction);
-	void Update_State(ECheck_Edge Check_Direction);
+    void State_Check_Block(GameObject& Character, ECheck_Edge Check_Direction);
+	void Update_State(GameObject& Character, ECheck_Edge Check_Direction);
 	//↓Is_State_Exist : 检测某个区块的地图数据是否存在
 	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	bool Get_Compile_Status() const;
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check) const;
 	Tanxl_Coord<int> Get_Exac_Location() const;
-	//↓HitEdge_Check 返回最后一次的按键状态
-	// 获取上次移动触发的边沿
-	EMove_State_EventId Auto_Update_Trigger(short Edge);
 	//↓Get_DataHeight : 获取单个地图区块纵向包含的单元个数
 	unsigned Get_DataHeight()const;
 	//↓Get_DataWidth : 获取单个地图区块横向包含的单元个数
@@ -336,10 +333,10 @@ private:
 	Tanxl_Coord<int> _Exac_Location;
 	//_GameState_Length 用于控制当前地图的显示宽/高度
 	Tanxl_Coord<int> _GameState_Length;
-	//_Location_Distance_Mid 方块离中心点的距离
+	//_Location_Distance_Mid 上一次有效的方块离中心点的距离
 	Tanxl_Coord<float> _Location_Distance_Mid{ 0.0f, 0.0f };
-	//_Location_Move_Distance 方块移动的距离
-	Tanxl_Coord<float> _Location_Move_Distance{ 0.0f, 0.0f };
+	//_Location_Distance_Move 上一次有效的方块移动距离
+	Tanxl_Coord<float> _Location_Distance_Move{ 0.0f, 0.0f };
 	//_GameState_Adjust 用于记录每次自动调整的距离
 	float _GameState_Adjust;
 	//_Is_Data_Set 用于标记是否从文件中获取到了地图数据
@@ -356,12 +353,6 @@ private:
 	bool _Trigger_Mode{ false };
 	//_MState 用于记录当前加载地图区域
 	Square_State _MState;
-	//_Distance_Screen_Mid 用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
-	int _Distance_Screen_Mid;
-	//_Distance_Move 用于记录当前相对于原点的移动距离
-	int _Distance_Move;
-	//_Last_Move 用于记录上次移动距离
-	int _Last_Move;
 	//_State_Loc 记录地图场景移动距离
 	int _State_Loc{};
 	//_Extend_Mid_Id 记录当前扩展世界中心点的编号

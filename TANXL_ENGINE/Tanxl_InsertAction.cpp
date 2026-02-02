@@ -82,18 +82,40 @@ size_t InsertEventBase::Get_KeyEvent_Size()
 	return this->_KeyEventS.size();
 }
 
-void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
+void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameObject& Character)
 {
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	double MoveScale{ OPD->Get_DeltaTime() };
-	State->Update_Last_Location();
+	State->Update_Last_Location(Character);
 
 	if (this->_Is_Key_Enable == false)
 		return;
 
-	State->Get_Last_Move()._Coord_X = 0.0f;
-	State->Get_Last_Move()._Coord_Y = 0.0f;
+#if _ENABLE_TANXL_INSERTACTION_OBSERVER_TEST_
+	EventSubject<int> InsertCheck;
+
+	Event_Observer<int>* ObserverUP = new Key_Observer(GLFW_KEY_UP, MOVETO_VERT,0.5f);
+	Event_Observer<int>* Observer_W = new Key_Observer(GLFW_KEY_W, MOVETO_VERT, 0.5f);
+	Event_Observer<int>* ObserverLE = new Key_Observer(GLFW_KEY_LEFT, MOVETO_PARA, -0.5f);
+	Event_Observer<int>* Observer_A = new Key_Observer(GLFW_KEY_A, MOVETO_PARA, -0.5f);
+	Event_Observer<int>* ObserverRI = new Key_Observer(GLFW_KEY_RIGHT, MOVETO_PARA, 0.5f);
+	Event_Observer<int>* Observer_D = new Key_Observer(GLFW_KEY_D, MOVETO_PARA, 0.5f);
+	Event_Observer<int>* ObserverDO = new Key_Observer(GLFW_KEY_DOWN, MOVETO_VERT, -0.5f);
+	Event_Observer<int>* Observer_S = new Key_Observer(GLFW_KEY_S, MOVETO_VERT, -0.5f);
+
+	InsertCheck.Add_Observer(ObserverUP);
+	InsertCheck.Add_Observer(Observer_W);
+	InsertCheck.Add_Observer(ObserverLE);
+	InsertCheck.Add_Observer(Observer_A);
+	InsertCheck.Add_Observer(ObserverRI);
+	InsertCheck.Add_Observer(Observer_D);
+	InsertCheck.Add_Observer(ObserverDO);
+	InsertCheck.Add_Observer(Observer_S);
+#endif
+
+	Character.Get_Last_Move()->_Coord_X = 0.0f;
+	Character.Get_Last_Move()->_Coord_Y = 0.0f;
 
 	Tanxl_Coord<double> Insert_Move_Length{ 0,0 };
 
@@ -101,6 +123,9 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 	{
 		if (glfwGetKey(window, this->_KeyEventS.at(i)->_Key_Unit->GLFW_KEY) == GLFW_PRESS)
 		{
+#if _ENABLE_TANXL_INSERTACTION_OBSERVER_TEST_
+			InsertCheck.Notify(this->_KeyEventS.at(i)->_Key_Unit->GLFW_KEY);
+#endif
 			_Is_Key_Pressed = true;
 			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)//非移动功能的按键判断
 			{
@@ -149,13 +174,13 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State)
 		this->_Insert_Status |= 8;
 	}
 
-	State->Get_Screen_Distance() += Insert_Length;
-	State->Get_Move_Distance() += Insert_Length;
-	State->Get_Last_Move() += Insert_Length;
+	*Character.Get_Last_Move() += Insert_Length;
+	*Character.Get_Distance_Move() += Insert_Length;
+	*Character.Get_Distance_Mid() += Insert_Length;
 
-	AutoCheck(State->Get_Screen_Distance(), State->Get_Move_Distance());
+	AutoCheck(*Character.Get_Distance_Mid(), *Character.Get_Distance_Move());
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
-	std::cout << "Move Distance X :" << State->Get_Move_Distance()._LocX << " -  Y :" << State->Get_Move_Distance()._LocY << std::endl;
+	std::cout << "Move Distance X :" << *Character.Get_Distance_Move()._Coord_X << " -  Y :" << *Character.Get_Distance_Move()._Coord_Y << std::endl;
 #endif
 }
 

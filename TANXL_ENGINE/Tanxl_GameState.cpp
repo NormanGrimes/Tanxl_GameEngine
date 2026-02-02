@@ -412,34 +412,18 @@ Tanxl_Coord<float>& GameStateBase::Get_State_Loc() const
 	return LocationBase::GetLocationBase().Get_LocationS(this->_State_Loc);
 }
 
-Tanxl_Coord<float>& GameStateBase::Get_Screen_Distance() const
+Tanxl_Coord<float> GameStateBase::Auto_Adjust(GameObject& Character, double Move_Scale)
 {
-	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Screen_Mid);
-}
-
-Tanxl_Coord<float>& GameStateBase::Get_Move_Distance() const
-{
-	return LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move);
-}
-
-Tanxl_Coord<float>& GameStateBase::Get_Last_Move() const
-{
-	return LocationBase::GetLocationBase().Get_LocationS(this->_Last_Move);
-}
-
-Tanxl_Coord<float> GameStateBase::Auto_Adjust(double Move_Scale)
-{
-	static Tanxl_Coord<float>& DistMid{ LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Screen_Mid) };
 	Tanxl_Coord<float> Temp_Move(0.0f, 0.0f);
-	double Current_Height{ (static_cast<double>(DistMid._Coord_Y) * 2 + 1) / (this->_Each_Height) };
-	double Current_Width{ (static_cast<double>(DistMid._Coord_X) * 2 + 1) / (this->_Each_Width) };
+	double Current_Height{ (static_cast<double>(Character.Get_Distance_Mid()->_Coord_Y) * 2 + 1) / (this->_Each_Height)};
+	double Current_Width{ (static_cast<double>(Character.Get_Distance_Mid()->_Coord_X) * 2 + 1) / (this->_Each_Width) };
 
 	if (this->_Is_Adjusting)//Auto Adjust Part
 	{
-		Temp_Move._Coord_Y = this->Set_ExacHeight(Current_Height, DistMid._Coord_Y, Move_Scale);
-		Temp_Move._Coord_X = this->Set_ExacWidth(Current_Width, DistMid._Coord_X, Move_Scale);
+		Temp_Move._Coord_Y = this->Set_ExacHeight(Current_Height, Character.Get_Distance_Mid()->_Coord_Y, Move_Scale);
+		Temp_Move._Coord_X = this->Set_ExacWidth(Current_Width, Character.Get_Distance_Mid()->_Coord_X, Move_Scale);
 	}
-	return Temp_Move + DistMid;
+	return Temp_Move + *Character.Get_Distance_Mid();
 }
 
 double GameStateBase::Get_Each_Width() const
@@ -756,10 +740,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 	}
 }
 
-void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
+void GameStateBase::Update_Move(float MoveX, float MoveY, GameObject& Character, ECheck_Edge Check)
 {
-	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
-
 	if ((this->_Half_State_Length._Coord_X == 0.0f) || (this->_Half_State_Length._Coord_Y == 0.0f))
 		this->Set_Display_State(this->_GameState_Length._Coord_X, this->_GameState_Length._Coord_Y);
 
@@ -794,8 +776,8 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 		break;
 	}
 
-	float Temp_LocationX{ (Distance->_Coord_X + MoveX) * (this->_GameState_Length._Coord_X / 2.0f) };
-	float Temp_LocationY{ (Distance->_Coord_Y + MoveY) * (this->_GameState_Length._Coord_Y / 2.0f) };
+	float Temp_LocationX{ (Character.Get_Distance_Move()->_Coord_X + MoveX) * (this->_GameState_Length._Coord_X / 2.0f)};
+	float Temp_LocationY{ (Character.Get_Distance_Move()->_Coord_Y + MoveY) * (this->_GameState_Length._Coord_Y / 2.0f) };
 
 #if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
 	std::cout << "Before Adjust :" << Temp_LocationX << "____" << Temp_LocationY << std::endl;
@@ -807,9 +789,9 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 	this->_Exac_Location._Coord_X = static_cast<int>(Temp_LocationX);
 	this->_Exac_Location._Coord_Y = static_cast<int>(Temp_LocationY);
 
-	if (Distance->_Coord_X + MoveX < -0.24f)
+	if (Character.Get_Distance_Move()->_Coord_X + MoveX < -0.24f)
 		--this->_Exac_Location._Coord_X;
-	if (Distance->_Coord_Y + MoveY > 0.24f)
+	if (Character.Get_Distance_Move()->_Coord_Y + MoveY > 0.24f)
 		++this->_Exac_Location._Coord_Y;
 
 	this->_Exac_Location._Coord_Y = -this->_Exac_Location._Coord_Y;
@@ -820,43 +802,42 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, ECheck_Edge Check)
 #endif
 }
 
-void GameStateBase::StateMove_Edge_Set(short Edge, double Scale)//Reach Screen Edge : Then push screen to move
+void GameStateBase::StateMove_Edge_Set(GameObject& Character, short Edge, double Scale)//Reach Screen Edge : Then push screen to move
 {
-	int Moves{};
-	if (_Trigger_Mode)
-		Moves = this->Auto_Update_Trigger(Edge);
+	if (!this->_Trigger_Mode)
+		return;
 
-	if ((Moves & MoveToNH) == MoveToNH)
+	if ((Edge & MoveToNH) == MoveToNH)
 	{
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------Y+" << std::endl;
 #endif
 		this->Get_State_Loc()._Coord_Y += static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Coord_Y -= static_cast<float>(0.35f * Scale);
+		Character.Get_Distance_Move()->_Coord_Y -= static_cast<float>(0.35f * Scale);
 	}
-	if ((Moves & MoveToPH) == MoveToPH)
+	if ((Edge & MoveToPH) == MoveToPH)
 	{
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------Y-" << std::endl;
 #endif
 		this->Get_State_Loc()._Coord_Y -= static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Coord_Y += static_cast<float>(0.35f * Scale);
+		Character.Get_Distance_Move()->_Coord_Y += static_cast<float>(0.35f * Scale);
 	}
-	if ((Moves & MoveToNW) == MoveToNW)
+	if ((Edge & MoveToNW) == MoveToNW)
 	{
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------X+" << std::endl;
 #endif
 		this->Get_State_Loc()._Coord_X += static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Coord_X -= static_cast<float>(0.35f * Scale);
+		Character.Get_Distance_Move()->_Coord_X -= static_cast<float>(0.35f * Scale);
 	}
-	if ((Moves & MoveToPW) == MoveToPW)
+	if ((Edge & MoveToPW) == MoveToPW)
 	{
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------X-" << std::endl;
 #endif
 		this->Get_State_Loc()._Coord_X -= static_cast<float>(0.35f * Scale);
-		this->Get_Move_Distance()._Coord_X += static_cast<float>(0.35f * Scale);
+		Character.Get_Distance_Move()->_Coord_X += static_cast<float>(0.35f * Scale);
 	}
 }
 
@@ -925,20 +906,19 @@ void GameStateBase::Move_State(EMove_State_EventId Direction, int Times)
 		this->_MState.Set_Move_State(Direction);
 }
 
-void GameStateBase::Update_Last_Location()
+void GameStateBase::Update_Last_Location(GameObject& Character)
 {
-	static int Dist_Mid{ this->_Distance_Screen_Mid };
-	this->_Location_Distance_Mid = LocationBase::GetLocationBase().Get_LocationS(Dist_Mid);
-	this->_Location_Move_Distance = this->Get_Move_Distance();
+	this->_Location_Distance_Mid = *Character.Get_Distance_Mid();
+	this->_Location_Distance_Move = *Character.Get_Distance_Move();
 }
 
-void GameStateBase::State_Check_Event()
+void GameStateBase::State_Check_Event(GameObject& Character)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
 	static GameObject* MC{ Main_Character::Get_Main_Character() };
 	static bool Achievement{ true };
-	this->Update_Move(0.0f, 0.0f, CHECK_EDGE_CURR);
+	this->Update_Move(0.0f, 0.0f, Character, CHECK_EDGE_CURR);
 	StateUnit* CheckUnit{ this->Get_State() };
 	if (!CheckUnit)
 		return;
@@ -1007,19 +987,17 @@ void GameStateBase::State_Check_Event()
 	}
 }
 
-void GameStateBase::HitEdge_Check()
+void GameStateBase::HitEdge_Check(GameObject& Character)
 {
 	static double State_Data_Width{ this->_Data_Width * this->_Each_Width * 2 + this->_Each_Width };
 	static double State_Data_Height{ this->_Data_Height * this->_Each_Height * 2 + this->_Each_Height };
 
-	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
-
-	if (this->Get_Last_Move()._Coord_X < 0)
+	if (Character.Get_Last_Move()->_Coord_X < 0)
 	{
-		if (Distance->_Coord_X < -static_cast<int>(this->Get_DataWidth()) - 1)
+		if (Character.Get_Distance_Move()->_Coord_X < -static_cast<int>(this->Get_DataWidth()) - 1)
 		{
-			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-			this->Get_Move_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
+			Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
+			Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "LEFT RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
 #endif
@@ -1028,19 +1006,19 @@ void GameStateBase::HitEdge_Check()
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_LEFT);
+				this->Update_Move(Character.Get_Last_Move()->_Coord_X, 0.0f, Character, CHECK_EDGE_LEFT);
 
 				if (this->_Exac_Location._Coord_X >= -static_cast<int>(this->Get_DataWidth()) - 1)
-					this->State_Check_Block(CHECK_EDGE_LEFT);
+					this->State_Check_Block(Character, CHECK_EDGE_LEFT);
 			}
 		}
 	}
-	else if (this->Get_Last_Move()._Coord_X > 0)
+	else if (Character.Get_Last_Move()->_Coord_X > 0)
 	{
-		if (Distance->_Coord_X > State_Data_Width)
+		if (Character.Get_Distance_Move()->_Coord_X > State_Data_Width)
 		{
-			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-			this->Get_Move_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
+			Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
+			Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "RIGH RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
 #endif
@@ -1049,20 +1027,20 @@ void GameStateBase::HitEdge_Check()
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				this->Update_Move(this->Get_Last_Move()._Coord_X, 0.0f, CHECK_EDGE_RIGH);
+				this->Update_Move(Character.Get_Last_Move()->_Coord_X, 0.0f, Character, CHECK_EDGE_RIGH);
 
 				if (this->_Exac_Location._Coord_X <= static_cast<int>(this->Get_DataWidth()) * 2 + 1)
-					this->State_Check_Block(CHECK_EDGE_RIGH);
+					this->State_Check_Block(Character, CHECK_EDGE_RIGH);
 			}
 		}
 	}
 
-	if (this->Get_Last_Move()._Coord_Y > 0)
+	if (Character.Get_Last_Move()->_Coord_Y > 0)
 	{
-		if (Distance->_Coord_Y > this->Get_DataHeight() + 1)
+		if (Character.Get_Distance_Move()->_Coord_Y > this->Get_DataHeight() + 1)
 		{
-			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			this->Get_Move_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "ABOV RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
 #endif
@@ -1071,19 +1049,19 @@ void GameStateBase::HitEdge_Check()
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_ABOV);
+				this->Update_Move(0.0f, Character.Get_Last_Move()->_Coord_Y, Character, CHECK_EDGE_ABOV);
 
 				if (this->_Exac_Location._Coord_Y >= -static_cast<int>(this->Get_DataHeight()) - 1)
-					this->State_Check_Block(CHECK_EDGE_ABOV);
+					this->State_Check_Block(Character, CHECK_EDGE_ABOV);
 			}
 		}
 	}
-	else if (this->Get_Last_Move()._Coord_Y < 0)
+	else if (Character.Get_Last_Move()->_Coord_Y < 0)
 	{
-		if (Distance->_Coord_Y < -State_Data_Height)
+		if (Character.Get_Distance_Move()->_Coord_Y < -State_Data_Height)
 		{
-			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			this->Get_Move_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "DOWN RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
 #endif
@@ -1092,10 +1070,10 @@ void GameStateBase::HitEdge_Check()
 		{
 			for (int i{ 0 }; i < 2; ++i)
 			{
-				this->Update_Move(0.0f, this->Get_Last_Move()._Coord_Y, CHECK_EDGE_BELO);
+				this->Update_Move(0.0f, Character.Get_Last_Move()->_Coord_Y, Character, CHECK_EDGE_BELO);
 
 				if (this->_Exac_Location._Coord_Y <= static_cast<int>(this->Get_DataHeight()) * 2 + 1)
-					this->State_Check_Block(CHECK_EDGE_BELO);
+					this->State_Check_Block(Character, CHECK_EDGE_BELO);
 			}
 		}
 	}
@@ -1178,7 +1156,7 @@ void GameStateBase::Move_Adjust()
 	}
 }
 
-void GameStateBase::State_Check_Block(ECheck_Edge Check_Direction)
+void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_Direction)
 {
 	float Check_Range{ 1.0f };
 	static double LastTime{ glfwGetTime() };
@@ -1200,19 +1178,19 @@ void GameStateBase::State_Check_Block(ECheck_Edge Check_Direction)
 		{
 		case CHECK_EDGE_LEFT:
 		case CHECK_EDGE_RIGH:
-			this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-			this->Get_Move_Distance()._Coord_X = this->_Location_Move_Distance._Coord_X;
+			Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
+			Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Move._Coord_X;
 			break;
 		case CHECK_EDGE_BELO:
 		case CHECK_EDGE_ABOV:
-			this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			this->Get_Move_Distance()._Coord_Y = this->_Location_Move_Distance._Coord_Y;
+			Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Move._Coord_Y;
 			break;
 		}
 
 		while (true)
 		{
-			this->Update_Move(0.0f, 0.0f, Check_Direction);
+			this->Update_Move(0.0f, 0.0f, Character, Check_Direction);
 			if ((this->Get_State() == nullptr) ||
 				(this->Get_State()->Get_Extra_Status() == 1))
 			{
@@ -1230,31 +1208,31 @@ void GameStateBase::State_Check_Block(ECheck_Edge Check_Direction)
 				{
 				case CHECK_EDGE_LEFT:
 					this->_Location_Distance_Mid._Coord_X += Check_Range;
-					this->_Location_Move_Distance._Coord_X += Check_Range;
+					this->_Location_Distance_Move._Coord_X += Check_Range;
 
-					this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-					this->Get_Move_Distance()._Coord_X = this->_Location_Move_Distance._Coord_X;
+					Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
+					Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Move._Coord_X;
 					break;
 				case CHECK_EDGE_RIGH:
 					this->_Location_Distance_Mid._Coord_X -= Check_Range;
-					this->_Location_Move_Distance._Coord_X -= Check_Range;
+					this->_Location_Distance_Move._Coord_X -= Check_Range;
 
-					this->Get_Screen_Distance()._Coord_X = this->_Location_Distance_Mid._Coord_X;
-					this->Get_Move_Distance()._Coord_X = this->_Location_Move_Distance._Coord_X;
+					Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
+					Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Move._Coord_X;
 					break;
 				case CHECK_EDGE_BELO:
 					this->_Location_Distance_Mid._Coord_Y += Check_Range;
-					this->_Location_Move_Distance._Coord_Y += Check_Range;
+					this->_Location_Distance_Move._Coord_Y += Check_Range;
 
-					this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-					this->Get_Move_Distance()._Coord_Y = this->_Location_Move_Distance._Coord_Y;
+					Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+					Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Move._Coord_Y;
 					break;
 				case CHECK_EDGE_ABOV:
 					this->_Location_Distance_Mid._Coord_Y -= Check_Range;
-					this->_Location_Move_Distance._Coord_Y -= Check_Range;
+					this->_Location_Distance_Move._Coord_Y -= Check_Range;
 
-					this->Get_Screen_Distance()._Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-					this->Get_Move_Distance()._Coord_Y = this->_Location_Move_Distance._Coord_Y;
+					Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+					Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Move._Coord_Y;
 					break;
 				}
 			}
@@ -1269,26 +1247,26 @@ void GameStateBase::State_Check_Block(ECheck_Edge Check_Direction)
 		switch (Check_Direction)
 		{
 		case CHECK_EDGE_LEFT:
-			this->Get_Move_Distance()._Coord_X += Marg_Width;
+			Character.Get_Distance_Move()->_Coord_X += Marg_Width;
 			break;
 		case CHECK_EDGE_RIGH:
-			this->Get_Move_Distance()._Coord_X -= Marg_Width;
+			Character.Get_Distance_Move()->_Coord_X -= Marg_Width;
 			break;
 		case CHECK_EDGE_BELO:
-			this->Get_Move_Distance()._Coord_Y += Marg_Height;
+			Character.Get_Distance_Move()->_Coord_Y += Marg_Height;
 			break;
 		case CHECK_EDGE_ABOV:
-			this->Get_Move_Distance()._Coord_Y -= Marg_Height;
+			Character.Get_Distance_Move()->_Coord_Y -= Marg_Height;
 			break;
 		}
 
-		this->Update_Move(0.0f, 0.0f, Check_Direction);
+		this->Update_Move(0.0f, 0.0f, Character, Check_Direction);
 
-		this->Update_State(Check_Direction);
+		this->Update_State(Character, Check_Direction);
 	}
 }
 
-void GameStateBase::Update_State(ECheck_Edge Check_Direction)
+void GameStateBase::Update_State(GameObject& Character, ECheck_Edge Check_Direction)
 {
 	int State_Unit_Width{ static_cast<int>(this->_Data_Width) + 1 };
 	int State_Unit_Height{ static_cast<int>(this->_Data_Height) + 1 };
@@ -1296,8 +1274,8 @@ void GameStateBase::Update_State(ECheck_Edge Check_Direction)
 	int Temp_Height{ this->_New_Current_Loc._Coord_Y };
 	int Temp_Width{ this->_New_Current_Loc._Coord_X };
 
-	this->_New_Current_Loc._Coord_Y = -static_cast<int>((this->Get_Move_Distance()._Coord_Y + 2.0f) / this->_Each_Height);
-	this->_New_Current_Loc._Coord_X = -static_cast<int>((this->Get_Move_Distance()._Coord_X - 2.0f) / this->_Each_Width);
+	this->_New_Current_Loc._Coord_Y = -static_cast<int>((Character.Get_Distance_Move()->_Coord_Y + 2.0f) / this->_Each_Height);
+	this->_New_Current_Loc._Coord_X = -static_cast<int>((Character.Get_Distance_Move()->_Coord_X - 2.0f) / this->_Each_Width);
 
 	switch (Check_Direction)
 	{
@@ -1338,10 +1316,7 @@ GameStateBase::GameStateBase(int Width, int Height) :
 	_Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
-	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
-	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
 	this->_State_Loc = LCB->New_Location_set("State_Move_Location");
-	this->_Last_Move = LCB->New_Location_set("Last_Move");
 
 	this->_Each_Height = 2.0f / this->_GameState_Length._Coord_Y;//10 0.2
 	this->_Each_Width = 2.0f / this->_GameState_Length._Coord_X;//10 0.2
@@ -1412,11 +1387,10 @@ void StateUnit::Set_Status(int Extra_Status)
 
 //GameStateBase
 
-void GameStateBase::Set_CurrentLoc(float& CurrentX, float& CurrentY) const
+void GameStateBase::Set_CurrentLoc(GameObject& Character, float& CurrentX, float& CurrentY) const
 {
-	static Tanxl_Coord<float>* Distance{ &LocationBase::GetLocationBase().Get_LocationS(this->_Distance_Move) };
-	Distance->_Coord_X = CurrentX;
-	Distance->_Coord_Y = CurrentY;
+	Character.Get_Distance_Move()->_Coord_X = CurrentX;
+	Character.Get_Distance_Move()->_Coord_Y = CurrentY;
 }
 
 void GameStateBase::Set_Compile_Policy(std::string State_Name, int Set_To_Status)
@@ -1644,9 +1618,7 @@ _Compile_Success(false), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjust
 _Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
-	this->_Distance_Move = LCB->New_Location_set("Distance_Move");
-	this->_Distance_Screen_Mid = LCB->New_Location_set("Distance_Screen_Mid");
-	this->_Last_Move = LCB->New_Location_set("Last_Move");
+	this->_State_Loc = LCB->New_Location_set("State_Move_Location");
 
 	this->_Each_Height = 2.0f / this->_GameState_Length._Coord_Y;//10 0.2
 	this->_Each_Width = 2.0f / this->_GameState_Length._Coord_X;//10 0.2
@@ -1723,11 +1695,6 @@ Tanxl_Coord<int> GameStateBase::Get_Exac_Location() const
 Tanxl_Coord<int> GameStateBase::Get_StateLength()const
 {
 	return this->_GameState_Length;
-}
-
-EMove_State_EventId GameStateBase::Auto_Update_Trigger(short Edge)
-{
-	return static_cast<EMove_State_EventId>(Edge);
 }
 
 std::vector<StateUnit*>* GameStateBase::Get_GameState(EState_Extend State_Id) const
