@@ -40,6 +40,7 @@
 // 移除添加组件时的名称检查
 // 三个关于移动距离的变量移入物品类进行管理
 // 玩家数据类改为结构体并去掉三个获取变量的函数
+// 主操作对象类功能合并到物品基类中
 
 #pragma once
 
@@ -159,6 +160,8 @@ public:
 	int Check_Health();
 	int Get_MaxHealth();
 	bool Get_Is_Alive();
+
+	void Reset_Data();
 	
 	Tanxl_Coord<float>* Get_Last_Move();
 	Tanxl_Coord<float>* Get_Distance_Move();
@@ -178,18 +181,6 @@ private:
 	Tanxl_Coord<float>* _Distance_Mid;
 };
 
-//主操作对象 其生命值纹理前两个为角色纹理 即Health = 10时 8为其生命值2为纹理保留值
-class Main_Character
-{
-public:
-	static GameObject* Get_Main_Character();
-private:
-	Main_Character();
-	~Main_Character();
-	Main_Character(const Main_Character&);
-	Main_Character& operator=(const Main_Character&);
-};
-
 //GameObjectBase
 
 class GameObjectBase : public Tanxl_ClassBase
@@ -199,7 +190,11 @@ public:
 
 	const std::string Get_Version();
 
+	GameObject* Get_Main_Character();
+
 private:
+
+	GameObject* _Main_Character{ nullptr };
 
 	GameObjectBase();
 	~GameObjectBase();

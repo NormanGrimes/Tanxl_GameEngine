@@ -113,9 +113,9 @@ int main()
 			exit(0);
 		}
 
-		static GameObject* MC{ Main_Character::Get_Main_Character() };
+		static GameObject* Character{ GameObjectBase::GetObjectBase().Get_Main_Character() };
 
-		if (!MC->Get_Is_Alive())
+		if (!Character->Get_Is_Alive())
 		{
 			std::cout << "Reset the game !" << std::endl;
 			TGE.Engine_Save_Reset_Data();
@@ -177,7 +177,8 @@ int main()
 				"0-2,0-3,0-1,1-2,0-1,0-1,1-2,0-1,0-3,0-2,"
 				"0-3,0-2,1-2,0-2,0-2,0-2,0-2,1-2,0-2,0-3,");
 
-			std::cout << "Reset Finish !" << std::endl;
+			Character->Set_Health(7);
+			//std::cout << "Reset Finish !" << std::endl;
 		}
 
 		static bool Appended{ false };

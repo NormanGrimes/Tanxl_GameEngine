@@ -5,11 +5,11 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "91" };
+const static std::string SubVersion{ "92" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
-static GameObject* Character{ Main_Character::Get_Main_Character() };
+static GameObject* Character{ GameObjectBase::GetObjectBase().Get_Main_Character()};
 
 static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
 

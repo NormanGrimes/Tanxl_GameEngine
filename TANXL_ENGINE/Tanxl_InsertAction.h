@@ -16,6 +16,9 @@
 // 增加按键移动方向的枚举
 // 按键观察者类优化改进
 // 增加按键观察者模式的测试
+// 输入检测事件被观察者加入私有成员
+// 移动功能采用观察者模式实现
+// 移除按键观察者类的启用关闭功能和按键编号获取功能
 
 #pragma once
 
@@ -48,41 +51,39 @@
 
 enum MoveTo_Direction
 {
+	MOVETO_NONE,
 	MOVETO_PARA,
 	MOVETO_VERT,
 	MOVETO_BOTH
 };
 
-class Key_Observer :public Event_Observer<int>
+class Key_Observer : public Event_Observer<int>
 {
 public:
-	Key_Observer(int GLFW_KEY, MoveTo_Direction Direction, float Move_Length) :
-		_GLFW_KEY(GLFW_KEY), _Enable(true), _Direction(Direction), _Move_Length(Move_Length) {}
+	Key_Observer(int GLFW_KEY, MoveTo_Direction Direction, float Move_Length, Tanxl_Coord<double>* Target) :
+		_GLFW_KEY(GLFW_KEY), _Direction(Direction), _Move_Length(Move_Length), _Target(Target) {}
 
 	virtual void EventCheck(int& Event)
 	{
-		if (Event)
+		if (Event == this->_GLFW_KEY)
 		{
-			if (Event == _GLFW_KEY)
-				std::cout << "Key Event Call : " << _GLFW_KEY << std::endl;
+			//std::cout << "Event Call : " << this->_GLFW_KEY << std::endl;
+
+			if (this->_Direction == MoveTo_Direction::MOVETO_PARA)
+				this->_Target->_Coord_X += this->_Move_Length;
+			if (this->_Direction == MoveTo_Direction::MOVETO_VERT)
+				this->_Target->_Coord_Y += this->_Move_Length;
+			if (this->_Direction == MoveTo_Direction::MOVETO_BOTH)
+				*this->_Target += static_cast<double>(this->_Move_Length);
 		}
-	}
-
-	void Enable(bool Enable)
-	{
-		this->_Enable = Enable;
-	}
-
-	int Get_GLKey() const
-	{
-		return this->_GLFW_KEY;
 	}
 
 private:
 	int _GLFW_KEY;
-	bool _Enable;
 	MoveTo_Direction _Direction;
 	float _Move_Length;
+
+	Tanxl_Coord<double>* _Target;
 };
 
 struct Key_Unit
@@ -194,6 +195,8 @@ private:
 	double _Key_Extra_Press{ 20 };
 	//_Mouse_PosX 记录当前鼠标的X/Y轴坐标
 	Tanxl_Coord<double> _Mouse_Pos{ 0, 0 };
+	//_InsertCheck 输入检测的被观察者
+	EventSubject<int> _InsertCheck;
 	//单例实现部分
 	InsertEventBase();
 	~InsertEventBase();

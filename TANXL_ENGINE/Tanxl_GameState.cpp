@@ -916,7 +916,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
-	static GameObject* MC{ Main_Character::Get_Main_Character() };
+	static GameObject* MC{ GameObjectBase::GetObjectBase().Get_Main_Character() };
 	static bool Achievement{ true };
 	this->Update_Move(0.0f, 0.0f, Character, CHECK_EDGE_CURR);
 	StateUnit* CheckUnit{ this->Get_State() };

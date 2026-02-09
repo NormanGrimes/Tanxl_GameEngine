@@ -151,6 +151,14 @@ bool GameObject::Get_Is_Alive()
 	return this->_Health_Componment.Is_Alive();
 }
 
+void GameObject::Reset_Data()
+{
+	Tanxl_Coord<float>TempData(0.0f, 0.0f);
+	this->_Last_Move = &TempData;
+	this->_Distance_Mid = &TempData;
+	this->_Distance_Move = &TempData;
+}
+
 Tanxl_Coord<float>* GameObject::Get_Last_Move()
 {
 	return this->_Last_Move;
@@ -177,7 +185,12 @@ const std::string GameObjectBase::Get_Version()
 	return Tanxl_ClassBase::Get_Version();
 }
 
-GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.4") {}
+GameObject* GameObjectBase::Get_Main_Character()
+{
+	return this->_Main_Character;
+}
+
+GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.4"), _Main_Character(new GameObject(11, 5)) {}
 
 GameObjectBase::~GameObjectBase() {}
 
@@ -213,17 +226,3 @@ bool Componment_Unite::Remove()
 	_Object_Content.erase(this->_Object_Content.begin(), this->_Object_Content.end());
 	return true;
 }
-
-GameObject* Main_Character::Get_Main_Character()
-{
-	static GameObject* MainCharacter{ new GameObject(11, 5) };
-	return MainCharacter;
-}
-
-Main_Character::Main_Character() {}
-
-Main_Character::~Main_Character() {}
-
-Main_Character::Main_Character(const Main_Character&) {}
-
-Main_Character& Main_Character::operator=(const Main_Character&) { return *this; }

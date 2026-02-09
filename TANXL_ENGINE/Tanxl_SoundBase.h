@@ -28,6 +28,7 @@
 // 所有用于选择音频引擎的整形变量改为枚举
 // 增加停止所有音频的接口
 // 修复停止后重新播放的背景音乐重复的问题
+// 增加音频事件观察者类
 
 #pragma once
 
@@ -40,6 +41,7 @@
 
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_RandomBase.h"
+#include "Tanxl_GameEvent.h"
 
 enum ESoundEngine_ID
 {
@@ -129,6 +131,24 @@ private:
     ~SoundBase();
     SoundBase(const SoundBase&);
     SoundBase& operator=(const SoundBase&);
+};
+
+class Sound_Observer : public Event_Observer<int>
+{
+public:
+    Sound_Observer(int Event_Id, ESound_WAV Sound_Name, SoundBase* Sound_Engine) :
+        _Event_Id(Event_Id), _Sound_Name(Sound_Name), _Sound_Engine(Sound_Engine) {}
+
+    virtual void EventCheck(int& Event_Id)
+    {
+        if (this->_Event_Id == Event_Id)
+            _Sound_Engine->Play_Sound(this->_Sound_Name);
+    }
+
+private:
+    int _Event_Id;
+    ESound_WAV _Sound_Name;
+    SoundBase* _Sound_Engine;
 };
 
 #endif

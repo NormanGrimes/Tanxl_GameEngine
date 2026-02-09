@@ -21,6 +21,8 @@
 // 坐标模板类增加加法重载
 // 坐标模板类增加与单数字的比较重载
 // 析构函数增加动态添加的数据的处理
+// 坐标模板类增加常数加减的重载
+// 坐标模板增加指针运算符重载
 
 #pragma once
 
@@ -71,6 +73,11 @@ struct Tanxl_Coord
 			return true;
 		return false;
 	}
+
+	Tanxl_Coord& operator*()
+	{
+		return this;
+	}
 	
 	Tanxl_Coord operator+(Tanxl_Coord& Coord)
 	{
@@ -100,21 +107,49 @@ struct Tanxl_Coord
 		return *this;
 	}
 
-	Tanxl_Coord operator*(double& Mult)
+	Tanxl_Coord operator+(double Plu)
+	{
+		this->_Coord_X += Plu;
+		this->_Coord_Y += Plu;
+		return *this;
+	}
+
+	Tanxl_Coord operator+=(double Plu)
+	{
+		this->_Coord_X += Plu;
+		this->_Coord_Y += Plu;
+		return *this;
+	}
+
+	Tanxl_Coord operator-(double Min)
+	{
+		this->_Coord_X -= Min;
+		this->_Coord_Y -= Min;
+		return *this;
+	}
+
+	Tanxl_Coord operator-=(double Min)
+	{
+		this->_Coord_X -= Min;
+		this->_Coord_Y -= Min;
+		return *this;
+	}
+
+	Tanxl_Coord operator*(double Mult)
 	{
 		this->_Coord_X *= Mult;
 		this->_Coord_Y *= Mult;
 		return *this;
 	}
 
-	Tanxl_Coord operator*=(double& Mult)
+	Tanxl_Coord operator*=(double Mult)
 	{
 		this->_Coord_X *= Mult;
 		this->_Coord_Y *= Mult;
 		return *this;
 	}
 
-	Tanxl_Coord operator/(double& Div)
+	Tanxl_Coord operator/(double Div)
 	{
 		this->_Coord_X /= Div;
 		this->_Coord_Y /= Div;

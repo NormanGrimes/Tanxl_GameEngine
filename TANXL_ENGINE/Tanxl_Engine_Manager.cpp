@@ -239,7 +239,7 @@ void Tanxl_Engine::Engine_Insert_State_Update()
 {
 	if (this->Tanxl_Engine_OpenGL_Draw->Get_Window() == nullptr)
 		return;
-	static GameObject* Character{ Main_Character::Get_Main_Character() };
+	static GameObject* Character{ this->Tanxl_Engine_ObjectBase->Get_Main_Character() };
 	this->Tanxl_Engine_InsertBase->GetInsert(this->Tanxl_Engine_OpenGL_Draw->Get_Window(), this->Tanxl_Engine_GameState, *Character);
 	this->Tanxl_Engine_InsertBase->GetMouseInput(this->Tanxl_Engine_OpenGL_Draw->Get_Window());
 	this->Tanxl_Engine_GameState->Update_State(*Character, CHECK_EDGE_CURR);//更新地图加载区块
@@ -379,7 +379,7 @@ void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Is_Begin, std::strin
 
 void Tanxl_Engine::Engine_State_Event_Check()
 {
-	static GameObject* Character{ Main_Character::Get_Main_Character() };
+	static GameObject* Character{ this->Tanxl_Engine_ObjectBase->Get_Main_Character() };
 	this->Tanxl_Engine_GameState->HitEdge_Check(*Character);
 	this->Tanxl_Engine_GameState->State_Check_Event(*Character);
 }
