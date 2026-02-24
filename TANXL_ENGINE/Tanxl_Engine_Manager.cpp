@@ -112,8 +112,7 @@ void Tanxl_Engine::Engine_Adjust_Multi_Set(bool Enable_Adjust, float Adjust_Valu
 
 void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 {
-	static bool FirstSort{ true };
-	if (FirstSort)
+	if (_Engine_Infinite_State_Set._FirstSort == false)
 	{
 		this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Internal_Id(0x0000, "VERSION_INFORMATION", "ENGINE_CORE");
 		Data_Link* Data{ new Data_Link(0, "VERSION " + Tanxl_Engine_Console_List->Get_Version()) };
@@ -131,7 +130,7 @@ void Tanxl_Engine::Engine_Save_Source_Infor(std::string FileName)
 		this->Tanxl_Engine_GameState->Get_Data_Source()->Set_Internal_Data(Data, SIMPLE_SET);
 		this->Tanxl_Engine_GameState->Get_Data_Source()->AppendItem(APPENDTO_BOTH, FileName, true);
 
-		FirstSort = false;
+		_Engine_Infinite_State_Set._FirstSort = true;
 	}
 
 	this->Tanxl_Engine_GameState->Get_Data_Source()->SortDataBase(SORT_MEMORY, FileName);
@@ -222,7 +221,11 @@ bool Tanxl_Engine::Engine_Save_Reset_Data()
 		this->_Engine_Infinite_State_Set._Last_Begin_Width,
 		this->_Engine_Infinite_State_Set._Last_Begin_Height
 	);
+	_Engine_Infinite_State_Set._FirstSort = false;
 	this->Engine_Save_Source_Infor(this->_Engine_InforFile_Name);
+	//this->Tanxl_Engine_ObjectBase->Get_Main_Character()->Reset_Data();
+	//this->Tanxl_Engine_GameState->Reset_Location();
+	//this->Tanxl_Engine_OpenGL_Draw->init_StateData(this->Tanxl_Engine_GameState);
 	return true;
 }
 

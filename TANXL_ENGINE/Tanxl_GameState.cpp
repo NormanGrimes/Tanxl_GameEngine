@@ -780,6 +780,8 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, GameObject& Character,
 	float Temp_LocationY{ (Character.Get_Distance_Move()->_Coord_Y + MoveY) * (this->_GameState_Length._Coord_Y / 2.0f) };
 
 #if _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_
+	std::cout << "Data Move :" << Character.Get_Distance_Move()->_Coord_X << "____" << Character.Get_Distance_Move()->_Coord_Y << std::endl;
+	std::cout << "Data State :" << this->_GameState_Length._Coord_X << "____" << this->_GameState_Length._Coord_Y << std::endl;
 	std::cout << "Before Adjust :" << Temp_LocationX << "____" << Temp_LocationY << std::endl;
 #endif
 
@@ -802,7 +804,7 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, GameObject& Character,
 #endif
 }
 
-void GameStateBase::StateMove_Edge_Set(GameObject& Character, short Edge, double Scale)//Reach Screen Edge : Then push screen to move
+void GameStateBase::StateMove_Edge_Set(GameObject& Character, short Edge, double Scale) const//Reach Screen Edge : Then push screen to move
 {
 	if (!this->_Trigger_Mode)
 		return;
@@ -1308,6 +1310,15 @@ void GameStateBase::Update_State(GameObject& Character, ECheck_Edge Check_Direct
 		this->Move_State(MoveToNH, State_Unit_Height);
 		break;
 	}
+}
+
+void GameStateBase::Reset_Location()
+{
+	this->_Current_Move = 0;
+	this->_New_Current_Loc = 0;
+	this->_Exac_Location = 0;
+	this->_Location_Distance_Mid = 0.0f;
+	this->_Location_Distance_Move = 0.0f;
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :

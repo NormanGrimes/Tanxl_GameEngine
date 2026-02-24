@@ -50,23 +50,26 @@
 // 检测地图数据是否存在的接口增加空指针检查
 // 多个接口增加操作对象参数
 // 移除获取上次移动触发的边沿的接口
+// 增加重置所有坐标值的接口
+// 构建连接接口设为私有
+// 判断地图区块是否存在的接口设为私有
 
 #pragma once
 
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
 
-#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 0
+#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 1
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
 #define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
 #define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
-#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        1
+#define _TANXL_GAMESTATE_CONNECT_DEBUG_OUTPUT_        0
 #define _TANXL_GAMESTATE_LINK_SEARCH_DATA_OUTPUT_     0
 #define _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_  0
-#define _TANXL_GAMESTATE_GENERATE_STATE_OUTPUT_       1
+#define _TANXL_GAMESTATE_GENERATE_STATE_OUTPUT_       0
 #define _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_     0
 #define _TANXL_GAMESTATE_EDGE_LOCATION_VALUE_OUTPUT_  0
 #define _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_     0
@@ -257,11 +260,9 @@ public:
 	void Reload_Display_State(EState_Extend Extend_Dire);
 	void Reload_State_Data(int PreLoads, glm::ivec2* StateInfor);
 	void Update_Move(float MoveX, float MoveY, GameObject& Character, ECheck_Edge Check = CHECK_EDGE_CURR);
-	void StateMove_Edge_Set(GameObject& Character, short Edge = 0, double Scale = 1);
+	void StateMove_Edge_Set(GameObject& Character, short Edge = 0, double Scale = 1) const;
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock(int State_Id);
-	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
-	void Build_Connect(int State_Id);
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
 	void Move_State(EMove_State_EventId Direction, int Times);
@@ -272,8 +273,7 @@ public:
 	void Move_Adjust();
     void State_Check_Block(GameObject& Character, ECheck_Edge Check_Direction);
 	void Update_State(GameObject& Character, ECheck_Edge Check_Direction);
-	//↓Is_State_Exist : 检测某个区块的地图数据是否存在
-	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
+	void Reset_Location();
 	bool Get_Compile_Status() const;
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check) const;
@@ -288,7 +288,11 @@ private:
 	float Set_ExacHeight(double Current, float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
 	float Set_ExacWidth(double Current, float& MoveState, double Scale = 1.0);
 	std::string Locate_Extend_State(std::string State_Id);
+	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
+	void Build_Connect(int State_Id);
 	void Single_Connect(std::vector<Data_Unit*>* Build_Target, EState_Current CurrentState, int State_Id, int OffSet = 0);
+	//↓Is_State_Exist : 检测某个区块的地图数据是否存在
+	bool Is_State_Exist(EState_Extend State_Id = STATE_EXTEND_MIDD);
 	
 	struct State_Extend
 	{

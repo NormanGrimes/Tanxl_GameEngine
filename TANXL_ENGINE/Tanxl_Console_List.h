@@ -10,6 +10,7 @@
 // 修改选项成员为无符号数
 // 增加重新设置选项名称的功能
 // 改为继承自引擎基础类
+// 控制输出颜色的接口设为静态
 
 #pragma once
 
@@ -48,7 +49,7 @@ enum EBack_Color
 };
 
 //void Col是原Console_List的核心功能，使用了Linux控制台的指令
-void Col(unsigned ColN = NULL, bool Under_Line = false);//设置自定义行的背景颜色
+static void Col(unsigned ColN = NULL, bool Under_Line = false);//设置自定义行的背景颜色
 //物品类
 class CONSOLE : public Tanxl_ClassBase
 {

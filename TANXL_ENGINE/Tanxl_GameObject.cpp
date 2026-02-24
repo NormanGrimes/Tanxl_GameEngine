@@ -153,10 +153,12 @@ bool GameObject::Get_Is_Alive()
 
 void GameObject::Reset_Data()
 {
-	Tanxl_Coord<float>TempData(0.0f, 0.0f);
-	this->_Last_Move = &TempData;
-	this->_Distance_Mid = &TempData;
-	this->_Distance_Move = &TempData;
+	delete this->_Last_Move;
+	this->_Last_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
+	delete this->_Distance_Mid;
+	this->_Distance_Mid = new Tanxl_Coord<float>(0.0f, 0.0f);
+	delete this->_Distance_Move;
+	this->_Distance_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
 }
 
 Tanxl_Coord<float>* GameObject::Get_Last_Move()

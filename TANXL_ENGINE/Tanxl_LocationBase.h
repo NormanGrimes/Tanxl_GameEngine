@@ -78,6 +78,13 @@ struct Tanxl_Coord
 	{
 		return this;
 	}
+
+	Tanxl_Coord operator=(Tanxl_TypeName Equal)
+	{
+		this->_Coord_X = Equal;
+		this->_Coord_Y = Equal;
+		return *this;
+	}
 	
 	Tanxl_Coord operator+(Tanxl_Coord& Coord)
 	{

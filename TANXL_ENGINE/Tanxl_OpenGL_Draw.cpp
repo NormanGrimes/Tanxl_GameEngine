@@ -268,6 +268,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 	glBindVertexArray(0);
 
+	this->init_StateData(State);
+}
+
+void OpenGL_Draw::init_StateData(GameStateBase* State)
+{
 	std::cout << "___" << this->_Scene_Int._Coord_Y << "___" << this->_Scene_Int._Coord_X << "___" << this->_PreLoads << std::endl;
 
 	float Half_Width{ (this->_Scene_Int._Coord_X - 1) / 2.0f };

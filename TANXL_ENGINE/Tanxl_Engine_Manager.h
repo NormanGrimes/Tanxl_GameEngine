@@ -24,6 +24,7 @@
 // 2024/01/17 移除背景音乐正常播放时的无效播放功能调用
 // 2024/01/19 增加地图事件与碰撞功能的检测接口
 // 2024/01/19 增加接口用于初始化内置的八个按键
+// 2024/02/26 修复重置内存信息后无法重新整理的问题
 
 #pragma once
 
@@ -184,6 +185,7 @@ private:
 
 	struct
 	{
+		bool _FirstSort{ false };
 		bool _Is_State_Set{ false };
 		int _Last_Range_Width{};
 		int _Last_Range_Height{};

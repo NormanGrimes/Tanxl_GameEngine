@@ -178,7 +178,7 @@ int main()
 				"0-3,0-2,1-2,0-2,0-2,0-2,0-2,1-2,0-2,0-3,");
 
 			Character->Set_Health(7);
-			//std::cout << "Reset Finish !" << std::endl;
+			std::cout << "Reset Finish !" << std::endl;
 		}
 
 		static bool Appended{ false };

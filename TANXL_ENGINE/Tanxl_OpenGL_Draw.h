@@ -7,6 +7,7 @@
 // 记录地图总显示单元个数的变量分解到地图载入接口中
 // 移除内部的坐标基类指针成员
 // 初始化部分切换效率更高的接口
+// 地图数据初始化部分从初始化接口中独立为地图初始化接口
 
 #pragma once
 
@@ -496,6 +497,7 @@ public:
 	const std::string Get_Version();
 	//绘制模块主要初始化函数 window为需要绘制的窗口 State为单例类，需要完成地图设置后再调用此函数初始化
 	void init(GameStateBase* State);
+	void init_StateData(GameStateBase* State);
 	void display(GLFWwindow* window, GameStateBase* State);
 	//进行一次游戏画面绘制
 	void Render_Once(GameStateBase* State);
