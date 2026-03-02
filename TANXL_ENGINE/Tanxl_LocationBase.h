@@ -23,6 +23,7 @@
 // 析构函数增加动态添加的数据的处理
 // 坐标模板类增加常数加减的重载
 // 坐标模板增加指针运算符重载
+// 坐标模板的计算重载中增加类型转换
 
 #pragma once
 
@@ -116,43 +117,43 @@ struct Tanxl_Coord
 
 	Tanxl_Coord operator+(double Plu)
 	{
-		this->_Coord_X += Plu;
-		this->_Coord_Y += Plu;
+		this->_Coord_X += static_cast<Tanxl_TypeName>(Plu);
+		this->_Coord_Y += static_cast<Tanxl_TypeName>(Plu);
 		return *this;
 	}
 
 	Tanxl_Coord operator+=(double Plu)
 	{
-		this->_Coord_X += Plu;
-		this->_Coord_Y += Plu;
+		this->_Coord_X += static_cast<Tanxl_TypeName>(Plu);
+		this->_Coord_Y += static_cast<Tanxl_TypeName>(Plu);
 		return *this;
 	}
 
 	Tanxl_Coord operator-(double Min)
 	{
-		this->_Coord_X -= Min;
-		this->_Coord_Y -= Min;
+		this->_Coord_X -= static_cast<Tanxl_TypeName>(Min);
+		this->_Coord_Y -= static_cast<Tanxl_TypeName>(Min);
 		return *this;
 	}
 
 	Tanxl_Coord operator-=(double Min)
 	{
-		this->_Coord_X -= Min;
-		this->_Coord_Y -= Min;
+		this->_Coord_X -= static_cast<Tanxl_TypeName>(Min);
+		this->_Coord_Y -= static_cast<Tanxl_TypeName>(Min);
 		return *this;
 	}
 
 	Tanxl_Coord operator*(double Mult)
 	{
-		this->_Coord_X *= Mult;
-		this->_Coord_Y *= Mult;
+		this->_Coord_X = static_cast<Tanxl_TypeName>(this->_Coord_X * Mult);
+		this->_Coord_Y = static_cast<Tanxl_TypeName>(this->_Coord_Y * Mult);
 		return *this;
 	}
 
 	Tanxl_Coord operator*=(double Mult)
 	{
-		this->_Coord_X *= Mult;
-		this->_Coord_Y *= Mult;
+		this->_Coord_X = static_cast<Tanxl_TypeName>(this->_Coord_X * Mult);
+		this->_Coord_Y = static_cast<Tanxl_TypeName>(this->_Coord_Y * Mult);
 		return *this;
 	}
 

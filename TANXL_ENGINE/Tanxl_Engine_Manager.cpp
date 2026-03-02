@@ -85,17 +85,17 @@ void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string
 	this->Tanxl_Engine_GameState->Set_State_Counts(Width, Height);
 }
 
-void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, float Max_Widtd)
+void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, float Max_Width)
 {
 	this->Tanxl_Engine_InsertBase->Set_StateRange(Enable);
 	if (Enable)
 	{
-		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateLength()._Coord_Y));
-		this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateLength()._Coord_X));
+		this->Tanxl_Engine_InsertBase->Set_MaxFloat(
+			this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateLength()._Coord_X),
+			this->Tanxl_Engine_InsertBase->Get_AutoFloat(this->Tanxl_Engine_GameState->Get_StateLength()._Coord_Y));
 		return;
 	}
-	this->Tanxl_Engine_InsertBase->Set_MaxFloat_Height(Max_Height);
-	this->Tanxl_Engine_InsertBase->Set_MaxFloat_Width(Max_Widtd);
+	this->Tanxl_Engine_InsertBase->Set_MaxFloat(Max_Width, Max_Height);
 }
 
 void Tanxl_Engine::Engine_Insert_State_MoveWith(bool Enable, float Compare_Ratio)
@@ -253,15 +253,14 @@ void Tanxl_Engine::Engine_Insert_Default_Key()
 	this->Tanxl_Engine_InsertBase->Init_Default_Key();
 }
 
-Key_Unit* Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move, bool Height_Move, double Move_Length)
+void Tanxl_Engine::Engine_Insert_Regist_Move(int GLFW_KEY, MoveTo_Direction Direction, double Move_Length)
 {
-	Key_Unit* KEYU;
-	if ((Width_Move == false) && (Height_Move == false))
-		KEYU = new Key_Unit(GLFW_KEY);
-	else
-		KEYU = new Key_Unit(GLFW_KEY, Width_Move, Height_Move, Move_Length);
-	this->Tanxl_Engine_InsertBase->RegistEvent(KEYU);
-	return KEYU;
+	this->Tanxl_Engine_InsertBase->RegistEvent(GLFW_KEY, Direction, static_cast<float>(Move_Length));
+}
+
+void Tanxl_Engine::Engine_Insert_Regist_Press(int GLFW_KEY, bool* KeyStatus)
+{
+	this->Tanxl_Engine_InsertBase->RegistEvent(GLFW_KEY, KeyStatus);
 }
 
 void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
@@ -298,8 +297,7 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_INSERTBASE:
-		for (int i{ 0 }; i < this->Tanxl_Engine_InsertBase->Get_KeyEvent_Size(); ++i)
-			this->Tanxl_Engine_InsertBase->RemoveEvent();
+		this->Tanxl_Engine_InsertBase->RemoveAllEvent();
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_RANDOMBASE:
@@ -387,7 +385,7 @@ void Tanxl_Engine::Engine_State_Event_Check()
 	this->Tanxl_Engine_GameState->State_Check_Event(*Character);
 }
 
-void Tanxl_Engine::Engine_Insert_Adjust_Speed(int Start, int End, double Adjust_Value)
+void Tanxl_Engine::Engine_Insert_Adjust_Speed(double Adjust_Value)
 {
-	this->Tanxl_Engine_InsertBase->Set_MultiSpeed(Start, End, Adjust_Value);
+	this->Tanxl_Engine_InsertBase->Set_MultiSpeed(Adjust_Value);
 }

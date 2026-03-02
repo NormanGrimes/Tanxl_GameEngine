@@ -23,7 +23,8 @@ int main()
 	//设置屏幕显示宽度和高度为4个地图单元长度 并设置显示区域外每个方向额外加载4个地图单元长度
 	TGE.Engine_State_Set_Display(6, 5, 3);
 	//调用引擎接口注册一个事件按钮
-	Key_Unit* KU = TGE.Engine_Insert_Regist_Move(GLFW_KEY_E);
+	bool KeyStatus{ false };
+	TGE.Engine_Insert_Regist_Press(GLFW_KEY_E, &KeyStatus);
 	//禁止玩家控制的单元移动到屏幕显示区域以外
 	TGE.Engine_Insert_State_Limit(true);
 	//启用移动到达指定范围后地图随玩家移动 设置距离为0.6倍某方向距离的长度
@@ -182,20 +183,18 @@ int main()
 		}
 
 		static bool Appended{ false };
-		if (KU->Get_KeyStatus())
+		if (KeyStatus)
 		{
+			KeyStatus = false;
 			if (Appended == false)
 			{
 				Appended = true;
-				TGE.Engine_Insert_Adjust_Speed(0, 8, 0.5);
+				TGE.Engine_Insert_Adjust_Speed(1.0);
 			}
-		}
-		else
-		{
-			if (Appended == true)
+			else
 			{
 				Appended = false;
-				TGE.Engine_Insert_Adjust_Speed(0, 8, -0.5);
+				TGE.Engine_Insert_Adjust_Speed(2.0);
 			}
 		}
 	}

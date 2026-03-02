@@ -2,6 +2,8 @@
 
 #include "Tanxl_InsertAction.h"
 
+float Key_Observer::_Speed_Rato{ 1.0f };
+
 static void curse_poscallback(GLFWwindow* window, double x, double y)
 {
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
@@ -9,43 +11,6 @@ static void curse_poscallback(GLFWwindow* window, double x, double y)
 	std::cout << "(pos:" << x << "," << y << ")" << std::endl;
 #endif
 	IEB->Set_Mouse_Pos(x, y);
-}
-
-Key_Unit::Key_Unit() :GLFW_KEY(NULL), MoveToX(false), MoveToY(false), MoveLen(0.0f), Unit_Type(0), SaveLen(0)
-{
-	this->Unit_Name = RandomBase::GenerateAutoSeed();
-#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
-	std::cout << "KeyUnit :" << this->Unit_Name << std::endl;
-#endif
-}
-
-Key_Unit::Key_Unit(int GLKEY, bool MOVX, bool MOVY, double MOVL, std::string UNAM)
-	: GLFW_KEY(GLKEY), MoveToX(MOVX), MoveToY(MOVY), MoveLen(MOVL), Unit_Type(0), SaveLen(0)
-{
-	if (UNAM == "")
-		this->Unit_Name = RandomBase::GenerateAutoSeed();
-	else
-		this->Unit_Name = UNAM;
-#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
-	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
-#endif
-}
-
-Key_Unit::Key_Unit(int GLKEY, std::string UNAM) :
-	GLFW_KEY(GLKEY), MoveLen(3), MoveToX(false), MoveToY(false), Unit_Type(1), SaveLen(0)
-{
-	if (UNAM == "")
-		this->Unit_Name = RandomBase::GenerateAutoSeed();
-	else
-		this->Unit_Name = UNAM;
-#if _TANXL_INSERTACTION_CONSOLE_RANDOM_OUTPUT_
-	std::cout << "KeyUnit X :" << this->Unit_Name << "  Unit_Type :" << Unit_Type << std::endl;
-#endif
-}
-
-bool Key_Unit::Get_KeyStatus() const
-{
-	return this->MoveToY;
 }
 
 InsertEventBase& InsertEventBase::GetInsertBase()
@@ -59,27 +24,15 @@ float InsertEventBase::Get_AutoFloat(int Blocks)
 	return (1.0f - 1.0f / Blocks);
 }
 
-int InsertEventBase::RegistEvent(Key_Unit* KU)
-{
-	Key_Event* KE{ new Key_Event(KU) };
-	this->_KeyEventS.push_back(KE);
-	return static_cast<int>(this->_KeyEventS.size()) - 1;
-}
-
 Tanxl_Coord<double> InsertEventBase::Get_Mouse_Location() const
 {
 	return this->_Mouse_Pos;
 }
 
-void InsertEventBase::RemoveEvent()
+void InsertEventBase::RemoveAllEvent()
 {
-	if (this->_KeyEventS.size() != 0)
-		this->_KeyEventS.erase(this->_KeyEventS.end() - 1, this->_KeyEventS.end());
-}
-
-size_t InsertEventBase::Get_KeyEvent_Size()
-{
-	return this->_KeyEventS.size();
+	std::vector<int>().swap(this->_KeyNameS);
+	this->_InsertCheck.Remove_Observer();
 }
 
 void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameObject& Character)
@@ -87,96 +40,55 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	double MoveScale{ OPD->Get_DeltaTime() };
-	static bool ObserverStatus{ false };
 	State->Update_Last_Location(Character);
 
 	if (this->_Is_Key_Enable == false)
 		return;
 
-	Tanxl_Coord<double> Insert_Move_Length{ 0,0 };
-
-#if _ENABLE_TANXL_INSERTACTION_OBSERVER_TEST_
-	if (!ObserverStatus)
-	{
-		ObserverStatus = true;
-
-		Event_Observer<int>* ObserverUP = new Key_Observer(GLFW_KEY_UP, MOVETO_VERT, 0.5f, &Insert_Move_Length);
-		Event_Observer<int>* Observer_W = new Key_Observer(GLFW_KEY_W, MOVETO_VERT, 0.5f, &Insert_Move_Length);
-		Event_Observer<int>* ObserverLE = new Key_Observer(GLFW_KEY_LEFT, MOVETO_PARA, -0.5f, &Insert_Move_Length);
-		Event_Observer<int>* Observer_A = new Key_Observer(GLFW_KEY_A, MOVETO_PARA, -0.5f, &Insert_Move_Length);
-		Event_Observer<int>* ObserverRI = new Key_Observer(GLFW_KEY_RIGHT, MOVETO_PARA, 0.5f, &Insert_Move_Length);
-		Event_Observer<int>* Observer_D = new Key_Observer(GLFW_KEY_D, MOVETO_PARA, 0.5f, &Insert_Move_Length);
-		Event_Observer<int>* ObserverDO = new Key_Observer(GLFW_KEY_DOWN, MOVETO_VERT, -0.5f, &Insert_Move_Length);
-		Event_Observer<int>* Observer_S = new Key_Observer(GLFW_KEY_S, MOVETO_VERT, -0.5f, &Insert_Move_Length);
-
-		this->_InsertCheck.Add_Observer(ObserverUP);
-		this->_InsertCheck.Add_Observer(Observer_W);
-		this->_InsertCheck.Add_Observer(ObserverLE);
-		this->_InsertCheck.Add_Observer(Observer_A);
-		this->_InsertCheck.Add_Observer(ObserverRI);
-		this->_InsertCheck.Add_Observer(Observer_D);
-		this->_InsertCheck.Add_Observer(ObserverDO);
-		this->_InsertCheck.Add_Observer(Observer_S);
-	}
-#endif
+	this->_Insert_Move_Length = 0.0f;
 
 	Character.Get_Last_Move()->_Coord_X = 0.0f;
 	Character.Get_Last_Move()->_Coord_Y = 0.0f;
 
-	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
+	if (this->_KeyNameS.size() == 0)
+		return;
+
+	for (int i{ 0 }; i < this->_KeyNameS.size(); ++i)
 	{
-		if (glfwGetKey(window, this->_KeyEventS.at(i)->_Key_Unit->GLFW_KEY) == GLFW_PRESS)
+		if (glfwGetKey(window, this->_KeyNameS.at(i)) == GLFW_PRESS)
 		{
 			_Is_Key_Pressed = true;
-			if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Type == 1)//非移动功能的按键判断
-			{
-				this->_KeyEventS.at(i)->_Key_Unit->SaveLen++;
-				if (this->_KeyEventS.at(i)->_Key_Unit->SaveLen > this->_KeyEventS.at(i)->_Key_Unit->MoveLen)
-				{
-					this->_KeyEventS.at(i)->_Key_Unit->MoveToY = !this->_KeyEventS.at(i)->_Key_Unit->MoveToY;
-					this->_KeyEventS.at(i)->_Key_Unit->SaveLen = -25;
+			this->_KeyCheck.Notify(this->_KeyNameS.at(i));
 
-					this->_KeyEventS.at(i)->_Press_Count++;
-					this->_KeyEventS.at(i)->_Is_Key_Press = true;
-				}
-				continue;
-			}
 			if (OPD->Get_Adjust_Status())
 				return;
 
-#if _ENABLE_TANXL_INSERTACTION_OBSERVER_TEST_
-			this->_InsertCheck.Notify(this->_KeyEventS.at(i)->_Key_Unit->GLFW_KEY);
-#endif
+			this->_InsertCheck.Notify(this->_KeyNameS.at(i));
 		}
-		else
-			this->_KeyEventS.at(i)->_Key_Unit->SaveLen = 0;
 	}
-	Insert_Move_Length *= MoveScale;
-	Tanxl_Coord<float> Insert_Length(
-		static_cast<float>(Insert_Move_Length._Coord_X),
-		static_cast<float>(Insert_Move_Length._Coord_Y));
+	this->_Insert_Move_Length *= MoveScale;
 
 	this->_Insert_Status = 0;
-	if (Insert_Move_Length._Coord_Y < 0)
+	if (this->_Insert_Move_Length._Coord_Y < 0)
 	{
 		this->_Insert_Status |= 1;
 	}
-	if (Insert_Move_Length._Coord_X > 0)
+	if (this->_Insert_Move_Length._Coord_X > 0)
 	{
 		this->_Insert_Status |= 2;
 	}
-	if (Insert_Move_Length._Coord_Y > 0)
+	if (this->_Insert_Move_Length._Coord_Y > 0)
 	{
 		this->_Insert_Status |= 4;
 	}
-	if (Insert_Move_Length._Coord_X < 0)
+	if (this->_Insert_Move_Length._Coord_X < 0)
 	{
 		this->_Insert_Status |= 8;
 	}
 
-	*Character.Get_Last_Move() += Insert_Length;
-	*Character.Get_Distance_Move() += Insert_Length;
-	*Character.Get_Distance_Mid() += Insert_Length;
+	*Character.Get_Last_Move() += this->_Insert_Move_Length;
+	*Character.Get_Distance_Move() += this->_Insert_Move_Length;
+	*Character.Get_Distance_Mid() += this->_Insert_Move_Length;
 
 	AutoCheck(*Character.Get_Distance_Mid(), *Character.Get_Distance_Move());
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
@@ -224,22 +136,27 @@ void InsertEventBase::GetMouseInput(GLFWwindow* window)
 	LastMouseStatus_2 = Temp_Mouse_Status_2;
 }
 
-void InsertEventBase::Set_MaxFloat(float Max_float)
+void InsertEventBase::Set_MaxFloat(float Max_floatX, float Max_floatY)
 {
-	this->_Is_Max_Single = false;
-	this->_Max_float = Max_float;
+	if (Max_floatY == 0.0f)
+		this->_Maximum_Distance = Max_floatX;
+	else
+	{
+		this->_Maximum_Distance._Coord_X = Max_floatX;
+		this->_Maximum_Distance._Coord_Y = Max_floatY;
+	}
 }
 
-void InsertEventBase::Set_MaxFloat_Height(float Max_float)
+void InsertEventBase::RegistEvent(int GLFW_KEY, MoveTo_Direction MOVETO_VERT, float Move_Length)
 {
-	this->_Is_Max_Single = true;
-	this->_Max_float_Height = Max_float;
+	this->_InsertCheck.Add_Observer(new Key_Observer(GLFW_KEY, MOVETO_VERT, Move_Length, &this->_Insert_Move_Length));
+	this->_KeyNameS.push_back(GLFW_KEY);
 }
 
-void InsertEventBase::Set_MaxFloat_Width(float Max_float)
+void InsertEventBase::RegistEvent(int GLFW_KEY, bool* BindStatus)
 {
-	this->_Is_Max_Single = true;
-	this->_Max_float_Width = Max_float;
+	this->_KeyCheck.Add_Observer(new Press_Observer(GLFW_KEY, BindStatus));
+	this->_KeyNameS.push_back(GLFW_KEY);
 }
 
 void InsertEventBase::Set_StateRange(bool Enable)
@@ -247,23 +164,9 @@ void InsertEventBase::Set_StateRange(bool Enable)
 	this->_Is_State_Range = Enable;
 }
 
-void InsertEventBase::Set_MultiSpeed(int Start, int End, double Adjust_Value)
+void InsertEventBase::Set_MultiSpeed(double Adjust_Value)
 {
-	if (Start < 0)
-		Start = 0;
-	if (End > this->_KeyEventS.size())
-		End = static_cast<int>(this->_KeyEventS.size());
-	if (End < Start)
-		return;
-
-	while (Start < End)
-	{
-		if (this->_KeyEventS.at(Start)->_Key_Unit->MoveLen > 0.0f)
-			this->_KeyEventS.at(Start)->_Key_Unit->MoveLen += Adjust_Value;
-		else if (this->_KeyEventS.at(Start)->_Key_Unit->MoveLen < 0.0f)
-			this->_KeyEventS.at(Start)->_Key_Unit->MoveLen -= Adjust_Value;
-		Start++;
-	}
+	Key_Observer::Set_Speed_Ratio(static_cast<float>(Adjust_Value));
 }
 
 void InsertEventBase::Set_Key_Enable(bool Enable)
@@ -274,26 +177,14 @@ void InsertEventBase::Set_Key_Enable(bool Enable)
 void InsertEventBase::Init_Default_Key()
 {
 	//InsertKey Init //多次注册会导致多次移动
-
-	Key_Unit* MOVE_UP{ new Key_Unit(GLFW_KEY_UP, false, true, 0.5) };
-	this->RegistEvent(MOVE_UP);
-	MOVE_UP = new Key_Unit(GLFW_KEY_W, false, true, 0.5);
-	this->RegistEvent(MOVE_UP);
-
-	Key_Unit* MOVE_LEFT{ new Key_Unit(GLFW_KEY_LEFT, true, false, -0.5) };
-	this->RegistEvent(MOVE_LEFT);
-	MOVE_LEFT = new Key_Unit(GLFW_KEY_A, true, false, -0.5);
-	this->RegistEvent(MOVE_LEFT);
-
-	Key_Unit* MOVE_RIGHT{ new Key_Unit(GLFW_KEY_RIGHT, true, false, 0.5) };
-	this->RegistEvent(MOVE_RIGHT);
-	MOVE_RIGHT = new Key_Unit(GLFW_KEY_D, true, false, 0.5);
-	this->RegistEvent(MOVE_RIGHT);
-
-	Key_Unit* MOVE_DOWN{ new Key_Unit(GLFW_KEY_DOWN, false, true, -0.5) };
-	this->RegistEvent(MOVE_DOWN);
-	MOVE_DOWN = new Key_Unit(GLFW_KEY_S, false, true, -0.5);
-	this->RegistEvent(MOVE_DOWN);
+	this->RegistEvent(GLFW_KEY_UP, MOVETO_VERT, 0.5f);
+	this->RegistEvent(GLFW_KEY_W, MOVETO_VERT, 0.5f);
+	this->RegistEvent(GLFW_KEY_LEFT, MOVETO_PARA, -0.5f);
+	this->RegistEvent(GLFW_KEY_A, MOVETO_PARA, -0.5f);
+	this->RegistEvent(GLFW_KEY_RIGHT, MOVETO_PARA, 0.5f);
+	this->RegistEvent(GLFW_KEY_D, MOVETO_PARA, 0.5f);
+	this->RegistEvent(GLFW_KEY_DOWN, MOVETO_VERT, -0.5f);
+	this->RegistEvent(GLFW_KEY_S, MOVETO_VERT, -0.5f);
 }
 
 void InsertEventBase::Set_Mouse_Pos(double LocationX, double LocationY)
@@ -304,16 +195,12 @@ void InsertEventBase::Set_Mouse_Pos(double LocationX, double LocationY)
 
 void InsertEventBase::Set_Trigger_Range(float Ratio)
 {
-	this->_Max_float *= Ratio;
-	this->_Max_float_Height *= Ratio;
-	this->_Max_float_Width *= Ratio;
+	this->_Maximum_Distance *= static_cast<double>(Ratio);
 }
 
 void InsertEventBase::Reset_Move_Range()
 {
-	this->_Max_float = 1.0f;
-	this->_Max_float_Height = 1;
-	this->_Max_float_Width = 1;
+	this->_Maximum_Distance = 1.0f;
 }
 
 bool InsertEventBase::Get_Key_Pressed()
@@ -321,19 +208,6 @@ bool InsertEventBase::Get_Key_Pressed()
 	bool Temp_Element{ _Is_Key_Pressed };
 	this->_Is_Key_Pressed = false;
 	return Temp_Element;
-}
-
-bool InsertEventBase::RemoveEvent(std::string Event_Name)
-{
-	for (int i{ 0 }; i < this->_KeyEventS.size(); ++i)
-	{
-		if (this->_KeyEventS.at(i)->_Key_Unit->Unit_Name == Event_Name)
-		{
-			this->_KeyEventS.erase(_KeyEventS.begin() + i);
-			return true;
-		}
-	}
-	return false;
 }
 
 bool InsertEventBase::Check_Key_Press(GLFWwindow* Window)
@@ -376,37 +250,31 @@ void InsertEventBase::AutoCheck(Tanxl_Coord<float>& Screen_Move, Tanxl_Coord<flo
 	if (!this->_Is_State_Range)
 		return;
 
-	if (this->_Is_Max_Single)
-		this->_Max_float = this->_Max_float_Width;
-
-	if (Screen_Move._Coord_X > this->_Max_float)
+	if (Screen_Move._Coord_X > this->_Maximum_Distance._Coord_X)
 	{
 		this->_Is_Reach_Edge += 2;
-		Move_Distance._Coord_X -= (Screen_Move._Coord_X - this->_Max_float);
-		Screen_Move._Coord_X = this->_Max_float;
+		Move_Distance._Coord_X -= (Screen_Move._Coord_X - this->_Maximum_Distance._Coord_X);
+		Screen_Move._Coord_X = this->_Maximum_Distance._Coord_X;
 
 	}
-	else if (Screen_Move._Coord_X < -this->_Max_float)
+	else if (Screen_Move._Coord_X < -this->_Maximum_Distance._Coord_X)
 	{
 		this->_Is_Reach_Edge += 1;
-		Move_Distance._Coord_X -= (Screen_Move._Coord_X + this->_Max_float);
-		Screen_Move._Coord_X = -this->_Max_float;
+		Move_Distance._Coord_X -= (Screen_Move._Coord_X + this->_Maximum_Distance._Coord_X);
+		Screen_Move._Coord_X = -this->_Maximum_Distance._Coord_X;
 	}
 
-	if (this->_Is_Max_Single)
-		this->_Max_float = this->_Max_float_Height;
-
-	if (Screen_Move._Coord_Y > this->_Max_float)
+	if (Screen_Move._Coord_Y > this->_Maximum_Distance._Coord_Y)
 	{
 		this->_Is_Reach_Edge += 8;
-		Move_Distance._Coord_Y -= (Screen_Move._Coord_Y - this->_Max_float);
-		Screen_Move._Coord_Y = this->_Max_float;
+		Move_Distance._Coord_Y -= (Screen_Move._Coord_Y - this->_Maximum_Distance._Coord_Y);
+		Screen_Move._Coord_Y = this->_Maximum_Distance._Coord_Y;
 	}
-	else if (Screen_Move._Coord_Y < -this->_Max_float)
+	else if (Screen_Move._Coord_Y < -this->_Maximum_Distance._Coord_Y)
 	{
 		this->_Is_Reach_Edge += 4;
-		Move_Distance._Coord_Y -= (Screen_Move._Coord_Y + this->_Max_float);
-		Screen_Move._Coord_Y = -this->_Max_float;
+		Move_Distance._Coord_Y -= (Screen_Move._Coord_Y + this->_Maximum_Distance._Coord_Y);
+		Screen_Move._Coord_Y = -this->_Maximum_Distance._Coord_Y;
 	}
 #if _TANXL_INSERTACTION_CONSOLE_AUTO_OUTPUT_
 	std::cout << "this->_Margin_X " << this->_Margin_X << " this->_Margin_Y " << this->_Margin_X << std::endl;
@@ -416,22 +284,15 @@ void InsertEventBase::AutoCheck(Tanxl_Coord<float>& Screen_Move, Tanxl_Coord<flo
 //UnImportant 单例实现
 
 InsertEventBase::InsertEventBase() :Tanxl_ClassBase("0.9"),
-_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Max_float(1.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+_Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
-InsertEventBase::~InsertEventBase()
-{
-	std::vector<Key_Event*>().swap(this->_KeyEventS);
-}
+InsertEventBase::~InsertEventBase() {}
 
 InsertEventBase::InsertEventBase(const InsertEventBase&) :Tanxl_ClassBase("0.9"),
-_KeyEventS(NULL), _Is_Max_Single(false), _Max_float_Height(1), _Max_float_Width(1),
-_Max_float(1.0f), _Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
+_Is_State_Range(true), _Is_Key_Pressed(false), _Is_Key_Enable(true) {}
 
 InsertEventBase& InsertEventBase::operator=(const InsertEventBase&)
 {
 	return *this;
 }
-
-Key_Event::Key_Event(Key_Unit* Key) :_Key_Unit(Key), _Is_Key_Press(false), _Press_Count(0) {}
 

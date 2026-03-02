@@ -631,7 +631,8 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
-	static Key_Unit* OpenGL_Stop_Key{ new Key_Unit(GLFW_KEY_F) };
+	static bool OpenGL_Stop_Key{ false };
+	static bool Is_Stop{ false };
 
 	static double LastTime{ glfwGetTime() };
 	this->_Delta_Time = glfwGetTime() - LastTime;
@@ -640,7 +641,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	if (this->_Is_Init_Need)
 	{
 		this->_Is_Init_Need = false;
-		IEB->RegistEvent(OpenGL_Stop_Key);
+		IEB->RegistEvent(GLFW_KEY_F, &OpenGL_Stop_Key);
 	}
 
 	glBindVertexArray(_vao[1]);
@@ -684,7 +685,24 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glUseProgram(this->_Fonts_RenderingProgram);
 		glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
-		if ((OpenGL_Stop_Key->MoveToY == true) || (this->_Is_Adjust_Enable == false))
+		static int intCnt{ 0 };
+		std::cout << "OpenGL_Stop_Key Press :" << OpenGL_Stop_Key << std::endl;
+		if (OpenGL_Stop_Key)
+		{
+			if (intCnt < 10)
+				intCnt++;
+			else
+			{
+				intCnt = 0;
+				std::cout << "StopKey Press :" << Is_Stop << std::endl;
+				Is_Stop = !Is_Stop;
+				OpenGL_Stop_Key = false;
+			}
+		}
+		else
+			intCnt = 0;
+
+		if (Is_Stop)
 		{
 			display(_Main_Window, State);
 			glfwSwapBuffers(_Main_Window);

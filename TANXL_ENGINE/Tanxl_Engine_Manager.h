@@ -25,6 +25,8 @@
 // 2024/01/19 增加地图事件与碰撞功能的检测接口
 // 2024/01/19 增加接口用于初始化内置的八个按键
 // 2024/02/26 修复重置内存信息后无法重新整理的问题
+// 2024/02/29 多处适配输入模块最新改动
+// 2024/02/29 增加非移动性质的按键注册接口
 
 #pragma once
 
@@ -93,7 +95,7 @@ public:
 	//Insert Part
 
 	//设置是否启用输入移动限制 Eanble启用/关闭自动移动限制 启用后不需要设置后续内容 Max_Height最大移动高度(绝对值) Max_Widtd最大移动宽度(绝对值)
-	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Widtd = 0.0f);
+	void Engine_Insert_State_Limit(bool Enable, float Max_Height = 0.0f, float Max_Width = 0.0f);
 
 	//设置是否启用移动到达地图边缘时地图随着移动操作而移动 Enable启用/关闭此功能 Mode为true时根据程序中输入操作自动获取 为false时需要设置Compaer_Height/Width为触发的比较值
 	void Engine_Insert_State_MoveWith(bool Enable, float Compare_Ratio = 1.0f);
@@ -104,11 +106,14 @@ public:
 	//初始化内置的八个按键功能
 	void Engine_Insert_Default_Key();
 
-	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Width_Move/Height_Move标记是否在X/Y轴上移动 Move_Length为单次移动距离 返回此按键的ID
-	Key_Unit* Engine_Insert_Regist_Move(int GLFW_KEY, bool Width_Move = false, bool Height_Move = false, double Move_Length = 3);
+	//注册一个输入按键功能 此按键仅可用于控制物品的移动速度和移动方向 GLFW_KEY为OpenGL定义的按键 Direction标记是按键的移动方向 Move_Length为单次移动距离
+	void Engine_Insert_Regist_Move(int GLFW_KEY, MoveTo_Direction Direction, double Move_Length);
 
-	//连续调整多个按键单元的移动距离 Start为其在已注册事件容器中的起始位置 End为其结束位置 Adjust_Value为调整的大小 会根据被调整值的正负情况进行对应的调整
-	void Engine_Insert_Adjust_Speed(int Start, int End, double Adjust_Value);
+	//注册一个输入按键功能 此按键仅可用非移动性质的按键输入 GLFW_KEY为OpenGL定义的按键 KeyStatus为输入状态
+	void Engine_Insert_Regist_Press(int GLFW_KEY, bool* KeyStatus);
+
+	//连续调整所有按键单元的移动距离倍率 Adjust_Value为调整的大小 默认为1.0倍的移动速度 Adjust_Value为0.7则设为0.7倍于当前的移动速度
+	void Engine_Insert_Adjust_Speed(double Adjust_Value);
 
 	//Data Part
 
