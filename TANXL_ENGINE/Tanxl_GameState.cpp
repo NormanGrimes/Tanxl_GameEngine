@@ -611,7 +611,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
 				{
 					unsigned x{ Move_NX - this->_Data_Width - 1 + (Move_NY - this->_Data_Height - 1) * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x % this->Get_GameState(STATE_EXTEND_RIGH_BELO)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -624,7 +624,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_RIGH))
 				{
 					unsigned x{ Move_NX - this->_Data_Width - 1 + Move_NY * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH, x % this->Get_GameState(STATE_EXTEND_RIGH)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -637,7 +637,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
 				{
 					unsigned x{ Move_NX - this->_Data_Width - 1 + (Move_NY + this->_Data_Height + 1) * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x % this->Get_GameState(STATE_EXTEND_RIGH_ABOV)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -653,7 +653,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_BELO))
 				{
 					unsigned x{ Move_NX + (Move_NY - this->_Data_Height - 1) * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_BELO, x % this->Get_GameState(STATE_EXTEND_BELO)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_BELO, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -666,7 +666,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_MIDD))
 				{
 					unsigned x{ Move_NX + Move_NY * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_MIDD, x % this->Get_GameState(STATE_EXTEND_MIDD)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_MIDD, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -679,7 +679,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_ABOV))
 				{
 					unsigned x{ Move_NX + (Move_NY + this->_Data_Height + 1) * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_ABOV, x % this->Get_GameState(STATE_EXTEND_ABOV)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_ABOV, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -695,7 +695,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_LEFT_BELO))
 				{
 					unsigned x{ Move_NX + this->_Data_Width + 1 + (Move_NY - this->_Data_Height - 1) * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x % this->Get_GameState(STATE_EXTEND_LEFT_BELO)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -708,7 +708,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_LEFT))
 				{
 					unsigned x{ Move_NX + this->_Data_Width + 1 + Move_NY * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT, x % this->Get_GameState(STATE_EXTEND_LEFT)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -721,7 +721,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				if (this->Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
 				{
 					unsigned x{ Move_NX + this->_Data_Width + 1 + (Move_NY + this->_Data_Height + 1) * (this->_Data_Width + 1) };
-					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x % this->Get_GameState(STATE_EXTEND_LEFT_ABOV)->size()) };
+					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
@@ -804,8 +804,10 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, GameObject& Character,
 #endif
 }
 
-void GameStateBase::StateMove_Edge_Set(GameObject& Character, short Edge, double Scale) const//Reach Screen Edge : Then push screen to move
+void GameStateBase::StateMove_Edge_Set(GameObject& Character, short Edge, double Scale, float Speed_Ratio) const//Reach Screen Edge : Then push screen to move
 {
+	const float EdgeSpeed{ 0.35f * Speed_Ratio };
+
 	if (!this->_Trigger_Mode)
 		return;
 
@@ -814,32 +816,32 @@ void GameStateBase::StateMove_Edge_Set(GameObject& Character, short Edge, double
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------Y+" << std::endl;
 #endif
-		this->Get_State_Loc()._Coord_Y += static_cast<float>(0.35f * Scale);
-		Character.Get_Distance_Move()->_Coord_Y -= static_cast<float>(0.35f * Scale);
+		this->Get_State_Loc()._Coord_Y += static_cast<float>(EdgeSpeed * Scale);
+		Character.Get_Distance_Move()->_Coord_Y -= static_cast<float>(EdgeSpeed * Scale);
 	}
 	if ((Edge & MoveToPH) == MoveToPH)
 	{
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------Y-" << std::endl;
 #endif
-		this->Get_State_Loc()._Coord_Y -= static_cast<float>(0.35f * Scale);
-		Character.Get_Distance_Move()->_Coord_Y += static_cast<float>(0.35f * Scale);
+		this->Get_State_Loc()._Coord_Y -= static_cast<float>(EdgeSpeed * Scale);
+		Character.Get_Distance_Move()->_Coord_Y += static_cast<float>(EdgeSpeed * Scale);
 	}
 	if ((Edge & MoveToNW) == MoveToNW)
 	{
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------X+" << std::endl;
 #endif
-		this->Get_State_Loc()._Coord_X += static_cast<float>(0.35f * Scale);
-		Character.Get_Distance_Move()->_Coord_X -= static_cast<float>(0.35f * Scale);
+		this->Get_State_Loc()._Coord_X += static_cast<float>(EdgeSpeed * Scale);
+		Character.Get_Distance_Move()->_Coord_X -= static_cast<float>(EdgeSpeed * Scale);
 	}
 	if ((Edge & MoveToPW) == MoveToPW)
 	{
 #if _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_
 		std::cout << "FLAG ----------------------------X-" << std::endl;
 #endif
-		this->Get_State_Loc()._Coord_X -= static_cast<float>(0.35f * Scale);
-		Character.Get_Distance_Move()->_Coord_X += static_cast<float>(0.35f * Scale);
+		this->Get_State_Loc()._Coord_X -= static_cast<float>(EdgeSpeed * Scale);
+		Character.Get_Distance_Move()->_Coord_X += static_cast<float>(EdgeSpeed * Scale);
 	}
 }
 
@@ -1323,7 +1325,7 @@ void GameStateBase::Reset_Location()
 
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Length(Width, Height), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
-	_MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
+	_MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), Tanxl_ClassBase("1.2"),
 	_Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
@@ -1347,32 +1349,6 @@ GameStateBase::~GameStateBase()
 {
 	Clear_Display_Vector(STATE_EXTEND_SPEC);
 }
-
-//GameEvent
-
-std::string GameEvent::GetEventName()
-{
-	return this->_EventName;
-}
-
-void GameEvent::Set_EventTarget(GameObject* Obejct)
-{
-	this->_GameObejct = Obejct;
-}
-
-//GameEventBase
-
-GameEventBase::GameEventBase() :_GameEvents(NULL), Tanxl_ClassBase("0.1") {}
-
-GameEventBase::~GameEventBase()
-{
-	std::vector<GameEvent*>().swap(this->_GameEvents);
-	delete& _GameEvents;
-}
-
-GameEventBase::GameEventBase(const GameEventBase&) :_GameEvents(NULL), Tanxl_ClassBase("0.1") {}
-
-GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }
 
 //StateUnit
 
@@ -1475,22 +1451,31 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 	switch (State)
 	{
 	case STATE_EXTEND_MIDD:
+		Pos = Pos % this->_GameState_Extend._MIDD._Data->size();
 		return this->_GameState_Extend._MIDD._Data->at(Pos);
 	case STATE_EXTEND_LEFT:
+		Pos = Pos % this->_GameState_Extend._LEFT._Data->size();
 		return this->_GameState_Extend._LEFT._Data->at(Pos);
 	case STATE_EXTEND_RIGH:
+		Pos = Pos % this->_GameState_Extend._RIGH._Data->size();
 		return this->_GameState_Extend._RIGH._Data->at(Pos);
 	case STATE_EXTEND_ABOV:
+		Pos = Pos % this->_GameState_Extend._ABOV._Data->size();
 		return this->_GameState_Extend._ABOV._Data->at(Pos);
 	case STATE_EXTEND_BELO:
+		Pos = Pos % this->_GameState_Extend._BELO._Data->size();
 		return this->_GameState_Extend._BELO._Data->at(Pos);
 	case STATE_EXTEND_LEFT_ABOV:
+		Pos = Pos % this->_GameState_Extend._LEFT_ABOV._Data->size();
 		return this->_GameState_Extend._LEFT_ABOV._Data->at(Pos);
 	case STATE_EXTEND_LEFT_BELO:
+		Pos = Pos % this->_GameState_Extend._LEFT_BELO._Data->size();
 		return this->_GameState_Extend._LEFT_BELO._Data->at(Pos);
 	case STATE_EXTEND_RIGH_ABOV:
+		Pos = Pos % this->_GameState_Extend._RIGH_ABOV._Data->size();
 		return this->_GameState_Extend._RIGH_ABOV._Data->at(Pos);
 	case STATE_EXTEND_RIGH_BELO:
+		Pos = Pos % this->_GameState_Extend._RIGH_BELO._Data->size();
 		return this->_GameState_Extend._RIGH_BELO._Data->at(Pos);
 	}
 	return nullptr;

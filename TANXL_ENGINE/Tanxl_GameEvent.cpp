@@ -3,7 +3,19 @@
 #include "Tanxl_GameEvent.h"
 #include "Tanxl_GameState.h"
 
+//GameEvent
+
 GameEvent::GameEvent(std::string Name, GameObject* Obejct) :_EventName(Name), _GameObejct(Obejct) {}
+
+std::string GameEvent::GetEventName()
+{
+	return this->_EventName;
+}
+
+void GameEvent::Set_EventTarget(GameObject* Obejct)
+{
+	this->_GameObejct = Obejct;
+}
 
 //State_ChangeEvent
 
@@ -91,3 +103,15 @@ GameEventBase& GameEventBase::GetEventBase()
 }
 
 GameEvent_By_Location::GameEvent_By_Location(std::string Name, GameObject* Obejct) :GameEvent(Name, Obejct) {}
+
+GameEventBase::GameEventBase() :_GameEvents(NULL), Tanxl_ClassBase("0.1") {}
+
+GameEventBase::~GameEventBase()
+{
+	std::vector<GameEvent*>().swap(this->_GameEvents);
+	delete& _GameEvents;
+}
+
+GameEventBase::GameEventBase(const GameEventBase&) :_GameEvents(NULL), Tanxl_ClassBase("0.1") {}
+
+GameEventBase& GameEventBase::operator=(const GameEventBase&) { return *this; }

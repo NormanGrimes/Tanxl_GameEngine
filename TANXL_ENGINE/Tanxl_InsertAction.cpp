@@ -38,7 +38,7 @@ void InsertEventBase::RemoveAllEvent()
 void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameObject& Character)
 {
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
-	static SoundBase* SB{ &SoundBase::GetSoundBase() };
+	int PressStatus{ 0 };
 	double MoveScale{ OPD->Get_DeltaTime() };
 	State->Update_Last_Location(Character);
 
@@ -57,15 +57,17 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 	{
 		if (glfwGetKey(window, this->_KeyNameS.at(i)) == GLFW_PRESS)
 		{
+			PressStatus++;
 			_Is_Key_Pressed = true;
-			this->_KeyCheck.Notify(this->_KeyNameS.at(i));
-
-			if (OPD->Get_Adjust_Status())
-				return;
-
 			this->_InsertCheck.Notify(this->_KeyNameS.at(i));
 		}
 	}
+	if (PressStatus == 0)
+		this->_InsertCheck.Notify(GLFW_KEY_UNKNOWN);
+
+	if (OPD->Get_Adjust_Status())
+		return;
+
 	this->_Insert_Move_Length *= MoveScale;
 
 	this->_Insert_Status = 0;
@@ -155,7 +157,7 @@ void InsertEventBase::RegistEvent(int GLFW_KEY, MoveTo_Direction MOVETO_VERT, fl
 
 void InsertEventBase::RegistEvent(int GLFW_KEY, bool* BindStatus)
 {
-	this->_KeyCheck.Add_Observer(new Press_Observer(GLFW_KEY, BindStatus));
+	this->_InsertCheck.Add_Observer(new Press_Observer(GLFW_KEY, BindStatus));
 	this->_KeyNameS.push_back(GLFW_KEY);
 }
 

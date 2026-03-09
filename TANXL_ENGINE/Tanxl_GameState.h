@@ -1,58 +1,7 @@
-﻿//_VERSION_1_1_ UPDATE LOG
-// LAST_UPDATE 2023-10-08 14:46
-// 单一连接功能修复未能构建双向连接的问题
-// 单一连接功能增加溢出的处理
-// 移除获取地图尺寸获取功能
-// 移除获取扩展世界是否开启的功能
-// 序列号定位地图数据的功能增加错误处理
-// 修复右边构建连接指向了错误坐标的问题
-// 移除地图横向与纵向区块个数的获取接口
-// 地图基础类改为继承自引擎基础类
-// 移除扩展世界启用标记以及设置函数
-// 移除无参数版本的地图生成函数
-// 获取地图范围接口效率改进
-// 将三个地图矩形区域设置接口移动到结构体中
-// 矩形地图结构体增加地图宽度与高度的设置接口
-// 增加无参数版本地图单元获取接口
-// 地图精确坐标改为坐标模板实现
-// 移除调整等待帧的所有设定
-// 新增扩展地图替换接口
-// 扩展地图结构体增加字符串数据获取接口
-// 析构地图数据时保留对地图的更改
-// 修复新添加的地图单元构建连接失败的问题
-// 构建连接功能效率优化
-// 单一连接接口不再返回连接对象的序列号
-// 优化枚举设置显示矩阵的接口
-// 合并获取地图需要绘制的高度与宽度接口
-// 移动绘制模块部分代码组成检测是否到达边缘的接口
-// 增加宏控制地图生成信息的输出
-// 增加根据输入状态控制地图调整的功能
-// 增加获取当前地图数据的接口
-// 移除地图中心点的记录
-// 多个接口性能优化
-// 微调地图功能去掉一个参数
-// 地图微调功能性能优化
-// 单元检测接口修复一个可导致死循环的问题
-// 提升碰撞功能动态计算的稳定性
-// 效率改进并移除部分不必要的接口
-// 地图微调接口改为私有
-// 新增简化版自动调整接口
-// 多个成员函数设为常量
-// 屏幕边缘移动接口减少参数
-// 去掉地图改变相关的参数
-// 移除多个绘制模块相关的返回值
-// 移除设置调整状态的接口
-// 合并设置地图调节和移动中调节的接口
-// 合并设置地图数据和设置起始地图数据的接口
-// 移除检查地图方块接口的返回值
-// 移除更新地图接口的返回值
-// 移除两个坐标编号获取接口
-// 检测地图数据是否存在的接口增加空指针检查
-// 多个接口增加操作对象参数
-// 移除获取上次移动触发的边沿的接口
-// 增加重置所有坐标值的接口
-// 构建连接接口设为私有
-// 判断地图区块是否存在的接口设为私有
+﻿//_VERSION_1_2_ UPDATE LOG
+// LAST_UPDATE 2024-03-01 17:16
+// 获取地图单元接口增加错误参数的处理
+// 地图边缘移动接口增加速度比率参数
 
 #pragma once
 
@@ -260,7 +209,7 @@ public:
 	void Reload_Display_State(EState_Extend Extend_Dire);
 	void Reload_State_Data(int PreLoads, glm::ivec2* StateInfor);
 	void Update_Move(float MoveX, float MoveY, GameObject& Character, ECheck_Edge Check = CHECK_EDGE_CURR);
-	void StateMove_Edge_Set(GameObject& Character, short Edge = 0, double Scale = 1) const;
+	void StateMove_Edge_Set(GameObject& Character, short Edge = 0, double Scale = 1, float Speed_Ratio = 1.0f) const;
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock(int State_Id);
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);

@@ -685,22 +685,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		glUseProgram(this->_Fonts_RenderingProgram);
 		glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
-		static int intCnt{ 0 };
-		std::cout << "OpenGL_Stop_Key Press :" << OpenGL_Stop_Key << std::endl;
 		if (OpenGL_Stop_Key)
 		{
-			if (intCnt < 10)
-				intCnt++;
-			else
-			{
-				intCnt = 0;
-				std::cout << "StopKey Press :" << Is_Stop << std::endl;
-				Is_Stop = !Is_Stop;
-				OpenGL_Stop_Key = false;
-			}
+			Is_Stop = !Is_Stop;
+			OpenGL_Stop_Key = false;
 		}
-		else
-			intCnt = 0;
 
 		if (Is_Stop)
 		{
@@ -723,7 +712,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 		Update_VertData(this->_StateInfor);
-		State->StateMove_Edge_Set(*Character, IEB->Get_Reach_Edge(), this->_Delta_Time);
+		State->StateMove_Edge_Set(*Character, IEB->Get_Reach_Edge(), this->_Delta_Time, Key_Observer::Get_Speed_Ratio());
 
 		glProgramUniform1f(_State_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
 		glProgramUniform1f(_State_RenderingProgram, 5, State->Get_State_Loc()._Coord_Y);//State_MoveY

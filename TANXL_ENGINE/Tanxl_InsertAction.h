@@ -30,6 +30,10 @@
 // 新增非移动按键观察者
 // 初始化按键接口增加非移动版本重载
 // 移除按键单元与按键事件类
+// 取消多个按键观察者的设定
+// 非移动按键使用更稳定的方案实现
+// 移除旧版本按键控制长按和双击的变量
+// 增加速度比率获取接口
 
 #pragma once
 
@@ -92,6 +96,11 @@ public:
 		_Speed_Rato = Speed_Rato;
 	}
 
+	static float Get_Speed_Ratio()
+	{
+		return _Speed_Rato;
+	}
+
 private:
 	int _GLFW_KEY;
 	MoveTo_Direction _Direction;
@@ -105,18 +114,36 @@ class Press_Observer : public Event_Observer<int>
 {
 public:
 	Press_Observer(int GLFW_KEY, bool* BindStatus) :
-		_GLFW_KEY(GLFW_KEY), _KeyPressed(BindStatus) {}
+		_Internal_UnPress_Count(0), _Internal_Press_Count(0), _GLFW_KEY(GLFW_KEY), _Event_Processed(false), _KeyPressed(BindStatus) {}
 
 	virtual void EventCheck(int& Event)
 	{
 		if (Event == this->_GLFW_KEY)
 		{
-			*this->_KeyPressed = true;
+			this->_Internal_Press_Count++;
+			this->_Internal_UnPress_Count = 0;
+			if ((this->_Internal_Press_Count > 2) && (this->_Event_Processed == false))
+			{
+				this->_Event_Processed = true;
+				*this->_KeyPressed = true;
+			}
+		}
+		else
+		{
+			this->_Internal_UnPress_Count++;
+			if (this->_Internal_UnPress_Count > 4)
+			{
+				this->_Event_Processed = false;
+				this->_Internal_Press_Count = 0;
+			}
 		}
 	}
 
 private:
+	int _Internal_UnPress_Count;
+	int _Internal_Press_Count;
 	int _GLFW_KEY;
+	bool _Event_Processed;
 	bool* _KeyPressed;
 };
 
@@ -175,10 +202,6 @@ private:
 	bool _Is_Key_Pressed;
 	//_Is_Key_Enable 用于标记当前是否响应输入
 	bool _Is_Key_Enable;
-	//_Key_Press_Length 记录一个按键事件确认按下需要的帧数
-	double _Key_Press_Length{ 10 };
-	//_Key_Extra_Press 记录一个按键事件重复执行按下操作需要的帧数
-	double _Key_Extra_Press{ 20 };
 	//_Insert_Move_Length 记录当前输入导致的移动距离
 	Tanxl_Coord<float> _Insert_Move_Length{ 0.0f, 0.0f };
 	//_Maximum_Distance 代表当前主控制物品在X/Y轴的最大移动距离
@@ -187,8 +210,6 @@ private:
 	Tanxl_Coord<double> _Mouse_Pos{ 0, 0 };
 	//_InsertCheck 输入检测的被观察者
 	EventSubject<int> _InsertCheck;
-	//_KeyCheck 非移动输入检测的被观察者
-	EventSubject<int> _KeyCheck;
 	//单例实现部分
 	InsertEventBase();
 	~InsertEventBase();
