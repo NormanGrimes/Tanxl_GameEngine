@@ -73,6 +73,8 @@ Version 0.4 Build 78 TURBO 36 - 2026/01/12 18:45
 
 Version 0.4 Build 88 TURBO 37 - 2026/02/02 18:36
 
+Version 0.4 Build 99 TURBO 38 - 2026/03/09 18:43
+
 # Tanxl_GameEngine Version 0.4 Build 82 UPDATE
 某些版本可能包含无法编译通过的BUG，如果发现此问题请回退至上一个版本，或等待下一个版本发布。
 
