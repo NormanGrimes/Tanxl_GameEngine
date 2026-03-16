@@ -27,6 +27,7 @@
 // 2024/02/26 修复重置内存信息后无法重新整理的问题
 // 2024/02/29 多处适配输入模块最新改动
 // 2024/02/29 增加非移动性质的按键注册接口
+// 2024/03/06 增加获取主要操控角色指针的接口
 
 #pragma once
 
@@ -157,6 +158,9 @@ public:
 
 	//用于检测是否需要关闭引擎并退出程序
 	bool Engine_Should_Shut_Down();
+
+	//可用于获取当前的主要操控角色的指针
+	GameObject* Engine_Object_Get_Character();
 
 private:
 	CONSOLE* Tanxl_Engine_Console_List;

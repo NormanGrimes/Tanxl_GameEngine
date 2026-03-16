@@ -29,6 +29,7 @@
 // 增加停止所有音频的接口
 // 修复停止后重新播放的背景音乐重复的问题
 // 增加音频事件观察者类
+// 增加音频观察者成员变量
 
 #pragma once
 
@@ -126,6 +127,8 @@ private:
 
     int _Current_BackGround_Id;
     bool _BackGround_Music_Playing;
+
+    EventSubject<int> _SoundCheck;
 
     SoundBase();
     ~SoundBase();

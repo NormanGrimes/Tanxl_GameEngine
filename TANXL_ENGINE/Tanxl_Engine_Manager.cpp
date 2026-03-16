@@ -368,6 +368,11 @@ bool Tanxl_Engine::Engine_Should_Shut_Down()
 	return glfwWindowShouldClose(this->Tanxl_Engine_OpenGL_Draw->Get_Window());
 }
 
+GameObject* Tanxl_Engine::Engine_Object_Get_Character()
+{
+	return this->Tanxl_Engine_ObjectBase->Get_Main_Character();
+}
+
 void Tanxl_Engine::Engine_State_Set_Data(int State_Id, bool Is_Begin, std::string State_Infor)
 {
 	if (((this->_Engine_Status & 0x100) == 0x000))

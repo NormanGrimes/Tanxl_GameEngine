@@ -121,36 +121,6 @@ int GameObject::Get_Money()
 	return this->_Money_Componment.Get_Money();
 }
 
-void GameObject::RestoreHealth(int RestVal)
-{
-	this->_Health_Componment.RestoreHealth(RestVal);
-}
-
-void GameObject::TakeDamage(int TakeVal)
-{
-	this->_Health_Componment.TakeDamage(TakeVal);
-}
-
-void GameObject::Set_Health(int Current_Health, int Max_Health)
-{
-	this->_Health_Componment.Set_Health(Current_Health, Max_Health);
-}
-
-int GameObject::Check_Health()
-{
-	return this->_Health_Componment.Check_Health();
-}
-
-int GameObject::Get_MaxHealth()
-{
-	return this->_Health_Componment.Get_MaxHealth();
-}
-
-bool GameObject::Get_Is_Alive()
-{
-	return this->_Health_Componment.Is_Alive();
-}
-
 void GameObject::Reset_Data()
 {
 	delete this->_Last_Move;
@@ -174,6 +144,11 @@ Tanxl_Coord<float>* GameObject::Get_Distance_Move()
 Tanxl_Coord<float>* GameObject::Get_Distance_Mid()
 {
 	return this->_Distance_Mid;
+}
+
+Health_Componment* GameObject::GetHealth()
+{
+	return &this->_Health_Componment;
 }
 
 GameObjectBase& GameObjectBase::GetObjectBase()

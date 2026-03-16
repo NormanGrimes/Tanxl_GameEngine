@@ -9,6 +9,7 @@
 // 初始化部分切换效率更高的接口
 // 地图数据初始化部分从初始化接口中独立为地图初始化接口
 // 停止按钮应用最新版改动
+// 新增三帧左侧移动动作测试
 
 #pragma once
 
@@ -73,6 +74,9 @@ namespace TanxlOD
 	static const char* TexPrincess_02_Run_18	{ "Texture/TANXL_PRINCESS_02_RUN_18.png"	};
 	static const char* TexPrincess_03			{ "Texture/TANXL_PRINCESS_03.png"			};
 	static const char* TexPrincess_04			{ "Texture/TANXL_PRINCESS_04.png"			};
+	static const char* TexPrincess_04_Run_01	{ "Texture/TANXL_PRINCESS_04_RUN_01.png"	};
+	static const char* TexPrincess_04_Run_02	{ "Texture/TANXL_PRINCESS_04_RUN_02.png"	};
+	static const char* TexPrincess_04_Run_03	{ "Texture/TANXL_PRINCESS_04_RUN_03.png"	};
 	static const char* TexPrincess_01_Blink_01	{ "Texture/TANXL_PRINCESS_01_BLINK_01.png"	};
 	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};

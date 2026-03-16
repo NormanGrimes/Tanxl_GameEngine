@@ -41,6 +41,8 @@
 // 三个关于移动距离的变量移入物品类进行管理
 // 玩家数据类改为结构体并去掉三个获取变量的函数
 // 主操作对象类功能合并到物品基类中
+// 游戏物品类增加接口返回生命组件指针
+// 物品类移除所有调用生命值组件的接口
 
 #pragma once
 
@@ -154,18 +156,13 @@ public:
 	bool Pay_Money(int Price);
 	int Get_Money();
 
-	void RestoreHealth(int RestVal);
-	void TakeDamage(int TakeVal);
-	void Set_Health(int Current_Health, int Max_Health = 11);
-	int Check_Health();
-	int Get_MaxHealth();
-	bool Get_Is_Alive();
-
 	void Reset_Data();
 	
 	Tanxl_Coord<float>* Get_Last_Move();
 	Tanxl_Coord<float>* Get_Distance_Move();
 	Tanxl_Coord<float>* Get_Distance_Mid();
+
+	Health_Componment* GetHealth();
 
 private:
 	Character_Data _Character_Data;

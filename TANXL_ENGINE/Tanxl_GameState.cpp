@@ -947,10 +947,10 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 
 	if (Unit_State_Id == 2)
 	{
-		if (MC->Get_Is_Alive())
+		if (MC->GetHealth()->Is_Alive())
 		{
 			SB->Play_Sound(SOUND_EVENT_START);
-			MC->TakeDamage(1);
+			MC->GetHealth()->TakeDamage(1);
 			MC->Add_Money(1);
 
 			CheckUnit->Set_Status(0);
@@ -965,10 +965,10 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	}
 	else if (Unit_State_Id == 4)
 	{
-		if (MC->Check_Health() < MC->Get_MaxHealth())
+		if (MC->GetHealth()->Check_Health() < MC->GetHealth()->Get_MaxHealth())
 		{
 			SB->Play_Sound(SOUND_SYSTEM_CALL);
-			MC->RestoreHealth(1);
+			MC->GetHealth()->RestoreHealth(1);
 			CheckUnit->Set_Status(0);
 		}
 	}

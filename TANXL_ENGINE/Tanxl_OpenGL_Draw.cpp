@@ -5,7 +5,7 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "92" };
+const static std::string SubVersion{ "95" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -109,7 +109,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//HP UI MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//HP UI MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, Character->Get_MaxHealth() + 2);//Health Init
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, Character->GetHealth()->Get_MaxHealth() + 2);//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
@@ -164,6 +164,9 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_MotionS.at(2)->Set_Idle_Image(TanxlOD::TexPrincess_03);
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_01, 2);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_02, 2);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_03, 2);
 	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04);
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, Tex_01);
@@ -465,7 +468,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
-			Character->Set_Health(5);
+			Character->GetHealth()->Set_Health(5, 11);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
@@ -476,7 +479,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Check_Health() + 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->GetHealth()->Check_Health() + 2) * 6);
 		}
 		else
 		{
@@ -501,7 +504,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 			Update_VertData(this->_StateInfor);
-			Character->Set_Health(5);
+			Character->GetHealth()->Set_Health(5, 11);
 			this->_Game_Status = GAME_START_MENU;
 		}
 		else
@@ -517,7 +520,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Check_Health() + 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->GetHealth()->Check_Health() + 2) * 6);
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -536,13 +539,15 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			else if (Insert_Status & 0x04)
 				this->_MotionS.at(2)->Idle_Image();
 			else if (Insert_Status & 0x08)
-				this->_MotionS.at(3)->Idle_Image();
+				this->_MotionS.at(3)->Start_Motion(this->_Delta_Time * 100);
 			else
 			{
 				if (LastStatus & 0x01)
 					this->_MotionS.at(0)->Start_Motion(this->_Delta_Time * 100);
 				if (LastStatus & 0x02)
 					this->_MotionS.at(1)->Idle_Image();
+				if (Insert_Status & 0x08)
+					this->_MotionS.at(3)->Idle_Image();
 			}
 			if (Insert_Status != 0)
 				LastStatus = Insert_Status;
@@ -568,7 +573,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (Character->Check_Health() + 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (Character->GetHealth()->Check_Health() + 2) * 6);
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -613,7 +618,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 
-	if (!Character->Get_Is_Alive())
+	if (!Character->GetHealth()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
 
 	if (VersionFontSize > -800.0f)
@@ -663,7 +668,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 	}
 
-	if ((!Character->Get_Is_Alive()) && (_Draw_Status != 3) && (_Draw_Status != 4))
+	if ((!Character->GetHealth()->Is_Alive()) && (_Draw_Status != 3) && (_Draw_Status != 4))
 	{
 		_Draw_Status = 3;
 		IEB->Set_Key_Enable(false);
