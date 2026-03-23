@@ -53,7 +53,6 @@ void SoundBase::Stop_AllSound()
 	this->_SoundEngine[SOUND_ENGINE_EVENT]->stopAllSounds();
 	this->_SoundEngine[SOUND_ENGINE_BACKGROUND]->stopAllSounds();
 
-	//this->_Current_BackGround_Id = 0;
 	this->_BackGround_Music_Playing = false;
 
 	this->_SoundEngine[SOUND_ENGINE_EVENT]->setSoundVolume(1.0f);
@@ -134,12 +133,13 @@ _BackGround_Music_Playing(false), _Current_BackGround_Id(0)
 
 	_SoundCheck.Add_Observer(new Sound_Observer(0, SOUND_GAME_START, this));
 	_SoundCheck.Add_Observer(new Sound_Observer(1, SOUND_GAME_OVER, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(2, SOUND_EVENT_START, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(2, SOUND_TAKE_DAMAGE, this));
 	_SoundCheck.Add_Observer(new Sound_Observer(3, SOUND_RESTORE_HEALTH, this));
 	_SoundCheck.Add_Observer(new Sound_Observer(4, SOUND_MOUSE_CLICK, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(5, SOUND_SYSTEM_CALL, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(6, SOUND_ACHIEVEMENT, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(7, SOUND_SECRET_CORE, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(5, SOUND_MOUSE_CLICK_RIGHT, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(6, SOUND_TAKE_COIN, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(7, SOUND_ACHIEVEMENT, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(8, SOUND_SECRET_CORE, this));
 
 }
 

@@ -2,6 +2,7 @@
 // LAST_UPDATE 2024-03-01 17:16
 // 获取地图单元接口增加错误参数的处理
 // 地图边缘移动接口增加速度比率参数
+// 单个地图区块的长度数据合并为一个变量
 
 #pragma once
 
@@ -264,10 +265,8 @@ private:
 	GameStateBase(const GameStateBase&);
 	GameStateBase& operator=(const GameStateBase&);
 	TANXL_DataBase _Data_Base{};
-	// _Data_Width 单个地图区块横向包含的单元个数
-	unsigned _Data_Width;
-	// _Data_Height 单个地图区块纵向包含的单元个数
-	unsigned _Data_Height;
+	// _Single_Block_Length 单个地图区块横/纵向包含的单元个数
+	Tanxl_Coord<unsigned> _Single_Block_Length;
 	//_Each_Height 记录地图场景基本矩形的高度值
 	double _Each_Height{ 0 };
 	//_Each_Width 记录地图场景基本矩形的宽度值

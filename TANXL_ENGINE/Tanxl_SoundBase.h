@@ -30,6 +30,8 @@
 // 修复停止后重新播放的背景音乐重复的问题
 // 增加音频事件观察者类
 // 增加音频观察者成员变量
+// 音频宏与名称调整
+// 新增鼠标右键点击的音频
 
 #pragma once
 
@@ -54,18 +56,19 @@ enum ESound_WAV
 {
     SOUND_GAME_START        = 0,
     SOUND_GAME_OVER         = 1,
-    SOUND_EVENT_START       = 2,
+    SOUND_TAKE_DAMAGE       = 2,
     SOUND_RESTORE_HEALTH    = 3,
     SOUND_MOUSE_CLICK       = 4,
-    SOUND_SYSTEM_CALL       = 5,
-    SOUND_ACHIEVEMENT       = 6,
-    SOUND_SECRET_CORE       = 7,
+    SOUND_MOUSE_CLICK_RIGHT = 5,
+    SOUND_TAKE_COIN         = 6,
+    SOUND_ACHIEVEMENT       = 7,
+    SOUND_SECRET_CORE       = 8,
 
-    SOUND_BACKGROUND_01     = 8,
-    SOUND_BACKGROUND_02     = 9,
-    SOUND_BACKGROUND_03     = 10,
-    SOUND_BACKGROUND_04     = 11,
-    SOUND_BACKGROUND_05     = 12,
+    SOUND_BACKGROUND_01     = 9,
+    SOUND_BACKGROUND_02     = 10,
+    SOUND_BACKGROUND_03     = 11,
+    SOUND_BACKGROUND_04     = 12,
+    SOUND_BACKGROUND_05     = 13,
 
     SOUND_NO_SOUND          = 0xFF
 };
@@ -106,15 +109,16 @@ public:
 private:
     irrklang::ISoundEngine* _SoundEngine[2];
 
-    std::string _Sound_Names[13]
+    std::string _Sound_Names[14]
     { 
         "music/Game_Start.wav", 
         "music/Game_Over.wav",
-        "music/Game_Event_Start.wav",
+        "music/Game_Take_Damage.wav",
         "music/Game_Event_Restore_Health.wav" ,
         "music/Game_Mouse_Click.wav",
-        "music/Game_System_Call.wav",
-        "music/Achievement_Unlock.wav",
+        "music/Game_Mouse_Click_Right.wav",
+        "music/Game_Take_Coin.wav",
+        "music/Game_Achievement_Unlock.wav",
         "music/Game_Event_Secret_Core.wav",
         "music/Game_BackGround_01.mp3",
         "music/Game_BackGround_02.mp3",

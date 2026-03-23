@@ -10,6 +10,8 @@
 // 地图数据初始化部分从初始化接口中独立为地图初始化接口
 // 停止按钮应用最新版改动
 // 新增三帧左侧移动动作测试
+// 左侧移动动作增加到十三帧
+// 修复左侧移动停止时不会切换图片的问题
 
 #pragma once
 
@@ -77,6 +79,16 @@ namespace TanxlOD
 	static const char* TexPrincess_04_Run_01	{ "Texture/TANXL_PRINCESS_04_RUN_01.png"	};
 	static const char* TexPrincess_04_Run_02	{ "Texture/TANXL_PRINCESS_04_RUN_02.png"	};
 	static const char* TexPrincess_04_Run_03	{ "Texture/TANXL_PRINCESS_04_RUN_03.png"	};
+	static const char* TexPrincess_04_Run_04	{ "Texture/TANXL_PRINCESS_04_RUN_04.png"	};
+	static const char* TexPrincess_04_Run_05	{ "Texture/TANXL_PRINCESS_04_RUN_05.png"	};
+	static const char* TexPrincess_04_Run_06	{ "Texture/TANXL_PRINCESS_04_RUN_06.png"	};
+	static const char* TexPrincess_04_Run_07	{ "Texture/TANXL_PRINCESS_04_RUN_07.png"	};
+	static const char* TexPrincess_04_Run_08	{ "Texture/TANXL_PRINCESS_04_RUN_08.png"	};
+	static const char* TexPrincess_04_Run_09	{ "Texture/TANXL_PRINCESS_04_RUN_09.png"	};
+	static const char* TexPrincess_04_Run_10	{ "Texture/TANXL_PRINCESS_04_RUN_10.png"	};
+	static const char* TexPrincess_04_Run_11	{ "Texture/TANXL_PRINCESS_04_RUN_11.png"	};
+	static const char* TexPrincess_04_Run_12	{ "Texture/TANXL_PRINCESS_04_RUN_12.png"	};
+	static const char* TexPrincess_04_Run_13	{ "Texture/TANXL_PRINCESS_04_RUN_13.png"	};
 	static const char* TexPrincess_01_Blink_01	{ "Texture/TANXL_PRINCESS_01_BLINK_01.png"	};
 	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};

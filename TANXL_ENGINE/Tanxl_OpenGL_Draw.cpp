@@ -164,9 +164,20 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_MotionS.at(2)->Set_Idle_Image(TanxlOD::TexPrincess_03);
 
 	this->_MotionS.push_back(new Motion_Cycle(Tex_01, this));
-	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_01, 2);
-	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_02, 2);
-	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_03, 2);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_01, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_02, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_03, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_04, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_05, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_06, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_07, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_08, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_09, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_10, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_11, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_12, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_13, 3);
+
 	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04);
 
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, Tex_01);
@@ -531,7 +542,6 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		{
 			static unsigned LastStatus{ Insert_Status };
-
 			if (Insert_Status & 0x01)
 				this->_MotionS.at(0)->Start_Motion(this->_Delta_Time * 100);
 			else if (Insert_Status & 0x02)
@@ -544,10 +554,15 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			{
 				if (LastStatus & 0x01)
 					this->_MotionS.at(0)->Start_Motion(this->_Delta_Time * 100);
-				if (LastStatus & 0x02)
+				else if (LastStatus & 0x02)
 					this->_MotionS.at(1)->Idle_Image();
-				if (Insert_Status & 0x08)
+				else if (LastStatus & 0x04)
+					this->_MotionS.at(2)->Idle_Image();
+				else if (LastStatus & 0x08)
+				{
+					std::cout << "SET IDLE IMAGE    " << LastStatus << std::endl;
 					this->_MotionS.at(3)->Idle_Image();
+				}
 			}
 			if (Insert_Status != 0)
 				LastStatus = Insert_Status;

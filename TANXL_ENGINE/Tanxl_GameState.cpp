@@ -298,8 +298,8 @@ void GameStateBase::Set_Display_State(int Width, int Height)
 
 void GameStateBase::Set_Data_Length(unsigned Width, unsigned Height)
 {
-	this->_Data_Width = Width - 1;
-	this->_Data_Height = Height - 1;
+	this->_Single_Block_Length._Coord_X = Width - 1;
+	this->_Single_Block_Length._Coord_Y = Height - 1;
 }
 
 StateUnit* GameStateBase::Get_State()
@@ -604,13 +604,13 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 		StateInfor[i].x = 4;
 		StateInfor[i].y = 1;
 
-		if (Move_NX > static_cast<int>(this->_Data_Width))//RIGH AREA
+		if (Move_NX > static_cast<int>(this->_Single_Block_Length._Coord_X))//RIGH AREA
 		{
-			if (Move_NY > static_cast<int>(this->_Data_Height))
+			if (Move_NY > static_cast<int>(this->_Single_Block_Length._Coord_Y))
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
 				{
-					unsigned x{ Move_NX - this->_Data_Width - 1 + (Move_NY - this->_Data_Height - 1) * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX - this->_Single_Block_Length._Coord_X - 1 + (Move_NY - this->_Single_Block_Length._Coord_Y - 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -623,7 +623,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_RIGH))
 				{
-					unsigned x{ Move_NX - this->_Data_Width - 1 + Move_NY * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX - this->_Single_Block_Length._Coord_X - 1 + Move_NY * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -632,11 +632,11 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 #endif
 				}
 			}
-			else if (Move_NY >= -static_cast<int>(this->_Data_Height))
+			else if (Move_NY >= -static_cast<int>(this->_Single_Block_Length._Coord_Y))
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_RIGH_ABOV))
 				{
-					unsigned x{ Move_NX - this->_Data_Width - 1 + (Move_NY + this->_Data_Height + 1) * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX - this->_Single_Block_Length._Coord_X - 1 + (Move_NY + this->_Single_Block_Length._Coord_Y + 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -648,11 +648,11 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 		}
 		else if (Move_NX >= 0)//MID AREA
 		{
-			if (Move_NY > static_cast<int>(this->_Data_Height))
+			if (Move_NY > static_cast<int>(this->_Single_Block_Length._Coord_Y))
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_BELO))
 				{
-					unsigned x{ Move_NX + (Move_NY - this->_Data_Height - 1) * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX + (Move_NY - this->_Single_Block_Length._Coord_Y - 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_BELO, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -665,7 +665,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_MIDD))
 				{
-					unsigned x{ Move_NX + Move_NY * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX + Move_NY * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_MIDD, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -674,11 +674,11 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 #endif
 				}
 			}
-			else if (Move_NY >= -static_cast<int>(this->_Data_Height))
+			else if (Move_NY >= -static_cast<int>(this->_Single_Block_Length._Coord_Y))
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_ABOV))
 				{
-					unsigned x{ Move_NX + (Move_NY + this->_Data_Height + 1) * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX + (Move_NY + this->_Single_Block_Length._Coord_Y + 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_ABOV, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -688,13 +688,13 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				}
 			}
 		}
-		else if (Move_NX >= -static_cast<int>(this->_Data_Width))//LEFT AREA
+		else if (Move_NX >= -static_cast<int>(this->_Single_Block_Length._Coord_X))//LEFT AREA
 		{
-			if (Move_NY > static_cast<int>(this->_Data_Height))
+			if (Move_NY > static_cast<int>(this->_Single_Block_Length._Coord_Y))
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_LEFT_BELO))
 				{
-					unsigned x{ Move_NX + this->_Data_Width + 1 + (Move_NY - this->_Data_Height - 1) * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX + this->_Single_Block_Length._Coord_X + 1 + (Move_NY - this->_Single_Block_Length._Coord_Y - 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -707,7 +707,7 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_LEFT))
 				{
-					unsigned x{ Move_NX + this->_Data_Width + 1 + Move_NY * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX + this->_Single_Block_Length._Coord_X + 1 + Move_NY * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -716,11 +716,11 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 #endif
 				}
 			}
-			else if (Move_NY >= -static_cast<int>(this->_Data_Height))
+			else if (Move_NY >= -static_cast<int>(this->_Single_Block_Length._Coord_Y))
 			{
 				if (this->Is_State_Exist(STATE_EXTEND_LEFT_ABOV))
 				{
-					unsigned x{ Move_NX + this->_Data_Width + 1 + (Move_NY + this->_Data_Height + 1) * (this->_Data_Width + 1) };
+					unsigned x{ Move_NX + this->_Single_Block_Length._Coord_X + 1 + (Move_NY + this->_Single_Block_Length._Coord_Y + 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x) };
 					StateInfor[i].x = Unit->Get_State_Id();
 					StateInfor[i].y = Unit->Get_Extra_Status();
@@ -949,7 +949,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	{
 		if (MC->GetHealth()->Is_Alive())
 		{
-			SB->Play_Sound(SOUND_EVENT_START);
+			SB->Play_Sound(SOUND_TAKE_DAMAGE);
 			MC->GetHealth()->TakeDamage(1);
 			MC->Add_Money(1);
 
@@ -958,7 +958,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	}
 	else if (Unit_State_Id == 3)
 	{
-		SB->Play_Sound(SOUND_RESTORE_HEALTH);
+		SB->Play_Sound(SOUND_TAKE_COIN);
 		MC->Add_Money(5);
 
 		CheckUnit->Set_Status(0);
@@ -967,7 +967,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	{
 		if (MC->GetHealth()->Check_Health() < MC->GetHealth()->Get_MaxHealth())
 		{
-			SB->Play_Sound(SOUND_SYSTEM_CALL);
+			SB->Play_Sound(SOUND_RESTORE_HEALTH);
 			MC->GetHealth()->RestoreHealth(1);
 			CheckUnit->Set_Status(0);
 		}
@@ -993,8 +993,8 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 
 void GameStateBase::HitEdge_Check(GameObject& Character)
 {
-	static double State_Data_Width{ this->_Data_Width * this->_Each_Width * 2 + this->_Each_Width };
-	static double State_Data_Height{ this->_Data_Height * this->_Each_Height * 2 + this->_Each_Height };
+	static double State_Data_Width{ this->_Single_Block_Length._Coord_X * this->_Each_Width * 2 + this->_Each_Width };
+	static double State_Data_Height{ this->_Single_Block_Length._Coord_Y * this->_Each_Height * 2 + this->_Each_Height };
 
 	if (Character.Get_Last_Move()->_Coord_X < 0)
 	{
@@ -1170,8 +1170,8 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 	float Marg_Width{ static_cast<float>(this->_Each_Width * 10) };
 	float Marg_Height{ static_cast<float>(this->_Each_Height * 10) };
 
-	int State_Unit_Width{ static_cast<int>(this->_Data_Width) + 1 };
-	int State_Unit_Height{ static_cast<int>(this->_Data_Height) + 1 };
+	int State_Unit_Width{ static_cast<int>(this->_Single_Block_Length._Coord_X) + 1 };
+	int State_Unit_Height{ static_cast<int>(this->_Single_Block_Length._Coord_Y) + 1 };
 
 	bool Reset{ this->Check_Edge_Reached(Check_Direction) };
 
@@ -1272,8 +1272,8 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 
 void GameStateBase::Update_State(GameObject& Character, ECheck_Edge Check_Direction)
 {
-	int State_Unit_Width{ static_cast<int>(this->_Data_Width) + 1 };
-	int State_Unit_Height{ static_cast<int>(this->_Data_Height) + 1 };
+	int State_Unit_Width{ static_cast<int>(this->_Single_Block_Length._Coord_X) + 1 };
+	int State_Unit_Height{ static_cast<int>(this->_Single_Block_Length._Coord_Y) + 1 };
 
 	int Temp_Height{ this->_New_Current_Loc._Coord_Y };
 	int Temp_Width{ this->_New_Current_Loc._Coord_X };
@@ -1325,7 +1325,7 @@ void GameStateBase::Reset_Location()
 
 GameStateBase::GameStateBase(int Width, int Height) :
 	_GameState_Length(Width, Height), _GameState_Adjust(0.0f), _Compile_Success(false), _Extend_Mid_Id(0),
-	_MState(0), _Data_Height(Height), _Data_Width(Width), _Is_Adjusting(false), Tanxl_ClassBase("1.2"),
+	_MState(0), _Single_Block_Length(Width, Height), _Is_Adjusting(false), Tanxl_ClassBase("1.2"),
 	_Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
@@ -1392,12 +1392,12 @@ void GameStateBase::Set_Data_Size(int Size)
 
 unsigned GameStateBase::Get_DataHeight()const
 {
-	return this->_Data_Height;
+	return this->_Single_Block_Length._Coord_Y;
 }
 
 unsigned GameStateBase::Get_DataWidth()const
 {
-	return this->_Data_Width;
+	return this->_Single_Block_Length._Coord_X;
 }
 
 void GameStateBase::Set_Adjust(float Adjust)
@@ -1484,9 +1484,9 @@ StateUnit* GameStateBase::Get_StateUnit(EState_Extend State, int Pos)
 StateUnit* GameStateBase::Get_State(int LocationX, int LocationY)
 {
 	StateUnit* Unit{ nullptr };
-	if (LocationX > static_cast<int>(this->_Data_Width))
+	if (LocationX > static_cast<int>(this->_Single_Block_Length._Coord_X))
 	{
-		if (LocationY > static_cast<int>(this->_Data_Height))
+		if (LocationY > static_cast<int>(this->_Single_Block_Length._Coord_Y))
 		{
 			if (this->Is_State_Exist(STATE_EXTEND_RIGH_BELO))
 			{
@@ -1610,7 +1610,7 @@ Id_Link* GameStateBase::Locate_Link(std::string Link_Name)
 }
 
 GameStateBase::GameStateBase(const GameStateBase&) :_GameState_Length(0, 0), _GameState_Adjust(0), _Extend_Mid_Id(0),
-_Compile_Success(false), _MState(0), _Data_Height(0), _Data_Width(0), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
+_Compile_Success(false), _MState(0), _Single_Block_Length(0, 0), _Is_Adjusting(false), Tanxl_ClassBase("1.1"),
 _Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(false)
 {
 	LocationBase* LCB{ &LocationBase::GetLocationBase() };
