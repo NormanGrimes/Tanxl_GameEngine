@@ -3,6 +3,7 @@
 // 获取地图单元接口增加错误参数的处理
 // 地图边缘移动接口增加速度比率参数
 // 单个地图区块的长度数据合并为一个变量
+// 转移物品上次移动的变量的控制权
 
 #pragma once
 
@@ -285,10 +286,6 @@ private:
 	Tanxl_Coord<int> _Exac_Location;
 	//_GameState_Length 用于控制当前地图的显示宽/高度
 	Tanxl_Coord<int> _GameState_Length;
-	//_Location_Distance_Mid 上一次有效的方块离中心点的距离
-	Tanxl_Coord<float> _Location_Distance_Mid{ 0.0f, 0.0f };
-	//_Location_Distance_Move 上一次有效的方块移动距离
-	Tanxl_Coord<float> _Location_Distance_Move{ 0.0f, 0.0f };
 	//_GameState_Adjust 用于记录每次自动调整的距离
 	float _GameState_Adjust;
 	//_Is_Data_Set 用于标记是否从文件中获取到了地图数据

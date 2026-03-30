@@ -127,7 +127,7 @@ void InsertEventBase::GetMouseInput(GLFWwindow* window)
 	{
 		if (LastMouseStatus_2 == GLFW_PRESS)
 		{
-			SB->Play_Sound(SOUND_MOUSE_CLICK);
+			SB->Play_Sound(SOUND_MOUSE_CLICK_RIGHT);
 			std::cout << "Mouse 2 Press" << std::endl;
 			Tips->Update_Count();
 			_Is_Key_Pressed = true;

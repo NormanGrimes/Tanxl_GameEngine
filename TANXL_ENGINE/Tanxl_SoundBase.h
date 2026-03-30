@@ -32,6 +32,8 @@
 // 增加音频观察者成员变量
 // 音频宏与名称调整
 // 新增鼠标右键点击的音频
+// 增加错误调试模式
+// 停止音频接口不再调整音量
 
 #pragma once
 
@@ -45,6 +47,8 @@
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameEvent.h"
+
+#define _ENABLE_SOUNDBASE_DEBUG_MODE_ 1
 
 enum ESoundEngine_ID
 {

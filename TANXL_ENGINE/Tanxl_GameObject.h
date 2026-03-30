@@ -43,6 +43,10 @@
 // 主操作对象类功能合并到物品基类中
 // 游戏物品类增加接口返回生命组件指针
 // 物品类移除所有调用生命值组件的接口
+// 游戏物品类增加上次移动位置的记录
+// 游戏物品类中的坐标成员改为实例
+// 移除物品类的多个金币接口改为直接获取组件
+// 新增移动坐标组件类
 
 #pragma once
 
@@ -105,6 +109,32 @@ private:
 	int _Current_Money;
 };
 
+class Coord_Componment : public Componment_Base
+{
+public:
+	Coord_Componment();
+
+	void Reset_Data();
+	void Update_Last_Location();
+
+	Tanxl_Coord<float>* Get_Last_Move();
+	Tanxl_Coord<float>* Get_Distance_Move();
+	Tanxl_Coord<float>* Get_Distance_Mid();
+	Tanxl_Coord<float>* Get_Last_Distance_Mid();
+	Tanxl_Coord<float>* Get_Last_Distance_Move();
+private:
+	//_Last_Move 用于记录上次移动距离
+	Tanxl_Coord<float> _Last_Move;
+	//_Distance_Move 用于记录当前相对于原点的移动距离
+	Tanxl_Coord<float> _Distance_Move;
+	//_Distance_Mid 用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
+	Tanxl_Coord<float> _Distance_Mid;
+	//_Last_Distance_Mid 上一次有效的方块离中心点的距离
+	Tanxl_Coord<float> _Last_Distance_Mid;
+	//_Last_Distance_Move 上一次有效的方块移动距离
+	Tanxl_Coord<float> _Last_Distance_Move;
+};
+
 struct Weapon
 {
 	Weapon(int Damage);
@@ -152,17 +182,16 @@ class GameObject
 public:
 	GameObject(int Max_Health, int Current_Health, bool Unable_Damage = false);
 
-	void Add_Money(int Money);
-	bool Pay_Money(int Price);
-	int Get_Money();
-
 	void Reset_Data();
 	
 	Tanxl_Coord<float>* Get_Last_Move();
 	Tanxl_Coord<float>* Get_Distance_Move();
 	Tanxl_Coord<float>* Get_Distance_Mid();
+	Tanxl_Coord<float>* Get_Last_Distance_Mid();
+	Tanxl_Coord<float>* Get_Last_Distance_Move();
 
 	Health_Componment* GetHealth();
+	Money_Componment* GetMoney();
 
 private:
 	Character_Data _Character_Data;
@@ -171,11 +200,15 @@ private:
 	Money_Componment _Money_Componment;
 
 	//_Last_Move 用于记录上次移动距离
-	Tanxl_Coord<float>* _Last_Move;
+	Tanxl_Coord<float> _Last_Move;
 	//_Distance_Move 用于记录当前相对于原点的移动距离
-	Tanxl_Coord<float>* _Distance_Move;
+	Tanxl_Coord<float> _Distance_Move;
 	//_Distance_Mid 用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
-	Tanxl_Coord<float>* _Distance_Mid;
+	Tanxl_Coord<float> _Distance_Mid;
+	//_Last_Distance_Mid 上一次有效的方块离中心点的距离
+	Tanxl_Coord<float> _Last_Distance_Mid;
+	//_Last_Distance_Move 上一次有效的方块移动距离
+	Tanxl_Coord<float> _Last_Distance_Move;
 };
 
 //GameObjectBase

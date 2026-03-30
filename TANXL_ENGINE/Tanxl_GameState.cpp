@@ -912,8 +912,8 @@ void GameStateBase::Move_State(EMove_State_EventId Direction, int Times)
 
 void GameStateBase::Update_Last_Location(GameObject& Character)
 {
-	this->_Location_Distance_Mid = *Character.Get_Distance_Mid();
-	this->_Location_Distance_Move = *Character.Get_Distance_Move();
+	*Character.Get_Last_Distance_Mid() = *Character.Get_Distance_Mid();
+	*Character.Get_Last_Distance_Move() = *Character.Get_Distance_Move();
 }
 
 void GameStateBase::State_Check_Event(GameObject& Character)
@@ -930,7 +930,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 
 	AC->CheckAchievement(g_rgAchievements[1]);
 
-	if ((MC->Get_Money() >= 100) && Achievement)
+	if ((MC->GetMoney()->Get_Money() >= 100) && Achievement)
 	{
 		Achievement = false;
 		if (AC->RequestStats())
@@ -951,7 +951,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 		{
 			SB->Play_Sound(SOUND_TAKE_DAMAGE);
 			MC->GetHealth()->TakeDamage(1);
-			MC->Add_Money(1);
+			MC->GetMoney()->Add_Money(1);
 
 			CheckUnit->Set_Status(0);
 		}
@@ -959,7 +959,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	else if (Unit_State_Id == 3)
 	{
 		SB->Play_Sound(SOUND_TAKE_COIN);
-		MC->Add_Money(5);
+		MC->GetMoney()->Add_Money(5);
 
 		CheckUnit->Set_Status(0);
 	}
@@ -1000,10 +1000,10 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Get_Distance_Move()->_Coord_X < -static_cast<int>(this->Get_DataWidth()) - 1)
 		{
-			Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
-			Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
+			Character.Get_Distance_Mid()->_Coord_X = Character.Get_Last_Distance_Mid()->_Coord_X;
+			Character.Get_Distance_Move()->_Coord_X = Character.Get_Last_Distance_Mid()->_Coord_X;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "LEFT RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
+			std::cout << "LEFT RES :" << this->_Last_Distance_Mid._Coord_X << std::endl;
 #endif
 		}
 		else
@@ -1021,10 +1021,10 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Get_Distance_Move()->_Coord_X > State_Data_Width)
 		{
-			Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
-			Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
+			Character.Get_Distance_Mid()->_Coord_X = Character.Get_Last_Distance_Mid()->_Coord_X;
+			Character.Get_Distance_Move()->_Coord_X = Character.Get_Last_Distance_Mid()->_Coord_X;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "RIGH RES :" << this->_Location_Distance_Mid._Coord_X << std::endl;
+			std::cout << "RIGH RES :" << this->_Last_Distance_Mid._Coord_X << std::endl;
 #endif
 		}
 		else
@@ -1043,10 +1043,10 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Get_Distance_Move()->_Coord_Y > this->Get_DataHeight() + 1)
 		{
-			Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			Character.Get_Distance_Mid()->_Coord_Y = Character.Get_Last_Distance_Mid()->_Coord_Y;
+			Character.Get_Distance_Move()->_Coord_Y = Character.Get_Last_Distance_Mid()->_Coord_Y;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "ABOV RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
+			std::cout << "ABOV RES :" << this->_Last_Distance_Mid._Coord_Y << std::endl;
 #endif
 		}
 		else
@@ -1064,10 +1064,10 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Get_Distance_Move()->_Coord_Y < -State_Data_Height)
 		{
-			Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
+			Character.Get_Distance_Mid()->_Coord_Y = Character.Get_Last_Distance_Mid()->_Coord_Y;
+			Character.Get_Distance_Move()->_Coord_Y = Character.Get_Last_Distance_Mid()->_Coord_Y;
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
-			std::cout << "DOWN RES :" << this->_Location_Distance_Mid._Coord_Y << std::endl;
+			std::cout << "DOWN RES :" << this->_Last_Distance_Mid._Coord_Y << std::endl;
 #endif
 		}
 		else
@@ -1182,13 +1182,13 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 		{
 		case CHECK_EDGE_LEFT:
 		case CHECK_EDGE_RIGH:
-			Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
-			Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Move._Coord_X;
+			Character.Get_Distance_Mid()->_Coord_X = Character.Get_Last_Distance_Mid()->_Coord_X;
+			Character.Get_Distance_Move()->_Coord_X = Character.Get_Last_Distance_Move()->_Coord_X;
 			break;
 		case CHECK_EDGE_BELO:
 		case CHECK_EDGE_ABOV:
-			Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-			Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Move._Coord_Y;
+			Character.Get_Distance_Mid()->_Coord_Y = Character.Get_Last_Distance_Mid()->_Coord_Y;
+			Character.Get_Distance_Move()->_Coord_Y = Character.Get_Last_Distance_Move()->_Coord_Y;
 			break;
 		}
 
@@ -1211,32 +1211,32 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 				switch (Check_Direction)
 				{
 				case CHECK_EDGE_LEFT:
-					this->_Location_Distance_Mid._Coord_X += Check_Range;
-					this->_Location_Distance_Move._Coord_X += Check_Range;
+					Character.Get_Last_Distance_Mid()->_Coord_X += Check_Range;
+					Character.Get_Last_Distance_Move()->_Coord_X += Check_Range;
 
-					Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
-					Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Move._Coord_X;
+					Character.Get_Distance_Mid()->_Coord_X = Character.Get_Last_Distance_Mid()->_Coord_X;
+					Character.Get_Distance_Move()->_Coord_X = Character.Get_Last_Distance_Move()->_Coord_X;
 					break;
 				case CHECK_EDGE_RIGH:
-					this->_Location_Distance_Mid._Coord_X -= Check_Range;
-					this->_Location_Distance_Move._Coord_X -= Check_Range;
+					Character.Get_Last_Distance_Mid()->_Coord_X -= Check_Range;
+					Character.Get_Last_Distance_Move()->_Coord_X -= Check_Range;
 
-					Character.Get_Distance_Mid()->_Coord_X = this->_Location_Distance_Mid._Coord_X;
-					Character.Get_Distance_Move()->_Coord_X = this->_Location_Distance_Move._Coord_X;
+					Character.Get_Distance_Mid()->_Coord_X = Character.Get_Last_Distance_Mid()->_Coord_X;
+					Character.Get_Distance_Move()->_Coord_X = Character.Get_Last_Distance_Move()->_Coord_X;
 					break;
 				case CHECK_EDGE_BELO:
-					this->_Location_Distance_Mid._Coord_Y += Check_Range;
-					this->_Location_Distance_Move._Coord_Y += Check_Range;
+					Character.Get_Last_Distance_Mid()->_Coord_Y += Check_Range;
+					Character.Get_Last_Distance_Move()->_Coord_Y += Check_Range;
 
-					Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-					Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Move._Coord_Y;
+					Character.Get_Distance_Mid()->_Coord_Y = Character.Get_Last_Distance_Mid()->_Coord_Y;
+					Character.Get_Distance_Move()->_Coord_Y = Character.Get_Last_Distance_Move()->_Coord_Y;
 					break;
 				case CHECK_EDGE_ABOV:
-					this->_Location_Distance_Mid._Coord_Y -= Check_Range;
-					this->_Location_Distance_Move._Coord_Y -= Check_Range;
+					Character.Get_Last_Distance_Mid()->_Coord_Y -= Check_Range;
+					Character.Get_Last_Distance_Move()->_Coord_Y -= Check_Range;
 
-					Character.Get_Distance_Mid()->_Coord_Y = this->_Location_Distance_Mid._Coord_Y;
-					Character.Get_Distance_Move()->_Coord_Y = this->_Location_Distance_Move._Coord_Y;
+					Character.Get_Distance_Mid()->_Coord_Y = Character.Get_Last_Distance_Mid()->_Coord_Y;
+					Character.Get_Distance_Move()->_Coord_Y = Character.Get_Last_Distance_Move()->_Coord_Y;
 					break;
 				}
 			}
@@ -1246,7 +1246,7 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 	}
 	else if (Reset)
 	{
-		std::cout << "Enter Adjust Map" << std::endl;
+		//std::cout << "Enter Adjust Map" << std::endl;
 
 		switch (Check_Direction)
 		{
@@ -1319,8 +1319,6 @@ void GameStateBase::Reset_Location()
 	this->_Current_Move = 0;
 	this->_New_Current_Loc = 0;
 	this->_Exac_Location = 0;
-	this->_Location_Distance_Mid = 0.0f;
-	this->_Location_Distance_Move = 0.0f;
 }
 
 GameStateBase::GameStateBase(int Width, int Height) :

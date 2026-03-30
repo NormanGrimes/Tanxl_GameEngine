@@ -5,7 +5,7 @@
 #include <Windows.h>
 
 const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "95" };
+const static std::string SubVersion{ "97" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -559,10 +559,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 				else if (LastStatus & 0x04)
 					this->_MotionS.at(2)->Idle_Image();
 				else if (LastStatus & 0x08)
-				{
-					std::cout << "SET IDLE IMAGE    " << LastStatus << std::endl;
 					this->_MotionS.at(3)->Idle_Image();
-				}
 			}
 			if (Insert_Status != 0)
 				LastStatus = Insert_Status;
@@ -631,7 +628,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->GetMoney()->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 
 	if (!Character->GetHealth()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
@@ -687,7 +684,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	{
 		_Draw_Status = 3;
 		IEB->Set_Key_Enable(false);
-		Character->Pay_Money(Character->Get_Money());
+		Character->GetMoney()->Pay_Money(Character->GetMoney()->Get_Money());
 	}
 
 	if (!glfwWindowShouldClose(_Main_Window))

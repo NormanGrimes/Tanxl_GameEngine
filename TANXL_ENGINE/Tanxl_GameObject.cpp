@@ -99,56 +99,52 @@ std::string Componment_Base::GetName()
 }
 
 GameObject::GameObject(int Max_Health, int Current_Health, bool Unable_Damage)
-	:_Character_Data(), _Health_Componment(Max_Health, Current_Health, Unable_Damage), _Money_Componment(0)
-{
-	this->_Last_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
-	this->_Distance_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
-	this->_Distance_Mid = new Tanxl_Coord<float>(0.0f, 0.0f);
-}
-
-void GameObject::Add_Money(int Money)
-{
-	this->_Money_Componment.Add_Money(Money);
-}
-
-bool GameObject::Pay_Money(int Price)
-{
-	return this->_Money_Componment.Pay_Money(Price);
-}
-
-int GameObject::Get_Money()
-{
-	return this->_Money_Componment.Get_Money();
-}
+	:_Character_Data(), _Health_Componment(Max_Health, Current_Health, Unable_Damage), _Money_Componment(0),
+	_Last_Move(0.0f, 0.0f), _Distance_Move(0.0f, 0.0f), _Distance_Mid(0.0f, 0.0f),
+	_Last_Distance_Mid(0.0f, 0.0f), _Last_Distance_Move(0.0f, 0.0f) {}
 
 void GameObject::Reset_Data()
 {
-	delete this->_Last_Move;
-	this->_Last_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
-	delete this->_Distance_Mid;
-	this->_Distance_Mid = new Tanxl_Coord<float>(0.0f, 0.0f);
-	delete this->_Distance_Move;
-	this->_Distance_Move = new Tanxl_Coord<float>(0.0f, 0.0f);
+	this->_Last_Move = 0.0f;
+	this->_Distance_Mid = 0.0f;
+	this->_Distance_Move = 0.0f;
+	this->_Last_Distance_Mid = 0.0f;
+	this->_Last_Distance_Move = 0.0f;
 }
 
 Tanxl_Coord<float>* GameObject::Get_Last_Move()
 {
-	return this->_Last_Move;
+	return &this->_Last_Move;
 }
 
 Tanxl_Coord<float>* GameObject::Get_Distance_Move()
 {
-	return this->_Distance_Move;
+	return &this->_Distance_Move;
 }
 
 Tanxl_Coord<float>* GameObject::Get_Distance_Mid()
 {
-	return this->_Distance_Mid;
+	return &this->_Distance_Mid;
+}
+
+Tanxl_Coord<float>* GameObject::Get_Last_Distance_Mid()
+{
+	return &this->_Last_Distance_Mid;
+}
+
+Tanxl_Coord<float>* GameObject::Get_Last_Distance_Move()
+{
+	return &this->_Last_Distance_Move;
 }
 
 Health_Componment* GameObject::GetHealth()
 {
 	return &this->_Health_Componment;
+}
+
+Money_Componment* GameObject::GetMoney()
+{
+	return &this->_Money_Componment;
 }
 
 GameObjectBase& GameObjectBase::GetObjectBase()
@@ -202,4 +198,47 @@ bool Componment_Unite::Remove()
 {
 	_Object_Content.erase(this->_Object_Content.begin(), this->_Object_Content.end());
 	return true;
+}
+
+Coord_Componment::Coord_Componment() :Componment_Base("Coord"), _Last_Move(0.0f, 0.0f), _Distance_Move(0.0f, 0.0f),
+_Distance_Mid(0.0f, 0.0f), _Last_Distance_Mid(0.0f, 0.0f), _Last_Distance_Move(0.0f, 0.0f) {}
+
+void Coord_Componment::Reset_Data()
+{
+	this->_Last_Move = 0.0f;
+	this->_Distance_Mid = 0.0f;
+	this->_Distance_Move = 0.0f;
+	this->_Last_Distance_Mid = 0.0f;
+	this->_Last_Distance_Move = 0.0f;
+}
+
+void Coord_Componment::Update_Last_Location()
+{
+	this->_Last_Distance_Mid = this->_Distance_Mid;
+	this->_Last_Distance_Move = this->_Distance_Move;
+}
+
+Tanxl_Coord<float>* Coord_Componment::Get_Last_Move()
+{
+	return &this->_Last_Move;
+}
+
+Tanxl_Coord<float>* Coord_Componment::Get_Distance_Move()
+{
+	return &this->_Distance_Move;
+}
+
+Tanxl_Coord<float>* Coord_Componment::Get_Distance_Mid()
+{
+	return &this->_Distance_Mid;
+}
+
+Tanxl_Coord<float>* Coord_Componment::Get_Last_Distance_Mid()
+{
+	return &this->_Last_Distance_Mid;
+}
+
+Tanxl_Coord<float>* Coord_Componment::Get_Last_Distance_Move()
+{
+	return &this->_Last_Distance_Move;
 }
