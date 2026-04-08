@@ -91,15 +91,15 @@ int main()
 		"0-2,0-3,0-1,1-2,0-1,0-1,1-2,0-1,0-3,0-2,"
 		"0-3,0-2,1-2,0-2,0-2,0-2,0-2,1-2,0-2,0-3,");
 
-	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_01);
-	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_02);
-	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_03);
-	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_04);
-	TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_BACKGROUND_05);
+	TGE.Engine_Sound_Add_BackGround("music/Game_BackGround_01.mp3");
+	TGE.Engine_Sound_Add_BackGround("music/Game_BackGround_02.mp3");
+	TGE.Engine_Sound_Add_BackGround("music/Game_BackGround_03.mp3");
+	TGE.Engine_Sound_Add_BackGround("music/Game_BackGround_04.mp3");
+	TGE.Engine_Sound_Add_BackGround("music/Game_BackGround_05.mp3");
 
 	while (1)
 	{
-		TGE.Engine_Sound_Add_BackGround(ESound_WAV::SOUND_NO_SOUND, true);
+		TGE.Engine_Sound_Add_BackGround("", true);
 
 		TGE.Engine_Insert_State_Update();//Key Insert
 
@@ -114,7 +114,7 @@ int main()
 			exit(0);
 		}
 
-		if (!TGE.Engine_Object_Get_Character()->GetHealth()->Is_Alive())
+		if (!TGE.Engine_Object_Get_Character()->Health()->Is_Alive())
 		{
 			std::cout << "Reset the game !" << std::endl;
 			TGE.Engine_Save_Reset_Data();
@@ -176,7 +176,7 @@ int main()
 				"0-2,0-3,0-1,1-2,0-1,0-1,1-2,0-1,0-3,0-2,"
 				"0-3,0-2,1-2,0-2,0-2,0-2,0-2,1-2,0-2,0-3,");
 
-			TGE.Engine_Object_Get_Character()->GetHealth()->Set_Health(7, 11);
+			TGE.Engine_Object_Get_Character()->Health()->Set_Health(7, 11);
 			std::cout << "Reset Finish !" << std::endl;
 		}
 

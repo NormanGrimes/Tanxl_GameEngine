@@ -109,7 +109,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 6, 0.6f);//HP UI MoveX
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 7, 0.9f);//HP UI MoveY
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, Character->GetHealth()->Get_MaxHealth() + 2);//Health Init
+	glProgramUniform1i(this->_Adjst_RenderingProgram, 8, Character->Health()->Get_MaxHealth() + 2);//Health Init
 	glProgramUniform1f(this->_Adjst_RenderingProgram, 9, this->_Health_Image_Margin);
 	glProgramUniform1i(this->_Adjst_RenderingProgram, 10, 0);//Insert Status
 
@@ -292,14 +292,14 @@ void OpenGL_Draw::init_StateData(GameStateBase* State)
 	float Half_Width{ (this->_Scene_Int._Coord_X - 1) / 2.0f };
 	float Half_Height{ (this->_Scene_Int._Coord_Y - 1) / 2.0f };
 
-	Character->Get_Distance_Move()->_Coord_X = (2.0f / this->_Scene_Int._Coord_X) * Half_Width + (1.0f / this->_Scene_Int._Coord_X) * (8 - this->_PreLoads);
-	Character->Get_Distance_Move()->_Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
+	Character->Coord()->Get_Distance_Move()->_Coord_X = (2.0f / this->_Scene_Int._Coord_X) * Half_Width + (1.0f / this->_Scene_Int._Coord_X) * (8 - this->_PreLoads);
+	Character->Coord()->Get_Distance_Move()->_Coord_Y = -(2.0f / this->_Scene_Int._Coord_Y) * Half_Height - (1.0f / this->_Scene_Int._Coord_Y) * (8 - this->_PreLoads);
 
 	State->Get_Square_State().Set_State_Length(this->_Scene_Int._Coord_X, this->_Scene_Int._Coord_Y);
 	State->Get_Square_State().Set_Move_State(this->_Pre_Move._Coord_X, this->_Pre_Move._Coord_Y, this->_PreLoads);
 
-	Character->Get_Distance_Move()->_Coord_X += static_cast<float>((this->_Pre_Move._Coord_X - 4) * State->Get_Each_Width());
-	Character->Get_Distance_Move()->_Coord_Y -= static_cast<float>((this->_Pre_Move._Coord_Y - 4) * State->Get_Each_Height());
+	Character->Coord()->Get_Distance_Move()->_Coord_X += static_cast<float>((this->_Pre_Move._Coord_X - 4) * State->Get_Each_Width());
+	Character->Coord()->Get_Distance_Move()->_Coord_Y -= static_cast<float>((this->_Pre_Move._Coord_Y - 4) * State->Get_Each_Height());
 
 	this->Set_Max_Middle_Frame(200);
 
@@ -463,7 +463,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	{
 		if (this->_Middle_Frame == 0)
 		{
-			SB->Play_Sound(SOUND_GAME_START);
+			SB->Play_Sound("music/Game_Start.wav");
 		}
 		this->_Middle_Frame += this->_Delta_Time * 100;
 		if (VersionFontSize > -800.0f)
@@ -479,7 +479,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
-			Character->GetHealth()->Set_Health(5, 11);
+			Character->Health()->Set_Health(5, 11);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
@@ -490,7 +490,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->GetHealth()->Check_Health() + 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 2) * 6);
 		}
 		else
 		{
@@ -515,7 +515,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 			Update_VertData(this->_StateInfor);
-			Character->GetHealth()->Set_Health(5, 11);
+			Character->Health()->Set_Health(5, 11);
 			this->_Game_Status = GAME_START_MENU;
 		}
 		else
@@ -531,7 +531,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->GetHealth()->Check_Health() + 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 2) * 6);
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -569,7 +569,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			_Draw_Status = 4;
 			this->_Game_Status = GAME_PLAYER_DEAD;
-			SB->Play_Sound(SOUND_GAME_OVER);
+			SB->Play_Sound("music/Game_Over.wav");
 			SB->Random_BackGround_Music();
 			Tips->Update_Count();
 		}
@@ -585,7 +585,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
 
 		glUseProgram(_Adjst_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (Character->GetHealth()->Check_Health() + 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 2) * 6);
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -628,9 +628,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->GetMoney()->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 750.0f, 630.0f, 0.7f, 1);
 
-	if (!Character->GetHealth()->Is_Alive())
+	if (!Character->Health()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
 
 	if (VersionFontSize > -800.0f)
@@ -680,11 +680,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		}
 	}
 
-	if ((!Character->GetHealth()->Is_Alive()) && (_Draw_Status != 3) && (_Draw_Status != 4))
+	if ((!Character->Health()->Is_Alive()) && (_Draw_Status != 3) && (_Draw_Status != 4))
 	{
 		_Draw_Status = 3;
 		IEB->Set_Key_Enable(false);
-		Character->GetMoney()->Pay_Money(Character->GetMoney()->Get_Money());
+		Character->Money()->Pay_Money(Character->Money()->Get_Money());
 	}
 
 	if (!glfwWindowShouldClose(_Main_Window))

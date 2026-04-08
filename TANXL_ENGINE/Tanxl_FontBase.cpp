@@ -62,13 +62,13 @@ void FontBase::Init_Fonts(std::string Font_Path)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// Now store character for later use
-		Character character{
+		SCharacter character{
 			texture,
 			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			static_cast<GLuint>(face->glyph->advance.x)
 		};
-		_Characters[_Internal_Font_Counts].insert(std::pair<GLuint, Character>(c, character));
+		_Characters[_Internal_Font_Counts].insert(std::pair<GLuint, SCharacter>(c, character));
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	_Internal_Font_Counts++;
@@ -136,7 +136,7 @@ void FontBase::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale,
 	std::wstring wText{ std::wstring(text.begin(),text.end()) };
 	for (std::wstring::const_iterator c{ wText.begin() }; c != wText.end(); ++c)
 	{
-		Character ch{ (this->Get_Characters(Font_Id))[*c] };// Characters[*c];
+		SCharacter ch{ (this->Get_Characters(Font_Id))[*c] };// Characters[*c];
 
 		GLfloat xpos{ x + ch.Bearing.x * scale };
 		GLfloat ypos{ y - (ch.Size.y - ch.Bearing.y) * scale };
@@ -173,7 +173,7 @@ ECurren_Language FontBase::Get_Language() const
 	return this->_Internal_Language;
 }
 
-std::map<wchar_t, Character> FontBase::Get_Characters(int Id)
+std::map<wchar_t, SCharacter> FontBase::Get_Characters(int Id)
 {
 	if (Id > _Internal_Font_Counts - 1)
 		Id = _Internal_Font_Counts - 1;

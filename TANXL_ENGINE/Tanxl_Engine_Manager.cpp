@@ -328,7 +328,7 @@ void Tanxl_Engine::Engine_Event_State_Regist(std::string Name, int LocationX, in
 	this->Tanxl_Engine_GameEvent->RegistEvent(new State_ChangeEvent(Name, LocationX, LocationY, Cover_String));
 }
 
-void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV SoundName)
+void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, std::string SoundName)
 {
 	if (Enable_Current)
 		Tanxl_Engine_SoundBase->Play_Sound(SoundName);
@@ -336,18 +336,15 @@ void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV Sound
 		Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_EVENT);
 }
 
-void Tanxl_Engine::Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable_Play)
+void Tanxl_Engine::Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play)
 {
-	if (SoundName != SOUND_NO_SOUND)
+	if (SoundName != "")
 		this->Tanxl_Engine_SoundBase->Append_BackGround_Music(SoundName);
 	if (Enable_Play)
 	{
 		if (this->Tanxl_Engine_OpenGL_Draw->Get_Game_Status() == GAME_PLAYER_ACTIVE)
 		{
-			if (!this->Tanxl_Engine_SoundBase->BackGround_Playing())
-			{
-				this->Tanxl_Engine_SoundBase->Play_BackGround_Music();
-			}
+			this->Tanxl_Engine_SoundBase->Play_BackGround_Music();
 		}
 		else
 		{

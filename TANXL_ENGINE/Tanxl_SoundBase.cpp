@@ -16,32 +16,12 @@ void SoundBase::Play_Sound(std::string Wav_File_Location, ESoundEngine_ID SoundE
 	this->_SoundEngine[SoundEngine_Id]->play2D(Wav_File_Location.c_str());
 }
 
-void SoundBase::Play_Sound(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id)
-{
-#if _ENABLE_SOUNDBASE_DEBUG_MODE_
-	std::cout << "Play Sound Id: " << Sound_Name << " Sound Name : " << this->_Sound_Names[Sound_Name] << std::endl;
-#endif
-	if (Sound_Name == ESound_WAV::SOUND_NO_SOUND)
-		return;
-	this->_SoundEngine[SoundEngine_Id]->play2D(this->_Sound_Names[Sound_Name].c_str());
-}
-
 void SoundBase::Append_BackGround_Music(std::string Wav_File_Location)
 {
 #if _ENABLE_SOUNDBASE_DEBUG_MODE_
 	std::cout << "Append BGM : " << Wav_File_Location << std::endl;
 #endif
 	this->_BackGround_Music_List.push_back(Wav_File_Location);
-}
-
-void SoundBase::Append_BackGround_Music(ESound_WAV Sound_Name)
-{
-#if _ENABLE_SOUNDBASE_DEBUG_MODE_
-	std::cout << "Append BGM : " << this->_Sound_Names[Sound_Name] << std::endl;
-#endif
-	if (Sound_Name == ESound_WAV::SOUND_NO_SOUND)
-		return;
-	this->_BackGround_Music_List.push_back(this->_Sound_Names[Sound_Name]);
 }
 
 void SoundBase::Stop_Sound(ESoundEngine_ID SoundEngine_Id)
@@ -64,9 +44,6 @@ void SoundBase::Stop_AllSound()
 	this->_SoundEngine[SOUND_ENGINE_BACKGROUND]->stopAllSounds();
 
 	this->_BackGround_Music_Playing = false;
-
-	this->_SoundEngine[SOUND_ENGINE_EVENT]->setSoundVolume(1.0f);
-	this->_SoundEngine[SOUND_ENGINE_BACKGROUND]->setSoundVolume(0.3f);
 }
 
 void SoundBase::Play_BackGround_Music(int Begin_Id)
@@ -108,6 +85,11 @@ void SoundBase::Set_SoundVolume(ESoundEngine_ID SoundEngine_Id, float Volume)
 	this->_SoundEngine[SoundEngine_Id]->setSoundVolume(Volume);
 }
 
+void SoundBase::Notify(int SoundEvent)
+{
+	this->_SoundCheck.Notify(SoundEvent);
+}
+
 bool SoundBase::Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id)
 {
 #if _ENABLE_SOUNDBASE_DEBUG_MODE_
@@ -116,29 +98,9 @@ bool SoundBase::Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID Sou
 	return this->_SoundEngine[SoundEngine_Id]->isCurrentlyPlaying(Wav_File_Location.c_str());
 }
 
-bool SoundBase::Sound_Playing(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id)
-{
-#if _ENABLE_SOUNDBASE_DEBUG_MODE_
-	std::cout << "Check Sound " << Sound_Name << " " << this->_SoundEngine[SoundEngine_Id]->isCurrentlyPlaying(this->_Sound_Names[Sound_Name].c_str()) << std::endl;
-#endif
-	if (Sound_Name == ESound_WAV::SOUND_NO_SOUND)
-		return false;
-	return this->_SoundEngine[SoundEngine_Id]->isCurrentlyPlaying(this->_Sound_Names[Sound_Name].c_str());
-}
-
 bool SoundBase::BackGround_Playing() const
 {
 	return this->_BackGround_Music_Playing;
-}
-
-ESound_WAV SoundBase::Sound_Playing_Id(ESoundEngine_ID SoundEngine_Id)
-{
-	for (int i{ 0 }; i < 8; ++i)
-	{
-		if (this->Sound_Playing(ESound_WAV(i)))
-			return ESound_WAV(i);
-	}
-	return ESound_WAV::SOUND_NO_SOUND;
 }
 
 const std::string SoundBase::Get_Version()
@@ -153,16 +115,15 @@ _BackGround_Music_Playing(false), _Current_BackGround_Id(0)
 	_SoundEngine[1] = irrklang::createIrrKlangDevice();
 	this->_SoundEngine[1]->setSoundVolume(0.3f);
 
-	_SoundCheck.Add_Observer(new Sound_Observer(0, SOUND_GAME_START, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(1, SOUND_GAME_OVER, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(2, SOUND_TAKE_DAMAGE, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(3, SOUND_RESTORE_HEALTH, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(4, SOUND_MOUSE_CLICK, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(5, SOUND_MOUSE_CLICK_RIGHT, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(6, SOUND_TAKE_COIN, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(7, SOUND_ACHIEVEMENT, this));
-	_SoundCheck.Add_Observer(new Sound_Observer(8, SOUND_SECRET_CORE, this));
-
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_GAME_START, "music/Game_Start.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_GAME_OVER, "music/Game_Over.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_TAKE_DAMAGE, "music/Game_Take_Damage.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_RESTORE_HEALTH, "music/Game_Event_Restore_Health.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_MOUSE_CLICK, "music/Game_Mouse_Click_Right.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_MOUSE_CLICK_RIGHT, "music/Game_Mouse_Click_Right.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_TAKE_COIN, "music/Game_Take_Coin.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_ACHIEVEMENT, "music/Game_Achievement_Unlock.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_SECRET_CORE, "music/Game_Event_Secret_Core.wav", this));
 }
 
 SoundBase::~SoundBase() 
@@ -172,11 +133,6 @@ SoundBase::~SoundBase()
 }
 
 SoundBase::SoundBase(const SoundBase&) : Tanxl_ClassBase("0.1"), _BackGround_Music_List(),
-_BackGround_Music_Playing(false), _Current_BackGround_Id(0) 
-{
-	_SoundEngine[0] = irrklang::createIrrKlangDevice();
-	_SoundEngine[1] = irrklang::createIrrKlangDevice();
-	this->_SoundEngine[1]->setSoundVolume(0.3f);
-}
+_BackGround_Music_Playing(false), _Current_BackGround_Id(0) {}
 
 SoundBase& SoundBase::operator=(const SoundBase&) { return *this; }

@@ -34,6 +34,10 @@
 // 新增鼠标右键点击的音频
 // 增加错误调试模式
 // 停止音频接口不再调整音量
+// 禁用存在问题的波形文件
+// 移除音频枚举以及所有枚举涉及的接口
+// 移除内部记录音频路径的成员
+// 增加音频事件通知接口
 
 #pragma once
 
@@ -48,7 +52,7 @@
 #include "Tanxl_RandomBase.h"
 #include "Tanxl_GameEvent.h"
 
-#define _ENABLE_SOUNDBASE_DEBUG_MODE_ 1
+#define _ENABLE_SOUNDBASE_DEBUG_MODE_ 0
 
 enum ESoundEngine_ID
 {
@@ -84,11 +88,7 @@ public:
 
     void Play_Sound(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
-    void Play_Sound(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
-
     void Append_BackGround_Music(std::string Wav_File_Location);
-
-    void Append_BackGround_Music(ESound_WAV Sound_Name);
     // 停止指定声音引擎的声音播放
     void Stop_Sound(ESoundEngine_ID SoundEngine_Id);
     // 停止所有声音引擎的播放
@@ -100,36 +100,16 @@ public:
 
     void Set_SoundVolume(ESoundEngine_ID SoundEngine_Id, float Volume);
 
+    void Notify(int SoundEvent);
+
     bool Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
-    bool Sound_Playing(ESound_WAV Sound_Name, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
-
     bool BackGround_Playing() const;
-
-    ESound_WAV Sound_Playing_Id(ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
     const std::string Get_Version();
 
 private:
     irrklang::ISoundEngine* _SoundEngine[2];
-
-    std::string _Sound_Names[14]
-    { 
-        "music/Game_Start.wav", 
-        "music/Game_Over.wav",
-        "music/Game_Take_Damage.wav",
-        "music/Game_Event_Restore_Health.wav" ,
-        "music/Game_Mouse_Click.wav",
-        "music/Game_Mouse_Click_Right.wav",
-        "music/Game_Take_Coin.wav",
-        "music/Game_Achievement_Unlock.wav",
-        "music/Game_Event_Secret_Core.wav",
-        "music/Game_BackGround_01.mp3",
-        "music/Game_BackGround_02.mp3",
-        "music/Game_BackGround_03.mp3",
-        "music/Game_BackGround_04.mp3",
-        "music/Game_BackGround_05.mp3"
-    };
 
     std::vector<std::string> _BackGround_Music_List;
 
@@ -147,7 +127,7 @@ private:
 class Sound_Observer : public Event_Observer<int>
 {
 public:
-    Sound_Observer(int Event_Id, ESound_WAV Sound_Name, SoundBase* Sound_Engine) :
+    Sound_Observer(int Event_Id, std::string Sound_Name, SoundBase* Sound_Engine) :
         _Event_Id(Event_Id), _Sound_Name(Sound_Name), _Sound_Engine(Sound_Engine) {}
 
     virtual void EventCheck(int& Event_Id)
@@ -158,7 +138,7 @@ public:
 
 private:
     int _Event_Id;
-    ESound_WAV _Sound_Name;
+    std::string _Sound_Name;
     SoundBase* _Sound_Engine;
 };
 

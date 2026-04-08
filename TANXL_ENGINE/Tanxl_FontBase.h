@@ -37,7 +37,7 @@ enum EFontSet
 	kremlinPremierRegular
 };
 
-struct Character
+struct SCharacter
 {
 	GLuint     TextureID;  // 字形纹理ID
 	glm::ivec2 Size;       // 字形大小
@@ -66,7 +66,7 @@ public:
 
 	ECurren_Language Get_Language() const;
 
-	std::map<wchar_t, Character> Get_Characters(int Id);
+	std::map<wchar_t, SCharacter> Get_Characters(int Id);
 
 	const std::string Get_Version();
 
@@ -88,7 +88,7 @@ private:
 		"Fonts/kremlin-premier.regular.ttf"
 	};
 
-	std::map<wchar_t, Character> _Characters[5];
+	std::map<wchar_t, SCharacter> _Characters[5];
 
 	glm::vec3 _Font_Color{ 0.0f, 0.0f, 0.0f };
 	GLuint _Font_VAO{};

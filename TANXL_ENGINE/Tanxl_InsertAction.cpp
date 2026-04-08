@@ -40,15 +40,14 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	int PressStatus{ 0 };
 	double MoveScale{ OPD->Get_DeltaTime() };
-	State->Update_Last_Location(Character);
+	Character.Coord()->Update_Last_Location();
 
 	if (this->_Is_Key_Enable == false)
 		return;
 
 	this->_Insert_Move_Length = 0.0f;
 
-	Character.Get_Last_Move()->_Coord_X = 0.0f;
-	Character.Get_Last_Move()->_Coord_Y = 0.0f;
+	*Character.Coord()->Get_Last_Move() = 0.0f;
 
 	if (this->_KeyNameS.size() == 0)
 		return;
@@ -75,11 +74,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 	{
 		this->_Insert_Status |= 1;
 	}
-	if (this->_Insert_Move_Length._Coord_X > 0)
-	{
-		this->_Insert_Status |= 2;
-	}
-	if (this->_Insert_Move_Length._Coord_Y > 0)
+	else if (this->_Insert_Move_Length._Coord_Y > 0)
 	{
 		this->_Insert_Status |= 4;
 	}
@@ -87,12 +82,16 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 	{
 		this->_Insert_Status |= 8;
 	}
+	else if (this->_Insert_Move_Length._Coord_X > 0)
+	{
+		this->_Insert_Status |= 2;
+	}
+	
+	*Character.Coord()->Get_Last_Move() += this->_Insert_Move_Length;
+	*Character.Coord()->Get_Distance_Move() += this->_Insert_Move_Length;
+	*Character.Coord()->Get_Distance_Mid() += this->_Insert_Move_Length;
 
-	*Character.Get_Last_Move() += this->_Insert_Move_Length;
-	*Character.Get_Distance_Move() += this->_Insert_Move_Length;
-	*Character.Get_Distance_Mid() += this->_Insert_Move_Length;
-
-	AutoCheck(*Character.Get_Distance_Mid(), *Character.Get_Distance_Move());
+	AutoCheck(*Character.Coord()->Get_Distance_Mid(), *Character.Coord()->Get_Distance_Move());
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_
 	std::cout << "Move Distance X :" << *Character.Get_Distance_Move()._Coord_X << " -  Y :" << *Character.Get_Distance_Move()._Coord_Y << std::endl;
 #endif
@@ -117,7 +116,7 @@ void InsertEventBase::GetMouseInput(GLFWwindow* window)
 	{
 		if (LastMouseStatus_1 == GLFW_PRESS)
 		{
-			SB->Play_Sound(SOUND_MOUSE_CLICK);
+			SB->Play_Sound("music/Game_Mouse_Click.wav");
 			std::cout << "Mouse 1 Press" << std::endl;
 			Tips->Update_Count();
 			_Is_Key_Pressed = true;
@@ -127,7 +126,7 @@ void InsertEventBase::GetMouseInput(GLFWwindow* window)
 	{
 		if (LastMouseStatus_2 == GLFW_PRESS)
 		{
-			SB->Play_Sound(SOUND_MOUSE_CLICK_RIGHT);
+			SB->Play_Sound("music/Game_Mouse_Click_Right.wav");
 			std::cout << "Mouse 2 Press" << std::endl;
 			Tips->Update_Count();
 			_Is_Key_Pressed = true;

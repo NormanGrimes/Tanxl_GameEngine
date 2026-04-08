@@ -147,11 +147,11 @@ public:
 	//用于注册移动指定区域触发的地图替换功能 Name为事件名称 LocationX/LocationY为替换的区域坐标 Cover_String为替换的地图数据
 	void Engine_Event_State_Regist(std::string Name, int LocationX, int LocationY, std::string Cover_String);
 
-	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐枚举
-	void Engine_Sound_Play_Sound(bool Enable_Current, ESound_WAV SoundName);
+	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐路径
+	void Engine_Sound_Play_Sound(bool Enable_Current, std::string SoundName);
 
 	//用于添加指定的内部音乐作为背景音乐 Enable_Play用于启用或关闭背景音乐的播放
-	void Engine_Sound_Add_BackGround(ESound_WAV SoundName, bool Enable_Play = false);
+	void Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play = false);
 
 	//设置当前系统显示语言 Language用于指定语言枚举
 	void Engine_System_Set_Language(ECurren_Language Language);

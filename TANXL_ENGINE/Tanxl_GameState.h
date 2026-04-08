@@ -4,6 +4,7 @@
 // 地图边缘移动接口增加速度比率参数
 // 单个地图区块的长度数据合并为一个变量
 // 转移物品上次移动的变量的控制权
+// 移除更新上次移动的接口
 
 #pragma once
 
@@ -217,7 +218,6 @@ public:
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
 	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
 	void Move_State(EMove_State_EventId Direction, int Times);
-	void Update_Last_Location(GameObject& Character);
 	void State_Check_Event(GameObject& Character);
 	void HitEdge_Check(GameObject& Character);
 	//↓Move_Adjust : 根据移动位置将背景地图向某一方向微调一个或多个地图单元

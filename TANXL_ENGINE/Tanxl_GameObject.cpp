@@ -100,49 +100,20 @@ std::string Componment_Base::GetName()
 
 GameObject::GameObject(int Max_Health, int Current_Health, bool Unable_Damage)
 	:_Character_Data(), _Health_Componment(Max_Health, Current_Health, Unable_Damage), _Money_Componment(0),
-	_Last_Move(0.0f, 0.0f), _Distance_Move(0.0f, 0.0f), _Distance_Mid(0.0f, 0.0f),
-	_Last_Distance_Mid(0.0f, 0.0f), _Last_Distance_Move(0.0f, 0.0f) {}
+	_Coord_Componment() {}
 
-void GameObject::Reset_Data()
+
+Coord_Componment* GameObject::Coord()
 {
-	this->_Last_Move = 0.0f;
-	this->_Distance_Mid = 0.0f;
-	this->_Distance_Move = 0.0f;
-	this->_Last_Distance_Mid = 0.0f;
-	this->_Last_Distance_Move = 0.0f;
+	return &this->_Coord_Componment;
 }
 
-Tanxl_Coord<float>* GameObject::Get_Last_Move()
-{
-	return &this->_Last_Move;
-}
-
-Tanxl_Coord<float>* GameObject::Get_Distance_Move()
-{
-	return &this->_Distance_Move;
-}
-
-Tanxl_Coord<float>* GameObject::Get_Distance_Mid()
-{
-	return &this->_Distance_Mid;
-}
-
-Tanxl_Coord<float>* GameObject::Get_Last_Distance_Mid()
-{
-	return &this->_Last_Distance_Mid;
-}
-
-Tanxl_Coord<float>* GameObject::Get_Last_Distance_Move()
-{
-	return &this->_Last_Distance_Move;
-}
-
-Health_Componment* GameObject::GetHealth()
+Health_Componment* GameObject::Health()
 {
 	return &this->_Health_Componment;
 }
 
-Money_Componment* GameObject::GetMoney()
+Money_Componment* GameObject::Money()
 {
 	return &this->_Money_Componment;
 }
@@ -216,6 +187,41 @@ void Coord_Componment::Update_Last_Location()
 {
 	this->_Last_Distance_Mid = this->_Distance_Mid;
 	this->_Last_Distance_Move = this->_Distance_Move;
+}
+
+void Coord_Componment::Move_To(int Direction, float Range)
+{
+	switch (Direction)
+	{
+	case 1:
+		this->_Last_Distance_Mid._Coord_X += Range;
+		this->_Last_Distance_Move._Coord_X += Range;
+
+		this->_Distance_Mid._Coord_X = this->_Last_Distance_Mid._Coord_X;
+		this->_Distance_Move._Coord_X = this->_Last_Distance_Move._Coord_X;
+		break;
+	case 2:
+		this->_Last_Distance_Mid._Coord_X -= Range;
+		this->_Last_Distance_Move._Coord_X -= Range;
+
+		this->_Distance_Mid._Coord_X = this->_Last_Distance_Mid._Coord_X;
+		this->_Distance_Move._Coord_X = this->_Last_Distance_Move._Coord_X;
+		break;
+	case 3:
+		this->_Last_Distance_Mid._Coord_Y += Range;
+		this->_Last_Distance_Move._Coord_Y += Range;
+
+		this->_Distance_Mid._Coord_Y = this->_Last_Distance_Mid._Coord_Y;
+		this->_Distance_Move._Coord_Y = this->_Last_Distance_Move._Coord_Y;
+		break;
+	case 4:
+		this->_Last_Distance_Mid._Coord_Y -= Range;
+		this->_Last_Distance_Move._Coord_Y -= Range;
+
+		this->_Distance_Mid._Coord_Y = this->_Last_Distance_Mid._Coord_Y;
+		this->_Distance_Move._Coord_Y = this->_Last_Distance_Move._Coord_Y;
+		break;
+	}
 }
 
 Tanxl_Coord<float>* Coord_Componment::Get_Last_Move()

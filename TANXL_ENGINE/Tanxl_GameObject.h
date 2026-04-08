@@ -47,6 +47,8 @@
 // 游戏物品类中的坐标成员改为实例
 // 移除物品类的多个金币接口改为直接获取组件
 // 新增移动坐标组件类
+// 坐标组件替换物品类中原有的数据
+// 坐标组件新增移动接口
 
 #pragma once
 
@@ -116,6 +118,7 @@ public:
 
 	void Reset_Data();
 	void Update_Last_Location();
+	void Move_To(int Direction, float Range);
 
 	Tanxl_Coord<float>* Get_Last_Move();
 	Tanxl_Coord<float>* Get_Distance_Move();
@@ -182,33 +185,16 @@ class GameObject
 public:
 	GameObject(int Max_Health, int Current_Health, bool Unable_Damage = false);
 
-	void Reset_Data();
-	
-	Tanxl_Coord<float>* Get_Last_Move();
-	Tanxl_Coord<float>* Get_Distance_Move();
-	Tanxl_Coord<float>* Get_Distance_Mid();
-	Tanxl_Coord<float>* Get_Last_Distance_Mid();
-	Tanxl_Coord<float>* Get_Last_Distance_Move();
-
-	Health_Componment* GetHealth();
-	Money_Componment* GetMoney();
+	Coord_Componment* Coord();
+	Health_Componment* Health();
+	Money_Componment* Money();
 
 private:
 	Character_Data _Character_Data;
 
+	Coord_Componment _Coord_Componment;
 	Health_Componment _Health_Componment;
 	Money_Componment _Money_Componment;
-
-	//_Last_Move 用于记录上次移动距离
-	Tanxl_Coord<float> _Last_Move;
-	//_Distance_Move 用于记录当前相对于原点的移动距离
-	Tanxl_Coord<float> _Distance_Move;
-	//_Distance_Mid 用于记录当前距离屏幕显示区域地图中心点的距离 取值范围0.0 ~ 1.0
-	Tanxl_Coord<float> _Distance_Mid;
-	//_Last_Distance_Mid 上一次有效的方块离中心点的距离
-	Tanxl_Coord<float> _Last_Distance_Mid;
-	//_Last_Distance_Move 上一次有效的方块移动距离
-	Tanxl_Coord<float> _Last_Distance_Move;
 };
 
 //GameObjectBase
