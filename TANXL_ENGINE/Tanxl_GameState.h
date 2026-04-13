@@ -5,16 +5,19 @@
 // 单个地图区块的长度数据合并为一个变量
 // 转移物品上次移动的变量的控制权
 // 移除更新上次移动的接口
+// 优化减少地图微调接口需要的参数
+// 优化地图区块的设置流程
 
 #pragma once
 
 #ifndef _TANXL_GAMESTATE_
 #define _TANXL_GAMESTATE_
 
-#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 1
+#define _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_ 0
 
 #if _ENABLE_TANXL_GAMESTATE_CONSOLE_OUTPUT_
 
+#include <iostream>
 #define _TANXL_GAMESTATE_SETEXAC_LOCATION_OUTPUT_     0
 #define _TANXL_GAMESTATE_UPDATE_MOVE_OUTPUT_          0
 #define _TANXL_GAMESTATE_TRIGGER_LIMIT_CHECK_OUTPUT_  0
@@ -28,7 +31,6 @@
 
 #endif
 
-#include <iostream>
 #include <iomanip>
 
 #include "Tanxl_GameEvent.h"
@@ -236,8 +238,8 @@ public:
 	//↓Get_StateHeight : 获取当前需要绘制的State的高/宽度值
 	Tanxl_Coord<int> Get_StateLength()const;
 private:
-	float Set_ExacHeight(double Current, float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
-	float Set_ExacWidth(double Current, float& MoveState, double Scale = 1.0);
+	float Set_ExacHeight(float& MoveState, double Scale = 1.0);//可选功能 对2D棋盘上的物品微调位置
+	float Set_ExacWidth(float& MoveState, double Scale = 1.0);
 	std::string Locate_Extend_State(std::string State_Id);
 	//↓Build_Connect : 一对多构建连接 State_Id为EXAC编号
 	void Build_Connect(int State_Id);

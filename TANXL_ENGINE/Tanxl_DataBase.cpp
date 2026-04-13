@@ -159,14 +159,6 @@ namespace TanxlDB
 		throw "失败 : Divid_Char 读取错误 不存在满足条件的内容";
 		return "";
 	}
-
-	void Combine_File(std::string FileA, std::string FileB)
-	{
-		TANXL_DataBase TDB;
-		TDB.Get_LocalData(FileA);
-		TDB.Get_LocalData(FileB, false);
-		TDB.SortDataBase(SORT_MEMORY);
-	}
 }
 
 std::ostream& operator<<(std::ostream& out, TANXL_DataBase& s)

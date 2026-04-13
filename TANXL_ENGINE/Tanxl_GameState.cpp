@@ -25,10 +25,11 @@ const std::string GameStateBase::Get_Version()
 	return Tanxl_ClassBase::Get_Version();
 }
 
-float GameStateBase::Set_ExacHeight(double Current, float& MoveState, double Scale)
+float GameStateBase::Set_ExacHeight(float& MoveState, double Scale)
 {
 	if (_Adjust_Enable == false)
 		return 0.0f;
+	double Current{ MoveState * 2 + 1 / this->_Each_Height };
 	float& State_MoveY{ this->Get_State_Loc()._Coord_Y };
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
@@ -74,10 +75,11 @@ float GameStateBase::Set_ExacHeight(double Current, float& MoveState, double Sca
 	return Temp_Move;
 }
 
-float GameStateBase::Set_ExacWidth(double Current, float& MoveState, double Scale)
+float GameStateBase::Set_ExacWidth(float& MoveState, double Scale)
 {
 	if (_Adjust_Enable == false)
 		return 0.0f;
+	double Current{ MoveState * 2 + 1 / this->_Each_Width };
 	float& State_MoveX{ this->Get_State_Loc()._Coord_X };
 	float Temp_Move{};
 	float Temp_GameState_Adjust{ static_cast<float>(_GameState_Adjust * Scale) };
@@ -136,7 +138,6 @@ std::string GameStateBase::Locate_Extend_State(std::string State_Id)
 		Id_Link* Target_Link{ Locate_Link(State_Id) };
 		if (Target_Link != nullptr)
 			return Target_Link->_Data->_Data_Units.at(1)->_Data;
-		return "NULL";
 	}
 	return "NULL";
 }
@@ -357,34 +358,34 @@ void GameStateBase::Set_State(int State_Id, std::string Cover_String, bool Start
 {
 	if (this->Get_Engine_File())
 	{
-		Id_Link* Link{ this->_Data_Base.Id_Link_Locate(1, State_Id) };
-		std::string Data_Name{ Link->_Data->_Data_Units.at(0)->_Data };
-		Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
+		std::vector<Data_Unit*> DLink{ this->_Data_Base.Id_Link_Locate(1, State_Id)->_Data->_Data_Units };
+		std::string Data_Name{ DLink.at(0)->_Data };
+		DLink.at(1)->_Data = Cover_String;
 
 		if (Start)
 		{
 			this->_Extend_Mid_Id = State_Id;
 
 			if (Cover_String != "NULL")
-				Link->_Data->_Data_Units.at(1)->_Data = Cover_String;
-			this->CompileStateUnits(Link->_Data->_Data_Units.at(1)->_Data, STATE_EXTEND_MIDD);
-			this->_GameState_Extend._MIDD._Id = Link->_Data->_Data_Units.at(0)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(2)->_Data), STATE_EXTEND_LEFT);
-			this->_GameState_Extend._LEFT._Id = Link->_Data->_Data_Units.at(2)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(3)->_Data), STATE_EXTEND_RIGH);
-			this->_GameState_Extend._RIGH._Id = Link->_Data->_Data_Units.at(3)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(4)->_Data), STATE_EXTEND_ABOV);
-			this->_GameState_Extend._ABOV._Id = Link->_Data->_Data_Units.at(4)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(5)->_Data), STATE_EXTEND_BELO);
-			this->_GameState_Extend._BELO._Id = Link->_Data->_Data_Units.at(5)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(6)->_Data), STATE_EXTEND_LEFT_ABOV);
-			this->_GameState_Extend._LEFT_ABOV._Id = Link->_Data->_Data_Units.at(6)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(7)->_Data), STATE_EXTEND_LEFT_BELO);
-			this->_GameState_Extend._LEFT_BELO._Id = Link->_Data->_Data_Units.at(7)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(8)->_Data), STATE_EXTEND_RIGH_ABOV);
-			this->_GameState_Extend._RIGH_ABOV._Id = Link->_Data->_Data_Units.at(8)->_Data;
-			this->CompileStateUnits(Locate_Extend_State(Link->_Data->_Data_Units.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
-			this->_GameState_Extend._RIGH_BELO._Id = Link->_Data->_Data_Units.at(9)->_Data;
+				DLink.at(1)->_Data = Cover_String;
+			this->CompileStateUnits(DLink.at(1)->_Data, STATE_EXTEND_MIDD);
+			this->_GameState_Extend._MIDD._Id = DLink.at(0)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(2)->_Data), STATE_EXTEND_LEFT);
+			this->_GameState_Extend._LEFT._Id = DLink.at(2)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(3)->_Data), STATE_EXTEND_RIGH);
+			this->_GameState_Extend._RIGH._Id = DLink.at(3)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(4)->_Data), STATE_EXTEND_ABOV);
+			this->_GameState_Extend._ABOV._Id = DLink.at(4)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(5)->_Data), STATE_EXTEND_BELO);
+			this->_GameState_Extend._BELO._Id = DLink.at(5)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(6)->_Data), STATE_EXTEND_LEFT_ABOV);
+			this->_GameState_Extend._LEFT_ABOV._Id = DLink.at(6)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(7)->_Data), STATE_EXTEND_LEFT_BELO);
+			this->_GameState_Extend._LEFT_BELO._Id = DLink.at(7)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(8)->_Data), STATE_EXTEND_RIGH_ABOV);
+			this->_GameState_Extend._RIGH_ABOV._Id = DLink.at(8)->_Data;
+			this->CompileStateUnits(Locate_Extend_State(DLink.at(9)->_Data), STATE_EXTEND_RIGH_BELO);
+			this->_GameState_Extend._RIGH_BELO._Id = DLink.at(9)->_Data;
 			this->Set_Data_Length(10, 10);
 		}
 	}
@@ -415,13 +416,11 @@ Tanxl_Coord<float>& GameStateBase::Get_State_Loc() const
 Tanxl_Coord<float> GameStateBase::Auto_Adjust(GameObject& Character, double Move_Scale)
 {
 	Tanxl_Coord<float> Temp_Move(0.0f, 0.0f);
-	double Current_Height{ (static_cast<double>(Character.Coord()->Get_Distance_Mid()->_Coord_Y) * 2 + 1) / (this->_Each_Height)};
-	double Current_Width{ (static_cast<double>(Character.Coord()->Get_Distance_Mid()->_Coord_X) * 2 + 1) / (this->_Each_Width) };
 
 	if (this->_Is_Adjusting)//Auto Adjust Part
 	{
-		Temp_Move._Coord_Y = this->Set_ExacHeight(Current_Height, Character.Coord()->Get_Distance_Mid()->_Coord_Y, Move_Scale);
-		Temp_Move._Coord_X = this->Set_ExacWidth(Current_Width, Character.Coord()->Get_Distance_Mid()->_Coord_X, Move_Scale);
+		Temp_Move._Coord_Y = this->Set_ExacHeight(Character.Coord()->Get_Distance_Mid()->_Coord_Y, Move_Scale);
+		Temp_Move._Coord_X = this->Set_ExacWidth(Character.Coord()->Get_Distance_Mid()->_Coord_X, Move_Scale);
 	}
 	return Temp_Move + *Character.Coord()->Get_Distance_Mid();
 }
@@ -994,8 +993,7 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Coord()->Get_Distance_Move()->_Coord_X < -static_cast<int>(this->Get_DataWidth()) - 1)
 		{
-			Character.Coord()->Get_Distance_Mid()->_Coord_X = Character.Coord()->Get_Last_Distance_Mid()->_Coord_X;
-			Character.Coord()->Get_Distance_Move()->_Coord_X = Character.Coord()->Get_Last_Distance_Mid()->_Coord_X;
+			Character.Coord()->RollBack(0);
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "LEFT RES :" << this->_Last_Distance_Mid._Coord_X << std::endl;
 #endif
@@ -1015,8 +1013,7 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Coord()->Get_Distance_Move()->_Coord_X > State_Data_Width)
 		{
-			Character.Coord()->Get_Distance_Mid()->_Coord_X = Character.Coord()->Get_Last_Distance_Mid()->_Coord_X;
-			Character.Coord()->Get_Distance_Move()->_Coord_X = Character.Coord()->Get_Last_Distance_Mid()->_Coord_X;
+			Character.Coord()->RollBack(0);
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "RIGH RES :" << this->_Last_Distance_Mid._Coord_X << std::endl;
 #endif
@@ -1037,8 +1034,7 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Coord()->Get_Distance_Move()->_Coord_Y > this->Get_DataHeight() + 1)
 		{
-			Character.Coord()->Get_Distance_Mid()->_Coord_Y = Character.Coord()->Get_Last_Distance_Mid()->_Coord_Y;
-			Character.Coord()->Get_Distance_Move()->_Coord_Y = Character.Coord()->Get_Last_Distance_Mid()->_Coord_Y;
+			Character.Coord()->RollBack(1);
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "ABOV RES :" << this->_Last_Distance_Mid._Coord_Y << std::endl;
 #endif
@@ -1058,8 +1054,7 @@ void GameStateBase::HitEdge_Check(GameObject& Character)
 	{
 		if (Character.Coord()->Get_Distance_Move()->_Coord_Y < -State_Data_Height)
 		{
-			Character.Coord()->Get_Distance_Mid()->_Coord_Y = Character.Coord()->Get_Last_Distance_Mid()->_Coord_Y;
-			Character.Coord()->Get_Distance_Move()->_Coord_Y = Character.Coord()->Get_Last_Distance_Mid()->_Coord_Y;
+			Character.Coord()->RollBack(1);
 #if _TANXL_GAMESTATE_EDGE_LIMIT_CHECK_OUTPUT_
 			std::cout << "DOWN RES :" << this->_Last_Distance_Mid._Coord_Y << std::endl;
 #endif
@@ -1090,9 +1085,6 @@ void GameStateBase::Move_Adjust()
 			std::cout << "NCUH __ " << this->_New_Current_Loc._Coord_Y << " CUH __ " << this->_Current_Move._Coord_Y << std::endl;
 #endif
 			int TempVal{ this->_New_Current_Loc._Coord_Y };
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-			std::cout << "NCUH != CUH !_Is_Adjusting RELOAD" << std::endl;
-#endif
 			if (this->_New_Current_Loc._Coord_Y > this->_Current_Move._Coord_Y)
 			{
 				while (this->_New_Current_Loc._Coord_Y-- > this->_Current_Move._Coord_Y)
@@ -1124,9 +1116,6 @@ void GameStateBase::Move_Adjust()
 			std::cout << "NCUW __ " << this->_New_Current_Loc._Coord_X << " CUW __ " << this->_Current_Move._Coord_X << std::endl;
 #endif
 			int TempVal{ this->_New_Current_Loc._Coord_X };
-#if _TANXL_GAMESTATE_START_MOVEADJUST_OUTPUT_
-			std::cout << "NCUW != CUW !_Is_Adjusting RELOAD" << std::endl;
-#endif
 			if (this->_New_Current_Loc._Coord_X > this->_Current_Move._Coord_X)
 			{
 				while (this->_New_Current_Loc._Coord_X-- > this->_Current_Move._Coord_X)
@@ -1176,13 +1165,11 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 		{
 		case CHECK_EDGE_LEFT:
 		case CHECK_EDGE_RIGH:
-			Character.Coord()->Get_Distance_Mid()->_Coord_X = Character.Coord()->Get_Last_Distance_Mid()->_Coord_X;
-			Character.Coord()->Get_Distance_Move()->_Coord_X = Character.Coord()->Get_Last_Distance_Move()->_Coord_X;
+			Character.Coord()->RollBack(0);
 			break;
 		case CHECK_EDGE_BELO:
 		case CHECK_EDGE_ABOV:
-			Character.Coord()->Get_Distance_Mid()->_Coord_Y = Character.Coord()->Get_Last_Distance_Mid()->_Coord_Y;
-			Character.Coord()->Get_Distance_Move()->_Coord_Y = Character.Coord()->Get_Last_Distance_Move()->_Coord_Y;
+			Character.Coord()->RollBack(1);
 			break;
 		}
 

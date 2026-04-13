@@ -49,11 +49,23 @@
 // 新增移动坐标组件类
 // 坐标组件替换物品类中原有的数据
 // 坐标组件新增移动接口
+// 增加重设主要操作物品的接口
+// 生命值组件增加启用无敌模式的接口
+// 坐标组件增加回滚上次移动的接口
 
 #pragma once
 
 #ifndef _TANXL_GAME_OBJECT_
 #define _TANXL_GAME_OBJECT_
+
+#define _TANXL_GAMEOBJECT_CONSOLE_OUTPUT_  0
+
+#if _TANXL_GAMEOBJECT_CONSOLE_OUTPUT_
+
+#include <iostream>
+#define _TANXL_GAMEOBJECT_ROLLBACK_OUTPUT_ 0
+
+#endif
 
 #include <vector>
 #include <string>
@@ -82,6 +94,8 @@ public:
 	void TakeDamage(int TakeVal);
 
 	void Set_Health(int Current_Health, int Max_Health);
+
+	void God_Mode(bool Enable = true);
 	// 获取当前生命值
 	int Check_Health() const;
 	// 获取最大生命值
@@ -119,6 +133,7 @@ public:
 	void Reset_Data();
 	void Update_Last_Location();
 	void Move_To(int Direction, float Range);
+	void RollBack(int BackStatus);
 
 	Tanxl_Coord<float>* Get_Last_Move();
 	Tanxl_Coord<float>* Get_Distance_Move();
@@ -156,8 +171,8 @@ struct Character_Data
 {
 	Character_Data();
 
-	inline int Get_Attack_Damage();
-	inline int Get_Defense_Armor();
+	inline int Get_Attack_Damage() const;
+	inline int Get_Defense_Armor() const;
 
 	int _Attack_Damage;
 	int _Defense_Armor;
@@ -208,6 +223,8 @@ public:
 
 	GameObject* Get_Main_Character();
 
+	void Reset_Main_Character(GameObject* Character);
+
 private:
 
 	GameObject* _Main_Character{ nullptr };
@@ -216,7 +233,6 @@ private:
 	~GameObjectBase();
 	GameObjectBase(const GameObjectBase&);
 	GameObjectBase& operator=(const GameObjectBase&);
-
 };
 
 #endif

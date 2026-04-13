@@ -36,6 +36,11 @@ void Health_Componment::Set_Health(int Current_Health, int Max_Health)
 		this->_Is_Alive = true;
 }
 
+void Health_Componment::God_Mode(bool Enable)
+{
+	this->_Unable_Damage = Enable;
+}
+
 int Health_Componment::Check_Health() const
 {
 	return this->_Current_Health;
@@ -77,14 +82,14 @@ int Money_Componment::Get_Money() const
 Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0),
 _Weapon_Slot(nullptr), _Armor_Slot(nullptr) {}
 
-int Character_Data::Get_Attack_Damage()
+int Character_Data::Get_Attack_Damage() const
 {
 	if (this->_Weapon_Slot != nullptr)
 		return this->_Attack_Damage + this->_Weapon_Slot->_Damage;
 	return this->_Attack_Damage;
 }
 
-int Character_Data::Get_Defense_Armor()
+int Character_Data::Get_Defense_Armor() const
 {
 	if (this->_Armor_Slot != nullptr)
 		return this->_Defense_Armor + this->_Armor_Slot->_Defense;
@@ -132,6 +137,11 @@ const std::string GameObjectBase::Get_Version()
 GameObject* GameObjectBase::Get_Main_Character()
 {
 	return this->_Main_Character;
+}
+
+void GameObjectBase::Reset_Main_Character(GameObject* Character)
+{
+	this->_Main_Character = Character;
 }
 
 GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.4"), _Main_Character(new GameObject(11, 5)) {}
@@ -221,6 +231,34 @@ void Coord_Componment::Move_To(int Direction, float Range)
 		this->_Distance_Mid._Coord_Y = this->_Last_Distance_Mid._Coord_Y;
 		this->_Distance_Move._Coord_Y = this->_Last_Distance_Move._Coord_Y;
 		break;
+	}
+}
+
+void Coord_Componment::RollBack(int BackStatus)
+{
+	if (BackStatus == 0)
+	{
+#if _TANXL_GAMEOBJECT_ROLLBACK_OUTPUT_
+		std::cout << "ROLL BACK X" << std::endl;
+#endif
+		this->_Distance_Mid._Coord_X = this->_Last_Distance_Mid._Coord_X;
+		this->_Distance_Move._Coord_X = this->_Last_Distance_Move._Coord_X;
+	}
+	else if (BackStatus == 1)
+	{
+#if _TANXL_GAMEOBJECT_ROLLBACK_OUTPUT_
+		std::cout << "ROLL BACK Y" << std::endl;
+#endif
+		this->_Distance_Mid._Coord_Y = this->_Last_Distance_Mid._Coord_Y;
+		this->_Distance_Move._Coord_Y = this->_Last_Distance_Move._Coord_Y;
+	}
+	else
+	{
+#if _TANXL_GAMEOBJECT_ROLLBACK_OUTPUT_
+		std::cout << "ROLL BACK ALL" << std::endl;
+#endif
+		this->_Distance_Mid = this->_Last_Distance_Mid;
+		this->_Distance_Move = this->_Last_Distance_Move;
 	}
 }
 

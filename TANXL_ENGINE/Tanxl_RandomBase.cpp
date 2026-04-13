@@ -36,7 +36,7 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
     unsigned seed{ static_cast<unsigned>(time(0)) };
     _RandomEngine.seed(seed);
     std::uniform_int_distribution<int> SID(0, 3);
-    std::uniform_int_distribution<int> EID(0, 6);
+    std::uniform_int_distribution<int> EID(0, 8);
     Suffle_UniData(1);
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)

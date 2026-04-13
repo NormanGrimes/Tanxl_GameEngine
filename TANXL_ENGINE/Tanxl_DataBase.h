@@ -28,6 +28,7 @@
 // 组合文件功能流程简化
 // 移除用于判断内部结构体是否有数据的变量
 // 增加内存调试功能并使用宏控制开关
+// 移除组合文件接口
 
 #pragma once
 
@@ -194,7 +195,8 @@ public:
 	void Copy_DataBase(TANXL_DataBase& DataBase);
 	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();
-	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);//用于直接输出当前Item单例内的信息
+	//↓用于直接输出当前Item单例内的信息
+	friend std::ostream& operator<<(std::ostream& fot, TANXL_DataBase& Taxnl_Data);
 };
 
 namespace TanxlDB
@@ -202,8 +204,6 @@ namespace TanxlDB
 	std::string Combine_Char(std::string data, int Start, int End);//拆分char数组获取指定内容，Start为开始位置End为结束位置(结束位置不保留)
 
 	std::string Divid_Char(std::string data, int Mode = GET_STATUS_DAT);//拆分单行内容获取信息
-
-	void Combine_File(std::string FileA, std::string FileB);//将FileA和FileB的内容整合到FileA中 仅限USD格式文件使用
 }
 
 #endif

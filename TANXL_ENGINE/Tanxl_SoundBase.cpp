@@ -133,6 +133,6 @@ SoundBase::~SoundBase()
 }
 
 SoundBase::SoundBase(const SoundBase&) : Tanxl_ClassBase("0.1"), _BackGround_Music_List(),
-_BackGround_Music_Playing(false), _Current_BackGround_Id(0) {}
+_BackGround_Music_Playing(false), _Current_BackGround_Id(0), _SoundEngine() { }
 
 SoundBase& SoundBase::operator=(const SoundBase&) { return *this; }
