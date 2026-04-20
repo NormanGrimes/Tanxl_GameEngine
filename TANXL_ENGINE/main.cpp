@@ -176,7 +176,6 @@ int main()
 				"0-2,0-3,0-1,1-2,0-1,0-1,1-2,0-1,0-3,0-2,"
 				"0-3,0-2,1-2,0-2,0-2,0-2,0-2,1-2,0-2,0-3,");
 
-			TGE.Engine_Object_Get_Character()->Health()->Set_Health(7, 11);
 			std::cout << "Reset Finish !" << std::endl;
 		}
 

@@ -903,12 +903,6 @@ void GameStateBase::Replace_State(int Cover_Id, SExtend_State& State_Target, SEx
 	State_Target._Data->assign(State_Id._Data->begin(), State_Id._Data->end());
 }
 
-void GameStateBase::Move_State(EMove_State_EventId Direction, int Times)
-{
-	while (Times--)
-		this->_MState.Set_Move_State(Direction);
-}
-
 void GameStateBase::State_Check_Event(GameObject& Character)
 {
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
@@ -1239,28 +1233,28 @@ void GameStateBase::Update_State(GameObject& Character, ECheck_Edge Check_Direct
 		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X + 1);
 
 		this->Reload_Display_State(STATE_EXTEND_LEFT);
-		this->Move_State(MoveToNW, State_Unit_Width);
+		this->_MState.Set_Move_State(MoveToNW, State_Unit_Width);
 		break;
 	case CHECK_EDGE_RIGH:
 		this->_Current_Move._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y);
 		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X - 1);
 
 		this->Reload_Display_State(STATE_EXTEND_RIGH);
-		this->Move_State(MoveToPW, State_Unit_Width);
+		this->_MState.Set_Move_State(MoveToPW, State_Unit_Width);
 		break;
 	case CHECK_EDGE_BELO:
 		this->_Current_Move._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y + 1);
 		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X);
 
 		this->Reload_Display_State(STATE_EXTEND_BELO);
-		this->Move_State(MoveToPH, State_Unit_Height);
+		this->_MState.Set_Move_State(MoveToPH, State_Unit_Height);
 		break;
 	case CHECK_EDGE_ABOV:
 		this->_Current_Move._Coord_Y -= (Temp_Height - this->_New_Current_Loc._Coord_Y - 1);
 		this->_Current_Move._Coord_X -= (Temp_Width - this->_New_Current_Loc._Coord_X);
 
 		this->Reload_Display_State(STATE_EXTEND_ABOV);
-		this->Move_State(MoveToNH, State_Unit_Height);
+		this->_MState.Set_Move_State(MoveToNH, State_Unit_Height);
 		break;
 	}
 }
@@ -1322,12 +1316,6 @@ void StateUnit::Set_Status(int Extra_Status)
 }
 
 //GameStateBase
-
-void GameStateBase::Set_CurrentLoc(GameObject& Character, float& CurrentX, float& CurrentY) const
-{
-	Character.Coord()->Get_Distance_Move()->_Coord_X = CurrentX;
-	Character.Coord()->Get_Distance_Move()->_Coord_Y = CurrentY;
-}
 
 void GameStateBase::Set_Compile_Policy(std::string State_Name, int Set_To_Status)
 {

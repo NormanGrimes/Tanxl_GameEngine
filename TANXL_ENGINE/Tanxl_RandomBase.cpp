@@ -33,8 +33,7 @@ std::string RandomBase::Generate(int seed)
 
 std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Random_Event)
 {
-    unsigned seed{ static_cast<unsigned>(time(0)) };
-    _RandomEngine.seed(seed);
+    _RandomEngine.seed( static_cast<unsigned>(time(0)));
     std::uniform_int_distribution<int> SID(0, 3);
     std::uniform_int_distribution<int> EID(0, 8);
     Suffle_UniData(1);
@@ -59,8 +58,7 @@ std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Ran
 std::string RandomBase::GenerateAutoSeed()
 {
     std::string Data{};
-    unsigned seed{ static_cast<unsigned>(time(0)) };
-    _RandomEngine.seed(seed);
+    _RandomEngine.seed(static_cast<unsigned>(time(0)));
     static std::uniform_int_distribution<int> UID(0, 61);
     for (int i{ 0 }; i < 15; ++i)
     {
@@ -82,16 +80,14 @@ int RandomBase::RandomAutoSeed(int Start, int End)
 {
     if (End <= Start)
         return Start;
-    unsigned seed{ static_cast<unsigned>(time(0)) };
-    _RandomEngine.seed(seed);
+    _RandomEngine.seed(static_cast<unsigned>(time(0)));
     std::uniform_int_distribution<int> UID(Start, End);
     return UID(_RandomEngine);
 }
 
 void RandomBase::Suffle_UniData(int Times)
 {
-    unsigned seed{ static_cast<unsigned>(time(0)) };
-    _RandomEngine.seed(seed);
+    _RandomEngine.seed(static_cast<unsigned>(time(0)));
     static std::uniform_int_distribution<int> UID(0, 61);
     while (Times--)
     {

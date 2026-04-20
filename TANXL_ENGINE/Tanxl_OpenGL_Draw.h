@@ -12,6 +12,8 @@
 // 新增三帧左侧移动动作测试
 // 左侧移动动作增加到十三帧
 // 修复左侧移动停止时不会切换图片的问题
+// 修改玩家数值界面的显示位置
+// 增加复用纹理缓存
 
 #pragma once
 
@@ -53,6 +55,9 @@ namespace TanxlOD
 	static const char* TexCoin_01_64x64			{ "Texture/TANXL_COIN_01_64X64.png"			};
 	static const char* TexSecretCore_01_64x64	{ "Texture/TANXL_SECRET_CORE_01_64X64.png"	};
 	static const char* TexHealth_01_32x32		{ "Texture/YANG_HEALTH_01_32X32.png"		};
+	static const char* TexHealth_Slot_01_64x64	{ "Texture/TANXL_HEALTH_SLOT_01_64X64.png"	};
+	static const char* TexHealth_Slot_02_64x64	{ "Texture/TANXL_HEALTH_SLOT_02_64X64.png"	};
+	static const char* TexHealth_Slot_03_64x64	{ "Texture/TANXL_HEALTH_SLOT_03_64X64.png"	};
 	static const char* TexPrincess_01_9x11		{ "Texture/YANG_PRINCESS_01_9X11.png"		};
 	static const char* TexPrincess_01			{ "Texture/TANXL_PRINCESS_01.png"			};
 	static const char* TexPrincess_02			{ "Texture/TANXL_PRINCESS_02.png"			};
@@ -553,14 +558,17 @@ private:
 	GLuint _State_RenderingProgram{ 0 };
 	GLuint _Adjst_RenderingProgram{ 0 };
 	GLuint _Start_RenderingProgram{ 0 };
-	GLuint _ITest_RenderingProgram{ 0 };
+	GLuint _Insta_RenderingProgram{ 0 };
 	GLuint _Fonts_RenderingProgram{ 0 };
+	GLuint _Healt_RenderingProgram{ 0 };
 
 	GLuint _vao[3];
 	GLuint _vbo[32];
 	GLuint _Font_vbo[5];
 	GLuint _Inst_vbo[32];
 
+	int _Texture_Reuse_Slot[10]{};
+	//当前游戏状态
 	int _Current_Status{ 0 };
 	//记载额外加载的地图环数量
 	int _PreLoads;

@@ -7,6 +7,8 @@
 // 移除更新上次移动的接口
 // 优化减少地图微调接口需要的参数
 // 优化地图区块的设置流程
+// 移除设置当前坐标的接口
+// 移除移动地图区域的接口
 
 #pragma once
 
@@ -208,7 +210,6 @@ public:
 	void Set_State_Counts(int Width, int Height);
 	void Set_Adjust(float Adjust);
 	void Set_Enable_Adjust(bool Enable_Adjust, bool Enable_While_Move);
-	void Set_CurrentLoc(GameObject& Character, float& CurrentX, float& CurrentY) const;
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
 	void Set_Data_Size(int Size);
 	void Reload_Display_State(EState_Extend Extend_Dire);
@@ -218,8 +219,6 @@ public:
 	void Set_Trigger_Mode(bool Mode);
 	void Generate_StateBlock(int State_Id);
 	void Replace_State(int Cover_Id, SExtend_State& State_Target, SExtend_State& State_Id);
-	//↓Move_State : 将需要绘制的地图区域整体沿Direction方向移动Times个地图单元长度
-	void Move_State(EMove_State_EventId Direction, int Times);
 	void State_Check_Event(GameObject& Character);
 	void HitEdge_Check(GameObject& Character);
 	//↓Move_Adjust : 根据移动位置将背景地图向某一方向微调一个或多个地图单元
