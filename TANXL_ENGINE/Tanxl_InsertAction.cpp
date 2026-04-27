@@ -117,7 +117,7 @@ void InsertEventBase::GetMouseInput(GLFWwindow* window)
 		if (LastMouseStatus_1 == GLFW_PRESS)
 		{
 			SB->Play_Sound("music/Game_Mouse_Click.wav");
-			std::cout << "Mouse 1 Press" << std::endl;
+			std::cout << "Mouse 1 Press  " << this->_Mouse_Pos._Coord_X << "_" << this->_Mouse_Pos._Coord_Y << std::endl;
 			Tips->Update_Count();
 			_Is_Key_Pressed = true;
 		}
@@ -127,7 +127,7 @@ void InsertEventBase::GetMouseInput(GLFWwindow* window)
 		if (LastMouseStatus_2 == GLFW_PRESS)
 		{
 			SB->Play_Sound("music/Game_Mouse_Click_Right.wav");
-			std::cout << "Mouse 2 Press" << std::endl;
+			std::cout << "Mouse 2 Press  " << this->_Mouse_Pos._Coord_X << "_" << this->_Mouse_Pos._Coord_Y << std::endl;
 			Tips->Update_Count();
 			_Is_Key_Pressed = true;
 		}

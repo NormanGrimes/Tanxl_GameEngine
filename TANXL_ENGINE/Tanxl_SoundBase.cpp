@@ -111,8 +111,8 @@ const std::string SoundBase::Get_Version()
 SoundBase::SoundBase() : Tanxl_ClassBase("0.1"), _BackGround_Music_List(),
 _BackGround_Music_Playing(false), _Current_BackGround_Id(0)
 {
-	_SoundEngine[0] = irrklang::createIrrKlangDevice();
-	_SoundEngine[1] = irrklang::createIrrKlangDevice();
+	this->_SoundEngine[0] = irrklang::createIrrKlangDevice();
+	this->_SoundEngine[1] = irrklang::createIrrKlangDevice();
 	this->_SoundEngine[1]->setSoundVolume(0.3f);
 
 	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_GAME_START, "music/Game_Start.wav", this));

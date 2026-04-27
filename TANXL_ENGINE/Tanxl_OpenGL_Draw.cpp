@@ -5,8 +5,8 @@
 #include <Windows.h>
 
 const static int Health_Slot_Length{ 25 };
-const static std::string MainVersion{ "2" };
-const static std::string SubVersion{ "97" };
+const static std::string MainVersion{ "3" };
+const static std::string SubVersion{ "02+" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -192,6 +192,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Healt_RenderingProgram, 10, this->_Texture_Reuse_Slot[6]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 11, this->_Texture_Reuse_Slot[7]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 12, this->_Texture_Reuse_Slot[8]);
+	glProgramUniform1i(this->_Healt_RenderingProgram, 13, Health_Slot_Length);
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, this->_Texture_Reuse_Slot[3]);
 
@@ -646,7 +647,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 800.0f, 30.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 810.0f, 30.0f, 0.7f, 1);
 
 	if (!Character->Health()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
