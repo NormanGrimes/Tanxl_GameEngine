@@ -84,7 +84,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
 	Font->Set_Language(ECurren_Language::LANGUAGE_ENGLISH/*TI->Get_User_Language()*/);
-	Font->Confirm_Language();
 
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	//Tips->ResetFonts(ECurren_Language::LANGUAGE_CHINESE);

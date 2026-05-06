@@ -611,8 +611,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX - this->_Single_Block_Length._Coord_X - 1 + (Move_NY - this->_Single_Block_Length._Coord_Y - 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_BELO, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -624,8 +624,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX - this->_Single_Block_Length._Coord_X - 1 + Move_NY * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -637,8 +637,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX - this->_Single_Block_Length._Coord_X - 1 + (Move_NY + this->_Single_Block_Length._Coord_Y + 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_RIGH_ABOV, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -653,8 +653,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX + (Move_NY - this->_Single_Block_Length._Coord_Y - 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_BELO, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -666,8 +666,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX + Move_NY * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_MIDD, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -679,8 +679,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX + (Move_NY + this->_Single_Block_Length._Coord_Y + 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_ABOV, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -695,8 +695,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX + this->_Single_Block_Length._Coord_X + 1 + (Move_NY - this->_Single_Block_Length._Coord_Y - 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_BELO, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -708,8 +708,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX + this->_Single_Block_Length._Coord_X + 1 + Move_NY * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -721,8 +721,8 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 				{
 					unsigned x{ Move_NX + this->_Single_Block_Length._Coord_X + 1 + (Move_NY + this->_Single_Block_Length._Coord_Y + 1) * (this->_Single_Block_Length._Coord_X + 1) };
 					StateUnit* Unit{ this->Get_StateUnit(STATE_EXTEND_LEFT_ABOV, x) };
-					StateInfor[i].x = Unit->Get_State_Id();
-					StateInfor[i].y = Unit->Get_Extra_Status();
+					StateInfor[i].x = Unit->_State_Id;
+					StateInfor[i].y = Unit->_Extra_Status;
 #if _TANXL_GAMESTATE_RELOAD_STATE_SQUARE_OUTPUT_
 					std::cout << i << "_State_Id :" << StateInfor[i].x << std::endl;
 #endif
@@ -913,7 +913,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	StateUnit* CheckUnit{ this->Get_State() };
 	if (!CheckUnit)
 		return;
-	int Unit_State_Id{ CheckUnit->Get_Extra_Status() };
+	int Unit_State_Id{ CheckUnit->_Extra_Status };
 
 	AC->CheckAchievement(g_rgAchievements[1]);
 
@@ -940,7 +940,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 			MC->Health()->TakeDamage(1);
 			MC->Money()->Add_Money(1);
 
-			CheckUnit->Set_Status(0);
+			CheckUnit->_Extra_Status = 0;
 		}
 	}
 	else if (Unit_State_Id == 3)
@@ -948,7 +948,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 		SB->Play_Sound("music/Game_Take_Coin.wav");
 		MC->Money()->Add_Money(5);
 
-		CheckUnit->Set_Status(0);
+		CheckUnit->_Extra_Status = 0;
 	}
 	else if (Unit_State_Id == 4)
 	{
@@ -956,7 +956,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 		{
 			SB->Play_Sound("music/Game_Event_Restore_Health.wav");
 			MC->Health()->RestoreHealth(1);
-			CheckUnit->Set_Status(0);
+			CheckUnit->_Extra_Status = 0;
 		}
 	}
 	else if (Unit_State_Id == 5)
@@ -964,7 +964,7 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 		static int Internal_Cnt{ 0 };
 		Internal_Cnt++;
 		SB->Play_Sound("music/Game_Event_Secret_Core.wav");
-		CheckUnit->Set_Status(0);
+		CheckUnit->_Extra_Status = 0;
 
 		if (Internal_Cnt == 4)
 		{
@@ -1153,7 +1153,7 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 	bool Reset{ this->Check_Edge_Reached(Check_Direction) };
 
 	if ((this->Get_State() == nullptr) ||
-		(this->Get_State()->Get_Extra_Status() == 1))
+		(this->Get_State()->_Extra_Status == 1))
 	{
 		switch (Check_Direction)
 		{
@@ -1171,7 +1171,7 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 		{
 			this->Update_Move(0.0f, 0.0f, Character, Check_Direction);
 			if ((this->Get_State() == nullptr) ||
-				(this->Get_State()->Get_Extra_Status() == 1))
+				(this->Get_State()->_Extra_Status == 1))
 			{
 				//std::cout << "Adjusting" << DeltaTime << std::endl;
 				if (DeltaTime < 0.1f)
@@ -1291,28 +1291,6 @@ GameStateBase::GameStateBase(int Width, int Height) :
 GameStateBase::~GameStateBase()
 {
 	Clear_Display_Vector(STATE_EXTEND_SPEC);
-}
-
-//StateUnit
-
-int StateUnit::Get_Extra_Status() const
-{
-	return this->_Extra_Status;
-}
-
-int StateUnit::Get_State_Id() const
-{
-	return this->_State_Id;
-}
-
-void StateUnit::Set_State_Id(int State_Id)
-{
-	this->_State_Id = State_Id;
-}
-
-void StateUnit::Set_Status(int Extra_Status)
-{
-	this->_Extra_Status = Extra_Status;
 }
 
 //GameStateBase
@@ -1667,8 +1645,8 @@ std::string SExtend_State::Get_Stand_Data()
 	std::string Data{};
 	for (int i{ 0 }; i < this->_Data->size(); ++i)
 	{
-		Data += std::to_string(this->_Data->at(i)->Get_Extra_Status()) + "-" +
-			std::to_string(this->_Data->at(i)->Get_State_Id()) + ",";
+		Data += std::to_string(this->_Data->at(i)->_Extra_Status) + "-" +
+			std::to_string(this->_Data->at(i)->_State_Id) + ",";
 	}
 	return Data;
 }

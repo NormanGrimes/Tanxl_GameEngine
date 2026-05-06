@@ -29,6 +29,7 @@
 // 移除用于判断内部结构体是否有数据的变量
 // 增加内存调试功能并使用宏控制开关
 // 移除组合文件接口
+// 增加两个内部数据结构的输出重载
 
 #pragma once
 
@@ -114,6 +115,8 @@ struct Data_Link//数据数据结构V4.1
 
 	std::vector<Data_Unit*> _Data_Units;
 
+	friend std::ostream& operator<<(std::ostream& fot, Data_Link& Link);
+
 #if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
 	~Data_Link();
 
@@ -129,6 +132,8 @@ struct Id_Link//序号数据结构V4.1
 	int _Type, _Exac;
 	std::string _Type_Name, _Exac_Name;
 	Data_Link* _Data;
+
+	friend std::ostream& operator<<(std::ostream& fot, Id_Link& Link);
 
 #if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
 	~Id_Link();

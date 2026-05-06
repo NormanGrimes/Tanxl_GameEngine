@@ -28,6 +28,7 @@
 // 2024/02/29 多处适配输入模块最新改动
 // 2024/02/29 增加非移动性质的按键注册接口
 // 2024/03/06 增加获取主要操控角色指针的接口
+// 2024/04/01 增加新版本的音频相关接口
 
 #pragma once
 
@@ -130,6 +131,20 @@ public:
 	//用于重新生成地图数据与引擎信息 仅在内存中已有数据时会生效 返回false时清理并生成失败
 	bool Engine_Save_Reset_Data();
 
+	//Sound Part
+
+	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐路径
+	void Engine_Sound_Play_Sound(bool Enable_Current, std::string SoundName);
+
+	//用于添加指定的内部音乐作为背景音乐 Enable_Play用于启用或关闭背景音乐的播放
+	void Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play = false);
+
+	//添加音频到音频播放队列 SoundEvent为指定音频的编号
+	void Engine_Sound_Add_List(int SoundEvent);
+
+	//播放音频播放队列中的音乐 此接口可在循环中调用
+	void Engine_Sound_Play_List();
+
 	//Other
 
 	//Enable_Adjust设置是否启用自动调整 Adjust_Value为单次调整的距离 Enable_While_Move为是否启用移动中调整 后两项需要第一项启动才会生效
@@ -146,12 +161,6 @@ public:
 
 	//用于注册移动指定区域触发的地图替换功能 Name为事件名称 LocationX/LocationY为替换的区域坐标 Cover_String为替换的地图数据
 	void Engine_Event_State_Regist(std::string Name, int LocationX, int LocationY, std::string Cover_String);
-
-	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐路径
-	void Engine_Sound_Play_Sound(bool Enable_Current, std::string SoundName);
-
-	//用于添加指定的内部音乐作为背景音乐 Enable_Play用于启用或关闭背景音乐的播放
-	void Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play = false);
 
 	//设置当前系统显示语言 Language用于指定语言枚举
 	void Engine_System_Set_Language(ECurren_Language Language);

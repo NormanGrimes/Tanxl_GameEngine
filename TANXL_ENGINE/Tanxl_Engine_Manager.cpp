@@ -229,6 +229,42 @@ bool Tanxl_Engine::Engine_Save_Reset_Data()
 	return true;
 }
 
+void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, std::string SoundName)
+{
+	if (Enable_Current)
+		Tanxl_Engine_SoundBase->Play_Sound(SoundName);
+	else
+		Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_EVENT);
+}
+
+void Tanxl_Engine::Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play)
+{
+	if (SoundName != "")
+		this->Tanxl_Engine_SoundBase->Append_BackGround_Music(SoundName);
+	if (Enable_Play)
+	{
+		if (this->Tanxl_Engine_OpenGL_Draw->Get_Game_Status() == GAME_PLAYER_ACTIVE)
+		{
+			this->Tanxl_Engine_SoundBase->Play_BackGround_Music();
+		}
+		else
+		{
+			if (this->Tanxl_Engine_SoundBase->BackGround_Playing() == true)
+				this->Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_BACKGROUND);
+		}
+	}
+}
+
+void Tanxl_Engine::Engine_Sound_Add_List(int SoundEvent)
+{
+	this->Tanxl_Engine_SoundBase->Sound_Append(SoundEvent);
+}
+
+void Tanxl_Engine::Engine_Sound_Play_List()
+{
+	this->Tanxl_Engine_SoundBase->Notify();
+}
+
 void Tanxl_Engine::Engine_Draw_State_Adjust(int PreLoad_Adjust)
 {
 	this->Tanxl_Engine_GameState->Check_Adjust_Status(this->Tanxl_Engine_InsertBase->Get_Key_Pressed());
@@ -328,36 +364,9 @@ void Tanxl_Engine::Engine_Event_State_Regist(std::string Name, int LocationX, in
 	this->Tanxl_Engine_GameEvent->RegistEvent(new State_ChangeEvent(Name, LocationX, LocationY, Cover_String));
 }
 
-void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, std::string SoundName)
-{
-	if (Enable_Current)
-		Tanxl_Engine_SoundBase->Play_Sound(SoundName);
-	else
-		Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_EVENT);
-}
-
-void Tanxl_Engine::Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play)
-{
-	if (SoundName != "")
-		this->Tanxl_Engine_SoundBase->Append_BackGround_Music(SoundName);
-	if (Enable_Play)
-	{
-		if (this->Tanxl_Engine_OpenGL_Draw->Get_Game_Status() == GAME_PLAYER_ACTIVE)
-		{
-			this->Tanxl_Engine_SoundBase->Play_BackGround_Music();
-		}
-		else
-		{
-			if (this->Tanxl_Engine_SoundBase->BackGround_Playing() == true)
-				this->Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_BACKGROUND);
-		}
-	}
-}
-
 void Tanxl_Engine::Engine_System_Set_Language(ECurren_Language Language)
 {
 	this->Tanxl_Engine_FontBase->Set_Language(Language);
-	this->Tanxl_Engine_FontBase->Confirm_Language();
 }
 
 bool Tanxl_Engine::Engine_Should_Shut_Down()

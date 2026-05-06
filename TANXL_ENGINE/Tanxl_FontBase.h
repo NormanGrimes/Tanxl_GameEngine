@@ -15,6 +15,7 @@
 // 增加宽字符的支持
 // 字体确认接口恢复中文字体的支持
 // 字体改为宽字符存储
+// 合并设置语言接口和确认语言接口
 
 #pragma once
 
@@ -55,8 +56,6 @@ public:
 	void Init_Fonts(EFontSet Font);
 
 	void Set_Language(ECurren_Language Language);
-
-	void Confirm_Language();
 
 	void Bind_FontVAO(GLuint Font_VAO,GLuint Font_VBO);
 

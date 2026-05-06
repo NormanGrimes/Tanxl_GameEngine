@@ -38,6 +38,8 @@
 // 移除音频枚举以及所有枚举涉及的接口
 // 移除内部记录音频路径的成员
 // 增加音频事件通知接口
+// 增加内部的音频播放队列
+// 音频被观察者通过播放队列发布通知
 
 #pragma once
 
@@ -46,6 +48,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include <irrKlang/irrKlang.h>
 
 #include "Tanxl_EngineBase.h"
@@ -88,6 +91,8 @@ public:
 
     void Play_Sound(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
+    void Sound_Append(int SoundEvent);
+
     void Append_BackGround_Music(std::string Wav_File_Location);
     // 停止指定声音引擎的声音播放
     void Stop_Sound(ESoundEngine_ID SoundEngine_Id);
@@ -100,7 +105,7 @@ public:
 
     void Set_SoundVolume(ESoundEngine_ID SoundEngine_Id, float Volume);
 
-    void Notify(int SoundEvent);
+    void Notify();
 
     bool Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
@@ -112,6 +117,8 @@ private:
     irrklang::ISoundEngine* _SoundEngine[2];
 
     std::vector<std::string> _BackGround_Music_List;
+
+    std::list<int> _Sound_Play_List;
 
     int _Current_BackGround_Id;
     bool _BackGround_Music_Playing;

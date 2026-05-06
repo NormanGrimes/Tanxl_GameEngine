@@ -16,6 +16,11 @@ void SoundBase::Play_Sound(std::string Wav_File_Location, ESoundEngine_ID SoundE
 	this->_SoundEngine[SoundEngine_Id]->play2D(Wav_File_Location.c_str());
 }
 
+void SoundBase::Sound_Append(int SoundEvent)
+{
+	this->_Sound_Play_List.push_back(SoundEvent);
+}
+
 void SoundBase::Append_BackGround_Music(std::string Wav_File_Location)
 {
 #if _ENABLE_SOUNDBASE_DEBUG_MODE_
@@ -85,9 +90,13 @@ void SoundBase::Set_SoundVolume(ESoundEngine_ID SoundEngine_Id, float Volume)
 	this->_SoundEngine[SoundEngine_Id]->setSoundVolume(Volume);
 }
 
-void SoundBase::Notify(int SoundEvent)
+void SoundBase::Notify()
 {
-	this->_SoundCheck.Notify(SoundEvent);
+	if (this->_Sound_Play_List.size() != 0)
+	{
+		this->_SoundCheck.Notify(this->_Sound_Play_List.front());
+		this->_Sound_Play_List.pop_front();
+	}
 }
 
 bool SoundBase::Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id)

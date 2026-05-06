@@ -79,22 +79,7 @@ int Money_Componment::Get_Money() const
 	return this->_Current_Money;
 }
 
-Character_Data::Character_Data() :_Attack_Damage(0), _Defense_Armor(0), _Move_Speed(0),
-_Weapon_Slot(nullptr), _Armor_Slot(nullptr) {}
-
-int Character_Data::Get_Attack_Damage() const
-{
-	if (this->_Weapon_Slot != nullptr)
-		return this->_Attack_Damage + this->_Weapon_Slot->_Damage;
-	return this->_Attack_Damage;
-}
-
-int Character_Data::Get_Defense_Armor() const
-{
-	if (this->_Armor_Slot != nullptr)
-		return this->_Defense_Armor + this->_Armor_Slot->_Defense;
-	return this->_Defense_Armor;
-}
+Character_Data::Character_Data() :_Move_Speed(0) {}
 
 Componment_Base::Componment_Base(std::string Name) :_Name(Name) {}
 
@@ -285,4 +270,20 @@ Tanxl_Coord<float>* Coord_Componment::Get_Last_Distance_Mid()
 Tanxl_Coord<float>* Coord_Componment::Get_Last_Distance_Move()
 {
 	return &this->_Last_Distance_Move;
+}
+
+Equipment_Componment::Equipment_Componment() :Componment_Base("Equipment") {}
+
+int Equipment_Componment::Get_Attack_Damage() const
+{
+	if (this->_Weapon_Slot != nullptr)
+		return this->_Attack_Damage + this->_Weapon_Slot->_Damage;
+	return this->_Attack_Damage;
+}
+
+int Equipment_Componment::Get_Defense_Armor() const
+{
+	if (this->_Armor_Slot != nullptr)
+		return this->_Defense_Armor + this->_Armor_Slot->_Defense;
+	return this->_Defense_Armor;
 }

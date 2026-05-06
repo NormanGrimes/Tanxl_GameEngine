@@ -85,10 +85,7 @@ void FontBase::Init_Fonts(EFontSet Font)
 void FontBase::Set_Language(ECurren_Language Language)
 {
 	this->_Internal_Language = Language;
-}
 
-void FontBase::Confirm_Language()
-{
 	if (this->_Internal_Language == LANGUAGE_ENGLISH)
 	{
 		this->Init_Fonts(EFontSet::JosefinSansSemiBoldItalic);

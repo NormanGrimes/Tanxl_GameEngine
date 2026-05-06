@@ -52,6 +52,7 @@
 // 增加重设主要操作物品的接口
 // 生命值组件增加启用无敌模式的接口
 // 坐标组件增加回滚上次移动的接口
+// 增加装备组件
 
 #pragma once
 
@@ -82,6 +83,25 @@ public:
 	std::string GetName();
 private:
 	std::string _Name;
+};
+
+struct Weapon
+{
+	Weapon(int Damage);
+	int _Damage;
+};
+
+struct Armor
+{
+	Armor(int Defense);
+	int _Defense;
+};
+
+struct Character_Data
+{
+	Character_Data();
+
+	double _Move_Speed;
 };
 
 class Health_Componment : public Componment_Base
@@ -153,30 +173,17 @@ private:
 	Tanxl_Coord<float> _Last_Distance_Move;
 };
 
-struct Weapon
+class Equipment_Componment : public Componment_Base
 {
-	Weapon(int Damage);
+public:
+	Equipment_Componment();
 
-	int _Damage;
-};
+	int Get_Attack_Damage() const;
+	int Get_Defense_Armor() const;
 
-struct Armor
-{
-	Armor(int Defense);
-
-	int _Defense;
-};
-
-struct Character_Data
-{
-	Character_Data();
-
-	inline int Get_Attack_Damage() const;
-	inline int Get_Defense_Armor() const;
-
+private:
 	int _Attack_Damage;
 	int _Defense_Armor;
-	double _Move_Speed;
 
 	Weapon* _Weapon_Slot;
 	Armor* _Armor_Slot;

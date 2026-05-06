@@ -9,6 +9,7 @@
 // 优化地图区块的设置流程
 // 移除设置当前坐标的接口
 // 移除移动地图区域的接口
+// 地图单元类改为结构体
 
 #pragma once
 
@@ -160,21 +161,15 @@ private:
 	bool _Event_Enable;
 };
 
-//StateUnit CLASS
-
-class StateUnit
+//StateUnit
+struct StateUnit
 {
-public:
 	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, int Move_Status = 0);
 	void SetEvent(std::string GameEventName, int State_Id = -1);
-	int Get_Extra_Status() const;
-	int Get_State_Id() const;
-	void Set_State_Id(int State_Id);
-	void Set_Status(int Extra_Status);
-private:
-	GameEvent* _GameEvents;
+
 	int _Extra_Status;
 	int _State_Id;
+	GameEvent* _GameEvents;
 };
 
 //GameStateBase CLASS
