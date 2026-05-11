@@ -14,6 +14,11 @@
 // 修复左侧移动停止时不会切换图片的问题
 // 修改玩家数值界面的显示位置
 // 增加复用纹理缓存
+// 生命值槽纹理重命名为物品槽
+// 新增一个物品槽纹理
+// 修改游戏开始后设置的玩家生命值与生命上限
+// 新增零号装备纹理
+// 新增绘制层类
 
 #pragma once
 
@@ -55,9 +60,10 @@ namespace TanxlOD
 	static const char* TexCoin_01_64x64			{ "Texture/TANXL_COIN_01_64X64.png"			};
 	static const char* TexSecretCore_01_64x64	{ "Texture/TANXL_SECRET_CORE_01_64X64.png"	};
 	static const char* TexHealth_01_32x32		{ "Texture/YANG_HEALTH_01_32X32.png"		};
-	static const char* TexHealth_Slot_01_64x64	{ "Texture/TANXL_HEALTH_SLOT_01_64X64.png"	};
-	static const char* TexHealth_Slot_02_64x64	{ "Texture/TANXL_HEALTH_SLOT_02_64X64.png"	};
-	static const char* TexHealth_Slot_03_64x64	{ "Texture/TANXL_HEALTH_SLOT_03_64X64.png"	};
+	static const char* TexObject_Slot_01		{ "Texture/TANXL_OBJECT_SLOT_01_64X64.png"	};
+	static const char* TexObject_Slot_02		{ "Texture/TANXL_OBJECT_SLOT_02_64X64.png"	};
+	static const char* TexObject_Slot_03		{ "Texture/TANXL_OBJECT_SLOT_03_64X64.png"	};
+	static const char* TexObject_Slot_04		{ "Texture/TANXL_OBJECT_SLOT_04_64X64.png"	};
 	static const char* TexPrincess_01_9x11		{ "Texture/YANG_PRINCESS_01_9X11.png"		};
 	static const char* TexPrincess_01			{ "Texture/TANXL_PRINCESS_01.png"			};
 	static const char* TexPrincess_02			{ "Texture/TANXL_PRINCESS_02.png"			};
@@ -98,6 +104,8 @@ namespace TanxlOD
 	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};
 	static const char* TexStartMenuLogo_01		{ "Texture/TANXL_MENU_LOGO_01.png"			};
+	static const char* TexEquipment_00			{ "Texture/TANXL_EQUIPMENT_00_64X64.png"	};
+	
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -593,6 +601,33 @@ private:
 	GLFWwindow* _Main_Window;
 	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2 _StateInfor[400];
+};
+
+class Layer
+{
+public:
+	Layer(std::string VertShader_Program, std::string FragShader_Program, int Coord_Counts) :
+		_Coord_Counts(Coord_Counts) 
+	{
+		_Shader_Program = OpenGL_Render::createShaderProgram(VertShader_Program.c_str(), FragShader_Program.c_str());
+	}
+
+	void Draw_Layer(int Coord_Counts)
+	{
+		_Coord_Counts = Coord_Counts;
+		glUseProgram(_Shader_Program);
+		glDrawArrays(GL_TRIANGLES, 0, _Coord_Counts);
+	}
+
+	void Draw_Layer()
+	{
+		glUseProgram(_Shader_Program);
+		glDrawArrays(GL_TRIANGLES, 0, _Coord_Counts);
+	}
+
+private:
+	GLuint _Shader_Program;
+	int _Coord_Counts;
 };
 
 struct Montion_Struct

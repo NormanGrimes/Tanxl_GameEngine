@@ -137,9 +137,9 @@ GameObjectBase::GameObjectBase(const GameObjectBase&) : Tanxl_ClassBase("0.4") {
 
 GameObjectBase& GameObjectBase::operator=(const GameObjectBase&) { return *this; }
 
-Weapon::Weapon(int Damage) :_Damage(Damage) {}
+Weapon::Weapon(int Damage, std::string Texture) :_Damage(Damage), _Texture(Texture) {}
 
-Armor::Armor(int Defense) :_Defense(Defense) {}
+Armor::Armor(int Defense, std::string Texture) :_Defense(Defense), _Texture(Texture) {}
 
 bool Componment_Unite::Append(Componment_Base* CM)
 {
@@ -272,7 +272,8 @@ Tanxl_Coord<float>* Coord_Componment::Get_Last_Distance_Move()
 	return &this->_Last_Distance_Move;
 }
 
-Equipment_Componment::Equipment_Componment() :Componment_Base("Equipment") {}
+Equipment_Componment::Equipment_Componment() :_Attack_Damage(0), _Defense_Armor(0),
+_Weapon_Slot(nullptr), _Armor_Slot(nullptr), Componment_Base("Equipment") {}
 
 int Equipment_Componment::Get_Attack_Damage() const
 {

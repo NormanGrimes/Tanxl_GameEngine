@@ -4,7 +4,7 @@
 
 #include <Windows.h>
 
-const static int Health_Slot_Length{ 25 };
+const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
 const static std::string SubVersion{ "02+" };
 
@@ -133,9 +133,10 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Texture_Reuse_Slot[3] = Append_Texture(TanxlOD::TexStartMenuLogo_01);
 	this->_Texture_Reuse_Slot[4] = Append_Texture(TanxlOD::TexMedic_01_64x64);
 	this->_Texture_Reuse_Slot[5] = Append_Texture(TanxlOD::TexSecretCore_01_64x64);
-	this->_Texture_Reuse_Slot[6] = Append_Texture(TanxlOD::TexHealth_Slot_01_64x64);
-	this->_Texture_Reuse_Slot[7] = Append_Texture(TanxlOD::TexHealth_Slot_02_64x64);
-	this->_Texture_Reuse_Slot[8] = Append_Texture(TanxlOD::TexHealth_Slot_03_64x64);
+	this->_Texture_Reuse_Slot[6] = Append_Texture(TanxlOD::TexObject_Slot_01);
+	this->_Texture_Reuse_Slot[7] = Append_Texture(TanxlOD::TexObject_Slot_02);
+	this->_Texture_Reuse_Slot[8] = Append_Texture(TanxlOD::TexObject_Slot_03);
+	this->_Texture_Reuse_Slot[9] = Append_Texture(TanxlOD::TexObject_Slot_04);
 
 	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
 	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01, 15);
@@ -191,7 +192,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Healt_RenderingProgram, 10, this->_Texture_Reuse_Slot[6]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 11, this->_Texture_Reuse_Slot[7]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 12, this->_Texture_Reuse_Slot[8]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 13, Health_Slot_Length);
+	glProgramUniform1i(this->_Healt_RenderingProgram, 13, this->_Texture_Reuse_Slot[9]);
+	glProgramUniform1i(this->_Healt_RenderingProgram, 14, Health_Slot_Length);
 
 	glProgramUniform1i(this->_Start_RenderingProgram, 2, this->_Texture_Reuse_Slot[3]);
 
@@ -488,7 +490,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
-			Character->Health()->Set_Health(10, 15);
+			Character->Health()->Set_Health(8, 13);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
@@ -502,7 +504,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
 			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 1 + Health_Slot_Length) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 3 + Health_Slot_Length) * 6);
 		}
 		else
 		{
@@ -527,7 +529,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 			Update_VertData(this->_StateInfor);
-			Character->Health()->Set_Health(10, 15);
+			Character->Health()->Set_Health(8, 13);
 			this->_Game_Status = GAME_START_MENU;
 		}
 		else
@@ -546,7 +548,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
 			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 1 + Health_Slot_Length) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 3 + Health_Slot_Length) * 6);
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -603,7 +605,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		
 		glUseProgram(_Healt_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 1 + Health_Slot_Length) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 3 + Health_Slot_Length) * 6);
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -646,7 +648,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 810.0f, 30.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 811.0f, 30.0f, 0.7f, 1);
 
 	if (!Character->Health()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);

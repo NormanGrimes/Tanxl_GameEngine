@@ -53,6 +53,7 @@
 // 生命值组件增加启用无敌模式的接口
 // 坐标组件增加回滚上次移动的接口
 // 增加装备组件
+// 武器与护甲类增加纹理成员
 
 #pragma once
 
@@ -73,6 +74,8 @@
 
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_LocationBase.h"
+#include "Tanxl_SteamService.h"
+#include "Tanxl_ObserverBase.h"
 
 //组件类
 class Componment_Base
@@ -87,14 +90,16 @@ private:
 
 struct Weapon
 {
-	Weapon(int Damage);
+	Weapon(int Damage, std::string Texture);
 	int _Damage;
+	std::string _Texture;
 };
 
 struct Armor
 {
-	Armor(int Defense);
+	Armor(int Defense, std::string Texture);
 	int _Defense;
+	std::string _Texture;
 };
 
 struct Character_Data

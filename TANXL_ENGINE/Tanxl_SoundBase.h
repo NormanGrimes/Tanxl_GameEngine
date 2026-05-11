@@ -53,7 +53,7 @@
 
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_RandomBase.h"
-#include "Tanxl_GameEvent.h"
+#include "Tanxl_ObserverBase.h"
 
 #define _ENABLE_SOUNDBASE_DEBUG_MODE_ 0
 
