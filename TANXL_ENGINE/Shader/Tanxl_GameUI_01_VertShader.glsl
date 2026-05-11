@@ -4,6 +4,7 @@
 // 增加生命值槽的绘制
 // 生命值槽位置与大小调整
 // 生命值槽的长度使用统一变量控制
+// 增加两个装备栏的显示
 
 #version 430
 
@@ -25,11 +26,12 @@ layout (location = 7) uniform float Direct_Margin;
 layout (location = 8) uniform int Player_Health_Texture_01;
 layout (location = 9) uniform int Player_Health_Texture_02;
 
-layout (location = 10) uniform int Player_Health_Slot_Texture_01;
-layout (location = 11) uniform int Player_Health_Slot_Texture_02;
-layout (location = 12) uniform int Player_Health_Slot_Texture_03;
+layout (location = 10) uniform int Player_Object_Slot_Texture_01;
+layout (location = 11) uniform int Player_Object_Slot_Texture_02;
+layout (location = 12) uniform int Player_Object_Slot_Texture_03;
+layout (location = 13) uniform int Player_Object_Slot_Texture_04;
 
-layout (location = 13) uniform int Health_Slot_Length;
+layout (location = 14) uniform int Health_Slot_Length;
 
 out vec4 vs_color;
 out vec2 tc;
@@ -42,7 +44,7 @@ void main(void)
 	
 	tc = texCoord;
 
-	if(gl_VertexID < (Health_Slot_Length + 1) * 6)
+	if(gl_VertexID < (Health_Slot_Length + 3) * 6)
 	{
 		if(gl_VertexID < 6)
 		{
@@ -78,80 +80,147 @@ void main(void)
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 		}
+		else if(gl_VertexID < 18)
+		{
+			float WidthSpace = 1.44f;
+			Cube = Player_Object_Slot_Texture_04;
+
+			if (gl_VertexID == 6)
+			{
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 7)
+			{
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 8)
+			{
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 9)
+			{
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 10)
+			{
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 11)
+			{
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+
+			else if (gl_VertexID == 12)
+			{
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 13)
+			{
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 14)
+			{
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 15)
+			{
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 16)
+			{
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+			else if (gl_VertexID == 17)
+			{
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
+			}
+		}
 		else
 		{
-			for(int i = 1; i < Health_Slot_Length + 1; i++)
+			for(int i = 3; i < Health_Slot_Length + 3; i++)
 			{
-				float WidthSpace = 0.06f * i;
+				float WidthSpace = 0.06f * (i - 2);
 	
 				if (gl_VertexID == i * 6 + 0)
 				{
-					if(i == 1)
-						Cube = Player_Health_Slot_Texture_03;
-					else if(i == Health_Slot_Length)
-						Cube = Player_Health_Slot_Texture_01;
+					if(i == 3)
+						Cube = Player_Object_Slot_Texture_03;
+					else if(i == Health_Slot_Length + 2)
+						Cube = Player_Object_Slot_Texture_01;
 					else
-						Cube = Player_Health_Slot_Texture_02;
+						Cube = Player_Object_Slot_Texture_02;
 
 					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 1)
 				{
-					if(i == 1)
-						Cube = Player_Health_Slot_Texture_03;
-					else if(i == Health_Slot_Length)
-						Cube = Player_Health_Slot_Texture_01;
+					if(i == 3)
+						Cube = Player_Object_Slot_Texture_03;
+					else if(i == Health_Slot_Length + 2)
+						Cube = Player_Object_Slot_Texture_01;
 					else
-						Cube = Player_Health_Slot_Texture_02;
+						Cube = Player_Object_Slot_Texture_02;
 
 					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 2)
 				{
-					if(i == 1)
-						Cube = Player_Health_Slot_Texture_03;
-					else if(i == Health_Slot_Length)
-						Cube = Player_Health_Slot_Texture_01;
+					if(i == 3)
+						Cube = Player_Object_Slot_Texture_03;
+					else if(i == Health_Slot_Length + 2)
+						Cube = Player_Object_Slot_Texture_01;
 					else
-						Cube = Player_Health_Slot_Texture_02;
+						Cube = Player_Object_Slot_Texture_02;
 
 					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 3)
 				{
-					if(i == 1)
-						Cube = Player_Health_Slot_Texture_03;
-					else if(i == Health_Slot_Length)
-						Cube = Player_Health_Slot_Texture_01;
+					if(i == 3)
+						Cube = Player_Object_Slot_Texture_03;
+					else if(i == Health_Slot_Length + 2)
+						Cube = Player_Object_Slot_Texture_01;
 					else
-						Cube = Player_Health_Slot_Texture_02;
+						Cube = Player_Object_Slot_Texture_02;
 
 					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 4)
 				{
-					if(i == 1)
-						Cube = Player_Health_Slot_Texture_03;
-					else if(i == Health_Slot_Length)
-						Cube = Player_Health_Slot_Texture_01;
+					if(i == 3)
+						Cube = Player_Object_Slot_Texture_03;
+					else if(i == Health_Slot_Length + 2)
+						Cube = Player_Object_Slot_Texture_01;
 					else
-						Cube = Player_Health_Slot_Texture_02;
+						Cube = Player_Object_Slot_Texture_02;
 
 					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 5)
 				{
-					if(i == 1)
-						Cube = Player_Health_Slot_Texture_03;
-					else if(i == Health_Slot_Length)
-						Cube = Player_Health_Slot_Texture_01;
+					if(i == 3)
+						Cube = Player_Object_Slot_Texture_03;
+					else if(i == Health_Slot_Length + 2)
+						Cube = Player_Object_Slot_Texture_01;
 					else
-						Cube = Player_Health_Slot_Texture_02;
+						Cube = Player_Object_Slot_Texture_02;
 
 					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
@@ -162,7 +231,7 @@ void main(void)
 	else
 	{
 		Cube = Player_Health_Texture_01;
-		for(int i = 1 + Health_Slot_Length, j = 2; i < Health_Length + Health_Slot_Length - 1; i++, j++)
+		for(int i = 3 + Health_Slot_Length, j = 2; i < Health_Length + Health_Slot_Length + 3; i++, j++)
 		{
 			if (gl_VertexID == i * 6 + 0)
 			{
