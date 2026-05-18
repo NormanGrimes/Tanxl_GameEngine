@@ -24,7 +24,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4") {}
+_Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4"), TestLayer(this) {}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -73,11 +73,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
-	this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	//this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Insta_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Inst_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
 	this->_Healt_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_GameUI_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+
+	TestLayer.Init_Shader("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6);
 
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_Screen_Length._Coord_X), 0.0f, static_cast<GLfloat>(_Screen_Length._Coord_Y));
 	glUseProgram(this->_Fonts_RenderingProgram);
@@ -118,25 +120,39 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 6, this->_PreLoads);//PreLoads
 
-	//State_Square Part 0~6  Adjust random range when number of textures change 
-	Append_Texture(TanxlOD::TexGrass_01);
-	Append_Texture(TanxlOD::TexGrass_02);
-	Append_Texture(TanxlOD::TexGrass_Snowy_01);
-	Append_Texture(TanxlOD::TexGrass_Snowy_02);
-	Append_Texture(TanxlOD::TexOcean_01);
-	Append_Texture(TanxlOD::TexDirt_01);
-	Append_Texture(TanxlOD::TexCoin_01_64x64);
+	Init_Texture_Slot(15);
 
-	this->_Texture_Reuse_Slot[0] = Append_Texture(TanxlOD::TexPrincess_01);
-	this->_Texture_Reuse_Slot[1] = Append_Texture(TanxlOD::TexHealth_01_32x32);
-	this->_Texture_Reuse_Slot[2] = Append_Texture(TanxlOD::TexPrincess_01_9x11);
-	this->_Texture_Reuse_Slot[3] = Append_Texture(TanxlOD::TexStartMenuLogo_01);
-	this->_Texture_Reuse_Slot[4] = Append_Texture(TanxlOD::TexMedic_01_64x64);
-	this->_Texture_Reuse_Slot[5] = Append_Texture(TanxlOD::TexSecretCore_01_64x64);
-	this->_Texture_Reuse_Slot[6] = Append_Texture(TanxlOD::TexObject_Slot_01);
-	this->_Texture_Reuse_Slot[7] = Append_Texture(TanxlOD::TexObject_Slot_02);
-	this->_Texture_Reuse_Slot[8] = Append_Texture(TanxlOD::TexObject_Slot_03);
-	this->_Texture_Reuse_Slot[9] = Append_Texture(TanxlOD::TexObject_Slot_04);
+	//State_Square Part 0~6  Adjust random range when number of textures change 
+	Reinit_Texture(5, TanxlOD::TexGrass_01);
+	Reinit_Texture(6, TanxlOD::TexGrass_02);
+	Reinit_Texture(7, TanxlOD::TexGrass_Snowy_01);
+	Reinit_Texture(8, TanxlOD::TexGrass_Snowy_02);
+	Reinit_Texture(9, TanxlOD::TexOcean_01);
+	Reinit_Texture(10, TanxlOD::TexDirt_01);
+	Reinit_Texture(11, TanxlOD::TexCoin_01_64x64);
+
+	this->_Texture_Reuse_Slot[0] = 12; 
+	Reinit_Texture(12, TanxlOD::TexPrincess_01);
+	this->_Texture_Reuse_Slot[1] = 13; 
+	Reinit_Texture(13, TanxlOD::TexHealth_01_32x32);
+	this->_Texture_Reuse_Slot[2] = 14; 
+	Reinit_Texture(14, TanxlOD::TexPrincess_01_9x11);
+	this->_Texture_Reuse_Slot[3] = 15; 
+	Reinit_Texture(15, TanxlOD::TexStartMenuLogo_01);
+	this->_Texture_Reuse_Slot[4] = 16; 
+	Reinit_Texture(16, TanxlOD::TexMedic_01_64x64);
+	this->_Texture_Reuse_Slot[5] = 17; 
+	Reinit_Texture(17, TanxlOD::TexSecretCore_01_64x64);
+	this->_Texture_Reuse_Slot[6] = 18; 
+	Reinit_Texture(18, TanxlOD::TexObject_Slot_01);
+	this->_Texture_Reuse_Slot[7] = 19; 
+	Reinit_Texture(19, TanxlOD::TexObject_Slot_02);
+	this->_Texture_Reuse_Slot[8] = 20; 
+	Reinit_Texture(20, TanxlOD::TexObject_Slot_03);
+	this->_Texture_Reuse_Slot[9] = 21; 
+	Reinit_Texture(21, TanxlOD::TexObject_Slot_04);
+	this->_Texture_Reuse_Slot[10] = 22; 
+	Reinit_Texture(22, TanxlOD::TexEquipment_00);
 
 	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
 	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01, 15);
@@ -194,8 +210,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Healt_RenderingProgram, 12, this->_Texture_Reuse_Slot[8]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 13, this->_Texture_Reuse_Slot[9]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 14, Health_Slot_Length);
+	glProgramUniform1i(this->_Healt_RenderingProgram, 15, this->_Texture_Reuse_Slot[10]);
+	glProgramUniform1i(this->_Healt_RenderingProgram, 16, this->_Texture_Reuse_Slot[10]);
 
-	glProgramUniform1i(this->_Start_RenderingProgram, 2, this->_Texture_Reuse_Slot[3]);
+	//glProgramUniform1i(this->_Start_RenderingProgram, 2, this->_Texture_Reuse_Slot[3]);
+	TestLayer.Set_ReuseTexture(2, 15, TanxlOD::TexStartMenuLogo_01);
 
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_Texture_Reuse_Slot[4]);
 	glProgramUniform1i(this->_State_RenderingProgram, 9, this->_Texture_Reuse_Slot[5]);
@@ -349,24 +368,22 @@ void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 	}
 }
 
-int OpenGL_Draw::Append_Texture(const char* Texture, bool InstanceUse)
+void OpenGL_Draw::Init_Texture_Slot(int Slot_Count)
 {
-	const int OffSet{ 4 };
 	static unsigned Id{ 0 };
 
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
+	if ((Slot_Count > 25) || (Slot_Count < 1))
+		return;
+	for (int i{ 0 }; i < Slot_Count; ++i)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
 
-	if (InstanceUse)
-		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::InstanceCoord), TanxlOD::InstanceCoord, GL_STATIC_DRAW);
-	else
 		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
 
-	glActiveTexture(GL_TEXTURE1 + Id + OffSet);
+		glActiveTexture(GL_TEXTURE5 + Id++);
 
-	glBindTexture(GL_TEXTURE_2D, OpenGL_Render::loadTexture(Texture));
-	Id++;
-
-	return Id + OffSet;
+		glBindTexture(GL_TEXTURE_2D, 1);
+	}
 }
 
 GLFWwindow* OpenGL_Draw::Get_Window()const
@@ -461,6 +478,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };
 
 	static float VersionFontSize{ 20.0f };
+	static EGame_Status Last_Status{ EGame_Status::GAME_NO_STATUS };
 
 	glBindVertexArray(_vao[1]);
 
@@ -490,7 +508,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (this->_Middle_Frame > this->_Max_Middle_Frame / 2.0f)
 		{
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
-			Character->Health()->Set_Health(8, 13);
+			Character->Health()->Set_Health(22, 22);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
@@ -503,8 +521,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glUseProgram(_Adjst_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
+			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 3 + Health_Slot_Length) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 5 + Health_Slot_Length) * 6);
 		}
 		else
 		{
@@ -529,7 +548,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 			Update_VertData(this->_StateInfor);
-			Character->Health()->Set_Health(8, 13);
+			Character->Health()->Set_Health(22, 22);
 			this->_Game_Status = GAME_START_MENU;
 		}
 		else
@@ -547,8 +566,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			glUseProgram(_Adjst_RenderingProgram);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
+			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 3 + Health_Slot_Length) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 5 + Health_Slot_Length) * 6);
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -604,8 +624,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glUseProgram(_Adjst_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		
+		glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 		glUseProgram(_Healt_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 3 + Health_Slot_Length) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 5 + Health_Slot_Length) * 6);
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -617,9 +638,13 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glBindVertexArray(0);
 		glBindVertexArray(_vao[1]);
 
-		glUseProgram(_Start_RenderingProgram);
+		if (Last_Status != GAME_START_MENU)
+			TestLayer.Reload_Texture();
+		TestLayer.Draw_Layer();
+
+		/*glUseProgram(_Start_RenderingProgram);
 		glProgramUniform1i(_Start_RenderingProgram, 3, this->_Game_Status);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawArrays(GL_TRIANGLES, 0, 6);*/
 	}
 
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
@@ -636,7 +661,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 	Font->Bind_FontVAO(_vao[0], _Font_vbo[0]);
 
-	Font->Set_FontColor(glm::vec3(0.3, 0.7f, 0.9f));
+	Font->Set_FontColor(glm::vec3(0.8, 0.2f, 0.2f));
 
 	if ((this->_Game_Status == GAME_START_MENU) || (this->_Game_Status == GAME_PLAYER_DEAD))
 	{
@@ -648,7 +673,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 811.0f, 30.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 811.0f, 28.0f, 0.7f, 1);
 
 	if (!Character->Health()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
@@ -663,6 +688,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	}
 
 	glBindVertexArray(0);
+	Last_Status = this->_Game_Status;
 }
 
 void OpenGL_Draw::Render_Once(GameStateBase* State)

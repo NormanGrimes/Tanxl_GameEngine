@@ -162,8 +162,9 @@ private:
 };
 
 //StateUnit
-struct StateUnit
+class StateUnit
 {
+public:
 	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, int Move_Status = 0);
 	void SetEvent(std::string GameEventName, int State_Id = -1);
 

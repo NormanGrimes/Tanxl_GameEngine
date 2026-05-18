@@ -19,6 +19,18 @@
 // 修改游戏开始后设置的玩家生命值与生命上限
 // 新增零号装备纹理
 // 新增绘制层类
+// 调整字体颜色
+// 微调金币数量显示的位置
+// 绘制层类增加纹理初始化与存储功能
+// 添加纹理接口改为纹理槽初始化接口
+// 绘制层类调用绘制接口时重新初始化纹理
+// 绘制层类增加默认构造函数和相关设置接口
+// 起始页面改用绘制层类实现
+// 绘制接口记录上一次游戏状态
+// 绘制层类增加着色器程序获取接口
+// 重制生命值纹理
+// 修复生命值上限统一变量仅在初始化时定义的问题
+// 降低生命值纹理的水平间隔
 
 #pragma once
 
@@ -48,6 +60,7 @@
 #include "Tanxl_Console_List.h"
 
 class Motion_Cycle;
+class OpenGL_Draw;
 
 namespace TanxlOD
 {
@@ -59,7 +72,7 @@ namespace TanxlOD
 	static const char* TexOcean_01				{ "Texture/TANXL_OCEAN_01.png"				};
 	static const char* TexCoin_01_64x64			{ "Texture/TANXL_COIN_01_64X64.png"			};
 	static const char* TexSecretCore_01_64x64	{ "Texture/TANXL_SECRET_CORE_01_64X64.png"	};
-	static const char* TexHealth_01_32x32		{ "Texture/YANG_HEALTH_01_32X32.png"		};
+	static const char* TexHealth_01_32x32		{ "Texture/TANXL_HEALTH_01_16X16.png"		};
 	static const char* TexObject_Slot_01		{ "Texture/TANXL_OBJECT_SLOT_01_64X64.png"	};
 	static const char* TexObject_Slot_02		{ "Texture/TANXL_OBJECT_SLOT_02_64X64.png"	};
 	static const char* TexObject_Slot_03		{ "Texture/TANXL_OBJECT_SLOT_03_64X64.png"	};
@@ -512,11 +525,43 @@ namespace TanxlOD
 
 enum EGame_Status
 {
+	GAME_NO_STATUS,
 	GAME_START_MENU,
 	GAME_PLAYER_ACTIVE,
 	GAME_STORE_BUYING_PAGE,
 	GAME_PLAYER_DEAD,
 	GAME_PLAYER_STATUS_DISPLAY
+};
+
+
+class Layer
+{
+public:
+	Layer(OpenGL_Draw* DrawEngine);
+
+	Layer(OpenGL_Draw* DrawEngine, const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts);
+
+	void Init_Shader(const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts);
+
+	void Set_ReuseTexture(int Shader_Location, int Textrue_Target, const char* Texture);
+
+	void Draw_Layer(int Coord_Counts);
+
+	void Reload_Texture();
+
+	void Draw_Layer();
+
+	GLuint Get_ShaderProgram() const;
+
+private:
+	OpenGL_Draw* _DrawEngine;
+
+	int _Texture_Count;
+	int _Texture_Reuse_Location[15]{};
+	int _Texture_Reuse_Slot[15]{};
+	const char* _Texture_Reuse_Texture[15]{};
+	GLuint _Shader_Program;
+	int _Coord_Counts;
 };
 
 class OpenGL_Draw : public Tanxl_ClassBase
@@ -544,7 +589,7 @@ public:
 	void Enable_State_Adjust(bool Enable);
 	//用于第一次或重新加载整个地图场景
 	void Update_VertData(glm::ivec2* StateInfor);
-	int Append_Texture(const char* Texture, bool InstanceUse = false);
+	void Init_Texture_Slot(int Slot_Count);
 	int Get_Adjust_Status() const;
 	//获取预载的数值
 	int Get_PreLoad() const;
@@ -575,7 +620,7 @@ private:
 	GLuint _Font_vbo[5];
 	GLuint _Inst_vbo[32];
 
-	int _Texture_Reuse_Slot[10]{};
+	int _Texture_Reuse_Slot[25]{};
 	//当前游戏状态
 	int _Current_Status{ 0 };
 	//记载额外加载的地图环数量
@@ -591,44 +636,68 @@ private:
 	//记录在地图初始化时 玩家方块的初始移动距离
 	Tanxl_Coord<int> _Pre_Move{ 3, 3 };
 	//记录需要绘制的生命值纹理之间的距离
-	float _Health_Image_Margin{ 0.1f };
+	float _Health_Image_Margin{ 0.06f };
 	//当前的中间页面编号
 	double _Middle_Frame{ 0 };
 	//距离上次调用绘制的增量时间
 	double _Delta_Time{ 0 };
 	//新版动作测试
 	std::vector<Motion_Cycle*> _MotionS;
+	//页面测试
+	Layer TestLayer;
 	GLFWwindow* _Main_Window;
 	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2 _StateInfor[400];
 };
 
-class Layer
+inline Layer::Layer(OpenGL_Draw* DrawEngine) :_DrawEngine(DrawEngine), _Shader_Program(0), _Coord_Counts(0), _Texture_Reuse_Location(),
+_Texture_Reuse_Slot(), _Texture_Reuse_Texture(), _Texture_Count(0) {}
+
+inline Layer::Layer(OpenGL_Draw* DrawEngine, const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts) :
+	_DrawEngine(DrawEngine), _Coord_Counts(Coord_Counts), _Texture_Reuse_Location(), _Texture_Reuse_Slot(),
+	_Texture_Reuse_Texture(), _Texture_Count(0)
 {
-public:
-	Layer(std::string VertShader_Program, std::string FragShader_Program, int Coord_Counts) :
-		_Coord_Counts(Coord_Counts) 
-	{
-		_Shader_Program = OpenGL_Render::createShaderProgram(VertShader_Program.c_str(), FragShader_Program.c_str());
-	}
+	_Shader_Program = OpenGL_Render::createShaderProgram(VertShader_Program, FragShader_Program);
+}
 
-	void Draw_Layer(int Coord_Counts)
-	{
-		_Coord_Counts = Coord_Counts;
-		glUseProgram(_Shader_Program);
-		glDrawArrays(GL_TRIANGLES, 0, _Coord_Counts);
-	}
+inline void Layer::Init_Shader(const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts)
+{
+	_Coord_Counts = Coord_Counts;
+	_Shader_Program = OpenGL_Render::createShaderProgram(VertShader_Program, FragShader_Program);
+}
 
-	void Draw_Layer()
-	{
-		glUseProgram(_Shader_Program);
-		glDrawArrays(GL_TRIANGLES, 0, _Coord_Counts);
-	}
+inline void Layer::Set_ReuseTexture(int Shader_Location, int Textrue_Target, const char* Texture)//Init only once
+{
+	_Texture_Reuse_Location[_Texture_Count] = Shader_Location;
+	_Texture_Reuse_Slot[_Texture_Count] = Textrue_Target;
+	_Texture_Reuse_Texture[_Texture_Count++] = Texture;
+}
 
-private:
-	GLuint _Shader_Program;
-	int _Coord_Counts;
-};
+inline void Layer::Draw_Layer(int Coord_Counts)
+{
+	_Coord_Counts = Coord_Counts;
+	Draw_Layer();
+}
+
+inline void Layer::Reload_Texture()
+{
+	for (int i{ 0 }; i < _Texture_Count; ++i)
+	{
+		_DrawEngine->Reinit_Texture(_Texture_Reuse_Slot[i], _Texture_Reuse_Texture[i]);
+		glProgramUniform1i(this->_Shader_Program, _Texture_Reuse_Location[i], _Texture_Reuse_Slot[i]);
+	}
+}
+
+inline void Layer::Draw_Layer()
+{
+	glUseProgram(_Shader_Program);
+	glDrawArrays(GL_TRIANGLES, 0, _Coord_Counts);
+}
+
+inline GLuint Layer::Get_ShaderProgram() const
+{
+	return this->_Shader_Program;
+}
 
 struct Montion_Struct
 {

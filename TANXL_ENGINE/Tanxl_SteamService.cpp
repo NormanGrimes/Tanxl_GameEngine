@@ -276,6 +276,10 @@ ECurren_Language Tanxl_Inventory::Get_User_Language()
 		return ECurren_Language::LANGUAGE_FRENCH;
 	else if (UserLanguage == "russian")
 		return ECurren_Language::LANGUAGE_RUSSIAN;
+	else if (UserLanguage == "schinese")
+		return ECurren_Language::LANGUAGE_CHINESE;
+	else if (UserLanguage == "japanese")
+		return ECurren_Language::LANGUAGE_JAPANESE;
 	else
 		return ECurren_Language::LANGUAGE_ENGLISH;
 }
