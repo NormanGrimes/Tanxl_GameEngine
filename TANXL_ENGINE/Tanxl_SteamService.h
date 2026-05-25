@@ -21,6 +21,11 @@
 // 增加基础类用于初始化SteamAPI
 // 多个成员函数设为常量
 // 获取用户语言接口增加中文与日语的获取
+// 新增一个测试成就
+// 基础类转为静态类
+// 构造函数的初始化流程转移到初始化接口
+// 增加应用程序信息获取接口
+// 修复库存功能未启用的问题
 
 #pragma once
 
@@ -42,13 +47,16 @@
 enum ETanxl_Inventory_ItemDefId
 {
 	Tanxl_Pormise_LIMITED_ITEM			= 1,
-	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2
+	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2,
+
+	Tanxl_Item_Collection_01			= 10001
 };
 
 enum ETanxl_Achievement_DefId
 {
-	NEW_ACHIEVEMENT_1_0 = 1,
-	NEW_ACHIEVEMENT_1_1 = 2
+	ACHIEVEMENT_SECRET_PROPERTY = 1,
+	ACHIEVEMENT_BAG_OF_MONEY	= 2,
+	ACHIEVEMENT_PLENTY_OF_MONEY	= 3
 };
 
 class TanxlItem
@@ -77,21 +85,21 @@ struct Achievement_t
 
 static Achievement_t g_rgAchievements[] =
 {
-	_ACH_ID(NEW_ACHIEVEMENT_1_0, "Secret"),
-	_ACH_ID(NEW_ACHIEVEMENT_1_1, "100 Coins")
+	_ACH_ID(ACHIEVEMENT_SECRET_PROPERTY, "Secret"),
+	_ACH_ID(ACHIEVEMENT_BAG_OF_MONEY, "100 Coins"),
+	_ACH_ID(ACHIEVEMENT_PLENTY_OF_MONEY, "500 Coins")
 };
 
 class Steam_Service
 {
 public:
-	static Steam_Service& GetServiceBase();
+	static ISteamUser* GetSteamUser();
+	static ISteamApps* GetSteamApps();
+	static ISteamUserStats* GetSteamUserStats();
+	static ISteamInventory* GetSteamInvetory();
 
-	inline ISteamUser* GetSteamUser();
-	inline ISteamUserStats* GetSteamUserStats();
-	inline ISteamInventory* GetSteamInvetory();
-
-	bool Reinit_Steam() const;
-	bool Get_InitStatus() const;
+	static bool Reinit_Steam();
+	static int Get_InitStatus();
 
 private:
 	Steam_Service();
@@ -99,11 +107,12 @@ private:
 	Steam_Service(const Steam_Service&);
 	Steam_Service& operator=(const Steam_Service&);
 
-	ISteamUser* _SteamUser;
-	ISteamUserStats* _SteamUserStats;
-	ISteamInventory* _Steam_Invetory;
+	static ISteamUser* _SteamUser;
+	static ISteamApps* _SteamApps;
+	static ISteamUserStats* _SteamUserStats;
+	static ISteamInventory* _Steam_Invetory;
 
-	bool _Steam_API_InitStatus;
+	static int _Steam_API_InitStatus;
 };
 
 class Tanxl_Achievement
@@ -128,7 +137,7 @@ class Tanxl_Inventory : public Tanxl_ClassBase
 {
 public:
 
-	static Tanxl_Inventory& Get_InventoryBase();
+	static Tanxl_Inventory* Get_InventoryBase();
 
 	const std::string Get_Version();
 

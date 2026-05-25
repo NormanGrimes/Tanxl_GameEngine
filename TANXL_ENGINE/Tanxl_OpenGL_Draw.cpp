@@ -12,7 +12,7 @@ static FontBase* Font{ &FontBase::GetFontBase() };
 
 static GameObject* Character{ GameObjectBase::GetObjectBase().Get_Main_Character()};
 
-static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
+//static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
 
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
@@ -184,7 +184,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
 	this->_MotionS.at(2)->Set_Idle_Image(TanxlOD::TexPrincess_03);
 
-	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
+	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this, true));
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_01, 3);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_02, 3);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_03, 3);
@@ -674,7 +674,10 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
 		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 811.0f, 28.0f, 0.7f, 1);
-
+	if(Steam_Service::Get_InitStatus() == 2)
+		Font->RenderText("Build Id : " + std::to_string(Steam_Service::GetSteamApps()->GetAppBuildId()), 10.0f, 785.0f, 0.25f, 1);
+	else
+		Font->RenderText("Build Id : ERROR", 10.0f, 785.0f, 0.25f, 1);
 	if (!Character->Health()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
 

@@ -99,6 +99,14 @@ int main()
 
 	while (1)
 	{
+		static time_t CurrTime = time(0);
+		if (time(0) - CurrTime > 70)
+		{
+			CurrTime = time(0);
+			TGE.Engine_Invent_Update_Drop();
+			std::cout << "Trigger Drop !" << std::endl;
+		}
+
 		TGE.Engine_Sound_Add_BackGround("", true);
 
 		TGE.Engine_Insert_State_Update();//Key Insert

@@ -11,7 +11,7 @@ Tanxl_Engine_OpenGL_Draw(&OpenGL_Draw::GetOpenGLBase()),
 Tanxl_Engine_InsertBase(&InsertEventBase::GetInsertBase()),
 Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase()),
 Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase()),
-Tanxl_Engine_Inventory(&Tanxl_Inventory::Get_InventoryBase()),
+Tanxl_Engine_Inventory(Tanxl_Inventory::Get_InventoryBase()),
 Tanxl_Engine_SoundBase(&SoundBase::GetSoundBase()),
 Tanxl_Engine_FontBase(&FontBase::GetFontBase())
 {
@@ -355,8 +355,11 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 
 void Tanxl_Engine::Engine_Invent_Update_Drop()
 {
-	this->Tanxl_Engine_Inventory->RefreshFromServer();
-	this->Tanxl_Engine_Inventory->CheckForItemDrops();
+	if (this->Tanxl_Engine_Inventory != nullptr)
+	{
+		this->Tanxl_Engine_Inventory->RefreshFromServer();
+		this->Tanxl_Engine_Inventory->CheckForItemDrops();
+	}
 }
 
 void Tanxl_Engine::Engine_Event_State_Regist(std::string Name, int LocationX, int LocationY, std::string Cover_String)
