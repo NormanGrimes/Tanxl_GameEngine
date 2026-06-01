@@ -25,6 +25,9 @@
 // 转为静态类
 // 随机引擎变量移入静态成员
 // 统一随机种子的获取方式
+// 移除用于生成随机数的内部数组
+// 随机数获取接口增加上限与下限参数
+// 移除刷新随机数数组的接口
 
 #pragma once
 
@@ -51,16 +54,13 @@ public:
     static std::string GenerateAutoSeed();
 
     //根据输入的种子生成一组数字
-    static int GenerateNum(int seed);
+    static int GenerateNum(int seed, int LowValue = 0, int HighValue = 9);
 
     //随机生成一个介于Start与End之间的数字
     static int RandomAutoSeed(int Start, int End);
 
     //刷新随机字库
     static void Suffle_UniData(int Times);
-
-    //刷新数字字库
-    static void Suffle_NumData(int Times);
 
     //恢复到初始状态
     static void Reset_Default();
@@ -72,7 +72,6 @@ private:
 
     static std::default_random_engine _RandomEngine;
     static std::string _UniData[62];
-    static int _NumData[10];
     static std::string _Version;
 };
 

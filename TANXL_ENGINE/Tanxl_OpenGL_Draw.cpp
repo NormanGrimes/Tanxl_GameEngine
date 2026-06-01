@@ -6,7 +6,7 @@
 
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
-const static std::string SubVersion{ "02+" };
+const static std::string SubVersion{ "08" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 

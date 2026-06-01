@@ -8,9 +8,9 @@ int Steam_Service::_Steam_API_InitStatus = 0;
 
 void Tanxl_Inventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* callback)
 {
-	bool bGotResult = false;
+	bool bGotResult{ false };
 	std::vector<SteamItemDetails_t> vecDetails;
-	uint32 count = 0;
+	uint32 count{ 0 };
 	if (_Steam_Invetory->GetResultItems(callback->m_handle, NULL, &count))
 	{
 		vecDetails.resize(count);
@@ -23,8 +23,8 @@ void Tanxl_Inventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* cal
 		std::list<TanxlItem*>::iterator iter;
 		for (iter = _listPlayerItems.begin(); iter != _listPlayerItems.end(); /*incr at end of loop*/)
 		{
-			bool bFound = false;
-			for (size_t i = 0; i < vecDetails.size(); i++)
+			bool bFound{ false };
+			for (size_t i{ 0 }; i < vecDetails.size(); i++)
 			{
 				if ((*iter)->GetItemId() == vecDetails[i].m_itemId)
 				{
@@ -55,9 +55,9 @@ void Tanxl_Inventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* cal
 		}
 
 		// Anything remaining in the result vector is a new item, since we removed all the updates.
-		for (size_t i = 0; i < vecDetails.size(); ++i)
+		for (size_t i{ 0 }; i < vecDetails.size(); ++i)
 		{
-			TanxlItem* item = new TanxlItem();
+			TanxlItem* item{ new TanxlItem() };
 			item->SetDetails(vecDetails[i]);
 			_listPlayerItems.push_back(item);
 		}

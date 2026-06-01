@@ -47,7 +47,7 @@ void CONSOLE::Append_Item(std::string New_Item, unsigned Space, void (*FunC)(), 
 	}
 }
 
-void CONSOLE::Reset_Name(std::string Name)
+void CONSOLE::Set_Name(std::string Name)
 {
 	this->_Name = Name;
 }
@@ -92,7 +92,7 @@ const std::string CONSOLE::Get_Version()
 	return Tanxl_ClassBase::Get_Version();
 }
 
-void CONSOLE::Display_Once()
+void CONSOLE::Display_List()
 {
 	static bool Insert{ true };
 	bool Cover{ false };

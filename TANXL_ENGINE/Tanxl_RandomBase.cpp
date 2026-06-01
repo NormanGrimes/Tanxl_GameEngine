@@ -69,11 +69,11 @@ std::string RandomBase::GenerateAutoSeed()
     return Data;
 }
 
-int RandomBase::GenerateNum(int seed)
+int RandomBase::GenerateNum(int seed, int LowValue, int HighValue)
 {
     _RandomEngine.seed(seed);
-    static std::uniform_int_distribution<int> UID(0, 9);
-    return _NumData[UID(_RandomEngine)];
+    static std::uniform_int_distribution<int> UID(LowValue, HighValue);
+    return UID(_RandomEngine);
 }
 
 int RandomBase::RandomAutoSeed(int Start, int End)
@@ -101,23 +101,6 @@ void RandomBase::Suffle_UniData(int Times)
     }
 }
 
-void RandomBase::Suffle_NumData(int Times)
-{
-    unsigned seed{ static_cast<unsigned>(time(0)) };
-    _RandomEngine.seed(seed);
-    static std::uniform_int_distribution<int> UID(0, 9);
-    while (Times--)
-    {
-        for (int i{ 0 }; i < 10; ++i)
-        {
-            int Temp{ _NumData[i] };
-            int Exchange_Val{ UID(_RandomEngine) };
-            _NumData[i] = _NumData[Exchange_Val];
-            _NumData[Exchange_Val] = Temp;
-        }
-    }
-}
-
 void RandomBase::Reset_Default()
 {
     std::string SaveUniData[62] = {
@@ -130,10 +113,6 @@ void RandomBase::Reset_Default()
     {"Y"}, {"Z"} };
     for (int i{ 0 }; i < 62; ++i)
         _UniData[i] = SaveUniData[i];
-    int SaveNumData[10] =
-    { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-    for (int i{ 0 }; i < 10; ++i)
-        _NumData[i] = SaveNumData[i];
 }
 
 const std::string RandomBase::Get_Version()
@@ -151,8 +130,5 @@ std::string RandomBase::_UniData[] = {
     {"E"}, {"F"}, {"G"}, {"H"}, {"I"}, {"J"}, {"K"}, {"L"}, {"M"}, {"N"},
     {"O"}, {"P"}, {"Q"}, {"R"}, {"S"}, {"T"}, {"U"}, {"V"}, {"W"}, {"X"},
     {"Y"}, {"Z"} };
-
-int RandomBase::_NumData[] =
-{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
 std::string RandomBase::_Version{ "0.3" };

@@ -165,12 +165,14 @@ std::ostream& operator<<(std::ostream& fot, Data_Link& Link)
 {
 	for (int i = 0; i < Link._Data_Units.size(); ++i)
 		fot << "\t" << Link._Data_Units.at(i)->_Id << " : " << Link._Data_Units.at(i)->_Data << std::endl;
+	return fot;
 }
 
 std::ostream& operator<<(std::ostream& fot, Id_Link& Link)
 {
 	fot << "Type : " << Link._Type << "-" << Link._Type_Name << " Exac : " << Link._Exac << "-" << Link._Exac_Name << std::endl;
 	fot << Link._Data;
+	return fot;
 }
 
 std::ostream& operator<<(std::ostream& out, TANXL_DataBase& s)

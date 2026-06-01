@@ -11,6 +11,7 @@
 // 增加重新设置选项名称的功能
 // 改为继承自引擎基础类
 // 控制输出颜色的接口设为静态
+// 接口名称调整
 
 #pragma once
 
@@ -58,11 +59,11 @@ public:
 
 	const std::string Get_Version();
 
-	void Display_Once();
+	void Display_List();
 
 	void Append_Item(std::string New_Item, unsigned Space = 0x171109, void(*FunC)() = nullptr, int Depth = 0, int* Ids = nullptr);
 
-	void Reset_Name(std::string Name);
+	void Set_Name(std::string Name);
 
 private:
 	void Display(int Depth = 0, unsigned Def_Col = (FONT_COLOR_WHITE | BACK_COLOR_RED), unsigned Real_Sel = (FONT_COLOR_WHITE | BACK_COLOR_PURPLE));

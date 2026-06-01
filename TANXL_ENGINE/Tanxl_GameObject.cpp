@@ -129,11 +129,11 @@ void GameObjectBase::Reset_Main_Character(GameObject* Character)
 	this->_Main_Character = Character;
 }
 
-GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.4"), _Main_Character(new GameObject(22, 22)) {}
+GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.5"), _Main_Character(new GameObject(22, 22)) {}
 
 GameObjectBase::~GameObjectBase() {}
 
-GameObjectBase::GameObjectBase(const GameObjectBase&) : Tanxl_ClassBase("0.4") {}
+GameObjectBase::GameObjectBase(const GameObjectBase&) : Tanxl_ClassBase("0.5") {}
 
 GameObjectBase& GameObjectBase::operator=(const GameObjectBase&) { return *this; }
 
