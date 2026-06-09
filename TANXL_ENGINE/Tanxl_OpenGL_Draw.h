@@ -33,6 +33,7 @@
 // 降低生命值纹理的水平间隔
 // 修复左侧移动动作不连贯的问题
 // 左上角增加构建编号显示
+// 增加设置当前画面暂停的接口
 
 #pragma once
 
@@ -584,6 +585,7 @@ public:
 	void Set_DisplaySize(int WindowWidth, int WindowHeight);
 	void Set_Max_Middle_Frame(int Max_Middle_Frame);
 	void Set_Game_Status(EGame_Status Game_Status);
+	void Set_Scene_Stop(bool Enable);
 	//编号不变 替换为新纹理
 	void Reinit_Texture(int CurrentId, const char* Texture);
 	//删除OpenGL窗口
@@ -608,6 +610,7 @@ private:
 	bool _Window_Adjust_Enable;
 	bool _Is_Adjust_Enable{ true };
 	bool _Is_Init_Need{ true };
+	bool _Is_Scene_Stop{ false };
 
 	GLuint _Midle_RenderingProgram{ 0 };
 	GLuint _State_RenderingProgram{ 0 };

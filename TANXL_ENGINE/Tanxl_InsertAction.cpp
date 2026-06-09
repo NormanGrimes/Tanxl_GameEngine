@@ -19,11 +19,6 @@ InsertEventBase& InsertEventBase::GetInsertBase()
 	return *IEB;
 }
 
-float InsertEventBase::Get_AutoFloat(int Blocks)
-{
-	return (1.0f - 1.0f / Blocks);
-}
-
 Tanxl_Coord<double> InsertEventBase::Get_Mouse_Location() const
 {
 	return this->_Mouse_Pos;
@@ -146,6 +141,11 @@ void InsertEventBase::Set_MaxFloat(float Max_floatX, float Max_floatY)
 		this->_Maximum_Distance._Coord_X = Max_floatX;
 		this->_Maximum_Distance._Coord_Y = Max_floatY;
 	}
+}
+
+void InsertEventBase::Set_MaxFloat(int Max_Width, int Max_Height)
+{
+	this->Set_MaxFloat((1.0f - 1.0f / Max_Width), (1.0f - 1.0f / Max_Height));
 }
 
 void InsertEventBase::RegistEvent(int GLFW_KEY, MoveTo_Direction MOVETO_VERT, float Move_Length)

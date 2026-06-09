@@ -12,8 +12,6 @@ static FontBase* Font{ &FontBase::GetFontBase() };
 
 static GameObject* Character{ GameObjectBase::GetObjectBase().Get_Main_Character()};
 
-//static Tanxl_Inventory* TI{ &Tanxl_Inventory::Get_InventoryBase() };
-
 OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool Window_Adjust)
 {
 	static OpenGL_Draw* OGD{ new OpenGL_Draw(ScreenWidth, ScreenHeight, Window_Adjust) };
@@ -85,7 +83,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
-	Font->Set_Language(ECurren_Language::LANGUAGE_ENGLISH/*TI->Get_User_Language()*/);
+	Font->Set_Language(ECurren_Language::LANGUAGE_ENGLISH);
 
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
 	//Tips->ResetFonts(ECurren_Language::LANGUAGE_CHINESE);
@@ -424,6 +422,11 @@ void OpenGL_Draw::Set_Game_Status(EGame_Status Game_Status)
 	this->_Game_Status = Game_Status;
 }
 
+void OpenGL_Draw::Set_Scene_Stop(bool Enable)
+{
+	this->_Is_Scene_Stop = Enable;
+}
+
 void OpenGL_Draw::Reinit_Texture(int CurrentId, const char* Texture)
 {
 	const GLuint Id{ static_cast<GLuint>(CurrentId) };
@@ -698,7 +701,6 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 {
 	static InsertEventBase* IEB{ &InsertEventBase::GetInsertBase() };//获取输入事件基类
 	static bool OpenGL_Stop_Key{ false };
-	static bool Is_Stop{ false };
 
 	static double LastTime{ glfwGetTime() };
 	this->_Delta_Time = glfwGetTime() - LastTime;
@@ -753,11 +755,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		if (OpenGL_Stop_Key)
 		{
-			Is_Stop = !Is_Stop;
+			this->_Is_Scene_Stop = !this->_Is_Scene_Stop;
 			OpenGL_Stop_Key = false;
 		}
 
-		if (Is_Stop)
+		if (this->_Is_Scene_Stop)
 		{
 			display(_Main_Window, State);
 			glfwSwapBuffers(_Main_Window);

@@ -119,9 +119,8 @@ bool Steam_Service::Reinit_Steam()
 			else
 			{
 				_Steam_API_InitStatus = 2;
-				_Steam_Invetory = SteamInventory();
-				_Steam_Invetory->LoadItemDefinitions();
 
+				_Steam_Invetory = SteamInventory();
 				_SteamUser = SteamUser();
 				_SteamApps = SteamApps();
 				_SteamUserStats = SteamUserStats();
@@ -159,33 +158,31 @@ void Tanxl_Achievement::UnlockAchievement(Achievement_t& achievement)
 {
 	achievement.m_bAchieved = true;
 	achievement.m_iIconImage = 0;
-	if (_SteamUserStats != nullptr)
-		_SteamUserStats->SetAchievement(achievement.m_pchAchievementID);
+	if (Steam_Service::GetSteamUserStats() != nullptr)
+		Steam_Service::GetSteamUserStats()->SetAchievement(achievement.m_pchAchievementID);
 }
 
 bool Tanxl_Achievement::CheckAchievement(Achievement_t& achievement)
 {
 	bool Is_Unlock{ false };
-	if (_SteamUserStats != nullptr)
-		_SteamUserStats->GetAchievementAndUnlockTime(achievement.m_pchAchievementID, &Is_Unlock, nullptr);
+	if (Steam_Service::GetSteamUserStats() != nullptr)
+		Steam_Service::GetSteamUserStats()->GetAchievementAndUnlockTime(achievement.m_pchAchievementID, &Is_Unlock, nullptr);
 	return Is_Unlock;
 }
 
 bool Tanxl_Achievement::RequestStats()
 {
-	if (NULL == _SteamUserStats || NULL == _SteamUser)// 是否已加载 Steam 若否,则我们无法获取统计
+	if (NULL == Steam_Service::GetSteamUserStats() || NULL == Steam_Service::GetSteamUser())// 是否已加载 Steam 若否,则我们无法获取统计
 		return false;
-	if (!_SteamUser->BLoggedOn())// 用户是否已登录 若否,则我们无法获取统计
+	if (!Steam_Service::GetSteamUser()->BLoggedOn())// 用户是否已登录 若否,则我们无法获取统计
 		return false;
-	return _SteamUserStats->RequestCurrentStats();
+	return Steam_Service::GetSteamUserStats()->RequestCurrentStats();
 }
 
 Tanxl_Achievement::Tanxl_Achievement()
 {
 	std::cout << "Achievement Init Called" << std::endl;
 	Steam_Service::Reinit_Steam();
-	_SteamUser = Steam_Service::GetSteamUser();
-	_SteamUserStats = Steam_Service::GetSteamUserStats();
 }
 
 Tanxl_Inventory* Tanxl_Inventory::Get_InventoryBase()

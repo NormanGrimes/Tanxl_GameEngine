@@ -35,6 +35,8 @@
 // 移除旧版本按键控制长按和双击的变量
 // 增加速度比率获取接口
 // 鼠标点击时输出当前坐标
+// 增加重载版本的最大移动距离设置接口
+// 移除自动计算距离接口
 
 #pragma once
 
@@ -153,8 +155,6 @@ class InsertEventBase : public Tanxl_ClassBase
 public:
 	//获取输入模块的单例类
 	static InsertEventBase& GetInsertBase();
-	//自动根据已知信息返回方块能移动的最大范围 公式 1 - ( 1 / 游戏地图边长（方块数）)
-	float Get_AutoFloat(int Blocks);
 	//获取当前是否按下了按键 并重置此变量状态为未按下
 	bool Get_Key_Pressed();
 	//检测是否有按键按下
@@ -175,8 +175,8 @@ public:
 	//获取鼠标输入
 	void GetMouseInput(GLFWwindow* window);
 	//Max_float用于指定最大移动距离（相对地图比例）设置当前操作可移动到的高/宽度方向最远距离
-	//此功能仅在所有区域均为正方形时可以正常使用 否则可能导致部分空间抵达显示区域外
 	void Set_MaxFloat(float Max_floatX, float Max_floatY = 0.0f);
+	void Set_MaxFloat(int Max_Width, int Max_Height);
 	//设置移动操作是否会导致方块移动到地图外 State_Range的值默认为真 为真时无法移动到地图外
 	void Set_StateRange(bool Enable);
 	//同时设置多个按键控制的移动距离

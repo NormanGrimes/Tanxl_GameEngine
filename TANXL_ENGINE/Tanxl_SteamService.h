@@ -27,6 +27,8 @@
 // 增加应用程序信息获取接口
 // 修复库存功能未启用的问题
 // 代码整理
+// 基础类初始化时不载入库存类的物品
+// 移除成就类的私有指针
 
 #pragma once
 
@@ -129,9 +131,6 @@ public:
 
 private:
 	Tanxl_Achievement();
-
-	ISteamUser* _SteamUser;
-	ISteamUserStats* _SteamUserStats;
 };
 
 class Tanxl_Inventory : public Tanxl_ClassBase

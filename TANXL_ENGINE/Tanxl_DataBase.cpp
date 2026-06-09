@@ -293,7 +293,6 @@ void TANXL_DataBase::SortDataBase(ESort_Mode Mode, std::string Out_File_Name, st
 	}
 	std::fstream out(Out_File_Name + ".sd", std::ios::out | std::ios::trunc);
 	out << "<Tanxl_DataBase Information>" << std::endl;
-	std::vector<Id_Link*>::iterator IOIE{ this->_Id_Links->end() };
 	std::vector<Id_Link*>::iterator IOIB{ this->_Id_Links->begin() };
 	int last{ -1 };
 	do
@@ -301,7 +300,6 @@ void TANXL_DataBase::SortDataBase(ESort_Mode Mode, std::string Out_File_Name, st
 #if _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_
 		std::cout << "(*IOIB)" << (*IOIB)->_Data->_Data_Units.size() << std::endl;
 #endif
-		std::vector<Data_Unit*>::iterator IODE{ (*IOIB)->_Data->_Data_Units.end() };
 		std::vector<Data_Unit*>::iterator IODB{ (*IOIB)->_Data->_Data_Units.begin() };
 #if _TANXL_DATABASE_CONSOLE_SORT_OUTPUT_
 		std::cout << "\t<Type_Status : " << (*IOIB)->_Type_Name << " / " << (*IOIB)->_Type << ">" << std::endl;
@@ -328,11 +326,11 @@ void TANXL_DataBase::SortDataBase(ESort_Mode Mode, std::string Out_File_Name, st
 #endif
 			++Count;
 			++IODB;
-		} while (IODB != IODE);
+		} while (IODB != (*IOIB)->_Data->_Data_Units.end());
 		out << "\t\t</Exac_Status>" << std::endl;
 		last = (*IOIB)->_Type;
 		++IOIB;
-	} while (IOIB != IOIE);
+	} while (IOIB != this->_Id_Links->end());
 	out << "\t</Type_Status>" << std::endl;
 	out << "</Tanxl_DataBase Information>" << std::endl;
 	out.close();
