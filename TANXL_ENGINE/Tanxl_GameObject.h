@@ -1,5 +1,6 @@
 ﻿//_VERSION_0_5_ UPDATE LOG
 // LAST_UPDATE 2024-04-09 18:04
+// 新增装备观察者以及一个替换地图编号的装备事件
 
 #pragma once
 
@@ -170,6 +171,22 @@ private:
 	Money_Componment _Money_Componment;
 };
 
+class Equipment_State_Replace_Observer : public Event_Observer<StateUnit>
+{
+public:
+	Equipment_State_Replace_Observer(int Event_Id, int Replace_State_Id) :
+		_Event_Id(Event_Id), _Replace_State_Id(Replace_State_Id) {}
+
+	void EventCheck(StateUnit& State)
+	{
+		if (_Event_Id == State._State_Id)
+			State._Extra_Status = _Replace_State_Id;
+	}
+private:
+	int _Event_Id;
+	int _Replace_State_Id;
+};
+
 //GameObjectBase
 
 class GameObjectBase : public Tanxl_ClassBase
@@ -184,6 +201,7 @@ public:
 	void Reset_Main_Character(GameObject* Character);
 
 private:
+	EventSubject<StateUnit> _Equipment_Subject;
 
 	GameObject* _Main_Character{ nullptr };
 

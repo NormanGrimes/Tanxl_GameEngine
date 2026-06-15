@@ -404,9 +404,6 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name, bool Clear_Current)
 				{
 					Type_Stat = std::stoi(TanxlDB::Divid_Char(Line, GET_STATUS_DAT));
 					Type_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
-					std::getline(in, Line);
-					Exac_Stat = std::stoi(TanxlDB::Divid_Char(Line, GET_STATUS_DAT));
-					Exac_Data = TanxlDB::Divid_Char(Line, GET_STATUS_STR);
 				}
 				catch (std::invalid_argument&)
 				{
@@ -414,7 +411,6 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name, bool Clear_Current)
 					std::cout << "Type Invalid argument :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
 #endif
 					Type_Stat = 0;
-					Exac_Stat = 0;
 				}
 				catch (std::out_of_range&)
 				{
@@ -422,7 +418,6 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name, bool Clear_Current)
 					std::cout << "Type Out of range :" << TanxlDB::Divid_Char(Line, GET_STATUS_DAT) << ", Reset to zero" << std::endl;
 #endif
 					Type_Stat = 0;
-					Exac_Stat = 0;
 				}
 			}
 			else if (Tag == "Exac")
@@ -494,8 +489,7 @@ bool TANXL_DataBase::Get_LocalData(std::string File_Name, bool Clear_Current)
 void TANXL_DataBase::Print_Data()
 {
 	std::vector<Id_Link*>::iterator BOI{ this->_Id_Links->begin() };
-	std::vector<Id_Link*>::iterator EOI{ this->_Id_Links->end() };
-	while (BOI != EOI)
+	while (BOI != this->_Id_Links->end())
 	{
 		std::cout << "Id_Link :" << (*BOI)->_Type << " - " << (*BOI)->_Type_Name << " - " << (*BOI)->_Exac << " - " << (*BOI)->_Exac_Name << std::endl;
 		Data_Link* DL{ ((*BOI)->_Data) };

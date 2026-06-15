@@ -10,6 +10,8 @@
 // 移除设置当前坐标的接口
 // 移除移动地图区域的接口
 // 地图单元类改为结构体
+// 移除地图单元类的事件成员
+// 移除地图单元类的事件设置接口
 
 #pragma once
 
@@ -159,18 +161,6 @@ private:
 	int _Trigger_Counts;
 
 	bool _Event_Enable;
-};
-
-//StateUnit
-class StateUnit
-{
-public:
-	StateUnit(GameEvent* GE = nullptr, int State_Id = 0, int Move_Status = 0);
-	void SetEvent(std::string GameEventName, int State_Id = -1);
-
-	int _Extra_Status;
-	int _State_Id;
-	GameEvent* _GameEvents;
 };
 
 //GameStateBase CLASS

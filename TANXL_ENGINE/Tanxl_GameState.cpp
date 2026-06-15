@@ -4,20 +4,6 @@
 
 //Core
 
-//StateUnit
-
-StateUnit::StateUnit(GameEvent* GE, int State_Id, int Move_Status)
-	:_Extra_Status(Move_Status), _GameEvents(GE), _State_Id(State_Id) {}
-
-void StateUnit::SetEvent(std::string GameEventName, int State_Id)
-{
-	GameEventBase* EventBase{ &GameEventBase::GetEventBase() };
-	if (EventBase->GetGameEvent(GameEventName))
-		this->_GameEvents = EventBase->GetEventBase().GetGameEvent(GameEventName);
-	if (State_Id != -1)
-		this->_State_Id = State_Id;
-}
-
 //GameStateBase
 
 const std::string GameStateBase::Get_Version()
@@ -326,7 +312,7 @@ void GameStateBase::CompileStateUnits(std::string Infor, EState_Extend Extend)
 		if (Infor.at(i) == ',')
 		{
 			Status_Id = std::stoi(Text_Reader);
-			Target->push_back(new StateUnit(nullptr, Status_Id, State_Status));
+			Target->push_back(new StateUnit(Status_Id, State_Status));
 			Text_Reader = "";
 		}
 		else if (Infor.at(i) == '-')

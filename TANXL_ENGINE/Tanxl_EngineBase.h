@@ -4,6 +4,7 @@
 // 增加游戏坐标模板类
 // 引擎基础类增加名称获取函数
 // 移动语言枚举到引擎基础模块中
+// 移动地图单元类到引擎基础模块中
 
 #pragma once
 
@@ -39,6 +40,17 @@ public:
 private:
 	const std::string _Version;
 	const std::string _Name;
+};
+
+//StateUnit
+class StateUnit
+{
+public:
+	StateUnit(int State_Id = 0, int Move_Status = 0)
+		:_Extra_Status(Move_Status), _State_Id(State_Id) {}
+
+	int _Extra_Status;
+	int _State_Id;
 };
 
 #endif
