@@ -894,22 +894,38 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	static SoundBase* SB{ &SoundBase::GetSoundBase() };
 	static Tanxl_Achievement* AC{ &Tanxl_Achievement::Get_AchievementBase() };
 	static GameObject* MC{ GameObjectBase::GetObjectBase().Get_Main_Character() };
-	static bool Achievement{ true };
+
+	static bool Achievement_100_Coins{ AC->CheckAchievement(g_rgAchievements[1]) };
+	static bool Achievement_500_Coins{ AC->CheckAchievement(g_rgAchievements[2]) };
+
 	this->Update_Move(0.0f, 0.0f, Character, CHECK_EDGE_CURR);
 	StateUnit* CheckUnit{ this->Get_State() };
 	if (!CheckUnit)
 		return;
 	int Unit_State_Id{ CheckUnit->_Extra_Status };
 
-	AC->CheckAchievement(g_rgAchievements[1]);
-
-	if ((MC->Money()->Get_Money() >= 100) && Achievement)
+	if (!Achievement_100_Coins && (MC->Money()->Get_Money() >= 100))
 	{
-		Achievement = false;
+		Achievement_100_Coins = true;
 		if (AC->RequestStats())
 		{
 			std::cout << "Achievement Unlocked !" << std::endl;
 			AC->UnlockAchievement(g_rgAchievements[1]);
+			SB->Play_Sound("music/Game_Achievement_Unlock.wav");
+		}
+		else
+		{
+			std::cout << "Achievement Request Fail !" << std::endl;
+		}
+	}
+
+	if (!Achievement_500_Coins && (MC->Money()->Get_Money() >= 500))
+	{
+		Achievement_500_Coins = true;
+		if (AC->RequestStats())
+		{
+			std::cout << "Achievement Unlocked !" << std::endl;
+			AC->UnlockAchievement(g_rgAchievements[2]);
 			SB->Play_Sound("music/Game_Achievement_Unlock.wav");
 		}
 		else

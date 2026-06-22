@@ -166,7 +166,7 @@ bool Tanxl_Achievement::CheckAchievement(Achievement_t& achievement)
 {
 	bool Is_Unlock{ false };
 	if (Steam_Service::GetSteamUserStats() != nullptr)
-		Steam_Service::GetSteamUserStats()->GetAchievementAndUnlockTime(achievement.m_pchAchievementID, &Is_Unlock, nullptr);
+		Steam_Service::GetSteamUserStats()->GetAchievement(achievement.m_pchAchievementID, &Is_Unlock);
 	return Is_Unlock;
 }
 

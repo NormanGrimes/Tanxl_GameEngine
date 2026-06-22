@@ -71,7 +71,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
-	//this->_Start_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Insta_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Inst_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
@@ -211,7 +210,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Healt_RenderingProgram, 15, this->_Texture_Reuse_Slot[10]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 16, this->_Texture_Reuse_Slot[10]);
 
-	//glProgramUniform1i(this->_Start_RenderingProgram, 2, this->_Texture_Reuse_Slot[3]);
 	TestLayer.Set_ReuseTexture(2, 15, TanxlOD::TexStartMenuLogo_01);
 
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_Texture_Reuse_Slot[4]);
@@ -526,7 +524,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 5 + Health_Slot_Length) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (6 + Health_Slot_Length) * 6);
 		}
 		else
 		{
@@ -571,7 +569,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 5 + Health_Slot_Length) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, (6 + Health_Slot_Length) * 6);
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -629,7 +627,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		
 		glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 		glUseProgram(_Healt_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (Character->Health()->Check_Health() + 5 + Health_Slot_Length) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, (6 + Health_Slot_Length) * 6);
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -644,10 +642,6 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		if (Last_Status != GAME_START_MENU)
 			TestLayer.Reload_Texture();
 		TestLayer.Draw_Layer();
-
-		/*glUseProgram(_Start_RenderingProgram);
-		glProgramUniform1i(_Start_RenderingProgram, 3, this->_Game_Status);
-		glDrawArrays(GL_TRIANGLES, 0, 6);*/
 	}
 
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));

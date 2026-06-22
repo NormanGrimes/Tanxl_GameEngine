@@ -129,7 +129,7 @@ void GameObjectBase::Reset_Main_Character(GameObject* Character)
 	this->_Main_Character = Character;
 }
 
-GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.5"), _Main_Character(new GameObject(22, 22)) {}
+GameObjectBase::GameObjectBase() : Tanxl_ClassBase("0.5"), _Main_Character(new GameObject(22, 1)) {}
 
 GameObjectBase::~GameObjectBase() {}
 

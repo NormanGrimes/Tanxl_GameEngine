@@ -34,6 +34,8 @@
 // 修复左侧移动动作不连贯的问题
 // 左上角增加构建编号显示
 // 增加设置当前画面暂停的接口
+// 重制生命值纹理
+// 移除起始界面着色器成员
 
 #pragma once
 
@@ -75,7 +77,7 @@ namespace TanxlOD
 	static const char* TexOcean_01				{ "Texture/TANXL_OCEAN_01.png"				};
 	static const char* TexCoin_01_64x64			{ "Texture/TANXL_COIN_01_64X64.png"			};
 	static const char* TexSecretCore_01_64x64	{ "Texture/TANXL_SECRET_CORE_01_64X64.png"	};
-	static const char* TexHealth_01_32x32		{ "Texture/TANXL_HEALTH_01_16X16.png"		};
+	static const char* TexHealth_01_32x32		{ "Texture/TANXL_HEALTH_01_64X64.png"		};
 	static const char* TexObject_Slot_01		{ "Texture/TANXL_OBJECT_SLOT_01_64X64.png"	};
 	static const char* TexObject_Slot_02		{ "Texture/TANXL_OBJECT_SLOT_02_64X64.png"	};
 	static const char* TexObject_Slot_03		{ "Texture/TANXL_OBJECT_SLOT_03_64X64.png"	};
@@ -615,7 +617,6 @@ private:
 	GLuint _Midle_RenderingProgram{ 0 };
 	GLuint _State_RenderingProgram{ 0 };
 	GLuint _Adjst_RenderingProgram{ 0 };
-	GLuint _Start_RenderingProgram{ 0 };
 	GLuint _Insta_RenderingProgram{ 0 };
 	GLuint _Fonts_RenderingProgram{ 0 };
 	GLuint _Healt_RenderingProgram{ 0 };
