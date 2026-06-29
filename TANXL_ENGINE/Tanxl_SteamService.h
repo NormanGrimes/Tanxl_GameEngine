@@ -30,6 +30,11 @@
 // 基础类初始化时不载入库存类的物品
 // 移除成就类的私有指针
 // 成就检查接口内部调用更短的函数
+// 成就类设置为观察者模式
+// 增加地图触发类型的成就观察者
+// 增加成就观察者的删除队列和删除接口
+// 增加数值比较触发类型的成就观察者
+// 成就类独立增加对数值比较类型成就的支持
 
 #pragma once
 
@@ -43,6 +48,7 @@
 #include "public/steam/steam_api.h"
 #include "public/steam/isteamapps.h"
 #include "Tanxl_EngineBase.h"
+#include "Tanxl_ObserverBase.h"
 
 #define _STEAM_ALPHA_VERSION_ 0
 #define _STEAM_REINIT_ENABLE_ 0
@@ -119,6 +125,12 @@ private:
 	static int _Steam_API_InitStatus;
 };
 
+enum EAchievement_TriggerType
+{
+	STATE_TRIGGER,
+	COUNT_TRIGGER
+};
+
 class Tanxl_Achievement
 {
 public:
@@ -126,12 +138,51 @@ public:
 
 	void UnlockAchievement(Achievement_t& achievement);
 
+	void Remove_Achievement_Observer();
+
 	bool CheckAchievement(Achievement_t& achievement);
+
+	bool Append_Remove_List(Event_Observer<int>* Observer, EAchievement_TriggerType TriggerType);
 
 	bool RequestStats();//请求用户统计数据
 
 private:
 	Tanxl_Achievement();
+
+	EventSubject<int> _Achievement_Subject;
+
+	int _State_Remove_List_Size;
+	Event_Observer<int>* _State_RemoveList[10];
+
+	int _Count_Remove_List_Size;
+	Event_Observer<int>* _Count_RemoveList[10];
+};
+
+class Achievement_State_Trigger_Observer : public Event_Observer<int>
+{
+public:
+	Achievement_State_Trigger_Observer(Achievement_t Achievement, int EventId, int Times_ToUnlock = 1);
+
+	void EventCheck(int& EventId);
+
+private:
+	Achievement_t _Achievement;
+	int _Event_Id;
+	int _Internal_Times;
+	int _Times_ToUnlock;
+};
+
+class Achievement_Count_Trigger_Observer : public Event_Observer<int>
+{
+public:
+	Achievement_Count_Trigger_Observer(Achievement_t Achievement, int EventId, int Count_Target);
+
+	void EventCheck(int& DataCount);
+
+private:
+	Achievement_t _Achievement;
+	int _Event_Id;
+	int _Count_Target;
 };
 
 class Tanxl_Inventory : public Tanxl_ClassBase

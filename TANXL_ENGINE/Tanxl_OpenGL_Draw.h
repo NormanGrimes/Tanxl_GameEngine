@@ -36,6 +36,8 @@
 // 增加设置当前画面暂停的接口
 // 重制生命值纹理
 // 移除起始界面着色器成员
+// 新增多个装备的纹理
+// 增加装备纹理的更新功能
 
 #pragma once
 
@@ -122,7 +124,12 @@ namespace TanxlOD
 	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};
 	static const char* TexStartMenuLogo_01		{ "Texture/TANXL_MENU_LOGO_01.png"			};
-	static const char* TexEquipment_00			{ "Texture/TANXL_EQUIPMENT_00_64X64.png"	};
+
+	static const char* TexEquipment_00	{ "Texture/Equipment/TANXL_EQUIPMENT_00_NOEQUIPMENT.png"	};
+	static const char* TexEquipment_01	{ "Texture/Equipment/TANXL_EQUIPMENT_01_MEDICKIT.png"		};
+	static const char* TexEquipment_02	{ "Texture/Equipment/TANXL_EQUIPMENT_02_GOLDCOIN.png"		};
+	static const char* TexEquipment_03	{ "Texture/Equipment/TANXL_EQUIPMENT_03_STATEBLOCK.png"		};
+	static const char* TexEquipment_04	{ "Texture/Equipment/TANXL_EQUIPMENT_04_SECRETCORE.png"		};
 	
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);

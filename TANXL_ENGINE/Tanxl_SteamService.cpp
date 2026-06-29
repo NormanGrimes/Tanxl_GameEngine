@@ -162,12 +162,57 @@ void Tanxl_Achievement::UnlockAchievement(Achievement_t& achievement)
 		Steam_Service::GetSteamUserStats()->SetAchievement(achievement.m_pchAchievementID);
 }
 
+void Tanxl_Achievement::Remove_Achievement_Observer()
+{
+	for (int i{ 0 }; i < this->_State_Remove_List_Size; ++i)
+		if (this->_State_RemoveList[i] != nullptr)
+		{
+			this->_Achievement_Subject.Remove_Observer(this->_State_RemoveList[i]);
+			this->_State_RemoveList[i] = nullptr;
+		}
+	this->_State_Remove_List_Size = 0;
+
+	for (int i{ 0 }; i < this->_Count_Remove_List_Size; ++i)
+		if (this->_Count_RemoveList[i] != nullptr)
+		{
+			this->_Achievement_Subject.Remove_Observer(this->_Count_RemoveList[i]);
+			this->_Count_RemoveList[i] = nullptr;
+		}
+	this->_Count_Remove_List_Size = 0;
+}
+
 bool Tanxl_Achievement::CheckAchievement(Achievement_t& achievement)
 {
 	bool Is_Unlock{ false };
 	if (Steam_Service::GetSteamUserStats() != nullptr)
 		Steam_Service::GetSteamUserStats()->GetAchievement(achievement.m_pchAchievementID, &Is_Unlock);
 	return Is_Unlock;
+}
+
+bool Tanxl_Achievement::Append_Remove_List(Event_Observer<int>* Observer, EAchievement_TriggerType TriggerType)
+{
+	if (TriggerType == STATE_TRIGGER)
+	{
+		if (this->_State_Remove_List_Size >= 9)
+			return false;
+		else
+		{
+			this->_State_Remove_List_Size++;
+			this->_State_RemoveList[this->_State_Remove_List_Size] = Observer;
+			return true;
+		}
+	}
+	else
+	{
+		if (this->_Count_Remove_List_Size >= 9)
+			return false;
+		else
+		{
+			this->_Count_Remove_List_Size++;
+			this->_Count_RemoveList[this->_Count_Remove_List_Size] = Observer;
+			return true;
+		}
+	}
 }
 
 bool Tanxl_Achievement::RequestStats()
@@ -179,10 +224,39 @@ bool Tanxl_Achievement::RequestStats()
 	return Steam_Service::GetSteamUserStats()->RequestCurrentStats();
 }
 
-Tanxl_Achievement::Tanxl_Achievement()
+Tanxl_Achievement::Tanxl_Achievement() :
+	_Achievement_Subject(), _State_Remove_List_Size(0), _State_RemoveList(), _Count_Remove_List_Size(0), _Count_RemoveList()
 {
 	std::cout << "Achievement Init Called" << std::endl;
 	Steam_Service::Reinit_Steam();
+}
+
+Achievement_State_Trigger_Observer::Achievement_State_Trigger_Observer(Achievement_t Achievement, int EventId, int Times_ToUnlock) :
+	_Achievement(Achievement), _Event_Id(EventId), _Times_ToUnlock(Times_ToUnlock), _Internal_Times(0) {}
+
+void Achievement_State_Trigger_Observer::EventCheck(int& EventId)
+{
+	if (EventId == _Event_Id)
+	{
+		_Internal_Times++;
+		if (_Internal_Times >= _Times_ToUnlock)
+		{
+			if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this, STATE_TRIGGER))
+				Tanxl_Achievement::Get_AchievementBase().UnlockAchievement(_Achievement);
+		}
+	}
+}
+
+Achievement_Count_Trigger_Observer::Achievement_Count_Trigger_Observer(Achievement_t Achievement, int EventId, int Count_Target)
+	:_Achievement(Achievement), _Event_Id(EventId), _Count_Target(Count_Target) {}
+
+void Achievement_Count_Trigger_Observer::EventCheck(int& DataCount)
+{
+	if (DataCount > _Count_Target)
+	{
+		if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this, COUNT_TRIGGER))
+			Tanxl_Achievement::Get_AchievementBase().UnlockAchievement(_Achievement);
+	}
 }
 
 Tanxl_Inventory* Tanxl_Inventory::Get_InventoryBase()

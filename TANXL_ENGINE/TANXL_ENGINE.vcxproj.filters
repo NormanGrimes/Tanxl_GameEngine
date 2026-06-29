@@ -79,7 +79,7 @@
       <Filter>头文件\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Tanxl_ObserverBase.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
