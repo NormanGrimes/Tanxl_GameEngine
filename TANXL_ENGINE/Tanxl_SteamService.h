@@ -35,6 +35,10 @@
 // 增加成就观察者的删除队列和删除接口
 // 增加数值比较触发类型的成就观察者
 // 成就类独立增加对数值比较类型成就的支持
+// 成就类初始化时根据成就状态添加成就观察者
+// 增加一个成就被观察者
+// 增加成就通知接口
+// 修复移除成就队列添加错误的问题
 
 #pragma once
 
@@ -49,6 +53,7 @@
 #include "public/steam/isteamapps.h"
 #include "Tanxl_EngineBase.h"
 #include "Tanxl_ObserverBase.h"
+#include "Tanxl_SoundBase.h"
 
 #define _STEAM_ALPHA_VERSION_ 0
 #define _STEAM_REINIT_ENABLE_ 0
@@ -140,6 +145,8 @@ public:
 
 	void Remove_Achievement_Observer();
 
+	void Achievement_Notify(int EventData, EAchievement_TriggerType TriggerType);
+
 	bool CheckAchievement(Achievement_t& achievement);
 
 	bool Append_Remove_List(Event_Observer<int>* Observer, EAchievement_TriggerType TriggerType);
@@ -149,10 +156,12 @@ public:
 private:
 	Tanxl_Achievement();
 
-	EventSubject<int> _Achievement_Subject;
+	EventSubject<int> _Achievement_State_Subject;
 
 	int _State_Remove_List_Size;
 	Event_Observer<int>* _State_RemoveList[10];
+
+	EventSubject<int> _Achievement_Count_Subject;
 
 	int _Count_Remove_List_Size;
 	Event_Observer<int>* _Count_RemoveList[10];
@@ -175,13 +184,12 @@ private:
 class Achievement_Count_Trigger_Observer : public Event_Observer<int>
 {
 public:
-	Achievement_Count_Trigger_Observer(Achievement_t Achievement, int EventId, int Count_Target);
+	Achievement_Count_Trigger_Observer(Achievement_t Achievement, int Count_Target);
 
 	void EventCheck(int& DataCount);
 
 private:
 	Achievement_t _Achievement;
-	int _Event_Id;
 	int _Count_Target;
 };
 

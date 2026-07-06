@@ -1,6 +1,7 @@
 //_VERSION_0_1_ UPDATE LOG
 // LAST_UPDATE 2024-04-03 17:59
 // 从事件类中独立出观察者模式类
+// 观察事件类增加观察者个数的获取接口
 
 #pragma once
 
@@ -29,6 +30,8 @@ public:
 	void Remove_Observer();
 
 	void Notify(Tanxl_TypeName Tanxl_Type);
+
+	int Size();
 
 private:
 	std::vector<Event_Observer<Tanxl_TypeName>*> _ObserverS;
@@ -63,6 +66,12 @@ inline void EventSubject<Tanxl_TypeName>::Notify(Tanxl_TypeName Tanxl_Type)
 {
 	for (const auto& Observer : this->_ObserverS)
 		Observer->EventCheck(Tanxl_Type);
+}
+
+template<typename Tanxl_TypeName>
+inline int EventSubject<Tanxl_TypeName>::Size()
+{
+	return static_cast<int>(this->_ObserverS.size());
 }
 
 #endif

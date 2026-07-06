@@ -20,8 +20,8 @@ void Tanxl_Inventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* cal
 	if (bGotResult)
 	{
 		// For everything already in the inventory, check for update (exists in result) or removal (does not exist)
-		std::list<TanxlItem*>::iterator iter;
-		for (iter = _listPlayerItems.begin(); iter != _listPlayerItems.end(); /*incr at end of loop*/)
+		std::list<TanxlItem*>::iterator iter{ _listPlayerItems.begin() };
+		for (; iter != _listPlayerItems.end(); /*incr at end of loop*/)
 		{
 			bool bFound{ false };
 			for (size_t i{ 0 }; i < vecDetails.size(); i++)
@@ -159,15 +159,20 @@ void Tanxl_Achievement::UnlockAchievement(Achievement_t& achievement)
 	achievement.m_bAchieved = true;
 	achievement.m_iIconImage = 0;
 	if (Steam_Service::GetSteamUserStats() != nullptr)
+	{
 		Steam_Service::GetSteamUserStats()->SetAchievement(achievement.m_pchAchievementID);
+		std::cout << "Achievement Unlock Called !" << std::endl;
+	}
 }
 
 void Tanxl_Achievement::Remove_Achievement_Observer()
 {
+	//std::cout << "Removing1 : " << this->_State_Remove_List_Size << std::endl;
+	//std::cout << "Removing2 : " << this->_Count_Remove_List_Size << std::endl;
 	for (int i{ 0 }; i < this->_State_Remove_List_Size; ++i)
 		if (this->_State_RemoveList[i] != nullptr)
 		{
-			this->_Achievement_Subject.Remove_Observer(this->_State_RemoveList[i]);
+			this->_Achievement_State_Subject.Remove_Observer(this->_State_RemoveList[i]);
 			this->_State_RemoveList[i] = nullptr;
 		}
 	this->_State_Remove_List_Size = 0;
@@ -175,10 +180,27 @@ void Tanxl_Achievement::Remove_Achievement_Observer()
 	for (int i{ 0 }; i < this->_Count_Remove_List_Size; ++i)
 		if (this->_Count_RemoveList[i] != nullptr)
 		{
-			this->_Achievement_Subject.Remove_Observer(this->_Count_RemoveList[i]);
+			this->_Achievement_Count_Subject.Remove_Observer(this->_Count_RemoveList[i]);
 			this->_Count_RemoveList[i] = nullptr;
 		}
 	this->_Count_Remove_List_Size = 0;
+}
+
+void Tanxl_Achievement::Achievement_Notify(int EventData, EAchievement_TriggerType TriggerType)
+{
+	if (TriggerType == STATE_TRIGGER)
+	{
+		if (this->_Achievement_State_Subject.Size() != 0)
+			this->_Achievement_State_Subject.Notify(EventData);
+		//std::cout << "RemoveList Size : " << this->_Count_Remove_List_Size << std::endl;
+	}
+	else
+	{
+		if (this->_Achievement_Count_Subject.Size() != 0)
+			this->_Achievement_Count_Subject.Notify(EventData);
+		//std::cout << "RemoveList Size : " << this->_State_Remove_List_Size << std::endl;
+	}
+	Remove_Achievement_Observer();
 }
 
 bool Tanxl_Achievement::CheckAchievement(Achievement_t& achievement)
@@ -197,8 +219,8 @@ bool Tanxl_Achievement::Append_Remove_List(Event_Observer<int>* Observer, EAchie
 			return false;
 		else
 		{
-			this->_State_Remove_List_Size++;
 			this->_State_RemoveList[this->_State_Remove_List_Size] = Observer;
+			this->_State_Remove_List_Size++;
 			return true;
 		}
 	}
@@ -208,8 +230,8 @@ bool Tanxl_Achievement::Append_Remove_List(Event_Observer<int>* Observer, EAchie
 			return false;
 		else
 		{
-			this->_Count_Remove_List_Size++;
 			this->_Count_RemoveList[this->_Count_Remove_List_Size] = Observer;
+			this->_Count_Remove_List_Size++;
 			return true;
 		}
 	}
@@ -225,10 +247,28 @@ bool Tanxl_Achievement::RequestStats()
 }
 
 Tanxl_Achievement::Tanxl_Achievement() :
-	_Achievement_Subject(), _State_Remove_List_Size(0), _State_RemoveList(), _Count_Remove_List_Size(0), _Count_RemoveList()
+	_Achievement_State_Subject(), _Achievement_Count_Subject(), _State_Remove_List_Size(0),
+	_State_RemoveList(), _Count_Remove_List_Size(0), _Count_RemoveList()
 {
 	std::cout << "Achievement Init Called" << std::endl;
 	Steam_Service::Reinit_Steam();
+
+	ISteamUserStats* UserStatus{ Steam_Service::GetSteamUserStats() };
+	if (UserStatus != nullptr)
+	{
+		bool Is_Achieved{ false };
+		UserStatus->GetAchievement(g_rgAchievements[0].m_pchAchievementID, &Is_Achieved);
+		if (Is_Achieved == false)
+			this->_Achievement_State_Subject.Add_Observer(new Achievement_State_Trigger_Observer(g_rgAchievements[0], 5, 4));
+		Is_Achieved = false;
+		UserStatus->GetAchievement(g_rgAchievements[1].m_pchAchievementID, &Is_Achieved);
+		if (Is_Achieved == false)
+			this->_Achievement_Count_Subject.Add_Observer(new Achievement_Count_Trigger_Observer(g_rgAchievements[1], 1));
+		Is_Achieved = false;
+		UserStatus->GetAchievement(g_rgAchievements[2].m_pchAchievementID, &Is_Achieved);
+		if (Is_Achieved == false)
+			this->_Achievement_Count_Subject.Add_Observer(new Achievement_Count_Trigger_Observer(g_rgAchievements[2], 500));
+	}
 }
 
 Achievement_State_Trigger_Observer::Achievement_State_Trigger_Observer(Achievement_t Achievement, int EventId, int Times_ToUnlock) :
@@ -242,20 +282,28 @@ void Achievement_State_Trigger_Observer::EventCheck(int& EventId)
 		if (_Internal_Times >= _Times_ToUnlock)
 		{
 			if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this, STATE_TRIGGER))
+			{
+				static SoundBase* SB{ &SoundBase::GetSoundBase() };
+				SB->Play_Sound("music/Game_Achievement_Unlock.wav");
 				Tanxl_Achievement::Get_AchievementBase().UnlockAchievement(_Achievement);
+			}
 		}
 	}
 }
 
-Achievement_Count_Trigger_Observer::Achievement_Count_Trigger_Observer(Achievement_t Achievement, int EventId, int Count_Target)
-	:_Achievement(Achievement), _Event_Id(EventId), _Count_Target(Count_Target) {}
+Achievement_Count_Trigger_Observer::Achievement_Count_Trigger_Observer(Achievement_t Achievement, int Count_Target)
+	:_Achievement(Achievement), _Count_Target(Count_Target) {}
 
 void Achievement_Count_Trigger_Observer::EventCheck(int& DataCount)
 {
 	if (DataCount > _Count_Target)
 	{
 		if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this, COUNT_TRIGGER))
+		{
+			static SoundBase* SB{ &SoundBase::GetSoundBase() };
+				SB->Play_Sound("music/Game_Achievement_Unlock.wav");
 			Tanxl_Achievement::Get_AchievementBase().UnlockAchievement(_Achievement);
+		}
 	}
 }
 
