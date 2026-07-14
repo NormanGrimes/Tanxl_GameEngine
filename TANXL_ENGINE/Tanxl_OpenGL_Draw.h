@@ -38,6 +38,7 @@
 // 移除起始界面着色器成员
 // 新增多个装备的纹理
 // 增加装备纹理的更新功能
+// 移除一个内部着色器数组
 
 #pragma once
 
@@ -631,7 +632,6 @@ private:
 	GLuint _vao[3];
 	GLuint _vbo[32];
 	GLuint _Font_vbo[5];
-	GLuint _Inst_vbo[32];
 
 	int _Texture_Reuse_Slot[25]{};
 	//当前游戏状态

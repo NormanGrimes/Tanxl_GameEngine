@@ -6,7 +6,7 @@
 
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
-const static std::string SubVersion{ "12" };
+const static std::string SubVersion{ "14" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -21,7 +21,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 }
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
-_Inst_vbo(), _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
+_Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
 _Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4"), TestLayer(this) {}
 
 const std::string OpenGL_Draw::Get_Version()
@@ -255,6 +255,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 		}
 		BeginHeight -= State->Get_Each_Height();
 	}
+
+	GLuint _Inst_vbo[4];
 
 	glGenBuffers(1, &_Inst_vbo[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]);
@@ -879,7 +881,7 @@ void Motion_Cycle::Set_Idle_Image(const char* Motion_Image)
 	this->_Idle_Image = Motion_Image;
 }
 
-void Motion_Cycle::Idle_Image()
+void Motion_Cycle::Idle_Image()//无操作画面
 {
 	if (this->_Internal_Id != this->_SLastMotion_Id)
 	{

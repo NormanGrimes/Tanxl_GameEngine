@@ -178,45 +178,40 @@ void Coord_Componment::Reset_Data()
 	this->_Last_Distance_Move = 0.0f;
 }
 
-void Coord_Componment::Update_Last_Location()
+void Coord_Componment::Move(int Direction, float Range)
 {
 	this->_Last_Distance_Mid = this->_Distance_Mid;
 	this->_Last_Distance_Move = this->_Distance_Move;
-}
 
-void Coord_Componment::Move_To(int Direction, float Range)
-{
 	switch (Direction)
 	{
 	case 1:
-		this->_Last_Distance_Mid._Coord_X += Range;
-		this->_Last_Distance_Move._Coord_X += Range;
-
-		this->_Distance_Mid._Coord_X = this->_Last_Distance_Mid._Coord_X;
-		this->_Distance_Move._Coord_X = this->_Last_Distance_Move._Coord_X;
+		this->_Distance_Mid._Coord_X += Range;
+		this->_Distance_Move._Coord_X += Range;
 		break;
 	case 2:
-		this->_Last_Distance_Mid._Coord_X -= Range;
-		this->_Last_Distance_Move._Coord_X -= Range;
-
-		this->_Distance_Mid._Coord_X = this->_Last_Distance_Mid._Coord_X;
-		this->_Distance_Move._Coord_X = this->_Last_Distance_Move._Coord_X;
+		this->_Distance_Mid._Coord_X -= Range;
+		this->_Distance_Move._Coord_X -= Range;
 		break;
 	case 3:
-		this->_Last_Distance_Mid._Coord_Y += Range;
-		this->_Last_Distance_Move._Coord_Y += Range;
-
-		this->_Distance_Mid._Coord_Y = this->_Last_Distance_Mid._Coord_Y;
-		this->_Distance_Move._Coord_Y = this->_Last_Distance_Move._Coord_Y;
+		this->_Distance_Mid._Coord_Y += Range;
+		this->_Distance_Move._Coord_Y += Range;
 		break;
 	case 4:
-		this->_Last_Distance_Mid._Coord_Y -= Range;
-		this->_Last_Distance_Move._Coord_Y -= Range;
-
-		this->_Distance_Mid._Coord_Y = this->_Last_Distance_Mid._Coord_Y;
-		this->_Distance_Move._Coord_Y = this->_Last_Distance_Move._Coord_Y;
+		this->_Distance_Mid._Coord_Y -= Range;
+		this->_Distance_Move._Coord_Y -= Range;
 		break;
 	}
+}
+
+void Coord_Componment::Move(Tanxl_Coord<float>& MoveData)
+{
+	this->_Last_Distance_Mid = this->_Distance_Mid;
+	this->_Last_Distance_Move = this->_Distance_Move;
+
+	this->_Last_Move += MoveData;
+	this->_Distance_Move += MoveData;
+	this->_Distance_Mid += MoveData;
 }
 
 void Coord_Componment::RollBack(int BackStatus)
@@ -260,16 +255,6 @@ Tanxl_Coord<float>* Coord_Componment::Get_Distance_Move()
 Tanxl_Coord<float>* Coord_Componment::Get_Distance_Mid()
 {
 	return &this->_Distance_Mid;
-}
-
-Tanxl_Coord<float>* Coord_Componment::Get_Last_Distance_Mid()
-{
-	return &this->_Last_Distance_Mid;
-}
-
-Tanxl_Coord<float>* Coord_Componment::Get_Last_Distance_Move()
-{
-	return &this->_Last_Distance_Move;
 }
 
 Equipment_Componment::Equipment_Componment() :_Attack_Damage(0), _Defense_Armor(0),

@@ -1,3 +1,18 @@
+TEnGinE Version-0.3 Build-15 2024-05-11 15:38 UPDATE_LOG
+////////////////////////////////////////////////////////
+存储模块优化序号数据结构的内存空间。优化引擎基础类的内存
+空间。绘制模块移除一个内部着色器数组。坐标组件修复移动接
+口错误的修改上次移动位置的问题。坐标组件增加一个重载版本
+的移动接口。坐标组件移除更新上次移动位置的接口。坐标组件
+移除两个获取上次移动位置的接口。
+
+TEnGinE Version-0.3 Build-14 2024-05-08 18:35 UPDATE_LOG
+////////////////////////////////////////////////////////
+服务模块增加计数触发类型的成就的分类枚举。服务模块增加一
+个结构体作为观察者参数。服务模块成就通知接口拆分为两个接
+口。服务模块添加成就移除队列接口增加一个重载版本。服务模
+块计数类型成就增加类型检查。
+
 TEnGinE Version-0.3 Build-13 2024-05-07 18:23 UPDATE_LOG
 ////////////////////////////////////////////////////////
 服务模块成就类初始化时根据成就状态添加成就观察者。服务模
@@ -656,6 +671,20 @@ TEnGinE Version-0.2 Build-35 2023-09-04 17:02 UPDATE_LOG
 功能。设置地图偏移坐标为40乘40。地图模块增加记录数据长度
 的私有变量。地图模块修复字符串定位数据功能可能导致溢出的
 问题。
+--------------------------------------------------------
+The map module fixed the issue that the build 
+connection function overflowed with the unconnected 
+data connection. The Draw module fixed an issue that 
+could cause division by zeroing in the reloading map 
+interface. The Maps module has been added to generate a 
+reloaded version of a map tile. The Draw module removes 
+the ability to adjust wait frames. Reworked the Grass 
+No. 2 texture image. The map vertex shader removes 
+alternate block colors. Set the map offset coordinates 
+to 40 by 40. The map module adds a private variable for 
+the length of the recorded data. The map module fixed 
+the issue that the string locating data function might 
+cause overflow.
 
 TEnGinE Version-0.2 Build-34 2023-08-31 15:50 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -664,6 +693,17 @@ TEnGinE Version-0.2 Build-34 2023-08-31 15:50 UPDATE_LOG
 扩展世界中心的编号。存储模块部分定位接口抛出的异常转换为
 字符串。地图模块增加地图数据动态扩展功能测试。地图模块新
 增一对多构建数据连接的接口。
+--------------------------------------------------------
+The map module adds a multi-map block trigger event 
+class. Variables that plot module namespace storage 
+numbers are instead stored in multi-block trigger 
+events. The map module adds a variable to record the 
+number of the current extended world center. Exceptions 
+thrown by enclosure partially located interfaces are 
+converted to strings. The map module adds the dynamic 
+expansion function test of map data. The map module 
+adds an interface for building one-to-many data 
+connections.
 
 TEnGinE Version-0.2 Build-33 2023-08-30 16:03 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -673,6 +713,19 @@ STEAM_服务模块增加库存物品类。随机模块修复随机世界生成错
 问题。引擎管理模块移除地图生成中输出的地图数据文件。引擎
 管理模块简化地图数据设置接口的参数。随机模块刷新字库执行
 的次数减半。
+--------------------------------------------------------
+Steam Services module adds inventory item categories. 
+The Random module fixed an issue where random worlds 
+generated incorrect data. The engine management module 
+fixed the bug that the width of the infinite world 
+generation interface needed to be greater than the 
+offset. The map module fixed the problem that the last 
+item could not be located in the location map 
+interface. The engine management module removes the map 
+data files that are output in map generation. The 
+engine management module simplifies the parameters of 
+the map data setting interface. The number of times a 
+random module refreshes the font is halved.
 
 TEnGinE Version-0.2 Build-32 2023-08-28 16:07 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -681,6 +734,16 @@ TEnGinE Version-0.2 Build-32 2023-08-28 16:07 UPDATE_LOG
 力防御力移动速度的属性组件。输入模块优化鼠标按键按下的判
 断逻辑。地图模块定位地图数据接口优化重复代码。绘制模块构
 造函数初始化变量减少。
+--------------------------------------------------------
+The draw module instantiates the test code to add a 
+simplified version of the texture array. Added audio to 
+the audio module to restore health and mouse clicks. 
+Added a new attribute component to the Item module that 
+records the character's attack, defense, and movement 
+speed. The input module optimizes the judgment logic of 
+mouse button presses. The map module locates the map 
+data interface and optimizes the duplicate code. Draw 
+module constructor initialization variables reduced.
 
 TEnGinE Version-0.2 Build-31 2023-08-24 10:30 UPDATE_LOG
 ////////////////////////////////////////////////////////
@@ -689,6 +752,16 @@ TEnGinE Version-0.2 Build-31 2023-08-24 10:30 UPDATE_LOG
 码。增加踩到红色方块增加金币的设定。数据定义模块适配存储
 模块的改动。增加实例化测试版本顶点着色器。修改地图偏移坐
 标为10x10。
+--------------------------------------------------------
+Added audio that triggers map events. A gold component 
+has been added to the item module. Draw the test code 
+for the module to be displayed with text. Draw module 
+augmentation and instantiate test code with macro 
+controls. Added the setting to step on a red square to 
+increase the number of coins. The data definition 
+module adapts to the changes in the enclosure. Added 
+instantiated test version vertex shader. Change the map 
+offset coordinates to 10x10.
 
 TEnGinE Version-0.2 Build-30 TURBO 2023-08-22 11:41 UPDATE_LOG
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

@@ -34,6 +34,7 @@
 // 数据处理接口移除两个多余的迭代器
 // 数据输出接口移除一个多余的迭代器
 // 获取本地数据接口移除第一个关键字中的额外关键字
+// 优化序号数据结构的内存空间
 
 #pragma once
 
@@ -129,19 +130,18 @@ struct Data_Link//数据数据结构V4.1
 #endif
 };
 
-struct Id_Link//序号数据结构V4.1
+struct Id_Link//序号数据结构V4.2
 {
 	explicit Id_Link(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link* Data = nullptr);
 	void Append_Data_Link(Data_Link* Data);
 	int _Type, _Exac;
-	std::string _Type_Name, _Exac_Name;
+	std::string* _Type_Name, *_Exac_Name;
 	Data_Link* _Data;
 
 	friend std::ostream& operator<<(std::ostream& fot, Id_Link& Link);
 
-#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
 	~Id_Link();
-
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
 	static int Link_Count;
 	int Current_Link_Id;
 #endif

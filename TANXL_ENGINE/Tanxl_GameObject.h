@@ -1,6 +1,10 @@
 ﻿//_VERSION_0_5_ UPDATE LOG
 // LAST_UPDATE 2024-04-09 18:04
 // 新增装备观察者以及一个替换地图编号的装备事件
+// 坐标组件修复移动接口错误的修改上次移动位置的问题
+// 坐标组件增加一个重载版本的移动接口
+// 坐标组件移除更新上次移动位置的接口
+// 坐标组件移除两个获取上次移动位置的接口
 
 #pragma once
 
@@ -103,15 +107,13 @@ public:
 	Coord_Componment();
 
 	void Reset_Data();
-	void Update_Last_Location();
-	void Move_To(int Direction, float Range);
+	void Move(int Direction, float Range);
+	void Move(Tanxl_Coord<float>& MoveData);
 	void RollBack(int BackStatus);
 
 	Tanxl_Coord<float>* Get_Last_Move();
 	Tanxl_Coord<float>* Get_Distance_Move();
 	Tanxl_Coord<float>* Get_Distance_Mid();
-	Tanxl_Coord<float>* Get_Last_Distance_Mid();
-	Tanxl_Coord<float>* Get_Last_Distance_Move();
 private:
 	//_Last_Move 用于记录上次移动距离
 	Tanxl_Coord<float> _Last_Move;

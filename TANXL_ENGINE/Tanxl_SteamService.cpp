@@ -167,8 +167,6 @@ void Tanxl_Achievement::UnlockAchievement(Achievement_t& achievement)
 
 void Tanxl_Achievement::Remove_Achievement_Observer()
 {
-	//std::cout << "Removing1 : " << this->_State_Remove_List_Size << std::endl;
-	//std::cout << "Removing2 : " << this->_Count_Remove_List_Size << std::endl;
 	for (int i{ 0 }; i < this->_State_Remove_List_Size; ++i)
 		if (this->_State_RemoveList[i] != nullptr)
 		{
@@ -186,20 +184,17 @@ void Tanxl_Achievement::Remove_Achievement_Observer()
 	this->_Count_Remove_List_Size = 0;
 }
 
-void Tanxl_Achievement::Achievement_Notify(int EventData, EAchievement_TriggerType TriggerType)
+void Tanxl_Achievement::Achievement_State_Notify(int EventData)
 {
-	if (TriggerType == STATE_TRIGGER)
-	{
-		if (this->_Achievement_State_Subject.Size() != 0)
-			this->_Achievement_State_Subject.Notify(EventData);
-		//std::cout << "RemoveList Size : " << this->_Count_Remove_List_Size << std::endl;
-	}
-	else
-	{
-		if (this->_Achievement_Count_Subject.Size() != 0)
-			this->_Achievement_Count_Subject.Notify(EventData);
-		//std::cout << "RemoveList Size : " << this->_State_Remove_List_Size << std::endl;
-	}
+	if (this->_Achievement_State_Subject.Size() != 0)
+		this->_Achievement_State_Subject.Notify(EventData);
+	Remove_Achievement_Observer();
+}
+
+void Tanxl_Achievement::Achievement_Count_Notify(EAchievement_CountType Type, int EventData)
+{
+	if (this->_Achievement_Count_Subject.Size() != 0)
+		this->_Achievement_Count_Subject.Notify(CountAchType(Type, EventData));
 	Remove_Achievement_Observer();
 }
 
@@ -211,29 +206,27 @@ bool Tanxl_Achievement::CheckAchievement(Achievement_t& achievement)
 	return Is_Unlock;
 }
 
-bool Tanxl_Achievement::Append_Remove_List(Event_Observer<int>* Observer, EAchievement_TriggerType TriggerType)
+bool Tanxl_Achievement::Append_Remove_List(Event_Observer<int>* Observer)
 {
-	if (TriggerType == STATE_TRIGGER)
-	{
-		if (this->_State_Remove_List_Size >= 9)
-			return false;
-		else
-		{
-			this->_State_RemoveList[this->_State_Remove_List_Size] = Observer;
-			this->_State_Remove_List_Size++;
-			return true;
-		}
-	}
+	if (this->_State_Remove_List_Size >= 9)
+		return false;
 	else
 	{
-		if (this->_Count_Remove_List_Size >= 9)
-			return false;
-		else
-		{
-			this->_Count_RemoveList[this->_Count_Remove_List_Size] = Observer;
-			this->_Count_Remove_List_Size++;
-			return true;
-		}
+		this->_State_RemoveList[this->_State_Remove_List_Size] = Observer;
+		this->_State_Remove_List_Size++;
+		return true;
+	}
+}
+
+bool Tanxl_Achievement::Append_Remove_List(Event_Observer<CountAchType>* Observer)
+{
+	if (this->_Count_Remove_List_Size >= 9)
+		return false;
+	else
+	{
+		this->_Count_RemoveList[this->_Count_Remove_List_Size] = nullptr;// Observer;
+		this->_Count_Remove_List_Size++;
+		return true;
 	}
 }
 
@@ -259,29 +252,30 @@ Tanxl_Achievement::Tanxl_Achievement() :
 		bool Is_Achieved{ false };
 		UserStatus->GetAchievement(g_rgAchievements[0].m_pchAchievementID, &Is_Achieved);
 		if (Is_Achieved == false)
-			this->_Achievement_State_Subject.Add_Observer(new Achievement_State_Trigger_Observer(g_rgAchievements[0], 5, 4));
+			this->_Achievement_State_Subject.Add_Observer(new Achievement_State_Observer(g_rgAchievements[0], 5, 4));
 		Is_Achieved = false;
 		UserStatus->GetAchievement(g_rgAchievements[1].m_pchAchievementID, &Is_Achieved);
 		if (Is_Achieved == false)
-			this->_Achievement_Count_Subject.Add_Observer(new Achievement_Count_Trigger_Observer(g_rgAchievements[1], 1));
+			this->_Achievement_Count_Subject.Add_Observer(new Achievement_Count_Observer(g_rgAchievements[1], COUNT_MONEY, 100));
 		Is_Achieved = false;
 		UserStatus->GetAchievement(g_rgAchievements[2].m_pchAchievementID, &Is_Achieved);
 		if (Is_Achieved == false)
-			this->_Achievement_Count_Subject.Add_Observer(new Achievement_Count_Trigger_Observer(g_rgAchievements[2], 500));
+			this->_Achievement_Count_Subject.Add_Observer(new Achievement_Count_Observer(g_rgAchievements[2], COUNT_MONEY, 500));
 	}
 }
 
-Achievement_State_Trigger_Observer::Achievement_State_Trigger_Observer(Achievement_t Achievement, int EventId, int Times_ToUnlock) :
+Achievement_State_Observer::Achievement_State_Observer(Achievement_t Achievement, int EventId, int Times_ToUnlock) :
 	_Achievement(Achievement), _Event_Id(EventId), _Times_ToUnlock(Times_ToUnlock), _Internal_Times(0) {}
 
-void Achievement_State_Trigger_Observer::EventCheck(int& EventId)
+void Achievement_State_Observer::EventCheck(int& EventId)
 {
 	if (EventId == _Event_Id)
 	{
+		EventId = 0;
 		_Internal_Times++;
 		if (_Internal_Times >= _Times_ToUnlock)
 		{
-			if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this, STATE_TRIGGER))
+			if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this))
 			{
 				static SoundBase* SB{ &SoundBase::GetSoundBase() };
 				SB->Play_Sound("music/Game_Achievement_Unlock.wav");
@@ -291,14 +285,14 @@ void Achievement_State_Trigger_Observer::EventCheck(int& EventId)
 	}
 }
 
-Achievement_Count_Trigger_Observer::Achievement_Count_Trigger_Observer(Achievement_t Achievement, int Count_Target)
-	:_Achievement(Achievement), _Count_Target(Count_Target) {}
+Achievement_Count_Observer::Achievement_Count_Observer(Achievement_t Achievement, EAchievement_CountType Type, int Count_Target)
+	:_Achievement(Achievement), _Type(Type), _Count_Target(Count_Target) {}
 
-void Achievement_Count_Trigger_Observer::EventCheck(int& DataCount)
+void Achievement_Count_Observer::EventCheck(CountAchType& Data)
 {
-	if (DataCount > _Count_Target)
+	if ((Data._Type == this->_Type) && (Data._CountValue > this->_Count_Target))
 	{
-		if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this, COUNT_TRIGGER))
+		if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this))
 		{
 			static SoundBase* SB{ &SoundBase::GetSoundBase() };
 				SB->Play_Sound("music/Game_Achievement_Unlock.wav");
@@ -398,3 +392,5 @@ Tanxl_Inventory::Tanxl_Inventory(const Tanxl_Inventory&) :_PlaytimeRequestResult
 _SteamInventoryFullUpdate(this, &Tanxl_Inventory::OnSteamInventoryFullUpdate), _Steam_Invetory(nullptr), Tanxl_ClassBase("0.1") {}
 
 Tanxl_Inventory& Tanxl_Inventory::operator=(const Tanxl_Inventory&) { return *this; }
+
+CountAchType::CountAchType(EAchievement_CountType Type, int CountValue) :_Type(Type), _CountValue(CountValue) {}

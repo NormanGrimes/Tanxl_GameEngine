@@ -35,7 +35,6 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 	static OpenGL_Draw* OPD{ &OpenGL_Draw::GetOpenGLBase() };
 	int PressStatus{ 0 };
 	double MoveScale{ OPD->Get_DeltaTime() };
-	Character.Coord()->Update_Last_Location();
 
 	if (this->_Is_Key_Enable == false)
 		return;
@@ -82,9 +81,7 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 		this->_Insert_Status |= 2;
 	}
 	
-	*Character.Coord()->Get_Last_Move() += this->_Insert_Move_Length;
-	*Character.Coord()->Get_Distance_Move() += this->_Insert_Move_Length;
-	*Character.Coord()->Get_Distance_Mid() += this->_Insert_Move_Length;
+	Character.Coord()->Move(this->_Insert_Move_Length);
 
 	AutoCheck(*Character.Coord()->Get_Distance_Mid(), *Character.Coord()->Get_Distance_Move());
 #if _TANXL_INSERTACTION_CONSOLE_BASE_OUTPUT_

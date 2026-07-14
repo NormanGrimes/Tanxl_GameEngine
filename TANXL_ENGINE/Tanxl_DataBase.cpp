@@ -68,15 +68,19 @@ Data_Link::~Data_Link()
 {
 	std::cout << "Data Link " << this->Current_Link_Id << " was destory" << std::endl;
 }
-
+#endif
 Id_Link::~Id_Link()
 {
+#if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
 	std::cout << "Id Link " << this->Current_Link_Id << " was destory" << std::endl;
-}
 #endif
+	delete this->_Type_Name;
+	delete this->_Exac_Name;
+}
+
 
 Id_Link::Id_Link(int Type, std::string Type_Name, int Exac, std::string Exac_Name, Data_Link* Data) :
-	_Type(Type), _Type_Name(Type_Name), _Exac(Exac), _Exac_Name(Exac_Name)
+	_Type(Type), _Type_Name(new std::string(Type_Name)), _Exac(Exac), _Exac_Name(new std::string(Exac_Name))
 {
 #if _TANXL_DATABASE_CONSOLE_DATA_DEBUG_
 	this->Current_Link_Id = Link_Count++;

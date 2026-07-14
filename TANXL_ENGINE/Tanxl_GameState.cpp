@@ -899,9 +899,11 @@ void GameStateBase::State_Check_Event(GameObject& Character)
 	StateUnit* CheckUnit{ this->Get_State() };
 	if (!CheckUnit)
 		return;
-	int Unit_State_Id{ CheckUnit->_Extra_Status };
+	int/*&*/ Unit_State_Id{CheckUnit->_Extra_Status};
 
-	AC->Achievement_Notify(MC->Money()->Get_Money(), COUNT_TRIGGER);
+	AC->Achievement_Count_Notify(COUNT_MONEY, MC->Money()->Get_Money());
+
+	//AC->Achievement_State_Notify(Unit_State_Id);
 
 	if (Unit_State_Id == 2)
 	{
@@ -1154,7 +1156,7 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 						Check_Range = 0.0035f;
 				}
 
-				Character.Coord()->Move_To(Check_Direction, Check_Range);
+				Character.Coord()->Move(Check_Direction, Check_Range);
 			}
 			else
 				break;

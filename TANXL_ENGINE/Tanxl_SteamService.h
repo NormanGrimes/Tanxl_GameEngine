@@ -39,6 +39,11 @@
 // 增加一个成就被观察者
 // 增加成就通知接口
 // 修复移除成就队列添加错误的问题
+// 增加计数触发类型的成就的分类枚举
+// 增加一个结构体作为观察者参数
+// 成就通知接口拆分为两个接口
+// 添加成就移除队列接口增加一个重载版本
+// 计数类型成就增加类型检查
 
 #pragma once
 
@@ -136,6 +141,20 @@ enum EAchievement_TriggerType
 	COUNT_TRIGGER
 };
 
+enum EAchievement_CountType
+{
+	COUNT_MONEY,
+	COUNT_STATE
+};
+
+struct CountAchType
+{
+	CountAchType(EAchievement_CountType Type, int CountValue);
+
+	EAchievement_CountType _Type;
+	int _CountValue;
+};
+
 class Tanxl_Achievement
 {
 public:
@@ -143,34 +162,38 @@ public:
 
 	void UnlockAchievement(Achievement_t& achievement);
 
-	void Remove_Achievement_Observer();
+	void Achievement_State_Notify(int EventData);
 
-	void Achievement_Notify(int EventData, EAchievement_TriggerType TriggerType);
+	void Achievement_Count_Notify(EAchievement_CountType Type, int EventData);
 
 	bool CheckAchievement(Achievement_t& achievement);
 
-	bool Append_Remove_List(Event_Observer<int>* Observer, EAchievement_TriggerType TriggerType);
+	bool Append_Remove_List(Event_Observer<int>* Observer);
+
+	bool Append_Remove_List(Event_Observer<CountAchType>* Observer);
 
 	bool RequestStats();//请求用户统计数据
 
 private:
 	Tanxl_Achievement();
 
+	void Remove_Achievement_Observer();
+
 	EventSubject<int> _Achievement_State_Subject;
 
 	int _State_Remove_List_Size;
 	Event_Observer<int>* _State_RemoveList[10];
 
-	EventSubject<int> _Achievement_Count_Subject;
+	EventSubject<CountAchType> _Achievement_Count_Subject;
 
 	int _Count_Remove_List_Size;
-	Event_Observer<int>* _Count_RemoveList[10];
+	Event_Observer<CountAchType>* _Count_RemoveList[10];
 };
 
-class Achievement_State_Trigger_Observer : public Event_Observer<int>
+class Achievement_State_Observer : public Event_Observer<int>
 {
 public:
-	Achievement_State_Trigger_Observer(Achievement_t Achievement, int EventId, int Times_ToUnlock = 1);
+	Achievement_State_Observer(Achievement_t Achievement, int EventId, int Times_ToUnlock = 1);
 
 	void EventCheck(int& EventId);
 
@@ -181,15 +204,16 @@ private:
 	int _Times_ToUnlock;
 };
 
-class Achievement_Count_Trigger_Observer : public Event_Observer<int>
+class Achievement_Count_Observer : public Event_Observer<CountAchType>
 {
 public:
-	Achievement_Count_Trigger_Observer(Achievement_t Achievement, int Count_Target);
+	Achievement_Count_Observer(Achievement_t Achievement, EAchievement_CountType Type, int Count_Target);
 
-	void EventCheck(int& DataCount);
+	void EventCheck(CountAchType& Data);
 
 private:
 	Achievement_t _Achievement;
+	EAchievement_CountType _Type;
 	int _Count_Target;
 };
 

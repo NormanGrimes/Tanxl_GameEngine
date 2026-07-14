@@ -5,6 +5,7 @@
 // 引擎基础类增加名称获取函数
 // 移动语言枚举到引擎基础模块中
 // 移动地图单元类到引擎基础模块中
+// 优化引擎基础类的内存空间
 
 #pragma once
 
@@ -25,21 +26,28 @@ enum ECurren_Language
 class Tanxl_ClassBase
 {
 public:
-	Tanxl_ClassBase(std::string Version, std::string Name = "UNDEFINE NAME") :_Version(Version), _Name(Name) {}
+	Tanxl_ClassBase(std::string Version, std::string Name = "UNDEFINE NAME") :
+		_Version(new std::string(Version)), _Name(new std::string(Name)) {}
 
 	inline std::string Get_Version()
 	{
-		return this->_Version;
+		return *this->_Version;
 	}
 
 	inline std::string Get_Name()
 	{
-		return this->_Name;
+		return *this->_Name;
+	}
+
+	virtual ~Tanxl_ClassBase()
+	{
+		delete this->_Version;
+		delete this->_Name;
 	}
 
 private:
-	const std::string _Version;
-	const std::string _Name;
+	const std::string* _Version;
+	const std::string* _Name;
 };
 
 //StateUnit
