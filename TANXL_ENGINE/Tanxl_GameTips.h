@@ -8,6 +8,7 @@
 // 重制提示语言接口改为重制所有相关语言字符
 // 加入到引擎分类中
 // 修复一个可能导致编译失败的问题
+// 所有涉及显示的字体设为宽字符串
 
 #pragma once
 
@@ -26,13 +27,13 @@ public:
 
 	void ResetFonts(ECurren_Language Language);
 
-	std::string GetTips();
+	std::wstring GetTips();
 
-	std::string Get_DisplayVersion();
+	std::wstring Get_DisplayVersion();
 
-	std::string Get_GameOverName();
+	std::wstring Get_GameOverName();
 
-	std::string Get_PlayerCoinName();
+	std::wstring Get_PlayerCoinName();
 
 	int Update_Count();
 
@@ -62,9 +63,9 @@ private:
 		"Tips : Red squares can also provide coin"
 	};
 
-	std::string _VersionDisplay{ "TANXL GAME VERSION" };
-	std::string _GameOverName{ "GAME OVER" };
-	std::string _PlayerCoinName{ "Coin" };
+	std::wstring _VersionDisplay{ L"TANXL GAME VERSION" };
+	std::wstring _GameOverName{ L"GAME OVER" };
+	std::wstring _PlayerCoinName{ L"Coin" };
 };
 
 #endif

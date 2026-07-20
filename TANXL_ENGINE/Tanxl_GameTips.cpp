@@ -21,9 +21,9 @@ void GameTips::ResetFonts(ECurren_Language Language)
 		_Tips[6] = "提示七 : 你无法通过红色的方块";
 		_Tips[7] = "提示八 : 红色方块在造成伤害的同时也提供金币";
 
-		_VersionDisplay = "TANXL 版本编号";
-		_GameOverName = "游戏结束";
-		_PlayerCoinName = "金币";
+		_VersionDisplay = L"TANXL 版本编号";
+		_GameOverName = L"游戏结束";
+		_PlayerCoinName = L"金币";
 	}
 	else if (Language == ECurren_Language::LANGUAGE_RUSSIAN)
 	{
@@ -36,9 +36,9 @@ void GameTips::ResetFonts(ECurren_Language Language)
 		_Tips[6] = "Советы: Нельзя пересекать синие квадраты";
 		_Tips[7] = "Советы: Красные квадраты также могут дать монету";
 
-		_VersionDisplay = "ВЕРСИЯ ИГРЫ TANXL";
-		_GameOverName = "ИГРА ЗАКОНЧЕНА";
-		_PlayerCoinName = "Монета";
+		_VersionDisplay = L"ВЕРСИЯ ИГРЫ TANXL";
+		_GameOverName = L"ИГРА ЗАКОНЧЕНА";
+		_PlayerCoinName = L"Монета";
 	}
 	else if (Language == ECurren_Language::LANGUAGE_FRENCH)
 	{
@@ -51,37 +51,43 @@ void GameTips::ResetFonts(ECurren_Language Language)
 		_Tips[6] = "Vous ne pouvez pas traverser les treillis bleus";
 		_Tips[7] = "Les treillis rouges peuvent aussi fournir de la monnaie";
 
-		_VersionDisplay = "JEU TANXL VERSION";
-		_GameOverName = "FIN DU JEU";
-		_PlayerCoinName = "Pièce";
+		_VersionDisplay = L"JEU TANXL VERSION";
+		_GameOverName = L"FIN DU JEU";
+		_PlayerCoinName = L"Pièce";
 	}
 }
 
-std::string GameTips::GetTips()
+std::wstring GameTips::GetTips()
 {
 	static int Current_Internal_Count{ -1 };
-	static std::string Last_String;
+	static std::wstring Last_String;
 
 	if (Current_Internal_Count == _Internal_Count)
 		return Last_String;
 
 	Current_Internal_Count = _Internal_Count;
 	if (_File_Loaded)
-		return Last_String = Tips_Data.Id_Link_Locate(1, _Internal_Count)->_Data->_Data_Units.at(0)->_Data;
-	return Last_String = _Tips[_Internal_Count];
+	{
+		std::string Data{ Tips_Data.Id_Link_Locate(1, _Internal_Count)->_Data->_Data_Units.at(0)->_Data };
+		std::wstring WData{ std::wstring(Data.begin(),Data.end()) };
+		return WData;
+	}
+	std::string Data{ _Tips[_Internal_Count] };
+	std::wstring WData{ std::wstring(Data.begin(),Data.end()) };
+	return WData;
 }
 
-std::string GameTips::Get_DisplayVersion()
+std::wstring GameTips::Get_DisplayVersion()
 {
 	return this->_VersionDisplay;
 }
 
-std::string GameTips::Get_GameOverName()
+std::wstring GameTips::Get_GameOverName()
 {
 	return this->_GameOverName;
 }
 
-std::string GameTips::Get_PlayerCoinName()
+std::wstring GameTips::Get_PlayerCoinName()
 {
 	return this->_PlayerCoinName;
 }

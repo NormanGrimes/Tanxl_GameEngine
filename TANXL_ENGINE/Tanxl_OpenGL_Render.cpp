@@ -117,13 +117,7 @@ GLuint OpenGL_Render::createShaderProgram(const char* vp, const char* fp)
 
 GLuint OpenGL_Render::createShaderProgram(std::string vp, std::string fp)
 {
-	GLuint vShader{ prepareShader(GL_VERTEX_SHADER, vp.c_str()) };
-	GLuint fShader{ prepareShader(GL_FRAGMENT_SHADER, fp.c_str()) };
-	GLuint vfprogram{ glCreateProgram() };
-	glAttachShader(vfprogram, vShader);
-	glAttachShader(vfprogram, fShader);
-	finalizeShaderProgram(vfprogram);
-	return vfprogram;
+	return createShaderProgram(vp.c_str(), fp.c_str());
 }
 
 GLuint OpenGL_Render::loadTexture(const char *texImagePath)

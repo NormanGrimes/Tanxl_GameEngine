@@ -79,10 +79,9 @@ void Tanxl_Engine::Engine_State_Set_Display(int Width, int Height, int PreLoads)
 	this->Tanxl_Engine_OpenGL_Draw->init(this->Tanxl_Engine_GameState);
 }
 
-void Tanxl_Engine::Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend)
+void Tanxl_Engine::Engine_State_Compile_Units(std::string Infor, EState_Extend Extend)
 {
 	this->Tanxl_Engine_GameState->CompileStateUnits(Infor, Extend);
-	this->Tanxl_Engine_GameState->Set_State_Counts(Width, Height);
 }
 
 void Tanxl_Engine::Engine_Insert_State_Limit(bool Enable, float Max_Height, float Max_Width)
@@ -158,7 +157,6 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 		}
 	}
 	this->Tanxl_Engine_GameState->Set_Data_Size(Width * Height);
-	this->Tanxl_Engine_GameState->Set_State_Counts(256, 256);
 
 	if (Build_Connect)
 	{

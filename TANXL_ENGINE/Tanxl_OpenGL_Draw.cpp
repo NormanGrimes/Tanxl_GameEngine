@@ -7,6 +7,8 @@
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
 const static std::string SubVersion{ "14" };
+const static std::wstring wMainVersion{ L"3" };
+const static std::wstring wSubVersion{ L"14" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -674,11 +676,11 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + ": " + std::to_string(Character->Money()->Get_Money()), 811.0f, 28.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + L": " + std::to_wstring(Character->Money()->Get_Money()), 811.0f, 28.0f, 0.7f, 1);
 	if(Steam_Service::Get_InitStatus() == 2)
-		Font->RenderText("Build Id : " + std::to_string(Steam_Service::GetSteamApps()->GetAppBuildId()), 10.0f, 785.0f, 0.25f, 1);
+		Font->RenderText(L"Build Id : " + std::to_wstring(Steam_Service::GetSteamApps()->GetAppBuildId()), 10.0f, 785.0f, 0.25f, 1);
 	else
-		Font->RenderText("Build Id : ERROR", 10.0f, 785.0f, 0.25f, 1);
+		Font->RenderText(L"Build Id : ERROR", 10.0f, 785.0f, 0.25f, 1);
 	if (!Character->Health()->Is_Alive())
 		Font->RenderText(Tips->Get_GameOverName(), 280.0f, 650.0f, 1.3f, 2);
 
@@ -688,7 +690,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			static_cast<float>(sin(glfwGetTime())) * 0.5f + 0.5f,
 			static_cast<float>(cos(glfwGetTime())) * 0.5f + 0.5f,
 			0.5f));
-		Font->RenderText(Tips->Get_DisplayVersion() + " " + MainVersion + "." + SubVersion, VersionFontSize, 10.0f, 1.0f);
+		Font->RenderText(Tips->Get_DisplayVersion() + L" " + wMainVersion + L"." + wSubVersion, VersionFontSize, 10.0f, 1.0f);
 	}
 
 	glBindVertexArray(0);

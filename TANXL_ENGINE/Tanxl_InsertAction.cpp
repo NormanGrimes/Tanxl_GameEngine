@@ -41,8 +41,6 @@ void InsertEventBase::GetInsert(GLFWwindow* window, GameStateBase* State, GameOb
 
 	this->_Insert_Move_Length = 0.0f;
 
-	*Character.Coord()->Get_Last_Move() = 0.0f;
-
 	if (this->_KeyNameS.size() == 0)
 		return;
 

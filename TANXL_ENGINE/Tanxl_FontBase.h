@@ -16,6 +16,7 @@
 // 字体确认接口恢复中文字体的支持
 // 字体改为宽字符存储
 // 合并设置语言接口和确认语言接口
+// 增加添加字体纹理接口
 
 #pragma once
 
@@ -55,13 +56,15 @@ public:
 
 	void Init_Fonts(EFontSet Font);
 
+	void Insert_Character(int Font_Id, GLuint Text_Id);
+
 	void Set_Language(ECurren_Language Language);
 
 	void Bind_FontVAO(GLuint Font_VAO,GLuint Font_VBO);
 
 	void Set_FontColor(glm::vec3 color);
 
-	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, int Font_Id = 0);
+	void RenderText(std::wstring text, GLfloat x, GLfloat y, GLfloat scale, int Font_Id = 0);
 
 	ECurren_Language Get_Language() const;
 

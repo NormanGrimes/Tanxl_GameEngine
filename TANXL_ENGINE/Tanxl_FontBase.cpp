@@ -31,7 +31,7 @@ void FontBase::Init_Fonts(std::string Font_Path)
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	// Load first 128 characters of ASCII set
-	GLuint FontCnts{ 256 };
+	GLuint FontCnts{ 128 };
 
 	for (GLuint c = 0; c < FontCnts; c++)
 	{
@@ -82,6 +82,61 @@ void FontBase::Init_Fonts(EFontSet Font)
 	this->Init_Fonts(this->_Internal_FontPath[Font]);
 }
 
+void FontBase::Insert_Character(int Font_Id, GLuint Text_Id)
+{
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft))
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+
+	FT_Face face;
+	if (FT_New_Face(ft, this->_Internal_FontPath[Font_Id].c_str(), 0, &face))
+		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+
+	FT_Set_Pixel_Sizes(face, 0, 48);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	// Load character glyph 
+	if (FT_Load_Char(face, Text_Id, FT_LOAD_RENDER))
+	{
+		std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+		return;
+	}
+	// Generate texture
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(
+		GL_TEXTURE_2D,
+		0,
+		GL_RED,
+		face->glyph->bitmap.width,
+		face->glyph->bitmap.rows,
+		0,
+		GL_RED,
+		GL_UNSIGNED_BYTE,
+		face->glyph->bitmap.buffer
+	);
+	// Set texture options
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Now store character for later use
+	SCharacter character{
+		texture,
+		glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+		glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+		static_cast<GLuint>(face->glyph->advance.x)
+	};
+	_Characters[_Internal_Font_Counts].insert(std::pair<GLuint, SCharacter>(Text_Id, character));
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	_Internal_Font_Counts++;
+	// Destroy FreeType once we're finished
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
+}
+
 void FontBase::Set_Language(ECurren_Language Language)
 {
 	this->_Internal_Language = Language;
@@ -123,7 +178,7 @@ void FontBase::Set_FontColor(glm::vec3 color)
 	this->_Font_Color = color;
 }
 
-void FontBase::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, int Font_Id)
+void FontBase::RenderText(std::wstring text, GLfloat x, GLfloat y, GLfloat scale, int Font_Id)
 {
 	glUniform3f(0, this->_Font_Color.x, this->_Font_Color.y, this->_Font_Color.z);
 	glActiveTexture(GL_TEXTURE0);
@@ -133,6 +188,16 @@ void FontBase::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale,
 	std::wstring wText{ std::wstring(text.begin(),text.end()) };
 	for (std::wstring::const_iterator c{ wText.begin() }; c != wText.end(); ++c)
 	{
+		std::cout << "c :" << *c << std::endl;
+		std::cout << "Font Id:" << (this->Get_Characters(Font_Id))[*c].TextureID << std::endl;
+
+		if ((this->Get_Characters(Font_Id))[*c].TextureID == 0)
+		{
+			std::cout << "Reload Font " << std::endl;
+			this->Insert_Character(Font_Id, *c);
+			std::cout << "Reload Font Id:" << (this->Get_Characters(Font_Id))[*c].TextureID << std::endl;
+		}
+
 		SCharacter ch{ (this->Get_Characters(Font_Id))[*c] };// Characters[*c];
 
 		GLfloat xpos{ x + ch.Bearing.x * scale };
@@ -161,6 +226,7 @@ void FontBase::RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale,
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 		x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
 	}
+	std::cout << std::endl;
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

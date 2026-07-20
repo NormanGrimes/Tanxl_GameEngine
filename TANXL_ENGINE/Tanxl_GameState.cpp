@@ -275,9 +275,7 @@ void GameStateBase::Clear_Display_Vector(EState_Extend Clear_Id) const
 void GameStateBase::Set_Display_State(int Width, int Height)
 {
 	this->_GameState_Length._Coord_X = Width;
-	this->_Half_State_Length._Coord_X = 1.0f / Width;
 	this->_GameState_Length._Coord_Y = Height;
-	this->_Half_State_Length._Coord_Y = 1.0f / Height;
 
 	this->_Each_Height = 2.0f / this->_GameState_Length._Coord_Y;//10 0.2
 	this->_Each_Width = 2.0f / this->_GameState_Length._Coord_X;//10 0.2
@@ -375,12 +373,6 @@ void GameStateBase::Set_State(int State_Id, std::string Cover_String, bool Start
 			this->Set_Data_Length(10, 10);
 		}
 	}
-}
-
-void GameStateBase::Set_State_Counts(int Width, int Height)
-{
-	this->_State_WidthS = Width;
-	this->_State_HeightS = Height;
 }
 
 GameStateBase& GameStateBase::GetStateBase(int Display_Width, int Display_Height)
@@ -727,11 +719,10 @@ void GameStateBase::Reload_State_Data(int PreLoads, glm::ivec2* StateInfor)
 
 void GameStateBase::Update_Move(float MoveX, float MoveY, GameObject& Character, ECheck_Edge Check)
 {
-	if ((this->_Half_State_Length._Coord_X == 0.0f) || (this->_Half_State_Length._Coord_Y == 0.0f))
-		this->Set_Display_State(this->_GameState_Length._Coord_X, this->_GameState_Length._Coord_Y);
+	static Tanxl_Coord<float> Half_State_Length(1.0f / this->_GameState_Length._Coord_X, 1.0f / this->_GameState_Length._Coord_Y);
 
-	static float State_Above_Below_Width{ this->_Half_State_Length._Coord_X * 2 / 3 };
-	static float State_Above_Below_Height{ this->_Half_State_Length._Coord_Y * 2 / 3 };
+	static float State_Above_Below_Width{ Half_State_Length._Coord_X * 2 / 3 };
+	static float State_Above_Below_Height{ Half_State_Length._Coord_Y * 2 / 3 };
 
 	switch (Check)
 	{
@@ -740,23 +731,23 @@ void GameStateBase::Update_Move(float MoveX, float MoveY, GameObject& Character,
 		MoveY += 0.0f;
 		break;
 	case CHECK_EDGE_LEFT:
-		MoveX -= this->_Half_State_Length._Coord_X * 2 / 3;
+		MoveX -= Half_State_Length._Coord_X * 2 / 3;
 		MoveY += State_Above_Below_Height;
 		State_Above_Below_Height = -State_Above_Below_Height;
 		break;
 	case CHECK_EDGE_RIGH:
-		MoveX += this->_Half_State_Length._Coord_X * 2 / 3;
+		MoveX += Half_State_Length._Coord_X * 2 / 3;
 		MoveY += State_Above_Below_Height;
 		State_Above_Below_Height = -State_Above_Below_Height;
 		break;
 	case CHECK_EDGE_BELO:
 		MoveX += State_Above_Below_Width;
-		MoveY -= this->_Half_State_Length._Coord_Y * 2 / 3;
+		MoveY -= Half_State_Length._Coord_Y * 2 / 3;
 		State_Above_Below_Width = -State_Above_Below_Width;
 		break;
 	case CHECK_EDGE_ABOV:
 		MoveX += State_Above_Below_Width;
-		MoveY += this->_Half_State_Length._Coord_Y * 2 / 3;
+		MoveY += Half_State_Length._Coord_Y * 2 / 3;
 		State_Above_Below_Width = -State_Above_Below_Width;
 		break;
 	}

@@ -209,7 +209,7 @@ void Coord_Componment::Move(Tanxl_Coord<float>& MoveData)
 	this->_Last_Distance_Mid = this->_Distance_Mid;
 	this->_Last_Distance_Move = this->_Distance_Move;
 
-	this->_Last_Move += MoveData;
+	this->_Last_Move = MoveData;
 	this->_Distance_Move += MoveData;
 	this->_Distance_Mid += MoveData;
 }

@@ -87,7 +87,7 @@ public:
 	void Engine_State_Set_Display(int Width, int Height, int PreLoads);
 
 	//根据一串合理的字符串对地图进行生成 Width预设宽度 Height预设高度 Infor地图数据 Extend指定编译的目标区块
-	void Engine_State_Compile_Units(int Width, int Height, std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
+	void Engine_State_Compile_Units(std::string Infor, EState_Extend Extend = STATE_EXTEND_MIDD);
 
 	//在开启了扩展世界功能的情况下 State_Id用于选定起始区域的ID Is_Begin用于记录是否为起始区块 使用State_Infor的信息覆盖指定ID下的信息
 	void Engine_State_Set_Data(int State_Id, bool Is_Begin, std::string State_Infor = "NULL");

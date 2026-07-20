@@ -15,6 +15,8 @@
 // 增加新成就的解锁功能
 // 增加成就状态的获取避免重复解锁
 // 计数类型成就使用新版成就功能
+// 移除地图区块计数及其相关设置接口
+// 记录半个地图单元长度的成员设为局部变量
 
 #pragma once
 
@@ -196,7 +198,6 @@ public:
 	//↓Set_State : Start 为False时仅修改指定区域的地图数据 State_Id 指定区域Id Cover_String为覆盖的内容
 	// Start 为True时设置起始区域并构建初始连接编译周围区域 State_Id起始区域Id Cover_String不为NULL时覆盖起始区域内容
 	void Set_State(int State_Id, std::string Cover_String = "NULL", bool Start = false);
-	void Set_State_Counts(int Width, int Height);
 	void Set_Adjust(float Adjust);
 	void Set_Enable_Adjust(bool Enable_Adjust, bool Enable_While_Move);
 	void Set_Compile_Policy(std::string State_Name, int Set_To_Status);
@@ -262,16 +263,10 @@ private:
 	double _Each_Height{ 0 };
 	//_Each_Width 记录地图场景基本矩形的宽度值
 	double _Each_Width{ 0 };
-	// _State_WidthS 地图区块在横向的个数
-	int _State_WidthS{ 0 };
-	// _State_HeightS 地图区块在纵向的个数
-	int _State_HeightS{ 0 };
 	//_Current_Move 记录手动移动指定的当前坐标高度值
 	Tanxl_Coord<int> _Current_Move{ 0, 0 };
 	//_New_Current_Loc 移动导致改变的新坐标高度值
 	Tanxl_Coord<int> _New_Current_Loc{ 0, 0 };
-	// _Half_State_Length 半个地图单元的长度
-	Tanxl_Coord<float> _Half_State_Length{ 0.0f, 0.0f };
 	// _Exac_Location 玩家方块经过计算后的实际坐标
 	Tanxl_Coord<int> _Exac_Location;
 	//_GameState_Length 用于控制当前地图的显示宽/高度
