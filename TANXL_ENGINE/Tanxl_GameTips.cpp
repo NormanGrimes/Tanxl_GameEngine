@@ -12,14 +12,14 @@ void GameTips::ResetFonts(ECurren_Language Language)
 {
 	if (Language == ECurren_Language::LANGUAGE_CHINESE)
 	{
-		_Tips[0] = "提示一 : 金币道具可以提供五个金币";
-		_Tips[1] = "提示二 : 按W键或者上方向箭向上移动";
-		_Tips[2] = "提示三 : 按S键或者下方向箭向下移动";
-		_Tips[3] = "提示四 : 注意红色的方块!";
-		_Tips[4] = "提示五 : 按A键或者左方向箭向左移动";
-		_Tips[5] = "提示六 : 按D键或者右方向箭向右移动";
-		_Tips[6] = "提示七 : 你无法通过红色的方块";
-		_Tips[7] = "提示八 : 红色方块在造成伤害的同时也提供金币";
+		_Tips[0] = L"提示一 : 金币道具可以提供五个金币";
+		_Tips[1] = L"提示二 : 按W键或者上方向箭向上移动";
+		_Tips[2] = L"提示三 : 按S键或者下方向箭向下移动";
+		_Tips[3] = L"提示四 : 注意红色的方块!";
+		_Tips[4] = L"提示五 : 按A键或者左方向箭向左移动";
+		_Tips[5] = L"提示六 : 按D键或者右方向箭向右移动";
+		_Tips[6] = L"提示七 : 你无法通过红色的方块";
+		_Tips[7] = L"提示八 : 红色方块在造成伤害的同时也提供金币";
 
 		_VersionDisplay = L"TANXL 版本编号";
 		_GameOverName = L"游戏结束";
@@ -27,14 +27,14 @@ void GameTips::ResetFonts(ECurren_Language Language)
 	}
 	else if (Language == ECurren_Language::LANGUAGE_RUSSIAN)
 	{
-		_Tips[0] = "Советы: Золотой круг дает пять золотых монет";
-		_Tips[1] = "Советы: Нажмите кнопку W или вверх, чтобы переместиться вверх";
-		_Tips[2] = "Советы: Нажмите кнопку S или вниз, чтобы двигаться вниз";
-		_Tips[3] = "Советы: Осторожно, красные квадраты!";
-		_Tips[4] = "Советы: Нажмите кнопку A или левую кнопку, чтобы переместиться влево";
-		_Tips[5] = "Советы: Нажмите D или правую кнопку, чтобы двигаться вправо";
-		_Tips[6] = "Советы: Нельзя пересекать синие квадраты";
-		_Tips[7] = "Советы: Красные квадраты также могут дать монету";
+		_Tips[0] = L"Советы: Золотой круг дает пять золотых монет";
+		_Tips[1] = L"Советы: Нажмите кнопку W или вверх, чтобы переместиться вверх";
+		_Tips[2] = L"Советы: Нажмите кнопку S или вниз, чтобы двигаться вниз";
+		_Tips[3] = L"Советы: Осторожно, красные квадраты!";
+		_Tips[4] = L"Советы: Нажмите кнопку A или левую кнопку, чтобы переместиться влево";
+		_Tips[5] = L"Советы: Нажмите D или правую кнопку, чтобы двигаться вправо";
+		_Tips[6] = L"Советы: Нельзя пересекать синие квадраты";
+		_Tips[7] = L"Советы: Красные квадраты также могут дать монету";
 
 		_VersionDisplay = L"ВЕРСИЯ ИГРЫ TANXL";
 		_GameOverName = L"ИГРА ЗАКОНЧЕНА";
@@ -42,14 +42,14 @@ void GameTips::ResetFonts(ECurren_Language Language)
 	}
 	else if (Language == ECurren_Language::LANGUAGE_FRENCH)
 	{
-		_Tips[0] = "Le cercle d or donne cinq points";
-		_Tips[1] = "Appuyez sur le bouton W ou vers le haut pour monter";
-		_Tips[2] = "Appuyez sur le bouton S ou vers le bas pour descendre";
-		_Tips[3] = "Attention aux treillis rouges !";
-		_Tips[4] = "Appuyez sur A ou sur le bouton gauche pour aller vers la gauche";
-		_Tips[5] = "Appuyez sur le bouton D ou droit pour aller vers la droite";
-		_Tips[6] = "Vous ne pouvez pas traverser les treillis bleus";
-		_Tips[7] = "Les treillis rouges peuvent aussi fournir de la monnaie";
+		_Tips[0] = L"Le cercle d or donne cinq points";
+		_Tips[1] = L"Appuyez sur le bouton W ou vers le haut pour monter";
+		_Tips[2] = L"Appuyez sur le bouton S ou vers le bas pour descendre";
+		_Tips[3] = L"Attention aux treillis rouges !";
+		_Tips[4] = L"Appuyez sur A ou sur le bouton gauche pour aller vers la gauche";
+		_Tips[5] = L"Appuyez sur le bouton D ou droit pour aller vers la droite";
+		_Tips[6] = L"Vous ne pouvez pas traverser les treillis bleus";
+		_Tips[7] = L"Les treillis rouges peuvent aussi fournir de la monnaie";
 
 		_VersionDisplay = L"JEU TANXL VERSION";
 		_GameOverName = L"FIN DU JEU";
@@ -70,11 +70,11 @@ std::wstring GameTips::GetTips()
 	{
 		std::string Data{ Tips_Data.Id_Link_Locate(1, _Internal_Count)->_Data->_Data_Units.at(0)->_Data };
 		std::wstring WData{ std::wstring(Data.begin(),Data.end()) };
+		Last_String = WData;
 		return WData;
 	}
-	std::string Data{ _Tips[_Internal_Count] };
-	std::wstring WData{ std::wstring(Data.begin(),Data.end()) };
-	return WData;
+	Last_String = _Tips[_Internal_Count];
+	return _Tips[_Internal_Count];
 }
 
 std::wstring GameTips::Get_DisplayVersion()

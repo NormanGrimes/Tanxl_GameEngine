@@ -68,6 +68,7 @@ void FontBase::Init_Fonts(std::string Font_Path)
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			static_cast<GLuint>(face->glyph->advance.x)
 		};
+
 		_Characters[_Internal_Font_Counts].insert(std::pair<GLuint, SCharacter>(c, character));
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -84,12 +85,18 @@ void FontBase::Init_Fonts(EFontSet Font)
 
 void FontBase::Insert_Character(int Font_Id, GLuint Text_Id)
 {
+	int Temp_Font_Id{};
+	if (this->_Internal_Language != ECurren_Language::LANGUAGE_ENGLISH)
+		Temp_Font_Id = this->_Special_Font_Id;
+
 	FT_Library ft;
 	if (FT_Init_FreeType(&ft))
 		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
 
+	std::cout << "Font:" << this->_Internal_FontPath[Font_Id] << std::endl;
+
 	FT_Face face;
-	if (FT_New_Face(ft, this->_Internal_FontPath[Font_Id].c_str(), 0, &face))
+	if (FT_New_Face(ft, this->_Internal_FontPath[Temp_Font_Id].c_str(), 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 	FT_Set_Pixel_Sizes(face, 0, 48);
@@ -128,10 +135,10 @@ void FontBase::Insert_Character(int Font_Id, GLuint Text_Id)
 		glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 		static_cast<GLuint>(face->glyph->advance.x)
 	};
-	_Characters[_Internal_Font_Counts].insert(std::pair<GLuint, SCharacter>(Text_Id, character));
+
+	_Characters[Font_Id].insert(std::pair<GLuint, SCharacter>(Text_Id, character));
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	_Internal_Font_Counts++;
 	// Destroy FreeType once we're finished
 	FT_Done_Face(face);
 	FT_Done_FreeType(ft);
@@ -147,6 +154,7 @@ void FontBase::Set_Language(ECurren_Language Language)
 		this->Init_Fonts(EFontSet::JosefinSansBold);
 		this->Init_Fonts(EFontSet::NacelleBlack);
 		this->_Internal_Font_Counts = 3;
+		this->_Special_Font_Id = 2;
 	}
 	else if (this->_Internal_Language == LANGUAGE_FRENCH)
 	{
@@ -154,16 +162,19 @@ void FontBase::Set_Language(ECurren_Language Language)
 		this->Init_Fonts(EFontSet::JosefinSansBold);
 		this->Init_Fonts(EFontSet::NacelleBlack);
 		this->_Internal_Font_Counts = 3;
+		this->_Special_Font_Id = 2;
 	}
 	else if (this->_Internal_Language == LANGUAGE_RUSSIAN)
 	{
 		this->Init_Fonts(EFontSet::kremlinPremierRegular);
 		this->_Internal_Font_Counts = 1;
+		this->_Special_Font_Id = 3;
 	}
 	else if (this->_Internal_Language == LANGUAGE_CHINESE)
 	{
 		this->Init_Fonts(EFontSet::GuangLiangFont);
 		this->_Internal_Font_Counts = 1;
+		this->_Special_Font_Id = 3;
 	}
 }
 
@@ -185,17 +196,11 @@ void FontBase::RenderText(std::wstring text, GLfloat x, GLfloat y, GLfloat scale
 	glBindVertexArray(this->_Font_VAO);
 
 	// Iterate through all characters
-	std::wstring wText{ std::wstring(text.begin(),text.end()) };
-	for (std::wstring::const_iterator c{ wText.begin() }; c != wText.end(); ++c)
+	for (std::wstring::const_iterator c{ text.begin() }; c != text.end(); ++c)
 	{
-		std::cout << "c :" << *c << std::endl;
-		std::cout << "Font Id:" << (this->Get_Characters(Font_Id))[*c].TextureID << std::endl;
-
 		if ((this->Get_Characters(Font_Id))[*c].TextureID == 0)
 		{
-			std::cout << "Reload Font " << std::endl;
 			this->Insert_Character(Font_Id, *c);
-			std::cout << "Reload Font Id:" << (this->Get_Characters(Font_Id))[*c].TextureID << std::endl;
 		}
 
 		SCharacter ch{ (this->Get_Characters(Font_Id))[*c] };// Characters[*c];
@@ -226,7 +231,6 @@ void FontBase::RenderText(std::wstring text, GLfloat x, GLfloat y, GLfloat scale
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 		x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
 	}
-	std::cout << std::endl;
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -234,6 +238,11 @@ void FontBase::RenderText(std::wstring text, GLfloat x, GLfloat y, GLfloat scale
 ECurren_Language FontBase::Get_Language() const
 {
 	return this->_Internal_Language;
+}
+
+int FontBase::Get_Special_Id() const
+{
+	return this->_Special_Font_Id;
 }
 
 std::map<wchar_t, SCharacter> FontBase::Get_Characters(int Id)

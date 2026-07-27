@@ -13,7 +13,8 @@ Tanxl_Engine_LocationBase(&LocationBase::GetLocationBase()),
 Tanxl_Engine_ObjectBase(&GameObjectBase::GetObjectBase()),
 Tanxl_Engine_Inventory(Tanxl_Inventory::Get_InventoryBase()),
 Tanxl_Engine_SoundBase(&SoundBase::GetSoundBase()),
-Tanxl_Engine_FontBase(&FontBase::GetFontBase())
+Tanxl_Engine_FontBase(&FontBase::GetFontBase()),
+Tanxl_Engine_GameTips(&GameTips::GetTipsBase())
 {
 	if (!this->Tanxl_Engine_Console_List)
 		this->_Engine_Status = 0x1;
@@ -31,8 +32,14 @@ Tanxl_Engine_FontBase(&FontBase::GetFontBase())
 		this->_Engine_Status = 0x7;
 	else if (!this->Tanxl_Engine_ObjectBase)
 		this->_Engine_Status = 0x8;
-	else if (!this->Tanxl_Engine_SoundBase)
+	else if(!this->Tanxl_Engine_Inventory)
 		this->_Engine_Status = 0x9;
+	else if (!this->Tanxl_Engine_SoundBase)
+		this->_Engine_Status = 0xA;
+	else if (!this->Tanxl_Engine_FontBase)
+		this->_Engine_Status = 0xB;
+	else if (!this->Tanxl_Engine_GameTips)
+		this->_Engine_Status = 0xC;
 
 	if(this->_Engine_Status)
 		std::cout << "Fail to fully start Engine !" << std::endl;
@@ -367,7 +374,11 @@ void Tanxl_Engine::Engine_Event_State_Regist(std::string Name, int LocationX, in
 
 void Tanxl_Engine::Engine_System_Set_Language(ECurren_Language Language)
 {
+	if (Language == ECurren_Language::LANGUAGE_USER)
+		Language = Steam_Service::Get_User_Language();
+
 	this->Tanxl_Engine_FontBase->Set_Language(Language);
+	this->Tanxl_Engine_GameTips->ResetFonts(Language);
 }
 
 bool Tanxl_Engine::Engine_Should_Shut_Down()

@@ -9,6 +9,7 @@
 // 加入到引擎分类中
 // 修复一个可能导致编译失败的问题
 // 所有涉及显示的字体设为宽字符串
+// 修复获取提示接口二次调用错误的问题
 
 #pragma once
 
@@ -51,16 +52,16 @@ private:
 	bool _File_Loaded;
 	int _Internal_Count{ 0 };
 
-	std::string _Tips[8]
+	std::wstring _Tips[8]
 	{
-		"Tips : The golden circle provides five gold coins",
-		"Tips : Press W or up button to move upward",
-		"Tips : Press S or down button to move downward",
-		"Tips : Watch out red squares !",
-		"Tips : Press A or left button to move leftward",
-		"Tips : Press D or right button to move rightward",
-		"Tips : You can not cross the blue squares",
-		"Tips : Red squares can also provide coin"
+		L"Tips : The golden circle provides five gold coins",
+		L"Tips : Press W or up button to move upward",
+		L"Tips : Press S or down button to move downward",
+		L"Tips : Watch out red squares !",
+		L"Tips : Press A or left button to move leftward",
+		L"Tips : Press D or right button to move rightward",
+		L"Tips : You can not cross the blue squares",
+		L"Tips : Red squares can also provide coin"
 	};
 
 	std::wstring _VersionDisplay{ L"TANXL GAME VERSION" };

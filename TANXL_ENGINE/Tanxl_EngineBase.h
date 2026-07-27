@@ -6,6 +6,7 @@
 // 移动语言枚举到引擎基础模块中
 // 移动地图单元类到引擎基础模块中
 // 优化引擎基础类的内存空间
+// 完成中文字符的显示功能
 
 #pragma once
 
@@ -16,6 +17,7 @@
 
 enum ECurren_Language
 {
+	LANGUAGE_USER,
 	LANGUAGE_ENGLISH,
 	LANGUAGE_CHINESE,
 	LANGUAGE_FRENCH,

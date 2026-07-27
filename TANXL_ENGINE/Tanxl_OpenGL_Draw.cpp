@@ -84,10 +84,15 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glUseProgram(this->_Fonts_RenderingProgram);
 	glUniformMatrix4fv(4, 1, GL_FALSE, glm::value_ptr(projection));
 
-	Font->Set_Language(ECurren_Language::LANGUAGE_ENGLISH);
+	ECurren_Language UserLanguage{ Steam_Service::Get_User_Language() };
+	std::cout << "UserLanguage Id :" << UserLanguage << std::endl;
+	if ((UserLanguage != ECurren_Language::LANGUAGE_CHINESE) && (UserLanguage != ECurren_Language::LANGUAGE_ENGLISH))
+		UserLanguage = ECurren_Language::LANGUAGE_ENGLISH;
+
+	Font->Set_Language(UserLanguage);
 
 	static GameTips* Tips{ &GameTips::GetTipsBase() };
-	//Tips->ResetFonts(ECurren_Language::LANGUAGE_CHINESE);
+	Tips->ResetFonts(UserLanguage);
 
 	glGenVertexArrays(1, &_vao[0]);
 	glGenBuffers(1, &_Font_vbo[0]);

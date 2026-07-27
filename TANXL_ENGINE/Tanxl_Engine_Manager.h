@@ -30,6 +30,9 @@
 // 2024/03/06 增加获取主要操控角色指针的接口
 // 2024/04/01 增加新版本的音频相关接口
 // 2024/04/08 库存类允许初始化失败并增加失败的检测
+// 2024/05/22 增加对提示类的支持
+// 2024/05/22 修复初始化错误信息缺少的问题
+// 2024/05/22 调整语言设置接口并在枚举中增加用户语言
 
 #pragma once
 
@@ -51,6 +54,7 @@
 #include "Tanxl_SteamService.h"
 #include "Tanxl_SoundBase.h"
 #include "Tanxl_FontBase.h"
+#include "Tanxl_GameTips.h"
 
 enum class EENGINE_BASES
 {
@@ -66,7 +70,8 @@ enum class EENGINE_BASES
 	ENGINE_LOCATIONBASE  =  8,
 	ENGINE_OBJECTBASE    =  9,
 	ENGINE_FONTBASE      = 10,
-	ENGINE_SOUNDBASE     = 11
+	ENGINE_SOUNDBASE     = 11,
+	ENGINE_GAMETIPS		 = 12
 };
 
 class Tanxl_Engine
@@ -184,6 +189,7 @@ private:
 	Tanxl_Inventory* Tanxl_Engine_Inventory;
 	SoundBase* Tanxl_Engine_SoundBase;
 	FontBase* Tanxl_Engine_FontBase;
+	GameTips* Tanxl_Engine_GameTips;
 
 	//Status :
 	// 0x001 引擎组件控制台列表初始化失败

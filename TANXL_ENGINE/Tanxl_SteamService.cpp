@@ -143,6 +143,24 @@ int Steam_Service::Get_InitStatus()
 	return _Steam_API_InitStatus;
 }
 
+ECurren_Language Steam_Service::Get_User_Language()
+{
+	if (SteamApps() == nullptr)
+		return ECurren_Language::LANGUAGE_ENGLISH;
+
+	std::string UserLanguage{ SteamApps()->GetCurrentGameLanguage() };
+	if (UserLanguage == "french")
+		return ECurren_Language::LANGUAGE_FRENCH;
+	else if (UserLanguage == "russian")
+		return ECurren_Language::LANGUAGE_RUSSIAN;
+	else if (UserLanguage == "schinese")
+		return ECurren_Language::LANGUAGE_CHINESE;
+	else if (UserLanguage == "japanese")
+		return ECurren_Language::LANGUAGE_JAPANESE;
+	else
+		return ECurren_Language::LANGUAGE_ENGLISH;
+}
+
 Steam_Service::Steam_Service() {}
 Steam_Service::~Steam_Service() {}
 Steam_Service::Steam_Service(const Steam_Service&) {}
@@ -354,24 +372,6 @@ void Tanxl_Inventory::ConsumeInvetoryItem(ETanxl_Inventory_ItemDefId ItemInstanc
 bool Tanxl_Inventory::AddPromoItem(ETanxl_Inventory_ItemDefId Item)
 {
 	return _Steam_Invetory->AddPromoItem(NULL, Item);
-}
-
-ECurren_Language Tanxl_Inventory::Get_User_Language()
-{
-	if(SteamApps() == nullptr)
-		return ECurren_Language::LANGUAGE_ENGLISH;
-
-	std::string UserLanguage{ SteamApps()->GetCurrentGameLanguage() };
-	if (UserLanguage == "french")
-		return ECurren_Language::LANGUAGE_FRENCH;
-	else if (UserLanguage == "russian")
-		return ECurren_Language::LANGUAGE_RUSSIAN;
-	else if (UserLanguage == "schinese")
-		return ECurren_Language::LANGUAGE_CHINESE;
-	else if (UserLanguage == "japanese")
-		return ECurren_Language::LANGUAGE_JAPANESE;
-	else
-		return ECurren_Language::LANGUAGE_ENGLISH;
 }
 
 Tanxl_Inventory::Tanxl_Inventory() :_PlaytimeRequestResult(k_SteamInventoryResultInvalid), _SteamInventoryInit_Status(false),

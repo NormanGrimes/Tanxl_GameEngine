@@ -17,6 +17,7 @@
 // 字体改为宽字符存储
 // 合并设置语言接口和确认语言接口
 // 增加添加字体纹理接口
+// 动态根据需要显示的字符添加纹理
 
 #pragma once
 
@@ -68,6 +69,8 @@ public:
 
 	ECurren_Language Get_Language() const;
 
+	int Get_Special_Id() const;
+
 	std::map<wchar_t, SCharacter> Get_Characters(int Id);
 
 	const std::string Get_Version();
@@ -80,6 +83,7 @@ private:
 	FontBase& operator=(const FontBase&);
 
 	int _Internal_Font_Counts{ 0 };
+	int _Special_Font_Id{ 0 };
 
 	std::string _Internal_FontPath[5]
 	{

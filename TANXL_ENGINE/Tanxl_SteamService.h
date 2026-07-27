@@ -44,6 +44,7 @@
 // 成就通知接口拆分为两个接口
 // 添加成就移除队列接口增加一个重载版本
 // 计数类型成就增加类型检查
+// 用户语言获取接口移入静态服务类
 
 #pragma once
 
@@ -120,6 +121,7 @@ public:
 
 	static bool Reinit_Steam();
 	static int Get_InitStatus();
+	static ECurren_Language Get_User_Language();
 
 private:
 	Steam_Service();
@@ -234,8 +236,6 @@ public:
 	void ConsumeInvetoryItem(ETanxl_Inventory_ItemDefId ItemInstanceId);
 
 	bool AddPromoItem(ETanxl_Inventory_ItemDefId Item);
-
-	ECurren_Language Get_User_Language();
 
 private:
 
