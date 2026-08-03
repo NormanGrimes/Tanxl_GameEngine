@@ -40,6 +40,13 @@
 // 增加装备纹理的更新功能
 // 移除一个内部着色器数组
 // 所有涉及显示的字体设为宽字符串
+// 去掉纹理初始化接口的参数并设为私有接口
+// 地图数据数组现在根据地图尺寸动态生成
+// 增加用于记录地图数据长度的变量
+// 绘制层类增加统一变量设置接口
+// 玩家的绘制使用绘制层类实现
+// 增加复用纹理信息结构体
+// 使用容器优化绘制层类的空间占用
 
 #pragma once
 
@@ -547,6 +554,15 @@ enum EGame_Status
 	GAME_PLAYER_STATUS_DISPLAY
 };
 
+struct ReuseTextureInfor
+{
+	ReuseTextureInfor(int ShaderLocation, int ReuseTextureId, const char* ReuseTexture)
+		:_ShaderLocation(ShaderLocation), _ReuseTextureId(ReuseTextureId), _ReuseTexture(ReuseTexture) {}
+
+	int _ShaderLocation;
+	int _ReuseTextureId;
+	const char* _ReuseTexture;
+};
 
 class Layer
 {
@@ -561,6 +577,10 @@ public:
 
 	void Draw_Layer(int Coord_Counts);
 
+	void Set_UniformValue(int UniformId, int Value);
+
+	void Set_UniformValue(int UniformId, float Value);
+
 	void Reload_Texture();
 
 	void Draw_Layer();
@@ -570,10 +590,7 @@ public:
 private:
 	OpenGL_Draw* _DrawEngine;
 
-	int _Texture_Count;
-	int _Texture_Reuse_Location[15]{};
-	int _Texture_Reuse_Slot[15]{};
-	const char* _Texture_Reuse_Texture[15]{};
+	std::vector<ReuseTextureInfor*> _ReuseInfor;
 	GLuint _Shader_Program;
 	int _Coord_Counts;
 };
@@ -604,7 +621,6 @@ public:
 	void Enable_State_Adjust(bool Enable);
 	//用于第一次或重新加载整个地图场景
 	void Update_VertData(glm::ivec2* StateInfor);
-	void Init_Texture_Slot(int Slot_Count);
 	int Get_Adjust_Status() const;
 	//获取预载的数值
 	int Get_PreLoad() const;
@@ -614,6 +630,8 @@ public:
 	GLFWwindow* Get_Window()const;
 private:
 	OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust);
+
+	void Init_Texture_Slot();
 
 	bool _Clear_Function;
 	bool _Trigger_Mode{ false };
@@ -625,7 +643,7 @@ private:
 
 	GLuint _Midle_RenderingProgram{ 0 };
 	GLuint _State_RenderingProgram{ 0 };
-	GLuint _Adjst_RenderingProgram{ 0 };
+	//GLuint _Adjst_RenderingProgram{ 0 };
 	GLuint _Insta_RenderingProgram{ 0 };
 	GLuint _Fonts_RenderingProgram{ 0 };
 	GLuint _Healt_RenderingProgram{ 0 };
@@ -643,6 +661,8 @@ private:
 	int _Draw_Status{ 0 };
 	//最大的中间页面编号
 	int _Max_Middle_Frame{ 0 };
+	//记录地图数据信息的长度
+	int _StateInfor_Size{ 0 };
 	//记录地图场景的高度与宽度基本矩形行数
 	Tanxl_Coord<int> _Scene_Int{ 0, 0 };
 	//窗口的宽/高度
@@ -658,18 +678,17 @@ private:
 	//新版动作测试
 	std::vector<Motion_Cycle*> _MotionS;
 	//页面测试
-	Layer TestLayer;
+	Layer* AdjustPlayerLayer;
+	Layer* StartMenuLayer;
 	GLFWwindow* _Main_Window;
 	EGame_Status _Game_Status{ GAME_START_MENU };
-	glm::ivec2 _StateInfor[400];
+	glm::ivec2* _StateInfor;
 };
 
-inline Layer::Layer(OpenGL_Draw* DrawEngine) :_DrawEngine(DrawEngine), _Shader_Program(0), _Coord_Counts(0), _Texture_Reuse_Location(),
-_Texture_Reuse_Slot(), _Texture_Reuse_Texture(), _Texture_Count(0) {}
+inline Layer::Layer(OpenGL_Draw* DrawEngine) :_DrawEngine(DrawEngine), _Shader_Program(0), _Coord_Counts(0), _ReuseInfor() {}
 
 inline Layer::Layer(OpenGL_Draw* DrawEngine, const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts) :
-	_DrawEngine(DrawEngine), _Coord_Counts(Coord_Counts), _Texture_Reuse_Location(), _Texture_Reuse_Slot(),
-	_Texture_Reuse_Texture(), _Texture_Count(0)
+	_DrawEngine(DrawEngine), _Coord_Counts(Coord_Counts), _ReuseInfor()
 {
 	_Shader_Program = OpenGL_Render::createShaderProgram(VertShader_Program, FragShader_Program);
 }
@@ -682,9 +701,7 @@ inline void Layer::Init_Shader(const char* VertShader_Program, const char* FragS
 
 inline void Layer::Set_ReuseTexture(int Shader_Location, int Textrue_Target, const char* Texture)//Init only once
 {
-	_Texture_Reuse_Location[_Texture_Count] = Shader_Location;
-	_Texture_Reuse_Slot[_Texture_Count] = Textrue_Target;
-	_Texture_Reuse_Texture[_Texture_Count++] = Texture;
+	_ReuseInfor.push_back(new ReuseTextureInfor(Shader_Location, Textrue_Target, Texture));
 }
 
 inline void Layer::Draw_Layer(int Coord_Counts)
@@ -693,12 +710,22 @@ inline void Layer::Draw_Layer(int Coord_Counts)
 	Draw_Layer();
 }
 
+inline void Layer::Set_UniformValue(int UniformId, int Value)
+{
+	glProgramUniform1i(this->_Shader_Program, UniformId, Value);
+}
+
+inline void Layer::Set_UniformValue(int UniformId, float Value)
+{
+	glProgramUniform1f(this->_Shader_Program, UniformId, Value);
+}
+
 inline void Layer::Reload_Texture()
 {
-	for (int i{ 0 }; i < _Texture_Count; ++i)
+	for (int i{ 0 }; i < _ReuseInfor.size(); ++i)
 	{
-		_DrawEngine->Reinit_Texture(_Texture_Reuse_Slot[i], _Texture_Reuse_Texture[i]);
-		glProgramUniform1i(this->_Shader_Program, _Texture_Reuse_Location[i], _Texture_Reuse_Slot[i]);
+		_DrawEngine->Reinit_Texture(_ReuseInfor.at(i)->_ReuseTextureId, _ReuseInfor.at(i)->_ReuseTexture);
+		glProgramUniform1i(this->_Shader_Program, _ReuseInfor.at(i)->_ShaderLocation, _ReuseInfor.at(i)->_ReuseTextureId);
 	}
 }
 

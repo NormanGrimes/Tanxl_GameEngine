@@ -6,9 +6,9 @@
 
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
-const static std::string SubVersion{ "14" };
+const static std::string SubVersion{ "16" };
 const static std::wstring wMainVersion{ L"3" };
-const static std::wstring wSubVersion{ L"14" };
+const static std::wstring wSubVersion{ L"16" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -24,7 +24,22 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
-_Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4"), TestLayer(this) {}
+_Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4"), StartMenuLayer(new Layer(this)),
+AdjustPlayerLayer(new Layer(this)) {}
+
+void OpenGL_Draw::Init_Texture_Slot()
+{
+	for (int i{ 0 }; i < 25; ++i)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, _vbo[i]);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
+
+		glActiveTexture(GL_TEXTURE5 + i);
+
+		glBindTexture(GL_TEXTURE_2D, 1);
+	}
+}
 
 const std::string OpenGL_Draw::Get_Version()
 {
@@ -72,13 +87,13 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_Scene_Int = State->Get_StateLength();
 
 	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
-	this->_Adjst_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Insta_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Inst_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
 	this->_Healt_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_GameUI_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 
-	TestLayer.Init_Shader("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6);
+	AdjustPlayerLayer->Init_Shader("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6);
+	StartMenuLayer->Init_Shader("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6);
 
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(_Screen_Length._Coord_X), 0.0f, static_cast<GLfloat>(_Screen_Length._Coord_Y));
 	glUseProgram(this->_Fonts_RenderingProgram);
@@ -110,8 +125,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glGenBuffers(1, _vbo);
 	glBindVertexArray(_vao[1]);
 	
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 4, this->_Scene_Int._Coord_Y);//SHeight
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 5, this->_Scene_Int._Coord_X);//SWidth
+	AdjustPlayerLayer->Set_UniformValue(4, this->_Scene_Int._Coord_Y);
+	AdjustPlayerLayer->Set_UniformValue(5, this->_Scene_Int._Coord_X);
 
 	glProgramUniform1i(this->_Healt_RenderingProgram, 2, this->_Scene_Int._Coord_Y);//SHeight
 	glProgramUniform1i(this->_Healt_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
@@ -124,7 +139,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_State_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
 	glProgramUniform1i(this->_State_RenderingProgram, 6, this->_PreLoads);//PreLoads
 
-	Init_Texture_Slot(15);
+	Init_Texture_Slot();
 
 	//State_Square Part 0~6  Adjust random range when number of textures change 
 	Reinit_Texture(5, TanxlOD::TexGrass_01);
@@ -207,7 +222,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04);
 
-	glProgramUniform1i(this->_Adjst_RenderingProgram, 6, this->_Texture_Reuse_Slot[0]);
+	AdjustPlayerLayer->Set_UniformValue(6, this->_Texture_Reuse_Slot[0]);
 
 	glProgramUniform1i(this->_Healt_RenderingProgram, 8, this->_Texture_Reuse_Slot[1]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 9, this->_Texture_Reuse_Slot[2]);
@@ -219,7 +234,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glProgramUniform1i(this->_Healt_RenderingProgram, 15, this->_Texture_Reuse_Slot[10]);
 	glProgramUniform1i(this->_Healt_RenderingProgram, 16, this->_Texture_Reuse_Slot[11]);
 
-	TestLayer.Set_ReuseTexture(2, 15, TanxlOD::TexStartMenuLogo_01);
+	StartMenuLayer->Set_UniformValue(2, 15);
 
 	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_Texture_Reuse_Slot[4]);
 	glProgramUniform1i(this->_State_RenderingProgram, 9, this->_Texture_Reuse_Slot[5]);
@@ -319,6 +334,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
 	glBindVertexArray(0);
 
+	this->_StateInfor_Size = (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2);
 	this->init_StateData(State);
 }
 
@@ -340,18 +356,15 @@ void OpenGL_Draw::init_StateData(GameStateBase* State)
 
 	this->Set_Max_Middle_Frame(200);
 
+	delete[] this->_StateInfor;
+	this->_StateInfor = new glm::ivec2[this->_StateInfor_Size];
 	State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 	Update_VertData(this->_StateInfor);
 }
 
 void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 {
-	int State_Length{ (this->_Scene_Int._Coord_Y + this->_PreLoads * 2) * (this->_Scene_Int._Coord_X + this->_PreLoads * 2) + 1 };
-
-	if (State_Length > 400)
-		State_Length = 400;
-
-	for (int i{ 0 }; i < State_Length; ++i)
+	for (int i{ 0 }; i < this->_StateInfor_Size + 1; ++i)
 	{
 		std::string Tag{ "Infor[" + std::to_string(i) + "]" };
 		GLint StatePos{ glGetUniformLocation(_State_RenderingProgram, Tag.c_str()) };
@@ -372,24 +385,6 @@ void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 		if (i % (this->_Scene_Int._Coord_X + this->_PreLoads * 2) == 0)
 			std::cout << std::endl;
 #endif
-	}
-}
-
-void OpenGL_Draw::Init_Texture_Slot(int Slot_Count)
-{
-	static unsigned Id{ 0 };
-
-	if ((Slot_Count > 25) || (Slot_Count < 1))
-		return;
-	for (int i{ 0 }; i < Slot_Count; ++i)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, _vbo[Id]);
-
-		glBufferData(GL_ARRAY_BUFFER, sizeof(TanxlOD::textureCoordinates), TanxlOD::textureCoordinates, GL_STATIC_DRAW);
-
-		glActiveTexture(GL_TEXTURE5 + Id++);
-
-		glBindTexture(GL_TEXTURE_2D, 1);
 	}
 }
 
@@ -524,14 +519,13 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
 
-			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			AdjustPlayerLayer->Draw_Layer();
 
 			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 			glUseProgram(_Healt_RenderingProgram);
@@ -569,14 +563,13 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
 
 			glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
 			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2) * (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
 
-			glUseProgram(_Adjst_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			AdjustPlayerLayer->Draw_Layer();
 
 			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 			glUseProgram(_Healt_RenderingProgram);
@@ -627,15 +620,14 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 		glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
 		glUseProgram(_State_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
 
 		glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
 		glUseProgram(_State_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (this->_Scene_Int._Coord_Y + _PreLoads * 2)* (this->_Scene_Int._Coord_X + _PreLoads * 2) * 6);
+		glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
 
-		glUseProgram(_Adjst_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		
+		AdjustPlayerLayer->Draw_Layer();
+
 		glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
 		glUseProgram(_Healt_RenderingProgram);
 		glDrawArrays(GL_TRIANGLES, 0, (6 + Health_Slot_Length) * 6);
@@ -650,9 +642,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		glBindVertexArray(0);
 		glBindVertexArray(_vao[1]);
 
-		if (Last_Status != GAME_START_MENU)
-			TestLayer.Reload_Texture();
-		TestLayer.Draw_Layer();
+		StartMenuLayer->Draw_Layer();
 	}
 
 	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
@@ -780,8 +770,8 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 
 		Tanxl_Coord<float> Temp_Move(State->Auto_Adjust(*Character, this->_Delta_Time));
 
-		glProgramUniform1f(_Adjst_RenderingProgram, 2, Temp_Move._Coord_X);//Current_Move_LocationX
-		glProgramUniform1f(_Adjst_RenderingProgram, 3, Temp_Move._Coord_Y);//
+		AdjustPlayerLayer->Set_UniformValue(2, Temp_Move._Coord_X);
+		AdjustPlayerLayer->Set_UniformValue(3, Temp_Move._Coord_Y);
 
 		State->Reload_State_Data(this->_PreLoads, this->_StateInfor);
 		Update_VertData(this->_StateInfor);
