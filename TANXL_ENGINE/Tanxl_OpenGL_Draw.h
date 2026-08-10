@@ -47,6 +47,11 @@
 // 玩家的绘制使用绘制层类实现
 // 增加复用纹理信息结构体
 // 使用容器优化绘制层类的空间占用
+// 状态信息栏使用绘制层类实现
+// 绘制层类增加一个重载版本的统一变量设置接口
+// 绘制层类初始化接口与构造函数增加默认参数
+// 绘制层类指定点数量的绘制接口不再改变内部参数
+// 游戏地图使用绘制层类实现
 
 #pragma once
 
@@ -569,9 +574,9 @@ class Layer
 public:
 	Layer(OpenGL_Draw* DrawEngine);
 
-	Layer(OpenGL_Draw* DrawEngine, const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts);
+	Layer(OpenGL_Draw* DrawEngine, const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts = 0);
 
-	void Init_Shader(const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts);
+	void Init_Shader(const char* VertShader_Program, const char* FragShader_Program, int Coord_Counts = 0);
 
 	void Set_ReuseTexture(int Shader_Location, int Textrue_Target, const char* Texture);
 
@@ -580,6 +585,8 @@ public:
 	void Set_UniformValue(int UniformId, int Value);
 
 	void Set_UniformValue(int UniformId, float Value);
+
+	void Set_UniformValue(const char* UniformName, glm::ivec2& StateData);
 
 	void Reload_Texture();
 
@@ -643,10 +650,8 @@ private:
 
 	GLuint _Midle_RenderingProgram{ 0 };
 	GLuint _State_RenderingProgram{ 0 };
-	//GLuint _Adjst_RenderingProgram{ 0 };
 	GLuint _Insta_RenderingProgram{ 0 };
 	GLuint _Fonts_RenderingProgram{ 0 };
-	GLuint _Healt_RenderingProgram{ 0 };
 
 	GLuint _vao[3];
 	GLuint _vbo[32];
@@ -678,8 +683,11 @@ private:
 	//新版动作测试
 	std::vector<Motion_Cycle*> _MotionS;
 	//页面测试
+	Layer* GameStateLayer;
+	Layer* PlayerHealthLayer;
 	Layer* AdjustPlayerLayer;
 	Layer* StartMenuLayer;
+
 	GLFWwindow* _Main_Window;
 	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2* _StateInfor;
@@ -706,8 +714,8 @@ inline void Layer::Set_ReuseTexture(int Shader_Location, int Textrue_Target, con
 
 inline void Layer::Draw_Layer(int Coord_Counts)
 {
-	_Coord_Counts = Coord_Counts;
-	Draw_Layer();
+	glUseProgram(_Shader_Program);
+	glDrawArrays(GL_TRIANGLES, 0, Coord_Counts);
 }
 
 inline void Layer::Set_UniformValue(int UniformId, int Value)
@@ -718,6 +726,12 @@ inline void Layer::Set_UniformValue(int UniformId, int Value)
 inline void Layer::Set_UniformValue(int UniformId, float Value)
 {
 	glProgramUniform1f(this->_Shader_Program, UniformId, Value);
+}
+
+inline void Layer::Set_UniformValue(const char* UniformName, glm::ivec2& StateData)
+{
+	GLint StatePos{ glGetUniformLocation(this->_Shader_Program, UniformName) };
+	glProgramUniform2iv(this->_Shader_Program, StatePos, 1, glm::value_ptr(StateData));
 }
 
 inline void Layer::Reload_Texture()

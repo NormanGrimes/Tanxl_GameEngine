@@ -253,6 +253,7 @@ xcopy /y /d "..\GRAPHIC\freetype.dll" "$(OutDir)"</Command>
     <None Include="Shader\Tanxl_Fonts_01_FragShader.glsl" />
     <None Include="Shader\Tanxl_Fonts_01_VertShader.glsl" />
     <None Include="Shader\Tanxl_GameUI_01_VertShader.glsl" />
+    <None Include="Shader\Tanxl_GameUI_02_VertShader.glsl" />
     <None Include="Shader\Tanxl_Game_01_FragShader.glsl" />
     <None Include="Shader\Tanxl_Player_01_VertShader.glsl" />
     <None Include="Shader\Tanxl_State_01_VertShader.glsl" />

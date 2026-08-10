@@ -18,6 +18,7 @@
 // 合并设置语言接口和确认语言接口
 // 增加添加字体纹理接口
 // 动态根据需要显示的字符添加纹理
+// 获取字符接口设为私有
 
 #pragma once
 
@@ -71,11 +72,10 @@ public:
 
 	int Get_Special_Id() const;
 
-	std::map<wchar_t, SCharacter> Get_Characters(int Id);
-
 	const std::string Get_Version();
 
 private:
+	std::map<wchar_t, SCharacter> Get_Characters(int Id);
 
 	FontBase(ECurren_Language Language);
 	~FontBase();

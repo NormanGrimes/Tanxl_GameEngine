@@ -6,9 +6,9 @@
 
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
-const static std::string SubVersion{ "16" };
+const static std::string SubVersion{ "18" };
 const static std::wstring wMainVersion{ L"3" };
-const static std::wstring wSubVersion{ L"16" };
+const static std::wstring wSubVersion{ L"18" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -25,7 +25,7 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
 _Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4"), StartMenuLayer(new Layer(this)),
-AdjustPlayerLayer(new Layer(this)) {}
+AdjustPlayerLayer(new Layer(this)), PlayerHealthLayer(new Layer(this)), GameStateLayer(new Layer(this)) {}
 
 void OpenGL_Draw::Init_Texture_Slot()
 {
@@ -86,12 +86,12 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_Scene_Int = State->Get_StateLength();
 
-	this->_State_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Insta_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Inst_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
-	this->_Healt_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_GameUI_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 
+	GameStateLayer->Init_Shader("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
+	PlayerHealthLayer->Init_Shader("Shader/Tanxl_GameUI_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	AdjustPlayerLayer->Init_Shader("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6);
 	StartMenuLayer->Init_Shader("Shader/Tanxl_State_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6);
 
@@ -119,8 +119,6 @@ void OpenGL_Draw::init(GameStateBase* State)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	glUseProgram(this->_State_RenderingProgram);
-
 	glGenVertexArrays(1, &_vao[1]);
 	glGenBuffers(1, _vbo);
 	glBindVertexArray(_vao[1]);
@@ -128,16 +126,16 @@ void OpenGL_Draw::init(GameStateBase* State)
 	AdjustPlayerLayer->Set_UniformValue(4, this->_Scene_Int._Coord_Y);
 	AdjustPlayerLayer->Set_UniformValue(5, this->_Scene_Int._Coord_X);
 
-	glProgramUniform1i(this->_Healt_RenderingProgram, 2, this->_Scene_Int._Coord_Y);//SHeight
-	glProgramUniform1i(this->_Healt_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
-	glProgramUniform1f(this->_Healt_RenderingProgram, 4, -0.9f);//HP UI MoveX
-	glProgramUniform1f(this->_Healt_RenderingProgram, 5, -0.9f);//HP UI MoveY
-	glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Get_MaxHealth() + 2);//Health Init
-	glProgramUniform1f(this->_Healt_RenderingProgram, 7, this->_Health_Image_Margin);
+	PlayerHealthLayer->Set_UniformValue(2, this->_Scene_Int._Coord_Y);//SHeight
+	PlayerHealthLayer->Set_UniformValue(3, this->_Scene_Int._Coord_X);//SWidth
+	PlayerHealthLayer->Set_UniformValue(4, -0.9f);//HP UI MoveX
+	PlayerHealthLayer->Set_UniformValue(5, -0.9f);//HP UI MoveY
+	PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Get_MaxHealth() + 2);//Health Init
+	PlayerHealthLayer->Set_UniformValue(7, this->_Health_Image_Margin);
 
-	glProgramUniform1i(this->_State_RenderingProgram, 2, this->_Scene_Int._Coord_Y);//SHeight
-	glProgramUniform1i(this->_State_RenderingProgram, 3, this->_Scene_Int._Coord_X);//SWidth
-	glProgramUniform1i(this->_State_RenderingProgram, 6, this->_PreLoads);//PreLoads
+	GameStateLayer->Set_UniformValue(2, this->_Scene_Int._Coord_Y);//SHeight
+	GameStateLayer->Set_UniformValue(3, this->_Scene_Int._Coord_X);//SWidth
+	GameStateLayer->Set_UniformValue(6, this->_PreLoads);//PreLoads
 
 	Init_Texture_Slot();
 
@@ -224,20 +222,20 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	AdjustPlayerLayer->Set_UniformValue(6, this->_Texture_Reuse_Slot[0]);
 
-	glProgramUniform1i(this->_Healt_RenderingProgram, 8, this->_Texture_Reuse_Slot[1]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 9, this->_Texture_Reuse_Slot[2]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 10, this->_Texture_Reuse_Slot[6]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 11, this->_Texture_Reuse_Slot[7]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 12, this->_Texture_Reuse_Slot[8]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 13, this->_Texture_Reuse_Slot[9]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 14, Health_Slot_Length);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 15, this->_Texture_Reuse_Slot[10]);
-	glProgramUniform1i(this->_Healt_RenderingProgram, 16, this->_Texture_Reuse_Slot[11]);
+	PlayerHealthLayer->Set_UniformValue(8, this->_Texture_Reuse_Slot[1]);
+	PlayerHealthLayer->Set_UniformValue(9, this->_Texture_Reuse_Slot[2]);
+	PlayerHealthLayer->Set_UniformValue(10, this->_Texture_Reuse_Slot[6]);
+	PlayerHealthLayer->Set_UniformValue(11, this->_Texture_Reuse_Slot[7]);
+	PlayerHealthLayer->Set_UniformValue(12, this->_Texture_Reuse_Slot[8]);
+	PlayerHealthLayer->Set_UniformValue(13, this->_Texture_Reuse_Slot[9]);
+	PlayerHealthLayer->Set_UniformValue(14, Health_Slot_Length);
+	PlayerHealthLayer->Set_UniformValue(15, this->_Texture_Reuse_Slot[10]);
+	PlayerHealthLayer->Set_UniformValue(16, this->_Texture_Reuse_Slot[11]);
 
 	StartMenuLayer->Set_UniformValue(2, 15);
 
-	glProgramUniform1i(this->_State_RenderingProgram, 8, this->_Texture_Reuse_Slot[4]);
-	glProgramUniform1i(this->_State_RenderingProgram, 9, this->_Texture_Reuse_Slot[5]);
+	GameStateLayer->Set_UniformValue(8, this->_Texture_Reuse_Slot[4]);
+	GameStateLayer->Set_UniformValue(9, this->_Texture_Reuse_Slot[5]);
 
 	glBindVertexArray(0);
 
@@ -367,8 +365,7 @@ void OpenGL_Draw::Update_VertData(glm::ivec2* StateInfor)
 	for (int i{ 0 }; i < this->_StateInfor_Size + 1; ++i)
 	{
 		std::string Tag{ "Infor[" + std::to_string(i) + "]" };
-		GLint StatePos{ glGetUniformLocation(_State_RenderingProgram, Tag.c_str()) };
-		glProgramUniform2iv(_State_RenderingProgram, StatePos, 1, glm::value_ptr(StateInfor[i]));
+		GameStateLayer->Set_UniformValue(Tag.c_str(), StateInfor[i]);
 
 #if _TANXL_OPENGLDRAW_RELOAD_STATE_DATA_OUTPUT_
 
@@ -517,19 +514,16 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			this->_Game_Status = GAME_PLAYER_ACTIVE;
 			Character->Health()->Set_Health(22, 22);
 
-			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
-			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
+			GameStateLayer->Set_UniformValue(7, 0);
+			GameStateLayer->Draw_Layer(this->_StateInfor_Size * 6);
 
-			glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
-			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
+			GameStateLayer->Set_UniformValue(7, 1);
+			GameStateLayer->Draw_Layer(this->_StateInfor_Size * 6);
 
 			AdjustPlayerLayer->Draw_Layer();
 
-			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
-			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (6 + Health_Slot_Length) * 6);
+			PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Check_Health() + 2);
+			PlayerHealthLayer->Draw_Layer((6 + Health_Slot_Length) * 6);
 		}
 		else
 		{
@@ -561,19 +555,16 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			this->_Game_Status = GAME_PLAYER_DEAD;
 			
-			glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
-			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
+			GameStateLayer->Set_UniformValue(7, 0);
+			GameStateLayer->Draw_Layer(this->_StateInfor_Size * 6);
 
-			glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
-			glUseProgram(_State_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
+			GameStateLayer->Set_UniformValue(7, 1);
+			GameStateLayer->Draw_Layer(this->_StateInfor_Size * 6);
 
 			AdjustPlayerLayer->Draw_Layer();
 
-			glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
-			glUseProgram(_Healt_RenderingProgram);
-			glDrawArrays(GL_TRIANGLES, 0, (6 + Health_Slot_Length) * 6);
+			PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Check_Health() + 2);
+			PlayerHealthLayer->Draw_Layer((6 + Health_Slot_Length) * 6);
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -618,19 +609,16 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 		this->_Middle_Frame = 0;
 
-		glProgramUniform1i(this->_State_RenderingProgram, 7, 0);
-		glUseProgram(_State_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
+		GameStateLayer->Set_UniformValue(7, 0);
+		GameStateLayer->Draw_Layer(this->_StateInfor_Size * 6);
 
-		glProgramUniform1i(this->_State_RenderingProgram, 7, 1);
-		glUseProgram(_State_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, this->_StateInfor_Size * 6);
+		GameStateLayer->Set_UniformValue(7, 1);
+		GameStateLayer->Draw_Layer(this->_StateInfor_Size * 6);
 
 		AdjustPlayerLayer->Draw_Layer();
 
-		glProgramUniform1i(this->_Healt_RenderingProgram, 6, Character->Health()->Check_Health() + 2);
-		glUseProgram(_Healt_RenderingProgram);
-		glDrawArrays(GL_TRIANGLES, 0, (6 + Health_Slot_Length) * 6);
+		PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Check_Health() + 2);
+		PlayerHealthLayer->Draw_Layer((6 + Health_Slot_Length) * 6);
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -777,11 +765,11 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 		Update_VertData(this->_StateInfor);
 		State->StateMove_Edge_Set(*Character, IEB->Get_Reach_Edge(), this->_Delta_Time, Key_Observer::Get_Speed_Ratio());
 
-		glProgramUniform1f(_State_RenderingProgram, 4, State->Get_State_Loc()._Coord_X);//State_MoveX
-		glProgramUniform1f(_State_RenderingProgram, 5, State->Get_State_Loc()._Coord_Y);//State_MoveY
+		GameStateLayer->Set_UniformValue(4, State->Get_State_Loc()._Coord_X);//State_MoveX
+		GameStateLayer->Set_UniformValue(5, State->Get_State_Loc()._Coord_Y);//State_MoveY
 
-		glProgramUniform1i(this->_Healt_RenderingProgram, 15, this->_Texture_Reuse_Slot[10]);//EquipmentA
-		glProgramUniform1i(this->_Healt_RenderingProgram, 16, this->_Texture_Reuse_Slot[11]);//EquipmentB
+		PlayerHealthLayer->Set_UniformValue(15, this->_Texture_Reuse_Slot[10]);//EquipmentA
+		PlayerHealthLayer->Set_UniformValue(16, this->_Texture_Reuse_Slot[11]);//EquipmentB
 
 		glfwPollEvents();
 
