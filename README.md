@@ -13,8 +13,8 @@ editor, and Steam integration. Development has been continuous since 2022.
 >   development progress — the newest entry at the bottom is always the current
 >   state.
 >   *开发持续进行中。下方里程碑列表展示真实的开发进度——末尾条目即最新状态。*
-> - **Latest public release: Version 0.3 Build 18.**
->   *最新公开发布版本：0.3 Build 18。*
+> - **Latest public release: Version 0.3 Build 19.**
+>   *最新公开发布版本：0.3 Build 19。*
 > - Public releases are cut periodically (roughly **weekly**) from the milestones
 >   below (marked ✔). Because internal development often produces several builds
 >   per week, the *published* version trails the internal development milestone.
