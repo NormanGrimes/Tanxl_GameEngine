@@ -81,6 +81,8 @@ Version 0.5 Build 20 TURBO 40 - 2026/05/29 19:09
 
 Version 0.5 Build 31 TURBO 41 - 2026/06/30 12:03
 
+Version 0.5 Build 41 TURBO 42 - 2026/08/04 18:19
+
 # Tanxl_GameEngine Version 0.4 Build 82 UPDATE
 某些版本可能包含无法编译通过的BUG，如果发现此问题请回退至上一个版本，或等待下一个版本发布。
 
