@@ -52,6 +52,11 @@
 // 绘制层类初始化接口与构造函数增加默认参数
 // 绘制层类指定点数量的绘制接口不再改变内部参数
 // 游戏地图使用绘制层类实现
+// 新增游戏场景类用于容纳绘制层类
+// 游戏暂停时测试显示对话框功能
+// 中间页面使用绘制层类实现
+// 增加两个继承于游戏场景类的测试类
+// 移除私有成员中未使用变量
 
 #pragma once
 
@@ -602,6 +607,34 @@ private:
 	int _Coord_Counts;
 };
 
+class GameScene
+{
+public:
+	virtual void DisplayScene() = 0;
+	virtual ~GameScene();
+};
+
+class BaseGameScene : public GameScene
+{
+public:
+	BaseGameScene();
+
+	void DisplayScene();
+private:
+
+	std::vector<Layer*> _Layer;
+};
+
+class MiddleScene : public GameScene
+{
+public:
+	MiddleScene(BaseGameScene* From, BaseGameScene* To);
+
+	void DisplayScene();
+private:
+	Layer* _MiddlePage_Layer;
+};
+
 class OpenGL_Draw : public Tanxl_ClassBase
 {
 public:
@@ -648,8 +681,6 @@ private:
 	bool _Is_Init_Need{ true };
 	bool _Is_Scene_Stop{ false };
 
-	GLuint _Midle_RenderingProgram{ 0 };
-	GLuint _State_RenderingProgram{ 0 };
 	GLuint _Insta_RenderingProgram{ 0 };
 	GLuint _Fonts_RenderingProgram{ 0 };
 
@@ -683,6 +714,8 @@ private:
 	//新版动作测试
 	std::vector<Motion_Cycle*> _MotionS;
 	//页面测试
+	Layer* MiddleLayer;
+	Layer* GameTalkLayer;
 	Layer* GameStateLayer;
 	Layer* PlayerHealthLayer;
 	Layer* AdjustPlayerLayer;

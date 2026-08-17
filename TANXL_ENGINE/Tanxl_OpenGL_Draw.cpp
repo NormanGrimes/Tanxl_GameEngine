@@ -25,7 +25,8 @@ OpenGL_Draw& OpenGL_Draw::GetOpenGLBase(int ScreenWidth, int ScreenHeight, bool 
 OpenGL_Draw::OpenGL_Draw(int ScreenWidth, int ScreenHeight, bool Window_Adjust) : _vao(), _vbo(), _Font_vbo(),
 _Screen_Length(ScreenWidth, ScreenHeight), _Main_Window(nullptr), _Window_Adjust_Enable(Window_Adjust),
 _Clear_Function(true), _PreLoads(0), _StateInfor(), Tanxl_ClassBase("1.4"), StartMenuLayer(new Layer(this)),
-AdjustPlayerLayer(new Layer(this)), PlayerHealthLayer(new Layer(this)), GameStateLayer(new Layer(this)) {}
+AdjustPlayerLayer(new Layer(this)), PlayerHealthLayer(new Layer(this)), GameStateLayer(new Layer(this)),
+GameTalkLayer(new Layer(this)), MiddleLayer(new Layer(this)) {}
 
 void OpenGL_Draw::Init_Texture_Slot()
 {
@@ -86,10 +87,11 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_Scene_Int = State->Get_StateLength();
 
-	this->_Midle_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Insta_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Inst_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	this->_Fonts_RenderingProgram = OpenGL_Render::createShaderProgram("Shader/Tanxl_Fonts_01_VertShader.glsl", "Shader/Tanxl_Fonts_01_FragShader.glsl");
 
+	MiddleLayer->Init_Shader("Shader/Tanxl_State_03_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6 * 30);
+	GameTalkLayer->Init_Shader("Shader/Tanxl_GameUI_02_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 12);
 	GameStateLayer->Init_Shader("Shader/Tanxl_State_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	PlayerHealthLayer->Init_Shader("Shader/Tanxl_GameUI_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl");
 	AdjustPlayerLayer->Init_Shader("Shader/Tanxl_Player_01_VertShader.glsl", "Shader/Tanxl_Game_01_FragShader.glsl", 6);
@@ -222,6 +224,9 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	AdjustPlayerLayer->Set_UniformValue(6, this->_Texture_Reuse_Slot[0]);
 
+	GameTalkLayer->Set_UniformValue(2, this->_Texture_Reuse_Slot[0]);
+	GameTalkLayer->Set_UniformValue(3, this->_Texture_Reuse_Slot[9]);
+
 	PlayerHealthLayer->Set_UniformValue(8, this->_Texture_Reuse_Slot[1]);
 	PlayerHealthLayer->Set_UniformValue(9, this->_Texture_Reuse_Slot[2]);
 	PlayerHealthLayer->Set_UniformValue(10, this->_Texture_Reuse_Slot[6]);
@@ -276,7 +281,7 @@ void OpenGL_Draw::init(GameStateBase* State)
 		BeginHeight -= State->Get_Each_Height();
 	}
 
-	GLuint _Inst_vbo[4];
+	GLuint _Inst_vbo[4]{};
 
 	glGenBuffers(1, &_Inst_vbo[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, _Inst_vbo[1]);
@@ -524,6 +529,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 			PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Check_Health() + 2);
 			PlayerHealthLayer->Draw_Layer((6 + Health_Slot_Length) * 6);
+
+			if (this->_Is_Scene_Stop)
+				GameTalkLayer->Draw_Layer();
 		}
 		else
 		{
@@ -565,6 +573,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 			PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Check_Health() + 2);
 			PlayerHealthLayer->Draw_Layer((6 + Health_Slot_Length) * 6);
+
+			if (this->_Is_Scene_Stop)
+				GameTalkLayer->Draw_Layer();
 		}
 
 		this->_Middle_Frame += this->_Delta_Time * 100;
@@ -619,6 +630,9 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 		PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Check_Health() + 2);
 		PlayerHealthLayer->Draw_Layer((6 + Health_Slot_Length) * 6);
+
+		if(this->_Is_Scene_Stop)
+			GameTalkLayer->Draw_Layer();
 	}
 
 	if (this->_Game_Status == GAME_START_MENU)
@@ -633,11 +647,10 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		StartMenuLayer->Draw_Layer();
 	}
 
-	glProgramUniform1i(this->_Midle_RenderingProgram, 2, static_cast<int>(this->_Middle_Frame));
-	glProgramUniform1i(this->_Midle_RenderingProgram, 3, this->_Max_Middle_Frame);
+	MiddleLayer->Set_UniformValue(2, static_cast<int>(this->_Middle_Frame));
+	MiddleLayer->Set_UniformValue(3, this->_Max_Middle_Frame);
 
-	glUseProgram(_Midle_RenderingProgram);
-	glDrawArrays(GL_TRIANGLES, 0, 6 * 30);
+	MiddleLayer->Draw_Layer();
 
 	glBindVertexArray(0);
 
@@ -647,8 +660,13 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 	Font->Bind_FontVAO(_vao[0], _Font_vbo[0]);
 
-	Font->Set_FontColor(glm::vec3(0.8, 0.2f, 0.2f));
+	if (this->_Is_Scene_Stop)
+	{
+		Font->Set_FontColor(glm::vec3(0.3, 0.3f, 0.8f));
+		Font->RenderText(L"Hello world.", 180.0f, 100.0f, 1.0f, 1);
+	}
 
+	Font->Set_FontColor(glm::vec3(0.8, 0.2f, 0.2f));
 	if ((this->_Game_Status == GAME_START_MENU) || (this->_Game_Status == GAME_PLAYER_DEAD))
 	{
 		//std::cout << "Exac :" << IEB->Get_Mouse_Location()._Coord_X << " _ " << IEB->Get_Mouse_Location()._Coord_Y << std::endl;
@@ -882,3 +900,19 @@ void Motion_Cycle::Idle_Image()//无操作画面
 }
 
 Montion_Struct::Montion_Struct(const char* Image, double Delta_Time) :_Image(Image), _Delta_Time(Delta_Time) {}
+
+GameScene::~GameScene() {};
+
+BaseGameScene::BaseGameScene() :_Layer() {}
+
+void BaseGameScene::DisplayScene()
+{
+
+}
+
+MiddleScene::MiddleScene(BaseGameScene* From, BaseGameScene* To) {}
+
+void MiddleScene::DisplayScene()
+{
+
+}
