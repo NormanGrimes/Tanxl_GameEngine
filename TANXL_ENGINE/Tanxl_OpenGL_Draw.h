@@ -57,6 +57,11 @@
 // 中间页面使用绘制层类实现
 // 增加两个继承于游戏场景类的测试类
 // 移除私有成员中未使用变量
+// 调整左侧移动的动作纹理顺序
+// 左侧移动动作增加一帧
+// 增加两种锁住的门的纹理
+// 增加两种钥匙卡装备的纹理
+// 调整部分左侧移动帧的时间长度
 
 #pragma once
 
@@ -97,6 +102,8 @@ namespace TanxlOD
 	static const char* TexGrass_Snowy_02		{ "Texture/TANXL_GRASS_SNOWY_02.png"		};
 	static const char* TexOcean_01				{ "Texture/TANXL_OCEAN_01.png"				};
 	static const char* TexCoin_01_64x64			{ "Texture/TANXL_COIN_01_64X64.png"			};
+	static const char* TexLockedDoor_Red		{ "Texture/TANXL_LOCKED_DOOR_RED.png"		};
+	static const char* TexLockedDoor_Blue		{ "Texture/TANXL_LOCKED_DOOR_BLUE.png"		};
 	static const char* TexSecretCore_01_64x64	{ "Texture/TANXL_SECRET_CORE_01_64X64.png"	};
 	static const char* TexHealth_01_32x32		{ "Texture/TANXL_HEALTH_01_64X64.png"		};
 	static const char* TexObject_Slot_01		{ "Texture/TANXL_OBJECT_SLOT_01_64X64.png"	};
@@ -139,6 +146,7 @@ namespace TanxlOD
 	static const char* TexPrincess_04_Run_11	{ "Texture/TANXL_PRINCESS_04_RUN_11.png"	};
 	static const char* TexPrincess_04_Run_12	{ "Texture/TANXL_PRINCESS_04_RUN_12.png"	};
 	static const char* TexPrincess_04_Run_13	{ "Texture/TANXL_PRINCESS_04_RUN_13.png"	};
+	static const char* TexPrincess_04_Run_14	{ "Texture/TANXL_PRINCESS_04_RUN_14.png"	};
 	static const char* TexPrincess_01_Blink_01	{ "Texture/TANXL_PRINCESS_01_BLINK_01.png"	};
 	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};
@@ -149,7 +157,8 @@ namespace TanxlOD
 	static const char* TexEquipment_02	{ "Texture/Equipment/TANXL_EQUIPMENT_02_GOLDCOIN.png"		};
 	static const char* TexEquipment_03	{ "Texture/Equipment/TANXL_EQUIPMENT_03_STATEBLOCK.png"		};
 	static const char* TexEquipment_04	{ "Texture/Equipment/TANXL_EQUIPMENT_04_SECRETCORE.png"		};
-	
+	static const char* TexEquipment_05	{ "Texture/Equipment/TANXL_EQUIPMENT_05_RED_KEY_CARD.png"	};
+	static const char* TexEquipment_06	{ "Texture/Equipment/TANXL_EQUIPMENT_06_BLUE_KEY_CARD.png"	};
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 

@@ -208,17 +208,18 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this, true));
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_01, 3);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_02, 3);
-	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_03, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_03, 2);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_04, 3);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_05, 3);
-	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_06, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_06, 2);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_07, 3);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_08, 3);
-	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_09, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_09, 2);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_10, 3);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_11, 3);
-	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_12, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_12, 2);
 	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_13, 3);
+	this->_MotionS.at(3)->Append_Montion_Image(TanxlOD::TexPrincess_04_Run_14, 3);
 
 	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04);
 

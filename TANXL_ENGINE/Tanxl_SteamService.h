@@ -45,6 +45,7 @@
 // 添加成就移除队列接口增加一个重载版本
 // 计数类型成就增加类型检查
 // 用户语言获取接口移入静态服务类
+// 物品枚举加入一号收藏品的定义
 
 #pragma once
 
@@ -68,7 +69,12 @@
 enum ETanxl_Inventory_ItemDefId
 {
 	Tanxl_Pormise_LIMITED_ITEM			= 1,
-	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2,
+
+	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2, //Common   5
+	Tanxl_Medic_Kit_LIMITED_DROP_ITEM   = 3, //Common   5
+	Tanxl_State_Block_LIMITED_DROP_ITEM = 4, //Common   5
+	Tanxl_State_Coin_LIMITED_DROP_ITEM  = 5, //Common   5
+	Tanxl_Equipment_LIMITED_DROP_ITEM   = 6, //Rare     1
 
 	Tanxl_Item_Collection_01			= 10001
 };
