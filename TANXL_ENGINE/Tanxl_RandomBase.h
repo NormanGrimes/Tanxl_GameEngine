@@ -28,6 +28,9 @@
 // 移除用于生成随机数的内部数组
 // 随机数获取接口增加上限与下限参数
 // 移除刷新随机数数组的接口
+// 新增加权算法的随机地图单元生成类
+// 随机生成地图接口使用加权算法类实现
+// 修复随机数生成接口多次调用生成错误结果的问题
 
 #pragma once
 
@@ -37,6 +40,33 @@
 #include <string>
 #include <iostream>
 #include <random>
+#include <vector>
+
+struct StateWeight
+{
+    StateWeight(int StateId, int Weight);
+
+    int _StateId;
+    int _Weight;
+};
+
+class RandomState
+{
+public:
+    RandomState();
+
+    ~RandomState();
+
+    int Generate();//生成错误返回0 正常的返回值大于1
+
+    void Append_State(int StateId, int Weight);
+
+    void Clear_Event();
+
+private:
+    int _State_Weight_Count;
+    std::vector<StateWeight*> _Event_Rate;
+};
 
 class RandomBase
 {

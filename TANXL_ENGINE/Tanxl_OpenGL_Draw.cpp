@@ -130,8 +130,8 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	PlayerHealthLayer->Set_UniformValue(2, this->_Scene_Int._Coord_Y);//SHeight
 	PlayerHealthLayer->Set_UniformValue(3, this->_Scene_Int._Coord_X);//SWidth
-	PlayerHealthLayer->Set_UniformValue(4, -0.9f);//HP UI MoveX
-	PlayerHealthLayer->Set_UniformValue(5, -0.9f);//HP UI MoveY
+	PlayerHealthLayer->Set_UniformValue(4, -0.94f);//HP UI MoveX
+	PlayerHealthLayer->Set_UniformValue(5, -0.90f);//HP UI MoveY
 	PlayerHealthLayer->Set_UniformValue(6, Character->Health()->Get_MaxHealth() + 2);//Health Init
 	PlayerHealthLayer->Set_UniformValue(7, this->_Health_Image_Margin);
 
@@ -678,7 +678,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + L": " + std::to_wstring(Character->Money()->Get_Money()), 811.0f, 28.0f, 0.7f, 1);
+		Font->RenderText(Tips->Get_PlayerCoinName() + L": " + std::to_wstring(Character->Money()->Get_Money()), 800.0f, 28.0f, 0.7f, 1);
 	if(Steam_Service::Get_InitStatus() == 2)
 		Font->RenderText(L"Build Id : " + std::to_wstring(Steam_Service::GetSteamApps()->GetAppBuildId()), 10.0f, 785.0f, 0.25f, 1);
 	else
@@ -911,7 +911,10 @@ void BaseGameScene::DisplayScene()
 
 }
 
-MiddleScene::MiddleScene(BaseGameScene* From, BaseGameScene* To) {}
+MiddleScene::MiddleScene(BaseGameScene* From, BaseGameScene* To) 
+{
+
+}
 
 void MiddleScene::DisplayScene()
 {

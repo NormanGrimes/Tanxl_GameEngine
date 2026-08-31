@@ -62,6 +62,7 @@
 // 增加两种锁住的门的纹理
 // 增加两种钥匙卡装备的纹理
 // 调整部分左侧移动帧的时间长度
+// 屏幕下方的信息界面整体向左微调
 
 #pragma once
 
@@ -641,7 +642,8 @@ public:
 
 	void DisplayScene();
 private:
-	Layer* _MiddlePage_Layer;
+	Layer* _MiddlePage_Layer_From;
+	Layer* _MiddlePage_Layer_To;
 };
 
 class OpenGL_Draw : public Tanxl_ClassBase

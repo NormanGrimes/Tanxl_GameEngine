@@ -69,14 +69,16 @@
 enum ETanxl_Inventory_ItemDefId
 {
 	Tanxl_Pormise_LIMITED_ITEM			= 1,
+	                                         //Rarity   Rate
+	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2, //Common     25
+	Tanxl_Medic_Kit_LIMITED_DROP_ITEM   = 3, //Common     25
+	Tanxl_State_Block_LIMITED_DROP_ITEM = 4, //Common     25
+	Tanxl_State_Coin_LIMITED_DROP_ITEM  = 5, //Common     25
+	Tanxl_Equipment_LIMITED_DROP_ITEM   = 6, //Rare        5
+	Tanxl_Key_Card_LIMITED_DROP_ITEM    = 7, //Rare        5
+	Tanxl_Art_Work_LIMITED_DROP_ITEM    = 8, //Ultra Rare  1
 
-	Tanxl_Secret_Core_LIMITED_DROP_ITEM = 2, //Common   5
-	Tanxl_Medic_Kit_LIMITED_DROP_ITEM   = 3, //Common   5
-	Tanxl_State_Block_LIMITED_DROP_ITEM = 4, //Common   5
-	Tanxl_State_Coin_LIMITED_DROP_ITEM  = 5, //Common   5
-	Tanxl_Equipment_LIMITED_DROP_ITEM   = 6, //Rare     1
-
-	Tanxl_Item_Collection_01			= 10001
+	Tanxl_Item_Collection_01			= 10001 //Posted on 2024/06/07
 };
 
 enum ETanxl_Achievement_DefId

@@ -7,7 +7,7 @@ std::string RandomBase::Generate()
     std::string Data{};
     unsigned seed{ static_cast<unsigned>(time(0)) };
     _RandomEngine.seed(seed);
-    static std::uniform_int_distribution<int> UID(0, 61);
+    std::uniform_int_distribution<int> UID(0, 61);
     for (int i{ 0 }; i < 15; ++i)
     {
         if ((i % 5 == 0) && (i != 0))
@@ -33,15 +33,32 @@ std::string RandomBase::Generate(int seed)
 
 std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Random_Event)
 {
-    _RandomEngine.seed( static_cast<unsigned>(time(0)));
-    std::uniform_int_distribution<int> SID(0, 3);
-    std::uniform_int_distribution<int> EID(0, 8);
-    Suffle_UniData(1);
+    RandomState RandomId;
+    RandomState RandomEvent;
+
+    if (Random_Event)
+    {
+        RandomEvent.Append_State(0, 6);
+        RandomEvent.Append_State(1, 1);
+        RandomEvent.Append_State(2, 1);
+        RandomEvent.Append_State(3, 1);
+        RandomEvent.Append_State(4, 1);
+        RandomEvent.Append_State(5, 1);
+        RandomEvent.Append_State(6, 1);
+        RandomEvent.Append_State(7, 1);
+        RandomEvent.Append_State(8, 1);
+    }
+
+    RandomId.Append_State(0, 1);
+    RandomId.Append_State(1, 1);
+    RandomId.Append_State(2, 1);
+    RandomId.Append_State(3, 1);
+
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
     {
-        int StateVal{ SID(_RandomEngine) };
-        int EventVal{ EID(_RandomEngine) };
+        int StateVal{ RandomId.Generate() };
+        int EventVal{ RandomEvent.Generate() };
 
         if (EventVal > 4)
             EventVal = 0;
@@ -59,7 +76,7 @@ std::string RandomBase::GenerateAutoSeed()
 {
     std::string Data{};
     _RandomEngine.seed(static_cast<unsigned>(time(0)));
-    static std::uniform_int_distribution<int> UID(0, 61);
+    std::uniform_int_distribution<int> UID(0, 61);
     for (int i{ 0 }; i < 15; ++i)
     {
         if ((i % 5 == 0) && (i != 0))
@@ -72,7 +89,7 @@ std::string RandomBase::GenerateAutoSeed()
 int RandomBase::GenerateNum(int seed, int LowValue, int HighValue)
 {
     _RandomEngine.seed(seed);
-    static std::uniform_int_distribution<int> UID(LowValue, HighValue);
+    std::uniform_int_distribution<int> UID(LowValue, HighValue);
     return UID(_RandomEngine);
 }
 
@@ -88,7 +105,7 @@ int RandomBase::RandomAutoSeed(int Start, int End)
 void RandomBase::Suffle_UniData(int Times)
 {
     _RandomEngine.seed(static_cast<unsigned>(time(0)));
-    static std::uniform_int_distribution<int> UID(0, 61);
+    std::uniform_int_distribution<int> UID(0, 61);
     while (Times--)
     {
         for (int i{ 0 }; i < 31; ++i)
@@ -132,3 +149,35 @@ std::string RandomBase::_UniData[] = {
     {"Y"}, {"Z"} };
 
 std::string RandomBase::_Version{ "0.3" };
+
+StateWeight::StateWeight(int StateId, int Weight) :
+    _StateId(StateId), _Weight(Weight) {}
+
+RandomState::RandomState() :_State_Weight_Count(0), _Event_Rate() {}
+
+RandomState::~RandomState()
+{
+    this->Clear_Event();
+}
+
+int RandomState::Generate()
+{
+    unsigned seed{ static_cast<unsigned>(time(0)) };
+    static int AppSeed{ RandomBase::RandomAutoSeed(100,500) };
+    int RandomId{ RandomBase::GenerateNum(seed + AppSeed++, 0, this->_State_Weight_Count) };
+    for (int i{ 0 }; i < this->_Event_Rate.size(); ++i)
+        if (this->_Event_Rate.at(i)->_Weight >= RandomId)
+            return this->_Event_Rate.at(i)->_StateId;
+    return 0;
+}
+
+void RandomState::Append_State(int StateId, int Weight)
+{
+    this->_State_Weight_Count += Weight;
+    this->_Event_Rate.push_back(new StateWeight(StateId, this->_State_Weight_Count));
+}
+
+void RandomState::Clear_Event()
+{
+    _Event_Rate.erase(_Event_Rate.begin(), _Event_Rate.end());
+}
