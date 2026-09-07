@@ -2,28 +2,6 @@
 
 #include "Tanxl_Console_List.h"
 
-//void Col是原Console_List的核心功能，使用了Linux控制台的指令
-void Col(unsigned ColN, bool Under_Line)//设置自定义行的背景颜色
-{
-	if (ColN == NULL)
-		std::cout << "\033[0m";//清除颜色
-	else
-	{
-		if (Under_Line == true)
-			std::cout << "\033[7m";
-		std::cout << "\033[4;1;m";
-		if (((ColN & 0xf0) >> 4) > 0 && ((ColN & 0xf0) >> 4) <= 7)
-			std::cout << "\033[3" << ((ColN & 0xf0) >> 4) << "m";
-		else if ((ColN & 0xf0) >> 4 == 0);//值为0不作修改
-		else//字体颜色: 1红色 2绿色 3橙色 4蓝色 5紫色 6淡蓝 7白色
-			std::cout << "\033[3" << rand() % 7 + 1 << "m";
-		if ((ColN & 0x0f) > 0 && ((ColN & 0x0f) <= 7))
-			std::cout << "\033[4" << (ColN & 0x0f) << "m";
-		else if ((ColN & 0x0f) == 0);//值为0不作修改
-		else//背景颜色: 1红色 2绿色 3橙色 4蓝色 5紫色 6淡蓝 7白色
-			std::cout << "\033[4" << rand() % 7 + 1 << "m";
-	}
-}
 //构造函数
 CONSOLE::CONSOLE(std::string NamE, unsigned Space, void(*FunC)())
 	:_Selector(0), _Is_Selected(false), _SonList(NULL), _SSpace(Space), _Func(FunC),

@@ -108,6 +108,11 @@ Money_Componment* GameObject::Money()
 	return &this->_Money_Componment;
 }
 
+Equipment_Componment* GameObject::Equip()
+{
+	return &this->_Equipment_Componment;
+}
+
 GameObjectBase& GameObjectBase::GetObjectBase()
 {
 	static GameObjectBase* ObjectBase{ new GameObjectBase };
@@ -137,9 +142,7 @@ GameObjectBase::GameObjectBase(const GameObjectBase&) : Tanxl_ClassBase("0.5") {
 
 GameObjectBase& GameObjectBase::operator=(const GameObjectBase&) { return *this; }
 
-Weapon::Weapon(int Damage, std::string Texture) :_Damage(Damage), _Texture(Texture) {}
-
-Armor::Armor(int Defense, std::string Texture) :_Defense(Defense), _Texture(Texture) {}
+Equipment::Equipment(int Equipment_Id) :_Equipment_Id(Equipment_Id) {}
 
 bool Componment_Unite::Append(Componment_Base* CM)
 {
@@ -258,18 +261,24 @@ Tanxl_Coord<float>* Coord_Componment::Get_Distance_Mid()
 }
 
 Equipment_Componment::Equipment_Componment() :_Attack_Damage(0), _Defense_Armor(0),
-_Weapon_Slot(nullptr), _Armor_Slot(nullptr), Componment_Base("Equipment") {}
+_Equipment_Slot_0(new Equipment(0)), _Equipment_Slot_1(new Equipment(0)), Componment_Base("Equipment") {}
 
 int Equipment_Componment::Get_Attack_Damage() const
 {
-	if (this->_Weapon_Slot != nullptr)
-		return this->_Attack_Damage + this->_Weapon_Slot->_Damage;
 	return this->_Attack_Damage;
 }
 
 int Equipment_Componment::Get_Defense_Armor() const
 {
-	if (this->_Armor_Slot != nullptr)
-		return this->_Defense_Armor + this->_Armor_Slot->_Defense;
 	return this->_Defense_Armor;
+}
+
+int Equipment_Componment::Get_Equipment_Id_0()
+{
+	return this->_Equipment_Slot_0->_Equipment_Id;
+}
+
+int Equipment_Componment::Get_Equipment_Id_1()
+{
+	return this->_Equipment_Slot_1->_Equipment_Id;
 }

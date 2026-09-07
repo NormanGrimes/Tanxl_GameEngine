@@ -6,6 +6,9 @@
 // 坐标组件移除更新上次移动位置的接口
 // 坐标组件移除两个获取上次移动位置的接口
 // 坐标组件移动接口记录本次移动距离
+// 移除武器与护甲结构体改为装备结构体
+// 游戏物品类增加装备组件
+// 装备组件类增加装备编号获取接口
 
 #pragma once
 
@@ -40,18 +43,11 @@ private:
 	std::string _Name;
 };
 
-struct Weapon
+struct Equipment
 {
-	Weapon(int Damage, std::string Texture);
-	int _Damage;
-	std::string _Texture;
-};
+	Equipment(int Equipment_Id = 0);
 
-struct Armor
-{
-	Armor(int Defense, std::string Texture);
-	int _Defense;
-	std::string _Texture;
+	int _Equipment_Id;
 };
 
 struct Character_Data
@@ -136,12 +132,15 @@ public:
 	int Get_Attack_Damage() const;
 	int Get_Defense_Armor() const;
 
+	int Get_Equipment_Id_0();
+	int Get_Equipment_Id_1();
+
 private:
 	int _Attack_Damage;
 	int _Defense_Armor;
 
-	Weapon* _Weapon_Slot;
-	Armor* _Armor_Slot;
+	Equipment* _Equipment_Slot_0;
+	Equipment* _Equipment_Slot_1;
 };
 
 class Componment_Unite
@@ -165,6 +164,7 @@ public:
 	Coord_Componment* Coord();
 	Health_Componment* Health();
 	Money_Componment* Money();
+	Equipment_Componment* Equip();
 
 private:
 	Character_Data _Character_Data;
@@ -172,6 +172,7 @@ private:
 	Coord_Componment _Coord_Componment;
 	Health_Componment _Health_Componment;
 	Money_Componment _Money_Componment;
+	Equipment_Componment _Equipment_Componment;
 };
 
 class Equipment_State_Replace_Observer : public Event_Observer<StateUnit>

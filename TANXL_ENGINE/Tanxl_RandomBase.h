@@ -31,6 +31,9 @@
 // 新增加权算法的随机地图单元生成类
 // 随机生成地图接口使用加权算法类实现
 // 修复随机数生成接口多次调用生成错误结果的问题
+// 随机地图生成类增加权值为零的处理
+// 随机地图生成类的初始数据移到外部定义
+// 增加随机地图生成类的数据添加接口
 
 #pragma once
 
@@ -41,6 +44,12 @@
 #include <iostream>
 #include <random>
 #include <vector>
+
+enum EState_WeightEvent
+{
+    RANDOM_ID,
+    RANDOM_EVENT
+};
 
 struct StateWeight
 {
@@ -95,6 +104,9 @@ public:
     //恢复到初始状态
     static void Reset_Default();
 
+    //加权随机地图添加接口
+    static void Set_RandomState(EState_WeightEvent RandomName, int Id, int Weight);
+
     //获取版本信息
     static const std::string Get_Version();
 
@@ -103,6 +115,9 @@ private:
     static std::default_random_engine _RandomEngine;
     static std::string _UniData[62];
     static std::string _Version;
+
+    static RandomState RandomId;
+    static RandomState RandomEvent;
 };
 
 #endif

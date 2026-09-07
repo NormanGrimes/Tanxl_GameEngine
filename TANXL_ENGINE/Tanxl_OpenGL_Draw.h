@@ -63,6 +63,11 @@
 // 增加两种钥匙卡装备的纹理
 // 调整部分左侧移动帧的时间长度
 // 屏幕下方的信息界面整体向左微调
+// 修改中间页面类的成员类型
+// 中间页面类增加最大帧数量设置接口
+// 完成预定义的场景类接口
+// 修改两个新地图纹理的名称并加入游戏
+// 增加实时显示主角当前装备的功能
 
 #pragma once
 
@@ -153,13 +158,16 @@ namespace TanxlOD
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};
 	static const char* TexStartMenuLogo_01		{ "Texture/TANXL_MENU_LOGO_01.png"			};
 
-	static const char* TexEquipment_00	{ "Texture/Equipment/TANXL_EQUIPMENT_00_NOEQUIPMENT.png"	};
-	static const char* TexEquipment_01	{ "Texture/Equipment/TANXL_EQUIPMENT_01_MEDICKIT.png"		};
-	static const char* TexEquipment_02	{ "Texture/Equipment/TANXL_EQUIPMENT_02_GOLDCOIN.png"		};
-	static const char* TexEquipment_03	{ "Texture/Equipment/TANXL_EQUIPMENT_03_STATEBLOCK.png"		};
-	static const char* TexEquipment_04	{ "Texture/Equipment/TANXL_EQUIPMENT_04_SECRETCORE.png"		};
-	static const char* TexEquipment_05	{ "Texture/Equipment/TANXL_EQUIPMENT_05_RED_KEY_CARD.png"	};
-	static const char* TexEquipment_06	{ "Texture/Equipment/TANXL_EQUIPMENT_06_BLUE_KEY_CARD.png"	};
+	static const char* TexEquipment[]
+	{
+		{ "Texture/Equipment/TANXL_EQUIPMENT_00_NOEQUIPMENT.png"	},
+		{ "Texture/Equipment/TANXL_EQUIPMENT_01_MEDICKIT.png"		},
+		{ "Texture/Equipment/TANXL_EQUIPMENT_02_GOLDCOIN.png"		},
+		{ "Texture/Equipment/TANXL_EQUIPMENT_03_STATEBLOCK.png"		},
+		{ "Texture/Equipment/TANXL_EQUIPMENT_04_SECRETCORE.png"		},
+		{ "Texture/Equipment/TANXL_EQUIPMENT_05_RED_KEY_CARD.png"	},
+		{ "Texture/Equipment/TANXL_EQUIPMENT_06_BLUE_KEY_CARD.png"	}
+	};
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -638,12 +646,20 @@ private:
 class MiddleScene : public GameScene
 {
 public:
-	MiddleScene(BaseGameScene* From, BaseGameScene* To);
+	MiddleScene(BaseGameScene* From, BaseGameScene* To, Layer* Middle_Layer);
 
 	void DisplayScene();
+
+	void Set_MaxFrame(int MaxFrame);
+
 private:
-	Layer* _MiddlePage_Layer_From;
-	Layer* _MiddlePage_Layer_To;
+	int _Max_Middle_Frame;
+	int _Cur_Middle_Frame;
+
+	Layer* _Middle_Layer;
+
+	BaseGameScene* _MiddlePage_Layer_From;
+	BaseGameScene* _MiddlePage_Layer_To;
 };
 
 class OpenGL_Draw : public Tanxl_ClassBase

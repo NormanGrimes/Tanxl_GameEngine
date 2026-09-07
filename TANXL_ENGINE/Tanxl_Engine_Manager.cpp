@@ -16,6 +16,8 @@ Tanxl_Engine_SoundBase(&SoundBase::GetSoundBase()),
 Tanxl_Engine_FontBase(&FontBase::GetFontBase()),
 Tanxl_Engine_GameTips(&GameTips::GetTipsBase())
 {
+	RandomBase::Reset_Default();
+
 	if (!this->Tanxl_Engine_Console_List)
 		this->_Engine_Status = 0x1;
 	else if (!this->Tanxl_Engine_DataBase)
@@ -242,10 +244,14 @@ void Tanxl_Engine::Engine_Sound_Play_Sound(bool Enable_Current, std::string Soun
 		Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_EVENT);
 }
 
-void Tanxl_Engine::Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play)
+void Tanxl_Engine::Engine_Sound_Add_BackGround(std::string SoundName)
 {
 	if (SoundName != "")
 		this->Tanxl_Engine_SoundBase->Append_BackGround_Music(SoundName);
+}
+
+void Tanxl_Engine::Engine_Sound_Play_BackGround(bool Enable_Play)
+{
 	if (Enable_Play)
 	{
 		if (this->Tanxl_Engine_OpenGL_Draw->Get_Game_Status() == GAME_PLAYER_ACTIVE)
@@ -362,8 +368,13 @@ void Tanxl_Engine::Engine_Invent_Update_Drop()
 {
 	if (this->Tanxl_Engine_Inventory != nullptr)
 	{
-		this->Tanxl_Engine_Inventory->RefreshFromServer();
-		this->Tanxl_Engine_Inventory->CheckForItemDrops();
+		static time_t CurrTime = time(0);
+		if (time(0) - CurrTime > 60)
+		{
+			CurrTime = time(0);
+			this->Tanxl_Engine_Inventory->RefreshFromServer();
+			this->Tanxl_Engine_Inventory->CheckForItemDrops();
+		}
 	}
 }
 

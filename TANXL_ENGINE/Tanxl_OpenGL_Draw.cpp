@@ -6,9 +6,9 @@
 
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
-const static std::string SubVersion{ "18" };
+const static std::string SubVersion{ "22" };
 const static std::wstring wMainVersion{ L"3" };
-const static std::wstring wSubVersion{ L"18" };
+const static std::wstring wSubVersion{ L"22" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -147,33 +147,36 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Reinit_Texture(7, TanxlOD::TexGrass_Snowy_01);
 	Reinit_Texture(8, TanxlOD::TexGrass_Snowy_02);
 	Reinit_Texture(9, TanxlOD::TexOcean_01);
-	Reinit_Texture(10, TanxlOD::TexDirt_01);
+	this->_Texture_Reuse_Slot[12] = 10;
+	Reinit_Texture(this->_Texture_Reuse_Slot[12], TanxlOD::TexDirt_01);
 	Reinit_Texture(11, TanxlOD::TexCoin_01_64x64);
+	Reinit_Texture(12, TanxlOD::TexLockedDoor_Red);
+	Reinit_Texture(13, TanxlOD::TexLockedDoor_Blue);
 
-	this->_Texture_Reuse_Slot[0] = 12; 
+	this->_Texture_Reuse_Slot[0] = 14; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[0], TanxlOD::TexPrincess_01);
-	this->_Texture_Reuse_Slot[1] = 13; 
+	this->_Texture_Reuse_Slot[1] = 15; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[1], TanxlOD::TexHealth_01_32x32);
-	this->_Texture_Reuse_Slot[2] = 14;
+	this->_Texture_Reuse_Slot[2] = 16;
 	Reinit_Texture(this->_Texture_Reuse_Slot[2], TanxlOD::TexPrincess_01_9x11);
-	this->_Texture_Reuse_Slot[3] = 15; 
+	this->_Texture_Reuse_Slot[3] = 17; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[3], TanxlOD::TexStartMenuLogo_01);
-	this->_Texture_Reuse_Slot[4] = 16; 
+	this->_Texture_Reuse_Slot[4] = 18; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[4], TanxlOD::TexMedic_01_64x64);
-	this->_Texture_Reuse_Slot[5] = 17; 
+	this->_Texture_Reuse_Slot[5] = 19; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[5], TanxlOD::TexSecretCore_01_64x64);
-	this->_Texture_Reuse_Slot[6] = 18; 
+	this->_Texture_Reuse_Slot[6] = 20; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[6], TanxlOD::TexObject_Slot_01);
-	this->_Texture_Reuse_Slot[7] = 19; 
+	this->_Texture_Reuse_Slot[7] = 21; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[7], TanxlOD::TexObject_Slot_02);
-	this->_Texture_Reuse_Slot[8] = 20; 
+	this->_Texture_Reuse_Slot[8] = 22; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[8], TanxlOD::TexObject_Slot_03);
-	this->_Texture_Reuse_Slot[9] = 21; 
+	this->_Texture_Reuse_Slot[9] = 23; 
 	Reinit_Texture(this->_Texture_Reuse_Slot[9], TanxlOD::TexObject_Slot_04);
-	this->_Texture_Reuse_Slot[10] = 22; 
-	Reinit_Texture(this->_Texture_Reuse_Slot[10], TanxlOD::TexEquipment_00);
-	this->_Texture_Reuse_Slot[11] = 23;
-	Reinit_Texture(this->_Texture_Reuse_Slot[11], TanxlOD::TexEquipment_00);
+	this->_Texture_Reuse_Slot[10] = 24; 
+	Reinit_Texture(this->_Texture_Reuse_Slot[10], TanxlOD::TexEquipment[0]);
+	this->_Texture_Reuse_Slot[11] = 25;
+	Reinit_Texture(this->_Texture_Reuse_Slot[11], TanxlOD::TexEquipment[0]);
 
 	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
 	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01, 15);
@@ -238,10 +241,12 @@ void OpenGL_Draw::init(GameStateBase* State)
 	PlayerHealthLayer->Set_UniformValue(15, this->_Texture_Reuse_Slot[10]);
 	PlayerHealthLayer->Set_UniformValue(16, this->_Texture_Reuse_Slot[11]);
 
-	StartMenuLayer->Set_UniformValue(2, 15);
+	StartMenuLayer->Set_UniformValue(2, this->_Texture_Reuse_Slot[3]);
 
 	GameStateLayer->Set_UniformValue(8, this->_Texture_Reuse_Slot[4]);
 	GameStateLayer->Set_UniformValue(9, this->_Texture_Reuse_Slot[5]);
+	GameStateLayer->Set_UniformValue(10, 12);
+	GameStateLayer->Set_UniformValue(11, 13);
 
 	glBindVertexArray(0);
 
@@ -489,6 +494,22 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 
 	static float VersionFontSize{ 20.0f };
 	static EGame_Status Last_Status{ EGame_Status::GAME_NO_STATUS };
+
+	static int Last_Equipment_Id_0{ 0 };
+	static int Last_Equipment_Id_1{ 0 };
+
+	if (Character->Equip()->Get_Equipment_Id_0() != Last_Equipment_Id_0)
+	{
+		Last_Equipment_Id_0 = Character->Equip()->Get_Equipment_Id_0();
+		Reinit_Texture(this->_Texture_Reuse_Slot[10], TanxlOD::TexEquipment[Last_Equipment_Id_0]);
+		PlayerHealthLayer->Set_UniformValue(15, this->_Texture_Reuse_Slot[10]);
+	}
+	if (Character->Equip()->Get_Equipment_Id_1() != Last_Equipment_Id_1)
+	{
+		Last_Equipment_Id_1 = Character->Equip()->Get_Equipment_Id_1();
+		Reinit_Texture(this->_Texture_Reuse_Slot[11], TanxlOD::TexEquipment[Last_Equipment_Id_1]);
+		PlayerHealthLayer->Set_UniformValue(16, this->_Texture_Reuse_Slot[11]);
+	}
 
 	glBindVertexArray(_vao[1]);
 
@@ -908,15 +929,32 @@ BaseGameScene::BaseGameScene() :_Layer() {}
 
 void BaseGameScene::DisplayScene()
 {
-
+	for (int i{ 0 }; i < this->_Layer.size(); ++i)
+		this->_Layer.at(i)->Draw_Layer();
 }
 
-MiddleScene::MiddleScene(BaseGameScene* From, BaseGameScene* To) 
-{
-
-}
+MiddleScene::MiddleScene(BaseGameScene* From, BaseGameScene* To, Layer* Middle_Layer) :
+	_MiddlePage_Layer_From(From), _MiddlePage_Layer_To(To), _Middle_Layer(Middle_Layer),
+	_Max_Middle_Frame(200), _Cur_Middle_Frame(0) {}
 
 void MiddleScene::DisplayScene()
 {
+	if (this->_Cur_Middle_Frame * 2 < this->_Max_Middle_Frame)
+	{
+		this->_MiddlePage_Layer_From->DisplayScene();
+		this->_Middle_Layer->Draw_Layer();
+		this->_MiddlePage_Layer_To->DisplayScene();
+	}
+	else
+	{
+		this->_Middle_Layer->Draw_Layer();
+		this->_MiddlePage_Layer_To->DisplayScene();
+	}
+}
 
+void MiddleScene::Set_MaxFrame(int MaxFrame)
+{
+	if (MaxFrame < 0)//设置错误值时 重置为默认值
+		this->_Max_Middle_Frame = 200;
+	this->_Max_Middle_Frame = MaxFrame;
 }

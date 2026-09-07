@@ -33,6 +33,8 @@
 // 2024/05/22 增加对提示类的支持
 // 2024/05/22 修复初始化错误信息缺少的问题
 // 2024/05/22 调整语言设置接口并在枚举中增加用户语言
+// 2024/06/13 检测掉落接口使用内置的调用计时功能
+// 2024/06/14 背景音乐添加接口拆分合并为两个独立接口
 
 #pragma once
 
@@ -142,8 +144,11 @@ public:
 	//用于播放指定的内部音乐 Enable_Current用于启用或关闭音乐 SoundName为选择的音乐路径
 	void Engine_Sound_Play_Sound(bool Enable_Current, std::string SoundName);
 
-	//用于添加指定的内部音乐作为背景音乐 Enable_Play用于启用或关闭背景音乐的播放
-	void Engine_Sound_Add_BackGround(std::string SoundName, bool Enable_Play = false);
+	//用于添加指定的内部音乐作为背景音乐
+	void Engine_Sound_Add_BackGround(std::string SoundName);
+
+	//用于启用或关闭背景音乐的播放
+	void Engine_Sound_Play_BackGround(bool Enable_Play);
 
 	//添加音频到音频播放队列 SoundEvent为指定音频的编号
 	void Engine_Sound_Add_List(int SoundEvent);

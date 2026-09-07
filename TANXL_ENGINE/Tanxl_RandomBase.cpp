@@ -33,35 +33,11 @@ std::string RandomBase::Generate(int seed)
 
 std::string RandomBase::Generate_State(unsigned Width, unsigned Height, bool Random_Event)
 {
-    RandomState RandomId;
-    RandomState RandomEvent;
-
-    if (Random_Event)
-    {
-        RandomEvent.Append_State(0, 6);
-        RandomEvent.Append_State(1, 1);
-        RandomEvent.Append_State(2, 1);
-        RandomEvent.Append_State(3, 1);
-        RandomEvent.Append_State(4, 1);
-        RandomEvent.Append_State(5, 1);
-        RandomEvent.Append_State(6, 1);
-        RandomEvent.Append_State(7, 1);
-        RandomEvent.Append_State(8, 1);
-    }
-
-    RandomId.Append_State(0, 1);
-    RandomId.Append_State(1, 1);
-    RandomId.Append_State(2, 1);
-    RandomId.Append_State(3, 1);
-
     std::string ReturnVal{ "" };
     for (int i{ 0 }; i < static_cast<int>(Width) * static_cast<int>(Height); ++i)
     {
         int StateVal{ RandomId.Generate() };
         int EventVal{ RandomEvent.Generate() };
-
-        if (EventVal > 4)
-            EventVal = 0;
 
         if(Random_Event)
             ReturnVal += std::to_string(EventVal) + "-" + std::to_string(StateVal) + ",";
@@ -130,6 +106,31 @@ void RandomBase::Reset_Default()
     {"Y"}, {"Z"} };
     for (int i{ 0 }; i < 62; ++i)
         _UniData[i] = SaveUniData[i];
+
+    RandomEvent.Clear_Event();
+    RandomId.Clear_Event();
+
+    Set_RandomState(RANDOM_EVENT, 0, 9);
+    Set_RandomState(RANDOM_EVENT, 1, 1);
+    Set_RandomState(RANDOM_EVENT, 2, 3);
+    Set_RandomState(RANDOM_EVENT, 3, 3);
+    Set_RandomState(RANDOM_EVENT, 4, 3);
+    Set_RandomState(RANDOM_EVENT, 5, 0);
+    Set_RandomState(RANDOM_EVENT, 6, 1);
+    Set_RandomState(RANDOM_EVENT, 7, 1);
+
+    Set_RandomState(RANDOM_ID, 0, 1);
+    Set_RandomState(RANDOM_ID, 1, 1);
+    Set_RandomState(RANDOM_ID, 2, 1);
+    Set_RandomState(RANDOM_ID, 3, 1);
+}
+
+void RandomBase::Set_RandomState(EState_WeightEvent RandomName, int Id, int Weight)
+{
+    if (RandomName == EState_WeightEvent::RANDOM_ID)
+        RandomId.Append_State(Id, Weight);
+    else
+        RandomEvent.Append_State(Id, Weight);
 }
 
 const std::string RandomBase::Get_Version()
@@ -149,6 +150,10 @@ std::string RandomBase::_UniData[] = {
     {"Y"}, {"Z"} };
 
 std::string RandomBase::_Version{ "0.3" };
+
+RandomState RandomBase::RandomId{};
+
+RandomState RandomBase::RandomEvent{};
 
 StateWeight::StateWeight(int StateId, int Weight) :
     _StateId(StateId), _Weight(Weight) {}
@@ -173,6 +178,8 @@ int RandomState::Generate()
 
 void RandomState::Append_State(int StateId, int Weight)
 {
+    if (Weight == 0)
+        return;
     this->_State_Weight_Count += Weight;
     this->_Event_Rate.push_back(new StateWeight(StateId, this->_State_Weight_Count));
 }

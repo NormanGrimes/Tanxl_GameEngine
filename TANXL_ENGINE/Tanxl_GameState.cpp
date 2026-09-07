@@ -1117,7 +1117,9 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 	bool Reset{ this->Check_Edge_Reached(Check_Direction) };
 
 	if ((this->Get_State() == nullptr) ||
-		(this->Get_State()->_Extra_Status == 1))
+		(this->Get_State()->_Extra_Status == 1) ||
+		(this->Get_State()->_Extra_Status == 6) ||
+		(this->Get_State()->_Extra_Status == 7))
 	{
 		switch (Check_Direction)
 		{
@@ -1135,7 +1137,9 @@ void GameStateBase::State_Check_Block(GameObject& Character, ECheck_Edge Check_D
 		{
 			this->Update_Move(0.0f, 0.0f, Character, Check_Direction);
 			if ((this->Get_State() == nullptr) ||
-				(this->Get_State()->_Extra_Status == 1))
+				(this->Get_State()->_Extra_Status == 1) ||
+				(this->Get_State()->_Extra_Status == 6) ||
+				(this->Get_State()->_Extra_Status == 7))
 			{
 				//std::cout << "Adjusting" << DeltaTime << std::endl;
 				if (DeltaTime < 0.1f)
