@@ -87,9 +87,9 @@ public:
 			//std::cout << "Event Call : " << this->_GLFW_KEY << std::endl;
 			if (this->_Direction == MoveTo_Direction::MOVETO_PARA)
 				this->_Target->_Coord_X += this->_Move_Length * _Speed_Rato;
-			if (this->_Direction == MoveTo_Direction::MOVETO_VERT)
+			else if (this->_Direction == MoveTo_Direction::MOVETO_VERT)
 				this->_Target->_Coord_Y += this->_Move_Length * _Speed_Rato;
-			if (this->_Direction == MoveTo_Direction::MOVETO_BOTH)
+			else if (this->_Direction == MoveTo_Direction::MOVETO_BOTH)
 				*this->_Target += this->_Move_Length * _Speed_Rato;
 		}
 	}

@@ -65,7 +65,7 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND);
 	}
 
-	if (!this->Sound_Playing(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND))
+	if (!this->Is_Sound_Playing(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND))
 	{
 		this->_Current_BackGround_Id++;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
@@ -99,7 +99,7 @@ void SoundBase::Notify()
 	}
 }
 
-bool SoundBase::Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id)
+bool SoundBase::Is_Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id)
 {
 #if _ENABLE_SOUNDBASE_DEBUG_MODE_
 	std::cout << "Check Sound " << Wav_File_Location << " " << this->_SoundEngine[SoundEngine_Id]->isCurrentlyPlaying(Wav_File_Location.c_str()) << std::endl;
@@ -124,15 +124,15 @@ _BackGround_Music_Playing(false), _Current_BackGround_Id(0)
 	this->_SoundEngine[1] = irrklang::createIrrKlangDevice();
 	this->_SoundEngine[1]->setSoundVolume(0.3f);
 
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_GAME_START, "music/Game_Start.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_GAME_OVER, "music/Game_Over.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_TAKE_DAMAGE, "music/Game_Take_Damage.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_RESTORE_HEALTH, "music/Game_Event_Restore_Health.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_MOUSE_CLICK, "music/Game_Mouse_Click_Right.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_MOUSE_CLICK_RIGHT, "music/Game_Mouse_Click_Right.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_TAKE_COIN, "music/Game_Take_Coin.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_ACHIEVEMENT, "music/Game_Achievement_Unlock.wav", this));
-	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_SECRET_CORE, "music/Game_Event_Secret_Core.wav", this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_GAME_START, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_GAME_OVER, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_TAKE_DAMAGE, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_RESTORE_HEALTH, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_MOUSE_CLICK, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_MOUSE_CLICK_RIGHT, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_TAKE_COIN, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_ACHIEVEMENT, this));
+	_SoundCheck.Add_Observer(new Sound_Observer(SOUND_SECRET_CORE, this));
 }
 
 SoundBase::~SoundBase() 

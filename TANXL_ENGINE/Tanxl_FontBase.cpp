@@ -93,7 +93,7 @@ void FontBase::Insert_Character(int Font_Id, GLuint Text_Id)
 	if (FT_Init_FreeType(&ft))
 		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
 
-	std::cout << "Font:" << this->_Internal_FontPath[Font_Id] << std::endl;
+	//std::cout << "Font:" << this->_Internal_FontPath[Font_Id] << std::endl;
 
 	FT_Face face;
 	if (FT_New_Face(ft, this->_Internal_FontPath[Temp_Font_Id].c_str(), 0, &face))

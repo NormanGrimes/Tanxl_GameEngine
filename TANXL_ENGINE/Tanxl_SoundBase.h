@@ -40,6 +40,7 @@
 // 增加音频事件通知接口
 // 增加内部的音频播放队列
 // 音频被观察者通过播放队列发布通知
+// 优化减少音频观察者的初始化参数
 
 #pragma once
 
@@ -84,6 +85,19 @@ enum ESound_WAV
     SOUND_NO_SOUND          = 0xFF
 };
 
+static const char* SoundPath[]
+{
+    { "music/Game_Start.wav"                },
+    { "music/Game_Over.wav"                 },
+    { "music/Game_Take_Damage.wav"          },
+    { "music/Game_Event_Restore_Health.wav" },
+    { "music/Game_Mouse_Click.wav"          },
+    { "music/Game_Mouse_Click_Right.wav"    },
+    { "music/Game_Take_Coin.wav"            },
+    { "music/Game_Achievement_Unlock.wav"   },
+    { "music/Game_Event_Secret_Core.wav"    }
+};
+
 class SoundBase : public Tanxl_ClassBase
 {
 public:
@@ -107,7 +121,7 @@ public:
 
     void Notify();
 
-    bool Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
+    bool Is_Sound_Playing(std::string Wav_File_Location, ESoundEngine_ID SoundEngine_Id = SOUND_ENGINE_EVENT);
 
     bool BackGround_Playing() const;
 
@@ -134,8 +148,8 @@ private:
 class Sound_Observer : public Event_Observer<int>
 {
 public:
-    Sound_Observer(int Event_Id, std::string Sound_Name, SoundBase* Sound_Engine) :
-        _Event_Id(Event_Id), _Sound_Name(Sound_Name), _Sound_Engine(Sound_Engine) {}
+    Sound_Observer(int Event_Id, SoundBase* Sound_Engine) :
+        _Event_Id(Event_Id), _Sound_Name(SoundPath[Event_Id]), _Sound_Engine(Sound_Engine) {}
 
     virtual void EventCheck(int& Event_Id)
     {

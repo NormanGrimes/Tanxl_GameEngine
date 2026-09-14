@@ -1,73 +1,7 @@
-﻿//_VERSION_1_4_ UPDATE LOG
-// LAST_UPDATE 2024-02-05 09:51
-// 修复玩家死亡后背景音乐会短暂播放的问题
-// 移除事件检测接口
-// 移除用于标记死亡的静态变量
-// 分离绘制循环中的两个地图模块接口调用
-// 记录地图总显示单元个数的变量分解到地图载入接口中
-// 移除内部的坐标基类指针成员
-// 初始化部分切换效率更高的接口
-// 地图数据初始化部分从初始化接口中独立为地图初始化接口
-// 停止按钮应用最新版改动
-// 新增三帧左侧移动动作测试
-// 左侧移动动作增加到十三帧
-// 修复左侧移动停止时不会切换图片的问题
-// 修改玩家数值界面的显示位置
-// 增加复用纹理缓存
-// 生命值槽纹理重命名为物品槽
-// 新增一个物品槽纹理
-// 修改游戏开始后设置的玩家生命值与生命上限
-// 新增零号装备纹理
-// 新增绘制层类
-// 调整字体颜色
-// 微调金币数量显示的位置
-// 绘制层类增加纹理初始化与存储功能
-// 添加纹理接口改为纹理槽初始化接口
-// 绘制层类调用绘制接口时重新初始化纹理
-// 绘制层类增加默认构造函数和相关设置接口
-// 起始页面改用绘制层类实现
-// 绘制接口记录上一次游戏状态
-// 绘制层类增加着色器程序获取接口
-// 重制生命值纹理
-// 修复生命值上限统一变量仅在初始化时定义的问题
-// 降低生命值纹理的水平间隔
-// 修复左侧移动动作不连贯的问题
-// 左上角增加构建编号显示
-// 增加设置当前画面暂停的接口
-// 重制生命值纹理
-// 移除起始界面着色器成员
-// 新增多个装备的纹理
-// 增加装备纹理的更新功能
-// 移除一个内部着色器数组
-// 所有涉及显示的字体设为宽字符串
-// 去掉纹理初始化接口的参数并设为私有接口
-// 地图数据数组现在根据地图尺寸动态生成
-// 增加用于记录地图数据长度的变量
-// 绘制层类增加统一变量设置接口
-// 玩家的绘制使用绘制层类实现
-// 增加复用纹理信息结构体
-// 使用容器优化绘制层类的空间占用
-// 状态信息栏使用绘制层类实现
-// 绘制层类增加一个重载版本的统一变量设置接口
-// 绘制层类初始化接口与构造函数增加默认参数
-// 绘制层类指定点数量的绘制接口不再改变内部参数
-// 游戏地图使用绘制层类实现
-// 新增游戏场景类用于容纳绘制层类
-// 游戏暂停时测试显示对话框功能
-// 中间页面使用绘制层类实现
-// 增加两个继承于游戏场景类的测试类
-// 移除私有成员中未使用变量
-// 调整左侧移动的动作纹理顺序
-// 左侧移动动作增加一帧
-// 增加两种锁住的门的纹理
-// 增加两种钥匙卡装备的纹理
-// 调整部分左侧移动帧的时间长度
-// 屏幕下方的信息界面整体向左微调
-// 修改中间页面类的成员类型
-// 中间页面类增加最大帧数量设置接口
-// 完成预定义的场景类接口
-// 修改两个新地图纹理的名称并加入游戏
-// 增加实时显示主角当前装备的功能
+﻿//_VERSION_1_5_ UPDATE LOG
+// LAST_UPDATE 2024-06-17 17:23
+// 绘制层类增加矩阵统一变量的设置接口
+// 中文的金币个数显示字体缩小
 
 #pragma once
 
@@ -605,15 +539,17 @@ public:
 
 	void Draw_Layer(int Coord_Counts);
 
+	void Draw_Layer();
+
 	void Set_UniformValue(int UniformId, int Value);
 
 	void Set_UniformValue(int UniformId, float Value);
 
 	void Set_UniformValue(const char* UniformName, glm::ivec2& StateData);
 
-	void Reload_Texture();
+	void Set_UniformValue(int UniformId, glm::mat4 Value);
 
-	void Draw_Layer();
+	void Reload_Texture();
 
 	GLuint Get_ShaderProgram() const;
 
@@ -778,6 +714,12 @@ inline void Layer::Draw_Layer(int Coord_Counts)
 	glDrawArrays(GL_TRIANGLES, 0, Coord_Counts);
 }
 
+inline void Layer::Draw_Layer()
+{
+	glUseProgram(_Shader_Program);
+	glDrawArrays(GL_TRIANGLES, 0, _Coord_Counts);
+}
+
 inline void Layer::Set_UniformValue(int UniformId, int Value)
 {
 	glProgramUniform1i(this->_Shader_Program, UniformId, Value);
@@ -794,6 +736,11 @@ inline void Layer::Set_UniformValue(const char* UniformName, glm::ivec2& StateDa
 	glProgramUniform2iv(this->_Shader_Program, StatePos, 1, glm::value_ptr(StateData));
 }
 
+inline void Layer::Set_UniformValue(int UniformId, glm::mat4 Value)
+{
+	glUniformMatrix4fv(UniformId, 1, GL_FALSE, glm::value_ptr(Value));
+}
+
 inline void Layer::Reload_Texture()
 {
 	for (int i{ 0 }; i < _ReuseInfor.size(); ++i)
@@ -801,12 +748,6 @@ inline void Layer::Reload_Texture()
 		_DrawEngine->Reinit_Texture(_ReuseInfor.at(i)->_ReuseTextureId, _ReuseInfor.at(i)->_ReuseTexture);
 		glProgramUniform1i(this->_Shader_Program, _ReuseInfor.at(i)->_ShaderLocation, _ReuseInfor.at(i)->_ReuseTextureId);
 	}
-}
-
-inline void Layer::Draw_Layer()
-{
-	glUseProgram(_Shader_Program);
-	glDrawArrays(GL_TRIANGLES, 0, _Coord_Counts);
 }
 
 inline GLuint Layer::Get_ShaderProgram() const

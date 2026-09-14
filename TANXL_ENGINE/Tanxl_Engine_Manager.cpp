@@ -63,11 +63,12 @@ Tanxl_Engine::~Tanxl_Engine()
 
 unsigned Tanxl_Engine::Engine_Check_Engine_Status(bool ShutDown)
 {
-	if (((this->_Engine_Status & 0xFF) != 0) && ShutDown)
+	int Fault_Id{ (_Engine_Status & 0xFF) };
+	std::cout << "Fault detected ! Fault Id :" << Fault_Id << std::endl;
+	if ((Fault_Id != 0) && ShutDown)
 	{
-		std::cout << "Fault detected ! Fault Id :" << (_Engine_Status & 0xFF) << std::endl;
 		this->Tanxl_Engine_OpenGL_Draw->Destroy_Window();
-		exit(_Engine_Status & 0xFF);
+		exit(Fault_Id);
 	}
 	return this->_Engine_Status;//0 正常运行 1 初始化失败
 }

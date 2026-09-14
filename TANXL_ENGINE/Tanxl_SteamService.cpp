@@ -242,10 +242,19 @@ bool Tanxl_Achievement::Append_Remove_List(Event_Observer<CountAchType>* Observe
 		return false;
 	else
 	{
-		this->_Count_RemoveList[this->_Count_Remove_List_Size] = nullptr;// Observer;
+		this->_Count_RemoveList[this->_Count_Remove_List_Size] = Observer;
 		this->_Count_Remove_List_Size++;
 		return true;
 	}
+}
+
+bool Tanxl_Achievement::Lock_Achievement(Achievement_t& achievement, bool Upload)
+{
+	bool AchStatus{ Steam_Service::GetSteamUserStats()->ClearAchievement(achievement.m_pchAchievementID) };
+	if (Upload)
+		return Steam_Service::GetSteamUserStats()->StoreStats();
+	else
+		return AchStatus;
 }
 
 bool Tanxl_Achievement::RequestStats()
@@ -313,7 +322,8 @@ void Achievement_Count_Observer::EventCheck(CountAchType& Data)
 		if (Tanxl_Achievement::Get_AchievementBase().Append_Remove_List(this))
 		{
 			static SoundBase* SB{ &SoundBase::GetSoundBase() };
-				SB->Play_Sound("music/Game_Achievement_Unlock.wav");
+			SB->Play_Sound("music/Game_Achievement_Unlock.wav");
+			std::cout << "Unlock" << std::endl;
 			Tanxl_Achievement::Get_AchievementBase().UnlockAchievement(_Achievement);
 		}
 	}

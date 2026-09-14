@@ -699,7 +699,12 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 			Font->RenderText(Tips->GetTips(), 100.0f, 250.0f, 0.7f);
 	}
 	else if (this->_Game_Status == GAME_PLAYER_ACTIVE)
-		Font->RenderText(Tips->Get_PlayerCoinName() + L": " + std::to_wstring(Character->Money()->Get_Money()), 800.0f, 28.0f, 0.7f, 1);
+	{
+		if (Font->Get_Language() == LANGUAGE_CHINESE)
+			Font->RenderText(Tips->Get_PlayerCoinName() + L": " + std::to_wstring(Character->Money()->Get_Money()), 800.0f, 28.0f, 0.5f, 1);
+		else
+			Font->RenderText(Tips->Get_PlayerCoinName() + L": " + std::to_wstring(Character->Money()->Get_Money()), 800.0f, 28.0f, 0.7f, 1);
+	}
 	if(Steam_Service::Get_InitStatus() == 2)
 		Font->RenderText(L"Build Id : " + std::to_wstring(Steam_Service::GetSteamApps()->GetAppBuildId()), 10.0f, 785.0f, 0.25f, 1);
 	else

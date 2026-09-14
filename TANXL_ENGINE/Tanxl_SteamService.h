@@ -46,6 +46,8 @@
 // 计数类型成就增加类型检查
 // 用户语言获取接口移入静态服务类
 // 物品枚举加入一号收藏品的定义
+// 修复成就解锁后不会被移出队列的问题
+// 增加锁定成就接口
 
 #pragma once
 
@@ -181,6 +183,8 @@ public:
 	bool Append_Remove_List(Event_Observer<int>* Observer);
 
 	bool Append_Remove_List(Event_Observer<CountAchType>* Observer);
+
+	bool Lock_Achievement(Achievement_t& achievement, bool Upload = false);
 
 	bool RequestStats();//请求用户统计数据
 
