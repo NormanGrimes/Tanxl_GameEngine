@@ -360,7 +360,7 @@ void Tanxl_Engine::Engine_Reset_Engine_Base(EENGINE_BASES Engine_Class)
 		if (!All_Selected)
 			break;
 	case EENGINE_BASES::ENGINE_SOUNDBASE:
-		this->Tanxl_Engine_SoundBase->Stop_AllSound();
+		this->Tanxl_Engine_SoundBase->Stop_Sound(SOUND_ENGINE_ALL);
 		break;
 	}
 }

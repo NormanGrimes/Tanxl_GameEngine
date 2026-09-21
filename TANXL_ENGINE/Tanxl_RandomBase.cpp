@@ -178,7 +178,7 @@ int RandomState::Generate()
 
 void RandomState::Append_State(int StateId, int Weight)
 {
-    if (Weight == 0)
+    if (Weight <= 0)
         return;
     this->_State_Weight_Count += Weight;
     this->_Event_Rate.push_back(new StateWeight(StateId, this->_State_Weight_Count));

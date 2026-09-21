@@ -1515,11 +1515,6 @@ _Adjust_Enable(false), _Exac_Location(0, 0), _GameState_Extend(), _Is_Data_Set(f
 
 GameStateBase& GameStateBase::operator=(const GameStateBase&) { return *this; }
 
-bool GameStateBase::Get_Compile_Status() const
-{
-	return this->_Compile_Success;
-}
-
 void GameStateBase::Check_Adjust_Status(bool Is_Key_Pressed)
 {
 	if (!this->_Adjust_While_Move)

@@ -41,6 +41,9 @@
 // 增加内部的音频播放队列
 // 音频被观察者通过播放队列发布通知
 // 优化减少音频观察者的初始化参数
+// 合并两个音频停止播放接口
+// 修复音频类最新改动导致的错误
+// 修复音频引擎枚举导致的异常
 
 #pragma once
 
@@ -61,7 +64,8 @@
 enum ESoundEngine_ID
 {
     SOUND_ENGINE_EVENT      = 0,
-    SOUND_ENGINE_BACKGROUND = 1
+    SOUND_ENGINE_BACKGROUND = 1,
+    SOUND_ENGINE_ALL        = 2
 };
 
 enum ESound_WAV
@@ -95,7 +99,13 @@ static const char* SoundPath[]
     { "music/Game_Mouse_Click_Right.wav"    },
     { "music/Game_Take_Coin.wav"            },
     { "music/Game_Achievement_Unlock.wav"   },
-    { "music/Game_Event_Secret_Core.wav"    }
+    { "music/Game_Event_Secret_Core.wav"    },
+
+    { "music/Game_BackGround_01.mp3"        },
+    { "music/Game_BackGround_02.mp3"        },
+    { "music/Game_BackGround_03.mp3"        },
+    { "music/Game_BackGround_04.mp3"        },
+    { "music/Game_BackGround_05.mp3"        }
 };
 
 class SoundBase : public Tanxl_ClassBase
@@ -110,8 +120,6 @@ public:
     void Append_BackGround_Music(std::string Wav_File_Location);
     // 停止指定声音引擎的声音播放
     void Stop_Sound(ESoundEngine_ID SoundEngine_Id);
-    // 停止所有声音引擎的播放
-    void Stop_AllSound();
     // 包含对背景音乐的顺序播放功能 顺序播放功能需要持续调用
     void Play_BackGround_Music(int Begin_Id = -1);
 

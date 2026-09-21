@@ -9,6 +9,7 @@
 // 移除未使用变量并调整数据顺序
 // 适配存储模块的改动
 // 存储模块编号关键字改为与其他编号统一
+// 标签类增加预定义的标签数组
 
 #pragma once
 
@@ -16,6 +17,59 @@
 #define _TANXL_DATADEFINE_
 
 #include <string>
+
+namespace Tanxl_Tag
+{
+	static const char* DATABASE_TAG_HEAD_TITLE[]
+	{
+		"VERSION_INFORMATION",
+		"GAME_STATE_SAVE",
+		"DATA_CHAIN_SPACE"
+	};
+
+	static const int DATABASE_TAG_HEAD_TITLE_SIZE{ 3 };
+
+	static const char* DATABASE_TAG_HEAD_SUBTITLE[]
+	{
+		"ENGINE_CORE"
+	};
+
+	static const int DATABASE_TAG_HEAD_SUBSIZE{ 1 };
+
+	static const char* DATABASE_TAG_MODULE_LIST[]
+	{
+		"TANXL_CONSOLE_LIST",
+		"TANXL_DATABASE",
+		"TANXL_GAME_EVENT",
+		"TANXL_GAME_STATE",
+		"TANXL_INSERTACTION",
+		"TANXL_OPENGL_DRAW",
+		"TANXL_RANDOMBASE",
+		"TANXL_LOCATIONBASE",
+		"TANXL_GAME_OBJECTBASE",
+		"TANXL_SOUNDBASE",
+		"TANXL_FONTBASE",
+		"TANXL_ENGINE_MANAGER"
+	};
+
+	static const int DATABASE_TAG_MODULE_LIST_SIZE{ 12 };
+
+	static const char* DATABASE_TAG_STATE_DIRECTION[]
+	{
+		"UNIQ_CURRENT",
+		"UNIQ_BLOCK_DATA",
+		"UNIQ_LEFT",
+		"UNIQ_RIGHT",
+		"UNIQ_ABOVE",
+		"UNIQ_BELOW",
+		"UNIQ_LABOVE",
+		"UNIQ_LBELOW",
+		"UNIQ_RABOVE",
+		"UNIQ_RBELOW"
+	};
+
+	static const int DATABASE_TAG_STATE_DIRECTION_SIZE{ 10 };
+};
 
 static std::string DataTag(int Type = 0xFFFF, int Exac = 0xFFFF, int Data = 0xFFFF)
 {

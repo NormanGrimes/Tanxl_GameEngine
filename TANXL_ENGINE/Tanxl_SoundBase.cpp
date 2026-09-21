@@ -34,21 +34,18 @@ void SoundBase::Stop_Sound(ESoundEngine_ID SoundEngine_Id)
 #if _ENABLE_SOUNDBASE_DEBUG_MODE_
 	std::cout << "Stop Sound : " << SoundEngine_Id << std::endl;
 #endif
-	this->_SoundEngine[SoundEngine_Id]->stopAllSounds();
-
-	if (SoundEngine_Id == ESoundEngine_ID::SOUND_ENGINE_BACKGROUND)
+	if (SoundEngine_Id == ESoundEngine_ID::SOUND_ENGINE_ALL)
+	{
+		this->_SoundEngine[SOUND_ENGINE_EVENT]->stopAllSounds();
+		this->_SoundEngine[SOUND_ENGINE_BACKGROUND]->stopAllSounds();
 		this->_BackGround_Music_Playing = false;
-}
-
-void SoundBase::Stop_AllSound()
-{
-#if _ENABLE_SOUNDBASE_DEBUG_MODE_
-	std::cout << "Stop All Sound" << std::endl;
-#endif
-	this->_SoundEngine[SOUND_ENGINE_EVENT]->stopAllSounds();
-	this->_SoundEngine[SOUND_ENGINE_BACKGROUND]->stopAllSounds();
-
-	this->_BackGround_Music_Playing = false;
+	}
+	else
+	{
+		this->_SoundEngine[SoundEngine_Id]->stopAllSounds();
+		if (SoundEngine_Id == ESoundEngine_ID::SOUND_ENGINE_BACKGROUND)
+			this->_BackGround_Music_Playing = false;
+	}
 }
 
 void SoundBase::Play_BackGround_Music(int Begin_Id)

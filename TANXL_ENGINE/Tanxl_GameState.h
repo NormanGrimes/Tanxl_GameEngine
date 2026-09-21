@@ -18,6 +18,7 @@
 // 移除地图区块计数及其相关设置接口
 // 记录半个地图单元长度的成员设为局部变量
 // 设置新地图单元状态为不可通过
+// 移除获取地图数据编译是否成功的接口
 
 #pragma once
 
@@ -217,7 +218,6 @@ public:
     void State_Check_Block(GameObject& Character, ECheck_Edge Check_Direction);
 	void Update_State(GameObject& Character, ECheck_Edge Check_Direction);
 	void Reset_Location();
-	bool Get_Compile_Status() const;
 	bool Get_Engine_File();
 	bool Check_Edge_Reached(ECheck_Edge Check) const;
 	Tanxl_Coord<int> Get_Exac_Location() const;
