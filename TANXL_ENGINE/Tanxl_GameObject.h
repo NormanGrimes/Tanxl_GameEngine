@@ -9,6 +9,7 @@
 // 移除武器与护甲结构体改为装备结构体
 // 游戏物品类增加装备组件
 // 装备组件类增加装备编号获取接口
+// 装备组件类增加替换装备接口
 
 #pragma once
 
@@ -134,6 +135,9 @@ public:
 
 	int Get_Equipment_Id_0();
 	int Get_Equipment_Id_1();
+
+	int Set_Equipment_Id_0(int Equipment_Id);
+	int Set_Equipment_Id_1(int Equipment_Id);
 
 private:
 	int _Attack_Damage;

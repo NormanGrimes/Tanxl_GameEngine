@@ -10,6 +10,11 @@
 // 修复一个可能导致编译失败的问题
 // 所有涉及显示的字体设为宽字符串
 // 修复获取提示接口二次调用错误的问题
+// 增加游戏内的法语文本显示功能
+// 优化提示类的内存结构
+// 重置语言文字接口增加英文选项
+// 提示文本使用容器存储
+// 修改部分提示文本内容
 
 #pragma once
 
@@ -47,26 +52,18 @@ private:
 	GameTips(const GameTips&);
 	GameTips& operator=(const GameTips&);
 
-	TANXL_DataBase Tips_Data;
+	TANXL_DataBase* Tips_Data;
 
 	bool _File_Loaded;
 	int _Internal_Count{ 0 };
 
-	std::wstring _Tips[8]
-	{
-		L"Tips : The golden circle provides five gold coins",
-		L"Tips : Press W or up button to move upward",
-		L"Tips : Press S or down button to move downward",
-		L"Tips : Watch out red squares !",
-		L"Tips : Press A or left button to move leftward",
-		L"Tips : Press D or right button to move rightward",
-		L"Tips : You can not cross the blue squares",
-		L"Tips : Red squares can also provide coin"
-	};
+	ECurren_Language _Internal_Language{ LANGUAGE_ENGLISH };
 
-	std::wstring _VersionDisplay{ L"TANXL GAME VERSION" };
-	std::wstring _GameOverName{ L"GAME OVER" };
-	std::wstring _PlayerCoinName{ L"Coin" };
+	std::vector<std::wstring> _Tips;
+
+	std::wstring _VersionDisplay{};
+	std::wstring _GameOverName{};
+	std::wstring _PlayerCoinName{};
 };
 
 #endif

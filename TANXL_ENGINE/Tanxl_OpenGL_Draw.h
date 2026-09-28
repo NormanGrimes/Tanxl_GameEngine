@@ -2,6 +2,7 @@
 // LAST_UPDATE 2024-06-17 17:23
 // 绘制层类增加矩阵统一变量的设置接口
 // 中文的金币个数显示字体缩小
+// 移除绘制层类的着色器程序获取接口
 
 #pragma once
 
@@ -551,8 +552,6 @@ public:
 
 	void Reload_Texture();
 
-	GLuint Get_ShaderProgram() const;
-
 private:
 	OpenGL_Draw* _DrawEngine;
 
@@ -670,6 +669,7 @@ private:
 	Tanxl_Coord<int> _Pre_Move{ 3, 3 };
 	//记录需要绘制的生命值纹理之间的距离
 	float _Health_Image_Margin{ 0.06f };
+	EGame_Status _Game_Status{ GAME_START_MENU };
 	//当前的中间页面编号
 	double _Middle_Frame{ 0 };
 	//距离上次调用绘制的增量时间
@@ -685,7 +685,6 @@ private:
 	Layer* StartMenuLayer;
 
 	GLFWwindow* _Main_Window;
-	EGame_Status _Game_Status{ GAME_START_MENU };
 	glm::ivec2* _StateInfor;
 };
 
@@ -748,11 +747,6 @@ inline void Layer::Reload_Texture()
 		_DrawEngine->Reinit_Texture(_ReuseInfor.at(i)->_ReuseTextureId, _ReuseInfor.at(i)->_ReuseTexture);
 		glProgramUniform1i(this->_Shader_Program, _ReuseInfor.at(i)->_ShaderLocation, _ReuseInfor.at(i)->_ReuseTextureId);
 	}
-}
-
-inline GLuint Layer::Get_ShaderProgram() const
-{
-	return this->_Shader_Program;
 }
 
 struct Montion_Struct

@@ -282,3 +282,17 @@ int Equipment_Componment::Get_Equipment_Id_1()
 {
 	return this->_Equipment_Slot_1->_Equipment_Id;
 }
+
+int Equipment_Componment::Set_Equipment_Id_0(int Equipment_Id)
+{
+	int Current_Equipment{ this->_Equipment_Slot_0->_Equipment_Id };
+	this->_Equipment_Slot_0->_Equipment_Id = Equipment_Id;
+	return Current_Equipment;
+}
+
+int Equipment_Componment::Set_Equipment_Id_1(int Equipment_Id)
+{
+	int Current_Equipment{ this->_Equipment_Slot_1->_Equipment_Id };
+	this->_Equipment_Slot_1->_Equipment_Id = Equipment_Id;
+	return Current_Equipment;
+}

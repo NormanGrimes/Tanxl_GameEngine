@@ -6,9 +6,9 @@
 
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
-const static std::string SubVersion{ "22" };
+const static std::string SubVersion{ "24" };
 const static std::wstring wMainVersion{ L"3" };
-const static std::wstring wSubVersion{ L"22" };
+const static std::wstring wSubVersion{ L"24" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -103,7 +103,9 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	ECurren_Language UserLanguage{ Steam_Service::Get_User_Language() };
 	std::cout << "UserLanguage Id :" << UserLanguage << std::endl;
-	if ((UserLanguage != ECurren_Language::LANGUAGE_CHINESE) && (UserLanguage != ECurren_Language::LANGUAGE_ENGLISH))
+	if ((UserLanguage != ECurren_Language::LANGUAGE_CHINESE) &&
+		(UserLanguage != ECurren_Language::LANGUAGE_ENGLISH) &&
+		(UserLanguage != ECurren_Language::LANGUAGE_FRENCH))
 		UserLanguage = ECurren_Language::LANGUAGE_ENGLISH;
 
 	Font->Set_Language(UserLanguage);
