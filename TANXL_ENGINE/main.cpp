@@ -22,9 +22,6 @@ int main()
 	TGE.Engine_Save_Source_Infor("Tanxl Engine SystemInfor");
 	//设置屏幕显示宽度和高度为4个地图单元长度 并设置显示区域外每个方向额外加载4个地图单元长度
 	TGE.Engine_State_Set_Display(6, 5, 3);
-	//调用引擎接口注册一个事件按钮
-	bool KeyStatus{ false };
-	TGE.Engine_Insert_Regist_Press(GLFW_KEY_E, &KeyStatus);
 	//禁止玩家控制的单元移动到屏幕显示区域以外
 	TGE.Engine_Insert_State_Limit(true);
 	//启用移动到达指定范围后地图随玩家移动 设置距离为0.6倍某方向距离的长度
@@ -179,22 +176,6 @@ int main()
 				"0-3,0-2,1-2,0-2,0-2,0-2,0-2,1-2,0-2,0-3,");
 
 			std::cout << "Reset Finish !" << std::endl;
-		}
-
-		static bool Appended{ false };
-		if (KeyStatus)
-		{
-			KeyStatus = false;
-			if (Appended == false)
-			{
-				Appended = true;
-				TGE.Engine_Insert_Adjust_Speed(1.0);
-			}
-			else
-			{
-				Appended = false;
-				TGE.Engine_Insert_Adjust_Speed(2.0);
-			}
 		}
 	}
 }

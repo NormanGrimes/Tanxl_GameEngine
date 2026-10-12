@@ -179,6 +179,9 @@ void OpenGL_Draw::init(GameStateBase* State)
 	Reinit_Texture(this->_Texture_Reuse_Slot[10], TanxlOD::TexEquipment[0]);
 	this->_Texture_Reuse_Slot[11] = 25;
 	Reinit_Texture(this->_Texture_Reuse_Slot[11], TanxlOD::TexEquipment[0]);
+	this->_Texture_Reuse_Slot[12] = 26;
+	Reinit_Texture(this->_Texture_Reuse_Slot[12], TanxlOD::TexTextBackGround_01);
+	
 
 	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
 	this->_MotionS.at(0)->Append_Montion_Image(TanxlOD::TexPrincess_01_Blink_01, 15);
@@ -228,10 +231,28 @@ void OpenGL_Draw::init(GameStateBase* State)
 
 	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04);
 
+	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_01, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_02, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_03, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_04, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_03, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_02, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_01, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_05, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_06, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_07, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_08, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_07, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_06, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_05, 2);
+
+	this->_MotionS.at(4)->Set_Idle_Image(TanxlOD::TexPrincess_01);
+
 	AdjustPlayerLayer->Set_UniformValue(6, this->_Texture_Reuse_Slot[0]);
 
 	GameTalkLayer->Set_UniformValue(2, this->_Texture_Reuse_Slot[0]);
-	GameTalkLayer->Set_UniformValue(3, this->_Texture_Reuse_Slot[9]);
+	GameTalkLayer->Set_UniformValue(3, this->_Texture_Reuse_Slot[12]);
 
 	PlayerHealthLayer->Set_UniformValue(8, this->_Texture_Reuse_Slot[1]);
 	PlayerHealthLayer->Set_UniformValue(9, this->_Texture_Reuse_Slot[2]);
@@ -611,7 +632,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 		{
 			static unsigned LastStatus{ Insert_Status };
 			if (Insert_Status & 0x01)
-				this->_MotionS.at(0)->Start_Motion(this->_Delta_Time * 100);
+				this->_MotionS.at(4)->Start_Motion(this->_Delta_Time * 100);
 			else if (Insert_Status & 0x02)
 				this->_MotionS.at(1)->Start_Motion(this->_Delta_Time * 100);
 			else if (Insert_Status & 0x04)
@@ -688,6 +709,7 @@ void OpenGL_Draw::display(GLFWwindow* window, GameStateBase* State)
 	{
 		Font->Set_FontColor(glm::vec3(0.3, 0.3f, 0.8f));
 		Font->RenderText(L"Hello world.", 180.0f, 100.0f, 1.0f, 1);
+		Font->RenderText(L"Press E to continue.", 770.0f, 80.0f, 0.35f, 1);
 	}
 
 	Font->Set_FontColor(glm::vec3(0.8, 0.2f, 0.2f));
@@ -739,7 +761,7 @@ void OpenGL_Draw::Render_Once(GameStateBase* State)
 	if (this->_Is_Init_Need)
 	{
 		this->_Is_Init_Need = false;
-		IEB->RegistEvent(GLFW_KEY_F, &OpenGL_Stop_Key);
+		IEB->RegistEvent(GLFW_KEY_E, &OpenGL_Stop_Key);
 	}
 
 	glBindVertexArray(_vao[1]);

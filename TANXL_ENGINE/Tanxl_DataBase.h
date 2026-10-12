@@ -35,6 +35,8 @@
 // 数据输出接口移除一个多余的迭代器
 // 获取本地数据接口移除第一个关键字中的额外关键字
 // 优化序号数据结构的内存空间
+// 移除设置指定位置数据的两个设置功能
+// 重写数据转移接口
 
 #pragma once
 
@@ -94,8 +96,6 @@ enum EDivid_Mode//为Divid_Char函数提供的功能枚举
 
 enum ESet_Specified
 {
-	SET_TYPE_STATUS,
-	SET_EXAC_STATUS,
 	SET_UNIT_IDADAT,
 	ADD_UNIT_IDADAT
 };
@@ -160,7 +160,7 @@ private:
 
 	std::vector<Id_Link*>* _Id_Links;
 	int _Current_Location;
-	void Replace_Link(int OldType, int OldExac, int OldDepth, int Id, std::string Data);//转移Data_Chain到另一个Id_Chain下
+	void Replace_Link(int TypeFrom, int ExacFrom, int TypeTo, int ExacTo, int Depth = -1);//转移Data_Link到另一个Id_Link下
 	//↓添加内部数据结构的内容到内存里的Vector中
 	void Append_Link(Id_Link& New_Id);
 	//↓重置Item结构的内容

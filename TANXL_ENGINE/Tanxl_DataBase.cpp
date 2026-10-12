@@ -509,12 +509,6 @@ void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int 
 	if (Data_Unit * PDU{ Data_Link_Locate(Type, Exac, Nums) })
 		switch (level)
 		{
-		case SET_TYPE_STATUS:
-			Replace_Link(Type, Exac, Nums, Id, Data);
-			return;
-		case SET_EXAC_STATUS:
-			Replace_Link(Type, Exac, Nums, Type, Data);
-			return;
 		case SET_UNIT_IDADAT:
 			PDU->_Id = Id;
 			PDU->_Data = Data;
@@ -633,14 +627,35 @@ Data_Unit* TANXL_DataBase::Data_Link_Locate(int Type, int Exac, int Depth)
 	return PIL->_Data->_Data_Units.at(Depth);
 }
 
-void TANXL_DataBase::Replace_Link(int OldType, int OldExac, int OldDepth, int Id, std::string Data)
+void TANXL_DataBase::Replace_Link(int TypeFrom, int ExacFrom, int TypeTo, int ExacTo, int Depth)
 {
-	Id_Link* PIL{ Id_Link_Locate(OldType, OldExac) };
-	PIL->_Data->Append_Data(Id, Data);
-	if (PIL->_Data->_Data_Units.size() > OldDepth && OldDepth >= 0)
-		PIL->_Data->_Data_Units.erase(PIL->_Data->_Data_Units.begin() + OldDepth);
-	else if (PIL->_Data->_Data_Units.size() + OldDepth >= 0 && PIL->_Data->_Data_Units.size() + OldDepth < PIL->_Data->_Data_Units.size())
-		PIL->_Data->_Data_Units.erase(PIL->_Data->_Data_Units.begin() + PIL->_Data->_Data_Units.size() + OldDepth);
+	Data_Link* PDL{ nullptr };
+	Data_Link* PTL{ nullptr };
+	try { PDL = Id_Link_Locate(TypeFrom, ExacFrom)->_Data; }
+	catch (std::string& ErrorInfo)
+	{
+		std::cout << ErrorInfo << std::endl;
+		return;
+	}
+	try { PTL = Id_Link_Locate(TypeTo, ExacTo)->_Data; }
+	catch (std::string& ErrorInfo)
+	{
+		Id_Link* Link{ new Id_Link(TypeTo, "Id_Link_TypeName", ExacTo, "Id_Link_ExacName") };
+		this->Append_Link(*Link);
+		PTL = Id_Link_Locate(TypeTo, ExacTo)->_Data;
+	}
+	if (Depth != -1)
+	{
+		if(Depth < PDL->_Data_Units.size())
+		PTL->Append_Data(*PDL->_Data_Units.at(Depth));
+		PDL->_Data_Units.erase(PDL->_Data_Units.begin() + Depth);
+	}
+	else
+	{
+		for (int i{ 0 }; i < PDL->_Data_Units.size(); ++i)
+			PTL->Append_Data(*PDL->_Data_Units.at(i));
+		PDL->_Data_Units.erase(PDL->_Data_Units.begin(), PDL->_Data_Units.end());
+	}
 }
 
 void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigned Type, unsigned Exac)

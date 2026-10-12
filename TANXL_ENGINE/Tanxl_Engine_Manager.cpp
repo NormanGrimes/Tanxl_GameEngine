@@ -181,7 +181,7 @@ void Tanxl_Engine::Engine_Save_Infinite_State(bool Build_Connect, int Width, int
 				TANXL_DataBase* DataSource{ this->Tanxl_Engine_GameState->Get_Data_Source() };
 				Data_Unit* DataUnit{};
 
-				if ((j != Begin_PosX) && (DataUnit = DataSource->Data_Link_Locate(1, i * 256 + j - 1, 0)))
+				if ((j != Begin_PosX) && (DataUnit = DataSource->Data_Link_Locate(1, i * 256 + j - 1, 0)))// Set the Value and check if it's nullptr
 					LEFT_STR = DataUnit->_Data;
 				if ((j != Begin_PosX + Width - 1) && (DataUnit = DataSource->Data_Link_Locate(1, i * 256 + j + 1, 0)))
 					RIGH_STR = DataUnit->_Data;

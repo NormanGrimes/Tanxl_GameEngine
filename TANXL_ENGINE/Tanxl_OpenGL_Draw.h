@@ -3,6 +3,10 @@
 // 绘制层类增加矩阵统一变量的设置接口
 // 中文的金币个数显示字体缩小
 // 移除绘制层类的着色器程序获取接口
+// 修改游戏暂停按键
+// 增加四个对话背景纹理
+// 增加向下移动的动作
+// 增加八个向下移动的纹理
 
 #pragma once
 
@@ -53,6 +57,14 @@ namespace TanxlOD
 	static const char* TexObject_Slot_04		{ "Texture/TANXL_OBJECT_SLOT_04_64X64.png"	};
 	static const char* TexPrincess_01_9x11		{ "Texture/YANG_PRINCESS_01_9X11.png"		};
 	static const char* TexPrincess_01			{ "Texture/TANXL_PRINCESS_01.png"			};
+	static const char* TexPrincess_01_Run_01	{ "Texture/TANXL_PRINCESS_01_RUN_01.png"	};
+	static const char* TexPrincess_01_Run_02	{ "Texture/TANXL_PRINCESS_01_RUN_02.png"	};
+	static const char* TexPrincess_01_Run_03	{ "Texture/TANXL_PRINCESS_01_RUN_03.png"	};
+	static const char* TexPrincess_01_Run_04	{ "Texture/TANXL_PRINCESS_01_RUN_04.png"	};
+	static const char* TexPrincess_01_Run_05	{ "Texture/TANXL_PRINCESS_01_RUN_05.png"	};
+	static const char* TexPrincess_01_Run_06	{ "Texture/TANXL_PRINCESS_01_RUN_06.png"	};
+	static const char* TexPrincess_01_Run_07	{ "Texture/TANXL_PRINCESS_01_RUN_07.png"	};
+	static const char* TexPrincess_01_Run_08	{ "Texture/TANXL_PRINCESS_01_RUN_08.png"	};
 	static const char* TexPrincess_02			{ "Texture/TANXL_PRINCESS_02.png"			};
 	static const char* TexPrincess_02_Run_01	{ "Texture/TANXL_PRINCESS_02_RUN_01.png"	};
 	static const char* TexPrincess_02_Run_02	{ "Texture/TANXL_PRINCESS_02_RUN_02.png"	};
@@ -92,6 +104,10 @@ namespace TanxlOD
 	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};
 	static const char* TexStartMenuLogo_01		{ "Texture/TANXL_MENU_LOGO_01.png"			};
+	static const char* TexTextBackGround_01		{ "Texture/TANXL_TEXT_BACKGROUND_01.png"	};
+	static const char* TexTextBackGround_02		{ "Texture/TANXL_TEXT_BACKGROUND_02.png"	};
+	static const char* TexTextBackGround_03		{ "Texture/TANXL_TEXT_BACKGROUND_03.png"	};
+	static const char* TexTextBackGround_04		{ "Texture/TANXL_TEXT_BACKGROUND_04.png"	};
 
 	static const char* TexEquipment[]
 	{
