@@ -52,19 +52,19 @@ void SoundBase::Play_BackGround_Music(int Begin_Id)
 {
 	if (this->_BackGround_Music_List.size() == 0)
 		return;
-	if (Begin_Id == -1)
-		Begin_Id = this->_Current_BackGround_Id;
 	if (this->_BackGround_Music_Playing == false)
 	{
+		if (Begin_Id == -1)
+			this->Random_BackGround_Music();
+		else
+			this->_Current_BackGround_Id = Begin_Id % this->_BackGround_Music_List.size();
 		this->_BackGround_Music_Playing = true;
-		this->_Current_BackGround_Id = Begin_Id + static_cast<int>(this->_BackGround_Music_List.size()) - 1;
-		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND);
 	}
 
 	if (!this->Is_Sound_Playing(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND))
 	{
-		this->_Current_BackGround_Id++;
+		++this->_Current_BackGround_Id;
 		this->_Current_BackGround_Id = this->_Current_BackGround_Id % this->_BackGround_Music_List.size();
 		this->Play_Sound(this->_BackGround_Music_List.at(this->_Current_BackGround_Id), SOUND_ENGINE_BACKGROUND);
 	}

@@ -46,7 +46,7 @@ void Data_Link::Append_Data(int Id, std::string Data)
 
 void Data_Link::Append_Data(Data_Unit Data)
 {
-	_Data_Units.push_back(&Data);
+	_Data_Units.push_back(new Data_Unit(Data._Id, Data._Data));
 }
 
 void Data_Link::Append_Data(Data_Link* Data, bool Replace)
@@ -525,11 +525,17 @@ void TANXL_DataBase::Set_Specified(int Type, int Exac, int Nums, int level, int 
 
 void TANXL_DataBase::Remove_Link(int Type, int Exac)
 {
-	if (Id_Link * PIL{ Id_Link_Locate(Type, Exac) })
+	try
 	{
+		Id_Link* PIL{ Id_Link_Locate(Type, Exac) };
+
 		std::vector<Data_Unit*>().swap(PIL->_Data->_Data_Units);
 		delete PIL;
 		this->_Id_Links->erase(this->_Id_Links->begin() + this->_Current_Location);
+	}
+	catch (std::string& ErrorInfo)
+	{
+		std::cout << "Remove Link Error : " << ErrorInfo << std::endl;
 	}
 }
 
@@ -546,6 +552,11 @@ Id_Link* TANXL_DataBase::Id_Link_Locate(int Type, int Exac)
 		Right{ static_cast<int>(this->_Id_Links->size()) - 1 >= 0 ? static_cast<int>(this->_Id_Links->size()) - 1 : 0 };
 	if (Left == Right)
 	{
+		if (this->_Id_Links->size() == 0)
+		{
+			throw static_cast<std::string>("Id_Chain_Locate Failed ! : 当前模块中不存在任何数据");
+			return nullptr;
+		}
 		if (Value == (this->_Id_Links->at(0)->_Type << 16) + this->_Id_Links->at(0)->_Exac)
 		{
 			this->_Current_Location = 0;
@@ -631,24 +642,27 @@ void TANXL_DataBase::Replace_Link(int TypeFrom, int ExacFrom, int TypeTo, int Ex
 {
 	Data_Link* PDL{ nullptr };
 	Data_Link* PTL{ nullptr };
-	try { PDL = Id_Link_Locate(TypeFrom, ExacFrom)->_Data; }
-	catch (std::string& ErrorInfo)
-	{
-		std::cout << ErrorInfo << std::endl;
-		return;
-	}
 	try { PTL = Id_Link_Locate(TypeTo, ExacTo)->_Data; }
 	catch (std::string& ErrorInfo)
 	{
 		Id_Link* Link{ new Id_Link(TypeTo, "Id_Link_TypeName", ExacTo, "Id_Link_ExacName") };
+		std::cout << "Replace Link (TargetLink) Error : " << ErrorInfo << std::endl;
 		this->Append_Link(*Link);
 		PTL = Id_Link_Locate(TypeTo, ExacTo)->_Data;
 	}
+	try { PDL = Id_Link_Locate(TypeFrom, ExacFrom)->_Data; }
+	catch (std::string& ErrorInfo)
+	{
+		std::cout << "Replace Link (OriginalLink) Error : " << ErrorInfo << std::endl;
+		return;
+	}
 	if (Depth != -1)
 	{
-		if(Depth < PDL->_Data_Units.size())
-		PTL->Append_Data(*PDL->_Data_Units.at(Depth));
-		PDL->_Data_Units.erase(PDL->_Data_Units.begin() + Depth);
+		if (Depth < PDL->_Data_Units.size())
+		{
+			PTL->Append_Data(*PDL->_Data_Units.at(Depth));
+			PDL->_Data_Units.erase(PDL->_Data_Units.begin() + Depth);
+		}
 	}
 	else
 	{
@@ -656,6 +670,8 @@ void TANXL_DataBase::Replace_Link(int TypeFrom, int ExacFrom, int TypeTo, int Ex
 			PTL->Append_Data(*PDL->_Data_Units.at(i));
 		PDL->_Data_Units.erase(PDL->_Data_Units.begin(), PDL->_Data_Units.end());
 	}
+	if (PDL->_Data_Units.size() == 0)
+		this->_Id_Links->erase(this->_Id_Links->begin() + this->_Current_Location);
 }
 
 void TANXL_DataBase::Append_DataChain(std::string Data, unsigned Divide, unsigned Type, unsigned Exac)

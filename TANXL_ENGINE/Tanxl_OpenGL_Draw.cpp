@@ -6,9 +6,9 @@
 
 const static int Health_Slot_Length{ 22 };
 const static std::string MainVersion{ "3" };
-const static std::string SubVersion{ "24" };
+const static std::string SubVersion{ "27" };
 const static std::wstring wMainVersion{ L"3" };
-const static std::wstring wSubVersion{ L"24" };
+const static std::wstring wSubVersion{ L"27" };
 
 static FontBase* Font{ &FontBase::GetFontBase() };
 
@@ -232,20 +232,20 @@ void OpenGL_Draw::init(GameStateBase* State)
 	this->_MotionS.at(3)->Set_Idle_Image(TanxlOD::TexPrincess_04);
 
 	this->_MotionS.push_back(new Motion_Cycle(this->_Texture_Reuse_Slot[0], this));
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_01, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_02, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_03, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_04, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_03, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_02, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_01, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_05, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_06, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_07, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_08, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_07, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_06, 2);
-	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_05, 2);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_01, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_02, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_03, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_04, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_03, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_02, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_01, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_05, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_06, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_07, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_08, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_07, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_06, 3);
+	this->_MotionS.at(4)->Append_Montion_Image(TanxlOD::TexPrincess_01_Run_05, 3);
 
 	this->_MotionS.at(4)->Set_Idle_Image(TanxlOD::TexPrincess_01);
 

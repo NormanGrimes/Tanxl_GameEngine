@@ -37,6 +37,10 @@
 // 优化序号数据结构的内存空间
 // 移除设置指定位置数据的两个设置功能
 // 重写数据转移接口
+// 删除数据节点接口增加异常处理
+// 序号结构体的定位接口增加数据长度为零的处理
+// 修复数据数据结构中会添加被析构的数据的问题
+// 数据转移接口设为公有并增加对空数据的处理
 
 #pragma once
 
@@ -160,7 +164,6 @@ private:
 
 	std::vector<Id_Link*>* _Id_Links;
 	int _Current_Location;
-	void Replace_Link(int TypeFrom, int ExacFrom, int TypeTo, int ExacTo, int Depth = -1);//转移Data_Link到另一个Id_Link下
 	//↓添加内部数据结构的内容到内存里的Vector中
 	void Append_Link(Id_Link& New_Id);
 	//↓重置Item结构的内容
@@ -179,7 +182,7 @@ public:
 	Data_Unit* Data_Link_Locate(int Type, int Exac, int Depth);
 	//↓获取本地数据 并新建一个链表 支持打开任意格式的文件(.usd .sd)
 	bool Get_LocalData(std::string File_Name, bool Clear_Current = true);
-	//↓编辑实例 0x1122 11代表Type位 22代表Exac位 Type_Name为Type字符串 Exac_Name为Exac字符串
+	//↓编辑实例 Status为32位无符号数字 高16位为Type低16位为Exac Type_Name为Type字符串 Exac_Name为Exac字符串
 	void Set_Internal_Id(unsigned Status, std::string Type_Name, std::string Exac_Name);
 	//↓为当前内存中的匿名结构体通过 Set_Mode 的方式添加 Data_Link数据
 	void Set_Internal_Data(Data_Link* Data, ELinkSet_Mode Set_Mode);
@@ -202,6 +205,8 @@ public:
 	void Clear_DataChain();
 	//↓复制当前容器中的数据到另一个容器
 	void Copy_DataBase(TANXL_DataBase& DataBase);
+	//↓转移Data_Link到另一个Id_Link下
+	void Replace_Link(int TypeFrom, int ExacFrom, int TypeTo, int ExacTo, int Depth = -1);
 	//↓获取当前存储模块的版本信息
 	const std::string Get_Version();
 	//↓用于直接输出当前Item单例内的信息
