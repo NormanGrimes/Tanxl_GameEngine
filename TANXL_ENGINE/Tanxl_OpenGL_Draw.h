@@ -7,6 +7,9 @@
 // 增加四个对话背景纹理
 // 增加向下移动的动作
 // 增加八个向下移动的纹理
+// 地图顶点着色器一的多个静态数据改为动态
+// 动作纹理合并到一个数组中
+// 新增一个用于管理动作纹理的结构体
 
 #pragma once
 
@@ -38,8 +41,16 @@
 class Motion_Cycle;
 class OpenGL_Draw;
 
+struct Montion_Struct;
+
 namespace TanxlOD
 {
+	struct TexListInfor
+	{
+		Montion_Struct* TexS[32];//此结构支持最多32帧动作
+		int TexSize;
+	};
+
 	static const char* TexDirt_01				{ "Texture/TANXL_DIRT_01.png"				};
 	static const char* TexGrass_01				{ "Texture/TANXL_GRASS_01.png"				};
 	static const char* TexGrass_02				{ "Texture/TANXL_GRASS_02.png"				};
@@ -57,57 +68,55 @@ namespace TanxlOD
 	static const char* TexObject_Slot_04		{ "Texture/TANXL_OBJECT_SLOT_04_64X64.png"	};
 	static const char* TexPrincess_01_9x11		{ "Texture/YANG_PRINCESS_01_9X11.png"		};
 	static const char* TexPrincess_01			{ "Texture/TANXL_PRINCESS_01.png"			};
-	static const char* TexPrincess_01_Run_01	{ "Texture/TANXL_PRINCESS_01_RUN_01.png"	};
-	static const char* TexPrincess_01_Run_02	{ "Texture/TANXL_PRINCESS_01_RUN_02.png"	};
-	static const char* TexPrincess_01_Run_03	{ "Texture/TANXL_PRINCESS_01_RUN_03.png"	};
-	static const char* TexPrincess_01_Run_04	{ "Texture/TANXL_PRINCESS_01_RUN_04.png"	};
-	static const char* TexPrincess_01_Run_05	{ "Texture/TANXL_PRINCESS_01_RUN_05.png"	};
-	static const char* TexPrincess_01_Run_06	{ "Texture/TANXL_PRINCESS_01_RUN_06.png"	};
-	static const char* TexPrincess_01_Run_07	{ "Texture/TANXL_PRINCESS_01_RUN_07.png"	};
-	static const char* TexPrincess_01_Run_08	{ "Texture/TANXL_PRINCESS_01_RUN_08.png"	};
 	static const char* TexPrincess_02			{ "Texture/TANXL_PRINCESS_02.png"			};
-	static const char* TexPrincess_02_Run_01	{ "Texture/TANXL_PRINCESS_02_RUN_01.png"	};
-	static const char* TexPrincess_02_Run_02	{ "Texture/TANXL_PRINCESS_02_RUN_02.png"	};
-	static const char* TexPrincess_02_Run_03	{ "Texture/TANXL_PRINCESS_02_RUN_03.png"	};
-	static const char* TexPrincess_02_Run_04	{ "Texture/TANXL_PRINCESS_02_RUN_04.png"	};
-	static const char* TexPrincess_02_Run_05	{ "Texture/TANXL_PRINCESS_02_RUN_05.png"	};
-	static const char* TexPrincess_02_Run_06	{ "Texture/TANXL_PRINCESS_02_RUN_06.png"	};
-	static const char* TexPrincess_02_Run_07	{ "Texture/TANXL_PRINCESS_02_RUN_07.png"	};
-	static const char* TexPrincess_02_Run_08	{ "Texture/TANXL_PRINCESS_02_RUN_08.png"	};
-	static const char* TexPrincess_02_Run_09	{ "Texture/TANXL_PRINCESS_02_RUN_09.png"	};
-	static const char* TexPrincess_02_Run_10	{ "Texture/TANXL_PRINCESS_02_RUN_10.png"	};
-	static const char* TexPrincess_02_Run_11	{ "Texture/TANXL_PRINCESS_02_RUN_11.png"	};
-	static const char* TexPrincess_02_Run_12	{ "Texture/TANXL_PRINCESS_02_RUN_12.png"	};
-	static const char* TexPrincess_02_Run_13	{ "Texture/TANXL_PRINCESS_02_RUN_13.png"	};
-	static const char* TexPrincess_02_Run_14	{ "Texture/TANXL_PRINCESS_02_RUN_14.png"	};
-	static const char* TexPrincess_02_Run_15	{ "Texture/TANXL_PRINCESS_02_RUN_15.png"	};
-	static const char* TexPrincess_02_Run_16	{ "Texture/TANXL_PRINCESS_02_RUN_16.png"	};
-	static const char* TexPrincess_02_Run_17	{ "Texture/TANXL_PRINCESS_02_RUN_17.png"	};
-	static const char* TexPrincess_02_Run_18	{ "Texture/TANXL_PRINCESS_02_RUN_18.png"	};
 	static const char* TexPrincess_03			{ "Texture/TANXL_PRINCESS_03.png"			};
 	static const char* TexPrincess_04			{ "Texture/TANXL_PRINCESS_04.png"			};
-	static const char* TexPrincess_04_Run_01	{ "Texture/TANXL_PRINCESS_04_RUN_01.png"	};
-	static const char* TexPrincess_04_Run_02	{ "Texture/TANXL_PRINCESS_04_RUN_02.png"	};
-	static const char* TexPrincess_04_Run_03	{ "Texture/TANXL_PRINCESS_04_RUN_03.png"	};
-	static const char* TexPrincess_04_Run_04	{ "Texture/TANXL_PRINCESS_04_RUN_04.png"	};
-	static const char* TexPrincess_04_Run_05	{ "Texture/TANXL_PRINCESS_04_RUN_05.png"	};
-	static const char* TexPrincess_04_Run_06	{ "Texture/TANXL_PRINCESS_04_RUN_06.png"	};
-	static const char* TexPrincess_04_Run_07	{ "Texture/TANXL_PRINCESS_04_RUN_07.png"	};
-	static const char* TexPrincess_04_Run_08	{ "Texture/TANXL_PRINCESS_04_RUN_08.png"	};
-	static const char* TexPrincess_04_Run_09	{ "Texture/TANXL_PRINCESS_04_RUN_09.png"	};
-	static const char* TexPrincess_04_Run_10	{ "Texture/TANXL_PRINCESS_04_RUN_10.png"	};
-	static const char* TexPrincess_04_Run_11	{ "Texture/TANXL_PRINCESS_04_RUN_11.png"	};
-	static const char* TexPrincess_04_Run_12	{ "Texture/TANXL_PRINCESS_04_RUN_12.png"	};
-	static const char* TexPrincess_04_Run_13	{ "Texture/TANXL_PRINCESS_04_RUN_13.png"	};
-	static const char* TexPrincess_04_Run_14	{ "Texture/TANXL_PRINCESS_04_RUN_14.png"	};
-	static const char* TexPrincess_01_Blink_01	{ "Texture/TANXL_PRINCESS_01_BLINK_01.png"	};
-	static const char* TexPrincess_01_Blink_02	{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	};
 	static const char* TexMedic_01_64x64		{ "Texture/TANXL_MEDIC_01_64X64.png"		};
 	static const char* TexStartMenuLogo_01		{ "Texture/TANXL_MENU_LOGO_01.png"			};
 	static const char* TexTextBackGround_01		{ "Texture/TANXL_TEXT_BACKGROUND_01.png"	};
 	static const char* TexTextBackGround_02		{ "Texture/TANXL_TEXT_BACKGROUND_02.png"	};
 	static const char* TexTextBackGround_03		{ "Texture/TANXL_TEXT_BACKGROUND_03.png"	};
 	static const char* TexTextBackGround_04		{ "Texture/TANXL_TEXT_BACKGROUND_04.png"	};
+
+	static const char* TexPrincess_01_Run[]
+	{
+		{ "Texture/TANXL_PRINCESS_01_RUN_01.png"	},
+		{ "Texture/TANXL_PRINCESS_01_RUN_02.png"	},
+		{ "Texture/TANXL_PRINCESS_01_RUN_03.png"	},
+		{ "Texture/TANXL_PRINCESS_01_RUN_04.png"	},
+		{ "Texture/TANXL_PRINCESS_01_RUN_05.png"	},
+		{ "Texture/TANXL_PRINCESS_01_RUN_06.png"	},
+		{ "Texture/TANXL_PRINCESS_01_RUN_07.png"	},
+		{ "Texture/TANXL_PRINCESS_01_RUN_08.png"	}
+	};
+
+	static const char* TexPrincess_01_Blink[]
+	{
+		{ "Texture/TANXL_PRINCESS_01_BLINK_01.png"	},
+		{ "Texture/TANXL_PRINCESS_01_BLINK_02.png"	}
+	};
+
+	static const char* TexPrincess_02_Run[]
+	{
+		{ "Texture/TANXL_PRINCESS_02_RUN_01.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_02.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_03.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_04.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_05.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_06.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_07.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_08.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_09.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_10.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_11.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_12.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_13.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_14.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_15.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_16.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_17.png"	},
+		{ "Texture/TANXL_PRINCESS_02_RUN_18.png"	}
+	};
 
 	static const char* TexEquipment[]
 	{
@@ -118,6 +127,24 @@ namespace TanxlOD
 		{ "Texture/Equipment/TANXL_EQUIPMENT_04_SECRETCORE.png"		},
 		{ "Texture/Equipment/TANXL_EQUIPMENT_05_RED_KEY_CARD.png"	},
 		{ "Texture/Equipment/TANXL_EQUIPMENT_06_BLUE_KEY_CARD.png"	}
+	};
+
+	static const char* TexPrincess_04_Run[]
+	{
+		{ "Texture/TANXL_PRINCESS_04_RUN_01.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_02.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_03.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_04.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_05.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_06.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_07.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_08.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_09.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_10.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_11.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_12.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_13.png"	},
+		{ "Texture/TANXL_PRINCESS_04_RUN_14.png"	}
 	};
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);

@@ -7,12 +7,16 @@
 // 增加两个装备栏的显示
 // 增加装备的显示功能
 // 生命值纹理仅绘制一个并动态调整长度
+// 使用宏控制界面的图形间距
 
 #version 430
 
 #define PLAYER_01_LAYER 0.3f
 #define HEALTH_SLOT_DIV 8
 #define HEALTH_DIV_SIZE 10
+
+#define HEALTH_SLOT_MARGIN 0.03f
+#define USER_UI_MARGIN     0.09f
 
 layout (location = 1) in vec2 texCoord;
 
@@ -129,37 +133,37 @@ void main(void)
 			else if (gl_VertexID == 12)
 			{
 				Cube = Player_Object_Slot_Texture_04;
-				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + USER_UI_MARGIN, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 13)
 			{
 				Cube = Player_Object_Slot_Texture_04;
-				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + USER_UI_MARGIN, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 14)
 			{
 				Cube = Player_Object_Slot_Texture_04;
-				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + USER_UI_MARGIN,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 15)
 			{
 				Cube = Player_Object_Slot_Texture_04;
-				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + USER_UI_MARGIN, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 16)
 			{
 				Cube = Player_Object_Slot_Texture_04;
-				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + USER_UI_MARGIN,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 17)
 			{
 				Cube = Player_Object_Slot_Texture_04;
-				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + USER_UI_MARGIN,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 
@@ -203,37 +207,37 @@ void main(void)
 			else if (gl_VertexID == 24)
 			{
 				Cube = Player_Equipment_Armor_Texture;
-				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + USER_UI_MARGIN, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 25)
 			{
 				Cube = Player_Equipment_Armor_Texture;
-				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + USER_UI_MARGIN, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 26)
 			{
 				Cube = Player_Equipment_Armor_Texture;
-				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + USER_UI_MARGIN,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 27)
 			{
 				Cube = Player_Equipment_Armor_Texture;
-				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + 0.09f, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + USER_UI_MARGIN, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 28)
 			{
 				Cube = Player_Equipment_Armor_Texture;
-				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + USER_UI_MARGIN,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == 29)
 			{
 				Cube = Player_Equipment_Armor_Texture;
-				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + 0.09f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + WidthSpace + USER_UI_MARGIN,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER - 0.01f, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 		}
@@ -252,7 +256,7 @@ void main(void)
 					else
 						Cube = Player_Object_Slot_Texture_02;
 
-					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
+					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + HEALTH_SLOT_MARGIN, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 1)
@@ -264,7 +268,7 @@ void main(void)
 					else
 						Cube = Player_Object_Slot_Texture_02;
 
-					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
+					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + HEALTH_SLOT_MARGIN, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 2)
@@ -276,7 +280,7 @@ void main(void)
 					else
 						Cube = Player_Object_Slot_Texture_02;
 
-					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
+					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + HEALTH_SLOT_MARGIN,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 3)
@@ -288,7 +292,7 @@ void main(void)
 					else
 						Cube = Player_Object_Slot_Texture_02;
 
-					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
+					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + HEALTH_SLOT_MARGIN, -Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 4)
@@ -300,7 +304,7 @@ void main(void)
 					else
 						Cube = Player_Object_Slot_Texture_02;
 
-					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
+					gl_Position = vec4( -Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + HEALTH_SLOT_MARGIN,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 				else if (gl_VertexID == i * 6 + 5)
@@ -312,7 +316,7 @@ void main(void)
 					else
 						Cube = Player_Object_Slot_Texture_02;
 
-					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + 0.03f,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
+					gl_Position = vec4(  Width / HEALTH_SLOT_DIV + Begin_Location_X + WidthSpace + HEALTH_SLOT_MARGIN,  Height / HEALTH_SLOT_DIV + Begin_Location_Y, PLAYER_01_LAYER + 0.01f, 1.0f); 
 					vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 				}
 			}
@@ -325,32 +329,32 @@ void main(void)
 		{
 			if (gl_VertexID == i * 6 + 0)
 			{
-				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + 0.03f + (Health_Length - 3) * 0.06f, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + HEALTH_SLOT_MARGIN + (Health_Length - 3) * 0.06f, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == i * 6 + 1)
 			{
-				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + 0.03f, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + HEALTH_SLOT_MARGIN, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == i * 6 + 2)
 			{
-				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + 0.03f + (Health_Length - 3) * 0.06f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + HEALTH_SLOT_MARGIN + (Health_Length - 3) * 0.06f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == i * 6 + 3)
 			{
-				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + 0.03f, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + HEALTH_SLOT_MARGIN, -Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == i * 6 + 4)
 			{
-				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + 0.03f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4( -Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + HEALTH_SLOT_MARGIN,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 			else if (gl_VertexID == i * 6 + 5)
 			{
-				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + 0.03f + (Health_Length - 3) * 0.06f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
+				gl_Position = vec4(  Width / HEALTH_DIV_SIZE + Begin_Location_X + Direct_Margin + HEALTH_SLOT_MARGIN + (Health_Length - 3) * 0.06f,  Height / HEALTH_DIV_SIZE + Begin_Location_Y, PLAYER_01_LAYER, 1.0f); 
 				vs_color = vec4(0.9f, 1.0f, 1.0f, 1.0f);
 			}
 		}
